@@ -16,7 +16,7 @@ export default ({data}) => {
           <g.H3 marginBottom={rhythm(1 / 4)}>
             {node.frontmatter.title}{" "}
           </g.H3>
-          <g.Div color="#BBB" textAlign="right">{node.frontmatter.date}</g.Div>
+          <g.Small color="#AAA" textAlign="right">{node.frontmatter.date}</g.Small>
           <p>{node.excerpt}</p>
         </div>
       ))}
