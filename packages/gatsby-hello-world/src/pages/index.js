@@ -1,27 +1,43 @@
 import React from 'react'
+import g from 'glamorous'
 
-export default () =>
-  //<div style={{margin: '3rem auto', maxWidth: 600}}>
-  <div>
-  <h1>Richard Hamming on Luck</h1>
+import {rhythm} from '../utils/typography'
+
+export default ({data}) => {
+  console.log(data);
+  return (
     <div>
-      <p>
-        From Richard Hamming’s classic and must-read talk,
-        “<a href="http://www.cs.virginia.edu/~robins/YouAndYourResearch.html">
-        You and Your Research
-      </a>”.
-      </p>
-      <blockquote>
-        <p>
-          There is indeed an element of luck, and no, there isn’t. The prepared
-          mind sooner or later finds something important and does it. So yes, it
-          is luck.{' '}
-          <em>
-            The particular thing you do is luck, but that you do something is
-            not.
-          </em>
-        </p>
-      </blockquote>
+      <g.H1 display={"inline-block"} borderBottom={"1px solid"}>
+        Amazing Pandas Eating Things
+      </g.H1>
+      <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
+      {data.allMarkdownRemark.edges.map(({node}) => (
+        <div key={node.id}>
+          <g.H3 marginBottom={rhythm(1 / 4)}>
+            {node.frontmatter.title}{" "}
+          </g.H3>
+          <g.Div color="#BBB" textAlign="right">{node.frontmatter.date}</g.Div>
+          <p>{node.excerpt}</p>
+        </div>
+      ))}
     </div>
-    <p>Posted April 09, 2011</p>
-  </div>
+  );
+};
+
+export const query = graphql`
+  query IndexQuery {
+    allMarkdownRemark(sort: {fields: [frontmatter___date], order: DESC}){
+      totalCount
+      edges {
+        node {
+          id
+          frontmatter {
+            title
+            date(formatString: "DD MMM 'YY")
+          }
+          excerpt
+        }
+      }
+    }
+  }
+`;
