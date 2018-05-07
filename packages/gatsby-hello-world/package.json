@@ -3,7 +3,7 @@
   "description": "Gatsby hello world starter",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon -w package-lock.json -w gatsby-config.js -x gatsby develop",
+    "start": "nodemon -w package-lock.json -w \"gatsby-*.js\" -x gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve"
   },
