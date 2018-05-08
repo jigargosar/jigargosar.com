@@ -50,4 +50,9 @@ exports.onCreateNode = ({node, getNode, boundActionCreators}) => {
       value: slug,
     })
   }
+
+  if (node.internal.type === `MarkdownRemark`) {
+    const fileNode = getNode(node.parent)
+    console.log(`\n`, fileNode.relativePath)
+  }
 }
