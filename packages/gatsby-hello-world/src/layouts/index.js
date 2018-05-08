@@ -16,7 +16,7 @@ export default ({children, data}) =>
   <div style={{margin: `0 auto`, maxWidth: 650, padding: `1.25rem 1rem`}}>
     <Helmet title={`Blog - ${data.site.siteMetadata.title}`}/>
     <header style={{marginBottom: `1.5rem`}}>
-      <Link to="/" style={{textShadow: `none`, backgroundImage: `none`}}>
+      <Link to="/" >
         <h3 style={{display: `inline`}}>{`${data.site.siteMetadata.title}`}</h3>
       </Link>
       <ul style={{listStyle: `none`, float: `right`}}>
