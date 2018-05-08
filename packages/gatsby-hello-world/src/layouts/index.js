@@ -20,7 +20,7 @@ export default ({children, data}) =>
         <h3 style={{display: `inline`}}>{`${data.site.siteMetadata.title}`}</h3>
       </Link>
       <ul style={{listStyle: `none`, float: `right`}}>
-        <ListLink to="/">BLOG</ListLink>
+        <ListLink to="/blog">BLOG</ListLink>
         <ListLink to="/">MEDIUM</ListLink>
         <ListLink to="/">TWITTER</ListLink>
       </ul>
