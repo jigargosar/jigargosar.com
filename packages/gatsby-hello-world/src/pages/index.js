@@ -2,36 +2,27 @@ import React from 'react'
 import g from 'glamorous'
 import Link from 'gatsby-link'
 import {rhythm} from '../utils/typography'
-import {css} from 'glamor'
-
-const linkStyle = css({
-  textDecoration:"underline"
-})
-
-// const StyledLinkTo = g``
 
 export default ({data}) => {
   return (
-    <div>
-      <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
+    <g.Div>
+      <g.H5>{data.allMarkdownRemark.totalCount} Posts</g.H5>
       {data.allMarkdownRemark.edges.map(({node}) => (
         <div key={node.id}>
-          <Link
-            className={linkStyle}
-            to={node.fields.slug}
-          >
-            <g.H3 marginBottom={rhythm(1 / 4)}>
-              {node.frontmatter.title}{' '}
-            </g.H3>
-          </Link>
+          <g.H3 marginBottom={rhythm(1 / 4)}>
+            <Link
+              to={node.fields.slug}
+            >
+              {node.frontmatter.title}
+            </Link>
+          </g.H3>
           <g.Small color="#AAA" textAlign="right">{node.frontmatter.date}</g.Small>
           <p>{node.excerpt}</p>
         </div>
       ))}
-    </div>
+    </g.Div>
   )
 };
-
 
 export const query = graphql`
   query IndexQuery {
