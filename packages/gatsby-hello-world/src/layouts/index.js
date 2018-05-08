@@ -1,15 +1,21 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import Helmet from 'react-helmet'
-import {css} from 'glamor'
 
 import {rhythm} from '../utils/typography'
 
 const ListLink = props =>
   <li style={{display: `inline-block`, marginRight: `1rem`}}>
-    <Link to={props.to}>
+    <Link to={props.to} href={props.href} target={props.target}>
       {props.children}
     </Link>
+  </li>
+
+const LinkExternal = props =>
+  <li style={{display: `inline-block`, marginRight: `1rem`}}>
+    <a href={props.href} target={props.target || '_blank'}>
+      {props.children}
+    </a>
   </li>
 
 export default ({children, data}) =>
@@ -20,15 +26,17 @@ export default ({children, data}) =>
         <h3 style={{display: `inline`}}>{`${data.site.siteMetadata.title}`}</h3>
       </Link>
       <ul style={{listStyle: `none`, float: `right`}}>
-        <ListLink to="/blog">BLOG</ListLink>
-        <ListLink to="/">MEDIUM</ListLink>
-        <ListLink to="/">TWITTER</ListLink>
+        <ListLink to="/blog/">BLOG</ListLink>
+        <LinkExternal href="https://medium.com/@jigargosar">
+          MEDIUM
+        </LinkExternal>
+        <LinkExternal href="https://twitter.com/@jigargosar">
+          TWITTER
+        </LinkExternal>
       </ul>
     </header>
     {children()}
   </div>
-
-const linkStyle = css({float: `right`})
 
 // noinspection JSUnresolvedVariable
 export const query = graphql`
