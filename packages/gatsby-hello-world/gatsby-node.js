@@ -4,10 +4,10 @@
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
- // You can delete this file if you're not using it
+  // You can delete this file if you're not using it
 
 const {createFilePath} = require(`gatsby-source-filesystem`)
-const path = require("path")
+const path = require('path')
 
 exports.createPages = ({graphql, boundActionCreators}) => {
   const {createPage} = boundActionCreators
@@ -38,7 +38,6 @@ exports.createPages = ({graphql, boundActionCreators}) => {
     })
   })
 }
-
 
 exports.onCreateNode = ({node, getNode, boundActionCreators}) => {
   const {createNodeField} = boundActionCreators
