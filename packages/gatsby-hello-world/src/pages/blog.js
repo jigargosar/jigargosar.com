@@ -2,9 +2,11 @@ import React from 'react'
 import g from 'glamorous'
 import Link from 'gatsby-link'
 import {rhythm} from '../utils/typography'
+import {Helmet} from 'react-helmet'
 
 const BlogPostList = ({data}) =>
   <g.Div>
+    <Helmet title={`Blog - ${data.site.siteMetadata.title}`}/>
     <g.H5>{data.allMarkdownRemark.totalCount} Posts</g.H5>
     {data.allMarkdownRemark.edges.map(({node}) => (
       <div key={node.id}>
@@ -25,6 +27,11 @@ export default BlogPostList
 
 export const query = graphql`
   query BlogQuery {
+    site {
+      siteMetadata {
+        title
+      }
+    }
     allMarkdownRemark(sort: {fields: [frontmatter___date], order: DESC}){
       totalCount
       edges {
