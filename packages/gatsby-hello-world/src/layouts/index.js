@@ -20,10 +20,9 @@ export default ({children, data}) =>
         <h3 style={{display: `inline`}}>{`${data.site.siteMetadata.title}`}</h3>
       </Link>
       <ul style={{listStyle: `none`, float: `right`}}>
-        <ListLink to="/">Home</ListLink>
-        <ListLink to="/Counter/">Counter</ListLink>
-        <ListLink to="/index-t1/">Home Old</ListLink>
-        <ListLink to="/counter/">Counter</ListLink>
+        <ListLink to="/">BLOG</ListLink>
+        <ListLink to="/">MEDIUM</ListLink>
+        <ListLink to="/">TWITTER</ListLink>
       </ul>
     </header>
     {children()}
