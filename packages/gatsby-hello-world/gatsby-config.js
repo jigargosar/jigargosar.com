@@ -3,6 +3,7 @@ module.exports = {
     title: `JigarGosar`
   },
   plugins: [
+    `gatsby-plugin-react-next`,
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-glamor`,

@@ -3,6 +3,7 @@ import Helmet from 'react-helmet'
 import g from 'glamorous'
 import {rhythm} from '../utils/typography'
 import {Link} from '../components/Link'
+import {NavLinks} from '../components/NavLinks'
 
 const renderHeader = function(data) {
   return <g.Header
@@ -11,19 +12,19 @@ const renderHeader = function(data) {
     alignItems={`center`}
   >
     <g.Div flex="1">
-      <Link to="/">
-        <h3 style={{display: `inline`}}>{`${data.site.siteMetadata.title}`}</h3>
-      </Link>
+      <g.H3 display="inline">
+        <Link to="/">
+          {`${data.site.siteMetadata.title}`}
+        </Link>
+      </g.H3>
     </g.Div>
 
-    <g.Div>
-      <Link to="/blog/">BLOG</Link>
-      <Link href="https://medium.com/@jigargosar">
-        MEDIUM
-      </Link>
-      <Link href="https://twitter.com/@jigargosar">
-        TWITTER
-      </Link>
+    <g.Div
+      display="grid"
+      gridTemplateColumns={`repeat(3, fit-content(100%))`}
+      gridGap="0.5em"
+    >
+      <NavLinks/>
     </g.Div>
   </g.Header>
 }
