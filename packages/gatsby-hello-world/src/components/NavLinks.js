@@ -1,8 +1,8 @@
 import React, {Fragment as F} from 'react'
 import {Link} from '../components/Link'
 
-export const NavLinks = () =>
-  <F>
+export function NavLinks() {
+  return <F>
     <Link to="/blog/">BLOG</Link>
     <Link href="https://medium.com/@jigargosar">
       MEDIUM
@@ -11,3 +11,4 @@ export const NavLinks = () =>
       TWITTER
     </Link>
   </F>
+}
