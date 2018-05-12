@@ -2,7 +2,7 @@ import React from 'react'
 import g from 'glamorous'
 import {rhythm} from '../utils/typography'
 import {Helmet} from 'react-helmet'
-import {InternalLink} from '../components/Link'
+import {Link} from '../components/Link'
 
 const BlogPostList = ({data}) =>
   <g.Div>
@@ -11,11 +11,11 @@ const BlogPostList = ({data}) =>
     {data.allMarkdownRemark.edges.map(({node}) => (
       <div key={node.id}>
         <g.H3 marginBottom={rhythm(1 / 4)}>
-          <InternalLink
+          <Link
             to={node.fields.slug}
           >
             {node.frontmatter.title}
-          </InternalLink>
+          </Link>
         </g.H3>
         <g.Small color="#AAA" textAlign="right">{node.frontmatter.date}</g.Small>
         <p>{node.excerpt}</p>

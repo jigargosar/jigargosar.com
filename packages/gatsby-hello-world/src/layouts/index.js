@@ -2,7 +2,7 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import g from 'glamorous'
 import {rhythm} from '../utils/typography'
-import {ExternalLink, InternalLink, ListLink} from '../components/Link'
+import {Link} from '../components/Link'
 
 const renderHeader = function(data) {
   return <g.Header
@@ -11,19 +11,19 @@ const renderHeader = function(data) {
     alignItems={`center`}
   >
     <g.Div flex="1">
-      <InternalLink to="/">
+      <Link to="/">
         <h3 style={{display: `inline`}}>{`${data.site.siteMetadata.title}`}</h3>
-      </InternalLink>
+      </Link>
     </g.Div>
 
     <g.Div>
-      <InternalLink to="/blog/">BLOG</InternalLink>
-      <ExternalLink href="https://medium.com/@jigargosar">
+      <Link to="/blog/">BLOG</Link>
+      <Link href="https://medium.com/@jigargosar">
         MEDIUM
-      </ExternalLink>
-      <ExternalLink href="https://twitter.com/@jigargosar">
+      </Link>
+      <Link href="https://twitter.com/@jigargosar">
         TWITTER
-      </ExternalLink>
+      </Link>
     </g.Div>
   </g.Header>
 }

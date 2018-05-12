@@ -3,10 +3,19 @@ import GLink from 'gatsby-link'
 
 import {rhythm} from '../utils/typography'
 import g from 'glamorous'
-import {omit} from 'ramda'
+import {isNil, omit} from 'ramda'
 
-export const InternalLink = g(GLink)(omit(['children']))
+export const Link = ({to, href, children, ...rest}) => {
+  return isNil(to)
+         ? <ExternalLink href={href} {...rest} >{children}</ExternalLink>
+         : <InternalLink to={to} {...rest}>{children}</InternalLink>
+}
 
-export const ExternalLink = ({target, children, ...others}) =>
-  <g.A target={target || '_blank'} {...others}>{children}</g.A>
+const InternalLink = g(GLink)(omit(['children']))
+
+export const ExternalLink = g.A
+
+ExternalLink.defaultProps = {
+  target: '_blank',
+}
 
