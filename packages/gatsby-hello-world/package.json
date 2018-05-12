@@ -7,7 +7,7 @@
     "build": "gatsby build",
     "serve": "gatsby serve"
   },
-  "dependencies": {
+  "devDependencies": {
     "gatsby": "^1.9.250",
     "gatsby-link": "^1.6.40",
     "gatsby-plugin-catch-links": "1.0.22",
@@ -17,6 +17,7 @@
     "gatsby-source-filesystem": "1.5.35",
     "gatsby-transformer-remark": "1.7.40",
     "glamorous": "4.12.5",
+    "ramda": "0.25.0",
     "react-helmet": "5.2.0",
     "typography-theme-fairy-gates": "0.15.11",
     "typography-theme-kirkham": "0.16.3"

@@ -1,7 +1,7 @@
 import React from 'react'
 import g from 'glamorous'
 import {rhythm} from '../utils/typography'
-import {ListLink, ListLinkExternal} from '../components/ListLink'
+import {ExternalLink, InternalLink, ListLink} from '../components/Link'
 
 const Pages = ({data}) =>
     <g.Div display="flex" alignItems="center" justifyContent="center" height="100%">
@@ -9,13 +9,13 @@ const Pages = ({data}) =>
         Jigar Gosar
       </g.H1>
       <g.H2 flex="1" display="flex" flexDirection="column" alignItems="center">
-        <ListLink to="/blog/">BLOG</ListLink>
-        <ListLinkExternal href="https://medium.com/@jigargosar">
+        <InternalLink to="/blog/">BLOG</InternalLink>
+        <ExternalLink href="https://medium.com/@jigargosar">
           MEDIUM
-        </ListLinkExternal>
-        <ListLinkExternal href="https://twitter.com/@jigargosar">
+        </ExternalLink>
+        <ExternalLink href="https://twitter.com/@jigargosar">
           TWITTER
-        </ListLinkExternal>
+        </ExternalLink>
       </g.H2>
   </g.Div>
 
