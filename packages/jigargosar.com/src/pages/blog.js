@@ -1,7 +1,7 @@
 import React from 'react'
 import g from 'glamorous'
 import {rhythm} from '../utils/typo'
-import {Helmet} from 'react-helmet'
+import Helmet from 'react-helmet'
 import {Link} from '../components/Link'
 
 const BlogPostList = ({data}) =>
@@ -11,9 +11,7 @@ const BlogPostList = ({data}) =>
     {data.allMarkdownRemark.edges.map(({node}) => (
       <div key={node.id}>
         <g.H3 marginBottom={rhythm(1 / 4)}>
-          <Link
-            to={node.fields.slug}
-          >
+          <Link to={node.fields.slug}>
             {node.frontmatter.title}
           </Link>
         </g.H3>

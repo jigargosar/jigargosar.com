@@ -6,7 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/packages" />
       <excludeFolder url="file://$MODULE_DIR$/packages/gatsby-blog" />
       <excludeFolder url="file://$MODULE_DIR$/packages/gatsby-default" />
-      <excludeFolder url="file://$MODULE_DIR$/packages/gatsby-hello-world" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/jigargosar.com" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
