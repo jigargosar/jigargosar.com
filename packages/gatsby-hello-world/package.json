@@ -19,6 +19,7 @@
     "glamorous": "4.13.0",
     "ramda": "0.25.0",
     "react-helmet": "5.2.0",
+    "typography": "0.16.17",
     "typography-theme-fairy-gates": "0.15.11",
     "typography-theme-kirkham": "0.16.3"
   },

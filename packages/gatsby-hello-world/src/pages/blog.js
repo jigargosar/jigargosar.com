@@ -1,6 +1,6 @@
 import React from 'react'
 import g from 'glamorous'
-import {rhythm} from '../utils/typography'
+import {rhythm} from '../utils/typo'
 import {Helmet} from 'react-helmet'
 import {Link} from '../components/Link'
 

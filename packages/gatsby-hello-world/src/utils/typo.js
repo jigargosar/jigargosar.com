@@ -8,3 +8,4 @@ if (process.env.NODE_ENV !== `production`) {
 }
 
 export default typography
+export const {rhythm} = typography
