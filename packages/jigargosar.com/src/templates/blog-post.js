@@ -12,8 +12,8 @@ export default ({data}) => {
         <Link to={post.fields.slug}>
           {post.frontmatter.title}
         </Link>
-        <g.Div style={{color: 'rgb(165, 164, 164)'}}>
-          <g.Span style={{fontSize: '0.5em'}}>
+        <g.Div style={{color: 'rgb(165, 164, 164)'}} textAlign="right">
+          <g.Span style={{fontSize: '0.4em'}} fontWeight="normal">
             {post.frontmatter.date}
           </g.Span>
         </g.Div>
