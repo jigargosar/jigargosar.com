@@ -8,12 +8,12 @@ Let’s skip on what and focus on why Functional Programming
 
 ## WHY FP?
 
-After 15+ years of writing imperative and pseudo-functional code in Java, Ruby & Javascript. I stumbled upon an incredible Javascript library called [Ramda](http://ramdajs.com/).
+After 15+ years of writing imperative and pseudo-functional code in Java, Ruby & Javascript. I stumbled upon an incredible Javascript library called [Ramda][http://ramdajs.com/].
 
 In past 6–8 months I have been primarily working in Javascript. And after reading up on
 
-* [Hey Underscore, You’re Doing It Wrong!](https://www.youtube.com/watch?v=m3svKOdZijA&app=desktop)
-* [The Philosophy of Ramda](http://fr.umio.us/the-philosophy-of-ramda/).
+* [Hey Underscore, You’re Doing It Wrong!][https://www.youtube.com/watch?v=m3svKOdZijA&app=desktop])
+* [The Philosophy of Ramda][http://fr.umio.us/the-philosophy-of-ramda/].
 
 
 I finally realized that I have been missing out on some of the fundamental principles of FP.
