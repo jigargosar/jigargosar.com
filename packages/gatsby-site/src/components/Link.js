@@ -21,5 +21,18 @@ ExternalLink.defaultProps = {
 export function Link({to, location, href, children, ...rest}) {
   return isNil(to)
          ? <ExternalLink href={href} {...rest} >{children}</ExternalLink>
-         : <InternalLink to={to} location={location} {...rest}>{children}</InternalLink>
+         : location && equals(location.pathname, to)
+           ? <ExternalLink
+             href={to}
+             target={'_self'}
+             onClick={e => e.preventDefault()}
+             {...rest} >
+             {children}
+           </ExternalLink>
+           : <InternalLink
+             to={to}
+             location={location}
+             {...rest}>
+             {children}
+           </InternalLink>
 }
