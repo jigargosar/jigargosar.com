@@ -36,7 +36,7 @@ module.exports = {
               // Optional runtime dependencies to load from NPM.
               // This option only applies to REPLs that support it (eg CodeSandbox).
               // eg ['react', 'react-dom'] or ['react@15', 'react-dom@15']
-              // dependencies: [],
+              // dependencies: ["assertion"],
 
               // Example code links are relative to this dir.
               // eg examples/path/to/file.js
@@ -61,7 +61,7 @@ module.exports = {
               // Optional link target.
               // Note that if a target is specified, "noreferrer" will also be added.
               // eg <a href="..." target="_blank" rel="noreferrer">...</a>
-              // target: '_blank',
+              target: '_blank',
             },
           },
           {
@@ -78,7 +78,7 @@ module.exports = {
 
               // Example code links are relative to this dir.
               // eg examples/path/to/file.js
-              directory: `${__dirname}/data/blog/`,
+              directory: `${__dirname}/data/examples/`,
             },
           },
           {

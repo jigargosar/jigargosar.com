@@ -1,6 +1,8 @@
-var absoluteValue = function(num){
+const assert = require("assertion");
+
+var absoluteValue = function(num) {
   return Math.abs(num);
 }
 // And please don't break my unit tests.
-assert.equals(absoluteValue(-4), 4);
-assert.equals(absoluteValue(16), 16);
+assert.equal(absoluteValue(-4), 4);
+assert.equal(absoluteValue(16), 16);

@@ -6,8 +6,6 @@ author: "Jigar Gosar"
 
 Let’s skip on what and focus on why Functional Programming
 
-[Try it on CodePen](codepen://fp-ex-01)
-
 ## WHY FP?
 
 After 15+ years of writing imperative and pseudo-functional code in Java, Ruby & Javascript. I stumbled upon an incredible Javascript library called [Ramda][http://ramdajs.com/].
