@@ -11,7 +11,7 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `data`,
-        path: `${__dirname}/data`,
+        path: `${__dirname}/data/`,
       },
     },
     {
@@ -25,6 +25,45 @@ module.exports = {
       resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [
+          {
+            resolve: 'gatsby-remark-code-repls',
+            options: {
+              // Optional default link text.
+              // Defaults to "REPL".
+              // eg <a href="...">Click here</a>
+              // defaultText: 'Click here',
+
+              // Optional runtime dependencies to load from NPM.
+              // This option only applies to REPLs that support it (eg CodeSandbox).
+              // eg ['react', 'react-dom'] or ['react@15', 'react-dom@15']
+              // dependencies: [],
+
+              // Example code links are relative to this dir.
+              // eg examples/path/to/file.js
+              directory: `${__dirname}/data/examples/`,
+
+              // Optional externals to load from a CDN.
+              // This option only applies to REPLs that support it (eg Codepen).
+              // eg '//unpkg.com/react/umd/react.development.js'
+              // externals: [],
+
+              // Optional HTML contents to inject into REPL.
+              // Defaults to `<div id="root"></div>`.
+              // This option only applies to REPLs that support it (eg Codepen, CodeSandbox).
+              // eg '<div id="root"></div>'
+              // html: '',
+
+              // Optional path to a custom redirect template.
+              // The redirect page is only shown briefly,
+              // But you can use this setting to override its CSS styling.
+              // redirectTemplate: `${__dirname}/src/redirect-template.js`,
+
+              // Optional link target.
+              // Note that if a target is specified, "noreferrer" will also be added.
+              // eg <a href="..." target="_blank" rel="noreferrer">...</a>
+              // target: '_blank',
+            },
+          },
           {
             resolve: 'gatsby-remark-embed-snippet',
             options: {
@@ -59,22 +98,19 @@ module.exports = {
       },
 
     },
-    {
-      resolve: 'gatsby-plugin-klipse',
-      options: {
-        // Class prefix for <pre> tags containing code examples
-        // defaults to empty string
-        // if you use PrimsJS for example then add `language-` as the prefix
-        // classPrefix: 'language-',
-        classPrefix: 'language-',
-        // Klipse config, you can check it here
-        // https://github.com/viebel/klipse#configuration
-        // klipseSettings: {},
-        // To load any external scripts you need, pass an array of URLs. The plugin will always load them before the klipse plugin
-        // defaults to an empty Array
-        externalScripts: [],
-      }
-    },
+    // {
+    //   resolve: 'gatsby-plugin-klipse',
+    //   options: {
+    //     // Class prefix for <pre> tags containing code examples
+    //     // defaults to empty string
+    //     // if you use PrimsJS for example then add `language-` as the prefix
+    //     // classPrefix: 'language-',
+    //     classPrefix: 'language-',
+    //     // Klipse config, you can check it here
+    //     // https://github.com/viebel/klipse#configuration
+    //     // klipseSettings: {},
+    //     // To load any external scripts you need, pass an array of URLs. The plugin will always load them before the
+    // klipse plugin // defaults to an empty Array externalScripts: [], } },
     {
       resolve: `gatsby-plugin-typography`,
       options: {
