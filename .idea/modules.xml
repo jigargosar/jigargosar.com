@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/packages/boowa-static-choo/boowa-static-choo.iml" filepath="$PROJECT_DIR$/packages/boowa-static-choo/boowa-static-choo.iml" />
       <module fileurl="file://$PROJECT_DIR$/packages/choo-jigargosar.com/choo-jigargosar.com.iml" filepath="$PROJECT_DIR$/packages/choo-jigargosar.com/choo-jigargosar.com.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/hacker-blog.iml" filepath="$PROJECT_DIR$/.idea/hacker-blog.iml" />
       <module fileurl="file://$PROJECT_DIR$/packages/jigargosar.com/jigargosar.com.iml" filepath="$PROJECT_DIR$/packages/jigargosar.com/jigargosar.com.iml" />
