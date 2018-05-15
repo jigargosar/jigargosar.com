@@ -2,37 +2,31 @@ import React from 'react'
 import GLink from 'gatsby-link'
 
 import g from 'glamorous'
-import {equals, isNil, omit, prop} from 'ramda'
+import {compose, equals, isNil, omit, pathEq, prop, propEq} from 'ramda'
+import {mapProps} from 'recompose'
 
-const GLinkWrapper = ({to, location, children}) => {
-  console.log('location.pathname', prop('pathname', location), to)
-  return location && equals(location.pathname, to)
-         ? <g.Div>{children}</g.Div>
-         : <GLink to={to}>{children}</GLink>
-}
-
-const InternalLink = g(GLinkWrapper)(omit(['children']))
+const InternalLink = g(GLink)(omit(['children']))
 
 const ExternalLink = g.A
 ExternalLink.defaultProps = {
   target: '_blank',
 }
 
-export function Link({to, location, href, children, ...rest}) {
+const enhanceLink = compose(
+  mapProps(({to, href, location, ...rest}) => ({
+    ...(location && to && location.pathname === to)
+       ? {
+        href: to,
+        target: '_self',
+        onClick: e => e.preventDefault(),
+      }
+       : {to, href},
+    ...rest,
+  })),
+)
+
+export const Link = enhanceLink(function Link({to, location, href, children, ...rest}) {
   return isNil(to)
          ? <ExternalLink href={href} {...rest} >{children}</ExternalLink>
-         : location && equals(location.pathname, to)
-           ? <ExternalLink
-             href={to}
-             target={'_self'}
-             onClick={e => e.preventDefault()}
-             {...rest} >
-             {children}
-           </ExternalLink>
-           : <InternalLink
-             to={to}
-             location={location}
-             {...rest}>
-             {children}
-           </InternalLink>
-}
+         : <InternalLink to={to} {...rest}>{children}</InternalLink>
+})
