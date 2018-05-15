@@ -3,14 +3,8 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/packages/choo-jigargosar.com" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/packages/choo-jigargosar.com/node_modules" />
-      <excludeFolder url="file://$MODULE_DIR$/packages/gatsby-blog" />
-      <excludeFolder url="file://$MODULE_DIR$/packages/gatsby-default" />
-      <excludeFolder url="file://$MODULE_DIR$/packages/jigargosar.com" />
     </content>
-    <content url="file://$MODULE_DIR$/packages/boowa-static-choo" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
