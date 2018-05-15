@@ -1,9 +1,8 @@
 import React from 'react'
 import g from 'glamorous'
 import {Link} from '../components/Link'
-import {NavLinks} from '../components/NavLinks'
 
-export function CommonHeader({title}) {
+export function CommonHeader({title, children}) {
   return <g.Header
     marginBottom={`1.5em`}
     display={`flex`}
@@ -18,7 +17,7 @@ export function CommonHeader({title}) {
       gridTemplateColumns={`repeat(3, fit-content(100%))`}
       gridGap="0.5em"
     >
-      <NavLinks/>
+      {children}
     </g.Div>
   </g.Header>
 }

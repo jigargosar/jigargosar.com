@@ -6,7 +6,7 @@ author: "Jigar Gosar"
 
 Can you spot the duplication? And remove it?
 
-`embed:fp-ex-01`
+`embed:fp-ex-01.js`
 
 Note:
 
