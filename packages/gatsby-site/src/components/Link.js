@@ -25,7 +25,7 @@ const enhanceLink = compose(
   })),
 )
 
-export const Link = enhanceLink(function Link({to, location, href, children, ...rest}) {
+export const Link = enhanceLink(function Link({to, href, children, ...rest}) {
   return isNil(to)
          ? <ExternalLink href={href} {...rest} >{children}</ExternalLink>
          : <InternalLink to={to} {...rest}>{children}</InternalLink>
