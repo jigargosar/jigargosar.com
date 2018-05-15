@@ -23,7 +23,8 @@ module.exports = () => endent`
    * Here are my articles.
    */</span>
   yourname<span class="token punctuation">.</span>articles <span class="token operator">=</span> <span class="token punctuation">[</span>
-    <span class="token string">"<a class="token md-link" href="./#articles/sheetify_document">sheetify document</a>"</span>
+    <span class="token string">"<a class="token md-link" href="./#articles/sheetify_document">sheetify document</a>"</span><span class="token punctuation">,</span>
+    <span class="token string">"<a class="token md-link" href="./#articles/sheetify_document2">sheetify document2</a>"</span>
   <span class="token punctuation">]</span>
 
   console.log(yourname)

@@ -5,9 +5,11 @@ var css = require('sheetify')
 var fs = require('fs')
 
 var sheetify_document = fs.readFileSync('./app/articles/sheetify_document.html', 'utf8')
+var sheetify_document2 = fs.readFileSync('./app/articles/sheetify_document2.html', 'utf8')
 
 var titleObject = {
-  sheetify_document: 'sheetify document'
+  sheetify_document: 'sheetify document',
+  sheetify_document2: 'sheetify document2'
 }
 
 css('./article.scss')
