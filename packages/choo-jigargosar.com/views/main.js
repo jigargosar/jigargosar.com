@@ -1,10 +1,10 @@
 var html = require('choo/html')
 
-var TITLE = 'choo-jigargosar.com - main'
+var TITLE = 'JigarGosar.com'
 
 module.exports = view
 
-function view (state, emit) {
+function view(state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
 
   return html`
@@ -152,7 +152,7 @@ function view (state, emit) {
     </body>
   `
 
-  function handleClick () {
-    emit('clicks:add', 1)
+  function handleClick() {
+    emit(state.events.clicks_add, 1)
   }
 }
