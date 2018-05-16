@@ -5,7 +5,7 @@ module.exports = {
   plugins: [
     `gatsby-plugin-react-next`,
     `gatsby-plugin-react-helmet`,
-    // `gatsby-plugin-catch-links`,
+    `gatsby-plugin-catch-links`,
     `gatsby-plugin-glamor`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -25,6 +25,14 @@ module.exports = {
       resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [
+          'gatsby-remark-autolink-headers',
+          {
+            resolve: 'gatsby-remark-external-links',
+            options: {
+              target: '_blank',
+              rel: 'nofollow noopener noreferrer',
+            },
+          },
           {
             resolve: 'gatsby-remark-code-repls',
             options: {
