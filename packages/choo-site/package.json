@@ -13,6 +13,7 @@
   "dependencies": {
     "choo": "6.11.0-preview1",
     "choo-service-worker": "2.4.0",
+    "ramda": "0.25.0",
     "sheetify": "7.3.2",
     "tachyons": "4.9.1"
   },
