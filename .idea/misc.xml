@@ -12,17 +12,5 @@
     <option name="nodeInterpreter" value="" />
     <option name="esprima" value="" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="/usr/local/Cellar/maven/3.5.0/libexec" />
-      </MavenGeneralSettings>
-    </option>
-    <option name="importingSettings">
-      <MavenImportingSettings>
-        <option name="importAutomatically" value="true" />
-      </MavenImportingSettings>
-    </option>
-  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="IDEA jdk" project-jdk-type="JavaSDK" />
 </project>

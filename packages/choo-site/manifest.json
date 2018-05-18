@@ -1,6 +1,6 @@
 {
-  "name": "choo-jigargosar.com",
-  "short_name": "choo-jigargosar.com",
+  "name": "jigargosar.com",
+  "short_name": "jigargosar.com",
   "description": "Source for jigargosar.com personal website",
   "start_url": "/",
   "display": "standalone",

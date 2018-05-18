@@ -1,7 +1,9 @@
 var css = require("sheetify")
 var choo = require("choo")
 
+css("./global.css")
 css("tachyons")
+css("prismjs/themes/prism.css")
 
 var app = choo()
 if (process.env.NODE_ENV === "production") {
@@ -18,7 +20,7 @@ app.use(function (state, emitter) {
 
 app.route("/rendering-performance", require("./views/rendering-performance"))
 app.route("/", require("./views/landing"))
-app.route("/md", require("./views/md"))
+app.route("/render-self", require("./views/md"))
 app.route("/*", require("./views/404"))
 
 module.exports = app.mount("body")

@@ -8,6 +8,7 @@
       <w>nofollow</w>
       <w>noopener</w>
       <w>noreferrer</w>
+      <w>prismjs</w>
     </words>
   </dictionary>
 </component>
