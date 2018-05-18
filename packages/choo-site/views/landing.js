@@ -22,6 +22,7 @@ function view(state, emit) {
     <div class="flex-column">
       <div>${link(`rendering-performance`, `Rendering Performance`)}</div>
       <div>${link(`render-self`, `Self Rendering Page`)}</div>
+      <div>${link(`main`, `Old Index Page`)}</div>
     </div>
 </div>
 </body>

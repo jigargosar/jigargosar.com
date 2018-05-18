@@ -18,8 +18,9 @@ app.use(function (state, emitter) {
   state.colCount = 5
 })
 
-app.route("/rendering-performance", require("./views/rendering-performance"))
 app.route("/", require("./views/landing"))
+app.route("/main", require("./views/main"))
+app.route("/rendering-performance", require("./views/rendering-performance"))
 app.route("/render-self", require("./views/render-self"))
 app.route("/*", require("./views/404"))
 

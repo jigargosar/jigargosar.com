@@ -96,7 +96,7 @@ function view(state, emit) {
             go ahead and delete them once you know how they work.
           </p>
 
-          <p>Number of clicks stored: ${state.totalClicks}</p>
+          <p>Number of clicks stored: ${state.clicks.total}</p>
 
           <button class="dim ph3 ba bw1 pv2 b--black pointer bg-white"
             onclick=${handleClick}>
@@ -153,6 +153,6 @@ function view(state, emit) {
   `
 
   function handleClick() {
-    emit(state.events.clicks_add, 1)
+    emit(state.events.clicks.add, 1)
   }
 }
