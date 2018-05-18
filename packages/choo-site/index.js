@@ -12,12 +12,13 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(require("./stores/clicks"))
 app.use(function (state, emitter) {
-  state.rowCount = 1000
+  state.rowCount = 50
   state.colCount = 5
 })
 
 app.route("/rendering-performance", require("./views/rendering-performance"))
 app.route("/", require("./views/landing"))
+app.route("/md", require("./views/md"))
 app.route("/*", require("./views/404"))
 
 module.exports = app.mount("body")
