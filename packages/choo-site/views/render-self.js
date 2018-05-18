@@ -14,7 +14,7 @@ var processor = unified()
     .use(remark2rehype)
     .use(toHtml)
 
-const src = fs.readFileSync(`${__dirname}/md.js`, "utf8")
+const src = fs.readFileSync(`${__dirname}/${__filename}`, "utf8")
 
 var TITLE = "Self Rendering Page - JigarGosar.com"
 

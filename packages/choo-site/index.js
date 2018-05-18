@@ -20,7 +20,7 @@ app.use(function (state, emitter) {
 
 app.route("/rendering-performance", require("./views/rendering-performance"))
 app.route("/", require("./views/landing"))
-app.route("/render-self", require("./views/md"))
+app.route("/render-self", require("./views/render-self"))
 app.route("/*", require("./views/404"))
 
 module.exports = app.mount("body")
