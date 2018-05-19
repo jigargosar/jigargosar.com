@@ -10,10 +10,10 @@ function viewNote(note) {
     para => html`<div class="pb2">${para}</div>`,
     note.body.split(/\r\n|\r|\n/),
   )
-  return html`<div class="mb3 center measure-wide pa3">
-    <div class="f5 mb1">${note.title}</div>
+  return html`<div class="center ph3-m mb4">
+    <div class="f5 mb1 ml2">${note.title}</div>
     <div class="f6 bg-white-80 shadow-1 pa3">
-      ${noteHtml}
+      <div class="measure-wide">${noteHtml}</div>
     </div>
   </div>`
 }
@@ -38,7 +38,7 @@ function view(state, emit) {
     </div>
   </div>
 </header>
-<div class="">
+<div class="mt4">
   ${R.map(viewNote, R.sortWith([R.descend(R.prop('modifiedAt'))], allNotes))}
 </div>
 </body>      
