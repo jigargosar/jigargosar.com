@@ -1,10 +1,8 @@
-var R = require('ramda')
+const R = require('ramda')
+const faker = new (require('faker'))(123)
+const chance = new (require('chance'))(123)
 
 module.exports = store
-var faker = require('faker')
-var Chance = require('chance')
-
-var chance = new Chance(123)
 
 function createFakeNote() {
   return {
