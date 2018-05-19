@@ -1,3 +1,4 @@
+const Machine = require('xstate').Machine
 const R = require('ramda')
 const faker = require('faker')
 faker.seed(123)
@@ -17,6 +18,31 @@ const fakeNotes = R.times(createFakeNote, 15)
 function store(state, emitter) {
   state.notes = {
     list: fakeNotes,
+    viewMachine: Machine({
+      key: 'notesViewState',
+      initial: 'list',
+      states: {
+        list: {
+          on: {
+            addNew: 'editNew',
+            editExisting: 'editExisting',
+          },
+        },
+        editNew: {
+          on: {
+            save: 'list',
+            cancel: 'list',
+          },
+        },
+        editExisting: {
+          on: {
+            save: 'list',
+            cancel: 'list',
+          },
+        },
+        stop: {},
+      },
+    }),
   }
 
   function render() {
@@ -34,6 +60,10 @@ function store(state, emitter) {
         idx,
         createFakeNote({modifiedAt: Date.now()}),
       )(state.notes.list)
+      state.notes.viewMachine.transition(
+        state.notes.viewMachine.state,
+        'editExisting',
+      )
       render()
     })
   })
