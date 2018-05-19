@@ -13,7 +13,7 @@ function viewEditButton(emit, idx) {
   }
 }
 
-const viewNote = R.curry(function(emit, totalNotes, note, idx) {
+const viewNote = R.curry(function(emit, note, idx, notes) {
   var noteHtml = R.map(
     para => html`<div class="pb2">${para}</div>`,
     note.body.split(/\r\n|\r|\n/),
@@ -28,7 +28,7 @@ const viewNote = R.curry(function(emit, totalNotes, note, idx) {
   //<div className="center ph3-m mb4">
   return html`<div class="center _ph3-m bg-white-80">
   <div class="flex f5 _mb1 _mh2 pa2 b--black-10 ${
-    totalNotes - 1 === idx ? '' : 'bb'
+    notes.length - 1 === idx ? '' : 'bb'
   }">
     <div class="flex-grow-1">
       ${note.title}
@@ -58,7 +58,7 @@ function view(state, emit) {
 </header>
 <div class="_mt4 ma3-ns shadow-1">
   ${R.addIndex(R.map)(
-    viewNote(emit, allNotes.length),
+    viewNote(emit),
     // R.sortWith([R.descend(R.prop('modifiedAt'))], allNotes),
     allNotes,
   )}
