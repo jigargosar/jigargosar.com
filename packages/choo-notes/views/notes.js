@@ -14,7 +14,8 @@ function viewEditButton(emit, idx) {
 }
 
 const viewNote = R.curry(function(emit, note, idx, notes) {
-  return html`<div class="center _ph3-m _mb4 bg-white-80">
+  return html`
+<div class="center _ph3-m _mb4 bg-white-80">
   <div class="flex f5 _mb1 _mh2 pa2 b--black-10 ${
     notes.length - 1 === idx ? '' : 'bb'
   }">
@@ -23,7 +24,7 @@ const viewNote = R.curry(function(emit, note, idx, notes) {
     </div>
     ${viewEditButton(emit, idx)}
   </div>
-  ${renderNoteBody() && null}
+  ${null && renderNoteBody()}
 </div>`
 
   function renderNoteBody() {
@@ -42,7 +43,8 @@ function view(state, emit) {
 
   const allNotes = state.notes.list
 
-  return html`<body class="bg-black-10 black-80 mw7-l center code lh-copy">
+  return html`
+<body class="bg-black-10 black-80 mw7-l center code lh-copy">
 <header class="bg-black-80 white-80">
   <div class="flex items-center pa3">
     <div class="flex-auto flex f3">
