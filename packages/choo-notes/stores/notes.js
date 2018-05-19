@@ -5,11 +5,15 @@ faker.seed(123)
 
 module.exports = store
 
-function createFakeNote() {
-  return {text: faker.lorem.paragraphs()}
+function createFakeNote({modifiedAt} = {}) {
+  return {
+    title: faker.lorem.words(),
+    text: faker.lorem.text(),
+    modifiedAt: modifiedAt || faker.date.recent(),
+  }
 }
 
-const fakeNotes = R.times(createFakeNote, chance.natural({min: 3, max: 10}))
+const fakeNotes = R.times(createFakeNote, 15)
 
 function store(state, emitter) {
   state.notes = {
@@ -18,7 +22,7 @@ function store(state, emitter) {
 
   emitter.on('DOMContentLoaded', function() {
     emitter.on('notes:add', function() {
-      state.notes.list.push(createFakeNote())
+      state.notes.list.push(createFakeNote({modifiedAt: Date.now()}))
       emitter.emit(state.events.RENDER)
     })
   })

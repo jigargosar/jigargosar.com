@@ -7,12 +7,12 @@ module.exports = view
 
 function viewNote(note) {
   var noteHtml = R.map(
-    para => html`<p>${para}</p>`,
+    para => html`<div class="pb2">${para}</div>`,
     note.text.split(/\r\n|\r|\n/),
   )
-  return html`<div class="mv3 measure-wide">
-    <div class="f5 mb2 bb">Note</div>
-    <div class="f6">
+  return html`<div class="mb3 center measure-wide pa3">
+    <div class="f5 mb1">${note.title}</div>
+    <div class="f6 bg-white-80 shadow-1 pa3">
       ${noteHtml}
     </div>
   </div>`
@@ -29,16 +29,17 @@ function view(state, emit) {
   return html`<body class="bg-black-10 black-80 mw7-l center code lh-copy">
 <header class="bg-black-80 white-80">
   <div class="flex items-center pa3">
-    <div class="flex-auto f3">
-      Choo Notes<span class="f6">(${allNotes.length})</span>
+    <div class="flex-auto flex f3">
+      <div>Choo Notes</div>
+      <div class="f6">(${allNotes.length})</div>
     </div>
-    <button onclick=${onClick}>
-      Add Note
-    </button>
+    <div class="underline pointer" onclick=${onClick}>
+      Add
+    </div>
   </div>
 </header>
-<div class="center measure-wide bg-white-80 pa3">
-  ${R.map(viewNote, allNotes)}
+<div class="">
+  ${R.map(viewNote, R.sortWith([R.descend(R.prop('modifiedAt'))], allNotes))}
 </div>
 </body>      
   `
