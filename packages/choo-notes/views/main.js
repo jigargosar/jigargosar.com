@@ -11,7 +11,6 @@ function viewNote(note) {
     R.map(para => html`<p>${para}</p>`),
     R.split(/\n ?\r?/),
   )(note.text)
-  console.log('noteHtml', noteHtml)
   return html`<div class="mv4 measure-wide">
     <div class="f5 mb2 bb">Note</div>
     <div class="f6">
@@ -24,7 +23,7 @@ function view(state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
 
   function onClick() {
-    emit('notes.addNew')
+    emit('notes:add')
   }
 
   var allNotes = state.notes.list
