@@ -1,12 +1,23 @@
 const R = require('ramda')
 const html = require('choo/html')
+const rawHtml = require('choo/html/raw')
 
 const TITLE = 'Choo Notes'
 
 module.exports = view
 
 function viewNote(note) {
-  return html`<div class="mb2"><pre>${note.text}</pre></div>`
+  var noteHtml = R.compose(
+    R.map(para => html`<p>${para}</p>`),
+    R.split(/\n ?\r?/),
+  )(note.text)
+  console.log('noteHtml', noteHtml)
+  return html`<div class="mv4 measure-wide">
+    <div class="f5 mb2 bb">Note</div>
+    <div class="f6">
+      ${noteHtml}
+    </div>
+  </div>`
 }
 
 function view(state, emit) {
@@ -28,7 +39,7 @@ function view(state, emit) {
         Add Note
       </button>
     </div>
-    <div>
+    <div class="center measure-wide">
       ${R.map(viewNote, allNotes)}
     </div>
   </body>      
