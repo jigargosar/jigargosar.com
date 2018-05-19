@@ -19,18 +19,22 @@ function store(state, emitter) {
     list: fakeNotes,
   }
 
+  function render() {
+    emitter.emit(state.events.RENDER)
+  }
+
   emitter.on('DOMContentLoaded', function() {
     emitter.on('notes:add', function() {
-      state.notes.list.push(createFakeNote({modifiedAt: Date.now()}))
-      emitter.emit(state.events.RENDER)
+      state.notes.list.unshift(createFakeNote({modifiedAt: Date.now()}))
+      render()
     })
 
-    emitter.on('notes:edit', function({idx}) {
+    emitter.on('notes:edit', function(idx) {
       state.notes.list = R.update(
         idx,
         createFakeNote({modifiedAt: Date.now()}),
       )(state.notes.list)
-      emitter.emit(state.events.RENDER)
+      render()
     })
   })
 }
