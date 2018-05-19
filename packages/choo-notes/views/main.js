@@ -14,19 +14,7 @@ function viewEditButton(emit, idx) {
 }
 
 const viewNote = R.curry(function(emit, note, idx, notes) {
-  var noteHtml = R.map(
-    para => html`<div class="pb2">${para}</div>`,
-    note.body.split(/\r\n|\r|\n/),
-  )
-
-  function renderNoteBody() {
-    return html`<div class="f6 bg-white-80 shadow-1 pa3">
-    <div class="measure-wide">${noteHtml}</div>
-  </div>`
-  }
-
-  //<div className="center ph3-m mb4">
-  return html`<div class="center _ph3-m bg-white-80">
+  return html`<div class="center _ph3-m _mb4 bg-white-80">
   <div class="flex f5 _mb1 _mh2 pa2 b--black-10 ${
     notes.length - 1 === idx ? '' : 'bb'
   }">
@@ -37,12 +25,22 @@ const viewNote = R.curry(function(emit, note, idx, notes) {
   </div>
   ${renderNoteBody() && null}
 </div>`
+
+  function renderNoteBody() {
+    const noteHtml = R.map(
+      para => html`<div class="pb2">${para}</div>`,
+      note.body.split(/\r\n|\r|\n/),
+    )
+    return html`<div class="f6 bg-white-80 shadow-1 pa3">
+    <div class="measure-wide">${noteHtml}</div>
+  </div>`
+  }
 })
 
 function view(state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
 
-  var allNotes = state.notes.list
+  const allNotes = state.notes.list
 
   return html`<body class="bg-black-10 black-80 mw7-l center code lh-copy">
 <header class="bg-black-80 white-80">
