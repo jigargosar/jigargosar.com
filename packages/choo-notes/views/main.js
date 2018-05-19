@@ -9,7 +9,7 @@ module.exports = view
 function viewNote(note) {
   var noteHtml = R.compose(
     R.map(para => html`<p>${para}</p>`),
-    R.split(/\n ?\r?/),
+    R.split(/\r\n|\r|\n/),
   )(note.text)
   return html`<div class="mv4 measure-wide">
     <div class="f5 mb2 bb">Note</div>
