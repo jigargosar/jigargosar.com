@@ -25,8 +25,11 @@ function store(state, emitter) {
       emitter.emit(state.events.RENDER)
     })
 
-    emitter.on('notes:edit', function(noteIndex) {
-      R.update(noteIndex, createFakeNote({modifiedAt: Date.now()}))
+    emitter.on('notes:edit', function({idx}) {
+      state.notes.list = R.update(
+        idx,
+        createFakeNote({modifiedAt: Date.now()}),
+      )(state.notes.list)
       emitter.emit(state.events.RENDER)
     })
   })
