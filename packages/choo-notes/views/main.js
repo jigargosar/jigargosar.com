@@ -6,7 +6,7 @@ const TITLE = 'Choo Notes'
 module.exports = view
 
 function viewEditButton(emit, idx) {
-  return html`<div class="underline" onclick="${onEditClicked}">edit</div>`
+  return html`<div class="underline pointer" onclick="${onEditClicked}">edit</div>`
 
   function onEditClicked() {
     emit('notes:edit', idx)
