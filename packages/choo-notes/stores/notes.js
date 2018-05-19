@@ -1,5 +1,4 @@
 const R = require('ramda')
-const chance = require('chance')(123)
 const faker = require('faker')
 faker.seed(123)
 
@@ -8,7 +7,7 @@ module.exports = store
 function createFakeNote({modifiedAt} = {}) {
   return {
     title: faker.lorem.words(),
-    text: faker.lorem.text(),
+    body: faker.lorem.text(),
     modifiedAt: modifiedAt || faker.date.recent(),
   }
 }
