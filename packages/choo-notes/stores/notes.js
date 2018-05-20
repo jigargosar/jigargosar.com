@@ -105,6 +105,6 @@ function store(state, emitter) {
       render()
     })
 
-    emitter.emit('notes:edit', 4)
+    emitter.emit('notes:edit', 2)
   })
 }

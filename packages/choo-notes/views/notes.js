@@ -78,15 +78,80 @@ function view(state, emit) {
   function renderEditNote(notes) {
     const fields = notes.editing.fields
     return html`
-      <div>
-        <div>editing note ${notes.editing.idx}</div>
-        <div>${fields.title}</div>
-        <div>${fields.body}</div>
+      <div class="p-5">
+        <p>
+          <div>editing note ${notes.editing.idx}</div>
+          <div>${fields.title}</div>
+          <div>${fields.body}</div>
+        </p>
+        <form onsubmit=${onSubmit} oncancel=${onSubmit}>
+            <input
+              autofocus 
+              class="input-reset form-control input-block" 
+              type="text" 
+              placeholder="Title"
+              value="${fields.title}" 
+              />
+            <textarea class="input-reset form-control input-block" style="height:200px;">
+              ${fields.body}
+            </textarea>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn">Cancel</button>
+            </div>
+        </form>
+        
+<form>
+  <div class="form-checkbox">
+    <label>
+      <input type="checkbox" checked="checked">
+      Available for hire
+    </label>
+    <p class="note" >
+      This will do insanely <strong>awesome</strong> and <strong>amazing</strong> things!
+    </p>
+  </div>
+</form>
+
+
+<form>
+  <div class="form-checkbox">
+    <label>
+      <input type="checkbox" checked="checked">
+      <em class="highlight">Available for hire</em>
+    </label>
+  </div>
+</form>
+
+        <form>
+        <dl class="form-group errored">
+    <dt><label for="example-text-errored">Example Text</label></dt>
+    <dd><input class="form-control" type="text" value="Example Value" id="example-text-errored" aria-describedby="form-error-text"></dd>
+    <dd class="error" id="form-error-text">This example input has an error.</dd>
+  </dl>
+  
+  <dl class="form-group errored">
+    <dt><label for="example-text-errored">Example Text</label></dt>
+    <dd><input class="form-control" type="text" value="Example Value" id="example-text-errored" aria-describedby="form-error-text"></dd>
+    <dd class="error" id="form-error-text">This example input has an error.</dd>
+  </dl>
+  <br>
+  <dl class="form-group warn">
+    <dt><label for="example-text-warn">Example Text</label></dt>
+    <dd><input class="form-control" type="text" value="Example Value" id="example-text-warn" aria-describedby="form-warning-text"></dd>
+    <dd class="warning" id="form-warning-text">This example input has a warning.</dd>
+  </dl>
+</form>
       </div>
       `
   }
 
   function onAddClick() {
     emit('notes:add')
+  }
+
+  function onSubmit(e) {
+    e.preventDefault()
+    emit('notes:saveChanges')
   }
 }

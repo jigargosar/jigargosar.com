@@ -3,6 +3,7 @@ var choo = require('choo')
 
 css('tachyons')
 css('primer')
+css('./global.css')
 
 var app = choo()
 if (process.env.NODE_ENV !== 'production') {
