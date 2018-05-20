@@ -49,7 +49,7 @@ const viewMachine = Machine({
 
 function store(state, emitter) {
   const notes = {
-    list: fakeNotes,
+    list: [] || fakeNotes,
     editing: null,
     viewMachine: viewMachine,
     viewState: viewMachine.initialState,
@@ -101,6 +101,7 @@ function store(state, emitter) {
         notes.list = R.update(noteIdx, fakeNote, notes.list)
       }
       notes.editing = null
+      localStorage.setItem('choo-notes', JSON.stringify(notes.list))
     },
   }
 
@@ -125,6 +126,15 @@ function store(state, emitter) {
   }
 
   emitter.on('DOMContentLoaded', () => {
+    try {
+      const list = JSON.parse(localStorage.getItem('choo-notes'))
+      assert.equal(R.type(list), 'Array')
+      state.notes.list = list
+      render()
+    } catch (e) {
+      log.info(e)
+    }
+
     emitter.on('notes:add', () => {
       handleEvent({type: 'add'})
       render()
@@ -142,6 +152,7 @@ function store(state, emitter) {
       handleEvent({type: 'save'})
       render()
     })
+
     // setTimeout(() => {
     //   emitter.emit('notes:edit', {id:`2`})
     // }, 1000)

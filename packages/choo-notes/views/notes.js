@@ -15,26 +15,29 @@ function viewEditButton(emit, {id}) {
 
 const viewNote = R.curry(function(emit, note, idx, notes) {
   return html`
-<div class="center _ph3-m _mb4 bg-white-80">
-  <div class="flex f5 _mb1 _mh2 pa2 b--black-10 ${
-    notes.length - 1 === idx ? '' : 'bb'
-  }">
-    <div class="flex-grow-1">
-      ${note.title}
+    <div class="center _ph3-m _mb4 bg-white-80">
+      <div class="flex f5 _mb1 _mh2 pa2 b--black-10 ${
+        notes.length - 1 === idx ? '' : 'bb'
+      }">
+        <div class="flex-grow-1">
+          ${note.title}
+        </div>
+        ${viewEditButton(emit, {id: note.id})}
+      </div>
+      ${null && renderNoteBody()}
     </div>
-    ${viewEditButton(emit, {id: note.id})}
-  </div>
-  ${null && renderNoteBody()}
-</div>`
+`
 
   function renderNoteBody() {
     const noteHtml = R.map(
       para => html`<div class="pb2">${para}</div>`,
       note.body.split(/\r\n|\r|\n/),
     )
-    return html`<div class="f6 bg-white-80 shadow-1 pa3">
-    <div class="measure-wide">${noteHtml}</div>
-  </div>`
+    return html`
+      <div class="f6 bg-white-80 shadow-1 pa3">
+        <div class="measure-wide">${noteHtml}</div>
+      </div>
+`
   }
 })
 
