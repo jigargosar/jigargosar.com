@@ -41,33 +41,49 @@ const viewNote = R.curry(function(emit, note, idx, notes) {
 function view(state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
 
-  const allNotes = state.notes.list
+  const notes = state.notes
+  const notesList = notes.list
 
   return html`
     <body class="bg-black-10 black-80 code lh-copy _mw7-l _center container-md">
-    <header class="bg-black-80 white-80">
+    ${renderHeader()}
+      ${notes.viewState.value === 'list' ? renderNotesList(notesList) : null}
+      ${notes.viewState.value === 'editing' ? renderEditNote(notes) : null}
+    </body>`
+
+  function renderHeader() {
+    return html`<header class="bg-black-80 white-80">
       <div class="flex items-center pa3">
         <div class="flex-auto flex f3">
           <div>Choo Notes</div>
-          <div class="f6">(${allNotes.length})</div>
+          <div class="f6">(${notesList.length})</div>
         </div>
         <div class="underline pointer" onclick=${onAddClick}>
           Add
         </div>
       </div>
-    </header>
-      ${renderNotesList(allNotes)}
-    </body>`
+    </header>`
+  }
 
   function renderNotesList(notesList) {
     return html`
       <div class="_mt4 ma3-ns shadow-1">
         ${R.addIndex(R.map)(
           viewNote(emit),
-          // R.sortWith([R.descend(R.prop('modifiedAt'))], allNotes),
+          // R.sortWith([R.descend(R.prop('modifiedAt'))], notesList),
           notesList,
         )}
       </div>`
+  }
+  function renderEditNote(notes) {
+    const fields = notes.editing.fields
+    return html`
+      <div>
+        <div>editing note ${notes.editing.idx}</div>
+        <div>${fields.title}</div>
+        <div>${fields.body}</div>
+      </div>
+      `
   }
 
   function onAddClick() {

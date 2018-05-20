@@ -30,7 +30,7 @@ const viewMachine = Machine({
         },
         editClicked: {
           editing: {
-            actions: ['updateNoteAtIndex'],
+            actions: ['startEditingNote'],
           },
         },
       },
@@ -52,29 +52,39 @@ const performAction = R.curry((actionMap, event, actionName) =>
 function store(state, emitter) {
   const notes = {
     list: fakeNotes,
+    editing: null,
     viewMachine: viewMachine,
     viewState: viewMachine.initialState,
   }
 
   state.notes = notes
+
   function render() {
     emitter.emit(state.events.RENDER)
   }
 
   const actionMap = {
-    updateNoteAtIndex: function({idx}) {
-      notes.editing = {idx}
-      notes.list = R.update(idx, createFakeNote({modifiedAt: Date.now()}))(
-        notes.list,
-      )
+    startEditingNote: function({idx}) {
+      assert(idx >= 0)
+      assert(idx < notes.list.length)
+      const note = notes.list[idx]
+      notes.editing = {
+        idx,
+        note,
+        isDirty: false,
+        fields: R.pick(['title', 'body'])(note),
+      }
+      // notes.list = R.update(idx, createFakeNote({modifiedAt: Date.now()}))(
+      //   notes.list,
+      // )
     },
   }
-  function getViewStateValue() {
-    return notes.viewState.value || viewMachine.initialStateValue
-  }
+
   emitter.on('DOMContentLoaded', () => {
     emitter.on('notes:add', () => {
-      notes.list.unshift(createFakeNote({modifiedAt: Date.now()}))
+      notes.list = R.prepend(createFakeNote({modifiedAt: Date.now()}))(
+        notes.list,
+      )
       render()
     })
     emitter.on('notes:edit', idx => {
@@ -94,5 +104,7 @@ function store(state, emitter) {
 
       render()
     })
+
+    emitter.emit('notes:edit', 4)
   })
 }
