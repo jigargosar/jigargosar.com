@@ -11,7 +11,7 @@ const fakeNotes = R.times(N.createFakeNote, 15)
 const initialStateValue = 'list'
 
 const viewMachine = Machine({
-  key: 'notesViewState',
+  key: 'notes',
   initial: initialStateValue,
   strict: true,
   states: {
@@ -67,14 +67,18 @@ function store(state, emitter) {
       // const note = createFakeNote()
       notes.editing = {isNew: true, fields: {title: '', body: ''}}
     },
-    startEditingNote: function({idx}) {
+    startEditingNote: function({idx, id}) {
       assert(idx >= 0)
       assert(idx < notes.list.length)
+      assert.equal(R.type(id), 'String')
       assert(R.isNil(notes.editing))
+      const note = R.find(R.propEq('id', id), notes.list)
 
-      const note = notes.list[idx]
+      assert(!R.isNil(note))
+
       notes.editing = {
         idx,
+        id,
         isNew: false,
         fields: R.pick(['title', 'body'])(note),
       }
@@ -127,8 +131,8 @@ function store(state, emitter) {
       handleEvent({type: 'add'})
       render()
     })
-    emitter.on('notes:edit', idx => {
-      handleEvent({type: 'edit', idx})
+    emitter.on('notes:edit', (idx, id) => {
+      handleEvent({type: 'edit', idx, id})
       render()
     })
     emitter.on('notes:discard', () => {
