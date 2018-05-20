@@ -16,19 +16,21 @@ function createFakeNote({modifiedAt} = {}) {
 
 const fakeNotes = R.times(createFakeNote, 15)
 
+const initialStateValue = 'list'
+
 const viewMachine = Machine({
   key: 'notesViewState',
-  initial: 'list',
+  initial: initialStateValue,
   strict: true,
   states: {
-    list: {
+    [initialStateValue]: {
       on: {
-        addClicked: {
+        add: {
           editing: {
             actions: ['addNewNote'],
           },
         },
-        editClicked: {
+        edit: {
           editing: {
             actions: ['startEditingNote'],
           },
@@ -37,17 +39,21 @@ const viewMachine = Machine({
     },
     editing: {
       on: {
-        save: 'list',
-        cancel: 'list',
+        save: {
+          [initialStateValue]: {
+            actions: ['saveEditingNote'],
+          },
+        },
+        discard: {
+          [initialStateValue]: {
+            actions: ['cleanEditingState'],
+          },
+        },
       },
     },
     stop: {},
   },
 })
-
-const performAction = R.curry((actionMap, event, actionName) =>
-  R.propOr(R.T, actionName, actionMap)(event),
-)
 
 function store(state, emitter) {
   const notes = {
@@ -64,47 +70,80 @@ function store(state, emitter) {
   }
 
   const actionMap = {
+    addNewNote: function() {
+      assert(R.isNil(notes.editing))
+      // const note = createFakeNote()
+      notes.editing = {isNew: true, fields: {title: '', body: ''}}
+    },
     startEditingNote: function({idx}) {
       assert(idx >= 0)
       assert(idx < notes.list.length)
+      assert(R.isNil(notes.editing))
+
       const note = notes.list[idx]
       notes.editing = {
         idx,
-        note,
-        isDirty: false,
+        isNew: false,
         fields: R.pick(['title', 'body'])(note),
       }
-      // notes.list = R.update(idx, createFakeNote({modifiedAt: Date.now()}))(
-      //   notes.list,
-      // )
     },
+    cleanEditingState: function() {
+      assert(!R.isNil(notes.editing))
+      notes.editing = null
+    },
+    saveEditingNote: function() {
+      const editing = notes.editing
+      assert(!R.isNil(editing))
+      assert(R.has('isNew', editing))
+      assert(R.type(R.prop('isNew', editing)) === 'Boolean')
+      const fakeNote = createFakeNote(Date.now())
+      if (editing.isNew) {
+        // const note = createFakeNote()
+        notes.list = R.prepend(fakeNote, notes.list)
+      } else {
+        const idx = editing.idx
+        assert(idx >= 0)
+        assert(idx < notes.list.length)
+        notes.list = R.update(editing.idx, fakeNote, notes.list)
+      }
+      notes.editing = null
+    },
+  }
+
+  function handleEvent(event) {
+    const performAction = R.curry((actionMap, event, actionName) =>
+      R.propOr(
+        () => assert.fail(`Action Not Found: ${actionName}`),
+        actionName,
+        actionMap,
+      )(event),
+    )
+    const nextViewState = viewMachine.transition(notes.viewState.value, event)
+    nextViewState.actions.forEach(performAction(actionMap, event))
+
+    notes.viewState = nextViewState
   }
 
   emitter.on('DOMContentLoaded', () => {
     emitter.on('notes:add', () => {
-      notes.list = R.prepend(createFakeNote({modifiedAt: Date.now()}))(
-        notes.list,
-      )
+      handleEvent({type: 'add'})
       render()
     })
     emitter.on('notes:edit', idx => {
-      const event = {
-        type: 'editClicked',
-        idx,
-      }
-      const nextViewState = viewMachine.transition(notes.viewState.value, event)
-
-      assert.notEqual(
-        notes.viewState.value,
-        nextViewState.value,
-        `Action 'notes:edit', Transition failed for event ${event}`,
-      )
-      notes.viewState = nextViewState
-      notes.viewState.actions.forEach(performAction(actionMap, event))
-
+      handleEvent({type: 'edit', idx})
       render()
     })
 
-    emitter.emit('notes:edit', 2)
+    emitter.on('notes:discard', () => {
+      handleEvent({type: 'discard'})
+      render()
+    })
+
+    emitter.on('notes:save', () => {
+      handleEvent({type: 'save'})
+      render()
+    })
+
+    // emitter.emit('notes:edit', 2)
   })
 }

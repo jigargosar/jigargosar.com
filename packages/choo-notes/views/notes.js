@@ -82,7 +82,7 @@ function view(state, emit) {
     return html`
       <div class="p-5">
         <!--\${renderDebug()}-->
-        <form onsubmit=${onSubmit} oncancel=${onSubmit}>
+        <form onsubmit=${onSubmit}>
             <dl>
               <input
                 autofocus 
@@ -104,7 +104,7 @@ function view(state, emit) {
             <dl>
               <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn">Cancel</button>
+                <button type="button" class="btn" onclick=${onCancel}>Cancel</button>
               </div>
             </dl>
         </form>
@@ -125,6 +125,11 @@ function view(state, emit) {
 
   function onSubmit(e) {
     e.preventDefault()
-    emit('notes:saveChanges')
+    emit('notes:save')
+  }
+
+  function onCancel(e) {
+    e.preventDefault()
+    emit('notes:discard')
   }
 }
