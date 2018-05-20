@@ -44,27 +44,31 @@ function view(state, emit) {
   const allNotes = state.notes.list
 
   return html`
-<body class="bg-black-10 black-80 code lh-copy _mw7-l _center container-md">
-<header class="bg-black-80 white-80">
-  <div class="flex items-center pa3">
-    <div class="flex-auto flex f3">
-      <div>Choo Notes</div>
-      <div class="f6">(${allNotes.length})</div>
-    </div>
-    <div class="underline pointer" onclick=${onAddClick}>
-      Add
-    </div>
-  </div>
-</header>
-<div class="_mt4 ma3-ns shadow-1">
-  ${R.addIndex(R.map)(
-    viewNote(emit),
-    // R.sortWith([R.descend(R.prop('modifiedAt'))], allNotes),
-    allNotes,
-  )}
-</div>
-</body>      
-`
+    <body class="bg-black-10 black-80 code lh-copy _mw7-l _center container-md">
+    <header class="bg-black-80 white-80">
+      <div class="flex items-center pa3">
+        <div class="flex-auto flex f3">
+          <div>Choo Notes</div>
+          <div class="f6">(${allNotes.length})</div>
+        </div>
+        <div class="underline pointer" onclick=${onAddClick}>
+          Add
+        </div>
+      </div>
+    </header>
+      ${renderNotesList(allNotes)}
+    </body>`
+
+  function renderNotesList(notesList) {
+    return html`
+      <div class="_mt4 ma3-ns shadow-1">
+        ${R.addIndex(R.map)(
+          viewNote(emit),
+          // R.sortWith([R.descend(R.prop('modifiedAt'))], allNotes),
+          notesList,
+        )}
+      </div>`
+  }
 
   function onAddClick() {
     emit('notes:add')
