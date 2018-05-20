@@ -44,7 +44,7 @@ function view(state, emit) {
   const allNotes = state.notes.list
 
   return html`
-<body class="bg-black-10 black-80 mw7-l center code lh-copy">
+<body class="bg-black-10 black-80 code lh-copy _mw7-l _center container-md">
 <header class="bg-black-80 white-80">
   <div class="flex items-center pa3">
     <div class="flex-auto flex f3">
