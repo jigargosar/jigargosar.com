@@ -3,19 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prettier-watch": "onchange '**/*.js' 'package.json' -- prettier --write {{changed}}",
+    "prettier-watch":
+      "onchange '**/*.js' 'package.json' -- prettier --write {{changed}}",
     "watch": "npm run prettier-watch",
     "build": "bankai build index.js",
     "create": "choo-scaffold",
     "inspect": "bankai inspect index.js",
     "start": "bankai start index.js",
     "test": "standard && npm run test-deps",
-    "test-deps": "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
+    "test-deps":
+      "dependency-check . && dependency-check . --extra --no-dev -i tachyons -i primer"
   },
   "sheetify": {
-    "transform": [
-      "sheetify-sass"
-    ]
+    "transform": ["sheetify-sass"]
   },
   "prettier": {
     "printWidth": 80,
@@ -28,10 +28,11 @@
     "jsxBracketSameLine": false
   },
   "dependencies": {
-    "chance": "1.0.16",
     "choo": "6.11.0-preview1",
     "choo-service-worker": "2.4.0",
     "faker": "4.1.0",
+    "nanologger": "1.3.1",
+    "primer": "10.5.0",
     "ramda": "0.25.0",
     "sheetify": "7.3.2",
     "tachyons": "4.9.1",
@@ -42,9 +43,7 @@
     "choo-devtools": "2.5.0",
     "choo-scaffold": "1.1.2",
     "dependency-check": "3.1.0",
-    "nanologger": "1.3.1",
     "prettier": "1.12.1",
-    "primer": "10.5.0",
     "sheetify-sass": "2.1.0",
     "standard": "11.0.1"
   }
