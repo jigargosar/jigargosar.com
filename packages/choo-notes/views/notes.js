@@ -13,6 +13,13 @@ function viewEditButton(emit, {id}) {
   }
 }
 
+function viewDeleteButton(emit, {id}) {
+  return html`<div class="underline pointer" onclick="${onDeleteClicked}">delete</div>`
+  function onDeleteClicked() {
+    emit('notes:delete', {id})
+  }
+}
+
 const viewNote = R.curry(function(emit, note, idx, notes) {
   return html`
     <div class="center _ph3-m _mb4 bg-white-80">
@@ -22,6 +29,8 @@ const viewNote = R.curry(function(emit, note, idx, notes) {
         <div class="flex-grow-1">
           ${note.title}
         </div>
+        ${viewDeleteButton(emit, {id: note.id})}
+        <div class="mh2"/>
         ${viewEditButton(emit, {id: note.id})}
       </div>
       ${null && renderNoteBody()}

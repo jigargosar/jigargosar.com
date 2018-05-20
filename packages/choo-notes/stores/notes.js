@@ -27,6 +27,11 @@ const viewMachine = Machine({
             actions: ['startEditingNote'],
           },
         },
+        delete: {
+          [initialStateValue]: {
+            actions: ['deleteNote'],
+          },
+        },
       },
     },
     editing: {
@@ -103,6 +108,16 @@ function store(state, emitter) {
       notes.editing = null
       localStorage.setItem('choo-notes', JSON.stringify(notes.list))
     },
+    deleteNote: function({id}) {
+      assert.equal(R.type(id), 'String')
+
+      const note = R.find(R.propEq('id', id), notes.list)
+      assert(!R.isNil(note))
+
+      const noteIdx = R.findIndex(R.propEq('id', id), notes.list)
+      assert.notEqual(noteIdx, -1)
+      notes.list = R.remove(noteIdx, 1, notes.list)
+    },
   }
 
   function handleEvent(event) {
@@ -150,6 +165,11 @@ function store(state, emitter) {
 
     emitter.on('notes:save', () => {
       handleEvent({type: 'save'})
+      render()
+    })
+
+    emitter.on('notes:delete', ({id}) => {
+      handleEvent({type: 'delete', id})
       render()
     })
 
