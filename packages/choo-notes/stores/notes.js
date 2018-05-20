@@ -1,20 +1,12 @@
 const Machine = require('xstate').Machine
 const R = require('ramda')
-const faker = require('faker')
 const assert = require('assert')
-faker.seed(123)
+const N = require('../models/note')
+const log = require('nanologger')('notes')
 
 module.exports = store
 
-function createFakeNote({modifiedAt} = {}) {
-  return {
-    title: faker.lorem.words(),
-    body: faker.lorem.text(),
-    modifiedAt: modifiedAt || faker.date.recent(),
-  }
-}
-
-const fakeNotes = R.times(createFakeNote, 15)
+const fakeNotes = R.times(N.createFakeNote, 15)
 
 const initialStateValue = 'list'
 
@@ -96,7 +88,7 @@ function store(state, emitter) {
       assert(!R.isNil(editing))
       assert(R.has('isNew', editing))
       assert(R.type(R.prop('isNew', editing)) === 'Boolean')
-      const fakeNote = createFakeNote(Date.now())
+      const fakeNote = N.createFakeNote()
       if (editing.isNew) {
         // const note = createFakeNote()
         notes.list = R.prepend(fakeNote, notes.list)
@@ -119,6 +111,12 @@ function store(state, emitter) {
       )(event),
     )
     const nextViewState = viewMachine.transition(notes.viewState.value, event)
+
+    log.debug('actions', ...nextViewState.actions, {
+      from: notes.viewState.value,
+      to: nextViewState.value,
+    })
+
     nextViewState.actions.forEach(performAction(actionMap, event))
 
     notes.viewState = nextViewState
@@ -133,7 +131,6 @@ function store(state, emitter) {
       handleEvent({type: 'edit', idx})
       render()
     })
-
     emitter.on('notes:discard', () => {
       handleEvent({type: 'discard'})
       render()
@@ -143,7 +140,8 @@ function store(state, emitter) {
       handleEvent({type: 'save'})
       render()
     })
-
-    // emitter.emit('notes:edit', 2)
+    // setTimeout(() => {
+    //   emitter.emit('notes:edit', 2)
+    // }, 1000)
   })
 }
