@@ -67,17 +67,15 @@ function store(state, emitter) {
       // const note = createFakeNote()
       notes.editing = {isNew: true, fields: {title: '', body: ''}}
     },
-    startEditingNote: function({idx, id}) {
-      assert(idx >= 0)
-      assert(idx < notes.list.length)
-      assert.equal(R.type(id), 'String')
+    startEditingNote: function({id}) {
       assert(R.isNil(notes.editing))
-      const note = R.find(R.propEq('id', id), notes.list)
 
+      assert.equal(R.type(id), 'String')
+
+      const note = R.find(R.propEq('id', id), notes.list)
       assert(!R.isNil(note))
 
       notes.editing = {
-        idx,
         id,
         isNew: false,
         fields: R.pick(['title', 'body'])(note),
@@ -94,13 +92,13 @@ function store(state, emitter) {
       assert(R.type(R.prop('isNew', editing)) === 'Boolean')
       const fakeNote = N.createFakeNote()
       if (editing.isNew) {
-        // const note = createFakeNote()
         notes.list = R.prepend(fakeNote, notes.list)
       } else {
-        const idx = editing.idx
-        assert(idx >= 0)
-        assert(idx < notes.list.length)
-        notes.list = R.update(editing.idx, fakeNote, notes.list)
+        const {id} = editing
+        assert.equal(R.type(id), 'String')
+        const noteIdx = R.findIndex(R.propEq('id', id), notes.list)
+        assert.notEqual(noteIdx, -1)
+        notes.list = R.update(noteIdx, fakeNote, notes.list)
       }
       notes.editing = null
     },
@@ -131,8 +129,8 @@ function store(state, emitter) {
       handleEvent({type: 'add'})
       render()
     })
-    emitter.on('notes:edit', (idx, id) => {
-      handleEvent({type: 'edit', idx, id})
+    emitter.on('notes:edit', ({id}) => {
+      handleEvent({type: 'edit', id})
       render()
     })
     emitter.on('notes:discard', () => {
@@ -145,7 +143,7 @@ function store(state, emitter) {
       render()
     })
     // setTimeout(() => {
-    //   emitter.emit('notes:edit', 2)
+    //   emitter.emit('notes:edit', {id:`2`})
     // }, 1000)
   })
 }

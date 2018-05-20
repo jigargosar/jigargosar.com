@@ -5,11 +5,11 @@ const TITLE = 'Choo Notes'
 
 module.exports = view
 
-function viewEditButton(emit, idx, id) {
+function viewEditButton(emit, {id}) {
   return html`<div class="underline pointer" onclick="${onEditClicked}">edit</div>`
 
   function onEditClicked() {
-    emit('notes:edit', idx, id)
+    emit('notes:edit', {id})
   }
 }
 
@@ -22,7 +22,7 @@ const viewNote = R.curry(function(emit, note, idx, notes) {
     <div class="flex-grow-1">
       ${note.title}
     </div>
-    ${viewEditButton(emit, idx, note.id)}
+    ${viewEditButton(emit, {id: note.id})}
   </div>
   ${null && renderNoteBody()}
 </div>`
@@ -112,7 +112,7 @@ function view(state, emit) {
 
     function renderDebug() {
       return html`<p>
-          <div>editing note ${notes.editing.idx}</div>
+          <div>editing note ${notes.editing.id}</div>
           <div>${fields.title}</div>
           <div>${fields.body}</div>
         </p>`
