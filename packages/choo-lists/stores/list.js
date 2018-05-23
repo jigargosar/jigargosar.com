@@ -8,7 +8,6 @@ function store(state, emitter) {
   state.list = R.times(() => I.createNew(), 10)
   state.events.list_add = 'list:add'
   state.events.list_delete = 'list:delete'
-  state.events.list_delete_clicked = 'list:delete:clicked'
 
   emitter.on('DOMContentLoaded', function() {
     emitter.on(state.events.list_add, function(item) {
@@ -20,11 +19,6 @@ function store(state, emitter) {
       const idx = R.indexOf(item, state.list)
       state.list.splice(idx, 1)
       emitter.emit(state.events.RENDER)
-    })
-
-    emitter.on(state.events.list_delete_clicked, function(item, event) {
-      event.preventDefault()
-      emitter.emit(state.events.list_delete, item)
     })
   })
 }

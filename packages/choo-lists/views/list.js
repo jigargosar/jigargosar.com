@@ -20,8 +20,7 @@ function itemsView(state, emit) {
       <div class="flex center mw7 mv3 ph3">
         ${Button(
           {
-            onclick: e => {
-              e.preventDefault()
+            onclick: () => {
               emit(state.events.list_add, I.createNew())
             },
           },
@@ -35,12 +34,11 @@ function itemsView(state, emit) {
 function createListItemView(state, emit) {
   return function(item) {
     return html`
-      <div class="flex center mw7 mv3 ph3">
+      <div id=${I.id(item)} class="flex center mw7 mv3 ph3">
         <div class="pa1">
           ${Button(
             {
-              onclick: event =>
-                emit(state.events.list_delete_clicked, item, event),
+              onclick: () => emit(state.events.list_delete, item),
             },
             'X',
           )}
@@ -58,7 +56,10 @@ function Button(props, content) {
   return html`
     <a href=""
        class="link orange" 
-       onclick="${props.onclick}"
+       onclick="${event => {
+         event.preventDefault()
+         props.onclick()
+       }}"
      >
       ${content}
     </a>`
