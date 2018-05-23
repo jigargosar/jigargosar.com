@@ -47,7 +47,6 @@ function createListItemView(state, emit) {
           <div class="">${I.text(item)}</div>
           <div class="f6 code gray lh-solid" >id: ${I.id(item)}</div>
         </div>
-        
       </div>`
   }
 }
@@ -58,7 +57,7 @@ function Button(props, content) {
        class="link orange" 
        onclick="${event => {
          event.preventDefault()
-         props.onclick()
+         props.onclick(event)
        }}"
      >
       ${content}
