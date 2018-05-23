@@ -27,14 +27,26 @@ function view(state, emit) {
 function viewItemsList(state, emit) {
   return html`
 <div class="">
+  <div class="flex center mw7 mv3 ph3">
+    <a href="" 
+       class="link orange" 
+       onclick="${e => {
+         e.preventDefault()
+         emit(state.events.list_add, I.create())
+       }}">
+      ADD
+    </a>
+  </div>
   ${state.list.map(function(item) {
     return html`<div class="flex center mw7 mv3 ph3">
                   <div class="pa1">
-                    <a class="link orange"  onclick="${e => {
-                      e.preventDefault()
-                      emit(state.events.list_delete, item)
-                    }}"
-                       href=""
+                    <a href=""
+                       class="link orange" 
+                       onclick="${e => {
+                         e.preventDefault()
+                         emit(state.events.list_delete, item)
+                       }}"
+                       
                     >
                       X
                     </a>
