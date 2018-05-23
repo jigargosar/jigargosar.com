@@ -33,6 +33,8 @@ function itemsView(state, emit) {
 
 function createListItemView(state, emit) {
   return function(item) {
+    const isEditing =
+      EM.editing === state.editMode && state.editState.item === item
     return html`
       <div id=${I.id(item)} class="flex center mw7 mv3 ph3">
         <div class="pa1">
@@ -43,7 +45,7 @@ function createListItemView(state, emit) {
         </div>
         <div class="pa1 flex-grow-1 flex flex-column">
           ${
-            EM.editing === state.editMode
+            isEditing
               ? html`<div>editing</div>`
               : html`<div class="">${I.text(item)}</div>`
           }
