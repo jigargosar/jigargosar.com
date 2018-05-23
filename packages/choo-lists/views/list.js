@@ -19,12 +19,12 @@ function view(state, emit) {
   return html`
 <body class="sans-serif lh-copy f4">
   <div class="bg-light-blue f1 tc pa3 ${banner}">${TITLE}</div>
-  ${viewItems(state, emit)}
+  ${itemsView(state, emit)}
 </body>
 `
 }
 
-function viewItems(state, emit) {
+function itemsView(state, emit) {
   return html`
     <div class="">
       <div class="flex center mw7 mv3 ph3">
