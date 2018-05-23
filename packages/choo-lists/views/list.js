@@ -46,18 +46,27 @@ function createListItemView(state, emit) {
     return html`
       <div class="flex center mw7 mv3 ph3">
         <div class="pa1">
-          <a href=""
-             class="link orange" 
-             onclick="${e => {
-               e.preventDefault()
-               emit(state.events.list_delete, item)
-             }}"
-             
-          >
-            X
-          </a>
+          ${Button(
+            {
+              onclick: e => {
+                e.preventDefault()
+                emit(state.events.list_delete, item)
+              },
+            },
+            'X',
+          )}
         </div>
         <div class="pa1">${I.text(item)}</div>
       </div>`
   }
+}
+
+function Button(props, content) {
+  return html`
+    <a href=""
+       class="link orange" 
+       onclick="${props.onclick}"
+     >
+      ${content}
+    </a>`
 }
