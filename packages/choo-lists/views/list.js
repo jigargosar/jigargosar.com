@@ -1,3 +1,5 @@
+const R = require('ramda')
+const log = require('nanologger')('views:list')
 const html = require('choo/html')
 const {TITLE} = require('./meta')
 const {updateTitle} = require('./events')
@@ -75,15 +77,35 @@ function createListItemView(state, emit) {
       </div>`
   }
 }
+function noModifiers(event) {
+  return !R.any(R.identity, R.props(['shiftKey', 'ctrlKey', 'metaKey'], event))
+}
+
+function codeEqWithNoModifiers(code, event) {
+  log.debug('codeEqWithNoModifiers', event.type, event.code, 'Expected: ', code)
+  return event.code === code && noModifiers(event)
+}
 
 function Button(props, content) {
+  const performAction = event => {
+    event.preventDefault()
+    props.onclick(event)
+  }
+
   return html`
     <a href=""
-       class="link orange" 
-       onclick="${event => {
-         event.preventDefault()
-         props.onclick(event)
+       class="link orange"
+       onkeypress="${event => {
+         if (codeEqWithNoModifiers('Space', event)) {
+           performAction(event)
+         }
        }}"
+       onkeyup="${event => {
+         if (codeEqWithNoModifiers('Escape', event)) {
+           event.target.blur()
+         }
+       }}" 
+       onclick="${performAction}"
      >
       ${content}
     </a>`
