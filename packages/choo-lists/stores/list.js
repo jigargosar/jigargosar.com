@@ -1,6 +1,6 @@
 const assert = require('assert')
 const R = require('ramda')
-const log = require('nanologger')('store:list')
+const log = require('nanologger')('stores:list')
 const I = require('../models/item')
 const EM = require('../models/edit-mode')
 
