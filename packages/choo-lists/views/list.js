@@ -22,7 +22,8 @@ function editView(state, emit) {
   const onDiscardClick = () => {
     emit(state.events.list_edit_discard)
   }
-  const onSaveClick = () => {
+  const onSubmit = event => {
+    event.preventDefault()
     emit(state.events.list_edit_save)
   }
   const onEditModeTextChange = event => {
@@ -31,16 +32,16 @@ function editView(state, emit) {
   return html`
     <div class="center mw7 mv3 ph3">
       <div class="f3">Editing</div>
-      <div class="dl">
+      <form onsubmit="${onSubmit}">
         <input class="pa1 ma1 w-100"
                type="text" 
                value="${state.editState.form.text}"
                oninput="${onEditModeTextChange}"
                placeholder="Edit this..."
         />
-      </div>
+      </form>
       <div class="flex flex-row-reverse f4">
-        <div class="pa1">${Button({onclick: onSaveClick}, 'SAVE')}</div>
+        <div class="pa1">${Button({onclick: onSubmit}, 'SAVE')}</div>
         <div class="pa1">${Button({onclick: onDiscardClick}, 'DISCARD')}</div>
       </div>
     </div>
