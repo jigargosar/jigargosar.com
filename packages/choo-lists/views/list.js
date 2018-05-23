@@ -48,10 +48,8 @@ function createListItemView(state, emit) {
         <div class="pa1">
           ${Button(
             {
-              onclick: e => {
-                e.preventDefault()
-                emit(state.events.list_delete, item)
-              },
+              onclick: event =>
+                emit(state.events.list_delete_clicked, item, event),
             },
             'X',
           )}
