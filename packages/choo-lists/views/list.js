@@ -36,12 +36,10 @@ function createListItemView(state, emit) {
     return html`
       <div id=${I.id(item)} class="flex center mw7 mv3 ph3">
         <div class="pa1">
-          ${Button(
-            {
-              onclick: () => emit(state.events.list_delete, item),
-            },
-            'X',
-          )}
+          ${Button({onclick: () => emit(state.events.list_delete, item)}, 'X')}
+        </div>
+        <div class="pa1">
+          ${Button({onclick: () => emit(state.events.list_edit, item)}, 'E')}
         </div>
         <div class="pa1 flex-grow-1 flex flex-column">
           <div class="">${I.text(item)}</div>
