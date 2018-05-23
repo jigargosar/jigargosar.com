@@ -54,9 +54,9 @@ function createListItemView(state, emit) {
             'X',
           )}
         </div>
-        <div class="flex-grow-1 flex flex-column">
+        <div class="pa1 flex-grow-1 flex flex-column">
           <div class="">${I.text(item)}</div>
-          <div class="f6">${I.id(item)}</div>
+          <div class="f6 code">id: ${I.id(item)}</div>
         </div>
         
       </div>`

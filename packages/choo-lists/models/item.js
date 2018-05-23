@@ -3,10 +3,9 @@ const faker = require('faker')
 faker.seed(123)
 
 export function createNew() {
-  const id = nanoid()
   return {
-    id,
-    text: `${faker.lorem.words()} (id:${id})`,
+    id: nanoid(),
+    text: `${faker.lorem.words()}`,
   }
 }
 
