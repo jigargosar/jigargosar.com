@@ -1,15 +1,7 @@
-const css = require('sheetify')
 const html = require('choo/html')
 const {TITLE} = require('./meta')
 const {updateTitle} = require('./events')
 const I = require('../models/item')
-
-// language=CSS
-const banner = css`
-  :host {
-    /*font-size: 4rem;*/
-  }
-`
 
 module.exports = view
 
@@ -18,7 +10,7 @@ function view(state, emit) {
 
   return html`
 <body class="sans-serif lh-copy f4">
-  <div class="bg-light-blue f1 tc pa3 ${banner}">${TITLE}</div>
+  <div class="bg-light-blue f1 tc pa3">${TITLE}</div>
   ${itemsView(state, emit)}
 </body>
 `
@@ -56,7 +48,7 @@ function createListItemView(state, emit) {
         </div>
         <div class="pa1 flex-grow-1 flex flex-column">
           <div class="">${I.text(item)}</div>
-          <div class="f6 code gray">id: ${I.id(item)}</div>
+          <div class="f6 code gray lh-solid" >id: ${I.id(item)}</div>
         </div>
         
       </div>`
