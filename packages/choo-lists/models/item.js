@@ -2,12 +2,18 @@ const nanoid = require('nanoid')
 const faker = require('faker')
 faker.seed(123)
 
-export function create() {
+export function createNew() {
+  const id = nanoid()
   return {
-    text: `${faker.lorem.words()} (id:${nanoid()})`,
+    id,
+    text: `${faker.lorem.words()} (id:${id})`,
   }
 }
 
 export function text(item) {
   return item.text
+}
+
+export function id(item) {
+  return item.id
 }

@@ -19,41 +19,45 @@ function view(state, emit) {
   return html`
 <body class="sans-serif lh-copy f4">
   <div class="bg-light-blue f1 tc pa3 ${banner}">${TITLE}</div>
-  ${viewItemsList(state, emit)}
+  ${viewItems(state, emit)}
 </body>
 `
 }
 
-function viewItemsList(state, emit) {
+function viewItems(state, emit) {
   return html`
-<div class="">
-  <div class="flex center mw7 mv3 ph3">
-    <a href="" 
-       class="link orange" 
-       onclick="${e => {
-         e.preventDefault()
-         emit(state.events.list_add, I.create())
-       }}">
-      ADD
-    </a>
-  </div>
-  ${state.list.map(function(item) {
-    return html`<div class="flex center mw7 mv3 ph3">
-                  <div class="pa1">
-                    <a href=""
-                       class="link orange" 
-                       onclick="${e => {
-                         e.preventDefault()
-                         emit(state.events.list_delete, item)
-                       }}"
-                       
-                    >
-                      X
-                    </a>
-                  </div>
-                  <div class="pa1">${I.text(item)}</div>
-                </div>`
-  })}  
-</div>
-`
+    <div class="">
+      <div class="flex center mw7 mv3 ph3">
+        <a href="" 
+           class="link orange" 
+           onclick="${e => {
+             e.preventDefault()
+             emit(state.events.list_add, I.createNew())
+           }}">
+          ADD
+        </a>
+      </div>
+      ${state.list.map(createListItemView(state, emit))}  
+    </div>`
+}
+
+function createListItemView(state, emit) {
+  return function(item) {
+    return html`
+      <div class="flex center mw7 mv3 ph3">
+        <div class="pa1">
+          <a href=""
+             class="link orange" 
+             onclick="${e => {
+               e.preventDefault()
+               emit(state.events.list_delete, item)
+             }}"
+             
+          >
+            X
+          </a>
+        </div>
+        <div class="pa1">${I.text(item)}</div>
+      </div>`
+  }
 }

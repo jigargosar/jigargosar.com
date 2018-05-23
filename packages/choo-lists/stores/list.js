@@ -5,7 +5,7 @@ const I = require('../models/item')
 module.exports = store
 
 function store(state, emitter) {
-  state.list = R.times(() => I.create(), 10)
+  state.list = R.times(() => I.createNew(), 10)
   state.events.list_add = 'list:add'
   state.events.list_delete = 'list:delete'
 
