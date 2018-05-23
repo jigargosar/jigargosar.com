@@ -7,13 +7,11 @@ module.exports = view
 
 function view(state, emit) {
   updateTitle(TITLE, state, emit)
-
   return html`
-<body class="sans-serif lh-copy f4">
-  <div class="bg-light-blue f1 tc pa3">${TITLE}</div>
-  ${itemsView(state, emit)}
-</body>
-`
+    <body class="sans-serif lh-copy f4">
+      <div class="bg-light-blue f1 tc pa3">${TITLE}</div>
+      ${itemsView(state, emit)}
+    </body>`
 }
 
 function itemsView(state, emit) {
