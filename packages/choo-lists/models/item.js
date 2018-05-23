@@ -1,3 +1,8 @@
+export function updateText(text, item) {
+  item.text = text
+  return item
+}
+
 const nanoid = require('nanoid')
 const faker = require('faker')
 faker.seed(123)

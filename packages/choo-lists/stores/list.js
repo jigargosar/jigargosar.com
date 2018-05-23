@@ -12,7 +12,9 @@ function store(state, emitter) {
 
   state.events.list_add = 'list:add'
   state.events.list_edit = 'list:edit'
+  state.events.list_edit_onTextChanged = 'list:edit:onTextChange'
   state.events.list_edit_discard = 'list:edit:discard'
+  state.events.list_edit_save = 'list:edit:save'
   state.events.list_delete = 'list:delete'
 
   emitter.on('DOMContentLoaded', function() {
@@ -25,13 +27,33 @@ function store(state, emitter) {
       assert(state.editMode === EM.idle)
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
-      state.editState = {item}
+      state.editState = {item, form: {text: item.text}}
       emitter.emit(state.events.RENDER)
     })
 
-    emitter.on(state.events.list_edit_discard, function(item) {
+    emitter.on(state.events.list_edit_onTextChanged, function(text) {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
+      state.editState.form.text = text
+      emitter.emit(state.events.RENDER)
+    })
+
+    emitter.on(state.events.list_edit_discard, function() {
+      assert(state.editMode === EM.editing)
+      assert(!R.isNil(state.editState))
+      state.editMode = EM.idle
+      state.editState = null
+      emitter.emit(state.events.RENDER)
+    })
+
+    emitter.on(state.events.list_edit_save, function() {
+      assert(state.editMode === EM.editing)
+      assert(!R.isNil(state.editState))
+
+      const item = state.editState.item
+      const idx = R.indexOf(item, state.list)
+      state.list.splice(idx, 1, I.updateText(state.editState.form.text, item))
+
       state.editMode = EM.idle
       state.editState = null
       emitter.emit(state.events.RENDER)
