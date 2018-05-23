@@ -2,7 +2,6 @@ const log = require('nanologger')('app')
 const css = require('sheetify')
 
 css('tachyons')
-css('./mcw.scss')
 
 window.addEventListener('error', function(event) {
   log.error(event.error.message)
