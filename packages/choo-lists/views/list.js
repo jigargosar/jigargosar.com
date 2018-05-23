@@ -26,8 +26,10 @@ function editView(state, emit) {
   return html`
     <div class="center mw7 mv3 ph3">
       <div class="f3">Editing</div>
-      <div class="f4">${Button({onclick: onDiscardClick}, 'DISCARD')}</div>
-      <div class="f4">${Button({onclick: onSaveClick}, 'SAVE')}</div>
+      <div class="flex flex-row-reverse f4">
+        <div class="pa1">${Button({onclick: onSaveClick}, 'SAVE')}</div>
+        <div class="pa1">${Button({onclick: onDiscardClick}, 'DISCARD')}</div>
+      </div>
     </div>
     `
 }
