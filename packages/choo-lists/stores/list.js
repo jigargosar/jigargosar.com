@@ -12,6 +12,7 @@ function store(state, emitter) {
 
   state.events.list_add = 'list:add'
   state.events.list_edit = 'list:edit'
+  state.events.list_edit_discard = 'list:edit:discard'
   state.events.list_delete = 'list:delete'
 
   emitter.on('DOMContentLoaded', function() {
@@ -25,6 +26,14 @@ function store(state, emitter) {
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
       state.editState = {item}
+      emitter.emit(state.events.RENDER)
+    })
+
+    emitter.on(state.events.list_edit_discard, function(item) {
+      assert(state.editMode === EM.editing)
+      assert(!R.isNil(state.editState))
+      state.editMode = EM.idle
+      state.editState = null
       emitter.emit(state.events.RENDER)
     })
 

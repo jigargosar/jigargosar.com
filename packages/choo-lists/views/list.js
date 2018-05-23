@@ -7,25 +7,39 @@ module.exports = view
 
 function view(state, emit) {
   updateTitle(TITLE, state, emit)
+  const isEditing = EM.editing === state.editMode
+
   return html`
     <body class="sans-serif lh-copy f4">
       <div class="bg-light-blue f1 tc pa3">${TITLE}</div>
-      ${itemsView(state, emit)}
+      ${isEditing ? editView(state, emit) : itemsView(state, emit)}
     </body>`
 }
 
+function editView(state, emit) {
+  const onDiscardClick = () => {
+    emit(state.events.list_edit_discard)
+  }
+  const onSaveClick = () => {
+    emit(state.events.list_edit_discard)
+  }
+  return html`
+    <div class="center mw7 mv3 ph3">
+      <div class="f3">Editing</div>
+      <div class="f4">${Button({onclick: onDiscardClick}, 'DISCARD')}</div>
+      <div class="f4">${Button({onclick: onSaveClick}, 'SAVE')}</div>
+    </div>
+    `
+}
+
 function itemsView(state, emit) {
+  const onAddClick = () => {
+    emit(state.events.list_add, I.createNew())
+  }
   return html`
     <div class="">
       <div class="flex center mw7 mv3 ph3">
-        ${Button(
-          {
-            onclick: () => {
-              emit(state.events.list_add, I.createNew())
-            },
-          },
-          'ADD',
-        )}
+        ${Button({onclick: onAddClick}, 'ADD')}
       </div>
       ${state.list.map(createListItemView(state, emit))}  
     </div>`
@@ -33,8 +47,6 @@ function itemsView(state, emit) {
 
 function createListItemView(state, emit) {
   return function(item) {
-    const isEditing =
-      EM.editing === state.editMode && state.editState.item === item
     return html`
       <div id=${I.id(item)} class="flex center mw7 mv3 ph3">
         <div class="pa1">
@@ -44,11 +56,7 @@ function createListItemView(state, emit) {
           ${Button({onclick: () => emit(state.events.list_edit, item)}, 'E')}
         </div>
         <div class="pa1 flex-grow-1 flex flex-column">
-          ${
-            isEditing
-              ? html`<div>editing</div>`
-              : html`<div class="">${I.text(item)}</div>`
-          }
+          <div class="">${I.text(item)}</div>
           <div class="f6 code gray lh-solid" >id: ${I.id(item)}</div>
         </div>
       </div>`
