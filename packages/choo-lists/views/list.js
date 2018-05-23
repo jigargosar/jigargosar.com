@@ -18,14 +18,15 @@ function itemsView(state, emit) {
   return html`
     <div class="">
       <div class="flex center mw7 mv3 ph3">
-        <a href="" 
-           class="link orange" 
-           onclick="${e => {
-             e.preventDefault()
-             emit(state.events.list_add, I.createNew())
-           }}">
-          ADD
-        </a>
+        ${Button(
+          {
+            onclick: e => {
+              e.preventDefault()
+              emit(state.events.list_add, I.createNew())
+            },
+          },
+          'ADD',
+        )}
       </div>
       ${state.list.map(createListItemView(state, emit))}  
     </div>`
