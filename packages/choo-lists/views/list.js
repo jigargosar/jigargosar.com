@@ -28,7 +28,19 @@ function viewItemsList(state, emit) {
   return html`
 <div class="">
   ${state.list.map(function(item) {
-    return html`<div class="center mw7 mv3 ph3">${I.text(item)}</div>`
+    return html`<div class="flex center mw7 mv3 ph3">
+                  <div class="pa1">
+                    <a class="link orange"  onclick="${e => {
+                      e.preventDefault()
+                      emit(state.events.list_delete, item)
+                    }}"
+                       href=""
+                    >
+                      X
+                    </a>
+                  </div>
+                  <div class="pa1">${I.text(item)}</div>
+                </div>`
   })}  
 </div>
 `
