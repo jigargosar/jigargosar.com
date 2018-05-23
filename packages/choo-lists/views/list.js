@@ -2,7 +2,7 @@ const html = require('choo/html')
 const {TITLE} = require('./meta')
 const {updateTitle} = require('./events')
 const I = require('../models/item')
-
+const EM = require('../models/edit-mode')
 module.exports = view
 
 function view(state, emit) {
@@ -42,7 +42,11 @@ function createListItemView(state, emit) {
           ${Button({onclick: () => emit(state.events.list_edit, item)}, 'E')}
         </div>
         <div class="pa1 flex-grow-1 flex flex-column">
-          <div class="">${I.text(item)}</div>
+          ${
+            EM.editing === state.editMode
+              ? html`<div>editing</div>`
+              : html`<div class="">${I.text(item)}</div>`
+          }
           <div class="f6 code gray lh-solid" >id: ${I.id(item)}</div>
         </div>
       </div>`

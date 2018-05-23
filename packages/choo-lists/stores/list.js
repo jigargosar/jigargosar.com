@@ -2,16 +2,13 @@ const assert = require('assert')
 const R = require('ramda')
 const log = require('nanologger')('store:main')
 const I = require('../models/item')
+const EM = require('../models/edit-mode')
 
 module.exports = store
 
 function store(state, emitter) {
   state.list = R.times(() => I.createNew(), 10)
-
-  state.editModes = {}
-  state.editModes.idle = 'editMode:idle'
-  state.editModes.editing = 'editMode:editing'
-  state.editMode = state.editModes.idle
+  state.editMode = EM.idle
 
   state.events.list_add = 'list:add'
   state.events.list_edit = 'list:edit'
@@ -24,14 +21,15 @@ function store(state, emitter) {
     })
 
     emitter.on(state.events.list_edit, function(item) {
-      assert(state.editMode === state.editModes.idle)
+      assert(state.editMode === EM.idle)
       assert(R.isNil(state.editState))
+      state.editMode = EM.editing
       state.editState = {item}
       emitter.emit(state.events.RENDER)
     })
 
     emitter.on(state.events.list_delete, function(item) {
-      const idx = R.findIndex(item, state.list)
+      const idx = R.indexOf(item, state.list)
       state.list.splice(idx, 1)
       emitter.emit(state.events.RENDER)
     })
