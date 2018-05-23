@@ -1,10 +1,16 @@
-var css = require('sheetify')
-var choo = require('choo')
+const log = require('nanologger')('app')
+const css = require('sheetify')
 
-// css("tachyons");
-css('primer')
+css('tachyons')
+css('./mcw.scss')
 
-var app = choo()
+window.addEventListener('error', function(event) {
+  log.error(event.error.message)
+})
+
+const choo = require('choo')
+
+const app = choo()
 if (process.env.NODE_ENV !== 'production') {
   app.use(require('choo-devtools')())
 } else {
@@ -13,7 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(require('./stores/list'))
 
-app.route('/', require('./views/main'))
+app.route('/', require('./views/list'))
 app.route('/*', require('./views/404'))
 
 module.exports = app.mount('body')
