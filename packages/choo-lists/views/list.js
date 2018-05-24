@@ -5,6 +5,7 @@ const {TITLE} = require('./meta')
 const {updateTitle} = require('./events')
 const I = require('../models/item')
 const EM = require('../models/edit-mode')
+const domAutofocus = require('dom-autofocus')
 module.exports = view
 
 function view(state, emit) {
@@ -33,14 +34,13 @@ function editView(state, emit) {
     <div class="center mw7 mv3 ph3">
       <div class="f3">Editing</div>
       <form onsubmit="${onSubmit}">
-        <input 
+        ${domAutofocus(html`<input 
           class="pa1 ma1 w-100" 
-          autofocus
           type="text" 
           value="${state.editState.form.text}"
           oninput="${onEditModeTextChange}"
           placeholder="Edit this..."
-        />
+        />`)}
       </form>
       <div class="flex flex-row-reverse f4">
         <div class="pa1">${Button({onclick: onSubmit}, 'SAVE')}</div>

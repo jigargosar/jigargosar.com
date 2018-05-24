@@ -28,16 +28,6 @@ function store(state, emitter) {
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
       state.editState = {item, form: {text: item.text}}
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          const inputs = document.querySelectorAll(`input[autofocus]`)
-
-          R.forEach(e => {
-            log.debug('Calling focus for ', e)
-            return e.focus()
-          }, R.take(1, Array.from(inputs)))
-        })
-      }, 0)
       emitter.emit(state.events.RENDER)
     })
 
