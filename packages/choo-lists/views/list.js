@@ -55,7 +55,8 @@ function itemsView(state, emit) {
   return html`
     <div class="">
       <div class="flex center mw7 mv3 ph3">
-        ${Button({onclick: onAddClick}, 'ADD')}
+        <div class="pa1">Total: ${state.list.length}</div>
+        <div class="pa1">${Button({onclick: onAddClick}, 'ADD')}</div>
       </div>
       ${state.list.map(createListItemView(state, emit))}  
     </div>`
