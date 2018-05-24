@@ -33,11 +33,13 @@ function editView(state, emit) {
     <div class="center mw7 mv3 ph3">
       <div class="f3">Editing</div>
       <form onsubmit="${onSubmit}">
-        <input class="pa1 ma1 w-100"
-               type="text" 
-               value="${state.editState.form.text}"
-               oninput="${onEditModeTextChange}"
-               placeholder="Edit this..."
+        <input 
+          class="pa1 ma1 w-100" 
+          autofocus
+          type="text" 
+          value="${state.editState.form.text}"
+          oninput="${onEditModeTextChange}"
+          placeholder="Edit this..."
         />
       </form>
       <div class="flex flex-row-reverse f4">
