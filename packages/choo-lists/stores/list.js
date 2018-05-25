@@ -27,6 +27,7 @@ function store(state, emitter) {
     emitter.on(state.events.list_add, function() {
       const newItemText = prompt('New Item', 'Get Milk!')
       log.debug('newItemText', newItemText)
+      if (R.isNil(newItemText)) return
       state.list.unshift(I.createNew({text: newItemText}))
       emitter.emit(state.events.RENDER)
       persistList()
