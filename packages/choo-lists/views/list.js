@@ -85,8 +85,14 @@ function noModifiers(event) {
   return !R.any(R.identity, R.props(['shiftKey', 'ctrlKey', 'metaKey'], event))
 }
 
-function codeEqWithNoModifiers(code, event) {
-  log.debug('codeEqWithNoModifiers', event.type, event.code, 'Expected: ', code)
+function hasKeyCodeWithoutModifiers(code, event) {
+  log.debug(
+    'hasKeyCodeWithoutModifiers',
+    event.type,
+    event.code,
+    'Expected: ',
+    code,
+  )
   return event.code === code && noModifiers(event)
 }
 
@@ -98,14 +104,15 @@ function Button(props, content) {
 
   return html`
     <a href=""
+       role="button"
        class="link orange"
        onkeypress="${event => {
-         if (codeEqWithNoModifiers('Space', event)) {
+         if (hasKeyCodeWithoutModifiers('Space', event)) {
            performAction(event)
          }
        }}"
        onkeyup="${event => {
-         if (codeEqWithNoModifiers('Escape', event)) {
+         if (hasKeyCodeWithoutModifiers('Escape', event)) {
            event.target.blur()
          }
        }}" 

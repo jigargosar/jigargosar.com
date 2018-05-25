@@ -3,9 +3,11 @@
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$" libraries="{Node.js Core}" />
     <file url="file://$PROJECT_DIR$/packages/boowa-static-choo" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/packages/choo-lists" libraries="{HTML, Node.js Core, node_modules}" />
     <file url="file://$PROJECT_DIR$/packages/choo-notes" libraries="{Node.js Core}" />
     <file url="file://$PROJECT_DIR$/packages/choo-site" libraries="{Node.js Core}" />
     <file url="file://$PROJECT_DIR$/packages/choo-site/node_modules" libraries="{Node.js Core}" />
     <file url="file://$PROJECT_DIR$/packages/gatsby-site" libraries="{Node.js Core}" />
+    <file url="PROJECT" libraries="{HTML, node_modules}" />
   </component>
 </project>
