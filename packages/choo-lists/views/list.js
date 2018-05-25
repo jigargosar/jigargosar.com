@@ -6,6 +6,7 @@ const {updateTitle} = require('./events')
 const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
+const yaml = require('js-yaml')
 module.exports = view
 
 function view(state, emit) {
@@ -33,7 +34,7 @@ function editView(state, emit) {
     emit(state.events.list_edit_onTextChanged, event.target.value)
   }
   return html`
-    <div class="${centeredContentClass}">
+    <div class="${centeredContentClass}" style="min-width: 100%;">
       <div class="f3">Editing</div>
       <form 
         onsubmit="${onSubmit}" 
@@ -58,8 +59,10 @@ function editView(state, emit) {
           <div class="pa1">${Button({onclick: onDiscardClick}, 'DISCARD')}</div>
         </div>
       </form>
-      <div class="mv3">
-        <pre><code>${JSON.stringify(state.editState, null, 2)}</code></pre>
+      <div class="flex flex-column mv3">
+        <textarea class="h4" style="height: 18rem;">${yaml.dump(
+          state.editState,
+        )}</textarea>
       </div>
     </div>
     `
