@@ -20,12 +20,17 @@ function store(state, emitter) {
   state.events.list_delete = 'list:delete'
 
   emitter.on('DOMContentLoaded', function() {
-    state.list = JSON.parse(
-      R.defaultTo('[]', localStorage.getItem(listStorageKey)),
+    state.list.splice(
+      0,
+      state.list.length,
+      ...JSON.parse(R.defaultTo('[]', localStorage.getItem(listStorageKey))),
     )
+
+    log.debug('state.list: after load', state.list)
+
     emitter.emit(state.events.RENDER)
     emitter.on(state.events.list_add, function() {
-      const newGrainText = prompt('New GGrain', 'Grainet Milk!')
+      const newGrainText = prompt('New Grain', 'Get Milk!')
       log.debug('newGrainText', newGrainText)
       if (R.isNil(newGrainText)) return
       state.list.unshift(G.createNew({text: newGrainText}))
@@ -38,6 +43,7 @@ function store(state, emitter) {
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
       state.editState = {grainId: G.id(grain), form: {text: grain.text}}
+      persistEditState()
       emitter.emit(state.events.RENDER)
     })
 
@@ -45,6 +51,7 @@ function store(state, emitter) {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
       state.editState.form.text = text
+      persistEditState()
       emitter.emit(state.events.RENDER)
     })
 
@@ -53,6 +60,7 @@ function store(state, emitter) {
       assert(!R.isNil(state.editState))
       state.editMode = EM.idle
       state.editState = null
+      persistEditState()
       emitter.emit(state.events.RENDER)
     })
 
@@ -70,6 +78,7 @@ function store(state, emitter) {
 
       state.editMode = EM.idle
       state.editState = null
+      persistEditState()
       emitter.emit(state.events.RENDER)
 
       persistList()
@@ -81,6 +90,16 @@ function store(state, emitter) {
       emitter.emit(state.events.RENDER)
       persistList()
     })
+
+    function persistEditState() {
+      const serialisedEditState = JSON.stringify(
+        R.pick(['editState', 'editMode']),
+        null,
+        2,
+      )
+      log.debug('serialisedEditState', serialisedEditState)
+      localStorage.setItem(listStorageKey, serialisedEditState)
+    }
 
     function persistList() {
       const serialisedList = JSON.stringify(state.list, null, 2)
