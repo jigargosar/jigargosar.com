@@ -45,6 +45,7 @@ function editView(state, emit) {
           // }
         }}"
       >
+        
         ${domAutofocus(html`<input 
           class="pa1 ma1 w-100" 
           type="text" 
@@ -57,6 +58,9 @@ function editView(state, emit) {
           <div class="pa1">${Button({onclick: onDiscardClick}, 'DISCARD')}</div>
         </div>
       </form>
+      <div class="mv3">
+        <pre><code>${JSON.stringify(state.editState, null, 2)}</code></pre>
+      </div>
     </div>
     `
 }
