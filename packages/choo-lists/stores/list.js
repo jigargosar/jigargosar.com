@@ -4,6 +4,8 @@ const log = require('nanologger')('stores:list')
 const I = require('../models/item')
 const EM = require('../models/edit-mode')
 
+const listStorageKey = 'choo-list:list'
+
 module.exports = store
 
 function store(state, emitter) {
@@ -18,9 +20,16 @@ function store(state, emitter) {
   state.events.list_delete = 'list:delete'
 
   emitter.on('DOMContentLoaded', function() {
-    emitter.on(state.events.list_add, function(item) {
-      state.list.unshift(item)
+    state.list = JSON.parse(
+      R.defaultTo('[]', localStorage.getItem(listStorageKey)),
+    )
+    emitter.emit(state.events.RENDER)
+    emitter.on(state.events.list_add, function() {
+      const newItemText = prompt('New Item', 'Get Milk!')
+      log.debug('newItemText', newItemText)
+      state.list.unshift(I.createNew({text: newItemText}))
       emitter.emit(state.events.RENDER)
+      persistList()
     })
 
     emitter.on(state.events.list_edit, function(item) {
@@ -57,12 +66,21 @@ function store(state, emitter) {
       state.editMode = EM.idle
       state.editState = null
       emitter.emit(state.events.RENDER)
+
+      persistList()
     })
 
     emitter.on(state.events.list_delete, function(item) {
       const idx = R.indexOf(item, state.list)
       state.list.splice(idx, 1)
       emitter.emit(state.events.RENDER)
+      persistList()
     })
+
+    function persistList() {
+      const serialisedList = JSON.stringify(state.list, null, 2)
+      log.debug('serialisedList', serialisedList)
+      localStorage.setItem(listStorageKey, serialisedList)
+    }
   })
 }

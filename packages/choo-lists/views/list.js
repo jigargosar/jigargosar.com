@@ -39,10 +39,10 @@ function editView(state, emit) {
         onsubmit="${onSubmit}" 
         onkeyup="${event => {
           // log.debug(event)
-          if (hasKeyCodeWithoutModifiers('Escape', event)) {
-            log.debug('event', event)
-            onDiscardClick(event)
-          }
+          // if (hasKeyCodeWithoutModifiers('Escape', event)) {
+          //   log.debug('event', event)
+          //   onDiscardClick(event)
+          // }
         }}"
       >
         ${domAutofocus(html`<input 
@@ -63,7 +63,7 @@ function editView(state, emit) {
 
 function itemsView(state, emit) {
   const onAddClick = () => {
-    emit(state.events.list_add, I.createNew())
+    emit(state.events.list_add)
   }
   return html`
     <div class="">
@@ -77,6 +77,7 @@ function itemsView(state, emit) {
 
 function createListItemView(state, emit) {
   return function(item) {
+    const text = I.text(item)
     return html`
       <div id=${I.id(item)} class="flex ${centeredContentClass}">
         <div class="pa1">
@@ -86,7 +87,11 @@ function createListItemView(state, emit) {
           ${Button({onclick: () => emit(state.events.list_edit, item)}, 'E')}
         </div>
         <div class="pa1 flex-grow-1 flex flex-column">
-          <div class="">${I.text(item)}</div>
+          ${
+            R.compose(R.isEmpty, R.trim)(text)
+              ? html`<div class="gray">${'<Empty>'}</div>`
+              : html`<div class="">${text}</div>`
+          }
           <div class="f6 code gray lh-solid" >id: ${I.id(item)}</div>
         </div>
       </div>`
