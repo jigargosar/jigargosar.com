@@ -37,7 +37,7 @@ function store(state, emitter) {
       assert(state.editMode === EM.idle)
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
-      state.editState = {grain, form: {text: grain.text}}
+      state.editState = {grainId: G.id(grain), form: {text: grain.text}}
       emitter.emit(state.events.RENDER)
     })
 
@@ -60,9 +60,13 @@ function store(state, emitter) {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
 
-      const grain = state.editState.grain
-      const idx = R.indexOf(grain, state.list)
-      state.list.splice(idx, 1, G.updateText(state.editState.form.text, grain))
+      const grain = R.find(R.propEq('id', state.editState.grainId), state.list)
+      assert(!R.isNil(grain))
+      state.list.splice(
+        R.indexOf(grain),
+        1,
+        G.updateText(state.editState.form.text, grain),
+      )
 
       state.editMode = EM.idle
       state.editState = null
