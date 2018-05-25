@@ -11,15 +11,15 @@ export function createNew({text} = {}) {
   }
 }
 
-export function updateText(text, item) {
-  item.text = text
-  return item
+export function updateText(text, grain) {
+  grain.text = text
+  return grain
 }
 
-export function text(item) {
-  return item.text
+export function text(grain) {
+  return grain.text
 }
 
-export function id(item) {
-  return item.id
+export function id(grain) {
+  return grain.id
 }

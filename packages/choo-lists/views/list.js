@@ -3,7 +3,7 @@ const log = require('nanologger')('views:list')
 const html = require('choo/html')
 const {TITLE} = require('./meta')
 const {updateTitle} = require('./events')
-const I = require('../models/item')
+const GG = require('../models/grain')
 const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 module.exports = view
@@ -71,20 +71,20 @@ function itemsView(state, emit) {
         <div class="pa1">Total: ${state.list.length}</div>
         <div class="pa1">${Button({onclick: onAddClick}, 'ADD')}</div>
       </div>
-      ${state.list.map(createListItemView(state, emit))}  
+      ${state.list.map(createGrainListView(state, emit))}  
     </div>`
 }
 
-function createListItemView(state, emit) {
-  return function(item) {
-    const text = I.text(item)
+function createGrainListView(state, emit) {
+  return function(grain) {
+    const text = GG.text(grain)
     return html`
-      <div id=${I.id(item)} class="flex ${centeredContentClass}">
+      <div id=${GG.id(grain)} class="flex ${centeredContentClass}">
         <div class="pa1">
-          ${Button({onclick: () => emit(state.events.list_delete, item)}, 'X')}
+          ${Button({onclick: () => emit(state.events.list_delete, grain)}, 'X')}
         </div>
         <div class="pa1">
-          ${Button({onclick: () => emit(state.events.list_edit, item)}, 'E')}
+          ${Button({onclick: () => emit(state.events.list_edit, grain)}, 'E')}
         </div>
         <div class="pa1 flex-grow-1 flex flex-column">
           ${
@@ -92,7 +92,7 @@ function createListItemView(state, emit) {
               ? html`<div class="gray">${'<Empty>'}</div>`
               : html`<div class="">${text}</div>`
           }
-          <div class="f6 code gray lh-solid" >id: ${I.id(item)}</div>
+          <div class="f6 code gray lh-solid" >id: ${GG.id(grain)}</div>
         </div>
       </div>`
   }

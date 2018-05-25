@@ -1,7 +1,7 @@
 const assert = require('assert')
 const R = require('ramda')
 const log = require('nanologger')('stores:list')
-const I = require('../models/item')
+const GG = require('../models/grain')
 const EM = require('../models/edit-mode')
 
 const listStorageKey = 'choo-list:list'
@@ -9,7 +9,7 @@ const listStorageKey = 'choo-list:list'
 module.exports = store
 
 function store(state, emitter) {
-  state.list = R.times(() => I.createNew(), 10)
+  state.list = R.times(() => GG.createNew(), 10)
   state.editMode = EM.idle
 
   state.events.list_add = 'list:add'
@@ -25,19 +25,19 @@ function store(state, emitter) {
     )
     emitter.emit(state.events.RENDER)
     emitter.on(state.events.list_add, function() {
-      const newItemText = prompt('New Item', 'Get Milk!')
-      log.debug('newItemText', newItemText)
-      if (R.isNil(newItemText)) return
-      state.list.unshift(I.createNew({text: newItemText}))
+      const newGrainText = prompt('New GGrain', 'Grainet Milk!')
+      log.debug('newGrainText', newGrainText)
+      if (R.isNil(newGrainText)) return
+      state.list.unshift(GG.createNew({text: newGrainText}))
       emitter.emit(state.events.RENDER)
       persistList()
     })
 
-    emitter.on(state.events.list_edit, function(item) {
+    emitter.on(state.events.list_edit, function(grain) {
       assert(state.editMode === EM.idle)
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
-      state.editState = {item, form: {text: item.text}}
+      state.editState = {grain, form: {text: grain.text}}
       emitter.emit(state.events.RENDER)
     })
 
@@ -60,9 +60,9 @@ function store(state, emitter) {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
 
-      const item = state.editState.item
-      const idx = R.indexOf(item, state.list)
-      state.list.splice(idx, 1, I.updateText(state.editState.form.text, item))
+      const grain = state.editState.grain
+      const idx = R.indexOf(grain, state.list)
+      state.list.splice(idx, 1, GG.updateText(state.editState.form.text, grain))
 
       state.editMode = EM.idle
       state.editState = null
@@ -71,8 +71,8 @@ function store(state, emitter) {
       persistList()
     })
 
-    emitter.on(state.events.list_delete, function(item) {
-      const idx = R.indexOf(item, state.list)
+    emitter.on(state.events.list_delete, function(grain) {
+      const idx = R.indexOf(grain, state.list)
       state.list.splice(idx, 1)
       emitter.emit(state.events.RENDER)
       persistList()
