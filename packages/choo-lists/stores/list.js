@@ -5,6 +5,7 @@ const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 
 const listStorageKey = 'choo-list:list'
+const viewStateStorageKey = 'choo-list:view'
 
 module.exports = store
 
@@ -23,7 +24,17 @@ function store(state, emitter) {
     state.list.splice(
       0,
       state.list.length,
-      ...JSON.parse(R.defaultTo('[]', localStorage.getItem(listStorageKey))),
+      ...R.defaultTo([], JSON.parse(localStorage.getItem(listStorageKey))),
+    )
+
+    Object.assign(
+      state,
+      getViewState(
+        R.defaultTo(
+          {editMode: EM.idle},
+          JSON.parse(localStorage.getItem(viewStateStorageKey)),
+        ),
+      ),
     )
 
     log.debug('state.list: after load', state.list)
@@ -43,7 +54,7 @@ function store(state, emitter) {
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
       state.editState = {grainId: G.id(grain), form: {text: grain.text}}
-      persistEditState()
+      persistViewState()
       emitter.emit(state.events.RENDER)
     })
 
@@ -51,7 +62,7 @@ function store(state, emitter) {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
       state.editState.form.text = text
-      persistEditState()
+      persistViewState()
       emitter.emit(state.events.RENDER)
     })
 
@@ -60,7 +71,7 @@ function store(state, emitter) {
       assert(!R.isNil(state.editState))
       state.editMode = EM.idle
       state.editState = null
-      persistEditState()
+      persistViewState()
       emitter.emit(state.events.RENDER)
     })
 
@@ -78,7 +89,7 @@ function store(state, emitter) {
 
       state.editMode = EM.idle
       state.editState = null
-      persistEditState()
+      persistViewState()
       emitter.emit(state.events.RENDER)
 
       persistList()
@@ -91,14 +102,14 @@ function store(state, emitter) {
       persistList()
     })
 
-    function persistEditState() {
-      const serialisedEditState = JSON.stringify(
-        R.pick(['editState', 'editMode']),
-        null,
-        2,
-      )
-      log.debug('serialisedEditState', serialisedEditState)
-      localStorage.setItem(listStorageKey, serialisedEditState)
+    function persistViewState() {
+      const serialisedViewState = JSON.stringify(getViewState(state), null, 2)
+      log.debug('serialisedViewState', serialisedViewState)
+      localStorage.setItem(viewStateStorageKey, serialisedViewState)
+    }
+
+    function getViewState(state) {
+      return R.pick(['editState', 'editMode'], state)
     }
 
     function persistList() {
