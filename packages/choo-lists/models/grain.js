@@ -6,7 +6,7 @@ faker.seed(123)
 
 export function createNew({text} = {}) {
   return {
-    id: nanoid(),
+    id: `grain-${nanoid()}`,
     text: R.isNil(text) ? `${faker.lorem.words()}` : text,
   }
 }

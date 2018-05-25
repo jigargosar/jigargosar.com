@@ -1,7 +1,7 @@
 const assert = require('assert')
 const R = require('ramda')
 const log = require('nanologger')('stores:list')
-const GG = require('../models/grain')
+const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 
 const listStorageKey = 'choo-list:list'
@@ -9,7 +9,7 @@ const listStorageKey = 'choo-list:list'
 module.exports = store
 
 function store(state, emitter) {
-  state.list = R.times(() => GG.createNew(), 10)
+  state.list = R.times(() => G.createNew(), 10)
   state.editMode = EM.idle
 
   state.events.list_add = 'list:add'
@@ -28,7 +28,7 @@ function store(state, emitter) {
       const newGrainText = prompt('New GGrain', 'Grainet Milk!')
       log.debug('newGrainText', newGrainText)
       if (R.isNil(newGrainText)) return
-      state.list.unshift(GG.createNew({text: newGrainText}))
+      state.list.unshift(G.createNew({text: newGrainText}))
       emitter.emit(state.events.RENDER)
       persistList()
     })
@@ -62,7 +62,7 @@ function store(state, emitter) {
 
       const grain = state.editState.grain
       const idx = R.indexOf(grain, state.list)
-      state.list.splice(idx, 1, GG.updateText(state.editState.form.text, grain))
+      state.list.splice(idx, 1, G.updateText(state.editState.form.text, grain))
 
       state.editMode = EM.idle
       state.editState = null

@@ -3,7 +3,7 @@ const log = require('nanologger')('views:list')
 const html = require('choo/html')
 const {TITLE} = require('./meta')
 const {updateTitle} = require('./events')
-const GG = require('../models/grain')
+const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 module.exports = view
@@ -77,9 +77,9 @@ function itemsView(state, emit) {
 
 function createGrainListView(state, emit) {
   return function(grain) {
-    const text = GG.text(grain)
+    const text = G.text(grain)
     return html`
-      <div id=${GG.id(grain)} class="flex ${centeredContentClass}">
+      <div id=${G.id(grain)} class="flex ${centeredContentClass}">
         <div class="pa1">
           ${Button({onclick: () => emit(state.events.list_delete, grain)}, 'X')}
         </div>
@@ -92,7 +92,7 @@ function createGrainListView(state, emit) {
               ? html`<div class="gray">${'<Empty>'}</div>`
               : html`<div class="">${text}</div>`
           }
-          <div class="f6 code gray lh-solid" >id: ${GG.id(grain)}</div>
+          <div class="f6 code gray lh-solid" >id: ${G.id(grain)}</div>
         </div>
       </div>`
   }
