@@ -19,6 +19,8 @@ function view(state, emit) {
     </body>`
 }
 
+const centeredContentClass = 'center mw7 mv3 ph3'
+
 function editView(state, emit) {
   const onDiscardClick = () => {
     emit(state.events.list_edit_discard)
@@ -31,9 +33,18 @@ function editView(state, emit) {
     emit(state.events.list_edit_onTextChanged, event.target.value)
   }
   return html`
-    <div class="center mw7 mv3 ph3">
+    <div class="${centeredContentClass}">
       <div class="f3">Editing</div>
-      <form onsubmit="${onSubmit}">
+      <form 
+        onsubmit="${onSubmit}" 
+        onkeyup="${event => {
+          // log.debug(event)
+          if (hasKeyCodeWithoutModifiers('Escape', event)) {
+            log.debug('event', event)
+            onDiscardClick(event)
+          }
+        }}"
+      >
         ${domAutofocus(html`<input 
           class="pa1 ma1 w-100" 
           type="text" 
@@ -41,11 +52,11 @@ function editView(state, emit) {
           oninput="${onEditModeTextChange}"
           placeholder="Edit this..."
         />`)}
+        <div class="flex flex-row-reverse f4">
+          <div class="pa1">${Button({onclick: onSubmit}, 'SAVE')}</div>
+          <div class="pa1">${Button({onclick: onDiscardClick}, 'DISCARD')}</div>
+        </div>
       </form>
-      <div class="flex flex-row-reverse f4">
-        <div class="pa1">${Button({onclick: onSubmit}, 'SAVE')}</div>
-        <div class="pa1">${Button({onclick: onDiscardClick}, 'DISCARD')}</div>
-      </div>
     </div>
     `
 }
@@ -56,7 +67,7 @@ function itemsView(state, emit) {
   }
   return html`
     <div class="">
-      <div class="flex center mw7 mv3 ph3">
+      <div class="flex ${centeredContentClass}">
         <div class="pa1">Total: ${state.list.length}</div>
         <div class="pa1">${Button({onclick: onAddClick}, 'ADD')}</div>
       </div>
@@ -67,7 +78,7 @@ function itemsView(state, emit) {
 function createListItemView(state, emit) {
   return function(item) {
     return html`
-      <div id=${I.id(item)} class="flex center mw7 mv3 ph3">
+      <div id=${I.id(item)} class="flex ${centeredContentClass}">
         <div class="pa1">
           ${Button({onclick: () => emit(state.events.list_delete, item)}, 'X')}
         </div>
@@ -81,6 +92,7 @@ function createListItemView(state, emit) {
       </div>`
   }
 }
+
 function noModifiers(event) {
   return !R.any(R.identity, R.props(['shiftKey', 'ctrlKey', 'metaKey'], event))
 }
@@ -113,6 +125,7 @@ function Button(props, content) {
        }}"
        onkeyup="${event => {
          if (hasKeyCodeWithoutModifiers('Escape', event)) {
+           log.debug('event', event)
            event.target.blur()
          }
        }}" 
