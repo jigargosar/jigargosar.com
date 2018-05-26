@@ -1,3 +1,4 @@
+require("babel-polyfill")
 const log = require('nanologger')('app')
 const css = require('sheetify')
 

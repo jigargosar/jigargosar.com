@@ -21,6 +21,7 @@
     "jsxBracketSameLine": false
   },
   "dependencies": {
+    "babel-polyfill": "6.26.0",
     "choo": "6.11.0",
     "choo-service-worker": "2.4.0",
     "codemirror": "5.38.0",

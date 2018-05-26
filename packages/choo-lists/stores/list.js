@@ -4,8 +4,31 @@ const log = require('nanologger')('stores:list')
 const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const yaml = require('js-yaml')
+const PouchDB = require('pouchdb-browser')
 
-const listStorageKey = 'choo-list:list'
+const db = new PouchDB('choo-list:main')
+const info = async function() {
+  log.info('pouch:', await db.info())
+}
+info().catch(log.error)
+
+const listLS = (function(key, defaultValue) {
+  function loadListFromLS() {
+    return R.defaultTo(defaultValue, JSON.parse(localStorage.getItem(key)))
+  }
+
+  function persistListToLS(obj) {
+    const serialisedObj = JSON.stringify(obj, null, 2)
+    log.debug('serialised', serialisedObj)
+    localStorage.setItem(key, serialisedObj)
+  }
+
+  return {
+    save: persistListToLS,
+    load: loadListFromLS,
+  }
+})('choo-list:list', [])
+
 const viewStateStorageKey = 'choo-list:view'
 
 module.exports = store
@@ -23,11 +46,7 @@ function store(state, emitter) {
   state.events.list_delete = 'list:delete'
 
   emitter.on('DOMContentLoaded', function() {
-    state.list.splice(
-      0,
-      state.list.length,
-      ...R.defaultTo([], JSON.parse(localStorage.getItem(listStorageKey))),
-    )
+    state.list.splice(0, state.list.length, ...listLS.load())
 
     Object.assign(
       state,
@@ -48,7 +67,7 @@ function store(state, emitter) {
       if (R.isNil(newGrainText)) return
       state.list.unshift(G.createNew({text: newGrainText}))
       emitter.emit(state.events.RENDER)
-      persistList()
+      listLS.save(state.list)
     })
 
     function dumpYAML(obj) {
@@ -124,14 +143,14 @@ function store(state, emitter) {
       persistViewState()
       emitter.emit(state.events.RENDER)
 
-      persistList()
+      listLS.save(state.list)
     })
 
     emitter.on(state.events.list_delete, function(grain) {
       const idx = R.indexOf(grain, state.list)
       state.list.splice(idx, 1)
       emitter.emit(state.events.RENDER)
-      persistList()
+      listLS.save(state.list)
     })
 
     function persistViewState() {
@@ -142,12 +161,6 @@ function store(state, emitter) {
 
     function getViewState(state) {
       return R.pick(['editState', 'editMode'], state)
-    }
-
-    function persistList() {
-      const serialisedList = JSON.stringify(state.list, null, 2)
-      log.debug('serialisedList', serialisedList)
-      localStorage.setItem(listStorageKey, serialisedList)
     }
   })
 }
