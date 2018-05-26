@@ -1,33 +1,14 @@
 const assert = require('assert')
 const R = require('ramda')
+const RA = require('ramda-adjunct')
 const log = require('nanologger')('stores:list')
 const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const yaml = require('js-yaml')
 const PouchDB = require('pouchdb-browser')
+const LocalStorageItem = require('./local-storage-item')
 
-const listPD = new PouchDB('choo-list:list')
-const info = async function() {
-  log.info('pouch:', await listPD.info())
-}
-info().catch(log.error)
-
-const listLS = (function(key, defaultValue) {
-  function loadListFromLS() {
-    return R.defaultTo(defaultValue, JSON.parse(localStorage.getItem(key)))
-  }
-
-  function persistListToLS(obj) {
-    const serialisedObj = JSON.stringify(obj, null, 2)
-    log.debug('serialised', serialisedObj)
-    localStorage.setItem(key, serialisedObj)
-  }
-
-  return {
-    save: persistListToLS,
-    load: loadListFromLS,
-  }
-})('choo-list:list', [])
+const listLS = LocalStorageItem('choo-list:list', [])
 
 const viewStateStorageKey = 'choo-list:view'
 
@@ -45,8 +26,31 @@ function store(state, emitter) {
   state.events.list_edit_save = 'list:edit:save'
   state.events.list_delete = 'list:delete'
 
+  function emitRender() {
+    emitter.emit(state.events.RENDER)
+  }
+
   emitter.on('DOMContentLoaded', function() {
-    state.list.splice(0, state.list.length, ...listLS.load())
+    // state.list.splice(0, state.list.length, ...listLS.load())
+
+    const listPD = new PouchDB('choo-list:list')
+    const info = async function() {
+      log.info('listPD', await listPD.info())
+    }
+    info().catch(log.error)
+
+    listPD
+      .allDocs({include_docs: true})
+      .then(R.tap(r => log.debug('all docs result', r)))
+      .then(
+        R.compose(
+          R.map(R.compose(RA.renameKeys({_id: 'id'}), R.prop('doc'))),
+          R.prop('rows'),
+        ),
+      )
+      .then(R.tap(r => log.debug('docs', r)))
+      .then(grains => state.list.splice(0, state.list.length, ...grains))
+      .then(emitRender)
 
     Object.assign(
       state,
@@ -65,7 +69,14 @@ function store(state, emitter) {
       const newGrainText = prompt('New Grain', 'Get Milk!')
       log.debug('newGrainText', newGrainText)
       if (R.isNil(newGrainText)) return
-      state.list.unshift(G.createNew({text: newGrainText}))
+      const newGrain = G.createNew({text: newGrainText})
+
+      state.list.unshift(newGrain)
+
+      listPD.put(RA.renameKeys({id: '_id'}, newGrain)).then(function(response) {
+        log.info('listPD:add:response', response)
+      })
+
       emitter.emit(state.events.RENDER)
       listLS.save(state.list)
     })
@@ -84,7 +95,7 @@ function store(state, emitter) {
         yaml: dumpYAML(grain),
       }
       persistViewState()
-      emitter.emit(state.events.RENDER)
+      emitRender()
     })
 
     emitter.on(state.events.list_edit_onTextChanged, function(text) {
@@ -96,7 +107,7 @@ function store(state, emitter) {
       )
 
       persistViewState()
-      emitter.emit(state.events.RENDER)
+      emitRender()
     })
 
     emitter.on(state.events.list_edit_onYAMLUpdate, function(yamlString) {
@@ -113,7 +124,7 @@ function store(state, emitter) {
       if (!R.isEmpty(updatedForm)) {
         Object.assign(state.editState.form, updatedForm)
         persistViewState()
-        emitter.emit(state.events.RENDER)
+        emitRender()
       }
     })
 
@@ -123,7 +134,7 @@ function store(state, emitter) {
       state.editMode = EM.idle
       state.editState = null
       persistViewState()
-      emitter.emit(state.events.RENDER)
+      emitRender()
     })
 
     emitter.on(state.events.list_edit_save, function() {
@@ -141,7 +152,7 @@ function store(state, emitter) {
       state.editMode = EM.idle
       state.editState = null
       persistViewState()
-      emitter.emit(state.events.RENDER)
+      emitRender()
 
       listLS.save(state.list)
     })
@@ -149,7 +160,7 @@ function store(state, emitter) {
     emitter.on(state.events.list_delete, function(grain) {
       const idx = R.indexOf(grain, state.list)
       state.list.splice(idx, 1)
-      emitter.emit(state.events.RENDER)
+      emitRender()
       listLS.save(state.list)
     })
 
