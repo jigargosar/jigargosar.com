@@ -43,11 +43,12 @@ function store(state, emitter) {
 
     listPD
       .allDocs({include_docs: true})
-      .then(R.tap(r => log.debug('all docs result', r)))
       .then(
         R.compose(
-          R.map(R.compose(RA.renameKeys({_id: 'id'}), R.prop('doc'))),
+          R.tap(r => log.debug('grains', r)),
+          R.map(R.compose(G.fromPouchDBDoc, R.prop('doc'))),
           R.prop('rows'),
+          R.tap(r => log.debug('all docs result', r)),
         ),
       )
       .then(R.tap(r => log.debug('docs', r)))
@@ -73,7 +74,7 @@ function store(state, emitter) {
       listPD.put(G.toPouchDBDoc(newGrain)).then(function(res) {
         log.info('listPD:add:res', res)
         assert(res.ok)
-        assert(res.id === newGrain.id)
+        assert(res.id === G.getId(newGrain))
         const newGrainWithRev = G.updateRev(res.rev, newGrain)
         state.list.unshift(newGrainWithRev)
         // listLS.save(state.list)
@@ -90,7 +91,7 @@ function store(state, emitter) {
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
       state.editState = {
-        grainId: G.id(grain),
+        grainId: G.getId(grain),
         form: R.clone(grain),
         yaml: dumpYAML(grain),
       }
@@ -149,7 +150,7 @@ function store(state, emitter) {
       listPD.put(G.toPouchDBDoc(updatedGrain)).then(function(res) {
         log.info('listPD:edit_save:res', res)
         assert(res.ok)
-        assert(res.id === updatedGrain.id)
+        assert(res.id === G.getId(updatedGrain))
         const updatedGrainWithRev = G.updateRev(res.rev, updatedGrain)
 
         state.list.splice(R.indexOf(grain, state.list), 1, updatedGrainWithRev)
@@ -164,16 +165,14 @@ function store(state, emitter) {
     })
 
     emitter.on(state.events.list_delete, function(grain) {
-      assert(!R.has('_deleted')(grain))
-
-      const deletedGrain = R.merge({_deleted: true})(grain)
+      const deletedGrain = G.setDeleted(grain)
 
       listPD.put(G.toPouchDBDoc(deletedGrain)).then(res => {
         log.info('listPD:delete:res', res)
         assert(res.ok)
-        assert(res.id === deletedGrain.id)
+        assert(res.id === G.getId(deletedGrain))
 
-        const idx = R.findIndex(R.propEq('id', deletedGrain.id), state.list)
+        const idx = R.findIndex(G.eqById(deletedGrain), state.list)
         assert(idx !== -1)
         state.list.splice(idx, 1)
         // listLS.save(state.list)
