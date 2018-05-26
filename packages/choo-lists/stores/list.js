@@ -71,14 +71,18 @@ function store(state, emitter) {
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
 
-      state.list.unshift(newGrain)
-
       listPD.put(RA.renameKeys({id: '_id'}, newGrain)).then(function(response) {
         log.info('listPD:add:response', response)
+        if (response.ok) {
+          assert(response.id === newGrain.id)
+          const newGrainWithRev = R.merge(newGrain, {_rev: response.rev})
+          state.list.unshift(newGrainWithRev)
+          emitRender()
+          listLS.save(state.list)
+        } else {
+          log.error('Cannot add new grain', response)
+        }
       })
-
-      emitter.emit(state.events.RENDER)
-      listLS.save(state.list)
     })
 
     function dumpYAML(obj) {
