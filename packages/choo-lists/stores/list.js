@@ -53,7 +53,7 @@ function store(state, emitter) {
       assert(state.editMode === EM.idle)
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
-      state.editState = {grainId: G.id(grain), form: {text: grain.text}}
+      state.editState = {grainId: G.id(grain), form: R.clone(grain)}
       persistViewState()
       emitter.emit(state.events.RENDER)
     })

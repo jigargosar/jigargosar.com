@@ -1,3 +1,5 @@
+const {CodeMirrorEditor} = require('../elements/CodeMirrorEditor')
+
 const R = require('ramda')
 const log = require('nanologger')('views:list')
 const html = require('choo/html')
@@ -7,6 +9,12 @@ const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 const yaml = require('js-yaml')
+const CodeMirror = require('codemirror')
+const css = require('sheetify')
+css('codemirror/lib/codemirror.css')
+css('codemirror/theme/zenburn.css')
+const Component = require('choo/component')
+
 module.exports = view
 
 function view(state, emit) {
@@ -21,6 +29,13 @@ function view(state, emit) {
 }
 
 const centeredContentClass = 'center mw7 mv3 ph3'
+
+const cm = new CodeMirror(null, {
+  value: '',
+  lineNumbers: true,
+})
+
+var cmComp = new CodeMirrorEditor()
 
 function editView(state, emit) {
   const onDiscardClick = () => {
@@ -60,9 +75,7 @@ function editView(state, emit) {
         </div>
       </form>
       <div class="flex flex-column mv3">
-        <textarea class="h4" style="height: 18rem;">${yaml.dump(
-          state.editState,
-        )}</textarea>
+        ${cmComp.render(yaml.dump(state.editState.form))}
       </div>
     </div>
     `
