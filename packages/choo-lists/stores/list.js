@@ -51,11 +51,19 @@ function store(state, emitter) {
       persistList()
     })
 
+    function dumpYAML(obj) {
+      return yaml.dump(obj, {noCompatMode: true, lineWidth: 60})
+    }
+
     emitter.on(state.events.list_edit, function(grain) {
       assert(state.editMode === EM.idle)
       assert(R.isNil(state.editState))
       state.editMode = EM.editing
-      state.editState = {grainId: G.id(grain), form: R.clone(grain)}
+      state.editState = {
+        grainId: G.id(grain),
+        form: R.clone(grain),
+        yaml: dumpYAML(grain),
+      }
       persistViewState()
       emitter.emit(state.events.RENDER)
     })
@@ -64,6 +72,10 @@ function store(state, emitter) {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
       state.editState.form.text = text
+      state.editState.yaml = dumpYAML(
+        R.merge(state.editState.form, {text: R.trim(text)}),
+      )
+
       persistViewState()
       emitter.emit(state.events.RENDER)
     })
@@ -71,12 +83,19 @@ function store(state, emitter) {
     emitter.on(state.events.list_edit_onYAMLUpdate, function(yamlString) {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
-      Object.assign(
-        state.editState.form,
-        R.pick(['text'], yaml.safeLoad(yamlString)),
+
+      state.editState.yaml = yamlString
+
+      const parseYAMLForm = R.compose(
+        R.pick(['text']),
+        R.tryCatch(yaml.safeLoad, R.always({})),
       )
-      persistViewState()
-      emitter.emit(state.events.RENDER)
+      const updatedForm = parseYAMLForm(yamlString)
+      if (!R.isEmpty(updatedForm)) {
+        Object.assign(state.editState.form, updatedForm)
+        persistViewState()
+        emitter.emit(state.events.RENDER)
+      }
     })
 
     emitter.on(state.events.list_edit_discard, function() {

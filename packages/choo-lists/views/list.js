@@ -65,8 +65,9 @@ function editView(state, emit) {
         </div>
       </form>
       <div class="flex flex-column mv3">
-        ${cmComp.render(yaml.dump(state.editState.form), yamlString =>
-          emit(state.events.list_edit_onYAMLUpdate, yamlString),
+        ${cmComp.render(
+          state.editState.yaml,
+          R.partial(emit, [state.events.list_edit_onYAMLUpdate]),
         )}
       </div>
     </div>
