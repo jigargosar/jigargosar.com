@@ -71,16 +71,16 @@ function store(state, emitter) {
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
 
-      listPD.put(RA.renameKeys({id: '_id'}, newGrain)).then(function(response) {
-        log.info('listPD:add:response', response)
-        if (response.ok) {
-          assert(response.id === newGrain.id)
-          const newGrainWithRev = R.merge(newGrain, {_rev: response.rev})
+      listPD.put(RA.renameKeys({id: '_id'}, newGrain)).then(function(res) {
+        log.info('listPD:add:res', res)
+        if (res.ok) {
+          assert(res.id === newGrain.id)
+          const newGrainWithRev = R.merge(newGrain, {_rev: res.rev})
           state.list.unshift(newGrainWithRev)
           emitRender()
           listLS.save(state.list)
         } else {
-          log.error('Cannot add new grain', response)
+          log.error('Cannot add new grain', res)
         }
       })
     })
@@ -156,16 +156,26 @@ function store(state, emitter) {
       state.editMode = EM.idle
       state.editState = null
       persistViewState()
-      emitRender()
-
       listLS.save(state.list)
+      emitRender()
     })
 
     emitter.on(state.events.list_delete, function(grain) {
-      const idx = R.indexOf(grain, state.list)
-      state.list.splice(idx, 1)
-      emitRender()
-      listLS.save(state.list)
+      assert(!R.has('_deleted')(grain))
+
+      const deletedGrain = R.merge({_deleted: true})(grain)
+
+      listPD.put(RA.renameKeys({id: '_id'})(deletedGrain)).then(res => {
+        log.info('listPD:delete:res', res)
+        assert(res.ok)
+        assert(res.id === deletedGrain.id)
+
+        const idx = R.findIndex(R.propEq('id', deletedGrain.id), state.list)
+        assert(idx !== -1)
+        state.list.splice(idx, 1)
+        listLS.save(state.list)
+        emitRender()
+      })
     })
 
     function persistViewState() {
