@@ -13,10 +13,11 @@ const textPropName = 'text'
 const createdAtPropName = 'createdAt'
 
 export function createNew({text} = {}) {
+  const nowTimestamp = Date.now()
   return {
-    [idPropName]: `grain-${nanoid()}`,
+    [idPropName]: `grain-${nowTimestamp}-${nanoid()}`,
     text: R.isNil(text) ? `${faker.lorem.words()}` : text,
-    [createdAtPropName]: Date.now(),
+    [createdAtPropName]: nowTimestamp,
   }
 }
 
@@ -47,12 +48,15 @@ export function toPouchDBDoc(grain) {
 }
 
 export function fromPouchDBDoc(doc) {
-  assert(RA.isNotNil(doc._id))
-  return RA.renameKeys({_id: idPropName}, doc)
+  assert(RA.isString(doc[idPropName]))
+  assert(RA.isString(doc[revisionPropName]))
+  assert(RA.isString(doc[textPropName]))
+  assert(RA.isNumber(doc[createdAtPropName]))
+  return doc
 }
 
 export const idEq = R.curry(function idEq(id, grain) {
-  return R.propEq(idPropName, id, getId(grain))
+  return R.propEq(idPropName, id, grain)
 })
 
 export const eqById = R.curry(function idEq(grain1, grain2) {

@@ -31,7 +31,7 @@ function store(state, emitter) {
 
   emitter.on('DOMContentLoaded', function() {
     const listPD = new PouchDB('choo-list:list')
-    listPD.info().then(info => log.info('listPD:info', info))
+    listPD.info().then(info => log.debug('listPD:info', info))
 
     listPD
       .allDocs({include_docs: true})
@@ -41,7 +41,7 @@ function store(state, emitter) {
           R.map(R.compose(G.fromPouchDBDoc, R.prop('doc'))),
           R.tap(rows => log.debug('allDocs:rows', ...rows)),
           R.prop('rows'),
-          R.tap(res => log.debug('allDocs:res', res)),
+          R.tap(res => log.trace('allDocs:res', res)),
         ),
       )
       .then(grains => state.list.splice(0, state.list.length, ...grains))
@@ -55,15 +55,14 @@ function store(state, emitter) {
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
 
-      PD.put(G.toPouchDBDoc(newGrain), listPD).then(function(res) {
-        log.info('listPD:add:res', res)
-        assert(res.ok)
-        assert(res.id === G.getId(newGrain))
-        const newGrainWithRev = G.setRevision(res.rev, newGrain)
-        state.list.unshift(newGrainWithRev)
-        // listLS.save(state.list)
-        emitRender()
-      })
+      const res = await PD.insert(G.toPouchDBDoc(newGrain), listPD)
+      log.info('listPD:add:res', res)
+      assert(res.ok)
+      assert(res.id === G.getId(newGrain))
+      const newGrainWithRev = G.setRevision(res.rev, newGrain)
+      state.list.unshift(newGrainWithRev)
+      // listLS.save(state.list)
+      emitRender()
     })
 
     function dumpYAML(obj) {
@@ -126,8 +125,8 @@ function store(state, emitter) {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
 
-      const grain = R.find(R.propEq('id', state.editState.grainId), state.list)
-      assert(!R.isNil(grain))
+      const grain = R.find(G.idEq(state.editState.grainId), state.list)
+      assert(RA.isNotNil(grain))
 
       const updatedGrain = G.setText(state.editState.form.text, grain)
 
