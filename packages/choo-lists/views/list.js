@@ -1,4 +1,4 @@
-const {CodeMirrorEditor} = require('../elements/CodeMirrorEditor')
+const {CodeMirrorEditor} = require('../components/CodeMirrorEditor')
 
 const R = require('ramda')
 const log = require('nanologger')('views:list')
