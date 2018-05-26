@@ -114,7 +114,7 @@ function store(state, emitter) {
       const grain = R.find(R.propEq('id', state.editState.grainId), state.list)
       assert(!R.isNil(grain))
       state.list.splice(
-        R.indexOf(grain),
+        R.indexOf(grain, state.list),
         1,
         G.updateText(state.editState.form.text, grain),
       )

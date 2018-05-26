@@ -12,8 +12,7 @@ export function createNew({text} = {}) {
 }
 
 export function updateText(text, grain) {
-  grain.text = text
-  return grain
+  return R.assoc('text', text, grain)
 }
 
 export function text(grain) {
