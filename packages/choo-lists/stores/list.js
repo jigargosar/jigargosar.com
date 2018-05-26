@@ -8,7 +8,7 @@ const yaml = require('js-yaml')
 const PouchDB = require('pouchdb-browser')
 const LocalStorageItem = require('./local-storage-item')
 
-const listLS = LocalStorageItem('choo-list:list', [])
+// const listLS = LocalStorageItem('choo-list:list', [])
 
 const viewStateStorageKey = 'choo-list:view'
 
@@ -32,6 +32,8 @@ function store(state, emitter) {
 
   emitter.on('DOMContentLoaded', function() {
     // state.list.splice(0, state.list.length, ...listLS.load())
+    // log.debug('state.list: after load', state.list)
+    // emitter.emit(state.events.RENDER)
 
     const listPD = new PouchDB('choo-list:list')
     const info = async function() {
@@ -62,9 +64,6 @@ function store(state, emitter) {
       ),
     )
 
-    log.debug('state.list: after load', state.list)
-
-    emitter.emit(state.events.RENDER)
     emitter.on(state.events.list_add, function() {
       const newGrainText = prompt('New Grain', 'Get Milk!')
       log.debug('newGrainText', newGrainText)
@@ -73,15 +72,12 @@ function store(state, emitter) {
 
       listPD.put(RA.renameKeys({id: '_id'}, newGrain)).then(function(res) {
         log.info('listPD:add:res', res)
-        if (res.ok) {
-          assert(res.id === newGrain.id)
-          const newGrainWithRev = R.merge(newGrain, {_rev: res.rev})
-          state.list.unshift(newGrainWithRev)
-          emitRender()
-          listLS.save(state.list)
-        } else {
-          log.error('Cannot add new grain', res)
-        }
+        assert(res.ok)
+        assert(res.id === newGrain.id)
+        const newGrainWithRev = R.merge(newGrain, {_rev: res.rev})
+        state.list.unshift(newGrainWithRev)
+        // listLS.save(state.list)
+        emitRender()
       })
     })
 
@@ -147,17 +143,24 @@ function store(state, emitter) {
 
       const grain = R.find(R.propEq('id', state.editState.grainId), state.list)
       assert(!R.isNil(grain))
-      state.list.splice(
-        R.indexOf(grain, state.list),
-        1,
-        G.updateText(state.editState.form.text, grain),
-      )
 
-      state.editMode = EM.idle
-      state.editState = null
-      persistViewState()
-      listLS.save(state.list)
-      emitRender()
+      const updatedGrain = G.updateText(state.editState.form.text, grain)
+
+      listPD.put(RA.renameKeys({id: '_id'}, updatedGrain)).then(function(res) {
+        log.info('listPD:edit_save:res', res)
+        assert(res.ok)
+        assert(res.id === updatedGrain.id)
+        const updatedGrainWithRev = R.merge(updatedGrain, {_rev: res.rev})
+
+        state.list.splice(R.indexOf(grain, state.list), 1, updatedGrainWithRev)
+
+        state.editMode = EM.idle
+        state.editState = null
+        persistViewState()
+
+        // listLS.save(state.list)
+        emitRender()
+      })
     })
 
     emitter.on(state.events.list_delete, function(grain) {
@@ -173,7 +176,7 @@ function store(state, emitter) {
         const idx = R.findIndex(R.propEq('id', deletedGrain.id), state.list)
         assert(idx !== -1)
         state.list.splice(idx, 1)
-        listLS.save(state.list)
+        // listLS.save(state.list)
         emitRender()
       })
     })
