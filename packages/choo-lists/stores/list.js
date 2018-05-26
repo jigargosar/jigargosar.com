@@ -70,11 +70,11 @@ function store(state, emitter) {
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
 
-      listPD.put(RA.renameKeys({id: '_id'}, newGrain)).then(function(res) {
+      listPD.put(G.toPouchDBDoc(newGrain)).then(function(res) {
         log.info('listPD:add:res', res)
         assert(res.ok)
         assert(res.id === newGrain.id)
-        const newGrainWithRev = R.merge(newGrain, {_rev: res.rev})
+        const newGrainWithRev = G.updateRev(res.rev, newGrain)
         state.list.unshift(newGrainWithRev)
         // listLS.save(state.list)
         emitRender()
@@ -146,11 +146,11 @@ function store(state, emitter) {
 
       const updatedGrain = G.updateText(state.editState.form.text, grain)
 
-      listPD.put(RA.renameKeys({id: '_id'}, updatedGrain)).then(function(res) {
+      listPD.put(G.toPouchDBDoc(updatedGrain)).then(function(res) {
         log.info('listPD:edit_save:res', res)
         assert(res.ok)
         assert(res.id === updatedGrain.id)
-        const updatedGrainWithRev = R.merge(updatedGrain, {_rev: res.rev})
+        const updatedGrainWithRev = G.updateRev(res.rev, updatedGrain)
 
         state.list.splice(R.indexOf(grain, state.list), 1, updatedGrainWithRev)
 
@@ -168,7 +168,7 @@ function store(state, emitter) {
 
       const deletedGrain = R.merge({_deleted: true})(grain)
 
-      listPD.put(RA.renameKeys({id: '_id'})(deletedGrain)).then(res => {
+      listPD.put(G.toPouchDBDoc(deletedGrain)).then(res => {
         log.info('listPD:delete:res', res)
         assert(res.ok)
         assert(res.id === deletedGrain.id)
