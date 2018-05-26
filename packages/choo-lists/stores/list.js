@@ -31,10 +31,7 @@ function store(state, emitter) {
 
   emitter.on('DOMContentLoaded', function() {
     const listPD = new PouchDB('choo-list:list')
-    const info = async function() {
-      log.info('listPD', await listPD.info())
-    }
-    info().catch(log.error)
+    listPD.info().then(info => log.info('listPD:info', info))
 
     listPD
       .allDocs({include_docs: true})
@@ -42,9 +39,9 @@ function store(state, emitter) {
         R.compose(
           R.tap(grains => log.debug('grains', ...grains)),
           R.map(R.compose(G.fromPouchDBDoc, R.prop('doc'))),
-          R.tap(rows => log.debug('all docs result', ...rows)),
+          R.tap(rows => log.debug('allDocs:rows', ...rows)),
           R.prop('rows'),
-          R.tap(res => log.debug('all docs result', res)),
+          R.tap(res => log.debug('allDocs:res', res)),
         ),
       )
       .then(grains => state.list.splice(0, state.list.length, ...grains))
