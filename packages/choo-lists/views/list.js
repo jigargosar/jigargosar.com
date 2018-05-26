@@ -9,11 +9,6 @@ const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 const yaml = require('js-yaml')
-const CodeMirror = require('codemirror')
-const css = require('sheetify')
-css('codemirror/lib/codemirror.css')
-css('codemirror/theme/zenburn.css')
-const Component = require('choo/component')
 
 module.exports = view
 
@@ -29,11 +24,6 @@ function view(state, emit) {
 }
 
 const centeredContentClass = 'center mw7 mv3 ph3'
-
-const cm = new CodeMirror(null, {
-  value: '',
-  lineNumbers: true,
-})
 
 var cmComp = new CodeMirrorEditor()
 
@@ -75,7 +65,9 @@ function editView(state, emit) {
         </div>
       </form>
       <div class="flex flex-column mv3">
-        ${cmComp.render(yaml.dump(state.editState.form))}
+        ${cmComp.render(yaml.dump(state.editState.form), yamlString =>
+          emit(state.events.list_edit_onYAMLUpdate, yamlString),
+        )}
       </div>
     </div>
     `

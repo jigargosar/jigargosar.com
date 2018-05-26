@@ -3,6 +3,7 @@ const R = require('ramda')
 const log = require('nanologger')('stores:list')
 const G = require('../models/grain')
 const EM = require('../models/edit-mode')
+const yaml = require('js-yaml')
 
 const listStorageKey = 'choo-list:list'
 const viewStateStorageKey = 'choo-list:view'
@@ -16,6 +17,7 @@ function store(state, emitter) {
   state.events.list_add = 'list:add'
   state.events.list_edit = 'list:edit'
   state.events.list_edit_onTextChanged = 'list:edit:onTextChange'
+  state.events.list_edit_onYAMLUpdate = 'list:edit:onYAMLUpdate'
   state.events.list_edit_discard = 'list:edit:discard'
   state.events.list_edit_save = 'list:edit:save'
   state.events.list_delete = 'list:delete'
@@ -62,6 +64,17 @@ function store(state, emitter) {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
       state.editState.form.text = text
+      persistViewState()
+      emitter.emit(state.events.RENDER)
+    })
+
+    emitter.on(state.events.list_edit_onYAMLUpdate, function(yamlString) {
+      assert(state.editMode === EM.editing)
+      assert(!R.isNil(state.editState))
+      Object.assign(
+        state.editState.form,
+        R.pick(['text'], yaml.safeLoad(yamlString)),
+      )
       persistViewState()
       emitter.emit(state.events.RENDER)
     })
