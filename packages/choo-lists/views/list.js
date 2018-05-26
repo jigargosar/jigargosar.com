@@ -90,7 +90,7 @@ function itemsView(state, emit) {
 
 function createGrainListView(state, emit) {
   return function(grain) {
-    const text = G.text(grain)
+    const text = G.getText(grain)
     return html`
       <div id=${G.getId(grain)} class="flex ${centeredContentClass}">
         <div class="pa1">

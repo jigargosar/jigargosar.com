@@ -7,10 +7,9 @@ const EM = require('../models/edit-mode')
 const yaml = require('js-yaml')
 const PouchDB = require('pouchdb-browser')
 const LocalStorageItem = require('./local-storage-item')
+const PD = require('../models/pouch-db')
 
-// const listLS = LocalStorageItem('choo-list:list', [])
-
-const viewStateStorageKey = 'choo-list:view'
+const viewLS = LocalStorageItem('choo-list:view', {editMode: EM.idle})
 
 module.exports = store
 
@@ -31,10 +30,6 @@ function store(state, emitter) {
   }
 
   emitter.on('DOMContentLoaded', function() {
-    // state.list.splice(0, state.list.length, ...listLS.load())
-    // log.debug('state.list: after load', state.list)
-    // emitter.emit(state.events.RENDER)
-
     const listPD = new PouchDB('choo-list:list')
     const info = async function() {
       log.info('listPD', await listPD.info())
@@ -45,37 +40,29 @@ function store(state, emitter) {
       .allDocs({include_docs: true})
       .then(
         R.compose(
-          R.tap(r => log.debug('grains', r)),
+          R.tap(grains => log.debug('grains', ...grains)),
           R.map(R.compose(G.fromPouchDBDoc, R.prop('doc'))),
+          R.tap(rows => log.debug('all docs result', ...rows)),
           R.prop('rows'),
-          R.tap(r => log.debug('all docs result', r)),
+          R.tap(res => log.debug('all docs result', res)),
         ),
       )
-      .then(R.tap(r => log.debug('docs', r)))
       .then(grains => state.list.splice(0, state.list.length, ...grains))
       .then(emitRender)
 
-    Object.assign(
-      state,
-      getViewState(
-        R.defaultTo(
-          {editMode: EM.idle},
-          JSON.parse(localStorage.getItem(viewStateStorageKey)),
-        ),
-      ),
-    )
+    Object.assign(state, pickViewState(viewLS.load()))
 
-    emitter.on(state.events.list_add, function() {
+    emitter.on(state.events.list_add, async function() {
       const newGrainText = prompt('New Grain', 'Get Milk!')
       log.debug('newGrainText', newGrainText)
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
 
-      listPD.put(G.toPouchDBDoc(newGrain)).then(function(res) {
+      PD.put(G.toPouchDBDoc(newGrain), listPD).then(function(res) {
         log.info('listPD:add:res', res)
         assert(res.ok)
         assert(res.id === G.getId(newGrain))
-        const newGrainWithRev = G.updateRev(res.rev, newGrain)
+        const newGrainWithRev = G.setRevision(res.rev, newGrain)
         state.list.unshift(newGrainWithRev)
         // listLS.save(state.list)
         emitRender()
@@ -145,13 +132,13 @@ function store(state, emitter) {
       const grain = R.find(R.propEq('id', state.editState.grainId), state.list)
       assert(!R.isNil(grain))
 
-      const updatedGrain = G.updateText(state.editState.form.text, grain)
+      const updatedGrain = G.setText(state.editState.form.text, grain)
 
       listPD.put(G.toPouchDBDoc(updatedGrain)).then(function(res) {
         log.info('listPD:edit_save:res', res)
         assert(res.ok)
         assert(res.id === G.getId(updatedGrain))
-        const updatedGrainWithRev = G.updateRev(res.rev, updatedGrain)
+        const updatedGrainWithRev = G.setRevision(res.rev, updatedGrain)
 
         state.list.splice(R.indexOf(grain, state.list), 1, updatedGrainWithRev)
 
@@ -181,12 +168,10 @@ function store(state, emitter) {
     })
 
     function persistViewState() {
-      const serialisedViewState = JSON.stringify(getViewState(state), null, 2)
-      log.debug('serialisedViewState', serialisedViewState)
-      localStorage.setItem(viewStateStorageKey, serialisedViewState)
+      viewLS.save(pickViewState(state))
     }
 
-    function getViewState(state) {
+    function pickViewState(state) {
       return R.pick(['editState', 'editMode'], state)
     }
   })

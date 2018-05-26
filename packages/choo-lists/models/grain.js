@@ -6,30 +6,36 @@ const assert = require('assert')
 const faker = require('faker')
 faker.seed(123)
 
-const idPropName = 'id'
+const idPropName = '_id'
+const deletedPropName = '_deleted'
+const revisionPropName = '_rev'
+const textPropName = 'text'
+const createdAtPropName = 'createdAt'
 
 export function createNew({text} = {}) {
   return {
-    id: `grain-${nanoid()}`,
+    [idPropName]: `grain-${nanoid()}`,
     text: R.isNil(text) ? `${faker.lorem.words()}` : text,
+    [createdAtPropName]: Date.now(),
   }
 }
 
-export function updateText(text, grain) {
-  return R.assoc('text', text, grain)
+export function setText(text, grain) {
+  assert(RA.isString(text))
+  return R.assoc(textPropName, text, grain)
 }
 
 export function setDeleted(grain) {
-  assert(!R.has('_deleted')(grain))
-  return R.merge({_deleted: true})(grain)
+  assert(!R.has(deletedPropName)(grain))
+  return R.assoc(deletedPropName, true)(grain)
 }
 
-export function updateRev(rev, grain) {
-  return R.assoc('_rev', rev, grain)
+export function setRevision(revision, grain) {
+  return R.assoc(revisionPropName, revision, grain)
 }
 
-export function text(grain) {
-  return grain.text
+export function getText(grain) {
+  return grain[textPropName]
 }
 
 export function getId(grain) {
@@ -46,7 +52,7 @@ export function fromPouchDBDoc(doc) {
 }
 
 export const idEq = R.curry(function idEq(id, grain) {
-  return R.propEq(idPropName, id, id(grain))
+  return R.propEq(idPropName, id, getId(grain))
 })
 
 export const eqById = R.curry(function idEq(grain1, grain2) {
