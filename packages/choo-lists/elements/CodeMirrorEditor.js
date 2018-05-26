@@ -16,6 +16,9 @@ css('codemirror/addon/lint/lint.css')
 css('codemirror/theme/blackboard.css')
 
 class CodeMirrorEditor extends Component {
+  _onChange = null
+  _data = ''
+
   load() {
     this._cm = CodeMirror.fromTextArea(this.element.firstChild, {
       lineNumbers: true,
@@ -26,23 +29,31 @@ class CodeMirrorEditor extends Component {
       lint: true,
     })
     this._cm.setSize(null, 200)
+    this._cm.on('changes', () => {
+      if (this._onChange) {
+        this._onChange(this._cm.getDoc().getValue())
+      }
+    })
   }
 
   createElement(...args) {
     log.debug('rendering', ...args)
-    const [data] = args
-    this._data = data
+    const [_data, _onChange] = args
+    Object.assign(this, {_data, _onChange})
     return html`
       <div>
         <textarea 
           name="cm" 
           id="" 
           cols="30" 
-          rows="10">${data}</textarea>
+          rows="10">${this._data}</textarea>
         </div>`
   }
 
-  update(data) {
+  update(data, onChange) {
+    if (this._onChange !== onChange) {
+      this._onChange = onChange
+    }
     if (this._data !== data) {
       this._cm.getDoc().setValue(data)
     }
