@@ -6,9 +6,9 @@ const EM = require('../models/edit-mode')
 const yaml = require('js-yaml')
 const PouchDB = require('pouchdb-browser')
 
-const db = new PouchDB('choo-list:main')
+const listPD = new PouchDB('choo-list:list')
 const info = async function() {
-  log.info('pouch:', await db.info())
+  log.info('pouch:', await listPD.info())
 }
 info().catch(log.error)
 
