@@ -34,7 +34,7 @@ function store(state, emitter) {
     listPD.info().then(info => log.debug('listPD:info', info))
 
     listPD
-      .allDocs({include_docs: true})
+      .allDocs({include_docs: true, descending: true})
       .then(
         R.compose(
           R.tap(grains => log.debug('grains', ...grains)),
