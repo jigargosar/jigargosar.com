@@ -25,7 +25,7 @@ function view(state, emit) {
 
 const centeredContentClass = 'center mw7 mv3 ph3'
 
-var cmComp = new CodeMirrorEditor()
+var grainEditor = new CodeMirrorEditor()
 
 function editView(state, emit) {
   const onDiscardClick = () => {
@@ -65,7 +65,7 @@ function editView(state, emit) {
         </div>
       </form>
       <div class="flex flex-column mv3">
-        ${cmComp.render(
+        ${grainEditor.render(
           state.editState.yaml,
           R.partial(emit, [state.events.list_edit_onYAMLUpdate]),
         )}
