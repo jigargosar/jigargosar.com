@@ -4,7 +4,6 @@ const nanoid = require("nanoid");
 const assert = require("assert");
 
 const idPropName = "_id";
-const deletedPropName = "_deleted";
 const revisionPropName = "_rev";
 const textPropName = "text";
 const createdAtPropName = "createdAt";

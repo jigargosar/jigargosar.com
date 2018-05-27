@@ -1,8 +1,5 @@
 import React from "react";
 
-const R = require("ramda");
-const RA = require("ramda-adjunct");
-
 const StateContext = React.createContext({
   list: [],
   load: () => {}

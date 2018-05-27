@@ -4,7 +4,6 @@ import PT from "prop-types";
 import {withState} from "../contexts/State";
 
 const R = require("ramda");
-const RA = require("ramda-adjunct");
 
 class GrainItem extends Component {
   render() {
