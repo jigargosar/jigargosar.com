@@ -21,7 +21,12 @@ function createGrainItem(grain) {
 
 class GrainList extends Component {
   render() {
-    return R.map(createGrainItem)(this.props.list);
+    return (
+      <div>
+        <button onClick={() => this.props.addNew()}>ADD</button>
+        {R.map(createGrainItem)(this.props.list)}
+      </div>
+    );
   }
 }
 

@@ -1,9 +1,8 @@
 import PouchDB from "pouchdb-browser";
 import * as R from "ramda";
-import {strict as assert} from "assert";
 import Logger from "nanologger";
 
-export default createPouchDB;
+const assert = require("assert");
 
 async function put(actionMsg, doc, { db, log }) {
   assert(R.has("_id")(doc));
@@ -18,9 +17,11 @@ async function put(actionMsg, doc, { db, log }) {
   return mergedDoc;
 }
 
-async function fetchDocsDescending({ db }) {
+async function fetchDocsDescending({ db, log }) {
   const res = await db.allDocs({ include_docs: true, descending: true });
-  return res.rows;
+  const docs = R.compose(R.map(R.prop("doc")), R.prop("rows"))(res);
+  log.trace("docs", ...docs);
+  return docs;
 }
 
 async function insert(doc, pdb) {
@@ -59,3 +60,5 @@ function createPouchDB(name) {
     remove: partialDB(remove)
   };
 }
+
+export default createPouchDB;

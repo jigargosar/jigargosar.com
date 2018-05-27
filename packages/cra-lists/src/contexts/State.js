@@ -1,5 +1,7 @@
 import React from "react";
+import * as R from "ramda";
 import createPouchDB from "../models/pouch-db";
+import * as G from "../models/grain";
 
 const StateContext = React.createContext({
   list: [],
@@ -28,7 +30,7 @@ export class StateProvider extends React.Component {
   constructor(props) {
     super(props);
 
-    const listPDB = createPouchDB("choo-list:list");
+    const listPDB = createPouchDB("tmp");
 
     this.load = async () => {
       const docs = await listPDB.fetchDocsDescending();
@@ -38,11 +40,20 @@ export class StateProvider extends React.Component {
       }));
     };
 
+    const addNew = async () => {
+      const doc = await listPDB.insert(G.createNew({ text: "Get Milk !!" }));
+
+      this.setState(state => ({
+        list: R.prepend(doc, state.list)
+      }));
+    };
+
     // State also contains the updater function so it will
     // be passed down into the context provider
     this.state = {
       list: [],
-      load: this.load
+      load: this.load,
+      addNew
     };
   }
 
