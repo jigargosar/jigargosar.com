@@ -12,6 +12,10 @@ export async function put(doc, db) {
   return R.merge(doc, {_rev: res.rev})
 }
 
+export async function fetchDocsDescending(db) {
+  return db.allDocs({include_docs: true, descending: true})
+}
+
 export function insert(doc, db) {
   assert(!R.has('_rev')(doc))
   assert(!R.has('_deleted')(doc))

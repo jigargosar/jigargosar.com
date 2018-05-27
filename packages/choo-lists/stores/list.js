@@ -33,8 +33,7 @@ function store(state, emitter) {
     const listPD = new PouchDB('choo-list:list')
     listPD.info().then(info => log.debug('listPD:info', info))
 
-    listPD
-      .allDocs({include_docs: true, descending: true})
+    PD.fetchDocsDescending(listPD)
       .then(
         R.compose(
           R.tap(grains => log.debug('grains', ...grains)),
