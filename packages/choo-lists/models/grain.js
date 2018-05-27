@@ -34,7 +34,7 @@ export function getId(grain) {
   return grain[idPropName]
 }
 
-export function fromPouchDBDoc(doc) {
+export function validate(doc) {
   assert(RA.isString(doc[idPropName]))
   assert(RA.isString(doc[revisionPropName]))
   assert(RA.isString(doc[textPropName]))

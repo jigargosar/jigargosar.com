@@ -1,35 +1,58 @@
+const PouchDB = require('pouchdb-browser')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 const assert = require('assert').strict
+const Logger = require('nanologger')
 
-export async function put(doc, db) {
-  assert.ok(R.has('_id')(doc))
-  assert.notOk(R.has('id')(doc))
+module.exports = createPouchDB
+
+async function put(doc, db) {
+  assert(R.has('_id')(doc))
+  assert(!R.has('id')(doc))
   const res = await db.put(doc)
-  assert.ok(res.ok)
-  assert.equals(res.id, doc._id)
-  assert.notEquals(res.rev, doc._rev)
+  assert(res.ok)
+  assert.equal(res.id, doc._id)
+  assert.notEqual(res.rev, doc._rev)
   return R.merge(doc, {_rev: res.rev})
 }
 
-export async function fetchDocsDescending(db) {
+async function fetchDocsDescending(db) {
   return db.allDocs({include_docs: true, descending: true})
 }
 
-export function insert(doc, db) {
-  assert.notOk(R.has('_rev')(doc))
-  assert.notOk(R.has('_deleted')(doc))
+function insert(doc, db) {
+  assert(!R.has('_rev')(doc))
+  assert(!R.has('_deleted')(doc))
   return put(doc, db)
 }
 
-export function update(doc, db) {
-  assert.ok(R.has('_rev')(doc))
-  assert.notOk(R.has('_deleted')(doc))
+function update(doc, db) {
+  assert(R.has('_rev')(doc))
+  assert(!R.has('_deleted')(doc))
   return put(doc, db)
 }
 
-export function remove(doc, db) {
-  assert.ok(R.has('_rev')(doc))
-  assert.notOk(R.has('_deleted')(doc))
+function remove(doc, db) {
+  assert(R.has('_rev')(doc))
+  assert(!R.has('_deleted')(doc))
   return put(R.assoc('_deleted', true)(doc), db)
+}
+
+function createPouchDB(name) {
+  const db = new PouchDB(name)
+
+  const log = Logger(`PDB:${name}`)
+
+  db.info().then(info => log.debug('DB Info', info))
+
+  function partialDB(fn) {
+    return R.partialRight(fn, [db])
+  }
+
+  return {
+    fetchDocsDescending: partialDB(fetchDocsDescending),
+    insert: partialDB(insert),
+    update: partialDB(update),
+    remove: partialDB(remove),
+  }
 }

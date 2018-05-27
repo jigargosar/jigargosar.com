@@ -26,6 +26,7 @@
     "choo-service-worker": "2.4.0",
     "codemirror": "5.38.0",
     "dom-autofocus": "1.0.1",
+    "es6-class-bind-all": "1.0.0",
     "faker": "4.1.0",
     "gray-matter": "4.0.1",
     "js-yaml": "3.11.0",

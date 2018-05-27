@@ -5,7 +5,6 @@ const log = require('nanologger')('stores:list')
 const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const yaml = require('js-yaml')
-const PouchDB = require('pouchdb-browser')
 const LocalStorageItem = require('./local-storage-item')
 const PD = require('../models/pouch-db')
 
@@ -30,15 +29,15 @@ function store(state, emitter) {
   }
 
   emitter.on('DOMContentLoaded', function() {
-    const listPD = new PouchDB('choo-list:list')
-    listPD.info().then(info => log.debug('listPD:info', info))
+    const listPD = PD('choo-list:list')
 
-    PD.fetchDocsDescending(listPD)
+    listPD
+      .fetchDocsDescending()
       .then(
         R.compose(
           R.tap(grains => log.debug('grains', ...grains)),
-          R.map(R.compose(G.fromPouchDBDoc, R.prop('doc'))),
-          R.tap(rows => log.debug('allDocs:rows', ...rows)),
+          R.map(R.compose(G.validate, R.prop('doc'))),
+          R.tap(rows => log.trace('allDocs:rows', ...rows)),
           R.prop('rows'),
           R.tap(res => log.trace('allDocs:res', res)),
         ),
@@ -54,8 +53,8 @@ function store(state, emitter) {
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
 
-      const doc = await PD.insert(newGrain, listPD)
-      log.info('listPD:add:doc', doc)
+      const doc = await listPD.insert(newGrain)
+      log.info('listPouchDB:add:doc', doc)
       state.list.unshift(doc)
       emitRender()
     })
@@ -125,8 +124,8 @@ function store(state, emitter) {
 
       const updatedGrain = G.setText(state.editState.form.text, grain)
 
-      const doc = await PD.update(updatedGrain, listPD)
-      log.info('listPD:edit_save:doc', doc)
+      const doc = await listPD.update(updatedGrain)
+      log.info('listPouchDB:edit_save:doc', doc)
 
       state.list.splice(R.indexOf(grain, state.list), 1, doc)
 
@@ -138,8 +137,8 @@ function store(state, emitter) {
     })
 
     emitter.on(state.events.list_delete, async function(grain) {
-      const doc = await PD.remove(grain, listPD)
-      log.info('listPD:delete:doc', doc)
+      const doc = await listPD.remove(grain)
+      log.info('listPouchDB:delete:doc', doc)
 
       const idx = R.findIndex(G.eqById(doc), state.list)
       assert(idx !== -1)
