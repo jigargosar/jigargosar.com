@@ -1,16 +1,19 @@
-require("babel-polyfill")
+require('babel-polyfill')
 const log = require('nanologger')('app')
 const css = require('sheetify')
-
 css('tachyons')
 
+const choo = require('choo')
+const app = choo()
+
 window.addEventListener('error', function(event) {
-  log.error(event.error.message)
+  log.error(event.error.reason, event.error.message)
 })
 
-const choo = require('choo')
+window.addEventListener('unhandledrejection', function(event) {
+  log.error(event.error.reason, event.error.message)
+})
 
-const app = choo()
 if (process.env.NODE_ENV !== 'production') {
   app.use(require('choo-devtools')())
 } else {
