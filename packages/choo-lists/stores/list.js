@@ -53,9 +53,7 @@ function store(state, emitter) {
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
 
-      const doc = await listPD.insert(newGrain)
-      log.info('listPouchDB:add:doc', doc)
-      state.list.unshift(doc)
+      state.list.unshift(await listPD.insert(newGrain))
       emitRender()
     })
 
@@ -123,10 +121,7 @@ function store(state, emitter) {
       assert(RA.isNotNil(grain))
 
       const updatedGrain = G.setText(state.editState.form.text, grain)
-
       const doc = await listPD.update(updatedGrain)
-      log.info('listPouchDB:edit_save:doc', doc)
-
       state.list.splice(R.indexOf(grain, state.list), 1, doc)
 
       state.editMode = EM.idle
@@ -138,8 +133,6 @@ function store(state, emitter) {
 
     emitter.on(state.events.list_delete, async function(grain) {
       const doc = await listPD.remove(grain)
-      log.info('listPouchDB:delete:doc', doc)
-
       const idx = R.findIndex(G.eqById(doc), state.list)
       assert(idx !== -1)
       state.list.splice(idx, 1)
