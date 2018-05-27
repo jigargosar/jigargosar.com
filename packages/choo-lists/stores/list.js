@@ -55,7 +55,7 @@ function store(state, emitter) {
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
 
-      const res = await PD.insert(G.toPouchDBDoc(newGrain), listPD)
+      const res = await PD.insert(newGrain, listPD)
       log.info('listPD:add:res', res)
       assert(res.ok)
       assert(res.id === G.getId(newGrain))
@@ -121,7 +121,7 @@ function store(state, emitter) {
       emitRender()
     })
 
-    emitter.on(state.events.list_edit_save, function() {
+    emitter.on(state.events.list_edit_save, async function() {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
 
@@ -130,37 +130,35 @@ function store(state, emitter) {
 
       const updatedGrain = G.setText(state.editState.form.text, grain)
 
-      listPD.put(G.toPouchDBDoc(updatedGrain)).then(function(res) {
-        log.info('listPD:edit_save:res', res)
-        assert(res.ok)
-        assert(res.id === G.getId(updatedGrain))
-        const updatedGrainWithRev = G.setRevision(res.rev, updatedGrain)
+      const res = await PD.put(updatedGrain, listPD)
+      log.info('listPD:edit_save:res', res)
+      assert(res.ok)
+      assert(res.id === G.getId(updatedGrain))
+      const updatedGrainWithRev = G.setRevision(res.rev, updatedGrain)
 
-        state.list.splice(R.indexOf(grain, state.list), 1, updatedGrainWithRev)
+      state.list.splice(R.indexOf(grain, state.list), 1, updatedGrainWithRev)
 
-        state.editMode = EM.idle
-        state.editState = null
-        persistViewState()
+      state.editMode = EM.idle
+      state.editState = null
+      persistViewState()
 
-        // listLS.save(state.list)
-        emitRender()
-      })
+      // listLS.save(state.list)
+      emitRender()
     })
 
-    emitter.on(state.events.list_delete, function(grain) {
+    emitter.on(state.events.list_delete, async function(grain) {
       const deletedGrain = G.setDeleted(grain)
 
-      listPD.put(G.toPouchDBDoc(deletedGrain)).then(res => {
-        log.info('listPD:delete:res', res)
-        assert(res.ok)
-        assert(res.id === G.getId(deletedGrain))
+      const res = await PD.put(deletedGrain, listPD)
+      log.info('listPD:delete:res', res)
+      assert(res.ok)
+      assert(res.id === G.getId(deletedGrain))
 
-        const idx = R.findIndex(G.eqById(deletedGrain), state.list)
-        assert(idx !== -1)
-        state.list.splice(idx, 1)
-        // listLS.save(state.list)
-        emitRender()
-      })
+      const idx = R.findIndex(G.eqById(deletedGrain), state.list)
+      assert(idx !== -1)
+      state.list.splice(idx, 1)
+      // listLS.save(state.list)
+      emitRender()
     })
 
     function persistViewState() {
