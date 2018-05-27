@@ -7,7 +7,8 @@
     <file url="file://$PROJECT_DIR$/packages/choo-notes" libraries="{Node.js Core}" />
     <file url="file://$PROJECT_DIR$/packages/choo-site" libraries="{Node.js Core}" />
     <file url="file://$PROJECT_DIR$/packages/choo-site/node_modules" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/packages/cra-lists" libraries="{HTML, Node.js Core, cra-list-node-modules}" />
     <file url="file://$PROJECT_DIR$/packages/gatsby-site" libraries="{Node.js Core}" />
-    <file url="PROJECT" libraries="{HTML, node_modules}" />
+    <file url="PROJECT" libraries="{HTML, cra-list-node-modules, node_modules}" />
   </component>
 </project>

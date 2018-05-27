@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import * as G from "../models/grain";
 import PT from "prop-types";
+import {withState} from "../contexts/State";
 
 const R = require("ramda");
 const RA = require("ramda-adjunct");
@@ -21,8 +22,8 @@ function createGrainItem(grain) {
 
 class GrainList extends Component {
   render() {
-    return R.map(createGrainItem)(R.map(_id => ({ _id }))([1, 2, 3]));
+    return R.map(createGrainItem)(this.props.list);
   }
 }
 
-export default GrainList;
+export default withState(GrainList);
