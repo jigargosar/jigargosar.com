@@ -15,11 +15,13 @@ GrainItem.propTypes = {
   grain: PT.object.isRequired
 };
 
+function createGrainItem(grain) {
+  return <GrainItem key={G.getId(grain)} grain={grain} />;
+}
+
 class GrainList extends Component {
   render() {
-    return R.map(grain => <GrainItem key={G.getId(grain)} grain={grain} />)(
-      R.map(_id => ({ _id }))([1, 2, 3])
-    );
+    return R.map(createGrainItem)(R.map(_id => ({ _id }))([1, 2, 3]));
   }
 }
 
