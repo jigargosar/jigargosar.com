@@ -1,4 +1,5 @@
 import React from "react";
+import createPouchDB from "../models/pouch-db";
 
 const StateContext = React.createContext({
   list: [],
@@ -8,11 +9,15 @@ const StateContext = React.createContext({
 export const StateConsumer = StateContext.Consumer;
 
 export function withState(Base) {
-  return function WithState(props) {
+  return function WithState({ children, ...rest }) {
     return (
       <StateConsumer>
         {stateProps => {
-          return <Base {...props} {...stateProps} />;
+          return (
+            <Base {...rest} {...stateProps}>
+              {children}
+            </Base>
+          );
         }}
       </StateConsumer>
     );
@@ -23,9 +28,13 @@ export class StateProvider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.load = () => {
+    const listPDB = createPouchDB("choo-list:list");
+
+    this.load = async () => {
+      const docs = await listPDB.fetchDocsDescending();
+
       this.setState(state => ({
-        list: [{ _id: 1 }]
+        list: docs
       }));
     };
 

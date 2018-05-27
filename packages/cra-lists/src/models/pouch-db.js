@@ -1,8 +1,7 @@
-const PouchDB = require("pouchdb-browser");
-const R = require("ramda");
-const RA = require("ramda-adjunct");
-const assert = require("assert").strict;
-const Logger = require("nanologger");
+import PouchDB from "pouchdb-browser";
+import * as R from "ramda";
+import {strict as assert} from "assert";
+import Logger from "nanologger";
 
 export default createPouchDB;
 
@@ -20,7 +19,8 @@ async function put(actionMsg, doc, { db, log }) {
 }
 
 async function fetchDocsDescending({ db }) {
-  return db.allDocs({ include_docs: true, descending: true });
+  const res = await db.allDocs({ include_docs: true, descending: true });
+  return res.rows;
 }
 
 async function insert(doc, pdb) {
