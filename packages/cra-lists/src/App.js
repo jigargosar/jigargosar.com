@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import GrainList from "./components/GrainList";
 
 class App extends Component {
   render() {
@@ -8,7 +9,7 @@ class App extends Component {
           <div className="f1">CRA List Prototype</div>
         </header>
         <main className="flex-grow-1 bg-white center w-100 mw7 pa3">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          <GrainList />
         </main>
       </div>
     );
