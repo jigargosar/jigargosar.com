@@ -26,25 +26,12 @@ export function setText(text, grain) {
   return R.assoc(textPropName, text, grain)
 }
 
-export function setDeleted(grain) {
-  assert(!R.has(deletedPropName)(grain))
-  return R.assoc(deletedPropName, true)(grain)
-}
-
-export function setRevision(revision, grain) {
-  return R.assoc(revisionPropName, revision, grain)
-}
-
 export function getText(grain) {
   return grain[textPropName]
 }
 
 export function getId(grain) {
   return grain[idPropName]
-}
-
-export function toPouchDBDoc(grain) {
-  return RA.renameKeys({[idPropName]: '_id'}, grain)
 }
 
 export function fromPouchDBDoc(doc) {

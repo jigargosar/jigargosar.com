@@ -55,13 +55,9 @@ function store(state, emitter) {
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
 
-      const res = await PD.insert(newGrain, listPD)
-      log.info('listPD:add:res', res)
-      assert(res.ok)
-      assert(res.id === G.getId(newGrain))
-      const newGrainWithRev = G.setRevision(res.rev, newGrain)
-      state.list.unshift(newGrainWithRev)
-      // listLS.save(state.list)
+      const doc = await PD.insert(newGrain, listPD)
+      log.info('listPD:add:doc', doc)
+      state.list.unshift(doc)
       emitRender()
     })
 
@@ -130,34 +126,25 @@ function store(state, emitter) {
 
       const updatedGrain = G.setText(state.editState.form.text, grain)
 
-      const res = await PD.put(updatedGrain, listPD)
-      log.info('listPD:edit_save:res', res)
-      assert(res.ok)
-      assert(res.id === G.getId(updatedGrain))
-      const updatedGrainWithRev = G.setRevision(res.rev, updatedGrain)
+      const doc = await PD.update(updatedGrain, listPD)
+      log.info('listPD:edit_save:doc', doc)
 
-      state.list.splice(R.indexOf(grain, state.list), 1, updatedGrainWithRev)
+      state.list.splice(R.indexOf(grain, state.list), 1, doc)
 
       state.editMode = EM.idle
       state.editState = null
       persistViewState()
 
-      // listLS.save(state.list)
       emitRender()
     })
 
     emitter.on(state.events.list_delete, async function(grain) {
-      const deletedGrain = G.setDeleted(grain)
+      const doc = await PD.remove(grain, listPD)
+      log.info('listPD:delete:doc', doc)
 
-      const res = await PD.put(deletedGrain, listPD)
-      log.info('listPD:delete:res', res)
-      assert(res.ok)
-      assert(res.id === G.getId(deletedGrain))
-
-      const idx = R.findIndex(G.eqById(deletedGrain), state.list)
+      const idx = R.findIndex(G.eqById(doc), state.list)
       assert(idx !== -1)
       state.list.splice(idx, 1)
-      // listLS.save(state.list)
       emitRender()
     })
 
