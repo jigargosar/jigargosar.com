@@ -3,20 +3,18 @@ const RA = require('ramda-adjunct')
 const nanoid = require('nanoid')
 const assert = require('assert')
 
-const faker = require('faker')
-faker.seed(123)
-
 const idPropName = '_id'
 const deletedPropName = '_deleted'
 const revisionPropName = '_rev'
 const textPropName = 'text'
 const createdAtPropName = 'createdAt'
 
-export function createNew({text} = {}) {
+export function createNew({text = ''} = {}) {
   const nowTimestamp = Date.now()
+  assert(RA.isNotNil(text))
   return {
     [idPropName]: `grain-${nowTimestamp}-${nanoid()}`,
-    text: R.isNil(text) ? `${faker.lorem.words()}` : text,
+    text,
     [createdAtPropName]: nowTimestamp,
   }
 }
