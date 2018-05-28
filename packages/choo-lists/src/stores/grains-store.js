@@ -1,8 +1,8 @@
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 const G = require('../models/grain')
-
-var createStore = require('../createStore')
+const pMinDelay = require('p-min-delay')
+const createStore = require('../createStore')
 const log = require('nanologger')('grains-store')
 const PD = require('../models/pouch-db')
 const assert = require('assert')
@@ -11,7 +11,7 @@ module.exports = createStore({
   namespace: 'grains',
   initialState: {
     listPD: PD('choo-list:list'),
-    list: R.times(() => G.createNew(), 10),
+    list: [],
   },
   events: {
     DOMContentLoaded: ({store: {listPD, list}, actions: {render}}) => {
