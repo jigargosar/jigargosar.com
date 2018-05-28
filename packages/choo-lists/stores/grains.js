@@ -8,6 +8,7 @@ const LocalStorageItem = require('./local-storage-item')
 var createStore = require('../createStore')
 const log = require('nanologger')('stores:grains')
 const PD = require('../models/pouch-db')
+const assert = require('assert')
 
 const viewLS = LocalStorageItem('choo-list:view', {editMode: EM.idle})
 
@@ -30,7 +31,7 @@ module.exports = createStore({
     list: R.times(() => G.createNew(), 10),
   },
   events: {
-    DOMContentLoaded: ({store, emitter, actions, state}) => {
+    DOMContentLoaded: ({store, state, actions: {render}}) => {
       store.listPD
         .fetchDocsDescending()
         .then(
@@ -43,19 +44,19 @@ module.exports = createStore({
           ),
         )
         .then(grains => state.list.splice(0, state.list.length, ...grains))
-        .then(() => actions.render())
+        .then(render)
     },
-    add: ({store, emitter, state, actions}) => {
+    add: ({store, state, actions: {render}}) => {
       const newGrainText = prompt('New Grain', 'Get Milk!')
       log.debug('newGrainText', newGrainText)
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
       store.listPD.insert(newGrain).then(grain => {
         state.list.unshift(grain)
-        actions.render()
+        render()
       })
     },
-    edit: ({data: {grain}, store, emitter, state, actions}) => {
+    edit: ({data: {grain}, store, state, actions: {render}}) => {
       assert(state.editMode === EM.idle)
       assert(R.isNil(state.editState))
       G.validate(grain)
@@ -66,9 +67,9 @@ module.exports = createStore({
         yaml: dumpYAML(grain),
       }
       persistViewState(state)
-      actions.render()
+      render()
     },
-    delete: ({store: {listPD}, data: {grain}, actions: {render}}) => {
+    delete: ({state, store: {listPD}, data: {grain}, actions: {render}}) => {
       listPD.remove(grain).then(doc => {
         const idx = R.findIndex(G.eqById(doc), state.list)
         assert(idx !== -1)

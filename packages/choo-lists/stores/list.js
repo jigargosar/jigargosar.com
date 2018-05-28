@@ -21,7 +21,6 @@ function store(state, emitter) {
   state.events.list_edit_onYAMLUpdate = 'list:edit:onYAMLUpdate'
   state.events.list_edit_discard = 'list:edit:discard'
   state.events.list_edit_save = 'list:edit:save'
-  state.events.list_delete = 'list:delete'
 
   function emitRender() {
     emitter.emit(state.events.RENDER)
@@ -29,20 +28,6 @@ function store(state, emitter) {
 
   emitter.on('DOMContentLoaded', function() {
     const listPD = PD('choo-list:list')
-
-    listPD
-      .fetchDocsDescending()
-      .then(
-        R.compose(
-          R.tap(grains => log.debug('grains', ...grains)),
-          R.map(R.compose(G.validate, R.prop('doc'))),
-          R.tap(rows => log.trace('allDocs:rows', ...rows)),
-          R.prop('rows'),
-          R.tap(res => log.trace('allDocs:res', res)),
-        ),
-      )
-      .then(grains => state.list.splice(0, state.list.length, ...grains))
-      .then(emitRender)
 
     Object.assign(state, pickViewState(viewLS.load()))
 
@@ -116,15 +101,6 @@ function store(state, emitter) {
         state.editMode = EM.idle
         state.editState = null
         persistViewState()
-        emitRender()
-      })
-    })
-
-    emitter.on(state.events.list_delete, function(grain) {
-      listPD.remove(grain).then(doc => {
-        const idx = R.findIndex(G.eqById(doc), state.list)
-        assert(idx !== -1)
-        state.list.splice(idx, 1)
         emitRender()
       })
     })

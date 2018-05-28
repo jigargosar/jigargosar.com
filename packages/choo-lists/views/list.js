@@ -92,7 +92,7 @@ function createGrainListView(state, emit) {
     return html`
       <div id=${G.getId(grain)} class="flex ${centeredContentClass}">
         <div class="pa1">
-          ${Button({onclick: () => emit(state.events.list_delete, grain)}, 'X')}
+          ${Button({onclick: () => GA.delete({grain})}, 'X')}
         </div>
         <div class="pa1">
           ${Button({onclick: () => emit(state.events.list_edit, grain)}, 'E')}
