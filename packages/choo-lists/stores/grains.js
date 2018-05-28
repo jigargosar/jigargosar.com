@@ -25,7 +25,10 @@ function dumpYAML(obj) {
 
 module.exports = createStore({
   storeName: 'grains',
-  initialState: {listPD: PD("choo-list:list"), list:R.times(() => G.createNew(), 10)},
+  initialState: {
+    listPD: PD('choo-list:list'),
+    list: R.times(() => G.createNew(), 10),
+  },
   events: {
     DOMContentLoaded: ({store, emitter, actions, state}) => {
       store.listPD
@@ -52,7 +55,7 @@ module.exports = createStore({
         actions.render()
       })
     },
-    edit: ({data:{grain},store, emitter, state, actions}) => {
+    edit: ({data: {grain}, store, emitter, state, actions}) => {
       assert(state.editMode === EM.idle)
       assert(R.isNil(state.editState))
       G.validate(grain)
@@ -64,9 +67,16 @@ module.exports = createStore({
       }
       persistViewState(state)
       actions.render()
-    }
-  }
+    },
+    delete: ({store: {listPD}, data: {grain}, actions: {render}}) => {
+      listPD.remove(grain).then(doc => {
+        const idx = R.findIndex(G.eqById(doc), state.list)
+        assert(idx !== -1)
+        state.list.splice(idx, 1)
+        render()
+      })
+    },
+  },
 })
 
-
-module.exports.storeName = "grains"
+module.exports.storeName = 'grains'
