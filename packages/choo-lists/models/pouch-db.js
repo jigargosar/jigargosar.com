@@ -6,36 +6,44 @@ const Logger = require('nanologger')
 
 module.exports = createPouchDB
 
-async function put(actionMsg, doc, {db, log}) {
+function put(actionMsg, doc, {db, log}) {
   assert(R.has('_id')(doc))
   assert(!R.has('id')(doc))
-  const res = await db.put(doc)
-  log.debug(`${actionMsg} result`, res)
-  assert(res.ok)
-  assert.equal(res.id, doc._id)
-  assert.notEqual(res.rev, doc._rev)
-  const mergedDoc = R.merge(doc, {_rev: res.rev})
-  log.debug(actionMsg, mergedDoc)
-  return mergedDoc
+  return db.put(doc).then(res => {
+    log.debug(`${actionMsg} result`, res)
+    assert(res.ok)
+    assert.equal(res.id, doc._id)
+    assert.notEqual(res.rev, doc._rev)
+    const mergedDoc = R.merge(doc, {_rev: res.rev})
+    log.debug(actionMsg, mergedDoc)
+    return mergedDoc
+  })
 }
 
-async function fetchDocsDescending({db}) {
+function fetchDocsDescending({db}) {
   return db.allDocs({include_docs: true, descending: true})
 }
 
-async function insert(doc, pdb) {
+function fetchDocsDescending2({db}) {
+  return db
+    .allDocs({include_docs: true, descending: true})
+    .then(R.compose(R.map(R.prop('doc')), R.prop('rows')))
+    .then(R.tap(docs => log.trace('docs', ...docs)))
+}
+
+function insert(doc, pdb) {
   assert(!R.has('_rev')(doc))
   assert(!R.has('_deleted')(doc))
   return put('insert', doc, pdb)
 }
 
-async function update(doc, pdb) {
+function update(doc, pdb) {
   assert(R.has('_rev')(doc))
   assert(!R.has('_deleted')(doc))
   return put('update', doc, pdb)
 }
 
-async function remove(doc, pdb) {
+function remove(doc, pdb) {
   assert(R.has('_rev')(doc))
   assert(!R.has('_deleted')(doc))
   return put('delete', R.assoc('_deleted', true)(doc), pdb)
@@ -54,6 +62,7 @@ function createPouchDB(name) {
 
   return {
     fetchDocsDescending: partialDB(fetchDocsDescending),
+    fetchDocsDescending2: partialDB(fetchDocsDescending2),
     insert: partialDB(insert),
     update: partialDB(update),
     remove: partialDB(remove),

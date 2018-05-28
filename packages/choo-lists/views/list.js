@@ -9,6 +9,7 @@ const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 const yaml = require('js-yaml')
+const {actions: GA} = require('../stores/grains')
 
 module.exports = view
 
@@ -75,14 +76,11 @@ function editView(state, emit) {
 }
 
 function itemsView(state, emit) {
-  const onAddClick = () => {
-    emit(state.events.list_add)
-  }
   return html`
     <div class="">
       <div class="flex ${centeredContentClass}">
         <div class="pa1">Total: ${state.list.length}</div>
-        <div class="pa1">${Button({onclick: onAddClick}, 'ADD')}</div>
+        <div class="pa1">${Button({onclick: GA.add}, 'ADD')}</div>
       </div>
       ${state.list.map(createGrainListView(state, emit))}  
     </div>`

@@ -16,7 +16,6 @@ function store(state, emitter) {
   state.list = R.times(() => G.createNew(), 10)
   state.editMode = EM.idle
 
-  state.events.list_add = 'list:add'
   state.events.list_edit = 'list:edit'
   state.events.list_edit_onTextChanged = 'list:edit:onTextChange'
   state.events.list_edit_onYAMLUpdate = 'list:edit:onYAMLUpdate'
@@ -46,16 +45,6 @@ function store(state, emitter) {
       .then(emitRender)
 
     Object.assign(state, pickViewState(viewLS.load()))
-
-    emitter.on(state.events.list_add, async function() {
-      const newGrainText = prompt('New Grain', 'Get Milk!')
-      log.debug('newGrainText', newGrainText)
-      if (R.isNil(newGrainText)) return
-      const newGrain = G.createNew({text: newGrainText})
-
-      state.list.unshift(await listPD.insert(newGrain))
-      emitRender()
-    })
 
     function dumpYAML(obj) {
       return yaml.dump(obj, {noCompatMode: true, lineWidth: 60})
@@ -113,7 +102,7 @@ function store(state, emitter) {
       emitRender()
     })
 
-    emitter.on(state.events.list_edit_save, async function() {
+    emitter.on(state.events.list_edit_save, function() {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
 
@@ -121,22 +110,23 @@ function store(state, emitter) {
       assert(RA.isNotNil(grain))
 
       const updatedGrain = G.setText(state.editState.form.text, grain)
-      const doc = await listPD.update(updatedGrain)
-      state.list.splice(R.indexOf(grain, state.list), 1, doc)
+      listPD.update(updatedGrain).then(doc => {
+        state.list.splice(R.indexOf(grain, state.list), 1, doc)
 
-      state.editMode = EM.idle
-      state.editState = null
-      persistViewState()
-
-      emitRender()
+        state.editMode = EM.idle
+        state.editState = null
+        persistViewState()
+        emitRender()
+      })
     })
 
-    emitter.on(state.events.list_delete, async function(grain) {
-      const doc = await listPD.remove(grain)
-      const idx = R.findIndex(G.eqById(doc), state.list)
-      assert(idx !== -1)
-      state.list.splice(idx, 1)
-      emitRender()
+    emitter.on(state.events.list_delete, function(grain) {
+      listPD.remove(grain).then(doc => {
+        const idx = R.findIndex(G.eqById(doc), state.list)
+        assert(idx !== -1)
+        state.list.splice(idx, 1)
+        emitRender()
+      })
     })
 
     function persistViewState() {

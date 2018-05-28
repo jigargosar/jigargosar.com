@@ -1,10 +1,11 @@
 {
   "env": {
     "production": {
-      "presets": ["env", "stage-0"]
+      "presets": ["env"]
     },
     "development": {
-      "presets": ["env", "stage-0"]
+      "presets": ["env", "power-assert"],
+      "plugins": ["babel-plugin-espower"]
     }
   }
 }
