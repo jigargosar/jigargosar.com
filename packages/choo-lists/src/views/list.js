@@ -11,8 +11,18 @@ const domAutofocus = require('dom-autofocus')
 const yaml = require('js-yaml')
 const {actions: GA} = require('../stores/grains-store')
 const {actions: GEA} = require('../stores/edit-grain-store')
+const {actions: FA} = require('../stores/firebase-store')
 
 module.exports = view
+
+function signInOutView(state) {
+  if (state.firebase.authState === 'loading') {
+    return '...Loading'
+  }
+  return state.firebase.authState === 'signedOut'
+    ? Button({onclick: FA.signIn}, 'Sign In')
+    : Button({onclick: FA.signOut}, 'Sign Out')
+}
 
 function view(state, emit) {
   updateTitle(TITLE, state, emit)
@@ -22,7 +32,7 @@ function view(state, emit) {
     <body class="sans-serif lh-copy f4">
       <div class="bg-light-blue tc pa3">
         <div class="f1">${TITLE}</div>
-        <div>${state.firebase.authState}</div>
+        <div>${signInOutView(state)}</div>
       </div>
       ${isEditing ? grainEditView(state) : grainsListView(state)}
     </body>`

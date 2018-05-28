@@ -26,7 +26,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(require('choo-service-worker')())
 }
 
-app.use(require('./stores/firebaseStore'))
+app.use(require('./stores/firebase-store'))
 app.use(require('./stores/grains-store'))
 app.use(require('./stores/edit-grain-store'))
 app.route('/', require('./views/list'))
