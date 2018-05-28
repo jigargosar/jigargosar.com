@@ -1,0 +1,10 @@
+{
+  "rules": [
+    {
+      "pathname": "/blog",
+      "method": ["GET", "POST", "OPTIONS"],
+      "dest": "with-zones-next-app-blog.now.sh"
+    },
+    { "pathname": "/**", "dest": "with-zones-next-app-home.now.sh" }
+  ]
+}
