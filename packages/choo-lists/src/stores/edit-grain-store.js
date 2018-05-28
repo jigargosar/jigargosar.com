@@ -6,7 +6,7 @@ const yaml = require('js-yaml')
 const LocalStorageItem = require('./local-storage-item')
 const {actions: GA} = require('./grains-store')
 
-var createStore = require('../createStore')
+var createStore = require('./createStore')
 const log = require('nanologger')('edit-grain-store')
 const assert = require('assert')
 
