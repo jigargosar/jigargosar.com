@@ -29,10 +29,14 @@ module.exports = createStore({
   initialState: {editMode: EM.idle},
   events: {
     DOMContentLoaded: ({store, actions: {render}}) => {
-      Object.assign(pickViewState(viewLS.load()))
+      Object.assign(store,pickViewState(viewLS.load()))
       render()
     },
-    edit: ({data: {grain}, store, actions: {render}}) => {
+    persistAndRender:({store, actions: {render}})=>{
+      persistViewState(store)
+      render()
+    },
+    edit: ({data: {grain}, store, actions: {persistAndRender}}) => {
       assert(store.editMode === EM.idle)
       assert(R.isNil(store.editState))
       G.validate(grain)
@@ -42,20 +46,18 @@ module.exports = createStore({
         form: R.clone(grain),
         yaml: dumpYAML(grain),
       }
-      persistViewState(store)
-      render()
+      persistAndRender()
     },
-    textChange: function({data: {text}, store, actions: {render}}) {
+    textChange: function({data: {text}, store, actions: {persistAndRender}}) {
       assert(store.editMode === EM.editing)
       assert(!R.isNil(store.editState))
       store.editState.form.text = text
       store.editState.yaml = dumpYAML(
         R.merge(store.editState.form, {text: R.trim(text)}),
       )
-      persistViewState(store)
-      render()
+      persistAndRender()
     },
-    yamlChange: function({data, store, actions: {render}}) {
+    yamlChange: function({data, store, actions: {persistAndRender}}) {
       assert(store.editMode === EM.editing)
       assert(!R.isNil(store.editState))
 
@@ -68,21 +70,19 @@ module.exports = createStore({
       const updatedForm = parseYAMLForm(data.yamlString)
       if (!R.isEmpty(updatedForm)) {
         Object.assign(store.editState.form, updatedForm)
-        persistViewState(store)
-        render()
+        persistAndRender()
       }
     },
 
-    discard: function({store, actions: {render}}) {
+    discard: function({store, actions: {persistAndRender}}) {
       assert(store.editMode === EM.editing)
       assert(!R.isNil(store.editState))
       store.editMode = EM.idle
       store.editState = null
-      persistViewState(store)
-      render()
+      persistAndRender()
     },
 
-    save: function({data, store, actions: {render}}) {
+    save: function({data, store, actions: {persistAndRender}}) {
       assert(store.editMode === EM.editing)
       assert(!R.isNil(store.editState))
       GA.update({
@@ -92,8 +92,7 @@ module.exports = createStore({
 
       store.editMode = EM.idle
       store.editState = null
-      persistViewState(store)
-      render()
+      persistAndRender()
     },
   },
 })

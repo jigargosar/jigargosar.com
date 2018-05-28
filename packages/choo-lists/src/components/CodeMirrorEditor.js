@@ -41,9 +41,7 @@ class CodeMirrorEditor extends Component {
     })
   }
 
-  createElement(...args) {
-    log.debug('rendering', ...args)
-    const [_data, _onChange] = args
+  createElement(_data, _onChange) {    
     Object.assign(this, {_data, _onChange})
     return html`
       <div>
