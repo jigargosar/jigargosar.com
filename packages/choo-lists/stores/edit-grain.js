@@ -12,12 +12,12 @@ const assert = require('assert')
 
 const viewLS = LocalStorageItem('choo-list:view', {editMode: EM.idle})
 
-function pickViewState(state) {
-  return R.pick(['editState', 'editMode'], state)
+function pickViewState(store) {
+  return R.pick(['editState', 'editMode'], store)
 }
 
-function persistViewState(state) {
-  viewLS.save(pickViewState(state))
+function persistViewState(store) {
+  viewLS.save(pickViewState(store))
 }
 
 function dumpYAML(obj) {
@@ -25,41 +25,41 @@ function dumpYAML(obj) {
 }
 
 module.exports = createStore({
-  storeName: 'edit-grain',
+  storeName: 'editGrain',
   initialState: {editMode: EM.idle},
   events: {
-    DOMContentLoaded: ({store, state, actions: {render}}) => {
-      Object.assign(state, pickViewState(viewLS.load()))
+    DOMContentLoaded: ({store, actions: {render}}) => {
+      Object.assign(pickViewState(viewLS.load()))
       render()
     },
-    edit: ({data: {grain}, store, state, actions: {render}}) => {
-      assert(state.editMode === EM.idle)
-      assert(R.isNil(state.editState))
+    edit: ({data: {grain}, store, actions: {render}}) => {
+      assert(store.editMode === EM.idle)
+      assert(R.isNil(store.editState))
       G.validate(grain)
-      state.editMode = EM.editing
-      state.editState = {
+      store.editMode = EM.editing
+      store.editState = {
         grainId: G.getId(grain),
         form: R.clone(grain),
         yaml: dumpYAML(grain),
       }
-      persistViewState(state)
+      persistViewState(store)
       render()
     },
-    textChange: function({data: {text}, state, actions: {render}}) {
-      assert(state.editMode === EM.editing)
-      assert(!R.isNil(state.editState))
-      state.editState.form.text = text
-      state.editState.yaml = dumpYAML(
-        R.merge(state.editState.form, {text: R.trim(text)}),
+    textChange: function({data: {text}, store, actions: {render}}) {
+      assert(store.editMode === EM.editing)
+      assert(!R.isNil(store.editState))
+      store.editState.form.text = text
+      store.editState.yaml = dumpYAML(
+        R.merge(store.editState.form, {text: R.trim(text)}),
       )
-      persistViewState(state)
+      persistViewState(store)
       render()
     },
-    yamlChange: function({data, state, actions: {render}}) {
-      assert(state.editMode === EM.editing)
-      assert(!R.isNil(state.editState))
+    yamlChange: function({data, store, actions: {render}}) {
+      assert(store.editMode === EM.editing)
+      assert(!R.isNil(store.editState))
 
-      state.editState.yaml = data.yamlString
+      store.editState.yaml = data.yamlString
 
       const parseYAMLForm = R.compose(
         R.pick(['text']),
@@ -67,35 +67,35 @@ module.exports = createStore({
       )
       const updatedForm = parseYAMLForm(data.yamlString)
       if (!R.isEmpty(updatedForm)) {
-        Object.assign(state.editState.form, updatedForm)
-        persistViewState(state)
+        Object.assign(store.editState.form, updatedForm)
+        persistViewState(store)
         render()
       }
     },
 
-    discard: function({state, actions: {render}}) {
-      assert(state.editMode === EM.editing)
-      assert(!R.isNil(state.editState))
-      state.editMode = EM.idle
-      state.editState = null
-      persistViewState(state)
+    discard: function({store, actions: {render}}) {
+      assert(store.editMode === EM.editing)
+      assert(!R.isNil(store.editState))
+      store.editMode = EM.idle
+      store.editState = null
+      persistViewState(store)
       render()
     },
 
-    save: function({data, state, actions: {render}}) {
-      assert(state.editMode === EM.editing)
-      assert(!R.isNil(state.editState))
+    save: function({data, store, actions: {render}}) {
+      assert(store.editMode === EM.editing)
+      assert(!R.isNil(store.editState))
       GA.update({
-        _id: state.editState.grainId,
-        text: state.editState.form.text,
+        _id: store.editState.grainId,
+        text: store.editState.form.text,
       })
 
-      state.editMode = EM.idle
-      state.editState = null
-      persistViewState(state)
+      store.editMode = EM.idle
+      store.editState = null
+      persistViewState(store)
       render()
     },
   },
 })
 
-module.exports.storeName = 'grains'
+module.exports.storeName = 'editGrain'

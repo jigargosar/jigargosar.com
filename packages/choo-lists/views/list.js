@@ -16,7 +16,7 @@ module.exports = view
 
 function view(state, emit) {
   updateTitle(TITLE, state, emit)
-  const isEditing = EM.editing === state.editMode
+  const isEditing = EM.editing === state.editGrain.editMode
 
   return html`
     <body class="sans-serif lh-copy f4">
@@ -40,6 +40,7 @@ function grainEditView(state) {
   const onEditModeTextChange = event => {
     GEA.textChange({text: event.target.value})
   }
+  const editState = state.editGrain.editState
   return html`
     <div class="${centeredContentClass}" style="min-width: 100%;">
       <div class="f3">Editing</div>
@@ -57,7 +58,7 @@ function grainEditView(state) {
         ${domAutofocus(html`<input 
           class="pa1 ma1 w-100" 
           type="text" 
-          value="${state.editState.form.text}"
+          value="${editState.form.text}"
           oninput="${onEditModeTextChange}"
           placeholder="Edit this..."
         />`)}
@@ -67,7 +68,7 @@ function grainEditView(state) {
         </div>
       </form>
       <div class="flex flex-column mv3">
-        ${grainEditor.render(state.editState.yaml, yamlString =>
+        ${grainEditor.render(editState.yaml, yamlString =>
           GEA.yamlChange({yamlString}),
         )}
       </div>
