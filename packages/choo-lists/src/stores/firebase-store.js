@@ -6,6 +6,7 @@ const firebase = require('firebase/app')
 const G = require('../models/grain')
 require('firebase/auth')
 require('firebase/firestore')
+const assert = require('assert')
 
 const createStore = require('./createStore')
 
@@ -22,8 +23,8 @@ function getCollection(path) {
   return firebase.firestore().collection(path)
 }
 
-function grainForFirebase(grain) {
-  return R.omit(['_ref'], grain)
+function omitRev(grain) {
+  return R.omit(['_rev'], grain)
 }
 
 const omitFirebaseClutter = R.unless(
@@ -35,7 +36,7 @@ const omitFirebaseClutter = R.unless(
 )
 module.exports = createStore({
   namespace: 'firebase',
-  initialState: {authState: 'loading', userInfo: null},
+  initialState: {authState: 'loading', userInfo: null, grainsLookup: {}},
   events: {
     DOMContentLoaded: ({store, actions: {render, syncGrains}}) => {
       firebase.initializeApp(config)
@@ -43,21 +44,65 @@ module.exports = createStore({
       pReflect(firebase.firestore().enablePersistence())
         .then(res => log.debug('enablePersistence res', res))
         .then(() => {
+          let isFirstSnapshot = true
           firebase.auth().onAuthStateChanged(user => {
-            store.userInfo = omitFirebaseClutter(user)
-            log.debug('onAuthStateChanged userInfo:', store.userInfo)
-            store.authState = 'signedOut'
-            if (user) {
-              store.authState = 'signedIn'
-              store.grainsPath = `users/${user.uid}/grains`
+            try {
+              store.userInfo = omitFirebaseClutter(user)
+              log.debug('onAuthStateChanged userInfo:', store.userInfo)
+              store.authState = 'signedOut'
+              store.grainsLookup = {}
+              if (user) {
+                store.authState = 'signedIn'
+                store.grainsPath = `users/${user.uid}/grains`
 
-              syncGrains()
-              getCollection(store.grainsPath).onSnapshot(snapshot => {
-                // log.debug('grains snapshot', omitFirebaseClutter(snapshot))
-                log.debug('grains docChanges', snapshot.docChanges())
-              })
+                const docFromChangeObj = handler => change =>
+                  handler(change.doc.id, omitRev(change.doc.data()))
+
+                const typeEq = R.propEq('type')
+                const handleChange = R.cond([
+                  [
+                    typeEq('added'),
+                    docFromChangeObj((id, doc) => {
+                      assert(!R.has(id, store.grainsLookup))
+                      store.grainsLookup[id] = doc
+                    }),
+                  ],
+                  [
+                    typeEq('modified'),
+                    docFromChangeObj((id, doc) => {
+                      assert(R.has(id, store.grainsLookup))
+                      store.grainsLookup[id] = doc
+                    }),
+                  ],
+                  [
+                    typeEq('removed'),
+                    docFromChangeObj(id => {
+                      assert(R.has(id, store.grainsLookup))
+                      delete store.grainsLookup[id]
+                    }),
+                  ],
+                  [
+                    R.T,
+                    change => {
+                      console.error(change)
+                    },
+                  ],
+                ])
+                getCollection(store.grainsPath).onSnapshot(snapshot => {
+                  log.debug('grains docChanges', snapshot.docChanges())
+
+                  snapshot.docChanges().forEach(handleChange)
+
+                  if (isFirstSnapshot) {
+                    syncGrains()
+                    isFirstSnapshot = false
+                  }
+                })
+              }
+              render()
+            } catch (e) {
+              debugger
             }
-            render()
           })
         })
     },
@@ -71,29 +116,35 @@ module.exports = createStore({
     },
     syncGrains: ({state, store}) => {
       log.debug('syncGrains', state.grains.list, store)
-      // const grainsCollection = getCollection(store.grainsPath)
-      // state.grains.list.forEach(grain => {
-      //   const grainRef = grainsCollection.doc(G.getId(grain))
-      //   firebase
-      //     .firestore()
-      //     .runTransaction(function(transaction) {
-      //       // This code may get re-run multiple times if there are conflicts.
-      //       return transaction.get(grainRef).then(function(grainSnapshot) {
-      //         log.debug('transaction:grainSnapshot', grainSnapshot)
-      //         if (grainSnapshot.exists) {
-      //           throw new Error('Document exists! wont update')
-      //         } else {
-      //           transaction.set(grainRef, grainForFirebase(grain))
-      //         }
-      //       })
-      //     })
-      //     .then(function() {
-      //       log.debug('Transaction successfully committed!')
-      //     })
-      //     .catch(function(error) {
-      //       log.warn('Transaction failed: ', error)
-      //     })
-      // })
+      const grainsCollection = getCollection(store.grainsPath)
+      state.grains.list.forEach(grain => {
+        if (R.equals(omitRev(grain), store.grainsLookup[G.getId(grain)])) {
+          log.debug('Doc up to date')
+          return
+        }
+
+        const grainRef = grainsCollection.doc(G.getId(grain))
+        firebase
+          .firestore()
+          .runTransaction(function(transaction) {
+            // This code may get re-run multiple times if there are conflicts.
+            return transaction.get(grainRef).then(function(grainSnapshot) {
+              log.debug('transaction:grainSnapshot', grainSnapshot)
+              if (grainSnapshot.exists) {
+                throw new Error('Document exists! wont update')
+              } else {
+                transaction.set(grainRef, omitRev(grain))
+              }
+            })
+          })
+          .then(function() {
+            log.debug('Transaction successfully committed!')
+          })
+          .catch(function(error) {
+            log.warn('Transaction failed: ', error)
+          })
+      })
     },
   },
 })
+
