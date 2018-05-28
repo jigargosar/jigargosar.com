@@ -21,7 +21,12 @@ function signInOutView(state) {
   }
   return state.firebase.authState === 'signedOut'
     ? Button({onclick: FA.signIn}, 'Sign In')
-    : Button({onclick: FA.signOut}, 'Sign Out')
+    : html`<div class="flex justify-center">
+              <div class="ph1">${state.firebase.userInfo.displayName}</div>
+              <div class="ph1">
+                ${Button({onclick: FA.signOut}, 'Sign Out')}
+              </div>
+            </div>`
 }
 
 function view(state, emit) {
@@ -146,7 +151,7 @@ function Button(props, content) {
   return html`
     <a href=""
        role="button"
-       class="link orange"
+       class="link light-purple"
        onkeypress="${event => {
          if (hasKeyCodeWithoutModifiers('Space', event)) {
            performAction(event)

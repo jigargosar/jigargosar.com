@@ -26,19 +26,16 @@ function grainForFirebase(grain) {
   return R.omit(['_ref'], grain)
 }
 
-const omitFirebaseClutter = R.pickBy(
-  (val, key) =>
-    !(
-      key.length <= 2 ||
-      RA.isFunction(val) ||
-      R.head(key) === '_'
-    ),
-);
-
-
+const omitFirebaseClutter = R.unless(
+  R.isNil,
+  R.pickBy(
+    (val, key) =>
+      !(key.length <= 2 || RA.isFunction(val) || R.head(key) === '_'),
+  ),
+)
 module.exports = createStore({
   namespace: 'firebase',
-  initialState: {authState: 'loading'},
+  initialState: {authState: 'loading', userInfo: null},
   events: {
     DOMContentLoaded: ({store, actions: {render, syncGrains}}) => {
       firebase.initializeApp(config)
@@ -47,10 +44,8 @@ module.exports = createStore({
         .then(res => log.debug('enablePersistence res', res))
         .then(() => {
           firebase.auth().onAuthStateChanged(user => {
-            log.debug(
-              'onAuthStateChanged user:',
-              omitFirebaseClutter(user),
-            )
+            store.userInfo = omitFirebaseClutter(user)
+            log.debug('onAuthStateChanged userInfo:', store.userInfo)
             store.authState = 'signedOut'
             if (user) {
               store.authState = 'signedIn'
