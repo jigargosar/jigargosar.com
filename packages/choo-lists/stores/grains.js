@@ -65,6 +65,17 @@ module.exports = createStore({
         render()
       })
     },
+
+    update: ({data, store: {listPD}, state, actions: {render}}) => {
+      const grain = R.find(G.eqById(data), state.list)
+      assert(RA.isNotNil(grain))
+
+      const updatedGrain = G.setText(data.text, grain)
+      listPD.update(updatedGrain).then(doc => {
+        state.list.splice(R.indexOf(grain, state.list), 1, doc)
+        render()
+      })
+    },
   },
 })
 

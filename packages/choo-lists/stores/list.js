@@ -7,6 +7,7 @@ const EM = require('../models/edit-mode')
 const yaml = require('js-yaml')
 const LocalStorageItem = require('./local-storage-item')
 const PD = require('../models/pouch-db')
+const {actions: GA} = require('../stores/grains')
 
 const viewLS = LocalStorageItem('choo-list:view', {editMode: EM.idle})
 
@@ -26,8 +27,6 @@ function store(state, emitter) {
   }
 
   emitter.on('DOMContentLoaded', function() {
-    const listPD = PD('choo-list:list')
-
     function dumpYAML(obj) {
       return yaml.dump(obj, {noCompatMode: true, lineWidth: 60})
     }
@@ -74,19 +73,15 @@ function store(state, emitter) {
     emitter.on(state.events.list_edit_save, function() {
       assert(state.editMode === EM.editing)
       assert(!R.isNil(state.editState))
-
-      const grain = R.find(G.idEq(state.editState.grainId), state.list)
-      assert(RA.isNotNil(grain))
-
-      const updatedGrain = G.setText(state.editState.form.text, grain)
-      listPD.update(updatedGrain).then(doc => {
-        state.list.splice(R.indexOf(grain, state.list), 1, doc)
-
-        state.editMode = EM.idle
-        state.editState = null
-        persistViewState()
-        emitRender()
+      GA.update({
+        _id: state.editState.grainId,
+        text: state.editState.form.text,
       })
+
+      state.editMode = EM.idle
+      state.editState = null
+      persistViewState()
+      emitRender()
     })
 
     function persistViewState() {
