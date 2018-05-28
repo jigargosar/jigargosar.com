@@ -10,6 +10,7 @@ const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 const yaml = require('js-yaml')
 const {actions: GA} = require('../stores/grains')
+const {actions: GEA} = require('../stores/edit-grain')
 
 module.exports = view
 
@@ -94,7 +95,7 @@ function grainItemView(grain) {
         ${Button({onclick: () => GA.delete({grain})}, 'X')}
       </div>
       <div class="pa1">
-        ${Button({onclick: () => GA.edit({grain})}, 'E')}
+        ${Button({onclick: () => GEA.edit({grain})}, 'E')}
       </div>
       <div class="pa1 flex-grow-1 flex flex-column">
         ${

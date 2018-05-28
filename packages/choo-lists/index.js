@@ -28,6 +28,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(require('./stores/list'))
 app.use(require('./stores/grains'))
+app.use(require('./stores/edit-grain'))
 app.route('/', require('./views/list'))
 app.route('/*', require('./views/404'))
 

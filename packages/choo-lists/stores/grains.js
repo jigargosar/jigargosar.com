@@ -57,19 +57,6 @@ module.exports = createStore({
         render()
       })
     },
-    edit: ({data: {grain}, store, state, actions: {render}}) => {
-      assert(state.editMode === EM.idle)
-      assert(R.isNil(state.editState))
-      G.validate(grain)
-      state.editMode = EM.editing
-      state.editState = {
-        grainId: G.getId(grain),
-        form: R.clone(grain),
-        yaml: dumpYAML(grain),
-      }
-      persistViewState(state)
-      render()
-    },
     delete: ({state, store: {listPD}, data: {grain}, actions: {render}}) => {
       listPD.remove(grain).then(doc => {
         const idx = R.findIndex(G.eqById(doc), state.list)
