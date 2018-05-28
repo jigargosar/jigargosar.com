@@ -9,8 +9,8 @@ const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 const yaml = require('js-yaml')
-const {actions: GA} = require('../stores/grains')
-const {actions: GEA} = require('../stores/edit-grain')
+const {actions: GA} = require('../stores/grains-store')
+const {actions: GEA} = require('../stores/edit-grain-store')
 
 module.exports = view
 

@@ -3,7 +3,7 @@ const RA = require('ramda-adjunct')
 const G = require('../models/grain')
 
 var createStore = require('../createStore')
-const log = require('nanologger')('stores:grains')
+const log = require('nanologger')('grains-store')
 const PD = require('../models/pouch-db')
 const assert = require('assert')
 

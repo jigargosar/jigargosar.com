@@ -4,10 +4,10 @@ const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const yaml = require('js-yaml')
 const LocalStorageItem = require('./local-storage-item')
-const {actions: GA} = require('../stores/grains')
+const {actions: GA} = require('./grains-store')
 
 var createStore = require('../createStore')
-const log = require('nanologger')('stores:edit-grain')
+const log = require('nanologger')('edit-grain-store')
 const assert = require('assert')
 
 const viewLS = LocalStorageItem('choo-list:view', {editMode: EM.idle})

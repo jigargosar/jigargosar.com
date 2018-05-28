@@ -1,4 +1,6 @@
 require('babel-polyfill')
+
+const R = require('ramda')
 const log = require('nanologger')('window')
 const css = require('sheetify')
 css('tachyons')
@@ -26,8 +28,8 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(require('choo-service-worker')())
 }
 
-app.use(require('./stores/grains'))
-app.use(require('./stores/edit-grain'))
+app.use(require('./stores/grains-store'))
+app.use(require('./stores/edit-grain-store'))
 app.route('/', require('./views/list'))
 app.route('/*', require('./views/404'))
 
