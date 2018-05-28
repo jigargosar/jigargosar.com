@@ -21,7 +21,7 @@ function view(state, emit) {
   return html`
     <body class="sans-serif lh-copy f4">
       <div class="bg-light-blue f1 tc pa3">${TITLE}</div>
-      ${isEditing ? grainEditView(state, emit) : grainsListView(state, emit)}
+      ${isEditing ? grainEditView(state) : grainsListView(state)}
     </body>`
 }
 
@@ -29,16 +29,16 @@ const centeredContentClass = 'center mw7 mv3 ph3'
 
 var grainEditor = new CodeMirrorEditor()
 
-function grainEditView(state, emit) {
+function grainEditView(state) {
   const onDiscardClick = () => {
-    emit(state.events.list_edit_discard)
+    GEA.discard()
   }
   const onSubmit = event => {
     event.preventDefault()
-    emit(state.events.list_edit_save)
+    GEA.save()
   }
   const onEditModeTextChange = event => {
-    emit(state.events.list_edit_onTextChanged, event.target.value)
+    GEA.textChange({text: event.target.value})
   }
   return html`
     <div class="${centeredContentClass}" style="min-width: 100%;">
@@ -67,9 +67,8 @@ function grainEditView(state, emit) {
         </div>
       </form>
       <div class="flex flex-column mv3">
-        ${grainEditor.render(
-          state.editState.yaml,
-          R.partial(emit, [state.events.list_edit_onYAMLUpdate]),
+        ${grainEditor.render(state.editState.yaml, yamlString =>
+          GEA.yamlChange({yamlString}),
         )}
       </div>
     </div>
