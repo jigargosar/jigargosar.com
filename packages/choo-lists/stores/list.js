@@ -16,7 +16,6 @@ function store(state, emitter) {
   state.list = R.times(() => G.createNew(), 10)
   state.editMode = EM.idle
 
-  state.events.list_edit = 'list:edit'
   state.events.list_edit_onTextChanged = 'list:edit:onTextChange'
   state.events.list_edit_onYAMLUpdate = 'list:edit:onYAMLUpdate'
   state.events.list_edit_discard = 'list:edit:discard'
@@ -29,24 +28,9 @@ function store(state, emitter) {
   emitter.on('DOMContentLoaded', function() {
     const listPD = PD('choo-list:list')
 
-    Object.assign(state, pickViewState(viewLS.load()))
-
     function dumpYAML(obj) {
       return yaml.dump(obj, {noCompatMode: true, lineWidth: 60})
     }
-
-    emitter.on(state.events.list_edit, function(grain) {
-      assert(state.editMode === EM.idle)
-      assert(R.isNil(state.editState))
-      state.editMode = EM.editing
-      state.editState = {
-        grainId: G.getId(grain),
-        form: R.clone(grain),
-        yaml: dumpYAML(grain),
-      }
-      persistViewState()
-      emitRender()
-    })
 
     emitter.on(state.events.list_edit_onTextChanged, function(text) {
       assert(state.editMode === EM.editing)

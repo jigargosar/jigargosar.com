@@ -32,6 +32,7 @@ module.exports = createStore({
   },
   events: {
     DOMContentLoaded: ({store, state, actions: {render}}) => {
+      Object.assign(state, pickViewState(viewLS.load()))
       store.listPD
         .fetchDocsDescending()
         .then(
