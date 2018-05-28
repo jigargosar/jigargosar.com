@@ -1,51 +1,58 @@
 function createStore(opts) {
-  var {storeName, initialState, events} = opts || {}
+  var {namespace, initialState, events} = opts || {}
 
-  if (!storeName) throw new Error('storeName required')
+  if (!namespace) throw new Error('namespace required')
   if (!initialState) throw new Error('initialState required')
   if (!events) throw new Error('events required')
+  var storeName = `${namespace}Store`
 
   var props = Object.assign({}, opts, {actions: {}})
 
   // API ref: https://github.com/choojs/choo#appusecallbackstate-emitter-app
   function store(state, emitter, app) {
-    state[storeName] = Object.assign({}, initialState)
-    state.events[storeName] = {}
+    state[namespace] = Object.assign({}, initialState)
+    state.events[namespace] = {}
 
     // add reset event if undefined
     if (!props.events.reset) {
       props.events.reset = ({data, store, emitter}) => {
         var {render} = data || {}
-        state[storeName] = Object.assign({}, initialState)
+        state[namespace] = Object.assign({}, initialState)
         if (render) emitter.emit('render')
       }
-
-    }
-    if (!props.events.render) {
-      props.events.render = ({state, emitter}) => {
-        emitter.emit(state.events.RENDER)
-      }
     }
 
+    function render() {
+      emitter.emit(state.events.RENDER)
+    }
 
+    props.actions.render = render
     Object.keys(events).forEach(event => {
       var eventName = `${storeName}:${event}`
 
       // attach events to emitter
       emitter.on(eventName, data => {
-        events[event]({data, store: state[storeName], emitter, state, app, actions: props["actions"]})
+        events[event]({
+          data,
+          store: state[namespace],
+          emitter,
+          state,
+          app,
+          actions: props.actions,
+          render,
+        })
       })
 
       // add event names to state.events
-      state.events[storeName][event] = eventName
+      state.events[eventName] = eventName
 
       // add action method
       props.actions[event] = data => emitter.emit(eventName, data)
     })
 
-    const domContentLoadedAction = props.actions["DOMContentLoaded"];
+    const domContentLoadedAction = props.actions['DOMContentLoaded']
     if (domContentLoadedAction) {
-      emitter.on("DOMContentLoaded", () => {
+      emitter.on('DOMContentLoaded', () => {
         domContentLoadedAction()
       })
     }

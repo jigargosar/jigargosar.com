@@ -8,7 +8,7 @@ const PD = require('../models/pouch-db')
 const assert = require('assert')
 
 module.exports = createStore({
-  storeName: 'grains',
+  namespace: 'grains',
   initialState: {
     listPD: PD('choo-list:list'),
     list: R.times(() => G.createNew(), 10),

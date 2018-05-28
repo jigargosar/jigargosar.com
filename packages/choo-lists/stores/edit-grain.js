@@ -25,7 +25,7 @@ function dumpYAML(obj) {
 }
 
 module.exports = createStore({
-  storeName: 'editGrain',
+  namespace: 'editGrain',
   initialState: {editMode: EM.idle},
   events: {
     DOMContentLoaded: ({store, actions: {render}}) => {
