@@ -1,0 +1,19 @@
+{
+  "name": "nextjs-lists",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [],
+  "author": "Jigar Gosar <jigar.gosar@gmail.com> (https://jigargosar.com)",
+  "license": "MIT",
+  "dependencies": {
+    "next": "6.0.3",
+    "react": "16.4.0",
+    "react-dom": "16.4.0"
+  }
+}
