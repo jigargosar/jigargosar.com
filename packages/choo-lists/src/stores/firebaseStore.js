@@ -16,14 +16,16 @@ var config = {
 
 module.exports = createStore({
   namespace: 'firebase',
-  initialState: {},
+  initialState: {authState: "loading", user: null},
   events: {
     DOMContentLoaded: ({store, actions: {render}}) => {
       const app = firebase.initializeApp(config, 'choo-list')
       app.auth().onAuthStateChanged(user => {
         log.debug('onAuthStateChanged user:', user)
         store.user = user
+        store.authState = "signedOut"
         if (user) {
+          store.authState = "signedIn"
           app
             .firestore()
             .collection(`users/${user.uid}/grains`)

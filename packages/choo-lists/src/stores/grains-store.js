@@ -1,7 +1,6 @@
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 const G = require('../models/grain')
-const pMinDelay = require('p-min-delay')
 const createStore = require('./createStore')
 const log = require('nanologger')('grains-store')
 const PD = require('../models/pouch-db')

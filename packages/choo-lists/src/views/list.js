@@ -20,7 +20,10 @@ function view(state, emit) {
 
   return html`
     <body class="sans-serif lh-copy f4">
-      <div class="bg-light-blue f1 tc pa3">${TITLE}</div>
+      <div class="bg-light-blue tc pa3">
+        <div class="f1">${TITLE}</div>
+        <div>${state.firebase.authState}</div>
+      </div>
       ${isEditing ? grainEditView(state) : grainsListView(state)}
     </body>`
 }
