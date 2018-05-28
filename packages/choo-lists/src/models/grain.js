@@ -6,6 +6,7 @@ const assert = require('assert')
 const idPropName = '_id'
 const deletedPropName = '_deleted'
 const revisionPropName = '_rev'
+const versionPropName = 'version'
 const textPropName = 'text'
 const createdAtPropName = 'createdAt'
 
@@ -16,6 +17,7 @@ export function createNew({text = ''} = {}) {
     [idPropName]: `grain-${nowTimestamp}-${nanoid()}`,
     text,
     [createdAtPropName]: nowTimestamp,
+    [versionPropName]: 0,
   }
 }
 
@@ -37,6 +39,7 @@ export function validate(doc) {
   assert(RA.isString(doc[revisionPropName]))
   assert(RA.isString(doc[textPropName]))
   assert(RA.isNumber(doc[createdAtPropName]))
+  assert(RA.isNumber(doc[versionPropName]))
   return doc
 }
 
