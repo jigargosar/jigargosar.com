@@ -8,14 +8,14 @@ const app = choo()
 
 window.addEventListener('error', function(event) {
   log.error(
-    event.error.message,
+    R.pathOr('noMessageFound', 'error.message'.split('.'), event),
     R.pathOr('noReasonFound', 'error.reason'.split('.'), event),
   )
 })
 
 window.addEventListener('unhandledrejection', function(event) {
   log.error(
-    event.error.message,
+    R.pathOr('noMessageFound', 'error.message'.split('.'), event),
     R.pathOr('noReasonFound', 'error.reason'.split('.'), event),
   )
 })

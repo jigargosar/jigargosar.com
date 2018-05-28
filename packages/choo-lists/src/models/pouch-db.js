@@ -20,11 +20,7 @@ function put(actionMsg, doc, {db, log}) {
   })
 }
 
-function fetchDocsDescending({db}) {
-  return db.allDocs({include_docs: true, descending: true})
-}
-
-function fetchDocsDescending2({db}) {
+function fetchDocsDescending({db, log}) {
   return db
     .allDocs({include_docs: true, descending: true})
     .then(R.compose(R.map(R.prop('doc')), R.prop('rows')))
@@ -52,9 +48,9 @@ function remove(doc, pdb) {
 function createPouchDB(name) {
   const db = new PouchDB(name)
 
-  const log = Logger(`PDB:${name}`)
+  const log = Logger(`pouch-db(${name})`)
 
-  db.info().then(info => log.debug('DB Info', info))
+  db.info().then(info => log.debug("db_info",info))
 
   function partialDB(fn) {
     return R.partialRight(fn, [{db, log}])
@@ -62,7 +58,6 @@ function createPouchDB(name) {
 
   return {
     fetchDocsDescending: partialDB(fetchDocsDescending),
-    fetchDocsDescending2: partialDB(fetchDocsDescending2),
     insert: partialDB(insert),
     update: partialDB(update),
     remove: partialDB(remove),

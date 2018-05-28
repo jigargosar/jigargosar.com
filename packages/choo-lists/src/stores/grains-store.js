@@ -17,15 +17,7 @@ module.exports = createStore({
     DOMContentLoaded: ({store: {listPD, list}, actions: {render}}) => {
       listPD
         .fetchDocsDescending()
-        .then(
-          R.compose(
-            R.tap(grains => log.debug('load', ...grains)),
-            R.map(R.compose(G.validate, R.prop('doc'))),
-            R.tap(rows => log.trace('allDocs:rows', ...rows)),
-            R.prop('rows'),
-            R.tap(res => log.trace('allDocs:res', res)),
-          ),
-        )
+        .then(R.map(G.validate))
         .then(grains => list.splice(0, list.length, ...grains))
         .then(render)
     },
