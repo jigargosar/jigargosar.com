@@ -97,5 +97,3 @@ module.exports = createStore({
     },
   },
 })
-
-module.exports.storeName = 'editGrain'
