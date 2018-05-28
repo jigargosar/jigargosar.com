@@ -1,28 +1,11 @@
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 const G = require('../models/grain')
-const EM = require('../models/edit-mode')
-const yaml = require('js-yaml')
-const LocalStorageItem = require('./local-storage-item')
 
 var createStore = require('../createStore')
 const log = require('nanologger')('stores:grains')
 const PD = require('../models/pouch-db')
 const assert = require('assert')
-
-const viewLS = LocalStorageItem('choo-list:view', {editMode: EM.idle})
-
-function pickViewState(state) {
-  return R.pick(['editState', 'editMode'], state)
-}
-
-function persistViewState(state) {
-  viewLS.save(pickViewState(state))
-}
-
-function dumpYAML(obj) {
-  return yaml.dump(obj, {noCompatMode: true, lineWidth: 60})
-}
 
 module.exports = createStore({
   storeName: 'grains',
@@ -31,9 +14,8 @@ module.exports = createStore({
     list: R.times(() => G.createNew(), 10),
   },
   events: {
-    DOMContentLoaded: ({store, state, actions: {render}}) => {
-      Object.assign(state, pickViewState(viewLS.load()))
-      store.listPD
+    DOMContentLoaded: ({store: {listPD, list}, actions: {render}}) => {
+      listPD
         .fetchDocsDescending()
         .then(
           R.compose(
@@ -44,35 +26,35 @@ module.exports = createStore({
             R.tap(res => log.trace('allDocs:res', res)),
           ),
         )
-        .then(grains => state.list.splice(0, state.list.length, ...grains))
+        .then(grains => list.splice(0, list.length, ...grains))
         .then(render)
     },
-    add: ({store, state, actions: {render}}) => {
+    add: ({store: {listPD, list}, actions: {render}}) => {
       const newGrainText = prompt('New Grain', 'Get Milk!')
       log.debug('newGrainText', newGrainText)
       if (R.isNil(newGrainText)) return
       const newGrain = G.createNew({text: newGrainText})
-      store.listPD.insert(newGrain).then(grain => {
-        state.list.unshift(grain)
+      listPD.insert(newGrain).then(grain => {
+        list.unshift(grain)
         render()
       })
     },
-    delete: ({state, store: {listPD}, data: {grain}, actions: {render}}) => {
+    delete: ({store: {listPD, list}, data: {grain}, actions: {render}}) => {
       listPD.remove(grain).then(doc => {
-        const idx = R.findIndex(G.eqById(doc), state.list)
+        const idx = R.findIndex(G.eqById(doc), list)
         assert(idx !== -1)
-        state.list.splice(idx, 1)
+        list.splice(idx, 1)
         render()
       })
     },
 
-    update: ({data, store: {listPD}, state, actions: {render}}) => {
-      const grain = R.find(G.eqById(data), state.list)
+    update: ({data, store: {listPD, list}, actions: {render}}) => {
+      const grain = R.find(G.eqById(data), list)
       assert(RA.isNotNil(grain))
 
       const updatedGrain = G.setText(data.text, grain)
       listPD.update(updatedGrain).then(doc => {
-        state.list.splice(R.indexOf(grain, state.list), 1, doc)
+        list.splice(R.indexOf(grain, list), 1, doc)
         render()
       })
     },

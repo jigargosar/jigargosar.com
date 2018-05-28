@@ -76,13 +76,14 @@ function grainEditView(state) {
 }
 
 function grainsListView(state) {
+  const list = state.grains.list
   return html`
     <div class="">
       <div class="flex ${centeredContentClass}">
-        <div class="pa1">Total: ${state.list.length}</div>
+        <div class="pa1">Total: ${list.length}</div>
         <div class="pa1">${Button({onclick: GA.add}, 'ADD')}</div>
       </div>
-      ${state.list.map(grainItemView)}  
+      ${list.map(grainItemView)}  
     </div>`
 }
 
