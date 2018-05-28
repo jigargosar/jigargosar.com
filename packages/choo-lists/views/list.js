@@ -20,7 +20,7 @@ function view(state, emit) {
   return html`
     <body class="sans-serif lh-copy f4">
       <div class="bg-light-blue f1 tc pa3">${TITLE}</div>
-      ${isEditing ? editView(state, emit) : itemsView(state, emit)}
+      ${isEditing ? grainEditView(state, emit) : grainsListView(state, emit)}
     </body>`
 }
 
@@ -28,7 +28,7 @@ const centeredContentClass = 'center mw7 mv3 ph3'
 
 var grainEditor = new CodeMirrorEditor()
 
-function editView(state, emit) {
+function grainEditView(state, emit) {
   const onDiscardClick = () => {
     emit(state.events.list_edit_discard)
   }
@@ -75,38 +75,36 @@ function editView(state, emit) {
     `
 }
 
-function itemsView(state, emit) {
+function grainsListView(state) {
   return html`
     <div class="">
       <div class="flex ${centeredContentClass}">
         <div class="pa1">Total: ${state.list.length}</div>
         <div class="pa1">${Button({onclick: GA.add}, 'ADD')}</div>
       </div>
-      ${state.list.map(createGrainListView(state, emit))}  
+      ${state.list.map(grainItemView)}  
     </div>`
 }
 
-function createGrainListView(state, emit) {
-  return function(grain) {
-    const text = G.getText(grain)
-    return html`
-      <div id=${G.getId(grain)} class="flex ${centeredContentClass}">
-        <div class="pa1">
-          ${Button({onclick: () => GA.delete({grain})}, 'X')}
-        </div>
-        <div class="pa1">
-          ${Button({onclick: () => emit(state.events.list_edit, grain)}, 'E')}
-        </div>
-        <div class="pa1 flex-grow-1 flex flex-column">
-          ${
-            R.compose(R.isEmpty, R.trim)(text)
-              ? html`<div class="gray">${'<Empty>'}</div>`
-              : html`<div class="">${text}</div>`
-          }
-          <div class="f6 code gray lh-solid" >id: ${G.getId(grain)}</div>
-        </div>
-      </div>`
-  }
+function grainItemView(grain) {
+  const text = G.getText(grain)
+  return html`
+    <div id=${G.getId(grain)} class="flex ${centeredContentClass}">
+      <div class="pa1">
+        ${Button({onclick: () => GA.delete({grain})}, 'X')}
+      </div>
+      <div class="pa1">
+        ${Button({onclick: () => GA.edit({grain})}, 'E')}
+      </div>
+      <div class="pa1 flex-grow-1 flex flex-column">
+        ${
+          R.compose(R.isEmpty, R.trim)(text)
+            ? html`<div class="gray">${'<Empty>'}</div>`
+            : html`<div class="">${text}</div>`
+        }
+        <div class="f6 code gray lh-solid" >id: ${G.getId(grain)}</div>
+      </div>
+    </div>`
 }
 
 function noModifiers(event) {
