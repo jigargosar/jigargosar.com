@@ -1,5 +1,5 @@
 require('babel-polyfill')
-const log = require('nanologger')('app')
+const log = require('nanologger')('window')
 const css = require('sheetify')
 css('tachyons')
 
@@ -7,11 +7,17 @@ const choo = require('choo')
 const app = choo()
 
 window.addEventListener('error', function(event) {
-  log.error(event.error.reason, event.error.message)
+  log.error(
+    event.error.message,
+    R.pathOr('noReasonFound', 'error.reason'.split('.'), event),
+  )
 })
 
 window.addEventListener('unhandledrejection', function(event) {
-  log.error(event.error.reason, event.error.message)
+  log.error(
+    event.error.message,
+    R.pathOr('noReasonFound', 'error.reason'.split('.'), event),
+  )
 })
 
 if (process.env.NODE_ENV !== 'production') {
