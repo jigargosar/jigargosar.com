@@ -54,6 +54,7 @@ module.exports = createStore({
               if (user) {
                 store.authState = 'signedIn'
                 store.grainsPath = `users/${user.uid}/grains`
+                store.grainsHistoryPath = `users/${user.uid}/grains-history`
 
                 const docFromChangeObj = handler => change =>
                   handler(change.doc.id, omitRev(change.doc.data()))
@@ -117,6 +118,7 @@ module.exports = createStore({
     syncGrains: ({state, store}) => {
       log.debug('syncGrains', state.grains.list, store)
       const grainsCollection = getCollection(store.grainsPath)
+      const grainsHistoryCollection = getCollection(store.grainsHistoryPath)
       state.grains.list.forEach(grain => {
         if (R.equals(omitRev(grain), store.grainsLookup[G.getId(grain)])) {
           log.debug('Doc up to date')
@@ -126,21 +128,25 @@ module.exports = createStore({
         const grainRef = grainsCollection.doc(G.getId(grain))
         firebase
           .firestore()
-          .runTransaction(function(transaction) {
+          .runTransaction(function (transaction) {
             // This code may get re-run multiple times if there are conflicts.
-            return transaction.get(grainRef).then(function(grainSnapshot) {
+            return transaction.get(grainRef).then(function (grainSnapshot) {
               log.debug('transaction:grainSnapshot', grainSnapshot)
               if (grainSnapshot.exists) {
-                throw new Error('Document exists! wont update')
+                const snapshotGrain = grainSnapshot.data()
+                if (G.getActorId(snapshotGrain) !== G.getActorId(grain)) {
+                  transaction.set(grainsHistoryCollection.doc(), snapshotGrain)
+                }
+                transaction.set(grainRef, grain)
               } else {
-                transaction.set(grainRef, omitRev(grain))
+                transaction.set(grainRef, grain)
               }
             })
           })
-          .then(function() {
+          .then(function () {
             log.debug('Transaction successfully committed!')
           })
-          .catch(function(error) {
+          .catch(function (error) {
             log.warn('Transaction failed: ', error)
           })
       })

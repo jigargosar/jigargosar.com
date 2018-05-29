@@ -1,3 +1,4 @@
+const {getAppActorId} = require('../stores/actor-id')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 const nanoid = require('nanoid')
@@ -7,6 +8,7 @@ const idPropName = '_id'
 const deletedPropName = '_deleted'
 const revisionPropName = '_rev'
 const versionPropName = 'version'
+const actorIdPropName = 'actorId'
 const textPropName = 'text'
 const createdAtPropName = 'createdAt'
 
@@ -17,7 +19,7 @@ export function createNew({text = ''} = {}) {
     [idPropName]: `grain-${nowTimestamp}-${nanoid()}`,
     text,
     [createdAtPropName]: nowTimestamp,
-    [versionPropName]: 0,
+    [actorIdPropName]: getAppActorId(),
   }
 }
 
@@ -34,12 +36,16 @@ export function getId(grain) {
   return grain[idPropName]
 }
 
+export function getActorId(grain) {
+  return grain[actorIdPropName]
+}
+
 export function validate(doc) {
   assert(RA.isString(doc[idPropName]))
   assert(RA.isString(doc[revisionPropName]))
   assert(RA.isString(doc[textPropName]))
   assert(RA.isNumber(doc[createdAtPropName]))
-  assert(RA.isNumber(doc[versionPropName]))
+  assert(RA.isString(doc[actorIdPropName]))
   return doc
 }
 
