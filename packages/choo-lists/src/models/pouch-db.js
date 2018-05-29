@@ -35,7 +35,6 @@ function insert(doc, pdb) {
 
 function update(doc, pdb) {
   assert(R.has('_rev')(doc))
-  assert(!R.has('_deleted')(doc))
   return put('update', doc, pdb)
 }
 
@@ -50,7 +49,7 @@ function createPouchDB(name) {
 
   const log = Logger(`pouch-db(${name})`)
 
-  db.info().then(info => log.debug("db_info",info))
+  db.info().then(info => log.debug('db_info', info))
 
   function partialDB(fn) {
     return R.partialRight(fn, [{db, log}])
