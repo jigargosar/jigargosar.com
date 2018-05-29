@@ -35,13 +35,14 @@ function insert(doc, pdb) {
 
 function update(doc, pdb) {
   assert(R.has('_rev')(doc))
-  return put('update', doc, pdb)
+  assert(!R.has('_deleted')(doc))
+  return put('update', R.merge(doc, {modifiedAt: Date.now()}), pdb)
 }
 
 function remove(doc, pdb) {
   assert(R.has('_rev')(doc))
   assert(!R.has('_deleted')(doc))
-  return put('delete', R.assoc('_deleted', true)(doc), pdb)
+  return put('delete', R.merge(doc, {_deleted: true}), pdb)
 }
 
 function createPouchDB(name) {
@@ -60,5 +61,6 @@ function createPouchDB(name) {
     insert: partialDB(insert),
     update: partialDB(update),
     remove: partialDB(remove),
+    _db: db,
   }
 }

@@ -5,7 +5,7 @@ const createStore = require('./createStore')
 const log = require('nanologger')('grains-store')
 const PD = require('../models/pouch-db')
 const assert = require('assert')
-const {actions:FA} = require('./firebase-store')
+const {actions: FA} = require('./firebase-store')
 
 module.exports = createStore({
   namespace: 'grains',
@@ -20,35 +20,90 @@ module.exports = createStore({
         .then(R.map(G.validate))
         .then(grains => list.splice(0, list.length, ...grains))
         .then(render)
+        .then(() => {
+          listPD._db
+            .changes({
+              include_docs: true,
+              live: true,
+              since: 'now',
+            })
+            .on('change', change => {
+              const doc = G.validate(change.doc)
+              const idx = R.findIndex(G.eqById(doc), list)
+              if (change.deleted) {
+                assert(idx !== -1)
+                list.splice(idx, 1)
+              }else if(idx === -1){
+                list.unshift(doc)
+              }else{
+                list.splice(idx, 1, doc)
+              }
+              render()
+            })
+        })
     },
     add: ({store: {listPD, list}, actions: {render}}) => {
       const newGrainText = prompt('New Grain', 'Get Milk!')
       log.debug('newGrainText', newGrainText)
       if (R.isNil(newGrainText)) return
-      const newGrain = G.createNew({text: newGrainText})
-      listPD.insert(newGrain).then(grain => {
-        list.unshift(grain)
-        render()
-      })
+      listPD.insert(G.createNew({text: newGrainText}))
     },
     delete: ({store: {listPD, list}, data: {grain}, actions: {render}}) => {
-      listPD.remove(grain).then(doc => {
-        const idx = R.findIndex(G.eqById(doc), list)
-        assert(idx !== -1)
-        list.splice(idx, 1)
-        render()
-      })
+      listPD.remove(grain)
     },
 
     update: ({data, store: {listPD, list}, actions: {render}}) => {
       const grain = R.find(G.eqById(data), list)
       assert(RA.isNotNil(grain))
+      listPD.update(G.setText(data.text, grain))
+    },
 
-      const updatedGrain = G.setText(data.text, grain)
-      listPD.update(updatedGrain).then(doc => {
-        list.splice(R.indexOf(grain, list), 1, doc)
-        render()
-      })
+    updateFromRemote: ({data, store: {listPD}}) => {
+      assert(G.idEq(data.id, data.doc))
+      const grain = G.validate(data.doc)
+      if (G.isLocal(grain)) {
+        return
+      }
+      debugger
+      listPD._db
+        .put(data.doc)
+        .then(res => {
+          log.info('remote result', res)
+        })
+        .catch(error => {
+          log.info('remote error', error)
+          listPD._db
+            .allDocs({
+              keys: [data.id],
+              include_docs: true,
+            })
+            .then(res => log.info('get after error', res))
+        })
+
+      // R.cond([
+      //   [
+      //     R.propEq('type', 'added'),
+      //     ({doc}) => {
+      //       listPD._db.txn(
+      //         {id: data.id, create: true, timestamps: true},
+      //         (doc, to_txn) => {
+      //           Object.assign(doc, data.doc)
+      //           return to_txn()
+      //         },
+      //         function(er, doc) {
+      //           if (er) console.log('Problem creating my_doc: ' + er)
+      //           else
+      //             console.log(
+      //               'Document created ' +
+      //                 doc.created_at +
+      //                 ' count = ' +
+      //                 doc.count,
+      //             )
+      //         },
+      //       )
+      //     },
+      //   ],
+      // ])(data)
     },
   },
 })

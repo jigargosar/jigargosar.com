@@ -1,3 +1,4 @@
+
 const {getAppActorId} = require('../stores/actor-id')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -11,6 +12,7 @@ const versionPropName = 'version'
 const actorIdPropName = 'actorId'
 const textPropName = 'text'
 const createdAtPropName = 'createdAt'
+const modifiedAtPropName = 'modifiedAt'
 
 export function createNew({text = ''} = {}) {
   const nowTimestamp = Date.now()
@@ -20,6 +22,7 @@ export function createNew({text = ''} = {}) {
     text,
     [createdAtPropName]: nowTimestamp,
     [actorIdPropName]: getAppActorId(),
+    [modifiedAtPropName]:nowTimestamp
   }
 }
 
@@ -42,12 +45,20 @@ export function getId(grain) {
 export function getActorId(grain) {
   return grain[actorIdPropName]
 }
+export function getModifiedAt(grain) {
+  return grain[modifiedAtPropName]
+}
+
+export function isLocal(grain) {
+  return getActorId(grain) === getAppActorId()
+}
 
 export function validate(doc) {
   assert(RA.isString(doc[idPropName]))
   assert(RA.isString(doc[revisionPropName]))
   assert(RA.isString(doc[textPropName]))
   assert(RA.isNumber(doc[createdAtPropName]))
+  assert(RA.isNumber(doc[modifiedAtPropName]))
   assert(RA.isString(doc[actorIdPropName]))
   return doc
 }
@@ -59,3 +70,7 @@ export const idEq = R.curry(function idEq(id, grain) {
 export const eqById = R.curry(function idEq(grain1, grain2) {
   return R.eqProps(idPropName, grain1, grain2)
 })
+
+export function isFlaggedAsDeleted(grain) {
+  R.propOr(false, '_deleted', grain);
+}
