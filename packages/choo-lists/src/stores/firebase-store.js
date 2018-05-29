@@ -23,10 +23,6 @@ function getCollection(path) {
   return firebase.firestore().collection(path)
 }
 
-function omitRev(grain) {
-  return R.omit(['_rev'], grain)
-}
-
 const omitFirebaseClutter = R.unless(
   R.isNil,
   R.pickBy(
@@ -57,7 +53,7 @@ module.exports = createStore({
                 store.grainsHistoryPath = `users/${user.uid}/grains-history`
 
                 const docFromChangeObj = handler => change =>
-                  handler(change.doc.id, omitRev(change.doc.data()))
+                  handler(change.doc.id, change.doc.data())
 
                 const typeEq = R.propEq('type')
                 const handleChange = R.cond([
@@ -93,7 +89,7 @@ module.exports = createStore({
                   log.debug('grains docChanges', snapshot.docChanges())
 
                   snapshot.docChanges().forEach(handleChange)
-
+                  render()
                   if (isFirstSnapshot) {
                     syncGrains()
                     isFirstSnapshot = false
@@ -120,20 +116,16 @@ module.exports = createStore({
       const grainsCollection = getCollection(store.grainsPath)
       const grainsHistoryCollection = getCollection(store.grainsHistoryPath)
       state.grains.list.forEach(grain => {
-        const g1 = omitRev(grain);
-        const g2 = store.grainsLookup[G.getId(grain)];
-        log.debug(g1, g2)
-        if (R.equals(g1, g2)) {
+        if (R.equals(grain, store.grainsLookup[G.getId(grain)])) {
           log.debug('Doc up to date')
           return
         }
-
         const grainRef = grainsCollection.doc(G.getId(grain))
         firebase
           .firestore()
-          .runTransaction(function (transaction) {
+          .runTransaction(function(transaction) {
             // This code may get re-run multiple times if there are conflicts.
-            return transaction.get(grainRef).then(function (grainSnapshot) {
+            return transaction.get(grainRef).then(function(grainSnapshot) {
               log.debug('transaction:grainSnapshot', grainSnapshot)
               if (grainSnapshot.exists) {
                 const snapshotGrain = grainSnapshot.data()
@@ -146,14 +138,13 @@ module.exports = createStore({
               }
             })
           })
-          .then(function () {
+          .then(function() {
             log.debug('Transaction successfully committed!')
           })
-          .catch(function (error) {
+          .catch(function(error) {
             log.warn('Transaction failed: ', error)
           })
       })
     },
   },
 })
-

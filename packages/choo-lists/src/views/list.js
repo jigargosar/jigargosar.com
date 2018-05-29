@@ -1,5 +1,5 @@
+const {grainsList} = require("../state")
 const {CodeMirrorEditor} = require('../components/CodeMirrorEditor')
-
 const R = require('ramda')
 const log = require('nanologger')('views:list')
 const html = require('choo/html')
@@ -95,7 +95,7 @@ function grainEditView(state) {
 }
 
 function grainsListView(state) {
-  const list = state.grains.list
+  const list = grainsList(state)
   return html`
     <div class="">
       <div class="flex ${centeredContentClass}">
