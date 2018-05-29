@@ -120,7 +120,10 @@ module.exports = createStore({
       const grainsCollection = getCollection(store.grainsPath)
       const grainsHistoryCollection = getCollection(store.grainsHistoryPath)
       state.grains.list.forEach(grain => {
-        if (R.equals(omitRev(grain), store.grainsLookup[G.getId(grain)])) {
+        const g1 = omitRev(grain);
+        const g2 = store.grainsLookup[G.getId(grain)];
+        log.debug(g1, g2)
+        if (R.equals(g1, g2)) {
           log.debug('Doc up to date')
           return
         }

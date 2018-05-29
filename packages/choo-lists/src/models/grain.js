@@ -25,7 +25,10 @@ export function createNew({text = ''} = {}) {
 
 export function setText(text, grain) {
   assert(RA.isString(text))
-  return R.assoc(textPropName, text, grain)
+  return R.merge(grain, {
+    [textPropName]: text,
+    [actorIdPropName]: getAppActorId(),
+  })
 }
 
 export function getText(grain) {
