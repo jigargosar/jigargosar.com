@@ -1,3 +1,5 @@
+import {findGrainEqById, isGrainEqByIdNotNil} from '../state'
+
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 const G = require('../models/grain')
@@ -6,6 +8,11 @@ const log = require('nanologger')('grains-store')
 const PD = require('../models/pouch-db')
 const assert = require('assert')
 const {actions: FA} = require('./firebase-store')
+
+function logError(e) {
+  log.error(e)
+  debugger
+}
 
 module.exports = createStore({
   namespace: 'grains',
@@ -33,9 +40,9 @@ module.exports = createStore({
               if (change.deleted) {
                 assert(idx !== -1)
                 list.splice(idx, 1)
-              }else if(idx === -1){
+              } else if (idx === -1) {
                 list.unshift(doc)
-              }else{
+              } else {
                 list.splice(idx, 1, doc)
               }
               render()
@@ -48,8 +55,10 @@ module.exports = createStore({
       if (R.isNil(newGrainText)) return
       listPD.insert(G.createNew({text: newGrainText}))
     },
-    delete: ({store: {listPD, list}, data: {grain}, actions: {render}}) => {
-      listPD.remove(grain)
+    delete: ({store: {listPD, list}, data, actions: {render}}) => {
+      const grain = R.find(G.eqById(data.grain), list)
+      assert(RA.isNotNil(grain))
+      listPD.update(G.setDeleted(grain))
     },
 
     update: ({data, store: {listPD, list}, actions: {render}}) => {
@@ -58,52 +67,46 @@ module.exports = createStore({
       listPD.update(G.setText(data.text, grain))
     },
 
-    updateFromRemote: ({data, store: {listPD}}) => {
+    updateFromRemote: ({data, store: {listPD}, state, actions}) => {
       assert(G.idEq(data.id, data.doc))
-      const grain = G.validate(data.doc)
-      if (G.isLocal(grain)) {
+      const remoteGrain = G.validate(data.doc)
+      if (isGrainEqByIdNotNil(remoteGrain, state) && G.isLocal(remoteGrain)) {
+        return
+      } else if (
+        isGrainEqByIdNotNil(remoteGrain, state) &&
+        G.getModifiedAt(remoteGrain) <
+          G.getModifiedAt(findGrainEqById(remoteGrain, state))
+      ) {
         return
       }
-      debugger
-      listPD._db
-        .put(data.doc)
-        .then(res => {
-          log.info('remote result', res)
-        })
-        .catch(error => {
-          log.info('remote error', error)
-          listPD._db
-            .allDocs({
-              keys: [data.id],
-              include_docs: true,
-            })
-            .then(res => log.info('get after error', res))
-        })
+      const pdbGrainPromise = listPD._db.allDocs({
+        keys: [G.getId(remoteGrain)],
+        include_docs: true,
+      })
 
-      // R.cond([
-      //   [
-      //     R.propEq('type', 'added'),
-      //     ({doc}) => {
-      //       listPD._db.txn(
-      //         {id: data.id, create: true, timestamps: true},
-      //         (doc, to_txn) => {
-      //           Object.assign(doc, data.doc)
-      //           return to_txn()
-      //         },
-      //         function(er, doc) {
-      //           if (er) console.log('Problem creating my_doc: ' + er)
-      //           else
-      //             console.log(
-      //               'Document created ' +
-      //                 doc.created_at +
-      //                 ' count = ' +
-      //                 doc.count,
-      //             )
-      //         },
-      //       )
-      //     },
-      //   ],
-      // ])(data)
+      pdbGrainPromise
+        .catch(e => {
+          log.error(e)
+          return listPD._put(R.omit(['_rev'], remoteGrain))
+        })
+        .catch(logError)
+
+      pdbGrainPromise
+        .then(result => {
+          const rows = result.rows
+          assert.equal(rows.length, 1)
+          const row = rows[0]
+
+          const isRowDeleted = R.pathOr(false, 'value.deleted'.split('.'))
+          if (isRowDeleted(row)) {
+            log.info(
+              'since docId is deleted locally, not adding it to either PDB or memory cache',
+            )
+          } else {
+            listPD._put(R.merge(remoteGrain, R.pick(['_rev'], row.doc)))
+          }
+        })
+        .catch(logError)
     },
   },
 })

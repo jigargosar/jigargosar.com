@@ -35,14 +35,7 @@ function insert(doc, pdb) {
 
 function update(doc, pdb) {
   assert(R.has('_rev')(doc))
-  assert(!R.has('_deleted')(doc))
-  return put('update', R.merge(doc, {modifiedAt: Date.now()}), pdb)
-}
-
-function remove(doc, pdb) {
-  assert(R.has('_rev')(doc))
-  assert(!R.has('_deleted')(doc))
-  return put('delete', R.merge(doc, {_deleted: true}), pdb)
+  return put('update', doc, pdb)
 }
 
 function createPouchDB(name) {
@@ -52,15 +45,17 @@ function createPouchDB(name) {
 
   db.info().then(info => log.debug('db_info', info))
 
+  const pdb = {db, log};
+
   function partialDB(fn) {
-    return R.partialRight(fn, [{db, log}])
+    return R.partialRight(fn, [pdb])
   }
 
   return {
     fetchDocsDescending: partialDB(fetchDocsDescending),
     insert: partialDB(insert),
     update: partialDB(update),
-    remove: partialDB(remove),
     _db: db,
+    _put: (doc) => put('_direct_put', doc, pdb)
   }
 }

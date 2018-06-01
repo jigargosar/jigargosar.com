@@ -88,20 +88,20 @@ module.exports = createStore({
 
       grainsPD(state)
         ._db.changes({
-          include_docs: true,
-          live: true,
-          since,
-        })
-        .on('change', function(change) {
+        include_docs: true,
+        live: true,
+        since,
+      })
+        .on('change', function (change) {
           // log.debug('pdb:changes last_seq', res.last_seq, res.results)
           const localGrain = change.doc
           assert(G.getId(localGrain) === change.id)
           const grainRef = grainsCollection.doc(G.getId(localGrain))
           firebase
             .firestore()
-            .runTransaction(function(transaction) {
+            .runTransaction(function (transaction) {
               // This code may get re-run multiple times if there are conflicts.
-              return transaction.get(grainRef).then(function(grainSnapshot) {
+              return transaction.get(grainRef).then(function (grainSnapshot) {
                 if (grainSnapshot.exists) {
                   const remoteGrain = grainSnapshot.data()
                   const [oldG, newG] = R.unless(
@@ -114,9 +114,8 @@ module.exports = createStore({
                   }
                   if (G.isFlaggedAsDeleted(newG)) {
                     transaction.delete(grainRef)
-                  } else if (newG !== remoteGrain) {
-                    transaction.set(grainRef, newG)
                   }
+                  transaction.set(grainRef, newG)
                 } else {
                   if (G.isFlaggedAsDeleted(localGrain)) {
                     transaction.delete(grainRef)
@@ -126,7 +125,7 @@ module.exports = createStore({
                 }
               })
             })
-            .then(function() {
+            .then(function () {
               log.debug('grains synced till seq', change.seq)
               syncSeqLS.save(change.seq)
             })

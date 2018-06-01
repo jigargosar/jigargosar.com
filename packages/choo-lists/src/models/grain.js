@@ -1,4 +1,3 @@
-
 const {getAppActorId} = require('../stores/actor-id')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -22,7 +21,7 @@ export function createNew({text = ''} = {}) {
     text,
     [createdAtPropName]: nowTimestamp,
     [actorIdPropName]: getAppActorId(),
-    [modifiedAtPropName]:nowTimestamp
+    [modifiedAtPropName]: nowTimestamp
   }
 }
 
@@ -31,6 +30,15 @@ export function setText(text, grain) {
   return R.merge(grain, {
     [textPropName]: text,
     [actorIdPropName]: getAppActorId(),
+    [modifiedAtPropName]: Date.now()
+  })
+}
+
+export function setDeleted(grain) {
+  return R.merge(grain, {
+    [deletedPropName]: true,
+    [actorIdPropName]: getAppActorId(),
+    [modifiedAtPropName]: Date.now()
   })
 }
 
@@ -45,6 +53,7 @@ export function getId(grain) {
 export function getActorId(grain) {
   return grain[actorIdPropName]
 }
+
 export function getModifiedAt(grain) {
   return grain[modifiedAtPropName]
 }
