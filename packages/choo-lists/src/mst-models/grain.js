@@ -19,12 +19,6 @@ export const Grain = BaseModel.named('Grain')
     },
   }))
 
-// .actions(self => ({
-//   setText(text){
-//     return self.text = text
-//   }
-// }))
-
 export const GrainStore = types
   .model('GrainStore', {
     modelMap: types.optional(types.map(Grain), () => ({})),
