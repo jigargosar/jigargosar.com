@@ -19,17 +19,24 @@ export const Grain = BaseModel.named('Grain')
     },
   }))
 
-export const GrainsStore = types
-  .model('GrainsStore', {
-    modelMap: types.optional(types.map(Grain), () => ({})),
-  })
-  .views(self => ({
-    getList() {
-      return Array.from(self.modelMap.values())
-    },
-  }))
-  .actions(self => ({
-    add(model) {
-      self.modelMap.put(model)
-    },
-  }))
+export const createCollectionStore = Model => {
+  assert(Model.isType)
+  assert(Model.name !== "AnonymousModel")
+  console.log(Model)
+  return types
+    .model(`${Model.name}Store`, {
+      modelMap: types.optional(types.map(Model), () => ({})),
+    })
+    .views(self => ({
+      getList() {
+        return Array.from(self.modelMap.values())
+      },
+    }))
+    .actions(self => ({
+      add(model) {
+        self.modelMap.put(model)
+      },
+    }))
+}
+
+export const GrainsStore = createCollectionStore(Grain)

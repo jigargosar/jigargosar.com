@@ -7,7 +7,7 @@ import {nanoId, timestamp} from '../mst-types'
 const assert = require('assert')
 
 export const BaseModel = types
-  .model('Grain', {
+  .model('BaseModel', {
     id: nanoId,
     createdAt: timestamp,
     modifiedAt: timestamp,
