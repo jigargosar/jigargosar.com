@@ -24,3 +24,7 @@ export const Grain = BaseModel.named('Grain')
 //     return self.text = text
 //   }
 // }))
+
+export const GrainStore = types.model('GrainStore', {
+  modelMap: types.optional(types.map(Grain), () => ({})),
+})
