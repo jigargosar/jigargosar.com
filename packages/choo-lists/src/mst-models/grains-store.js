@@ -6,7 +6,7 @@ const RA = require('ramda-adjunct')
 
 const assert = require('assert')
 
-export const Grain = BaseModel.named('Grain')
+export const GrainsStore = BaseModel.named('Grain')
   .props({
     text: types.optional(types.string, () => ''),
   })
@@ -21,7 +21,7 @@ export const Grain = BaseModel.named('Grain')
 
 export const GrainStore = types
   .model('GrainStore', {
-    modelMap: types.optional(types.map(Grain), () => ({})),
+    modelMap: types.optional(types.map(GrainsStore), () => ({})),
   })
   .views(self => ({
     getList() {
