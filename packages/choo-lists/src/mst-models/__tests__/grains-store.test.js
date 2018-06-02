@@ -1,4 +1,4 @@
-import {GrainsStore} from '../grains-store'
+import {Grain} from '../grains-store'
 
 const log = require('nanologger')('grain.test')
 
@@ -12,14 +12,14 @@ beforeEach(() => {
 
 describe('Grain', function() {
   test('should get created without any arguments', function() {
-    const grain = GrainsStore.create()
+    const grain = Grain.create()
     expect(grain).toMatchSnapshot()
     expect(grain.getText()).toEqual('')
     grain.userPatchProps({text: 'foo'})
     expect(grain.getText()).toEqual('foo')
   })
   test('should have text prop', function() {
-    const grain = GrainsStore.create()
+    const grain = Grain.create()
     expect(grain.getText()).toEqual('')
     grain.userPatchProps({text: 'foo'})
     expect(grain.getText()).toEqual('foo')
