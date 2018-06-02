@@ -33,16 +33,15 @@ export const createCollectionStore = Model => {
       getList() {
         return Array.from(self.modelMap.values())
       },
+      _put(){
+        return self.modelMap.put.bind(self.modelMap)
+      }
     }))
-    .actions(self => ({
-      put: model => {
-        return R.compose(
-          R.forEach(model => self.modelMap.put(Model.create(model))),
-          R.flatten,
-          Array.of,
-        )(model)
-      },
-    }))
+    .actions(self => {
+      return {
+        put: R.compose(R.forEach(self._put), R.flatten, Array.of),
+      }
+    })
 }
 
 export const GrainsStore = createCollectionStore(Grain)
