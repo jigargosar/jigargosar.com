@@ -3,7 +3,14 @@
     "production": {
       "presets": ["env"]
     },
-    "development": {
+
+    "env": {
+      "development": {
+        "presets": ["env", "power-assert"],
+        "plugins": ["babel-plugin-espower"]
+      }
+    },
+    "test": {
       "presets": ["env", "power-assert"],
       "plugins": ["babel-plugin-espower"]
     }

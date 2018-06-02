@@ -8,7 +8,8 @@
     "inspect": "bankai inspect index.js",
     "start": "bankai start index.js",
     "test": "standard && npm run test-deps",
-    "test-deps": "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
+    "test-deps":
+      "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
   },
   "prettier": {
     "printWidth": 80,
@@ -31,6 +32,7 @@
     "firebase": "5.0.4",
     "js-yaml": "3.11.0",
     "messenger-hubspot": "1.5.0-b2",
+    "mobx": "3.4.1",
     "mobx-state-tree": "1.3.1",
     "nanoid": "1.0.2",
     "nanologger": "1.3.1",
@@ -40,8 +42,7 @@
     "ramda": "0.25.0",
     "ramda-adjunct": "2.8.0",
     "sheetify": "7.3.2",
-    "tachyons": "4.9.1",
-    "txn": "1.2.0"
+    "tachyons": "4.9.1"
   },
   "devDependencies": {
     "babel-preset-env": "1.7.0",
@@ -51,6 +52,7 @@
     "choo-devtools": "2.5.1",
     "choo-scaffold": "1.1.2",
     "dependency-check": "3.1.0",
+    "jest": "23.0.0",
     "minify-stream": "1.1.0",
     "p-each-series": "1.0.0",
     "power-assert": "1.5.0",
