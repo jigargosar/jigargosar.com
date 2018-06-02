@@ -2,13 +2,9 @@
 
 exports[`Grain should get created without any arguments 1`] = `
 Object {
-  "0": "G",
-  "1": "r",
-  "2": "a",
-  "3": "i",
-  "4": "n",
   "createdAt": 1527958482904,
   "id": "BitYkpcz~i4qTWDlMgGbS",
   "modifiedAt": 1527958482904,
+  "text": "",
 }
 `;

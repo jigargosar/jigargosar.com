@@ -5,7 +5,7 @@ import nanoid from 'nanoid'
 const log = require('nanologger')('mst-types')
 
 function isValidNanoId(id) {
-  assert.equal(id.length, 21)
+  assert(id.length === 21)
   return id.length === 21
 }
 

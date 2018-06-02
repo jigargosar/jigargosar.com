@@ -12,13 +12,15 @@ export const BaseModel = types
     createdAt: timestamp,
     modifiedAt: timestamp,
   })
+
   .actions(self => ({
     afterCreate() {
       assert(RA.isArray(self.getUserEditableProps()))
     },
     userPatchProps(props) {
-      assert(R.compose(R.isEmpty, R.omit(self.getUserEditableProps()))(props))
-      Object.assign(self, R.pick(self.userEditableProps, props))
+      const userEditableProps = self.getUserEditableProps();
+      assert(R.compose(R.isEmpty, R.omit(userEditableProps))(props))
+
+      Object.assign(self, R.pick(userEditableProps, props))
     },
   }))
-
