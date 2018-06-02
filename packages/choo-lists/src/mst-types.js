@@ -5,11 +5,16 @@ import nanoid from 'nanoid'
 const log = require('nanologger')('mst-types')
 
 function isValidNanoId(id) {
-  assert(id.length === 21)
-  return id.length === 21
+  const isValidNanoId = id.length >= 21
+  assert(isValidNanoId)
+  return isValidNanoId
 }
 
-const _nanoId = types.refinement('NanoId', types.string, isValidNanoId)
-export const nanoId = types.optional(_nanoId, () => nanoid())
+const nanoId = types.refinement(
+  'NanoId',
+  types.identifier(types.string),
+  isValidNanoId,
+)
+export const optionalNanoId = types.optional(nanoId, () => nanoid())
 
 export const timestamp = types.optional(types.number, () => Date.now())

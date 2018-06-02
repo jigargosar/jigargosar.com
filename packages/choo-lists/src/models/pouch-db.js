@@ -1,7 +1,7 @@
 const PouchDB = require('pouchdb-browser')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
-const assert = require('assert').strict
+const assert = require('assert')
 const Logger = require('nanologger')
 
 module.exports = createPouchDB

@@ -1,4 +1,5 @@
 import {findGrainEqById, isGrainEqByIdNotNil} from '../state'
+import {GrainsStore} from '../mst-models/grains-store'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -19,12 +20,17 @@ module.exports = createStore({
   initialState: {
     listPD: PD('choo-list:list'),
     list: [],
+    grainsStore: GrainsStore.create(),
   },
   events: {
-    DOMContentLoaded: ({store: {listPD, list}, actions: {render}}) => {
+    DOMContentLoaded: ({
+      store: {listPD, list, grainsStore},
+      actions: {render},
+    }) => {
       listPD
         .fetchDocsDescending()
         .then(R.map(G.validate))
+        .then(R.tap(grainsStore.put))
         .then(grains => list.splice(0, list.length, ...grains))
         .then(render)
         .then(() => {
