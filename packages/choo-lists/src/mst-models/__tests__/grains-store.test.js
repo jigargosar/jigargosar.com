@@ -69,5 +69,4 @@ describe('GrainStore', function() {
       expect(list[0]).toEqual(serializedGrain({text: 'lol'}))
     })
   })
-
 })

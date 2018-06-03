@@ -21,7 +21,7 @@ export function createNew({text = ''} = {}) {
     text,
     [createdAtPropName]: nowTimestamp,
     [actorIdPropName]: getAppActorId(),
-    [modifiedAtPropName]: nowTimestamp
+    [modifiedAtPropName]: nowTimestamp,
   }
 }
 
@@ -30,7 +30,7 @@ export function setText(text, grain) {
   return R.merge(grain, {
     [textPropName]: text,
     [actorIdPropName]: getAppActorId(),
-    [modifiedAtPropName]: Date.now()
+    [modifiedAtPropName]: Date.now(),
   })
 }
 
@@ -38,7 +38,7 @@ export function setDeleted(grain) {
   return R.merge(grain, {
     [deletedPropName]: true,
     [actorIdPropName]: getAppActorId(),
-    [modifiedAtPropName]: Date.now()
+    [modifiedAtPropName]: Date.now(),
   })
 }
 
@@ -81,5 +81,5 @@ export const eqById = R.curry(function idEq(grain1, grain2) {
 })
 
 export function isFlaggedAsDeleted(grain) {
-  R.propOr(false, '_deleted', grain);
+  R.propOr(false, '_deleted', grain)
 }
