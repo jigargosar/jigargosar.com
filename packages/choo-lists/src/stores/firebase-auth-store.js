@@ -3,7 +3,7 @@ const RA = require('ramda-adjunct')
 const log = require('nanologger')('firebaseStore')
 const assert = require('assert')
 const LocalStorageItem = require('./local-storage-item')
-
+const firebase = require('firebase/app')
 const omitFirebaseClutter = R.unless(
   R.isNil,
   R.pickBy(
@@ -19,6 +19,10 @@ module.exports = function firebaseAuthStore(state, emitter) {
   state.events.firebase_auth_state_changed =
     'firebase:auth:state-changed'
 
+  state.events.firebase_auth_signin = 'firebase:auth:signin'
+
+  state.events.firebase_auth_signout = 'firebase:auth:signout'
+
   emitter.on(state.events.firebase_app_ready, () => {
     state.firebaseAuth.onAuthStateChanged(user => {
       state.userInfo = omitFirebaseClutter(user)
@@ -29,6 +33,16 @@ module.exports = function firebaseAuthStore(state, emitter) {
       }
       emitter.emit(state.events.firebase_auth_state_changed)
       emitter.emit(state.events.RENDER)
+    })
+
+    emitter.on(state.events.firebase_auth_signin, () => {
+      var provider = new firebase.auth.GoogleAuthProvider()
+      provider.setCustomParameters({prompt: 'select_account'})
+      state.firebaseAuth.signInWithRedirect(provider)
+    })
+
+    emitter.on(state.events.firebase_auth_signout, () => {
+      state.firebaseAuth.signOut()
     })
   })
 }

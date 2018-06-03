@@ -14,18 +14,25 @@ const {actions: FA} = require('../stores/firebase-store')
 
 module.exports = view
 
-function signInOutView(state) {
-  if (state.firebase.authState === 'loading') {
+function signInOutView(state, emit) {
+  if (state.authState === 'loading') {
     return '...Loading'
   }
-  return state.firebase.authState === 'signedOut'
-    ? Button({onclick: FA.signIn}, 'Sign In')
+  return state.authState === 'signedOut'
+    ? Button(
+        {onclick: () => emit(state.events.firebase_auth_signin)},
+        'Sign In',
+      )
     : html`<div class="flex justify-center">
-              <div class="ph1">${
-                state.firebase.userInfo.displayName
-              }</div>
+              <div class="ph1">${state.userInfo.displayName}</div>
               <div class="ph1">
-                ${Button({onclick: FA.signOut}, 'Sign Out')}
+                ${Button(
+                  {
+                    onclick: () =>
+                      emit(state.events.firebase_auth_signout),
+                  },
+                  'Sign Out',
+                )}
               </div>
             </div>`
 }
@@ -38,7 +45,7 @@ function view(state, emit) {
     <body class="sans-serif lh-copy f4">
       <div class="bg-light-blue tc pa3">
         <div class="f1">${TITLE}</div>
-        <div>${signInOutView(state)}</div>
+        <div>${signInOutView(state, emit)}</div>
       </div>
       ${isEditing ? grainEditView(state) : grainsListView(state)}
     </body>`
