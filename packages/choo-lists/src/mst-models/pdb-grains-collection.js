@@ -22,7 +22,7 @@ export const PDBGrainsCollection = createPDBCollection(PDBGrain).actions(
     add() {
       const text = prompt('New Grain', 'Get Milk!')
       if (R.isNil(text)) return
-      self._add(({text: text}))
+      self._add({text: text})
     },
   }),
 )
