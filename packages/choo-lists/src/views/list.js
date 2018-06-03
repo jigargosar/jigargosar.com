@@ -126,7 +126,10 @@ const grainItemView = R.curry(function grainItemView(
   return html`
     <div id=${id} class="flex ${centeredContentClass}">
       <div class="pa1">
-        ${Button({onclick: () => markGrainDeleted(id)}, 'X')}
+        ${Button(
+          {onclick: () => markGrainDeleted(id, revision)},
+          'X',
+        )}
       </div>
       <div class="pa1">
         ${Button({onclick: () => GEA.edit({grain})}, 'E')}

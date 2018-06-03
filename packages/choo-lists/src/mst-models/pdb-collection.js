@@ -50,12 +50,8 @@ export const createPDBCollection = PDBModel => {
         addNew(props) {
           return putModelInPDB(PDBModel.create(props))
         },
-
-        markDeletedById(id) {
-          const model = self.modelMap.get(id)
-          assert(RA.isNotNil(model))
-          const clonedModel = clone(model)
-          return putModelInPDB(clonedModel.markDeleted())
+        markDeletedById(id, revision) {
+          return self.userUpdateForId(id, revision, {deleted: true})
         },
         userUpdateForId(id, revision, props) {
           const model = self.findById(id)

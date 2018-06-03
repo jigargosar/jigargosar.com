@@ -15,9 +15,6 @@ export const PDBModel = types
     modifiedAt: timestamp,
   })
   .actions(self => ({
-    markDeleted() {
-      return self.userUpdate({deleted: true})
-    },
     userUpdate(props) {
       const omitSystemProps = R.omit([
         '_id',
@@ -30,7 +27,6 @@ export const PDBModel = types
       if (R.equals(prev, next)) return self
       Object.assign(self, next)
       self.modifiedAt = Date.now()
-
       return self
     },
   }))
