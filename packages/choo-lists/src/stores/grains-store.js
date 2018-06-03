@@ -56,22 +56,28 @@ module.exports = createStore({
             })
         })
     },
-    add: ({store: {listPD, list}, actions: {render}}) => {
+    add: ({store: {listPD, grainsStore}}) => {
       const newGrainText = prompt('New Grain', 'Get Milk!')
       log.debug('newGrainText', newGrainText)
       if (R.isNil(newGrainText)) return
-      listPD.insert(G.createNew({text: newGrainText}))
+      const grain = G.createNew({text: newGrainText});
+      grainsStore.put(grain)
+      listPD.insert(grain)
     },
-    delete: ({store: {listPD, list}, data, actions: {render}}) => {
+    delete: ({store: {listPD, list, grainsStore}, data}) => {
       const grain = R.find(G.eqById(data.grain), list)
       assert(RA.isNotNil(grain))
-      listPD.update(G.setDeleted(grain))
+      const deletedGrain = G.setDeleted(grain);
+      grainsStore.put(grain)
+      listPD.update(deletedGrain)
     },
 
-    update: ({data, store: {listPD, list}, actions: {render}}) => {
+    update: ({data, store: {listPD, list, grainsStore}}) => {
       const grain = R.find(G.eqById(data), list)
       assert(RA.isNotNil(grain))
-      listPD.update(G.setText(data.text, grain))
+      const updatedGrain = G.setText(data.text, grain);
+      grainsStore.put(updatedGrain)
+      listPD.update(updatedGrain)
     },
 
     updateFromRemote: ({data, store: {listPD}, state, actions}) => {
