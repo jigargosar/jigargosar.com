@@ -43,33 +43,28 @@ module.exports = createStore({
     DOMContentLoaded: ({store, actions: {render, syncGrains}}) => {
       firebase.initializeApp(config)
       firebase.firestore().settings({timestampsInSnapshots: true})
-      // pReflect(firebase.firestore().enablePersistence())
-      //   .then(res => log.debug('enablePersistence res', res))
-      Promise.resolve().then(() => {
-        firebase.auth().onAuthStateChanged(user => {
-          store.userInfo = omitFirebaseClutter(user)
-          log.debug('onAuthStateChanged userInfo:', store.userInfo)
-          store.authState = 'signedOut'
-          store.grainsLookup = {}
-          if (user) {
-            store.authState = 'signedIn'
-            store.grainsPath = `users/${user.uid}/grains`
-            store.grainsHistoryPath = `users/${user.uid}/grains-history`
-            syncGrains()
-
-            getCollection(store.grainsPath).onSnapshot(snapshot => {
-              snapshot.docChanges().forEach(change => {
-                log.debug('grains: onChange', change)
-                GA.updateFromRemote({
-                  type: change.type,
-                  id: change.doc.id,
-                  doc: change.doc.data(),
-                })
-              })
-            })
-          }
-          render()
-        })
+      firebase.auth().onAuthStateChanged(user => {
+        store.userInfo = omitFirebaseClutter(user)
+        log.debug('onAuthStateChanged userInfo:', store.userInfo)
+        store.authState = 'signedOut'
+        store.grainsLookup = {}
+        if (user) {
+          store.authState = 'signedIn'
+          store.grainsPath = `users/${user.uid}/grains`
+          store.grainsHistoryPath = `users/${user.uid}/grains-history`
+          // syncGrains()
+          // getCollection(store.grainsPath).onSnapshot(snapshot => {
+          //   snapshot.docChanges().forEach(change => {
+          //     log.debug('grains: onChange', change)
+          //     GA.updateFromRemote({
+          //       type: change.type,
+          //       id: change.doc.id,
+          //       doc: change.doc.data(),
+          //     })
+          //   })
+          // })
+        }
+        render()
       })
     },
     signIn: () => {
@@ -88,20 +83,20 @@ module.exports = createStore({
 
       grainsPD(state)
         ._db.changes({
-        include_docs: true,
-        live: true,
-        since,
-      })
-        .on('change', function (change) {
+          include_docs: true,
+          live: true,
+          since,
+        })
+        .on('change', function(change) {
           // log.debug('pdb:changes last_seq', res.last_seq, res.results)
           const localGrain = change.doc
           assert(G.getId(localGrain) === change.id)
           const grainRef = grainsCollection.doc(G.getId(localGrain))
           firebase
             .firestore()
-            .runTransaction(function (transaction) {
+            .runTransaction(function(transaction) {
               // This code may get re-run multiple times if there are conflicts.
-              return transaction.get(grainRef).then(function (grainSnapshot) {
+              return transaction.get(grainRef).then(function(grainSnapshot) {
                 if (grainSnapshot.exists) {
                   const remoteGrain = grainSnapshot.data()
                   const [oldG, newG] = R.unless(
@@ -125,7 +120,7 @@ module.exports = createStore({
                 }
               })
             })
-            .then(function () {
+            .then(function() {
               log.debug('grains synced till seq', change.seq)
               syncSeqLS.save(change.seq)
             })
