@@ -65,10 +65,6 @@ export const createPDBCollection = PDBModel => {
           return putModelInPDB(clonedModel.userUpdate(props))
         },
 
-        _pdPut(model) {
-          assert(getType(model) === PDBModel)
-          db.put(model)
-        },
         _pdOnChange(change) {
           self.modelMap.put(change.doc)
         },
