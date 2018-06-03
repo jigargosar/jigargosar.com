@@ -8,4 +8,36 @@ Object {
   "modifiedAt": 1527958482904,
   "text": "",
 }
-`;
+`
+
+exports[`GrainStore should get created without any arguments 1`] = `
+Object {
+  "modelMap": Object {},
+}
+`
+
+exports[`GrainStore should put new grain 1`] = `
+Object {
+  "modelMap": Object {
+    "BitYkpcz~i4qTWDlMgGbS": Object {
+      "createdAt": 1527958482904,
+      "deleted": false,
+      "id": "BitYkpcz~i4qTWDlMgGbS",
+      "modifiedAt": 1527958482904,
+      "text": "lol",
+    },
+  },
+}
+`
+
+exports[`GrainStore should put new grain 2`] = `
+Array [
+  Object {
+    "createdAt": 1527958482904,
+    "deleted": false,
+    "id": "BitYkpcz~i4qTWDlMgGbS",
+    "modifiedAt": 1527958482904,
+    "text": "lol",
+  },
+]
+`

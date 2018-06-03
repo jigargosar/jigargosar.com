@@ -1,4 +1,5 @@
-import {Grain} from '../grains-store'
+import {Grain, GrainsStore} from '../grains-store'
+import {getSnapshot} from "mobx-state-tree"
 
 const log = require('nanologger')('grain.test')
 
@@ -11,17 +12,29 @@ beforeEach(() => {
 })
 
 describe('Grain', function() {
-  test('should get created without any arguments', function() {
+  it('should get created without any arguments', function() {
     const grain = Grain.create()
-    expect(grain).toMatchSnapshot()
-    expect(grain.getText()).toEqual('')
-    grain.userPatchProps({text: 'foo'})
-    expect(grain.getText()).toEqual('foo')
+    expect(grain.toJSON()).toMatchSnapshot()
   })
-  test('should have text prop', function() {
+
+  it('should have text prop', function() {
     const grain = Grain.create()
     expect(grain.getText()).toEqual('')
     grain.userPatchProps({text: 'foo'})
     expect(grain.getText()).toEqual('foo')
   })
+})
+
+describe('GrainStore', function() {
+  it('should get created without any arguments', function() {
+    const grainStore = GrainsStore.create()
+    expect(grainStore.toJSON()).toMatchSnapshot()
+  })
+
+  it('should put new grain', function () {
+    const grainStore = GrainsStore.create()
+    grainStore.put({text:"lol"})
+    expect(grainStore.toJSON()).toMatchSnapshot()
+    expect(grainStore.getList().map(getSnapshot)).toMatchSnapshot()
+  });
 })
