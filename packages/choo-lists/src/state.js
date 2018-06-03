@@ -10,7 +10,10 @@ export const findGrainEqById = R.curry(function findGrainEqById(grain, state) {
   return R.compose(R.find(G.eqById(grain)), grainsList)(state)
 })
 
-export const isGrainEqByIdNotNil = R.curry(function isGrainEqByIdNotNil(grain, state) {
+export const isGrainEqByIdNotNil = R.curry(function isGrainEqByIdNotNil(
+  grain,
+  state,
+) {
   return R.compose(RA.isNotNil, findGrainEqById(grain))(state)
 })
 

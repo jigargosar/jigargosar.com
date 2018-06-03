@@ -1,47 +1,73 @@
 import {Grain, GrainsStore} from '../grains-store'
-import {getSnapshot} from 'mobx-state-tree'
+import {getSnapshot, getType} from 'mobx-state-tree'
+import {inspect} from 'util'
 
+const R = require('ramda')
+const RA = require('ramda-adjunct')
+
+const assert = require('assert')
 const log = require('nanologger')('grain.test')
 
-// noinspection SpellCheckingInspection
-jest.mock('nanoid', () => jest.fn(() => 'BitYkpcz~i4qTWDlMgGbS'))
-jest.spyOn(Date, 'now').mockImplementation(() => 1527958482904)
+const serializedGrain = (overrides = {}) =>
+  R.merge(
+    {
+      createdAt: expect.any(Number),
+      modifiedAt: expect.any(Number),
+      id: expect.any(String),
+      deleted: false,
+      text: '',
+    },
+    overrides,
+  )
+const serialize = R.compose(R.clone, getSnapshot)
 
-beforeEach(() => {
-  jest.resetModules()
-})
+describe('Grain', () => {
+  describe('.create()', () => {
+    it('should return MST Node of type Grain', () => {
+      const grain = Grain.create()
+      expect(getType(grain)).toEqual(Grain)
+    })
 
-describe('Grain', function() {
-  it('should get created without any arguments', function() {
-    const grain = Grain.create()
-    expect(grain.toJSON()).toMatchSnapshot()
+    it('should have empty text', function() {
+      const grain = Grain.create()
+      expect(grain.getText()).toEqual('')
+    })
   })
-
-  it('should have text prop', function() {
-    const grain = Grain.create()
-    expect(grain.getText()).toEqual('')
-    grain.userPatchProps({text: 'foo'})
-    expect(grain.getText()).toEqual('foo')
+  describe('.userPatchProps', function() {
+    it(`should be able update 'text'`, function() {
+      const grain = Grain.create()
+      grain.userPatchProps({text: 'foo'})
+      expect(grain.getText()).toEqual('foo')
+    })
   })
 })
 
 describe('GrainStore', function() {
-  it('should get created without any arguments', function() {
-    const grainStore = GrainsStore.create()
-    expect(grainStore.toJSON()).toMatchSnapshot()
+  describe('.create()', function() {
+    it('should return MST Node of type GrainStore', function() {
+      const grainStore = GrainsStore.create()
+      expect(getType(grainStore)).toBe(GrainsStore)
+    })
   })
 
-  it('should put new grain', function() {
-    const grainStore = GrainsStore.create()
-    grainStore.put({text: 'lol'})
-    expect(grainStore.toJSON()).toMatchSnapshot()
-    expect(grainStore.getList().map(getSnapshot)).toMatchSnapshot()
+  describe('.put', function() {
+    it('should create new grain with text prop', function() {
+      const grainStore = GrainsStore.create()
+      grainStore.put({text: 'lol'})
+      const list = grainStore.getList()
+      expect(list.length).toBe(1)
+      expect(list[0]).toEqual(serializedGrain({text: 'lol'}))
+    })
   })
 
-  it('should putAll new grains', function() {
-    const grainStore = GrainsStore.create()
-    grainStore.putAll([{text: 'lol'}])
-    expect(grainStore.toJSON()).toMatchSnapshot()
-    expect(grainStore.getList().map(getSnapshot)).toMatchSnapshot()
+  describe('.putAll', function() {
+    it('should add Array of grains with text prop', function() {
+      const grainStore = GrainsStore.create()
+      grainStore.putAll([{text: 'lol'}])
+      const list = grainStore.getList()
+      expect(list.length).toBe(1)
+      expect(list[0]).toEqual(serializedGrain({text: 'lol'}))
+    })
   })
+
 })
