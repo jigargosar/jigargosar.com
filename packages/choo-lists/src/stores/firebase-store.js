@@ -44,7 +44,6 @@ module.exports = createStore({
   initialState: {
     authState: 'loading',
     userInfo: null,
-    grainsLookup: {},
   },
   events: {
     DOMContentLoaded: ({store, actions: {render, syncGrains}}) => {
@@ -54,7 +53,6 @@ module.exports = createStore({
         store.userInfo = omitFirebaseClutter(user)
         log.debug('onAuthStateChanged userInfo:', store.userInfo)
         store.authState = 'signedOut'
-        store.grainsLookup = {}
         if (user) {
           store.authState = 'signedIn'
           store.grainsPath = `users/${user.uid}/grains`
