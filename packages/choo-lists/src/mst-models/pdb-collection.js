@@ -17,7 +17,7 @@ export const createPDBCollection = PDBModel => {
   const db = new PouchDB(name)
   const log = Logger(name)
 
-  const putModelInPDB = function (model) {
+  const putModelInPDB = function(model) {
     assert(getType(model) === PDBModel)
     db.put(model)
   }
@@ -49,7 +49,7 @@ export const createPDBCollection = PDBModel => {
         },
 
         markDeletedById(id) {
-          const model = self.modelMap.get(id);
+          const model = self.modelMap.get(id)
           assert(RA.isNotNil(model))
           const clonedModel = clone(model)
           return putModelInPDB(clonedModel.markDeleted())

@@ -112,7 +112,7 @@ function grainsListView(state) {
 const grainItemView = R.curry(function grainItemView(markGrainDeleted, grain) {
   const text = grain.getText()
   const id = grain.getId()
-  const _rev = grain.getRev()
+  const revision = grain.getRevision()
   return html`
     <div id=${id} class="flex ${centeredContentClass}">
       <div class="pa1">
@@ -127,7 +127,7 @@ const grainItemView = R.curry(function grainItemView(markGrainDeleted, grain) {
             ? html`<div class="gray">${'<Empty>'}</div>`
             : html`<div class="">${text}</div>`
         }
-        <div class="f6 code gray lh-solid" >_id: ${id} _rev:${_rev}</div>
+        <div class="f6 code gray lh-solid" >${`_id: ${id} _rev:${revision}`}</div>
       </div>
     </div>`
 })

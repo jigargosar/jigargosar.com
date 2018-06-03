@@ -28,7 +28,7 @@ export const PDBModel = types
     getId() {
       return self._id
     },
-    getRev() {
+    getRevision() {
       return self._rev
     }
   }))
