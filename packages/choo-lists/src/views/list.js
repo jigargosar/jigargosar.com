@@ -117,7 +117,7 @@ function grainsListView(state) {
 }
 
 const grainItemView = R.curry(function grainItemView(
-  markGrainDeleted,
+  markDeletedById,
   grain,
 ) {
   const text = grain.getText()
@@ -127,7 +127,7 @@ const grainItemView = R.curry(function grainItemView(
     <div id=${id} class="flex ${centeredContentClass}">
       <div class="pa1">
         ${Button(
-          {onclick: () => markGrainDeleted(id, revision)},
+          {onclick: () => markDeletedById(id, revision)},
           'X',
         )}
       </div>
