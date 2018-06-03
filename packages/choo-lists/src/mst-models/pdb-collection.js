@@ -35,7 +35,7 @@ export const createPDBCollection = PDBModel => {
               include_docs: true,
               live: true,
             })
-            .on('change', self._onPDChange)
+            .on('change', self._pdOnChange)
           addDisposer(self, () => disposer.cancel())
         },
 
@@ -43,11 +43,15 @@ export const createPDBCollection = PDBModel => {
           return self._pdPut(PDBModel.create(props))
         },
 
+        markDeleted(props) {
+          return self._pdPut(PDBModel.create(props))
+        },
+
         _pdPut(model) {
           assert(getType(model) === PDBModel)
           db.put(model)
         },
-        _onPDChange(change) {
+        _pdOnChange(change) {
           self.modelMap.put(change.doc)
         },
       }
