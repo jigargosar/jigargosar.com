@@ -1,5 +1,5 @@
 import {Grain, GrainsStore} from '../grains-store'
-import {getSnapshot, getType} from 'mobx-state-tree'
+import {getType} from 'mobx-state-tree'
 import {inspect} from 'util'
 
 const R = require('ramda')
@@ -19,7 +19,6 @@ const serializedGrain = (overrides = {}) =>
     },
     overrides,
   )
-const serialize = R.compose(R.clone, getSnapshot)
 
 describe('Grain', () => {
   describe('.create()', () => {

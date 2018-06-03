@@ -32,7 +32,7 @@ export const createCollectionStore = Model => {
           return self.modelMap.get(id)
         },
         cloneById(id) {
-          return clone(self.getById.get(id))
+          return clone(self.getById(id))
         },
       }
     })
