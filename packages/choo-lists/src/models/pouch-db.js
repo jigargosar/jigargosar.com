@@ -45,7 +45,7 @@ function createPouchDB(name) {
 
   db.info().then(info => log.debug('db_info', info))
 
-  const pdb = {db, log};
+  const pdb = {db, log}
 
   function partialDB(fn) {
     return R.partialRight(fn, [pdb])
@@ -56,6 +56,6 @@ function createPouchDB(name) {
     insert: partialDB(insert),
     update: partialDB(update),
     _db: db,
-    _put: (doc) => put('_direct_put', doc, pdb)
+    _pdPut: doc => put('_direct_put', doc, pdb),
   }
 }
