@@ -4,7 +4,6 @@ const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const yaml = require('js-yaml')
 const LocalStorageItem = require('./local-storage-item')
-const {actions: GA} = require('./grains-store')
 
 var createStore = require('./createStore')
 const log = require('nanologger')('edit-grain-store')
@@ -29,26 +28,36 @@ module.exports = createStore({
   initialState: {editMode: EM.idle},
   events: {
     DOMContentLoaded: ({store, actions: {render}}) => {
-      Object.assign(store,pickViewState(viewLS.load()))
+      Object.assign(store, pickViewState(viewLS.load()))
       render()
     },
-    persistAndRender:({store, actions: {render}})=>{
+    persistAndRender: ({store, actions: {render}}) => {
       persistViewState(store)
       render()
     },
-    edit: ({data: {grain}, store, actions: {persistAndRender}}) => {
+    edit: ({
+      data: {grain},
+      store,
+      state,
+      actions: {persistAndRender},
+    }) => {
       assert(store.editMode === EM.idle)
       assert(R.isNil(store.editState))
-      G.validate(grain)
+      assert(RA.isNotNil(grain))
       store.editMode = EM.editing
       store.editState = {
-        grainId: G.getId(grain),
+        id: grain.getId(),
+        revision: grain.getRevision(),
         form: R.clone(grain),
         yaml: dumpYAML(grain),
       }
       persistAndRender()
     },
-    textChange: function({data: {text}, store, actions: {persistAndRender}}) {
+    textChange: function({
+      data: {text},
+      store,
+      actions: {persistAndRender},
+    }) {
       assert(store.editMode === EM.editing)
       assert(!R.isNil(store.editState))
       store.editState.form.text = text
@@ -82,17 +91,29 @@ module.exports = createStore({
       persistAndRender()
     },
 
-    save: function({data, store, actions: {persistAndRender}}) {
+    save: function({
+      data,
+      store,
+      state,
+      actions: {persistAndRender},
+    }) {
       assert(store.editMode === EM.editing)
       assert(!R.isNil(store.editState))
-      GA.update({
-        _id: store.editState.grainId,
-        text: store.editState.form.text,
-      })
-
-      store.editMode = EM.idle
-      store.editState = null
-      persistAndRender()
+      state.grains
+        .userUpdateForId(
+          store.editState.id,
+          store.editState.revision,
+          R.pick(['text'], store.editState.form),
+        )
+        .then(() => {
+          store.editMode = EM.idle
+          store.editState = null
+          persistAndRender()
+        })
+      // GA.update({
+      //   _id: store.editState.grainId,
+      //   text: store.editState.form.text,
+      // })
     },
   },
 })

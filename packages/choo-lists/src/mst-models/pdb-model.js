@@ -16,7 +16,21 @@ export const PDBModel = types
   })
   .actions(self => ({
     markDeleted() {
-      self.deleted = true
+      return self.userUpdate({deleted: true})
+    },
+    userUpdate(props) {
+      const omitSystemProps = R.omit([
+        '_id',
+        '_rev',
+        'createdAt',
+        'modifiedAt',
+      ])
+      const prev = omitSystemProps(self)
+      const next = omitSystemProps(props)
+      if (R.equals(prev, next)) return self
+      Object.assign(self, next)
+      self.modifiedAt = Date.now()
+
       return self
     },
   }))

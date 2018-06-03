@@ -19,7 +19,7 @@ export const createPDBCollection = PDBModel => {
 
   const putModelInPDB = function(model) {
     assert(getType(model) === PDBModel)
-    db.put(model)
+    return db.put(model)
   }
   return types
     .model(name, {
@@ -29,6 +29,9 @@ export const createPDBCollection = PDBModel => {
       getList() {
         const models = Array.from(self.modelMap.values())
         return R.reject(R.prop('deleted'))(models)
+      },
+      findById(id) {
+        return self.modelMap.get(id)
       },
     }))
     .volatile(() => ({log}))
@@ -53,6 +56,13 @@ export const createPDBCollection = PDBModel => {
           assert(RA.isNotNil(model))
           const clonedModel = clone(model)
           return putModelInPDB(clonedModel.markDeleted())
+        },
+        userUpdateForId(id, revision, props) {
+          const model = self.findById(id)
+          assert(RA.isNotNil(model))
+          assert(model.getRevision() === revision)
+          const clonedModel = clone(model)
+          return putModelInPDB(clonedModel.userUpdate(props))
         },
 
         _pdPut(model) {

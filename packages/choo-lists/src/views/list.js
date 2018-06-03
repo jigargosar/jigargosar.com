@@ -9,7 +9,6 @@ const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 const yaml = require('js-yaml')
-const {actions: GA} = require('../stores/grains-store')
 const {actions: GEA} = require('../stores/edit-grain-store')
 const {actions: FA} = require('../stores/firebase-store')
 
@@ -22,7 +21,9 @@ function signInOutView(state) {
   return state.firebase.authState === 'signedOut'
     ? Button({onclick: FA.signIn}, 'Sign In')
     : html`<div class="flex justify-center">
-              <div class="ph1">${state.firebase.userInfo.displayName}</div>
+              <div class="ph1">${
+                state.firebase.userInfo.displayName
+              }</div>
               <div class="ph1">
                 ${Button({onclick: FA.signOut}, 'Sign Out')}
               </div>
@@ -81,8 +82,14 @@ function grainEditView(state) {
           placeholder="Edit this..."
         />`)}
         <div class="flex flex-row-reverse f4">
-          <div class="pa1">${Button({onclick: onSubmit}, 'SAVE')}</div>
-          <div class="pa1">${Button({onclick: onDiscardClick}, 'DISCARD')}</div>
+          <div class="pa1">${Button(
+            {onclick: onSubmit},
+            'SAVE',
+          )}</div>
+          <div class="pa1">${Button(
+            {onclick: onDiscardClick},
+            'DISCARD',
+          )}</div>
         </div>
       </form>
       <div class="flex flex-column mv3">
@@ -109,7 +116,10 @@ function grainsListView(state) {
     </div>`
 }
 
-const grainItemView = R.curry(function grainItemView(markGrainDeleted, grain) {
+const grainItemView = R.curry(function grainItemView(
+  markGrainDeleted,
+  grain,
+) {
   const text = grain.getText()
   const id = grain.getId()
   const revision = grain.getRevision()
@@ -119,7 +129,7 @@ const grainItemView = R.curry(function grainItemView(markGrainDeleted, grain) {
         ${Button({onclick: () => markGrainDeleted(id)}, 'X')}
       </div>
       <div class="pa1">
-        ${Button({onclick: () => GEA.edit({id: id})}, 'E')}
+        ${Button({onclick: () => GEA.edit({grain})}, 'E')}
       </div>
       <div class="pa1 flex-grow-1 flex flex-column">
         ${
@@ -127,12 +137,18 @@ const grainItemView = R.curry(function grainItemView(markGrainDeleted, grain) {
             ? html`<div class="gray">${'<Empty>'}</div>`
             : html`<div class="">${text}</div>`
         }
-        <div class="f6 code gray lh-solid" >${`_id: ${id} _rev:${revision}`}</div>
+        <div 
+          class="f6 code gray lh-solid"
+          >${`_id: ${id} _rev:${revision}`}</div>
       </div>
     </div>`
 })
+
 function noModifiers(event) {
-  return !R.any(R.identity, R.props(['shiftKey', 'ctrlKey', 'metaKey'], event))
+  return !R.any(
+    R.identity,
+    R.props(['shiftKey', 'ctrlKey', 'metaKey'], event),
+  )
 }
 
 function hasKeyCodeWithoutModifiers(code, event) {
