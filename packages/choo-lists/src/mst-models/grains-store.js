@@ -24,7 +24,6 @@ export const createCollectionStore = Model => {
   assert(Model.isType)
   assert(Model.name !== 'AnonymousModel')
   assert(Model.name !== 'BaseModel')
-  // console.log(Model)
   return types
     .model(`${plur(Model.name, 2)}Store`, {
       modelMap: types.optional(types.map(Model), {}),
@@ -33,13 +32,17 @@ export const createCollectionStore = Model => {
       getList() {
         return Array.from(self.modelMap.values())
       },
-      _put(){
-        return self.modelMap.put.bind(self.modelMap)
-      }
     }))
     .actions(self => {
       return {
-        put: R.compose(R.forEach(self._put), R.flatten, Array.of),
+        putAll(models) {
+          assert(RA.isArray(models))
+          models.forEach(self.put)
+        },
+        put(models) {
+          assert(RA.isNotArray(models))
+          self.modelMap.put(model)
+        },
       }
     })
 }

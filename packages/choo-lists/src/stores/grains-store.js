@@ -30,7 +30,7 @@ module.exports = createStore({
       listPD
         .fetchDocsDescending()
         .then(R.map(G.validate))
-        .then(R.tap(grainsStore.put))
+        .then(R.tap(grainsStore.putAll))
         .then(grains => list.splice(0, list.length, ...grains))
         .then(render)
         .then(() => {
@@ -42,6 +42,7 @@ module.exports = createStore({
             })
             .on('change', change => {
               const doc = G.validate(change.doc)
+              grainsStore.put(doc)
               const idx = R.findIndex(G.eqById(doc), list)
               if (change.deleted) {
                 assert(idx !== -1)
