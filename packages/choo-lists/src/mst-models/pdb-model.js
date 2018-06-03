@@ -14,15 +14,11 @@ export const PDBModel = types
     createdAt: timestamp,
     modifiedAt: timestamp,
   })
-  // .preProcessSnapshot(snapshot => {
-  //   assert(RA.isNotNil(snapshot))
-  //   return RA.renameKeys({_id: 'id', _deleted: 'deleted'})(snapshot)
-  // })
   .actions(self => ({
-    markDeleted(){
-      self.deleted=true
+    markDeleted() {
+      self.deleted = true
       return self
-    }
+    },
   }))
   .views(self => ({
     getId() {
@@ -30,5 +26,6 @@ export const PDBModel = types
     },
     getRevision() {
       return self._rev
-    }
+    },
+    isDeleted() {},
   }))
