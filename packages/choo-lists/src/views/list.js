@@ -10,7 +10,7 @@ const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 const yaml = require('js-yaml')
 const {actions: GEA} = require('../stores/edit-grain-store')
-const {actions: FA} = require('../stores/firebase-store')
+const {actions: FA} = require('../stores/firebase-auth-store')
 
 module.exports = view
 
@@ -126,10 +126,7 @@ const grainItemView = R.curry(function grainItemView(
   return html`
     <div id=${id} class="flex ${centeredContentClass}">
       <div class="pa1">
-        ${Button(
-          {onclick: () => markDeletedById(id, revision)},
-          'X',
-        )}
+        ${Button({onclick: () => markDeletedById(id, revision)}, 'X')}
       </div>
       <div class="pa1">
         ${Button({onclick: () => GEA.edit({grain})}, 'E')}

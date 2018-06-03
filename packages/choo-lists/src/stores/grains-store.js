@@ -11,7 +11,7 @@ const createStore = require('./createStore')
 const log = require('nanologger')('pdb-grains-store')
 const PD = require('../models/pouch-db')
 const assert = require('assert')
-const {actions: FA} = require('./firebase-store')
+const {actions: FA} = require('./firebase-auth-store')
 
 function logError(e) {
   log.error(e)
@@ -76,7 +76,9 @@ module.exports = createStore({
       // const grain = R.find(G.eqById(data.id), list)
       // assert(RA.isNotNil(grain))
       // const deletedGrain = G.setDeleted(grain)
-      listPD.update(toPDB(grainsStore.cloneById(data.id).markDeleted()))
+      listPD.update(
+        toPDB(grainsStore.cloneById(data.id).markDeleted()),
+      )
     },
 
     update: ({data, store: {listPD, list, grainsStore}}) => {
@@ -90,7 +92,10 @@ module.exports = createStore({
     updateFromRemote: ({data, store: {listPD}, state, actions}) => {
       assert(G.idEq(data.id, data.doc))
       const remoteGrain = G.validate(data.doc)
-      if (isGrainEqByIdNotNil(remoteGrain, state) && G.isLocal(remoteGrain)) {
+      if (
+        isGrainEqByIdNotNil(remoteGrain, state) &&
+        G.isLocal(remoteGrain)
+      ) {
         return
       } else if (
         isGrainEqByIdNotNil(remoteGrain, state) &&
@@ -117,13 +122,18 @@ module.exports = createStore({
           assert.equal(rows.length, 1)
           const row = rows[0]
 
-          const isRowDeleted = R.pathOr(false, 'value.deleted'.split('.'))
+          const isRowDeleted = R.pathOr(
+            false,
+            'value.deleted'.split('.'),
+          )
           if (isRowDeleted(row)) {
             log.info(
               'since docId is deleted locally, not adding it to either PDB or memory cache',
             )
           } else {
-            listPD._pdPut(R.merge(remoteGrain, R.pick(['_rev'], row.doc)))
+            listPD._pdPut(
+              R.merge(remoteGrain, R.pick(['_rev'], row.doc)),
+            )
           }
         })
         .catch(logError)
