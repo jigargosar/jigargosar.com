@@ -1,5 +1,5 @@
 import {Grain, GrainsStore} from '../grains-store'
-import {getSnapshot} from "mobx-state-tree"
+import {getSnapshot} from 'mobx-state-tree'
 
 const log = require('nanologger')('grain.test')
 
@@ -31,10 +31,17 @@ describe('GrainStore', function() {
     expect(grainStore.toJSON()).toMatchSnapshot()
   })
 
-  it('should put new grain', function () {
+  it('should put new grain', function() {
     const grainStore = GrainsStore.create()
-    grainStore.put({text:"lol"})
+    grainStore.put({text: 'lol'})
     expect(grainStore.toJSON()).toMatchSnapshot()
     expect(grainStore.getList().map(getSnapshot)).toMatchSnapshot()
-  });
+  })
+
+  it('should putAll new grains', function() {
+    const grainStore = GrainsStore.create()
+    grainStore.putAll([{text: 'lol'}])
+    expect(grainStore.toJSON()).toMatchSnapshot()
+    expect(grainStore.getList().map(getSnapshot)).toMatchSnapshot()
+  })
 })
