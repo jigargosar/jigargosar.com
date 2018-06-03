@@ -10,7 +10,7 @@ const EM = require('../models/edit-mode')
 const domAutofocus = require('dom-autofocus')
 const yaml = require('js-yaml')
 const {actions: GEA} = require('../stores/edit-grain-store')
-const {actions: FA} = require('../stores/firebase-auth-store')
+const {actions: FA} = require('../stores/firebase-store')
 
 module.exports = view
 

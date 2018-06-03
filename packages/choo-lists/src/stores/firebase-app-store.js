@@ -16,7 +16,7 @@ var config = {
   messagingSenderId: '476064436883',
 }
 
-module.exports = function firebaseAppStore(state, emitter, app) {
+module.exports = function firebaseAppStore(state, emitter) {
   state.firebaseApp = null
   state.events.firebase_app_ready = 'firebase:app:ready'
 

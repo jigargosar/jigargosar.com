@@ -11,7 +11,7 @@ const createStore = require('./createStore')
 const log = require('nanologger')('pdb-grains-store')
 const PD = require('../models/pouch-db')
 const assert = require('assert')
-const {actions: FA} = require('./firebase-auth-store')
+const {actions: FA} = require('./firebase-store')
 
 function logError(e) {
   log.error(e)
