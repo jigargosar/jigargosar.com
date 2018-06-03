@@ -100,23 +100,26 @@ function grainsListView(state) {
     <div class="">
       <div class="flex ${centeredContentClass}">
         <div class="pa1">Total: ${grainList.length}</div>
-        <div class="pa1">${Button({onclick: state.grains.addNew}, 'ADD')}</div>
+        <div class="pa1">${Button(
+          {onclick: state.grains.promptAndAddNew},
+          'ADD',
+        )}</div>
       </div>
-      ${grainList.map(grainItemView)}  
+      ${grainList.map(grainItemView(state.grains.markDeletedById))}  
     </div>`
 }
 
-function grainItemView(grain) {
+const grainItemView = R.curry(function grainItemView(markGrainDeleted, grain) {
   const text = grain.getText()
-  const _id = grain.getId()
+  const id = grain.getId()
   const _rev = grain.getRev()
   return html`
-    <div id=${_id} class="flex ${centeredContentClass}">
+    <div id=${id} class="flex ${centeredContentClass}">
       <div class="pa1">
-        ${Button({onclick: () => GA.delete({id: _id})}, 'X')}
+        ${Button({onclick: () => markGrainDeleted(id)}, 'X')}
       </div>
       <div class="pa1">
-        ${Button({onclick: () => GEA.edit({id: _id})}, 'E')}
+        ${Button({onclick: () => GEA.edit({id: id})}, 'E')}
       </div>
       <div class="pa1 flex-grow-1 flex flex-column">
         ${
@@ -124,11 +127,10 @@ function grainItemView(grain) {
             ? html`<div class="gray">${'<Empty>'}</div>`
             : html`<div class="">${text}</div>`
         }
-        <div class="f6 code gray lh-solid" >_id: ${_id} _rev:${_rev}</div>
+        <div class="f6 code gray lh-solid" >_id: ${id} _rev:${_rev}</div>
       </div>
     </div>`
-}
-
+})
 function noModifiers(event) {
   return !R.any(R.identity, R.props(['shiftKey', 'ctrlKey', 'metaKey'], event))
 }

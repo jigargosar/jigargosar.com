@@ -1,4 +1,4 @@
-import {addDisposer, getType, types} from 'mobx-state-tree'
+import {addDisposer, clone, getType, types} from 'mobx-state-tree'
 import plur from 'plur'
 
 const PouchDB = require('pouchdb-browser')
@@ -16,6 +16,11 @@ export const createPDBCollection = PDBModel => {
   const name = `${plur(PDBModel.name, 2)}Collection`
   const db = new PouchDB(name)
   const log = Logger(name)
+
+  const putModelInPDB = function (model) {
+    assert(getType(model) === PDBModel)
+    db.put(model)
+  }
   return types
     .model(name, {
       modelMap: types.optional(types.map(PDBModel), {}),
@@ -39,12 +44,15 @@ export const createPDBCollection = PDBModel => {
           addDisposer(self, () => disposer.cancel())
         },
 
-        _addNew(props) {
-          return self._pdPut(PDBModel.create(props))
+        addNew(props) {
+          return putModelInPDB(PDBModel.create(props))
         },
 
-        markDeleted(props) {
-          return self._pdPut(PDBModel.create(props))
+        markDeletedById(id) {
+          const model = self.modelMap.get(id);
+          assert(RA.isNotNil(model))
+          const clonedModel = clone(model)
+          return putModelInPDB(clonedModel.markDeleted())
         },
 
         _pdPut(model) {
