@@ -13,7 +13,10 @@ const assert = require('assert')
 const createStore = require('./createStore')
 const LocalStorageItem = require('./local-storage-item')
 
-const syncSeqLS = LocalStorageItem('choo-list:syncedTillSequenceNumber', 0)
+const syncSeqLS = LocalStorageItem(
+  'choo-list:syncedTillSequenceNumber',
+  0,
+)
 
 var config = {
   apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
@@ -38,7 +41,11 @@ const omitFirebaseClutter = R.unless(
 
 module.exports = createStore({
   namespace: 'firebase',
-  initialState: {authState: 'loading', userInfo: null, grainsLookup: {}},
+  initialState: {
+    authState: 'loading',
+    userInfo: null,
+    grainsLookup: {},
+  },
   events: {
     DOMContentLoaded: ({store, actions: {render, syncGrains}}) => {
       firebase.initializeApp(config)
@@ -79,7 +86,9 @@ module.exports = createStore({
       const since = syncSeqLS.load()
       log.debug('grains: start sync from seq', since)
       const grainsCollection = getCollection(store.grainsPath)
-      const grainsHistoryCollection = getCollection(store.grainsHistoryPath)
+      const grainsHistoryCollection = getCollection(
+        store.grainsHistoryPath,
+      )
 
       grainsPD(state)
         ._db.changes({
@@ -96,72 +105,41 @@ module.exports = createStore({
             .firestore()
             .runTransaction(function(transaction) {
               // This code may get re-run multiple times if there are conflicts.
-              return transaction.get(grainRef).then(function(grainSnapshot) {
-                if (grainSnapshot.exists) {
-                  const remoteGrain = grainSnapshot.data()
-                  const [oldG, newG] = R.unless(
-                    ([a, b]) => G.getModifiedAt(a) <= G.getModifiedAt(b),
-                    ([a, b]) => [b, a],
-                  )([localGrain, remoteGrain])
+              return transaction
+                .get(grainRef)
+                .then(function(grainSnapshot) {
+                  if (grainSnapshot.exists) {
+                    const remoteGrain = grainSnapshot.data()
+                    const [oldG, newG] = R.unless(
+                      ([a, b]) =>
+                        G.getModifiedAt(a) <= G.getModifiedAt(b),
+                      ([a, b]) => [b, a],
+                    )([localGrain, remoteGrain])
 
-                  if (G.getActorId(oldG) !== G.getActorId(newG)) {
-                    transaction.set(grainsHistoryCollection.doc(), oldG)
-                  }
-                  if (G.isFlaggedAsDeleted(newG)) {
-                    transaction.delete(grainRef)
-                  }
-                  transaction.set(grainRef, newG)
-                } else {
-                  if (G.isFlaggedAsDeleted(localGrain)) {
-                    transaction.delete(grainRef)
+                    if (G.getActorId(oldG) !== G.getActorId(newG)) {
+                      transaction.set(
+                        grainsHistoryCollection.doc(),
+                        oldG,
+                      )
+                    }
+                    if (G.isFlaggedAsDeleted(newG)) {
+                      transaction.delete(grainRef)
+                    }
+                    transaction.set(grainRef, newG)
                   } else {
-                    transaction.set(grainRef, localGrain)
+                    if (G.isFlaggedAsDeleted(localGrain)) {
+                      transaction.delete(grainRef)
+                    } else {
+                      transaction.set(grainRef, localGrain)
+                    }
                   }
-                }
-              })
+                })
             })
             .then(function() {
               log.debug('grains synced till seq', change.seq)
               syncSeqLS.save(change.seq)
             })
-          // .then(pList => pEachSeries(pList, R.identity))
-          // .catch(function(err) {
-          //   log.error(err)
-          // })
         })
-
-      // const grainsCollection = getCollection(store.grainsPath)
-      // const grainsHistoryCollection = getCollection(store.grainsHistoryPath)
-      // state.grains.list.forEach(grain => {
-      //   if (R.equals(grain, store.grainsLookup[G.getId(grain)])) {
-      //     log.debug('Doc up to date')
-      //     return
-      //   }
-      //   const grainRef = grainsCollection.doc(G.getId(grain))
-      //   firebase
-      //     .firestore()
-      //     .runTransaction(function(transaction) {
-      //       // This code may get re-run multiple times if there are conflicts.
-      //       return transaction.get(grainRef).then(function(grainSnapshot) {
-      //         log.debug('transaction:grainSnapshot', grainSnapshot)
-      //         if (grainSnapshot.exists) {
-      //           const snapshotGrain = grainSnapshot.data()
-      //           if (G.getActorId(snapshotGrain) !== G.getActorId(grain)) {
-      //             transaction.set(grainsHistoryCollection.doc(), snapshotGrain)
-      //           }
-      //           transaction.set(grainRef, grain)
-      //         } else {
-      //           transaction.set(grainRef, grain)
-      //         }
-      //       })
-      //     })
-      //     .then(function() {
-      //       log.debug('Transaction successfully committed!')
-      //     })
-      //     .catch(function(error) {
-      //       log.warn('Transaction failed: ', error)
-      //     })
-      // })
     },
   },
 })
