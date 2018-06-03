@@ -8,7 +8,8 @@
     "inspect": "bankai inspect index.js",
     "start": "bankai start index.js",
     "test": "standard && npm run test-deps",
-    "test-deps": "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
+    "test-deps":
+      "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
   },
   "prettier": {
     "printWidth": 80,
@@ -45,6 +46,7 @@
     "tachyons": "4.9.1"
   },
   "devDependencies": {
+    "@sinonjs/referee": "2.1.1",
     "babel-preset-env": "1.7.0",
     "babel-preset-power-assert": "2.0.0",
     "babel-preset-stage-0": "6.24.1",
@@ -56,6 +58,7 @@
     "minify-stream": "1.1.0",
     "p-each-series": "1.0.0",
     "power-assert": "1.5.0",
+    "sinon": "4.5.0",
     "standard": "11.0.1"
   }
 }
