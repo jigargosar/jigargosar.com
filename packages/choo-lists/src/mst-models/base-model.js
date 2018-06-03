@@ -9,13 +9,13 @@ const assert = require('assert')
 export const BaseModel = types
   .model('BaseModel', {
     id: optionalNanoId,
-    deleted:false,
+    deleted: false,
     createdAt: timestamp,
     modifiedAt: timestamp,
   })
   .preProcessSnapshot(snapshot => {
     assert(RA.isNotNil(snapshot))
-    return RA.renameKeys({_id:"id", _deleted:"deleted"})(snapshot)
+    return RA.renameKeys({_id: 'id', _deleted: 'deleted'})(snapshot)
   })
   .actions(self => ({
     afterCreate() {
@@ -25,6 +25,13 @@ export const BaseModel = types
       const userEditableProps = self.getUserEditableProps()
       assert(R.compose(R.isEmpty, R.omit(userEditableProps))(props))
 
-      Object.assign(self, R.pick(userEditableProps, props))
+      const modifiedProps = R.pick(userEditableProps, props)
+      const existingProps = R.pick(userEditableProps, self)
+      if (!R.equals(modifiedProps, existingProps)) {
+        Object.assign(self, modifiedProps, {modifiedAt: Date.now()})
+      }
+    },
+    markDeleted() {
+      self.userPatchProps({deleted: true})
     },
   }))

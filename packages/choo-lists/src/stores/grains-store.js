@@ -60,23 +60,23 @@ module.exports = createStore({
       const newGrainText = prompt('New Grain', 'Get Milk!')
       log.debug('newGrainText', newGrainText)
       if (R.isNil(newGrainText)) return
-      const grain = G.createNew({text: newGrainText});
+      const grain = G.createNew({text: newGrainText})
       grainsStore.put(grain)
       listPD.insert(grain)
     },
     delete: ({store: {listPD, list, grainsStore}, data}) => {
       const grain = R.find(G.eqById(data.grain), list)
       assert(RA.isNotNil(grain))
-      const deletedGrain = G.setDeleted(grain);
-      grainsStore.put(grain)
+      const deletedGrain = G.setDeleted(grain)
+      grainsStore.cloneById(grain).markDeleted()
       listPD.update(deletedGrain)
     },
 
     update: ({data, store: {listPD, list, grainsStore}}) => {
       const grain = R.find(G.eqById(data), list)
       assert(RA.isNotNil(grain))
-      const updatedGrain = G.setText(data.text, grain);
-      grainsStore.put(updatedGrain)
+      const updatedGrain = G.setText(data.text, grain)
+      grainsStore.cloneById(G.getId(grain)).userPatchProps({text: data.text})
       listPD.update(updatedGrain)
     },
 

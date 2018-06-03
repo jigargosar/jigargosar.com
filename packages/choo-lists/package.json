@@ -8,8 +8,7 @@
     "inspect": "bankai inspect index.js",
     "start": "bankai start index.js",
     "test": "standard && npm run test-deps",
-    "test-deps":
-      "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
+    "test-deps": "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
   },
   "prettier": {
     "printWidth": 80,
@@ -20,6 +19,12 @@
     "trailingComma": "all",
     "bracketSpacing": false,
     "jsxBracketSameLine": false
+  },
+  "jest": {
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ]
   },
   "dependencies": {
     "babel-polyfill": "6.26.0",
@@ -55,6 +60,7 @@
     "choo-scaffold": "1.1.2",
     "dependency-check": "3.1.0",
     "jest": "23.0.0",
+    "jest-watch-typeahead": "0.1.0",
     "minify-stream": "1.1.0",
     "p-each-series": "1.0.0",
     "power-assert": "1.5.0",
