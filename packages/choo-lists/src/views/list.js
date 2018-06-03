@@ -100,7 +100,7 @@ function grainsListView(state) {
     <div class="">
       <div class="flex ${centeredContentClass}">
         <div class="pa1">Total: ${grainList.length}</div>
-        <div class="pa1">${Button({onclick: state.grains.add}, 'ADD')}</div>
+        <div class="pa1">${Button({onclick: state.grains.addNew}, 'ADD')}</div>
       </div>
       ${grainList.map(grainItemView)}  
     </div>`
@@ -108,14 +108,15 @@ function grainsListView(state) {
 
 function grainItemView(grain) {
   const text = grain.getText()
-  const id = grain.getId()
+  const _id = grain.getId()
+  const _rev = grain.getRev()
   return html`
-    <div id=${id} class="flex ${centeredContentClass}">
+    <div id=${_id} class="flex ${centeredContentClass}">
       <div class="pa1">
-        ${Button({onclick: () => GA.delete({id})}, 'X')}
+        ${Button({onclick: () => GA.delete({id: _id})}, 'X')}
       </div>
       <div class="pa1">
-        ${Button({onclick: () => GEA.edit({id})}, 'E')}
+        ${Button({onclick: () => GEA.edit({id: _id})}, 'E')}
       </div>
       <div class="pa1 flex-grow-1 flex flex-column">
         ${
@@ -123,7 +124,7 @@ function grainItemView(grain) {
             ? html`<div class="gray">${'<Empty>'}</div>`
             : html`<div class="">${text}</div>`
         }
-        <div class="f6 code gray lh-solid" >id: ${id}</div>
+        <div class="f6 code gray lh-solid" >_id: ${_id} _rev:${_rev}</div>
       </div>
     </div>`
 }

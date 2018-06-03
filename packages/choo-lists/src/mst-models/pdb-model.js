@@ -21,5 +21,8 @@ export const PDBModel = types
   .views(self => ({
     getId() {
       return self._id
+    },
+    getRev() {
+      return self._rev
     }
   }))

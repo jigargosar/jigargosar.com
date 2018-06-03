@@ -39,8 +39,8 @@ export const createPDBCollection = PDBModel => {
           addDisposer(self, () => disposer.cancel())
         },
 
-        _add(props) {
-          self._pdPut(PDBModel.create(props))
+        _addNew(props) {
+          return self._pdPut(PDBModel.create(props))
         },
 
         _pdPut(model) {

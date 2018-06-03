@@ -19,10 +19,10 @@ export const PDBGrain = PDBModel.named('PDBGrain')
 
 export const PDBGrainsCollection = createPDBCollection(PDBGrain).actions(
   self => ({
-    add() {
+    addNew() {
       const text = prompt('New Grain', 'Get Milk!')
       if (R.isNil(text)) return
-      self._add({text: text})
+      return self._addNew({text: text})
     },
   }),
 )
