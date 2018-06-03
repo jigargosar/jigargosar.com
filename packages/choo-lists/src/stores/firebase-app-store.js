@@ -18,6 +18,8 @@ var config = {
 
 module.exports = function firebaseAppStore(state, emitter) {
   state.firebaseApp = null
+  state.firebaseAuth = null
+  state.firestore = null
   state.events.firebase_app_ready = 'firebase:app:ready'
 
   emitter.on(state.events.DOMCONTENTLOADED, () => {
@@ -25,6 +27,7 @@ module.exports = function firebaseAppStore(state, emitter) {
     const firestore = firebaseApp.firestore()
     firestore.settings({timestampsInSnapshots: true})
     state.firebaseApp = firebaseApp
+    state.firebaseAuth = firebaseApp.auth()
     state.firestore = firestore
     emitter.emit(state.events.firebase_app_ready)
   })
