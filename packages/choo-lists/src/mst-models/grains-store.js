@@ -16,7 +16,7 @@ export const Grain = BaseModel.named('Grain')
       return self.text
     },
     getUserEditableProps() {
-      return ['text']
+      return ['text', 'deleted']
     },
   }))
 

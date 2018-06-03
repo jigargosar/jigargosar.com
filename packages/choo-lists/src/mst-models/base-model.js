@@ -17,6 +17,11 @@ export const BaseModel = types
     assert(RA.isNotNil(snapshot))
     return RA.renameKeys({_id: 'id', _deleted: 'deleted'})(snapshot)
   })
+  .views(self => ({
+    getId() {
+      return self.id
+    }
+  }))
   .actions(self => ({
     afterCreate() {
       assert(RA.isArray(self.getUserEditableProps()))
@@ -30,8 +35,10 @@ export const BaseModel = types
       if (!R.equals(modifiedProps, existingProps)) {
         Object.assign(self, modifiedProps, {modifiedAt: Date.now()})
       }
+      return self
     },
     markDeleted() {
       self.userPatchProps({deleted: true})
+      return self
     },
   }))

@@ -1,4 +1,4 @@
-const {grainsList} = require('../state')
+const {getGrainsList} = require('../state')
 const {CodeMirrorEditor} = require('../components/CodeMirrorEditor')
 const R = require('ramda')
 const log = require('nanologger')('views:list')
@@ -95,26 +95,27 @@ function grainEditView(state) {
 }
 
 function grainsListView(state) {
-  const list = grainsList(state)
+  const grainList = state.grains.getList()
   return html`
     <div class="">
       <div class="flex ${centeredContentClass}">
-        <div class="pa1">Total: ${list.length}</div>
-        <div class="pa1">${Button({onclick: GA.add}, 'ADD')}</div>
+        <div class="pa1">Total: ${grainList.length}</div>
+        <div class="pa1">${Button({onclick: state.grains.add}, 'ADD')}</div>
       </div>
-      ${list.map(grainItemView)}  
+      ${grainList.map(grainItemView)}  
     </div>`
 }
 
 function grainItemView(grain) {
-  const text = G.getText(grain)
+  const text = grain.getText()
+  const id = grain.getId()
   return html`
-    <div id=${G.getId(grain)} class="flex ${centeredContentClass}">
+    <div id=${id} class="flex ${centeredContentClass}">
       <div class="pa1">
-        ${Button({onclick: () => GA.delete({grain})}, 'X')}
+        ${Button({onclick: () => GA.delete({id})}, 'X')}
       </div>
       <div class="pa1">
-        ${Button({onclick: () => GEA.edit({grain})}, 'E')}
+        ${Button({onclick: () => GEA.edit({id})}, 'E')}
       </div>
       <div class="pa1 flex-grow-1 flex flex-column">
         ${
@@ -122,7 +123,7 @@ function grainItemView(grain) {
             ? html`<div class="gray">${'<Empty>'}</div>`
             : html`<div class="">${text}</div>`
         }
-        <div class="f6 code gray lh-solid" >id: ${G.getId(grain)}</div>
+        <div class="f6 code gray lh-solid" >id: ${id}</div>
       </div>
     </div>`
 }

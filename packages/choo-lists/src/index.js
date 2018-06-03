@@ -27,7 +27,8 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use(require('./stores/firebase-store'))
-app.use(require('./stores/grains-store'))
+// app.use(require('./stores/grains-store'))
+app.use(require('./stores/pdb-grains-store'))
 app.use(require('./stores/edit-grain-store'))
 app.route('/', require('./views/list'))
 app.route('/*', require('./views/404'))

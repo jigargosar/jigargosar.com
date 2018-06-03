@@ -2,12 +2,13 @@ const R = require('ramda')
 const RA = require('ramda-adjunct')
 const G = require('./models/grain')
 
-export function grainsList(state) {
-  return state.grains.list
+export function getGrainsList(state) {
+  // return state.grains.list
+  return state.grains.grainsStore.getList()
 }
 
 export const findGrainEqById = R.curry(function findGrainEqById(grain, state) {
-  return R.compose(R.find(G.eqById(grain)), grainsList)(state)
+  return R.compose(R.find(G.eqById(grain)), getGrainsList)(state)
 })
 
 export const isGrainEqByIdNotNil = R.curry(function isGrainEqByIdNotNil(
