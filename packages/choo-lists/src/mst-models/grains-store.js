@@ -30,7 +30,8 @@ export const createCollectionStore = Model => {
     })
     .views(self => ({
       getList() {
-        return Array.from(self.modelMap.values())
+        const models = Array.from(self.modelMap.values());
+        return R.reject(R.prop("deleted"))(models)
       },
     }))
     .actions(self => {
@@ -39,8 +40,8 @@ export const createCollectionStore = Model => {
           assert(RA.isArray(models))
           models.forEach(self.put)
         },
-        put(models) {
-          assert(RA.isNotArray(models))
+        put(model) {
+          assert(RA.isNotArray(model))
           self.modelMap.put(model)
         },
       }
