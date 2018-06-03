@@ -9,12 +9,13 @@ const assert = require('assert')
 export const BaseModel = types
   .model('BaseModel', {
     id: optionalNanoId,
+    deleted:false,
     createdAt: timestamp,
     modifiedAt: timestamp,
   })
   .preProcessSnapshot(snapshot => {
     assert(RA.isNotNil(snapshot))
-    return RA.renameKeys({_id:"id"})(snapshot)
+    return RA.renameKeys({_id:"id", _deleted:"deleted"})(snapshot)
   })
   .actions(self => ({
     afterCreate() {
