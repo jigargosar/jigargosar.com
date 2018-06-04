@@ -22,10 +22,11 @@ export const PDBModel = types
         'createdAt',
         'modifiedAt',
       ])
-      const prev = omitSystemProps(self)
-      const next = omitSystemProps(props)
-      if (R.equals(prev, next)) return self
-      Object.assign(self, next)
+      const userProps = omitSystemProps(props)
+      if (R.equals(userProps, R.pick(R.keys(userProps), self))) {
+        return self
+      }
+      Object.assign(self, userProps)
       self.modifiedAt = Date.now()
       return self
     },

@@ -1,4 +1,4 @@
-import {addDisposer, clone, getType, types} from 'mobx-state-tree'
+import {addDisposer, clone, getType, types,} from 'mobx-state-tree'
 import plur from 'plur'
 
 const PouchDB = require('pouchdb-browser')
@@ -47,6 +47,10 @@ export const createPDBCollection = PDBModel => {
           addDisposer(self, () => disposer.cancel())
         },
 
+        changes(opts) {
+          return db.changes(opts)
+        },
+
         addNew(props) {
           return putModelInPDB(PDBModel.create(props))
         },
@@ -57,8 +61,13 @@ export const createPDBCollection = PDBModel => {
           const model = self.findById(id)
           assert(RA.isNotNil(model))
           assert(model.getRevision() === revision)
-          const clonedModel = clone(model)
-          return putModelInPDB(clonedModel.userUpdate(props))
+
+          const updatedModel = clone(model).userUpdate(props)
+
+          if (R.equals(updatedModel, model)) {
+            return Promise.resolve()
+          }
+          return putModelInPDB(updatedModel)
         },
 
         _pdOnChange(change) {
