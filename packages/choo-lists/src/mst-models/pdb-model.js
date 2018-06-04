@@ -1,8 +1,9 @@
-const R = require('ramda')
-const RA = require('ramda-adjunct')
-
+import {getAppActorId} from '../stores/actor-id'
 import {types} from 'mobx-state-tree'
 import {optionalNanoId, timestamp} from '../mst-types'
+
+const R = require('ramda')
+const RA = require('ramda-adjunct')
 
 const assert = require('assert')
 
@@ -11,6 +12,7 @@ export const PDBModel = types
     _id: optionalNanoId,
     _rev: types.maybe(types.string),
     deleted: false,
+    actorId: getAppActorId(),
     createdAt: timestamp,
     modifiedAt: timestamp,
   })
@@ -21,6 +23,7 @@ export const PDBModel = types
         '_rev',
         'createdAt',
         'modifiedAt',
+        'actorId',
       ])
       const userProps = omitSystemProps(props)
       if (R.equals(userProps, R.pick(R.keys(userProps), self))) {

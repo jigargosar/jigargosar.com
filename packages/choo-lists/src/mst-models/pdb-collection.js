@@ -1,4 +1,4 @@
-import {addDisposer, clone, getType, types,} from 'mobx-state-tree'
+import {addDisposer, clone, getType, types} from 'mobx-state-tree'
 import plur from 'plur'
 
 const PouchDB = require('pouchdb-browser')
