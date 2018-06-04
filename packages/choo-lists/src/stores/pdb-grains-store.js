@@ -7,9 +7,7 @@ const RA = require('ramda-adjunct')
 const G = require('../models/grain')
 const createStore = require('./createStore')
 const log = require('nanologger')('grains-store')
-const PD = require('../models/pouch-db')
 const assert = require('assert')
-const {actions: FA} = require('./firebase-store')
 
 module.exports = function pdbGrainsStore(state, emitter, app) {
   const pdbGrainsCollection = PDBGrainsCollection.create()

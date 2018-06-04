@@ -1,4 +1,3 @@
-const {grainsPD} = require('../state')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 const log = require('nanologger')('firebaseAppStore')
