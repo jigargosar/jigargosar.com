@@ -2,7 +2,6 @@ const R = require('ramda')
 const RA = require('ramda-adjunct')
 const log = require('nanologger')('firebaseStore')
 const assert = require('assert')
-const LocalStorageItem = require('./local-storage-item')
 const firebase = require('firebase/app')
 const omitFirebaseClutter = R.unless(
   R.isNil,
@@ -12,7 +11,7 @@ const omitFirebaseClutter = R.unless(
   ),
 )
 
-module.exports = function firebaseAuthStore(state, emitter) {
+export function firebaseAuthStore(state, emitter) {
   state.authState = 'loading'
   state.userInfo = null
 
@@ -20,7 +19,6 @@ module.exports = function firebaseAuthStore(state, emitter) {
     'firebase:auth:state-changed'
 
   state.events.firebase_auth_signin = 'firebase:auth:signin'
-
   state.events.firebase_auth_signout = 'firebase:auth:signout'
 
   emitter.on(state.events.firebase_app_ready, () => {
