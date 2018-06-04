@@ -4,7 +4,6 @@ import {PDBGrainsCollection} from '../mst-models/pdb-grains-collection'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
-const G = require('../models/grain')
 const createStore = require('./createStore')
 const log = require('nanologger')('grains-store')
 const assert = require('assert')

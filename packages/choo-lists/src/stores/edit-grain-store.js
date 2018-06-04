@@ -1,6 +1,5 @@
 const R = require('ramda')
 const RA = require('ramda-adjunct')
-const G = require('../models/grain')
 const EM = require('../models/edit-mode')
 const yaml = require('js-yaml')
 const LocalStorageItem = require('./local-storage-item')
