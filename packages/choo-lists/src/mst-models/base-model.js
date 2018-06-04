@@ -20,7 +20,7 @@ export const BaseModel = types
   .views(self => ({
     getId() {
       return self.id
-    }
+    },
   }))
   .actions(self => ({
     afterCreate() {

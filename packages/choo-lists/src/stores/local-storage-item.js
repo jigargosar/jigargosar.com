@@ -7,7 +7,10 @@ function LocalStorageItem(key, defaultValue) {
   const log = require('nanologger')(`ls-item:${key}`)
 
   function load() {
-    return R.defaultTo(defaultValue, JSON.parse(localStorage.getItem(key)))
+    return R.defaultTo(
+      defaultValue,
+      JSON.parse(localStorage.getItem(key)),
+    )
   }
 
   function save(obj) {

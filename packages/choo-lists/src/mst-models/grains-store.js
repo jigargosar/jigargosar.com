@@ -1,6 +1,6 @@
 import {BaseModel} from './base-model'
 import {types} from 'mobx-state-tree'
-import {createCollectionStore} from "./collection-store";
+import {createCollectionStore} from './collection-store'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
