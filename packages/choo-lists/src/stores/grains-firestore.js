@@ -51,7 +51,12 @@ module.exports = function grainsFirestore(state, emitter) {
               if (remoteDocSnapshot.exists) {
                 const remoteDoc = remoteDocSnapshot.data()
                 if (remoteDoc.modifiedAt < localDoc.modifiedAt) {
-                  transaction.set(historyCollection.doc(), remoteDoc)
+                  transaction.set(
+                    docRef
+                      .collection('history')
+                      .doc(remoteDoc.modifiedAt),
+                    remoteDoc,
+                  )
                   transaction.set(docRef, localDoc)
                 } else {
                   transaction.update(docRef, {})
