@@ -1,6 +1,6 @@
 import {getAppActorId} from '../stores/actor-id'
 import {types} from 'mobx-state-tree'
-import {optionalNanoId, timestamp} from '../mst-types'
+import {optionalNanoId, optionalTimestamp} from './mst-types'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -13,8 +13,8 @@ export const PDBModel = types
     _rev: types.maybe(types.string),
     deleted: false,
     actorId: getAppActorId(),
-    createdAt: timestamp,
-    modifiedAt: timestamp,
+    createdAt: optionalTimestamp,
+    modifiedAt: optionalTimestamp,
   })
   .actions(self => ({
     userUpdate(props) {

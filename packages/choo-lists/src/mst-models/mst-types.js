@@ -17,6 +17,6 @@ const nanoId = types.refinement(
 )
 export const optionalNanoId = types.optional(nanoId, () => nanoid())
 
-export const timestamp = types.optional(types.number, () =>
+export const optionalTimestamp = types.optional(types.Date, () =>
   Date.now(),
 )
