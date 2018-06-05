@@ -15,6 +15,23 @@ const syncSeqLS = LocalStorageItem(
   0,
 )
 
+function areFromSameActor(remoteDoc, localDoc) {
+  return remoteDoc.actorId === localDoc.actorId
+}
+
+const areFromDifferentActor = R.complement(areFromSameActor)
+
+function isNewerThan(remoteDoc, localDoc) {
+  return remoteDoc.modifiedAt > localDoc.modifiedAt
+}
+
+function addToHistory(docRef, doc, transaction) {
+  transaction.set(
+    docRef.collection('history').doc(`${doc.modifiedAt}`),
+    doc,
+  )
+}
+
 module.exports = function firestoreGrainsStore(state, emitter) {
   let disposer = R.identity
   emitter.on(state.events.firebase_auth_state_changed, () => {
@@ -47,13 +64,10 @@ module.exports = function firestoreGrainsStore(state, emitter) {
               const localDoc = change.doc
               if (remoteDocSnapshot.exists) {
                 const remoteDoc = remoteDocSnapshot.data()
-                if (remoteDoc.modifiedAt < localDoc.modifiedAt) {
-                  transaction.set(
-                    docRef
-                      .collection('history')
-                      .doc(remoteDoc.modifiedAt),
-                    remoteDoc,
-                  )
+                if (isNewerThan(localDoc, remoteDoc)) {
+                  if (areFromDifferentActor(localDoc, remoteDoc)) {
+                    addToHistory(docRef, remoteDoc, transaction)
+                  }
                   transaction.set(docRef, localDoc)
                 } else {
                   transaction.update(docRef, {})
