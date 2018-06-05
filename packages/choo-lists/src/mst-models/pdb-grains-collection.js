@@ -1,6 +1,5 @@
 import {types} from 'mobx-state-tree'
-import {PDBModel} from './pdb-model'
-import {createPDBCollection} from './pdb-collection'
+import {createPDBCollection, PDBModel} from './pdb-collection'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
