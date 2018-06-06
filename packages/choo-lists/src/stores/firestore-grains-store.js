@@ -70,6 +70,9 @@ module.exports = function firestoreGrainsStore(state, emitter) {
                   }
                   transaction.set(docRef, localDoc)
                 } else {
+                  if (areFromDifferentActor(localDoc, remoteDoc)) {
+                    addToHistory(docRef, localDoc, transaction)
+                  }
                   transaction.update(docRef, {})
                 }
               } else {
