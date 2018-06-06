@@ -1,3 +1,5 @@
+import {getAppActorId} from './actor-id'
+
 const pEachSeries = require('p-each-series')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -15,14 +17,10 @@ const syncSeqLS = LocalStorageItem(
   0,
 )
 
-function areFromSameActor(remoteDoc, localDoc) {
-  return remoteDoc.actorId === localDoc.actorId
-}
+const hasLocalActorId = R.propEq('actorId', getAppActorId())
 
-const areFromDifferentActor = R.complement(areFromSameActor)
-
-function isNewerThan(remoteDoc, localDoc) {
-  return remoteDoc.modifiedAt > localDoc.modifiedAt
+function isNewerThan(doc1, doc2) {
+  return doc1.modifiedAt > doc2.modifiedAt
 }
 
 function addToHistory(docRef, doc, transaction) {
@@ -56,26 +54,31 @@ module.exports = function firestoreGrainsStore(state, emitter) {
           since,
         })
         .on('change', change => {
+          // Update remote firebase
+          // iff we have changes from local actor, which are newer
+
           log.debug('change', change.id, change)
+          const localDoc = change.doc
+
+          if (!hasLocalActorId(localDoc)) return
+          // if (!hasLocalActorId(remoteDoc)) {
+          //           addToHistory(docRef, remoteDoc, transaction)
+          //         }
           const docRef = collection.doc(change.id)
           state.firestore
             .runTransaction(async transaction => {
               const remoteDocSnapshot = await transaction.get(docRef)
-              const localDoc = change.doc
-              if (remoteDocSnapshot.exists) {
-                const remoteDoc = remoteDocSnapshot.data()
-                if (isNewerThan(localDoc, remoteDoc)) {
-                  if (areFromDifferentActor(localDoc, remoteDoc)) {
-                    addToHistory(docRef, remoteDoc, transaction)
-                  }
-                  transaction.set(docRef, localDoc)
-                } else {
-                  if (areFromDifferentActor(localDoc, remoteDoc)) {
-                    addToHistory(docRef, localDoc, transaction)
-                  }
-                  transaction.update(docRef, {})
-                }
+              if (!remoteDocSnapshot.exists) {
+                transaction.set(docRef, localDoc)
+                return
+              }
+              const remoteDoc = remoteDocSnapshot.data()
+              if (isNewerThan(remoteDoc, localDoc)) {
+                transaction.update(docRef, {})
               } else {
+                if (!hasLocalActorId(remoteDoc)) {
+                  addToHistory(docRef, remoteDoc, transaction)
+                }
                 transaction.set(docRef, localDoc)
               }
             })
