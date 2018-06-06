@@ -38,6 +38,12 @@ export const PDBModel = types
     },
   }))
   .views(self => ({
+    get id() {
+      return self.getId()
+    },
+    get rev() {
+      return self.getRevision()
+    },
     getId() {
       return self._id
     },
