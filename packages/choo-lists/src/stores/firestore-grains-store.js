@@ -43,7 +43,6 @@ module.exports = function firestoreGrainsStore(state, emitter) {
       }
 
       const collection = userCollection(`grains`)
-      const historyCollection = userCollection(`grains-history`)
 
       const since = syncSeqLS.load()
       log.debug('start sync. seq:', since)
@@ -61,9 +60,6 @@ module.exports = function firestoreGrainsStore(state, emitter) {
           const localDoc = change.doc
 
           if (!hasLocalActorId(localDoc)) return
-          // if (!hasLocalActorId(remoteDoc)) {
-          //           addToHistory(docRef, remoteDoc, transaction)
-          //         }
           const docRef = collection.doc(change.id)
           state.firestore
             .runTransaction(async transaction => {
