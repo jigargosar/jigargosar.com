@@ -1,14 +1,1 @@
-@import "~tachyons";
-
-html,
-body {
-  height: 100%;
-}
-
-#root {
-  display: flex;
-  /*flex-direction: column;*/
-  height: 100vh;
-  /*justify-items: stretch;*/
-  /*justify-content: stretch;*/
-}
+@import '~tachyons';

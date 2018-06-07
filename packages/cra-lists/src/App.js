@@ -1,22 +1,19 @@
-import React, {Component} from "react";
-import GrainList from "./components/GrainList";
-import {StateProvider} from "./contexts/State";
+import React, {Component, Fragment as F} from 'react'
 
+const centeredContentClass = 'center mw7 mv3 ph3'
 class App extends Component {
   render() {
+    const TITLE = 'CRA List Prototype'
     return (
-      <StateProvider>
-        <div className="flex-grow-1 flex flex-column sans-serif bg-black-05">
-          <header className="tc bg-black white pa3">
-            <div className="f1">CRA List Prototype</div>
-          </header>
-          <main className="flex-grow-1 bg-white center w-100 mw7 pa3">
-            <GrainList />
-          </main>
+      <F>
+        <div className="bg-light-blue tc pa3">
+          <div className="f1">{TITLE}</div>
+          {/*<div>${signInOutView(state, emit)}</div>*/}
         </div>
-      </StateProvider>
-    );
+        <div className={`flex ${centeredContentClass}`}>LIST</div>
+      </F>
+    )
   }
 }
 
-export default App;
+export default App
