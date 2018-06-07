@@ -66,13 +66,16 @@ export function syncFromPDBToFireStore(state, emitter) {
           live: true,
           since,
         })
-        .flatMap(R.compose(Kefir.fromPromise, onChange))
+        .flatMap(
+          R.compose(Kefir.fromPromise, change => {
+            return onChange(change).then(seq => {
+              log.debug('synced till seq:', seq)
+              syncSeqLS.save(seq)
+            })
+          }),
+        )
         .takeErrors(1)
         .observe({
-          value(seq) {
-            log.debug('synced till seq:', seq)
-            syncSeqLS.save(seq)
-          },
           error(error) {
             log.error('sync error', error)
           },
