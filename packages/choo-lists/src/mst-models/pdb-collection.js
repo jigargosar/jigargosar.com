@@ -125,9 +125,12 @@ export const createPDBCollection = PDBModel => {
                 include_docs: true,
                 live: true,
               })
+              .bufferWithTimeOrCount(100, 100)
+              .map(self._pdOnChanges)
               .observe({
-                value: self._pdOnChange,
-                error: e => self.log.error(e),
+                error(error) {
+                  log.error(error)
+                },
               }),
           )
         },
@@ -157,8 +160,11 @@ export const createPDBCollection = PDBModel => {
           } else {
             const localModel = PDBModel.create(docResult.value)
             if (remoteModel.modifiedAt > localModel.modifiedAt) {
-              remoteModel._rev = localModel._rev
-              return self._putModelInPDB(remoteModel)
+              return self._putModelInPDB(
+                PDBModel.create(
+                  R.merge(remoteModel, R.pick(['_rev'], localModel)),
+                ),
+              )
             }
             return Promise.resolve()
           }
@@ -182,8 +188,12 @@ export const createPDBCollection = PDBModel => {
           return self._putModelInPDB(updatedModel)
         },
 
-        _pdOnChange(change) {
-          self.modelMap.put(change.doc)
+        _put(model) {
+          return self.modelMap.put(model)
+        },
+        _pdOnChanges(changes) {
+          R.forEach(R.compose(self._put, R.prop('doc')))(changes)
+          return self
         },
         _putModelInPDB(model) {
           assert(getType(model) === PDBModel)

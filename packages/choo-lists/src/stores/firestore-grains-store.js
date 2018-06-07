@@ -1,5 +1,6 @@
 import {getAppActorId} from './actor-id'
 import * as Kefir from 'kefir'
+import {PDBGrain} from '../mst-models/pdb-grains-collection'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -83,7 +84,7 @@ export function syncFromPDBToFireStore(state, emitter) {
         // iff we have changes from local actor, which are newer
 
         log.debug('pdb:change', change.id, change)
-        const localDoc = change.doc
+        const localDoc = PDBGrain.create(change.doc)
 
         if (!hasLocalActorId(localDoc)) {
           return Promise.resolve(change.seq)
@@ -99,7 +100,9 @@ export function syncFromPDBToFireStore(state, emitter) {
               )
               return change.seq
             }
-            const remoteDoc = remoteDocSnapshot.data()
+            const remoteDoc = PDBGrain.create(
+              remoteDocSnapshot.data(),
+            )
             if (isNewerThan(remoteDoc, localDoc)) {
               transaction.update(docRef, {})
             } else {
