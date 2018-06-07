@@ -8,8 +8,7 @@
     "inspect": "bankai inspect index.js",
     "start": "bankai start index.js",
     "test": "standard && npm run test-deps",
-    "test-deps":
-      "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
+    "test-deps": "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
   },
   "prettier": {
     "printWidth": 70,
@@ -37,6 +36,7 @@
     "faker": "4.1.0",
     "firebase": "5.0.4",
     "js-yaml": "3.11.0",
+    "kefir": "3.8.1",
     "messenger-hubspot": "1.5.0-b2",
     "mobx": "3.4.1",
     "mobx-state-tree": "1.3.1",

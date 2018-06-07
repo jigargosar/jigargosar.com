@@ -3,6 +3,8 @@ import plur from 'plur'
 import {optionalNanoId, optionalTimestamp} from './mst-types'
 import {getAppActorId} from '../stores/actor-id'
 
+const Kefir = require('kefir')
+
 const PouchDB = require('pouchdb-browser')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -52,6 +54,21 @@ export const PDBModel = types
     },
     isDeleted() {},
   }))
+
+function createPDBChangesStream(opts, db) {
+  return Kefir.stream(emitter => {
+    const changes = db
+      .changes(opts)
+      .on('change', emitter.value)
+      .on('error', emitter.error)
+      .on('completed', value => {
+        emitter.value(value)
+        emitter.end()
+      })
+    return () => changes.cancel()
+  })
+}
+
 export const createPDBCollection = PDBModel => {
   assert(PDBModel.isType)
   assert(PDBModel.name !== 'AnonymousModel')
@@ -93,6 +110,10 @@ export const createPDBCollection = PDBModel => {
 
         changes(opts) {
           return db.changes(opts)
+        },
+
+        changesStream(opts) {
+          return createPDBChangesStream(opts, db)
         },
 
         addNew(props) {
