@@ -84,12 +84,6 @@ export const createPDBCollection = PDBModel => {
   assert(PDBModel.name.startsWith('PDB'))
   const name = `${plur(PDBModel.name, 2)}Collection`
   const db = new PouchDB(name)
-  const log = Logger(name)
-
-  const putModelInPDB = function(model) {
-    assert(getType(model) === PDBModel)
-    return db.put(model)
-  }
   return types
     .model(name, {
       modelMap: types.optional(types.map(PDBModel), {}),
@@ -103,7 +97,7 @@ export const createPDBCollection = PDBModel => {
         return self.modelMap.get(id)
       },
     }))
-    .volatile(() => ({log}))
+    .volatile(() => ({log: Logger(name)}))
     .actions(self => {
       return {
         afterCreate() {
@@ -116,21 +110,19 @@ export const createPDBCollection = PDBModel => {
               })
               .observe({
                 value: self._pdOnChange,
-                error: e => log.error(e),
+                error: e => self.log.error(e),
               }),
           )
         },
-
         changes(opts) {
           return db.changes(opts)
         },
-
         changesStream(opts) {
           return createPDBChangesStream(opts, db)
         },
 
         addNew(props) {
-          return putModelInPDB(PDBModel.create(props))
+          return self._putModelInPDB(PDBModel.create(props))
         },
         markDeletedById(id, revision) {
           return self.userUpdateForId(id, revision, {deleted: true})
@@ -145,11 +137,15 @@ export const createPDBCollection = PDBModel => {
           if (R.equals(updatedModel, model)) {
             return Promise.resolve()
           }
-          return putModelInPDB(updatedModel)
+          return self._putModelInPDB(updatedModel)
         },
 
         _pdOnChange(change) {
           self.modelMap.put(change.doc)
+        },
+        _putModelInPDB(model) {
+          assert(getType(model) === PDBModel)
+          return db.put(model)
         },
       }
     })
