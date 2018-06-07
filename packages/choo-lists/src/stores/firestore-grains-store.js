@@ -69,8 +69,8 @@ export function syncFromPDBToFireStore(state, emitter) {
         })
         .scan(async (prevPromise, change) => {
           await prevPromise
-          const seq = await onChange(change)
-          syncSeqLS.save(seq)
+          await onChange(change)
+          syncSeqLS.save(change.seq)
         }, Promise.resolve())
         .takeErrors(1)
         .observe({
@@ -80,7 +80,7 @@ export function syncFromPDBToFireStore(state, emitter) {
         })
       unsubscribe = () => subscription.unsubscribe()
 
-      function onChange(change) {
+      async function onChange(change) {
         // Update remote firebase
         // iff we have changes from local actor, which are newer
 
@@ -88,10 +88,10 @@ export function syncFromPDBToFireStore(state, emitter) {
         const localDoc = PDBGrain.create(change.doc)
 
         if (!hasLocalActorId(localDoc)) {
-          return Promise.resolve(change.seq)
+          return
         }
         const docRef = grainsRef.doc(change.id)
-        return grainsRef.firestore.runTransaction(
+        await grainsRef.firestore.runTransaction(
           async transaction => {
             const remoteDocSnapshot = await transaction.get(docRef)
             if (!remoteDocSnapshot.exists) {
@@ -99,20 +99,19 @@ export function syncFromPDBToFireStore(state, emitter) {
                 docRef,
                 mergeFirestoreServerTimestamp(localDoc),
               )
-              return change.seq
+              return
             }
             const remoteDoc = PDBGrain.create(
               remoteDocSnapshot.data(),
             )
             if (isNewerThan(remoteDoc, localDoc)) {
               transaction.update(docRef, {})
-            } else {
-              if (!hasLocalActorId(remoteDoc)) {
-                addToHistory(docRef, remoteDoc, transaction)
-              }
-              transaction.update(docRef, localDoc)
+              return
             }
-            return change.seq
+            if (!hasLocalActorId(remoteDoc)) {
+              addToHistory(docRef, remoteDoc, transaction)
+            }
+            transaction.update(docRef, localDoc)
           },
         )
       }
