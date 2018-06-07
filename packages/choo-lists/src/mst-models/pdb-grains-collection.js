@@ -8,7 +8,7 @@ const assert = require('assert')
 
 export const PDBGrain = PDBModel.named('PDBGrain')
   .props({
-    text: types.optional(types.string, ''),
+    text: types.string,
   })
   .views(self => ({
     getText() {
