@@ -10,7 +10,7 @@ function isValidNanoId(id) {
   return isValidNanoId
 }
 
-const nanoId = types.refinement(
+export const nanoId = types.refinement(
   'NanoId',
   types.identifier(types.string),
   isValidNanoId,

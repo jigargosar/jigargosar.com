@@ -1,38 +1,34 @@
 import {addDisposer, clone, getType, types} from 'mobx-state-tree'
 import plur from 'plur'
-import {optionalNanoId, optionalTimestamp} from './mst-types'
+import {nanoId} from './mst-types'
 import {getAppActorId} from '../stores/actor-id'
+import nanoid from 'nanoid'
+
+const R = require('ramda')
+const RA = require('ramda-adjunct')
 
 const pReflect = require('p-reflect')
 const Kefir = require('kefir')
 
 const PouchDB = require('pouchdb-browser')
-const R = require('ramda')
-const RA = require('ramda-adjunct')
 const assert = require('assert')
 
 const Logger = require('nanologger')
 
-const normalizeTimestamp = arg => new Date(arg).getTime()
-
 export const PDBModel = types
   .model('PDBModel', {
-    _id: optionalNanoId,
+    _id: nanoId,
     _rev: types.maybe(types.string),
-    deleted: false,
-    actorId: getAppActorId(),
-    createdAt: optionalTimestamp,
-    modifiedAt: optionalTimestamp,
-  })
-  .preProcessSnapshot(
-    R.compose(
-      RA.renameKeys({_deleted: 'deleted'}),
-      R.evolve({
-        createdAt: normalizeTimestamp,
-        modifiedAt: normalizeTimestamp,
-      }),
+    deleted: types.boolean,
+    actorId: types.refinement(
+      'actorId',
+      types.string,
+      RA.isNonEmptyString,
     ),
-  )
+    createdAt: types.number,
+    modifiedAt: types.number,
+  })
+  .preProcessSnapshot(R.compose(RA.renameKeys({_deleted: 'deleted'})))
   .actions(self => ({
     userUpdate(props) {
       const omitSystemProps = R.omit([
@@ -170,7 +166,17 @@ export const createPDBCollection = PDBModel => {
           }
         },
         addNew(props) {
-          return self._putModelInPDB(PDBModel.create(props))
+          const model = PDBModel.create(
+            R.merge(props, {
+              _id: nanoid(),
+              _rev: null,
+              deleted: false,
+              actorId: getAppActorId(),
+              createdAt: Date.now(),
+              modifiedAt: Date.now(),
+            }),
+          )
+          return self._putModelInPDB(model)
         },
         markDeletedById(id, revision) {
           return self.userUpdateForId(id, revision, {deleted: true})
