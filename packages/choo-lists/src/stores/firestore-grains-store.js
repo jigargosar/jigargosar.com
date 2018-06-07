@@ -75,7 +75,7 @@ export function syncFromPDBToFireStore(state, emitter) {
         .takeErrors(1)
         .observe({
           error(error) {
-            log.error('sync error', error)
+            log.error('syncFromPDBToFireStore', error)
           },
         })
       unsubscribe = () => subscription.unsubscribe()
@@ -149,25 +149,23 @@ export function syncFromFirestoreToPDB(state, emitter) {
           .where('fireStoreServerTimestamp', '>', syncSinceTimestamp)
           .orderBy('fireStoreServerTimestamp'),
       )
-        .flatMap(
-          R.compose(
-            Kefir.fromPromise,
-            R.flip(pEachSeries)(async change => {
-              const firestoreTimestamp = change.doc.data()
-                .fireStoreServerTimestamp
-              assert(RA.isNotNil(firestoreTimestamp))
-              await state.grains.handleFirestoreChange(change)
-              syncFSMilliLS.save(firestoreTimestamp.toMillis())
-            }),
-            R.tap(changes => log.debug('snapshot:changes', changes)),
-            R.invoker(0, 'docChanges'),
-          ),
-        )
+        .scan(async (prevPromise, snapshot) => {
+          await prevPromise
+          const changes = snapshot.docChanges()
+          log.debug('snapshot:changes', changes)
+          await pEachSeries(changes, async change => {
+            const firestoreTimestamp = change.doc.data()
+              .fireStoreServerTimestamp
+            assert(RA.isNotNil(firestoreTimestamp))
+            await state.grains.handleFirestoreChange(change)
+            syncFSMilliLS.save(firestoreTimestamp.toMillis())
+          })
+        }, Promise.resolve())
         .takeErrors(1)
         .log()
         .observe({
           error(error) {
-            log.error(error)
+            log.error('syncFromFirestoreToPDB', error)
           },
         })
     } else if (state.authState === 'signedOut') {
