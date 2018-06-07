@@ -13,7 +13,7 @@ const assert = require('assert')
 
 const Logger = require('nanologger')
 
-const createDateFrom = arg => new Date(arg)
+const normalizeTimestamp = arg => new Date(arg).getTime()
 
 export const PDBModel = types
   .model('PDBModel', {
@@ -28,8 +28,8 @@ export const PDBModel = types
     R.compose(
       RA.renameKeys({_deleted: 'deleted'}),
       R.evolve({
-        createdAt: createDateFrom,
-        modifiedAt: createDateFrom,
+        createdAt: normalizeTimestamp,
+        modifiedAt: normalizeTimestamp,
       }),
     ),
   )

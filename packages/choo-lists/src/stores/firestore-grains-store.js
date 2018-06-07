@@ -162,7 +162,6 @@ export function syncFromFirestoreToPDB(state, emitter) {
           })
         }, Promise.resolve())
         .takeErrors(1)
-        .log()
         .observe({
           error(error) {
             log.error('syncFromFirestoreToPDB', error)
