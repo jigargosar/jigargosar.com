@@ -13,6 +13,8 @@ const assert = require('assert')
 
 const Logger = require('nanologger')
 
+const createDateFrom = arg => new Date(arg)
+
 export const PDBModel = types
   .model('PDBModel', {
     _id: optionalNanoId,
@@ -22,6 +24,15 @@ export const PDBModel = types
     createdAt: optionalTimestamp,
     modifiedAt: optionalTimestamp,
   })
+  .preProcessSnapshot(
+    R.compose(
+      RA.renameKeys({_deleted: 'deleted'}),
+      R.evolve({
+        createdAt: createDateFrom,
+        modifiedAt: createDateFrom,
+      }),
+    ),
+  )
   .actions(self => ({
     userUpdate(props) {
       const omitSystemProps = R.omit([
@@ -117,25 +128,37 @@ export const createPDBCollection = PDBModel => {
               }),
           )
         },
-        changes(opts) {
-          return db.changes(opts)
-        },
         changesStream(opts) {
           return createPDBChangesStream(opts, db)
         },
         async handleFirestoreChange(change) {
-          const docResult = await pReflect(db.get(change.doc.id))
-          const documentData = change.doc.data()
+          const changeDoc = change.doc
+          const changeDocData = changeDoc.data()
           self.log.debug(
             'handleFirestoreChange',
-            documentData,
-            change,
-            docResult,
+            changeDoc.id,
+            changeDoc.metadata,
+            changeDocData,
+          )
+          const docResult = await pReflect(db.get(changeDoc.id))
+
+          self.log.debug(
+            'handleFirestoreChange:docResult',
+            docResult.isRejected ? docResult.reason : docResult.value,
+          )
+          const remoteModel = PDBModel.create(
+            R.omit(['_rev'])(changeDocData),
           )
           if (docResult.isRejected) {
-            return db.put(R.omit(['_rev'], documentData))
+            return self._putModelInPDB(remoteModel)
+          } else {
+            const localModel = PDBModel.create(docResult.value)
+            if (remoteModel.modifiedAt > localModel.modifiedAt) {
+              remoteModel._rev = localModel._rev
+              return self._putModelInPDB(remoteModel)
+            }
+            return Promise.resolve()
           }
-          return Promise.resolve(docResult)
         },
         addNew(props) {
           return self._putModelInPDB(PDBModel.create(props))

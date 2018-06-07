@@ -132,6 +132,11 @@ export function syncFromFirestoreToPDB(state, emitter) {
         )
         .takeErrors(1)
         .log()
+        .observe({
+          error(error) {
+            log.error(error)
+          },
+        })
     } else if (state.authState === 'signedOut') {
       unsubscribe()
     } else {
