@@ -5,6 +5,7 @@ const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
 const assert = require('assert')
+const pReflect = require('p-reflect')
 
 var config = {
   apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
@@ -21,10 +22,12 @@ module.exports = function firebaseAppStore(state, emitter) {
   state.firestore = null
   state.events.firebase_app_ready = 'firebase:app:ready'
 
-  emitter.on(state.events.DOMCONTENTLOADED, () => {
+  emitter.on(state.events.DOMCONTENTLOADED, async () => {
     const firebaseApp = firebase.initializeApp(config)
     const firestore = firebaseApp.firestore()
     firestore.settings({timestampsInSnapshots: true})
+    const result = await pReflect(firestore.enablePersistence())
+    log.debug('firestore persistence result', result)
     state.firebaseApp = firebaseApp
     state.firebaseAuth = firebaseApp.auth()
     state.firestore = firestore

@@ -1,3 +1,8 @@
+const {
+  syncFromFirestoreToPDB,
+  syncFromPDBToFireStore,
+} = require('./stores/firestore-grains-store')
+
 const R = require('ramda')
 const log = require('nanologger')('window')
 const css = require('sheetify')
@@ -28,7 +33,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(require('./stores/firebase-app-store'))
 app.use(require('./stores/firebase-auth-store').firebaseAuthStore)
-app.use(require('./stores/firestore-grains-store'))
+app.use(syncFromPDBToFireStore)
+app.use(syncFromFirestoreToPDB)
 app.use(require('./stores/pdb-grains-store'))
 app.use(require('./stores/edit-grain-store'))
 app.route('/', require('./views/list'))

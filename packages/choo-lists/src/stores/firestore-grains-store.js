@@ -35,7 +35,7 @@ function createUserGrainsCollectionRef(state) {
   )
 }
 
-module.exports = function firestoreGrainsStore(state, emitter) {
+export function syncFromPDBToFireStore(state, emitter) {
   let unsubscribe = R.identity
   emitter.on(state.events.firebase_auth_state_changed, () => {
     unsubscribe()
@@ -94,6 +94,31 @@ module.exports = function firestoreGrainsStore(state, emitter) {
           },
         )
       }
+    } else if (state.authState === 'signedOut') {
+      unsubscribe()
+    } else {
+      assert.fail(`Invalid AuthState ${state.authState}`)
+    }
+  })
+}
+
+export function syncFromFirestoreToPDB(state, emitter) {
+  let unsubscribe = R.identity
+  emitter.on(state.events.firebase_auth_state_changed, () => {
+    unsubscribe()
+
+    if (state.authState === 'signedIn') {
+      const grainsRef = createUserGrainsCollectionRef(state)
+      unsubscribe = grainsRef.onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          log.debug('grains: onChange', change)
+          // GA.updateFromRemote({
+          //   type: change.type,
+          //   id: change.doc.id,
+          //   doc: change.doc.data(),
+          // })
+        })
+      })
     } else if (state.authState === 'signedOut') {
       unsubscribe()
     } else {
