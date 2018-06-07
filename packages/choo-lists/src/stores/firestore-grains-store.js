@@ -12,8 +12,15 @@ const createStore = require('./createStore')
 const LocalStorageItem = require('./local-storage-item')
 const pEachSeries = require('p-each-series')
 
+const Timestamp = firebase.firestore.Timestamp
+
 const syncSeqLS = LocalStorageItem(
   'choo-list:syncedTillSequenceNumber',
+  0,
+)
+
+const syncFSMilliLS = LocalStorageItem(
+  'choo-list:syncedTillFirestoreMilli',
   0,
 )
 
@@ -131,15 +138,24 @@ export function syncFromFirestoreToPDB(state, emitter) {
     if (state.authState === 'signedIn') {
       const grainsRef = createUserGrainsCollectionRef(state)
 
+      const syncSinceTimestamp = Timestamp.fromMillis(
+        syncFSMilliLS.load(),
+      )
       unsubscribe = createSnapshotStream(
         grainsRef
-          .where('fireStoreServerTimestamp', '>', 0)
+          .where('fireStoreServerTimestamp', '>', syncSinceTimestamp)
           .orderBy('fireStoreServerTimestamp'),
       )
         .flatMap(
           R.compose(
             Kefir.fromPromise,
-            R.flip(pEachSeries)(state.grains.handleFirestoreChange),
+            R.flip(pEachSeries)(async change => {
+              const firestoreTimestamp = change.doc.data()
+                .fireStoreServerTimestamp
+              assert(RA.isNotNil(firestoreTimestamp))
+              await state.grains.handleFirestoreChange(change)
+              syncFSMilliLS.save(firestoreTimestamp.toMillis())
+            }),
             R.tap(changes => log.debug('snapshot:changes', changes)),
             R.invoker(0, 'docChanges'),
           ),
