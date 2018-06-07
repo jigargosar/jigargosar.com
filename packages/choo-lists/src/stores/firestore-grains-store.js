@@ -10,6 +10,7 @@ require('firebase/firestore')
 const assert = require('assert')
 const createStore = require('./createStore')
 const LocalStorageItem = require('./local-storage-item')
+const pEachSeries = require('p-each-series')
 
 const syncSeqLS = LocalStorageItem(
   'choo-list:syncedTillSequenceNumber',
@@ -67,7 +68,7 @@ export function syncFromPDBToFireStore(state, emitter) {
         // Update remote firebase
         // iff we have changes from local actor, which are newer
 
-        log.debug('change', change.id, change)
+        log.debug('pdb:change', change.id, change)
         const localDoc = change.doc
 
         if (!hasLocalActorId(localDoc)) {
@@ -102,6 +103,16 @@ export function syncFromPDBToFireStore(state, emitter) {
   })
 }
 
+function createSnapshotStream(grainsRef) {
+  return Kefir.stream(emitter => {
+    return grainsRef.onSnapshot(
+      emitter.value,
+      emitter.error,
+      emitter.end,
+    )
+  })
+}
+
 export function syncFromFirestoreToPDB(state, emitter) {
   let unsubscribe = R.identity
   emitter.on(state.events.firebase_auth_state_changed, () => {
@@ -109,16 +120,18 @@ export function syncFromFirestoreToPDB(state, emitter) {
 
     if (state.authState === 'signedIn') {
       const grainsRef = createUserGrainsCollectionRef(state)
-      unsubscribe = grainsRef.onSnapshot(snapshot => {
-        snapshot.docChanges().forEach(change => {
-          log.debug('grains: onChange', change)
-          // GA.updateFromRemote({
-          //   type: change.type,
-          //   id: change.doc.id,
-          //   doc: change.doc.data(),
-          // })
-        })
-      })
+
+      unsubscribe = createSnapshotStream(grainsRef)
+        .flatMap(
+          R.compose(
+            Kefir.fromPromise,
+            R.flip(pEachSeries)(state.grains.handleFirestoreChange),
+            R.tap(changes => log.debug('snapshot:changes', changes)),
+            R.invoker(0, 'docChanges'),
+          ),
+        )
+        .takeErrors(1)
+        .log()
     } else if (state.authState === 'signedOut') {
       unsubscribe()
     } else {

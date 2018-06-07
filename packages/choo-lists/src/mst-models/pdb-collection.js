@@ -3,6 +3,7 @@ import plur from 'plur'
 import {optionalNanoId, optionalTimestamp} from './mst-types'
 import {getAppActorId} from '../stores/actor-id'
 
+const pReflect = require('p-reflect')
 const Kefir = require('kefir')
 
 const PouchDB = require('pouchdb-browser')
@@ -120,7 +121,15 @@ export const createPDBCollection = PDBModel => {
         changesStream(opts) {
           return createPDBChangesStream(opts, db)
         },
-
+        async handleFirestoreChange(change) {
+          self.log.debug('handleFirestoreChange', change)
+          const docResult = await pReflect(db.get(change.doc.id))
+          self.log.debug('handleFirestoreChange:docResult', docResult)
+          if (docResult.isRejected) {
+            return db.put(change.doc.data())
+          }
+          return Promise.resolve(docResult)
+        },
         addNew(props) {
           return self._putModelInPDB(PDBModel.create(props))
         },
