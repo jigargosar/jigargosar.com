@@ -82,6 +82,13 @@ module.exports = function firestoreGrainsStore(state, emitter) {
               log.debug('synced till seq:', change.seq)
               syncSeqLS.save(change.seq)
             })
+            .catch(e => {
+              log.error(
+                'Syncing Stopped Handle this use case using events',
+                e,
+              )
+              disposer()
+            })
         })
 
       disposer = () => changes.cancel()
