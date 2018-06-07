@@ -55,6 +55,8 @@ export const PDBModel = types
     isDeleted() {},
   }))
 
+const log = new Logger('createPDBChangesStream')
+
 function createPDBChangesStream(opts, db) {
   const stream = Kefir.stream(emitter => {
     const changes = db
@@ -67,8 +69,12 @@ function createPDBChangesStream(opts, db) {
       })
     return () => changes.cancel()
   })
-  stream.onError()
+  stream.mapErrors(R.tap(e => log.error(e)))
   return stream
+}
+
+function addUnsubscriber(self, subscription) {
+  addDisposer(self, () => subscription.unsubscribe())
 }
 
 export const createPDBCollection = PDBModel => {
@@ -101,13 +107,18 @@ export const createPDBCollection = PDBModel => {
     .actions(self => {
       return {
         afterCreate() {
-          const disposer = db
-            .changes({
-              include_docs: true,
-              live: true,
-            })
-            .on('change', self._pdOnChange)
-          addDisposer(self, () => disposer.cancel())
+          addUnsubscriber(
+            self,
+            self
+              .changesStream({
+                include_docs: true,
+                live: true,
+              })
+              .observe({
+                value: self._pdOnChange,
+                error: e => log.error(e),
+              }),
+          )
         },
 
         changes(opts) {
