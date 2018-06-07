@@ -96,6 +96,7 @@ module.exports = function firestoreGrainsStore(state, emitter) {
         )
       }
     } else if (state.authState === 'signedOut') {
+      unsubscribe()
     } else {
       assert.fail(`Invalid AuthState ${state.authState}`)
     }
