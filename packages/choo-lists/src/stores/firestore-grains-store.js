@@ -36,7 +36,6 @@ function createUserGrainsCollectionRef(state) {
 }
 
 module.exports = function firestoreGrainsStore(state, emitter) {
-  let disposer = R.identity
   let unsubscribe = R.identity
   emitter.on(state.events.firebase_auth_state_changed, () => {
     unsubscribe()
