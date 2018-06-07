@@ -1,9 +1,7 @@
 import {getAppActorId} from './actor-id'
 
-const pEachSeries = require('p-each-series')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
-const pReflect = require('p-reflect')
 const log = require('nanologger')('firestore-grains-store')
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -75,7 +73,7 @@ module.exports = function firestoreGrainsStore(state, emitter) {
                 if (!hasLocalActorId(remoteDoc)) {
                   addToHistory(docRef, remoteDoc, transaction)
                 }
-                transaction.set(docRef, localDoc)
+                transaction.update(docRef, localDoc)
               }
             })
             .then(() => {
