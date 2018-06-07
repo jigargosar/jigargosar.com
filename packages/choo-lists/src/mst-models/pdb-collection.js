@@ -42,7 +42,10 @@ export const PDBModel = types
         'modifiedAt',
         'actorId',
       ])
-      const userProps = omitSystemProps(props)
+      const userProps = R.compose(
+        R.merge({actorId: getAppActorId()}),
+        omitSystemProps,
+      )(props)
       if (R.equals(userProps, R.pick(R.keys(userProps), self))) {
         return self
       }

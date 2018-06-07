@@ -36,6 +36,13 @@ function createUserGrainsCollectionRef(state) {
   )
 }
 
+function mergeFirestoreServerTimestamp(localDoc) {
+  const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
+  return R.merge(localDoc, {
+    fireStoreServerTimestamp,
+  })
+}
+
 export function syncFromPDBToFireStore(state, emitter) {
   let unsubscribe = R.identity
   emitter.on(state.events.firebase_auth_state_changed, () => {
@@ -79,7 +86,10 @@ export function syncFromPDBToFireStore(state, emitter) {
           async transaction => {
             const remoteDocSnapshot = await transaction.get(docRef)
             if (!remoteDocSnapshot.exists) {
-              transaction.set(docRef, localDoc)
+              transaction.set(
+                docRef,
+                mergeFirestoreServerTimestamp(localDoc),
+              )
               return change.seq
             }
             const remoteDoc = remoteDocSnapshot.data()
@@ -121,7 +131,11 @@ export function syncFromFirestoreToPDB(state, emitter) {
     if (state.authState === 'signedIn') {
       const grainsRef = createUserGrainsCollectionRef(state)
 
-      unsubscribe = createSnapshotStream(grainsRef)
+      unsubscribe = createSnapshotStream(
+        grainsRef
+          .where('fireStoreServerTimestamp', '>', 0)
+          .orderBy('fireStoreServerTimestamp'),
+      )
         .flatMap(
           R.compose(
             Kefir.fromPromise,
