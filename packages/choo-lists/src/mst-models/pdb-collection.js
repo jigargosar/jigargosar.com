@@ -56,7 +56,7 @@ export const PDBModel = types
   }))
 
 function createPDBChangesStream(opts, db) {
-  return Kefir.stream(emitter => {
+  const stream = Kefir.stream(emitter => {
     const changes = db
       .changes(opts)
       .on('change', emitter.value)
@@ -67,6 +67,8 @@ function createPDBChangesStream(opts, db) {
       })
     return () => changes.cancel()
   })
+  stream.onError()
+  return stream
 }
 
 export const createPDBCollection = PDBModel => {
