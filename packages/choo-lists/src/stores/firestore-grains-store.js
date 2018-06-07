@@ -111,7 +111,10 @@ export function syncFromPDBToFireStore(state, emitter) {
             if (!hasLocalActorId(remoteDoc)) {
               addToHistory(docRef, remoteDoc, transaction)
             }
-            transaction.update(docRef, localDoc)
+            transaction.update(
+              docRef,
+              mergeFirestoreServerTimestamp(localDoc),
+            )
           },
         )
       }
