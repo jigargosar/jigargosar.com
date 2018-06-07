@@ -12,6 +12,7 @@ const assert = require('assert')
 const createStore = require('./createStore')
 const LocalStorageItem = require('./local-storage-item')
 const pEachSeries = require('p-each-series')
+const PLazy = require('p-lazy')
 
 const Timestamp = firebase.firestore.Timestamp
 
@@ -66,14 +67,11 @@ export function syncFromPDBToFireStore(state, emitter) {
           live: true,
           since,
         })
-        .flatMap(
-          R.compose(Kefir.fromPromise, change => {
-            return onChange(change).then(seq => {
-              log.debug('synced till seq:', seq)
-              syncSeqLS.save(seq)
-            })
-          }),
-        )
+        .scan(async (prevPromise, change) => {
+          await prevPromise
+          const seq = await onChange(change)
+          syncSeqLS.save(seq)
+        }, Promise.resolve())
         .takeErrors(1)
         .observe({
           error(error) {
