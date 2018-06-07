@@ -53,7 +53,9 @@ export const PDBModel = types
     getRevision() {
       return self._rev
     },
-    isDeleted() {},
+    isDeleted() {
+      return self.deleted
+    },
   }))
 
 const log = new Logger('createPDBChangesStream')
@@ -122,11 +124,16 @@ export const createPDBCollection = PDBModel => {
           return createPDBChangesStream(opts, db)
         },
         async handleFirestoreChange(change) {
-          self.log.debug('handleFirestoreChange', change)
           const docResult = await pReflect(db.get(change.doc.id))
-          self.log.debug('handleFirestoreChange:docResult', docResult)
+          const documentData = change.doc.data()
+          self.log.debug(
+            'handleFirestoreChange',
+            documentData,
+            change,
+            docResult,
+          )
           if (docResult.isRejected) {
-            return db.put(change.doc.data())
+            return db.put(R.omit(['_rev'], documentData))
           }
           return Promise.resolve(docResult)
         },
