@@ -1,4 +1,5 @@
 import {getAppActorId} from './actor-id'
+import * as Kefir from 'kefir'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -28,68 +29,72 @@ function addToHistory(docRef, doc, transaction) {
   )
 }
 
+function createUserGrainsCollectionRef(state) {
+  return state.firestore.collection(
+    `users/${state.userInfo.uid}/${`grains`}`,
+  )
+}
+
 module.exports = function firestoreGrainsStore(state, emitter) {
   let disposer = R.identity
+  let unsubscribe = R.identity
   emitter.on(state.events.firebase_auth_state_changed, () => {
-    disposer()
+    unsubscribe()
 
     if (state.authState === 'signedIn') {
-      const uid = state.userInfo.uid
-
-      function userCollection(name) {
-        return state.firestore.collection(`users/${uid}/${name}`)
-      }
-
-      const collection = userCollection(`grains`)
-
+      const grainsRef = createUserGrainsCollectionRef(state)
       const since = syncSeqLS.load()
       log.debug('start sync. seq:', since)
-      const changes = state.grains
-        .changes({
+      const subscription = state.grains
+        .changesStream({
           include_docs: true,
           live: true,
           since,
         })
-        .on('change', change => {
-          // Update remote firebase
-          // iff we have changes from local actor, which are newer
-
-          log.debug('change', change.id, change)
-          const localDoc = change.doc
-
-          if (!hasLocalActorId(localDoc)) return
-          const docRef = collection.doc(change.id)
-          state.firestore
-            .runTransaction(async transaction => {
-              const remoteDocSnapshot = await transaction.get(docRef)
-              if (!remoteDocSnapshot.exists) {
-                transaction.set(docRef, localDoc)
-                return
-              }
-              const remoteDoc = remoteDocSnapshot.data()
-              if (isNewerThan(remoteDoc, localDoc)) {
-                transaction.update(docRef, {})
-              } else {
-                if (!hasLocalActorId(remoteDoc)) {
-                  addToHistory(docRef, remoteDoc, transaction)
-                }
-                transaction.update(docRef, localDoc)
-              }
-            })
-            .then(() => {
-              log.debug('synced till seq:', change.seq)
-              syncSeqLS.save(change.seq)
-            })
-            .catch(e => {
-              log.error(
-                'Syncing Stopped Handle this use case using events',
-                e,
-              )
-              disposer()
-            })
+        .flatMap(R.compose(Kefir.fromPromise, onChange))
+        .takeErrors(1)
+        .observe({
+          value(seq) {
+            log.debug('synced till seq:', seq)
+            syncSeqLS.save(seq)
+          },
+          error(error) {
+            log.error('sync error', error)
+          },
         })
+      unsubscribe = () => subscription.unsubscribe()
 
-      disposer = () => changes.cancel()
+      function onChange(change) {
+        // Update remote firebase
+        // iff we have changes from local actor, which are newer
+
+        log.debug('change', change.id, change)
+        const localDoc = change.doc
+
+        if (!hasLocalActorId(localDoc)) {
+          return Promise.resolve(change.seq)
+        }
+        const docRef = grainsRef.doc(change.id)
+        return grainsRef.firestore.runTransaction(
+          async transaction => {
+            const remoteDocSnapshot = await transaction.get(docRef)
+            if (!remoteDocSnapshot.exists) {
+              transaction.set(docRef, localDoc)
+              return change.seq
+            }
+            const remoteDoc = remoteDocSnapshot.data()
+            if (isNewerThan(remoteDoc, localDoc)) {
+              transaction.update(docRef, {})
+            } else {
+              if (!hasLocalActorId(remoteDoc)) {
+                addToHistory(docRef, remoteDoc, transaction)
+              }
+              transaction.update(docRef, localDoc)
+            }
+            return change.seq
+          },
+        )
+      }
     } else if (state.authState === 'signedOut') {
     } else {
       assert.fail(`Invalid AuthState ${state.authState}`)
