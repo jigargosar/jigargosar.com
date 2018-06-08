@@ -8,9 +8,19 @@ const Grain = types.model('Grain', {
   text: types.string,
 })
 
+const Metadata = types.model('Metadata', {
+  id: types.identifier(types.string),
+  grain: types.reference(Grain),
+  pouchDBRevision: types.maybe(types.string),
+  createAt: types.number,
+  modifiedAt: types.number,
+  archived: types.boolean,
+})
+
 const GrainCollection = types
   .model('GrainCollection', {
     grainsMap: types.optional(types.map(Grain), {}),
+    metaMap: types.optional(types.map(Metadata), {}),
   })
   .views(self => {
     return {
@@ -22,8 +32,20 @@ const GrainCollection = types
   .actions(self => {
     return {
       addNew() {
-        self.grainsMap.put(
-          Grain.create({id: `grain-${nanoid()}`, text: ''}),
+        const id = `grain-${nanoid()}`
+        const grain = Grain.create({
+          id,
+          text: '<Empty Text>',
+        })
+        self.grainsMap.put(grain)
+        self.metaMap.put(
+          Metadata.create({
+            id: grain.id,
+            grain,
+            createAt: Date.now(),
+            modifiedAt: Date.now(),
+            archived: false,
+          }),
         )
       },
       clear() {
