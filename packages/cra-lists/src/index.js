@@ -2,14 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
-import {Provider} from 'mobx-react'
 import App from './App'
+import {StateProvider} from './StateContext'
+
+function getState() {
+  return require('./stores/rootStore').state
+}
 
 function render() {
   ReactDOM.render(
-    <Provider s={require('./stores/rootStore').state}>
+    <StateProvider value={getState()}>
       <App />
-    </Provider>,
+    </StateProvider>,
     document.getElementById('root'),
   )
 }

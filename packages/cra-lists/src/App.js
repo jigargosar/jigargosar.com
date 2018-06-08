@@ -1,11 +1,12 @@
 import React, {Fragment as F} from 'react'
-import {inject, observer} from 'mobx-react'
+import {observer} from 'mobx-react'
+import {withState} from './StateContext'
 
 const R = require('ramda')
 
 const centeredContentClass = 'center mw7 mv3 ph3'
 
-const injectS = R.compose(inject('s'), observer)
+const injectS = R.compose(withState, observer)
 
 const Header = injectS(function Header({s}) {
   return (
@@ -44,6 +45,7 @@ const GrainListHeader = injectS(function GrainListHeader({s}) {
     <SpacedRow>
       LIST
       <button onClick={s.onAddNew}>Add</button>
+      <button onClick={s.onClear}>Clear</button>
     </SpacedRow>
   )
 })

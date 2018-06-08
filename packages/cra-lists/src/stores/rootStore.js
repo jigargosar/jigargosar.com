@@ -27,6 +27,9 @@ const GrainCollection = types
           Grain.create({id: `grain-${nanoid()}`, text: ''}),
         )
       },
+      clear() {
+        self.grainsMap.clear()
+      },
     }
   })
 
@@ -46,10 +49,11 @@ export const State = types
   })
   .actions(self => {
     return {
-      onAddNew(event) {
-        // event['persist']()
-        log.debug('onAddNew', event.type, event)
+      onAddNew() {
         return self.grains.addNew()
+      },
+      onClear() {
+        return self.grains.clear()
       },
     }
   })
