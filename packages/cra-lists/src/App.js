@@ -29,16 +29,17 @@ const Header = injectS(function Header({s}) {
   )
 })
 
-const GrainItem = injectS(function GrainItem({item}) {
-  return <div>{item}</div>
+const GrainItem = injectS(function GrainItem({grain}) {
+  return <div>{grain.id}</div>
 })
 
 const GrainsList = injectS(function GrainsList({s}) {
+  const grainsList = s.grainsList
   return (
     <div>
-      {R.addIndex(R.map)((item, idx) => (
-        <GrainItem key={idx} item={item} />
-      ))(s.list)}
+      {R.map(grain => <GrainItem key={grain.id} grain={grain} />)(
+        grainsList,
+      )}
     </div>
   )
 })
