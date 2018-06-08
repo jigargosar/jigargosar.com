@@ -4,14 +4,10 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import {StateProvider} from './StateContext'
 
-function getState() {
-  return require('./stores/state').state
-}
-
 function render() {
   const App = require('./App').default
   ReactDOM.render(
-    <StateProvider value={getState()}>
+    <StateProvider value={require('./state-loader').state}>
       <App />
     </StateProvider>,
     document.getElementById('root'),
