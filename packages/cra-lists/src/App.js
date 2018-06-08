@@ -34,20 +34,31 @@ const GrainItem = injectS(function GrainItem({item}) {
 })
 
 const GrainsList = injectS(function GrainsList({s}) {
-  const list = s.list || [1, 2, 3]
   return (
     <div>
-      {R.map(item => <GrainItem key={item} item={item} />)(list)}
+      {R.addIndex(R.map)((item, idx) => (
+        <GrainItem key={idx} item={item} />
+      ))(s.list)}
     </div>
   )
 })
 
+const GrainListHeader = injectS(function GrainListHeader({s}) {
+  return (
+    <div className={'flex'}>
+      <div>LIST</div>
+      <div>
+        <button onClick={() => s.addNew()}>Add</button>
+      </div>
+    </div>
+  )
+})
 const App = injectS(function App() {
   return (
     <F>
       <Header />
       <div className={`${centeredContentClass}`}>
-        <div>LIST</div>
+        <GrainListHeader />
         <GrainsList />
       </div>
       <Counter />
