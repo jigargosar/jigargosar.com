@@ -36,7 +36,7 @@ export const State = types
       },
       addNew() {
         self.list = R.prepend(self.list.length, self.list)
-        self.grainsMap = self.grainsMap.put(
+        self.grainsMap.put(
           Grain.create({id: `grain-${nanoid()}`, text: ''}),
         )
       },
