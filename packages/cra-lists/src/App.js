@@ -7,6 +7,19 @@ const centeredContentClass = 'center mw7 mv3 ph3'
 
 const injectS = R.compose(inject('s'), observer)
 
+const Counter = injectS(function Counter({s}) {
+  return (
+    <div className={`flex flex-column ${centeredContentClass}`}>
+      <div>Counter : {s.counter}</div>
+      <div>
+        <button onClick={() => s.inc(1)}>+</button>
+        <button onClick={() => s.dec(1)}>-</button>
+        <button onClick={() => s.reset()}>reset</button>
+      </div>
+    </div>
+  )
+})
+
 function App({s}) {
   return (
     <F>
@@ -15,12 +28,7 @@ function App({s}) {
         {/*<div>${signInOutView(state, emit)}</div>*/}
       </div>
       <div className={`flex ${centeredContentClass}`}>LIST</div>
-      <div className={`flex ${centeredContentClass}`}>
-        Counter : {s.counter}
-        <button onClick={() => s.inc(1)}>+</button>
-        <button onClick={() => s.dec(1)}>-</button>
-        <button onClick={() => s.reset()}>reset</button>
-      </div>
+      <Counter />
     </F>
   )
 }
