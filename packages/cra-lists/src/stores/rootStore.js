@@ -2,6 +2,7 @@ import {types} from 'mobx-state-tree'
 
 const mst = require('mobx-state-tree')
 const nanoid = require('nanoid')
+const log = require('nanologger')('rootStore')
 
 const Grain = types.model('Grain', {
   id: types.identifier(types.string),
@@ -37,12 +38,18 @@ export const State = types
           Grain.create({id: `grain-${nanoid()}`, text: ''}),
         )
       },
+      onAddNew(event) {
+        // event['persist']()
+        log.debug('onAddNew', event.type, event)
+        return self.addNew()
+      },
     }
   })
 
 export const state = State.create()
 
 if (module.hot) {
+  window.state = state
   if (module.hot.data && module.hot.data.snapshot) {
     mst.applySnapshot(state, module.hot.data.snapshot)
   }

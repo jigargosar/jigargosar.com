@@ -41,14 +41,10 @@ const GrainsList = injectS(function GrainsList({s}) {
 
 const GrainListHeader = injectS(function GrainListHeader({s}) {
   return (
-    <div className={'flex'}>
-      <SpacedRow>
-        <div>LIST</div>
-        <div>
-          <button onClick={() => s.addNew()}>Add</button>
-        </div>
-      </SpacedRow>
-    </div>
+    <SpacedRow>
+      LIST
+      <button onClick={s.onAddNew}>Add</button>
+    </SpacedRow>
   )
 })
 const App = injectS(function App() {

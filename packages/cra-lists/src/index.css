@@ -10,4 +10,5 @@
 
 .SpacedRow > * {
   margin: 0 var(--default-row-spacing);
+  display: inline-block;
 }
