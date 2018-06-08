@@ -34,11 +34,10 @@ const GrainItem = injectS(function GrainItem({grain}) {
 })
 
 const GrainsList = injectS(function GrainsList({s}) {
-  const grainsList = s.grainsList
   return (
     <div>
       {R.map(grain => <GrainItem key={grain.id} grain={grain} />)(
-        grainsList,
+        s.grainsList,
       )}
     </div>
   )
