@@ -8,9 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/node_modules/mobx" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/node_modules/mobx-react" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/node_modules/mobx-state-tree" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/node_modules/react-dom" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/public" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/node_modules/nanologger" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/public" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules/.bin" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules/.cache" />
@@ -761,6 +760,7 @@
       <excludeFolder url="file://$MODULE_DIR$/node_modules/raw-body" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules/rc" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules/react-dev-utils" />
+      <excludeFolder url="file://$MODULE_DIR$/node_modules/react-dom" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules/react-error-overlay" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules/react-lifecycles-compat" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules/react-scripts" />
@@ -975,6 +975,7 @@
       <excludeFolder url="file://$MODULE_DIR$/node_modules/yargs-parser" />
     </content>
     <content url="file://$MODULE_DIR$/node_modules/nanologger" />
+    <content url="file://$MODULE_DIR$/node_modules/react-dom" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

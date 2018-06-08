@@ -3,23 +3,29 @@ import {inject, observer} from 'mobx-react'
 
 const R = require('ramda')
 
+// const rootStore = require('./stores/rootStore').rootStore
+// require('./stores/rootStore')
+
 const centeredContentClass = 'center mw7 mv3 ph3'
-const App = R.compose(inject('root'), observer)(function App() {
-  const root = this.props.root
-  const {pageTitle, counter} = this.props.root
+
+const injectS = R.compose(inject('s'), observer)
+
+function App({s}) {
   return (
     <F>
       <div className="bg-light-blue tc pa3">
-        <div className="f1">{pageTitle}</div>
+        <div className="f1">{s.pageTitle}</div>
         {/*<div>${signInOutView(state, emit)}</div>*/}
       </div>
       <div className={`flex ${centeredContentClass}`}>LIST</div>
       <div className={`flex ${centeredContentClass}`}>
-        Counter : {counter}
-        <button onClick={() => (root.counter += 1)}>+</button>
+        Counter : {s.counter}
+        <button onClick={() => s.inc(1)}>-</button>
+        <button onClick={() => s.dec(1)}>+</button>
+        <button onClick={() => s.reset()}>reset</button>
       </div>
     </F>
   )
-})
+}
 
-export default App
+export default injectS(App)

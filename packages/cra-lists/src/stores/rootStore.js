@@ -1,17 +1,33 @@
-import {observable, toJS} from 'mobx'
+import {types} from 'mobx-state-tree'
 
-export const rootStore = observable({
-  pageTitle: 'CRA List Prototype',
-  counter: 0,
-})
+const mst = require('mobx-state-tree')
+
+export const State = types
+  .model('RootState', {
+    counter: 0,
+    pageTitle: 'CRA List Proto',
+  })
+  .actions(self => {
+    return {
+      inc() {
+        self.counter += 1
+      },
+      dec() {
+        self.counter -= 1
+      },
+      reset() {
+        self.counter = 0
+      },
+    }
+  })
+
+export const state = State.create()
 
 if (module.hot) {
-  if (module.hot.data && module.hot.data.store) {
-    // applySnapshot(store, module.hot.data.store)
-    Object.asssign(rootStore, module.hot.data.store)
+  if (module.hot.data && module.hot.data.snapshot) {
+    mst.applySnapshot(state, module.hot.data.snapshot)
   }
   module.hot.dispose(data => {
-    // data.store = getSnapshot(store)
-    data.store = toJS(rootStore)
+    data.snapshot = mst.getSnapshot(state)
   })
 }
