@@ -3,9 +3,6 @@ import {inject, observer} from 'mobx-react'
 
 const R = require('ramda')
 
-// const rootStore = require('./stores/rootStore').rootStore
-// require('./stores/rootStore')
-
 const centeredContentClass = 'center mw7 mv3 ph3'
 
 const injectS = R.compose(inject('s'), observer)
@@ -20,8 +17,8 @@ function App({s}) {
       <div className={`flex ${centeredContentClass}`}>LIST</div>
       <div className={`flex ${centeredContentClass}`}>
         Counter : {s.counter}
-        <button onClick={() => s.inc(1)}>-</button>
-        <button onClick={() => s.dec(1)}>+</button>
+        <button onClick={() => s.inc(1)}>+</button>
+        <button onClick={() => s.dec(1)}>-</button>
         <button onClick={() => s.reset()}>reset</button>
       </div>
     </F>
