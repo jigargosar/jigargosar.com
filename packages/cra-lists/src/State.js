@@ -9,7 +9,6 @@ const Grain = types.model('Grain', {
 })
 
 const Metadata = types.model('Metadata', {
-  id: types.identifier(types.string),
   grain: types.reference(Grain),
   pouchDBRevision: types.maybe(types.string),
   createAt: types.number,
@@ -38,9 +37,9 @@ const GrainCollection = types
           text: '',
         })
         self.grainsMap.put(grain)
-        self.metaMap.put(
+        self.metaMap.set(
+          grain.id,
           Metadata.create({
-            id: grain.id,
             grain,
             createAt: Date.now(),
             modifiedAt: Date.now(),
