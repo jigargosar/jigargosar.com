@@ -16,8 +16,17 @@ const Header = injectS(function Header({s}) {
   )
 })
 
+function SpacedRow({children}) {
+  return <div className={'flex flex-row'}>{children}</div>
+}
+
 const GrainItem = injectS(function GrainItem({grain}) {
-  return <div>{grain.id}</div>
+  return (
+    <div>
+      <div>{grain.text}</div>
+      <div>{grain.id}</div>
+    </div>
+  )
 })
 
 const GrainsList = injectS(function GrainsList({s}) {
@@ -33,10 +42,12 @@ const GrainsList = injectS(function GrainsList({s}) {
 const GrainListHeader = injectS(function GrainListHeader({s}) {
   return (
     <div className={'flex'}>
-      <div>LIST</div>
-      <div>
-        <button onClick={() => s.addNew()}>Add</button>
-      </div>
+      <SpacedRow>
+        <div>LIST</div>
+        <div>
+          <button onClick={() => s.addNew()}>Add</button>
+        </div>
+      </SpacedRow>
     </div>
   )
 })
