@@ -22,10 +22,13 @@ function SpacedRow({children}) {
 }
 
 const GrainItem = injectS(function GrainItem({grain}) {
+  const [displayText, cn = ''] = R.isEmpty(grain.text)
+    ? ['<empty>', 'black-70']
+    : [grain.text]
   return (
-    <div>
-      <div>{grain.text}</div>
-      <div>{grain.id}</div>
+    <div className={'mv2'}>
+      <div className={cn}>{displayText}</div>
+      <div className={'black-50 ml2'}>_id:{grain.id}</div>
     </div>
   )
 })

@@ -35,7 +35,7 @@ const GrainCollection = types
         const id = `grain-${nanoid()}`
         const grain = Grain.create({
           id,
-          text: '<Empty Text>',
+          text: '',
         })
         self.grainsMap.put(grain)
         self.metaMap.put(
