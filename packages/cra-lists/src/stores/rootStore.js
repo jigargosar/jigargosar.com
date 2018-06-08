@@ -1,7 +1,6 @@
 import {types} from 'mobx-state-tree'
 
 const mst = require('mobx-state-tree')
-const R = require('ramda')
 const nanoid = require('nanoid')
 
 const Grain = types.model('Grain', {
@@ -13,7 +12,6 @@ export const State = types
   .model('RootState', {
     counter: 0,
     pageTitle: 'CRA List Proto',
-    list: types.optional(types.array(types.number), [1, 2, 4]),
     grainsMap: types.optional(types.map(Grain), {}),
   })
   .views(self => {
@@ -35,7 +33,6 @@ export const State = types
         self.counter = 0
       },
       addNew() {
-        self.list = R.prepend(self.list.length, self.list)
         self.grainsMap.put(
           Grain.create({id: `grain-${nanoid()}`, text: ''}),
         )

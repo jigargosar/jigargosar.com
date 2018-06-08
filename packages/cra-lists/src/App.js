@@ -7,19 +7,6 @@ const centeredContentClass = 'center mw7 mv3 ph3'
 
 const injectS = R.compose(inject('s'), observer)
 
-const Counter = injectS(function Counter({s}) {
-  return (
-    <div className={`${centeredContentClass}`}>
-      <div>Counter : {s.counter}</div>
-      <div>
-        <button onClick={() => s.inc(1)}>+</button>
-        <button onClick={() => s.dec(1)}>-</button>
-        <button onClick={() => s.reset()}>reset</button>
-      </div>
-    </div>
-  )
-})
-
 const Header = injectS(function Header({s}) {
   return (
     <div className="bg-light-blue tc pa3">
@@ -61,7 +48,6 @@ const App = injectS(function App() {
         <GrainListHeader />
         <GrainsList />
       </div>
-      <Counter />
     </F>
   )
 })
