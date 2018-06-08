@@ -5,7 +5,7 @@ import registerServiceWorker from './registerServiceWorker'
 import {StateProvider} from './StateContext'
 
 function getState() {
-  return require('./stores/rootStore').state
+  return require('./stores/state').state
 }
 
 function render() {

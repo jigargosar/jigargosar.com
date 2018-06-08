@@ -58,7 +58,7 @@ export const State = types
     }
   })
 
-export const state = State.create()
+export const state = State.create({}, {})
 
 if (module.hot) {
   window.state = state
