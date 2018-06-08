@@ -6,6 +6,7 @@ const nanoid = require('nanoid')
 const Grain = types.model('Grain', {
   id: types.identifier(types.string),
   text: types.string,
+  metadata: types.late(() => Metadata),
 })
 
 const Metadata = types.model('Metadata', {
@@ -32,20 +33,18 @@ const GrainCollection = types
     return {
       addNew() {
         const id = `grain-${nanoid()}`
-        const grain = Grain.create({
+        const metadata = {
+          grain: id,
+          createAt: Date.now(),
+          modifiedAt: Date.now(),
+          archived: false,
+        }
+        self.metaMap.set(id, metadata)
+        self.grainsMap.put({
           id,
           text: '',
+          metadata,
         })
-        self.grainsMap.put(grain)
-        self.metaMap.set(
-          grain.id,
-          Metadata.create({
-            grain,
-            createAt: Date.now(),
-            modifiedAt: Date.now(),
-            archived: false,
-          }),
-        )
       },
       clear() {
         self.grainsMap.clear()
