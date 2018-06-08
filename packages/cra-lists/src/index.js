@@ -1,12 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 import {Provider} from 'mobx-react'
 import {rootStore} from './stores/rootStore'
+import {autorun} from 'mobx'
 
-function render(App) {
+function render() {
+  const App = require('./App').default
   ReactDOM.render(
     <Provider root={rootStore}>
       <App />
@@ -15,12 +16,15 @@ function render(App) {
   )
 }
 
-render(App)
+render()
+
+autorun(() => {
+  document.title = rootStore.pageTitle
+})
 
 if (module.hot) {
   module.hot.accept('./App', () => {
-    const App = require('./App').default
-    render(App)
+    render()
   })
 }
 
