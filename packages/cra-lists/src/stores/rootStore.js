@@ -9,39 +9,47 @@ const Grain = types.model('Grain', {
   text: types.string,
 })
 
-export const State = types
-  .model('RootState', {
-    counter: 0,
-    pageTitle: 'CRA List Proto',
+const GrainCollection = types
+  .model('GrainCollection', {
     grainsMap: types.optional(types.map(Grain), {}),
   })
   .views(self => {
     return {
-      get grainsList() {
+      get list() {
         return Array.from(self.grainsMap.values())
       },
     }
   })
   .actions(self => {
     return {
-      inc() {
-        self.counter += 1
-      },
-      dec() {
-        self.counter -= 1
-      },
-      reset() {
-        self.counter = 0
-      },
       addNew() {
         self.grainsMap.put(
           Grain.create({id: `grain-${nanoid()}`, text: ''}),
         )
       },
+    }
+  })
+
+export const State = types
+  .model('RootState', {
+    pageTitle: 'CRA List Proto',
+    grains: types.optional(GrainCollection, () =>
+      GrainCollection.create(),
+    ),
+  })
+  .views(self => {
+    return {
+      get grainsList() {
+        return self.grains.list
+      },
+    }
+  })
+  .actions(self => {
+    return {
       onAddNew(event) {
         // event['persist']()
         log.debug('onAddNew', event.type, event)
-        return self.addNew()
+        return self.grains.addNew()
       },
     }
   })
