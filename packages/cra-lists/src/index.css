@@ -1,1 +1,13 @@
 @import '~tachyons';
+:root {
+  --default-row-spacing: 0.3rem;
+}
+.SpacedRow {
+  display: flex;
+  flex-direction: row;
+  margin: 0 calc(-1 * var(--default-row-spacing));
+}
+
+.SpacedRow > * {
+  margin: 0 var(--default-row-spacing);
+}

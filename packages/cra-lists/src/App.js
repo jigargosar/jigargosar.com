@@ -17,7 +17,7 @@ const Header = injectS(function Header({s}) {
 })
 
 function SpacedRow({children}) {
-  return <div className={'flex flex-row'}>{children}</div>
+  return <div className={'SpacedRow'}>{children}</div>
 }
 
 const GrainItem = injectS(function GrainItem({grain}) {
