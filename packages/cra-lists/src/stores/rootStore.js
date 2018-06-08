@@ -2,7 +2,7 @@ import {types} from 'mobx-state-tree'
 
 const mst = require('mobx-state-tree')
 const nanoid = require('nanoid')
-const log = require('nanologger')('rootStore')
+// const log = require('nanologger')('rootStore')
 
 const Grain = types.model('Grain', {
   id: types.identifier(types.string),
