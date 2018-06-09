@@ -208,11 +208,14 @@ const Fire = types
   .actions(self => {
     return {
       afterCreate: flow(function* afterCreate() {
-        reaction(
-          () => self.store,
-          () => {
-            self.log.debug('storeReady', self.store)
-          },
+        addDisposer(
+          self,
+          reaction(
+            () => self.store,
+            () => {
+              self.log.debug('storeReady', self.store)
+            },
+          ),
         )
 
         if (!self.store) {
