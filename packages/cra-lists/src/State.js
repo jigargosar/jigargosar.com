@@ -1,5 +1,6 @@
 // const log = require('nanologger')('rootStore')
 import {getEnv, types} from 'mobx-state-tree'
+import {SF} from './safe-fun'
 
 const R = require('ramda')
 
@@ -65,7 +66,7 @@ const GrainCollection = types
   .views(self => {
     return {
       get list() {
-        const sortWithPropsAs = [R.descend(R.prop('createAt'))]
+        const sortWithPropsAs = [R.descend(SF.prop('createdAt'))]
 
         return R.compose(
           R.sortWith(sortWithPropsAs),
