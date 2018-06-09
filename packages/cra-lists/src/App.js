@@ -29,7 +29,9 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
     <div className={'mv2'}>
       <button onClick={s.onUpdate(grain)}>E</button>
       <div className={cn}>{displayText}</div>
-      <div className={'black-50 ml2'}>_id:{grain.id}</div>
+      <div className={'black-50 ml2'}>
+        id:{grain.id} createdAt:{grain.createdAt}
+      </div>
     </div>
   )
 })

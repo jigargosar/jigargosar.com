@@ -138,7 +138,7 @@ const PFGrainCollection = createPouchFireCollection(PFGrain, 'Grain')
     return {
       get list() {
         const sortWithProps = [R.descend(SF.prop('createdAt'))]
-        return R.sortWith(sortWithProps)(self._all)
+        return R.sortWith(sortWithProps, self._all)
       },
 
       clear() {
