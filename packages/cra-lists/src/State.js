@@ -33,7 +33,6 @@ function createPouchFireModel(name) {
 function createPouchFireCollection(Model, modelName) {
   const name = `PouchFire${modelName}Collection`
   const log = require('nanologger')(name)
-  log.info(PouchFireBaseModel.propertyNames, Model.propertyNames)
 
   const userModifiableProps = R.without(
     PouchFireBaseModel.propertyNames,
