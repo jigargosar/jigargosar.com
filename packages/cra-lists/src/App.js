@@ -21,12 +21,13 @@ function SpacedRow({children}) {
   return <div className={'SpacedRow'}>{children}</div>
 }
 
-const GrainItem = injectS(function GrainItem({grain}) {
+const GrainItem = injectS(function GrainItem({s, grain}) {
   const [displayText, cn = ''] = R.isEmpty(grain.text)
     ? ['<empty>', 'black-70']
     : [grain.text]
   return (
     <div className={'mv2'}>
+      <button onClick={s.onUpdate(grain)}>E</button>
       <div className={cn}>{displayText}</div>
       <div className={'black-50 ml2'}>_id:{grain.id}</div>
     </div>
