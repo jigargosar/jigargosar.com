@@ -90,7 +90,7 @@ function createPouchFireCollection(Model, modelName) {
       return {
         _addNew(extendedProps = {}) {
           assert(RA.isNotNil(extendedProps))
-          const model = {
+          const props = {
             _id: `${modelName}-${nanoid()}`,
             _rev: null,
             createdAt: Date.now(),
@@ -99,7 +99,9 @@ function createPouchFireCollection(Model, modelName) {
             actorId: self._actorId,
             version: 0,
           }
-          self.__db.put(R.mergeDeepRight(extendedProps, model))
+          const finalProps = R.mergeDeepRight(extendedProps, props)
+
+          self.__db.put(getSnapshot(Model.create(finalProps)))
         },
         _update({_id, _rev}, userChange = {}) {
           assert(RA.isNotNil(userChange))
