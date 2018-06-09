@@ -38,9 +38,10 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
         <SpacedRow>
           <div>id: {grain.id}</div>
           <div>rev: {grain.rev}</div>
-          <div>c: {getFormattedDate(grain.createdAt)}</div>
-          <div>m: {getFormattedDate(grain.modifiedAt)}</div>
-          <div>v: {grain.version}</div>
+          <div>a: {grain.actorId}</div>
+          <div>cAt: {getFormattedDate(grain.createdAt)}</div>
+          <div>mAt: {getFormattedDate(grain.modifiedAt)}</div>
+          <div>ver: {grain.version}</div>
         </SpacedRow>
       </div>
     </div>
