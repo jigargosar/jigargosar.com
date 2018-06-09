@@ -29,11 +29,13 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
     <div className={'mv2'}>
       <button onClick={s.onUpdate(grain)}>E</button>
       <div className={cn}>{displayText}</div>
-      <div className={'f5 black-50 ml2'}>
+      <div className={'f6 black-50 ml2'}>
         <SpacedRow>
           <div>id:{grain.id}</div>
+          <div>rev:{grain.rev}</div>
           <div>c:{grain.createdAt}</div>
           <div>m:{grain.modifiedAt}</div>
+          <div>v:{grain.version}</div>
         </SpacedRow>
       </div>
     </div>

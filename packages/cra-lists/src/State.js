@@ -23,6 +23,9 @@ const PouchFireBaseModel = types
       get id() {
         return self._id
       },
+      get rev() {
+        return self._rev
+      },
     }
   })
 
