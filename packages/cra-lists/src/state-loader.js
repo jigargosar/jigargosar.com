@@ -18,5 +18,6 @@ if (module.hot) {
   }
   module.hot.dispose(data => {
     data.snapshot = mst.getSnapshot(state)
+    mst.destroy(state)
   })
 }

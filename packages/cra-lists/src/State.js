@@ -1,6 +1,7 @@
 // const log = require('nanologger')('rootStore')
-import {getEnv, types} from 'mobx-state-tree'
+import {addDisposer, getEnv, types} from 'mobx-state-tree'
 import {SF} from './safe-fun'
+import PouchDB from 'pouchdb-browser'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -27,15 +28,45 @@ function createPouchFireModel(name) {
     })
 }
 
-function createPouchFireCollection(Model, name) {
+function createPouchFireCollection(Model, modelName) {
+  const name = `PouchFire${modelName}Collection`
+  const log = require('nanologger')(name)
   return types
-    .model(`PouchFire${name}Collection`, {
-      _idLookup: types.optional(types.map(Model), {}),
+    .model(name, {
+      __idLookup: types.optional(types.map(Model), {}),
     })
     .views(self => {
       return {
         get _all() {
-          return Array.from(self._idLookup.values())
+          return Array.from(self.__idLookup.values())
+        },
+      }
+    })
+    .volatile(self => {
+      addDisposer(self, () => {
+        log.warn('closing pdb')
+        self.__db.close()
+        log.warn('pdb closed')
+      })
+      log.warn('creating pouch db')
+      return {
+        __db: new PouchDB(name),
+      }
+    })
+    .actions(self => {
+      return {
+        afterCreate() {
+          const changes = self.__db
+            .changes({
+              live: true,
+              include_docs: true,
+            })
+            .on('change', self.__loadFromPDB)
+          addDisposer(self, () => changes.cancel())
+        },
+        __loadFromPDB(change) {
+          log.debug('updating _idLookup from PDB change', change)
+          self.__idLookup.put(change.doc)
         },
       }
     })
@@ -44,7 +75,7 @@ function createPouchFireCollection(Model, name) {
         _addNew(extendedProps = {}) {
           assert(RA.isNotNil(extendedProps))
           const model = {
-            _id: `${name}-${nanoid()}`,
+            _id: `${modelName}-${nanoid()}`,
             _rev: null,
             createdAt: Date.now(),
             modifiedAt: Date.now(),
@@ -52,10 +83,10 @@ function createPouchFireCollection(Model, name) {
             actorId: getEnv(self).actorId,
             version: 0,
           }
-          self._idLookup.put(R.mergeDeepRight(extendedProps, model))
+          self.__db.put(R.mergeDeepRight(extendedProps, model))
         },
         _clear() {
-          self._idLookup.clear()
+          self.__idLookup.clear()
         },
       }
     })
@@ -89,9 +120,7 @@ const PFGrainCollection = createPouchFireCollection(PFGrain, 'Grain')
 export const State = types
   .model('RootState', {
     pageTitle: 'CRA List Proto',
-    grains: types.optional(PFGrainCollection, () =>
-      PFGrainCollection.create(),
-    ),
+    grains: types.optional(PFGrainCollection, {}),
   })
   .views(self => {
     return {
