@@ -8,6 +8,9 @@
   flex-direction: row;
   margin: 0 calc(-1 * var(--default-row-spacing));
 }
+.SpacedRow--inline {
+  display: inline-flex;
+}
 
 .SpacedRow > * {
   margin: 0 var(--default-row-spacing);

@@ -179,6 +179,14 @@ const PFGrainCollection = createPouchFireCollection(PFGrain, 'Grain')
     }
   })
 
+const omitFirebaseClutter = R.unless(
+  R.isNil,
+  R.pickBy(
+    (val, key) =>
+      !(key.length <= 2 || RA.isFunction(val) || R.head(key) === '_'),
+  ),
+)
+
 const Fire = types
   .model('Fire')
   .volatile(self => {
@@ -200,9 +208,16 @@ const Fire = types
       app: firebase,
       store: isAppInitialized ? firebase.firestore() : null,
       auth: firebase.auth(),
+      userInfo: null,
+      authState: 'loading',
       log,
     }
   })
+  .views(self => ({
+    get isAuthLoading() {
+      return self.authState === 'loading'
+    },
+  }))
   .actions(self => {
     return {
       afterCreate: flow(function* afterCreate() {
@@ -211,9 +226,14 @@ const Fire = types
           reaction(
             () => self.store,
             () => {
-              self.log.debug('storeReady', self.store)
+              self.log.debug('storeReady', RA.isNotNil(self.store))
             },
           ),
+        )
+
+        addDisposer(
+          self,
+          self.auth.onAuthStateChanged(self._onAuthStateChanged),
         )
 
         if (!self.store) {
@@ -224,6 +244,19 @@ const Fire = types
           self.store = store
         }
       }),
+      _onAuthStateChanged(user) {
+        self.userInfo = omitFirebaseClutter(user)
+        self.log.debug('onAuthStateChanged userInfo:', self.userInfo)
+        self.authState = user ? 'signedIn' : 'signedOut'
+      },
+      signIn() {
+        var provider = new firebase.auth.GoogleAuthProvider()
+        provider.setCustomParameters({prompt: 'select_account'})
+        return self.auth.signInWithRedirect(provider)
+      },
+      signOut() {
+        return self.auth.signOut()
+      },
     }
   })
 
@@ -243,6 +276,17 @@ export const State = types
       },
     }
   })
+  .views(self => ({
+    get signIn() {
+      return self.fire.signIn
+    },
+    get signOut() {
+      return self.fire.signOut
+    },
+    get userInfo() {
+      return self.fire.userInfo
+    },
+  }))
   .actions(self => {
     return {
       onAddNew() {
