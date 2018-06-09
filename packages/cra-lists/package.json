@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "date-fns": "1.29.0",
+    "firebase": "5.0.4",
     "mobx": "4.3.1",
     "mobx-react": "5.2.1",
     "mobx-react-devtools": "5.0.1",
@@ -21,6 +22,7 @@
     "nanoid": "1.0.3",
     "nanologger": "1.3.1",
     "ow": "0.4.0",
+    "p-reflect": "1.0.0",
     "pouchdb-browser": "6.4.3",
     "prop-types": "15.6.1",
     "ramda": "0.25.0",

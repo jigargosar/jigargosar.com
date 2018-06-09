@@ -1,7 +1,11 @@
 // const log = require('nanologger')('rootStore')
-import {addDisposer, getEnv, getSnapshot, types,} from 'mobx-state-tree'
+import {addDisposer, flow, getEnv, getSnapshot, types,} from 'mobx-state-tree'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
+import {reaction} from 'mobx'
+
+const firebase = require('firebase/app')
+const pReflect = require('p-reflect')
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -175,10 +179,53 @@ const PFGrainCollection = createPouchFireCollection(PFGrain, 'Grain')
     }
   })
 
+const Fire = types
+  .model('Fire')
+  .volatile(self => {
+    const log = require('nanologger')('Fire')
+    var config = {
+      apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
+      authDomain: 'not-now-142808.firebaseapp.com',
+      databaseURL: 'https://not-now-142808.firebaseio.com',
+      projectId: 'not-now-142808',
+      storageBucket: 'not-now-142808.appspot.com',
+      messagingSenderId: '476064436883',
+    }
+
+    const app = firebase.initializeApp(config)
+    const store = app.firestore()
+    store.settings({timestampsInSnapshots: true})
+    const auth = app.auth()
+
+    return {
+      app,
+      store,
+      storeReady: false,
+      auth,
+      log,
+    }
+  })
+  .actions(self => {
+    return {
+      afterCreate: flow(function* afterCreate() {
+        reaction(
+          () => self.storeReady,
+          () => {
+            self.log.debug('storeReady', self.storeReady)
+          },
+        )
+        const result = yield pReflect(self.store.enablePersistence())
+        self.log.debug('store enablePersistence result', result)
+        self.storeReady = true
+      }),
+    }
+  })
+
 export const State = types
   .model('RootState', {
     pageTitle: 'CRA List Proto',
     grains: types.optional(PFGrainCollection, {}),
+    fire: types.optional(Fire, {}),
   })
   .views(self => {
     return {

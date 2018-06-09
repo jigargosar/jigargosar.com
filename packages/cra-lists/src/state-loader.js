@@ -1,9 +1,16 @@
 import {State} from './State'
 import {getAppActorId} from './LocalStorage'
 
+const firebase = require('firebase/app')
+require('firebase/auth')
+require('firebase/firestore')
+
 const mst = require('mobx-state-tree')
 
-export const state = State.create({}, {actorId: getAppActorId()})
+export const state = State.create(
+  {},
+  {actorId: getAppActorId(), firebase},
+)
 
 mst.addMiddleware(state, (call, next) => {
   // console.log('in here', call)
