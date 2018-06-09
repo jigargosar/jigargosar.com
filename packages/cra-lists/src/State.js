@@ -84,6 +84,9 @@ function createPouchFireCollection(Model, modelName) {
           log.debug('updating _idLookup from PDB change', change)
           self.__idLookup.put(change.doc)
         },
+        __putInDB(modelProps) {
+          self.__db.put(getSnapshot(Model.create(modelProps)))
+        },
       }
     })
     .actions(self => {
@@ -99,9 +102,7 @@ function createPouchFireCollection(Model, modelName) {
             actorId: self._actorId,
             version: 0,
           }
-          const finalProps = R.mergeDeepRight(extendedProps, props)
-
-          self.__db.put(getSnapshot(Model.create(finalProps)))
+          self.__putInDB(R.mergeDeepRight(extendedProps, props))
         },
         _update({_id, _rev}, userChange = {}) {
           assert(RA.isNotNil(userChange))
@@ -122,7 +123,7 @@ function createPouchFireCollection(Model, modelName) {
               userChange,
             )
 
-            self.__db.put(
+            self.__putInDB(
               R.merge(changesMergedModel, {
                 modifiedAt: Date.now(),
                 actorId: self._actorId,
