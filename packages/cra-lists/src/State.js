@@ -1,4 +1,8 @@
-import {types} from 'mobx-state-tree'
+import {getRoot, types} from 'mobx-state-tree'
+
+const R = require('ramda')
+
+// const RA = require('ramda-adjunct')
 
 const nanoid = require('nanoid')
 // const log = require('nanologger')('rootStore')
@@ -6,6 +10,7 @@ const nanoid = require('nanoid')
 const Grain = types.model('Grain', {
   id: types.identifier(types.string),
   text: types.string,
+  actorId: types.string,
   pouchDBRevision: types.maybe(types.string),
   createAt: types.number,
   modifiedAt: types.number,
@@ -32,6 +37,7 @@ const GrainCollection = types
           createAt: Date.now(),
           modifiedAt: Date.now(),
           archived: false,
+          actorId: getRoot(self).actorId,
         })
       },
       clear() {
@@ -39,6 +45,18 @@ const GrainCollection = types
       },
     }
   })
+
+function getOrSetLocalStorage(id, setValue) {
+  let value = localStorage.getItem(id)
+  if (R.isNil(value)) {
+    value = localStorage.setItem(id, setValue)
+  }
+  return value
+}
+
+function getAppActorId() {
+  return getOrSetLocalStorage('app-actor-id', `actor-${nanoid()}`)
+}
 
 export const State = types
   .model('RootState', {
@@ -48,9 +66,16 @@ export const State = types
     ),
   })
   .views(self => {
+    let actorId = null
     return {
+      afterCreate() {
+        actorId = getAppActorId()
+      },
       get grainsList() {
         return self.grains.list
+      },
+      get actorId() {
+        return actorId
       },
     }
   })
