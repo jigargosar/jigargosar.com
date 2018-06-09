@@ -1,5 +1,5 @@
 // const log = require('nanologger')('rootStore')
-import {addDisposer, getEnv, types} from 'mobx-state-tree'
+import {addDisposer, getEnv, getSnapshot, types,} from 'mobx-state-tree'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
 
@@ -8,29 +8,42 @@ const RA = require('ramda-adjunct')
 const assert = require('assert')
 const nanoid = require('nanoid')
 
+const PouchFireBaseModel = types
+  .model(`PouchFireBaseModel`, {
+    _id: types.identifier(types.string),
+    _rev: types.maybe(types.string),
+    actorId: types.string,
+    version: types.number,
+    createdAt: types.number,
+    modifiedAt: types.number,
+    archived: types.boolean,
+  })
+  .views(self => {
+    return {
+      get id() {
+        return self._id
+      },
+    }
+  })
+
 function createPouchFireModel(name) {
-  return types
-    .model(`PouchFire${name}Model`, {
-      _id: types.identifier(types.string),
-      _rev: types.maybe(types.string),
-      actorId: types.string,
-      version: types.number,
-      createdAt: types.number,
-      modifiedAt: types.number,
-      archived: types.boolean,
-    })
-    .views(self => {
-      return {
-        get id() {
-          return self._id
-        },
-      }
-    })
+  return PouchFireBaseModel.named(`PouchFire${name}Model`)
 }
 
 function createPouchFireCollection(Model, modelName) {
   const name = `PouchFire${modelName}Collection`
   const log = require('nanologger')(name)
+  log.info(PouchFireBaseModel.propertyNames, Model.propertyNames)
+
+  const userModifiableProps = R.without(
+    PouchFireBaseModel.propertyNames,
+    Model.propertyNames,
+  )
+
+  function isValidChange(userChanges) {
+    return R.isEmpty(R.omit(userModifiableProps, userChanges))
+  }
+
   return types
     .model(name, {
       __idLookup: types.optional(types.map(Model), {}),
@@ -88,38 +101,31 @@ function createPouchFireCollection(Model, modelName) {
           }
           self.__db.put(R.mergeDeepRight(extendedProps, model))
         },
-        _update({_id, _rev}, userChanges = {}) {
-          assert(RA.isNotNil(userChanges))
-          const model = self.__idLookup.get(_id)
+        _update({_id, _rev}, userChange = {}) {
+          assert(RA.isNotNil(userChange))
+          const modelSnapshot = getSnapshot(self.__idLookup.get(_id))
 
-          assert(RA.isNotNil(model))
-          assert.equal(model._rev, _rev)
+          assert.equal(modelSnapshot._rev, _rev)
 
-          const protectedProps = [
-            '_id',
-            '_rev',
-            'createdAt',
-            'modifiedAt',
-            'actorId',
-            'version',
-          ]
+          assert(isValidChange(userChange))
 
-          const safeUserChanges = R.omit(protectedProps, userChanges)
-
-          const hasChanged = !R.equals(
-            R.pick(R.keys(safeUserChanges), model),
-            safeUserChanges,
+          const hasActualChanged = !R.equals(
+            modelSnapshot,
+            R.merge(modelSnapshot, userChange),
           )
-          if (hasChanged) {
+
+          if (hasActualChanged) {
             const changesMergedModel = R.mergeDeepRight(
-              model,
-              safeUserChanges,
+              modelSnapshot,
+              userChange,
             )
-            const metadataUpdatedModel = R.merge(changesMergedModel, {
-              modifiedAt: Date.now(),
-              actorId: self._actorId,
-            })
-            self.__db.put(metadataUpdatedModel)
+
+            self.__db.put(
+              R.merge(changesMergedModel, {
+                modifiedAt: Date.now(),
+                actorId: self._actorId,
+              }),
+            )
           }
         },
         _clear() {
