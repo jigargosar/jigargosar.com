@@ -111,12 +111,12 @@ function createPouchFireCollection(Model, modelName) {
 
           assert(isValidChange(userChange))
 
-          const hasActualChanged = !R.equals(
+          const hasActuallyChanged = !R.equals(
             modelSnapshot,
             R.merge(modelSnapshot, userChange),
           )
 
-          if (hasActualChanged) {
+          if (hasActuallyChanged) {
             const changesMergedModel = R.mergeDeepRight(
               modelSnapshot,
               userChange,
