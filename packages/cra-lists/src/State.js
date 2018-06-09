@@ -83,7 +83,11 @@ function createPouchFireCollection(Model, modelName) {
           addDisposer(self, () => changes.cancel())
         },
         __loadFromPDB(change) {
-          log.debug('updating _idLookup from PDB change', change)
+          log.debug(
+            'updating _idLookup from PDB change',
+            change.doc,
+            change,
+          )
           self.__idLookup.put(change.doc)
         },
         __putInDB(modelProps) {
