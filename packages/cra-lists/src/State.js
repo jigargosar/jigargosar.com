@@ -1,8 +1,8 @@
 // const log = require('nanologger')('rootStore')
 import {addDisposer, flow, getEnv, getSnapshot, types,} from 'mobx-state-tree'
+import {reaction} from 'mobx'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
-import {reaction} from 'mobx'
 
 const firebase = require('firebase/app')
 const pReflect = require('p-reflect')
@@ -69,7 +69,7 @@ function createPouchFireCollection(Model, modelName) {
       const pdb = new PouchDB(name)
       addDisposer(self, () => {
         log.warn('closing pdb', name)
-        self.pdb.close()
+        pdb.close()
       })
       return {
         __db: pdb,
@@ -192,16 +192,16 @@ const Fire = types
       messagingSenderId: '476064436883',
     }
 
-    const app = firebase.initializeApp(config)
-    const store = app.firestore()
-    store.settings({timestampsInSnapshots: true})
-    const auth = app.auth()
+    const isAppInitialized = !R.isEmpty(firebase.apps)
+
+    const app = isAppInitialized
+      ? firebase.apps[0]
+      : firebase.initializeApp(config)
 
     return {
       app,
-      store,
-      storeReady: false,
-      auth,
+      store: isAppInitialized ? app.firestore() : null,
+      auth: app.auth(),
       log,
     }
   })
@@ -209,14 +209,19 @@ const Fire = types
     return {
       afterCreate: flow(function* afterCreate() {
         reaction(
-          () => self.storeReady,
+          () => self.store,
           () => {
-            self.log.debug('storeReady', self.storeReady)
+            self.log.debug('storeReady', self.store)
           },
         )
-        const result = yield pReflect(self.store.enablePersistence())
-        self.log.debug('store enablePersistence result', result)
-        self.storeReady = true
+
+        if (!self.store) {
+          const store = self.app.firestore()
+          store.settings({timestampsInSnapshots: true})
+          const result = yield pReflect(store.enablePersistence())
+          self.log.debug('store enablePersistence result', result)
+          self.store = store
+        }
       }),
     }
   })
