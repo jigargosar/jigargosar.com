@@ -1,6 +1,7 @@
 import React, {Fragment as F} from 'react'
 import {observer} from 'mobx-react'
 import {withState} from './StateContext'
+import formatDate from 'date-fns/format'
 
 const R = require('ramda')
 
@@ -21,6 +22,10 @@ function SpacedRow({children}) {
   return <div className={'SpacedRow'}>{children}</div>
 }
 
+function getFormattedDate(date) {
+  return formatDate(date, `hh:mm a Do MMM 'YY`)
+}
+
 const GrainItem = injectS(function GrainItem({s, grain}) {
   const [displayText, cn = ''] = R.isEmpty(grain.text)
     ? ['<empty>', 'black-70']
@@ -31,11 +36,11 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
       <div className={cn}>{displayText}</div>
       <div className={'f6 black-50 ml2'}>
         <SpacedRow>
-          <div>id:{grain.id}</div>
-          <div>rev:{grain.rev}</div>
-          <div>c:{grain.createdAt}</div>
-          <div>m:{grain.modifiedAt}</div>
-          <div>v:{grain.version}</div>
+          <div>id: {grain.id}</div>
+          <div>rev: {grain.rev}</div>
+          <div>c: {getFormattedDate(grain.createdAt)}</div>
+          <div>m: {getFormattedDate(grain.modifiedAt)}</div>
+          <div>v: {grain.version}</div>
         </SpacedRow>
       </div>
     </div>
