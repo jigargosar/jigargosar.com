@@ -3,6 +3,7 @@ import {addDisposer, flow, getEnv, getSnapshot, types,} from 'mobx-state-tree'
 import {reaction} from 'mobx'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
+import Kefir from 'kefir'
 
 const firebase = require('firebase/app')
 const pReflect = require('p-reflect')
@@ -35,6 +36,21 @@ const PouchFireBaseModel = types
 
 function createPouchFireModel(name) {
   return PouchFireBaseModel.named(`PouchFire${name}Model`)
+}
+
+function pouchDBChangesStream(options, pouchDB) {
+  return Kefir.stream(emitter => {
+    const changes = pouchDB
+      .changes(options)
+      .on('change', emitter.value)
+      .on('error', emitter.error)
+      .on('complete', emitter.end)
+    return () => changes.cancel()
+  })
+}
+
+function addSubscriptionDisposer(target, subscription) {
+  return addDisposer(target, () => subscription.unsubscribe())
 }
 
 function createPouchFireCollection(Model, modelName) {
@@ -78,21 +94,27 @@ function createPouchFireCollection(Model, modelName) {
     .actions(self => {
       return {
         afterCreate() {
-          const changes = self.__db
-            .changes({
-              live: true,
-              include_docs: true,
-            })
-            .on('change', self.__loadFromPDB)
-          addDisposer(self, () => changes.cancel())
-        },
-        __loadFromPDB(change) {
-          log.debug(
-            'updating _idLookup from PDB change',
-            change.doc,
-            change,
+          addSubscriptionDisposer(
+            self,
+            pouchDBChangesStream(
+              {live: true, include_docs: true},
+              self.__db,
+            )
+              .bufferWithTimeOrCount(500, 100)
+              .filter(RA.isNotEmpty)
+              .spy(`${name} buffered changes`)
+              .observe({value: self.__updateFromPDBBufferedChanges}),
           )
+        },
+        __updateFromPDBChange(change) {
           self.__idLookup.put(change.doc)
+        },
+        __updateFromPDBBufferedChanges(bufferedChanges) {
+          log.debug(
+            'updating _idLookup from PDB bufferedChanges',
+            bufferedChanges,
+          )
+          R.forEach(self.__updateFromPDBChange, bufferedChanges)
         },
         __putInDB(modelProps) {
           return self.__db.put(getSnapshot(Model.create(modelProps)))
@@ -276,17 +298,6 @@ export const State = types
       },
     }
   })
-  .views(self => ({
-    get signIn() {
-      return self.fire.signIn
-    },
-    get signOut() {
-      return self.fire.signOut
-    },
-    get userInfo() {
-      return self.fire.userInfo
-    },
-  }))
   .actions(self => {
     return {
       onAddNew() {
