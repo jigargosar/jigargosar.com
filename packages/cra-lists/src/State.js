@@ -43,14 +43,14 @@ function createPouchFireCollection(Model, modelName) {
       }
     })
     .volatile(self => {
+      log.warn('creating pdb', name)
+      const pdb = new PouchDB(name)
       addDisposer(self, () => {
-        log.warn('closing pdb')
-        self.__db.close()
-        log.warn('pdb closed')
+        log.warn('closing pdb', name)
+        self.pdb.close()
       })
-      log.warn('creating pouch db')
       return {
-        __db: new PouchDB(name),
+        __db: pdb,
       }
     })
     .actions(self => {
