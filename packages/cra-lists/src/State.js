@@ -194,14 +194,12 @@ const Fire = types
 
     const isAppInitialized = !R.isEmpty(firebase.apps)
 
-    const app = isAppInitialized
-      ? firebase.apps[0]
-      : firebase.initializeApp(config)
+    if (!isAppInitialized) firebase.initializeApp(config)
 
     return {
-      app,
-      store: isAppInitialized ? app.firestore() : null,
-      auth: app.auth(),
+      app: firebase,
+      store: isAppInitialized ? firebase.firestore() : null,
+      auth: firebase.auth(),
       log,
     }
   })
