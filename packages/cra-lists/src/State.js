@@ -235,11 +235,16 @@ const Fire = types
       log,
     }
   })
-  .views(self => ({
-    get isAuthLoading() {
-      return self.authState === 'loading'
-    },
-  }))
+  .views(self => {
+    return {
+      get isAuthLoading() {
+        return R.equals(self.authState, 'loading')
+      },
+      get isSignedIn() {
+        return R.equals(self.authState, 'signedIn')
+      },
+    }
+  })
   .actions(self => {
     return {
       afterCreate: flow(function* afterCreate() {
