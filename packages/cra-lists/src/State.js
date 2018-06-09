@@ -45,6 +45,7 @@ function createPouchFireCollection(Model, name) {
           assert(RA.isNotNil(extendedProps))
           const model = {
             _id: `${name}-${nanoid()}`,
+            _rev: null,
             createdAt: Date.now(),
             modifiedAt: Date.now(),
             archived: false,
