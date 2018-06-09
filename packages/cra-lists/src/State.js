@@ -1,8 +1,29 @@
 // const log = require('nanologger')('rootStore')
 import {getEnv, types} from 'mobx-state-tree'
-import * as R from 'ramda'
+
+const R = require('ramda')
 
 const nanoid = require('nanoid')
+
+const InvalidAccessReporter = {
+  get: function(target, prop, receiver) {
+    const shouldValidateProp = ![
+      Symbol.iterator,
+      Symbol.toStringTag,
+      '_reactFragment',
+      '@@functional/placeholder',
+    ].includes(prop)
+
+    const isPropInvalid = !R.hasIn(prop, target)
+    if (shouldValidateProp && isPropInvalid) {
+      console.log('Prop not found', prop, 'in', target)
+    }
+    return Reflect.get(...arguments)
+  },
+}
+
+const validatePropAccessProperty = obj =>
+  new Proxy(obj, InvalidAccessReporter)
 
 function createPouchFireModel(name) {
   return types.model(`PouchFire${name}Model`, {
@@ -44,18 +65,20 @@ const GrainCollection = types
   .views(self => {
     return {
       get list() {
-        const sortWithPropsAs = [R.descend(R.prop('createdAt'))]
+        const sortWithPropsAs = [R.descend(R.prop('createAt'))]
 
-        return R.compose(R.sortWith(sortWithPropsAs), Array.from)(
-          self.grainsMap.values(),
-        )
+        return R.compose(
+          R.sortWith(sortWithPropsAs),
+          R.map(validatePropAccessProperty),
+          Array.from,
+        )(self.grainsMap.values())
       },
     }
   })
   .actions(self => {
     return {
       addNew() {
-        self.grainsMap.put({
+        const grain = Grain.create({
           id: `grain-${nanoid()}`,
           text: '',
           createdAt: Date.now(),
@@ -63,6 +86,7 @@ const GrainCollection = types
           archived: false,
           actorId: getEnv(self).actorId,
         })
+        self.grainsMap.put(validatePropAccessProperty(grain))
       },
       clear() {
         self.grainsMap.clear()
