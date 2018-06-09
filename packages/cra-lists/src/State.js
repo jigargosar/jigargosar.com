@@ -1,6 +1,6 @@
 // const log = require('nanologger')('rootStore')
 import {addDisposer, flow, getEnv, getSnapshot, types,} from 'mobx-state-tree'
-import {reaction} from 'mobx'
+import {autorun, reaction} from 'mobx'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
 import Kefir from 'kefir'
@@ -245,6 +245,17 @@ const Fire = types
       },
     }
   })
+  .views(self => ({
+    get _grainsCollectionRef() {
+      assert(self.isSignedIn)
+      assert(RA.isNotNil(self.store))
+      return self.store.collection(`/users/${self.uid}/grains`)
+    },
+    get uid() {
+      assert(self.isSignedIn)
+      return self.userInfo.uid
+    },
+  }))
   .actions(self => {
     return {
       afterCreate: flow(function* afterCreate() {
@@ -270,7 +281,36 @@ const Fire = types
           self.log.debug('store enablePersistence result', result)
           self.store = store
         }
+
+        addDisposer(
+          self,
+          autorun(() => {
+            if (self.isSignedIn) {
+              addSubscriptionDisposer(
+                self,
+                Kefir.stream(emitter => {
+                  return self._grainsCollectionRef.onSnapshot(
+                    emitter.value,
+                    emitter.error,
+                    emitter.end,
+                  )
+                })
+                  .spy('Firestore changes')
+                  .observe({value: self._onGrainsCollectionSnapshot}),
+              )
+            }
+          }),
+        )
       }),
+      _onGrainsCollectionSnapshot(snapshot) {
+        self.log.debug('_onGrainsCollectionSnapshot', snapshot)
+        R.compose(R.forEach(self._onGrainsCollectionDocChange))(
+          snapshot.docChanges(),
+        )
+      },
+      _onGrainsCollectionDocChange(docChange) {
+        self.log.debug(docChange)
+      },
       _onAuthStateChanged(user) {
         self.userInfo = omitFirebaseClutter(user)
         self.log.debug('onAuthStateChanged userInfo:', self.userInfo)
