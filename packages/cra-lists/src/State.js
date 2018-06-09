@@ -3,44 +3,61 @@ import {getEnv, types} from 'mobx-state-tree'
 import {SF} from './safe-fun'
 
 const R = require('ramda')
-
+const RA = require('ramda-adjunct')
+const assert = require('assert')
 const nanoid = require('nanoid')
 
-const InvalidAccessReporter = {
-  get: function(target, prop, receiver) {
-    const shouldValidateProp = ![
-      Symbol.iterator,
-      Symbol.toStringTag,
-      '_reactFragment',
-      '@@functional/placeholder',
-    ].includes(prop)
-
-    const isPropInvalid = !R.hasIn(prop, target)
-    if (shouldValidateProp && isPropInvalid) {
-      console.log('Prop not found', prop, 'in', target)
-    }
-    return Reflect.get(...arguments)
-  },
-}
-
-const validatePropAccessProperty = obj =>
-  new Proxy(obj, InvalidAccessReporter)
-
 function createPouchFireModel(name) {
-  return types.model(`PouchFire${name}Model`, {
-    _id: types.identifier(types.string),
-    _rev: types.maybe(types.string),
-    actorId: types.string,
-    createdAt: types.number,
-    modifiedAt: types.number,
-    archived: types.boolean,
-  })
+  return types
+    .model(`PouchFire${name}Model`, {
+      _id: types.identifier(types.string),
+      _rev: types.maybe(types.string),
+      actorId: types.string,
+      version: types.number,
+      createdAt: types.number,
+      modifiedAt: types.number,
+      archived: types.boolean,
+    })
+    .views(self => {
+      return {
+        get id() {
+          return self._id
+        },
+      }
+    })
 }
 
 function createPouchFireCollection(Model, name) {
-  return types.model(`PouchFire${name}Collection`, {
-    lookup: types.optional(types.map(Model), {}),
-  })
+  return types
+    .model(`PouchFire${name}Collection`, {
+      _idLookup: types.optional(types.map(Model), {}),
+    })
+    .views(self => {
+      return {
+        get _all() {
+          return Array.from(self._idLookup.values())
+        },
+      }
+    })
+    .actions(self => {
+      return {
+        _addNew(extendedProps = {}) {
+          assert(RA.isNotNil(extendedProps))
+          const model = {
+            _id: `${name}-${nanoid()}`,
+            createdAt: Date.now(),
+            modifiedAt: Date.now(),
+            archived: false,
+            actorId: getEnv(self).actorId,
+            version: 0,
+          }
+          self._idLookup.put(R.mergeDeepRight(extendedProps, model))
+        },
+        _clear() {
+          self._idLookup.clear()
+        },
+      }
+    })
 }
 
 const PFGrain = createPouchFireModel('Grain').props({
@@ -48,49 +65,22 @@ const PFGrain = createPouchFireModel('Grain').props({
 })
 
 const PFGrainCollection = createPouchFireCollection(PFGrain, 'Grain')
-
-const Grain = types.model('Grain', {
-  id: types.identifier(types.string),
-  text: types.string,
-  actorId: types.string,
-  pouchDBRevision: types.maybe(types.string),
-  createdAt: types.number,
-  modifiedAt: types.number,
-  archived: types.boolean,
-})
-
-const GrainCollection = types
-  .model('GrainCollection', {
-    grainsMap: types.optional(types.map(Grain), {}),
-  })
   .views(self => {
     return {
       get list() {
-        const sortWithPropsAs = [R.descend(SF.prop('createdAt'))]
+        const sortWithProps = [R.descend(SF.prop('createdAt'))]
+        return R.sortWith(sortWithProps)(self._all)
+      },
 
-        return R.compose(
-          R.sortWith(sortWithPropsAs),
-          R.map(validatePropAccessProperty),
-          Array.from,
-        )(self.grainsMap.values())
+      clear() {
+        self._clear()
       },
     }
   })
   .actions(self => {
     return {
       addNew() {
-        const grain = Grain.create({
-          id: `grain-${nanoid()}`,
-          text: '',
-          createdAt: Date.now(),
-          modifiedAt: Date.now(),
-          archived: false,
-          actorId: getEnv(self).actorId,
-        })
-        self.grainsMap.put(validatePropAccessProperty(grain))
-      },
-      clear() {
-        self.grainsMap.clear()
+        self._addNew({text: ''})
       },
     }
   })
@@ -98,8 +88,8 @@ const GrainCollection = types
 export const State = types
   .model('RootState', {
     pageTitle: 'CRA List Proto',
-    grains: types.optional(GrainCollection, () =>
-      GrainCollection.create(),
+    grains: types.optional(PFGrainCollection, () =>
+      PFGrainCollection.create(),
     ),
   })
   .views(self => {
