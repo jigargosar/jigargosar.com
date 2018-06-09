@@ -1,6 +1,6 @@
 // const log = require('nanologger')('rootStore')
-import {addDisposer, flow, getEnv, getSnapshot, types,} from 'mobx-state-tree'
-import {autorun, reaction} from 'mobx'
+import {addDisposer, flow, getEnv, getRoot, getSnapshot, types,} from 'mobx-state-tree'
+import {reaction} from 'mobx'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
 import Kefir from 'kefir'
@@ -53,7 +53,17 @@ function addSubscriptionDisposer(target, subscription) {
   return addDisposer(target, () => subscription.unsubscribe())
 }
 
-function createPouchFireCollection(Model, modelName) {
+function createFirestoreOnSnapshotStream(query) {
+  return Kefir.stream(emitter => {
+    return query.onSnapshot(emitter.value, emitter.error, emitter.end)
+  })
+}
+
+function createPouchFireCollection(
+  Model,
+  modelName,
+  firestoreCollectionName,
+) {
   const name = `PouchFire${modelName}Collection`
   const log = require('nanologger')(name)
 
@@ -121,6 +131,48 @@ function createPouchFireCollection(Model, modelName) {
         },
       }
     })
+    .views(self => {
+      return {
+        get fire() {
+          return getRoot(self).fire
+        },
+      }
+    })
+    .actions(self => {
+      const signInSubscriptions = []
+
+      function disposeSignInSubscriptions() {
+        R.forEach(R.invoker(0, 'unsubscribe'), signInSubscriptions)
+        signInSubscriptions.splice(0, signInSubscriptions.length)
+      }
+
+      return {
+        afterCreate() {
+          addSubscriptionDisposer(self, disposeSignInSubscriptions)
+          addDisposer(
+            self,
+            reaction(
+              () => [
+                self.fire.userCollectionRef(firestoreCollectionName),
+              ],
+              ([ucr]) => {
+                disposeSignInSubscriptions()
+                if (R.isNil(ucr)) return
+
+                signInSubscriptions.push(
+                  createFirestoreOnSnapshotStream(ucr).observe({
+                    value: self._onCollectionSnapshot,
+                  }),
+                )
+              },
+            ),
+          )
+        },
+        _onCollectionSnapshot(snapshot) {
+          log.debug('snapshot.docChanges()', snapshot.docChanges())
+        },
+      }
+    })
     .actions(self => {
       return {
         _addNew(extendedProps = {}) {
@@ -177,7 +229,11 @@ const PFGrain = createPouchFireModel('Grain').props({
   text: types.string,
 })
 
-const PFGrainCollection = createPouchFireCollection(PFGrain, 'Grain')
+const PFGrainCollection = createPouchFireCollection(
+  PFGrain,
+  'Grain',
+  'grains',
+)
   .views(self => {
     return {
       get list() {
@@ -246,6 +302,13 @@ const Fire = types
     }
   })
   .views(self => ({
+    userCollectionRef(collectionName) {
+      assert(RA.isNotNil(collectionName))
+      if (!self.isSignedIn || R.isNil(self.store)) return null
+      return self.store.collection(
+        `/users/${self.uid}/${collectionName}`,
+      )
+    },
     get _grainsCollectionRef() {
       assert(self.isSignedIn)
       assert(RA.isNotNil(self.store))
@@ -281,36 +344,8 @@ const Fire = types
           self.log.debug('store enablePersistence result', result)
           self.store = store
         }
-
-        addDisposer(
-          self,
-          autorun(() => {
-            if (self.isSignedIn) {
-              addSubscriptionDisposer(
-                self,
-                Kefir.stream(emitter => {
-                  return self._grainsCollectionRef.onSnapshot(
-                    emitter.value,
-                    emitter.error,
-                    emitter.end,
-                  )
-                })
-                  .spy('Firestore changes')
-                  .observe({value: self._onGrainsCollectionSnapshot}),
-              )
-            }
-          }),
-        )
       }),
-      _onGrainsCollectionSnapshot(snapshot) {
-        self.log.debug('_onGrainsCollectionSnapshot', snapshot)
-        R.compose(R.forEach(self._onGrainsCollectionDocChange))(
-          snapshot.docChanges(),
-        )
-      },
-      _onGrainsCollectionDocChange(docChange) {
-        self.log.debug(docChange)
-      },
+
       _onAuthStateChanged(user) {
         self.userInfo = omitFirebaseClutter(user)
         self.log.debug('onAuthStateChanged userInfo:', self.userInfo)
