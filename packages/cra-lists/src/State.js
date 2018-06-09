@@ -6,11 +6,6 @@ const nanoid = require('nanoid')
 const Grain = types.model('Grain', {
   id: types.identifier(types.string),
   text: types.string,
-  metadata: types.late(() => Metadata),
-})
-
-const Metadata = types.model('Metadata', {
-  grain: types.reference(Grain),
   pouchDBRevision: types.maybe(types.string),
   createAt: types.number,
   modifiedAt: types.number,
@@ -20,7 +15,6 @@ const Metadata = types.model('Metadata', {
 const GrainCollection = types
   .model('GrainCollection', {
     grainsMap: types.optional(types.map(Grain), {}),
-    metaMap: types.optional(types.map(Metadata), {}),
   })
   .views(self => {
     return {
@@ -32,18 +26,12 @@ const GrainCollection = types
   .actions(self => {
     return {
       addNew() {
-        const id = `grain-${nanoid()}`
-        const metadata = {
-          grain: id,
+        self.grainsMap.put({
+          id: `grain-${nanoid()}`,
+          text: '',
           createAt: Date.now(),
           modifiedAt: Date.now(),
           archived: false,
-        }
-        self.metaMap.set(id, metadata)
-        self.grainsMap.put({
-          id,
-          text: '',
-          metadata,
         })
       },
       clear() {
