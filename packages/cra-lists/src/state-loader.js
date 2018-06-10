@@ -6,10 +6,18 @@ require('firebase/auth')
 require('firebase/firestore')
 
 const mst = require('mobx-state-tree')
+var firebaseConfig = {
+  apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
+  authDomain: 'not-now-142808.firebaseapp.com',
+  databaseURL: 'https://not-now-142808.firebaseio.com',
+  projectId: 'not-now-142808',
+  storageBucket: 'not-now-142808.appspot.com',
+  messagingSenderId: '476064436883',
+}
 
 export const state = State.create(
   {},
-  {localAppActorId: getAppActorId(), firebase},
+  {localAppActorId: getAppActorId(), firebase, firebaseConfig},
 )
 
 mst.addMiddleware(state, (call, next) => {

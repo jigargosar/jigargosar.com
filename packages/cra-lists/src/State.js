@@ -571,17 +571,10 @@ const Fire = types
   .actions(self => {
     return {
       afterCreate: flow(function* afterCreate() {
-        var config = {
-          apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
-          authDomain: 'not-now-142808.firebaseapp.com',
-          databaseURL: 'https://not-now-142808.firebaseio.com',
-          projectId: 'not-now-142808',
-          storageBucket: 'not-now-142808.appspot.com',
-          messagingSenderId: '476064436883',
-        }
-
         if (!self.app) {
-          const app = self.firebase.initializeApp(config)
+          const app = self.firebase.initializeApp(
+            getEnv(self).firebaseConfig,
+          )
           const store = app.firestore()
           store.settings({timestampsInSnapshots: true})
           const result = yield pReflect(store.enablePersistence())
