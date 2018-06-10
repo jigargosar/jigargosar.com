@@ -205,10 +205,12 @@ function createPouchFireCollection(
                   )
                     .map(snapshot => snapshot.docChanges())
                     .flatten()
-                    .scan(async (prevPromise, change) => {
+                    .scan(async (prevPromise, firestoreChange) => {
                       await prevPromise
-                      await self.__onFirestoreCollectionChange(change)
-                      // syncSeqLS.save(change.seq)
+                      await self.__updatePDBFromFirestoreChange(
+                        firestoreChange,
+                      )
+                      // syncSeqLS.save(firestoreChange.seq)
                     }, Promise.resolve())
                     .takeErrors(1)
                     .observe({
@@ -240,8 +242,12 @@ function createPouchFireCollection(
             ),
           )
         },
-        async __onFirestoreCollectionChange(docChange) {
+        async __updatePDBFromFirestoreChange(docChange) {
           log.debug('fire: __onFirestoreCollectionChange', docChange)
+        },
+        set syncPDBSeq(seq) {
+          self._syncPDBSeqLS.save(seq)
+          // self._syncPDBSeqLS.save(0)
         },
         async __updateFirestoreFromPDBChange(pdbChange) {
           log.debug(
@@ -281,6 +287,8 @@ function createPouchFireCollection(
               prepareForFirestoreSave(localDoc),
             )
           })
+          // self.syncFSTimeStamp = docChange.data().fireStoreServerTimestamp
+          self.syncPDBSeq = pdbChange.seq
           function prepareForFirestoreSave(localDoc) {
             const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
             return R.compose(R.omit('_rev'), R.merge(localDoc))({
