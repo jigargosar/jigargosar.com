@@ -1,7 +1,7 @@
 // const log = require('nanologger')('rootStore')
 import {addDisposer as mstAddDisposer, flow, getEnv, getRoot, getSnapshot, types,} from 'mobx-state-tree'
 
-import {reaction, trace} from 'mobx'
+import {reaction} from 'mobx'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
 import Kefir from 'kefir'
@@ -43,16 +43,19 @@ function createPouchFireModel(name) {
   return PouchFireBaseModel.named(`PouchFire${name}Model`)
 }
 
-function pouchDBChangesStream(options, pouchDB) {
+function createPouchDBChangesStream(options, pouchDB) {
   const log = require('nanologger')(`PouchDB:${pouchDB.name}`)
-  log.debug('pouchDBChangesStream', options)
+  log.trace('createPouchDBChangesStream', options)
   return Kefir.stream(emitter => {
     const changes = pouchDB
       .changes(options)
       .on('change', emitter.value)
       .on('error', emitter.error)
       .on('complete', emitter.end)
-    return () => changes.cancel()
+    return () => {
+      log.trace('disposing createPouchDBChangesStream', options)
+      return changes.cancel()
+    }
   })
 }
 function addDisposer(target, disposer) {
@@ -106,10 +109,10 @@ function createPouchFireCollection(
       }
     })
     .volatile(self => {
-      log.warn('creating pdb', name)
+      log.trace('creating pdb', name)
       const pdb = new PouchDB(name)
       addDisposer(self, () => {
-        log.warn('closing pdb', name)
+        log.trace('closing pdb', name)
         pdb.close()
       })
       return {
@@ -121,7 +124,7 @@ function createPouchFireCollection(
         afterCreate() {
           addSubscriptionDisposer(
             self,
-            pouchDBChangesStream(
+            createPouchDBChangesStream(
               {live: true, include_docs: true},
               self.__db,
             )
@@ -152,15 +155,18 @@ function createPouchFireCollection(
           return getRoot(self).fire
         },
         get __firestoreCollectionRef() {
-          return self.fire.userCollectionRef(firestoreCollectionName)
+          return self.fire.userCollectionRef(name)
         },
         get __firestoreCollectionPath() {
-          return self.fire.userCollectionPath(firestoreCollectionName)
+          return self.fire.userCollectionPath(name)
         },
         get __syncFSTimeStamp() {
           return firebase.firestore.Timestamp.fromMillis(
             self.__syncFSMilliLS.load(),
           )
+        },
+        set __syncFSTimeStamp(timestamp) {
+          return self.__syncFSMilliLS.save(timestamp.toMillis())
         },
         set __syncPDBSeq(seq) {
           self.__syncPDBSeqLS.save(seq)
@@ -190,14 +196,40 @@ function createPouchFireCollection(
       const signInSubscriptions = []
 
       function disposeSignInSubscriptions() {
+        log.trace(
+          'disposeSignInSubscriptions',
+          signInSubscriptions.length,
+        )
         R.forEach(R.invoker(0, 'unsubscribe'), signInSubscriptions)
+        log.trace(
+          'disposeSignInSubscriptions complete',
+          signInSubscriptions.length,
+        )
         signInSubscriptions.splice(0, signInSubscriptions.length)
       }
 
       return {
+        afterCreate() {
+          addDisposer(self, disposeSignInSubscriptions)
+          addDisposer(
+            self,
+            reaction(
+              () => {
+                // trace()
+                return [self.__firestoreCollectionRef]
+              },
+              () => {
+                disposeSignInSubscriptions()
+
+                signInSubscriptions.push(self.__startDownStreamSync())
+                signInSubscriptions.push(self.__startUpStreamSync())
+              },
+            ),
+          )
+        },
         __startDownStreamSync() {
           const syncFSTimeStamp = self.__syncFSTimeStamp
-          log.info(
+          log.trace(
             '__startDownStreamSync from syncFSTimeStamp',
             syncFSTimeStamp,
           )
@@ -209,9 +241,12 @@ function createPouchFireCollection(
             .map(snapshot => snapshot.docChanges())
             .flatten()
             .scan(async (prevPromise, firestoreChange) => {
+              const firestoreTimestamp = firestoreChange.doc.data()
+                .fireStoreServerTimestamp
+              assert(RA.isNotNil(firestoreTimestamp))
               await prevPromise
               await self.__syncFirestoreChangeToPDB(firestoreChange)
-              // syncSeqLS.save(firestoreChange.seq)
+              self.__syncFSTimeStamp = firestoreTimestamp
             }, Promise.resolve())
             .takeErrors(1)
             .observe({
@@ -220,10 +255,47 @@ function createPouchFireCollection(
               },
             })
         },
+        async __syncFirestoreChangeToPDB(firestoreChange) {
+          const changeDoc = firestoreChange.doc
+          const changeDocData = changeDoc.data()
+
+          log.debug(
+            'sync downstream: firestoreChange',
+            changeDoc.id,
+            changeDoc.metadata,
+            changeDocData,
+            firestoreChange,
+          )
+
+          const remoteModel = Model.create(changeDocData)
+          assert(R.isNil(remoteModel._rev))
+
+          const docResult = await pReflect(
+            self.__db.get(changeDoc.id),
+          )
+
+          log.debug(
+            'sync downstream: get pdbDoc result',
+            docResult.isRejected ? docResult.reason : docResult.value,
+          )
+
+          if (docResult.isRejected) {
+            return self.__putInDB(remoteModel)
+          } else {
+            const localModel = Model.create(docResult.value)
+            if (remoteModel.modifiedAt > localModel.modifiedAt) {
+              return self.__putInDB(
+                R.merge(remoteModel, R.pick(['_rev'], localModel)),
+              )
+            }
+            log.debug('sync downstream: ignoring firestoreChange')
+            return Promise.resolve()
+          }
+        },
         __startUpStreamSync() {
           const since = self.__syncPDBSeq
-          log.info('__startUpStreamSync from seq', since)
-          return pouchDBChangesStream(
+          log.trace('__startUpStreamSync from syncPDBSeq', since)
+          return createPouchDBChangesStream(
             {
               live: true,
               include_docs: true,
@@ -242,27 +314,6 @@ function createPouchFireCollection(
                 log.error('syncFromPDBToFireStore', error)
               },
             })
-        },
-        afterCreate() {
-          addDisposer(self, disposeSignInSubscriptions)
-          addDisposer(
-            self,
-            reaction(
-              () => {
-                trace()
-                return [self.__firestoreCollectionRef]
-              },
-              () => {
-                disposeSignInSubscriptions()
-                signInSubscriptions.push(self.__startDownStreamSync())
-
-                signInSubscriptions.push(self.__startUpStreamSync())
-              },
-            ),
-          )
-        },
-        async __syncFirestoreChangeToPDB(firestoreChange) {
-          log.debug('sync downstream: fire2Pouch', firestoreChange)
         },
 
         async __syncPDBChangeToFirestore(pdbChange) {
@@ -309,7 +360,8 @@ function createPouchFireCollection(
           self.__syncPDBSeq = pdbChange.seq
           function prepareForFirestoreSave(localDoc) {
             const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
-            return R.compose(R.omit('_rev'), R.merge(localDoc))({
+            return R.compose(R.merge(localDoc))({
+              _rev: null,
               fireStoreServerTimestamp,
             })
           }
@@ -484,7 +536,7 @@ const Fire = types
           reaction(
             () => self.store,
             () => {
-              self.log.debug('storeReady', RA.isNotNil(self.store))
+              self.log.trace('storeReady', RA.isNotNil(self.store))
             },
           ),
         )
@@ -498,14 +550,14 @@ const Fire = types
           const store = self.app.firestore()
           store.settings({timestampsInSnapshots: true})
           const result = yield pReflect(store.enablePersistence())
-          self.log.debug('store enablePersistence result', result)
+          self.log.trace('store enablePersistence result', result)
           self.store = store
         }
       }),
 
       _onAuthStateChanged(user) {
         self.userInfo = omitFirebaseClutter(user)
-        self.log.debug('onAuthStateChanged userInfo:', self.userInfo)
+        self.log.trace('onAuthStateChanged userInfo:', self.userInfo)
         self.authState = user ? 'signedIn' : 'signedOut'
       },
       signIn() {
