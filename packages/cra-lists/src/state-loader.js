@@ -1,4 +1,4 @@
-import {State} from './State'
+import {State} from './mst/State'
 import {getAppActorId} from './LocalStorage'
 
 const mst = require('mobx-state-tree')
