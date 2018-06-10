@@ -230,34 +230,36 @@ function createPouchFireCollection(Model, modelName) {
             '__startDownStreamSync from syncFSTimeStamp',
             self.__syncFSTimeStamp,
           )
-          return createFirestoreOnSnapshotStream(
-            self.firestoreCollectionRef
-              .where(
-                'fireStoreServerTimestamp',
-                '>',
-                self.__syncFSTimeStamp,
-              )
-              .orderBy('fireStoreServerTimestamp'),
+          return (
+            createFirestoreOnSnapshotStream(
+              self.firestoreCollectionRef
+                .where(
+                  'fireStoreServerTimestamp',
+                  '>',
+                  self.__syncFSTimeStamp,
+                )
+                .orderBy('fireStoreServerTimestamp'),
+            )
+              // .bufferWithTimeOrCount(5000, 100)
+              // .filter(RA.isNotEmpty)
+              // .flatten()
+              .map(snapshot => snapshot.docChanges())
+              .flatten()
+              .scan(async (prevPromise, firestoreChange) => {
+                const firestoreTimestamp = firestoreChange.doc.data()
+                  .fireStoreServerTimestamp
+                assert(RA.isNotNil(firestoreTimestamp))
+                await prevPromise
+                await self.__syncFirestoreChangeToPDB(firestoreChange)
+                self.__syncFSTimeStamp = firestoreTimestamp
+              }, Promise.resolve())
+              .takeErrors(1)
+              .observe({
+                error(error) {
+                  log.error('syncFromPDBToFireStore', error)
+                },
+              })
           )
-            .bufferWithTimeOrCount(5000, 100)
-            .filter(RA.isNotEmpty)
-            .flatten()
-            .map(snapshot => snapshot.docChanges())
-            .flatten()
-            .scan(async (prevPromise, firestoreChange) => {
-              const firestoreTimestamp = firestoreChange.doc.data()
-                .fireStoreServerTimestamp
-              assert(RA.isNotNil(firestoreTimestamp))
-              await prevPromise
-              await self.__syncFirestoreChangeToPDB(firestoreChange)
-              self.__syncFSTimeStamp = firestoreTimestamp
-            }, Promise.resolve())
-            .takeErrors(1)
-            .observe({
-              error(error) {
-                log.error('syncFromPDBToFireStore', error)
-              },
-            })
         },
         __isFirestoreDocChangeEqualToModelInLookup(docChange) {
           const model = self.__idLookup.get(docChange.doc.id)
@@ -324,10 +326,8 @@ function createPouchFireCollection(Model, modelName) {
             },
             self.__db,
           )
-            .delay(3000)
             .scan(async (prevPromise, pdbChange) => {
               await prevPromise
-              // await self.__syncPDBChangeToFirestore(pdbChange)
               await updateFirestoreFromPouchDoc({
                 doc: pdbChange.doc,
                 appActorId: self.localAppActorId,
@@ -342,76 +342,6 @@ function createPouchFireCollection(Model, modelName) {
               },
             })
         },
-        //<editor-fold desc="Ignored">
-        async __syncPDBChangeToFirestore(pdbChange) {
-          await updateFirestoreFromPouchDoc({
-            doc: pdbChange.doc,
-            appActorId: self.localAppActorId,
-            cRef: self.firestoreCollectionRef,
-          })
-          log.debug(
-            'sync upstream: pdbChange',
-            ...R.compose(
-              R.values,
-              R.flatten,
-              R.toPairs,
-              SF.omit(['changes', 'doc']),
-            )(pdbChange),
-            pdbChange.doc,
-          )
-          const localDoc = Model.create(pdbChange.doc, getEnv(self))
-          if (!localDoc.hasLocalAppActorId) return
-
-          const docRef = self.firestoreCollectionRef.doc(localDoc.id)
-
-          return docRef.firestore.runTransaction(
-            async transaction => {
-              const remoteDocSnapshot = await transaction.get(docRef)
-              if (!remoteDocSnapshot.exists) {
-                transaction.set(
-                  docRef,
-                  prepareForFirestoreSave(localDoc),
-                )
-                return
-              }
-              const remoteDoc = Model.create(
-                remoteDocSnapshot.data(),
-                getEnv(self),
-              )
-              if (isNewerThan(remoteDoc, localDoc)) {
-                log.trace('sync upstream: empty transaction update')
-                transaction.update(docRef, {})
-                return
-              }
-              if (!remoteDoc.hasLocalAppActorId) {
-                addToHistory(docRef, remoteDoc, transaction)
-              }
-              transaction.update(
-                docRef,
-                prepareForFirestoreSave(localDoc),
-              )
-            },
-          )
-          function prepareForFirestoreSave(localDoc) {
-            log.trace('sync upstream: prepareForFirestoreSave')
-            return R.compose(R.merge(localDoc))({
-              _rev: null,
-              fireStoreServerTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            })
-          }
-
-          function isNewerThan(doc1, doc2) {
-            return doc1.modifiedAt > doc2.modifiedAt
-          }
-
-          function addToHistory(docRef, doc, transaction) {
-            transaction.set(
-              docRef.collection('history').doc(`${doc.modifiedAt}`),
-              doc,
-            )
-          }
-        },
-        //</editor-fold>
       }
     })
     .actions(self => ({
