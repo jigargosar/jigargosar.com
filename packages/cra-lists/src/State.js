@@ -105,16 +105,14 @@ function createPouchFireCollection(
     .model(name, {
       __idLookup: types.optional(types.map(Model), {}),
     })
-    .views(self => {
-      return {
-        get _all() {
-          return Array.from(self.__idLookup.values())
-        },
-        get _actorId() {
-          return getEnv(self).actorId
-        },
-      }
-    })
+    .views(self => ({
+      get _all() {
+        return Array.from(self.__idLookup.values())
+      },
+      get _actorId() {
+        return getEnv(self).actorId
+      },
+    }))
     .volatile(self => {
       log.trace('creating pdb', name)
       const pdb = new PouchDB(name)
@@ -126,36 +124,44 @@ function createPouchFireCollection(
         __db: pdb,
       }
     })
-    .actions(self => {
-      return {
-        afterCreate() {
-          addSubscriptionDisposer(
-            self,
-            createPouchDBChangesStream(
-              {live: true, include_docs: true},
-              self.__db,
-            )
-              .bufferWithTimeOrCount(500, 100)
-              .filter(RA.isNotEmpty)
-              // .spy(`${name} buffered changes`)
-              .observe({value: self.__updateFromPDBBufferedChanges}),
+    .actions(self => ({
+      afterCreate() {
+        addSubscriptionDisposer(
+          self,
+          createPouchDBChangesStream(
+            {live: true, include_docs: true},
+            self.__db,
           )
-        },
-        __updateFromPDBChange(change) {
-          self.__idLookup.put(change.doc)
-        },
-        __updateFromPDBBufferedChanges(bufferedChanges) {
-          log.debug(
-            'updating _idLookup from PDB bufferedChanges',
-            bufferedChanges,
-          )
-          R.forEach(self.__updateFromPDBChange, bufferedChanges)
-        },
-        __putInDB(modelProps) {
-          return self.__db.put(getSnapshot(Model.create(modelProps)))
-        },
-      }
-    })
+            .bufferWithTimeOrCount(500, 100)
+            .filter(RA.isNotEmpty)
+            // .spy(`${name} buffered changes`)
+            .observe({value: self.__updateFromPDBBufferedChanges}),
+        )
+      },
+      __updateFromPDBChange(change) {
+        self.__idLookup.put(change.doc)
+      },
+      __updateFromPDBBufferedChanges(bufferedChanges) {
+        log.debug(
+          'updating _idLookup from PDB bufferedChanges',
+          bufferedChanges,
+        )
+        R.forEach(self.__updateFromPDBChange, bufferedChanges)
+      },
+      __putInDB(modelProps) {
+        return self.__db.put(getSnapshot(Model.create(modelProps)))
+      },
+    }))
+    .volatile(self => ({
+      __syncFSMilliLS: LocalStorageItem(
+        `cra-list:${name}:syncedTillFirestoreMilli`,
+        0,
+      ),
+      __syncPDBSeqLS: LocalStorageItem(
+        `cra-list:${name}:syncedTillPDBSequenceNumber`,
+        0,
+      ),
+    }))
     .views(self => {
       return {
         get fire() {
@@ -183,21 +189,6 @@ function createPouchFireCollection(
           return self.__syncPDBSeqLS.load()
         },
       }
-    })
-    .volatile(self => {
-      return {
-        __syncFSMilliLS: LocalStorageItem(
-          `cra-list:${name}:syncedTillFirestoreMilli`,
-          0,
-        ),
-        __syncPDBSeqLS: LocalStorageItem(
-          `cra-list:${name}:syncedTillPDBSequenceNumber`,
-          0,
-        ),
-      }
-    })
-    .views(self => {
-      return {}
     })
     .actions(self => {
       const signInSubscriptions = []
@@ -322,7 +313,6 @@ function createPouchFireCollection(
               },
             })
         },
-
         async __syncPDBChangeToFirestore(pdbChange) {
           log.debug(
             'sync upstream: pdbChange',
@@ -388,56 +378,52 @@ function createPouchFireCollection(
         },
       }
     })
-    .actions(self => {
-      return {
-        _addNew(extendedProps = {}) {
-          assert(RA.isNotNil(extendedProps))
-          const props = {
-            _id: `${modelName}-${nanoid()}`,
-            _rev: null,
-            createdAt: Date.now(),
-            modifiedAt: Date.now(),
-            archived: false,
-            actorId: self._actorId,
-            version: 0,
-          }
-          return self.__putInDB(
-            R.mergeDeepRight(extendedProps, props),
-          )
-        },
-        _update({_id, _rev}, userChange = {}) {
-          assert(RA.isNotNil(userChange))
-          const modelSnapshot = getSnapshot(self.__idLookup.get(_id))
+    .actions(self => ({
+      _addNew(extendedProps = {}) {
+        assert(RA.isNotNil(extendedProps))
+        const props = {
+          _id: `${modelName}-${nanoid()}`,
+          _rev: null,
+          createdAt: Date.now(),
+          modifiedAt: Date.now(),
+          archived: false,
+          actorId: self._actorId,
+          version: 0,
+        }
+        return self.__putInDB(R.mergeDeepRight(extendedProps, props))
+      },
+      _update({_id, _rev}, userChange = {}) {
+        assert(RA.isNotNil(userChange))
+        const modelSnapshot = getSnapshot(self.__idLookup.get(_id))
 
-          assert.equal(modelSnapshot._rev, _rev)
+        assert.equal(modelSnapshot._rev, _rev)
 
-          assert(isValidChange(userChange))
+        assert(isValidChange(userChange))
 
-          const hasActuallyChanged = !R.equals(
+        const hasActuallyChanged = !R.equals(
+          modelSnapshot,
+          R.merge(modelSnapshot, userChange),
+        )
+
+        if (hasActuallyChanged) {
+          const changesMergedModel = R.mergeDeepRight(
             modelSnapshot,
-            R.merge(modelSnapshot, userChange),
+            userChange,
           )
 
-          if (hasActuallyChanged) {
-            const changesMergedModel = R.mergeDeepRight(
-              modelSnapshot,
-              userChange,
-            )
-
-            return self.__putInDB(
-              R.merge(changesMergedModel, {
-                modifiedAt: Date.now(),
-                actorId: self._actorId,
-              }),
-            )
-          }
-          return Promise.resolve()
-        },
-        _clear() {
-          self.__idLookup.clear()
-        },
-      }
-    })
+          return self.__putInDB(
+            R.merge(changesMergedModel, {
+              modifiedAt: Date.now(),
+              actorId: self._actorId,
+            }),
+          )
+        }
+        return Promise.resolve()
+      },
+      _clear() {
+        self.__idLookup.clear()
+      },
+    }))
 }
 
 const PFGrain = createPouchFireModel('Grain').props({
