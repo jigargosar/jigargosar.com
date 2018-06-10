@@ -4,6 +4,7 @@ import {reaction} from 'mobx'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
 import Kefir from 'kefir'
+import {LocalStorageItem} from './local-storage-item'
 
 const firebase = require('firebase/app')
 const pReflect = require('p-reflect')
@@ -30,6 +31,9 @@ const PouchFireBaseModel = types
       },
       get rev() {
         return self._rev
+      },
+      get hasLocalActorId() {
+        return R.equals(self.actorId, getRoot(self).actorId)
       },
     }
   })
@@ -144,6 +148,30 @@ function createPouchFireCollection(
         get fire() {
           return getRoot(self).fire
         },
+        get firestoreCollection() {
+          return self.fire.userCollectionRef(firestoreCollectionName)
+        },
+        get syncFSTimeStamp() {
+          return firebase.firestore.Timestamp.fromMillis(
+            self._syncFSMilliLS.load(),
+          )
+        },
+
+        get syncPDBSeq() {
+          return self._syncPDBSeqLS.load()
+        },
+      }
+    })
+    .volatile(self => {
+      return {
+        _syncFSMilliLS: LocalStorageItem(
+          `cra-list:${name}:syncedTillFirestoreMilli`,
+          0,
+        ),
+        _syncPDBSeqLS: LocalStorageItem(
+          `cra-list:${name}:syncedTillPDBSequenceNumber`,
+          0,
+        ),
       }
     })
     .actions(self => {
@@ -160,15 +188,21 @@ function createPouchFireCollection(
           addDisposer(
             self,
             reaction(
-              () => [
-                self.fire.userCollectionRef(firestoreCollectionName),
-              ],
-              ([ucr]) => {
+              () => [self.firestoreCollection],
+              () => {
                 disposeSignInSubscriptions()
-                if (R.isNil(ucr)) return
+                if (R.isNil(self.firestoreCollection)) return
 
                 signInSubscriptions.push(
-                  createFirestoreOnSnapshotStream(ucr)
+                  createFirestoreOnSnapshotStream(
+                    self.firestoreCollection
+                      .where(
+                        'fireStoreServerTimestamp',
+                        '>',
+                        self.syncFSTimeStamp,
+                      )
+                      .orderBy('fireStoreServerTimestamp'),
+                  )
                     .map(snapshot => snapshot.docChanges())
                     .flatten()
                     .scan(async (prevPromise, change) => {
@@ -210,7 +244,60 @@ function createPouchFireCollection(
           log.debug('fire: __onFirestoreCollectionChange', docChange)
         },
         async __updateFirestoreFromPDBChange(pdbChange) {
-          log.debug('fire: __updateFirestoreFromPDBChange', pdbChange)
+          log.debug(
+            'fire: __updateFirestoreFromPDBChange',
+            ...R.compose(
+              R.values,
+              R.flatten,
+              R.toPairs,
+              R.omit(['changes', 'doc']),
+            )(pdbChange),
+            pdbChange.doc,
+          )
+          const localDoc = Model.create(pdbChange.doc)
+          if (!localDoc.hasLocalActorId) return
+
+          const docRef = self.firestoreCollection.doc(localDoc.id)
+
+          await docRef.firestore.runTransaction(async transaction => {
+            const remoteDocSnapshot = await transaction.get(docRef)
+            if (!remoteDocSnapshot.exists) {
+              transaction.set(
+                docRef,
+                mergeFirestoreServerTimestamp(localDoc),
+              )
+              return
+            }
+            const remoteDoc = Model.create(remoteDocSnapshot.data())
+            if (isNewerThan(remoteDoc, localDoc)) {
+              transaction.update(docRef, {})
+              return
+            }
+            if (!remoteDoc.hasLocalActorId) {
+              addToHistory(docRef, remoteDoc, transaction)
+            }
+            transaction.update(
+              docRef,
+              mergeFirestoreServerTimestamp(localDoc),
+            )
+          })
+          function mergeFirestoreServerTimestamp(localDoc) {
+            const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
+            return R.merge(localDoc, {
+              fireStoreServerTimestamp,
+            })
+          }
+
+          function isNewerThan(doc1, doc2) {
+            return doc1.modifiedAt > doc2.modifiedAt
+          }
+
+          function addToHistory(docRef, doc, transaction) {
+            transaction.set(
+              docRef.collection('history').doc(`${doc.modifiedAt}`),
+              doc,
+            )
+          }
         },
       }
     })
