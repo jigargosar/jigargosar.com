@@ -168,21 +168,49 @@ function createPouchFireCollection(
                 if (R.isNil(ucr)) return
 
                 signInSubscriptions.push(
-                  createFirestoreOnSnapshotStream(ucr).observe({
-                    value: self._onFirestoreCollectionSnapshot,
-                  }),
+                  createFirestoreOnSnapshotStream(ucr)
+                    .map(snapshot => snapshot.docChanges())
+                    .flatten()
+                    .scan(async (prevPromise, change) => {
+                      await prevPromise
+                      await self.__onFirestoreCollectionChange(change)
+                      // syncSeqLS.save(change.seq)
+                    }, Promise.resolve())
+                    .takeErrors(1)
+                    .observe({
+                      error(error) {
+                        log.error('syncFromPDBToFireStore', error)
+                      },
+                    }),
+                )
+                signInSubscriptions.push(
+                  pouchDBChangesStream(
+                    {live: true, include_docs: true},
+                    self.__db,
+                  )
+                    .scan(async (prevPromise, change) => {
+                      await prevPromise
+                      await self.__updateFirestoreFromPDBChange(
+                        change,
+                      )
+                      // syncSeqLS.save(change.seq)
+                    }, Promise.resolve())
+                    .takeErrors(1)
+                    .observe({
+                      error(error) {
+                        log.error('syncFromPDBToFireStore', error)
+                      },
+                    }),
                 )
               },
             ),
           )
         },
-        _onFirestoreCollectionSnapshot(snapshot) {
-          const docChanges = snapshot.docChanges()
-          log.debug('fire: snapshot.docChanges()', docChanges)
-          R.forEach(self._onFirestoreCollectionChange, docChanges)
+        async __onFirestoreCollectionChange(docChange) {
+          log.debug('fire: __onFirestoreCollectionChange', docChange)
         },
-        _onFirestoreCollectionChange(docChange) {
-          log.debug('fire: docChange', docChange)
+        async __updateFirestoreFromPDBChange(pdbChange) {
+          log.debug('fire: __updateFirestoreFromPDBChange', pdbChange)
         },
       }
     })
