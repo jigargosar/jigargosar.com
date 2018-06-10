@@ -39,21 +39,23 @@ function transactionUpdateEmpty(docRef, transaction) {
   log.debug('transactionUpdateEmpty')
   return transaction.update(docRef, {})
 }
-function transactionSetInHistoryCollection(docRef, doc, transaction) {
-  log.debug('transactionSetInHistoryCollection')
-  transaction.set(
-    docRef.collection('history').doc(`${doc.modifiedAt}`),
-    doc,
-  )
-}
-
 function transactionUpdate(docRef, data, transaction) {
   return transaction.update(docRef, data)
 }
 
-function incrementVersion(data) {
-  return R.merge(data, {version: data.version + 1})
-}
+// function transactionSetInHistoryCollection(docRef, doc, transaction) {
+//   log.debug('transactionSetInHistoryCollection')
+//   transaction.set(
+//     docRef.collection('history').doc(`${doc.modifiedAt}`),
+//     doc,
+//   )
+// }
+
+// function incrementVersion(data) {
+//   const version = data.version + 1
+//   log.debug('incrementVersion to:', version, 'from:', data.version)
+//   return R.merge(data, {version})
+// }
 
 export async function updateFirestoreFromPouchDoc({
   doc,
@@ -81,12 +83,12 @@ export async function updateFirestoreFromPouchDoc({
     }
 
     if (isRemotelyModified(fireData, appActorId)) {
-      transactionSetInHistoryCollection(docRef, fireData, transaction)
+      // transactionSetInHistoryCollection(docRef, fireData, transaction)
     }
 
     return transactionUpdate(
       docRef,
-      incrementVersion(docToFirestoreData(doc)),
+      docToFirestoreData(doc),
       transaction,
     )
   }, cRef)

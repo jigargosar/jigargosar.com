@@ -263,8 +263,9 @@ function createPouchFireCollection(Model, modelName) {
             self.__isFirestoreDocChangeEqualToModelInLookup(
               firestoreChange,
             )
-          )
+          ) {
             return Promise.resolve()
+          }
           const changeDoc = firestoreChange.doc
           const changeDocData = changeDoc.data()
 
@@ -299,6 +300,7 @@ function createPouchFireCollection(Model, modelName) {
               getEnv(self),
             )
             if (remoteModel.modifiedAt > localModel.modifiedAt) {
+              // if (remoteModel.version > localModel.version) {
               return self.__putInDB(
                 R.merge(remoteModel, R.pick(['_rev'], localModel)),
               )
