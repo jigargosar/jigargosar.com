@@ -6,6 +6,7 @@ const assert = require('assert')
 const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
+const log = require('nanologger')('Fire')
 
 function addDisposer(target, disposer) {
   return mstAddDisposer(target, () => {
@@ -33,9 +34,6 @@ export const Fire = types
   }))
   .views(self => {
     return {
-      get log() {
-        return require('nanologger')('Fire')
-      },
       get store() {
         return self.app.firestore()
       },
@@ -77,7 +75,7 @@ export const Fire = types
           self.store
             .enablePersistence()
             .catch(error =>
-              self.log.trace('store enablePersistence result', error),
+              log.trace('store enablePersistence result', error),
             )
         }
 
@@ -89,7 +87,7 @@ export const Fire = types
 
       _onAuthStateChanged(user) {
         self.userInfo = omitFirebaseClutter(user)
-        self.log.trace('onAuthStateChanged userInfo:', self.userInfo)
+        log.trace('onAuthStateChanged userInfo:', self.userInfo)
         self.authState = user ? 'signedIn' : 'signedOut'
       },
       signIn() {
