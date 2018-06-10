@@ -43,6 +43,8 @@ function createPouchFireModel(name) {
 }
 
 function pouchDBChangesStream(options, pouchDB) {
+  const log = require('nanologger')(`PouchDB:${pouchDB.name}`)
+  log.debug('pouchDBChangesStream', options)
   return Kefir.stream(emitter => {
     const changes = pouchDB
       .changes(options)
@@ -148,7 +150,7 @@ function createPouchFireCollection(
         get fire() {
           return getRoot(self).fire
         },
-        get firestoreCollection() {
+        get firestoreCollectionRef() {
           return self.fire.userCollectionRef(firestoreCollectionName)
         },
         get syncFSTimeStamp() {
@@ -156,7 +158,10 @@ function createPouchFireCollection(
             self._syncFSMilliLS.load(),
           )
         },
-
+        set syncPDBSeq(seq) {
+          self._syncPDBSeqLS.save(seq)
+          // self._syncPDBSeqLS.save(0)
+        },
         get syncPDBSeq() {
           return self._syncPDBSeqLS.load()
         },
@@ -174,6 +179,9 @@ function createPouchFireCollection(
         ),
       }
     })
+    .views(self => {
+      return {}
+    })
     .actions(self => {
       const signInSubscriptions = []
 
@@ -188,14 +196,14 @@ function createPouchFireCollection(
           addDisposer(
             self,
             reaction(
-              () => [self.firestoreCollection],
+              () => [self.firestoreCollectionRef],
               () => {
                 disposeSignInSubscriptions()
-                if (R.isNil(self.firestoreCollection)) return
+                if (R.isNil(self.firestoreCollectionRef)) return
 
                 signInSubscriptions.push(
                   createFirestoreOnSnapshotStream(
-                    self.firestoreCollection
+                    self.firestoreCollectionRef
                       .where(
                         'fireStoreServerTimestamp',
                         '>',
@@ -207,7 +215,7 @@ function createPouchFireCollection(
                     .flatten()
                     .scan(async (prevPromise, firestoreChange) => {
                       await prevPromise
-                      await self.__updatePDBFromFirestoreChange(
+                      await self.__updateFromFirestoreChangeToPDB(
                         firestoreChange,
                       )
                       // syncSeqLS.save(firestoreChange.seq)
@@ -219,14 +227,20 @@ function createPouchFireCollection(
                       },
                     }),
                 )
+                const since = self.syncPDBSeq
+                log.debug('since', since)
                 signInSubscriptions.push(
                   pouchDBChangesStream(
-                    {live: true, include_docs: true},
+                    {
+                      live: true,
+                      include_docs: true,
+                      since: since,
+                    },
                     self.__db,
                   )
                     .scan(async (prevPromise, change) => {
                       await prevPromise
-                      await self.__updateFirestoreFromPDBChange(
+                      await self.__updateFromPDBChangeToFirestore(
                         change,
                       )
                       // syncSeqLS.save(change.seq)
@@ -242,16 +256,13 @@ function createPouchFireCollection(
             ),
           )
         },
-        async __updatePDBFromFirestoreChange(docChange) {
-          log.debug('fire: __onFirestoreCollectionChange', docChange)
+        async __updateFromFirestoreChangeToPDB(firestoreChange) {
+          log.debug('sync downstream: fire2Pouch', firestoreChange)
         },
-        set syncPDBSeq(seq) {
-          self._syncPDBSeqLS.save(seq)
-          // self._syncPDBSeqLS.save(0)
-        },
-        async __updateFirestoreFromPDBChange(pdbChange) {
+
+        async __updateFromPDBChangeToFirestore(pdbChange) {
           log.debug(
-            'fire: __updateFirestoreFromPDBChange',
+            'sync upstream: pouch2Fire',
             ...R.compose(
               R.values,
               R.flatten,
@@ -263,7 +274,7 @@ function createPouchFireCollection(
           const localDoc = Model.create(pdbChange.doc)
           if (!localDoc.hasLocalActorId) return
 
-          const docRef = self.firestoreCollection.doc(localDoc.id)
+          const docRef = self.firestoreCollectionRef.doc(localDoc.id)
 
           await docRef.firestore.runTransaction(async transaction => {
             const remoteDocSnapshot = await transaction.get(docRef)

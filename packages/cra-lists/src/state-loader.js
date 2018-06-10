@@ -24,6 +24,8 @@ if (module.hot) {
     mst.applySnapshot(state, module.hot.data.snapshot)
   }
   module.hot.dispose(data => {
+    console.clear()
+    console.clear()
     data.snapshot = mst.getSnapshot(state)
     mst.destroy(state)
   })
