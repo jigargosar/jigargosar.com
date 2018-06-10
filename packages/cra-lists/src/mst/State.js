@@ -280,7 +280,6 @@ function createPouchFireCollection(Model, modelName) {
             changeDocData,
             getEnv(self),
           )
-          assert(R.isNil(remoteModel._rev))
 
           const docResult = await pReflect(
             self.__db.get(changeDoc.id),
