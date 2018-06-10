@@ -1,6 +1,7 @@
 // const log = require('nanologger')('rootStore')
 import {addDisposer as mstAddDisposer, flow, getEnv, getRoot, getSnapshot, types,} from 'mobx-state-tree'
-import {reaction} from 'mobx'
+
+import {reaction, trace} from 'mobx'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
 import Kefir from 'kefir'
@@ -150,30 +151,33 @@ function createPouchFireCollection(
         get fire() {
           return getRoot(self).fire
         },
-        get firestoreCollectionRef() {
+        get __firestoreCollectionRef() {
           return self.fire.userCollectionRef(firestoreCollectionName)
         },
-        get syncFSTimeStamp() {
+        get __firestoreCollectionPath() {
+          return self.fire.userCollectionPath(firestoreCollectionName)
+        },
+        get __syncFSTimeStamp() {
           return firebase.firestore.Timestamp.fromMillis(
-            self._syncFSMilliLS.load(),
+            self.__syncFSMilliLS.load(),
           )
         },
-        set syncPDBSeq(seq) {
-          self._syncPDBSeqLS.save(seq)
+        set __syncPDBSeq(seq) {
+          self.__syncPDBSeqLS.save(seq)
           // self._syncPDBSeqLS.save(0)
         },
-        get syncPDBSeq() {
-          return self._syncPDBSeqLS.load()
+        get __syncPDBSeq() {
+          return self.__syncPDBSeqLS.load()
         },
       }
     })
     .volatile(self => {
       return {
-        _syncFSMilliLS: LocalStorageItem(
+        __syncFSMilliLS: LocalStorageItem(
           `cra-list:${name}:syncedTillFirestoreMilli`,
           0,
         ),
-        _syncPDBSeqLS: LocalStorageItem(
+        __syncPDBSeqLS: LocalStorageItem(
           `cra-list:${name}:syncedTillPDBSequenceNumber`,
           0,
         ),
@@ -196,18 +200,19 @@ function createPouchFireCollection(
           addDisposer(
             self,
             reaction(
-              () => [self.firestoreCollectionRef],
+              () => {
+                trace()
+                return [self.__firestoreCollectionRef]
+              },
               () => {
                 disposeSignInSubscriptions()
-                if (R.isNil(self.firestoreCollectionRef)) return
-
                 signInSubscriptions.push(
                   createFirestoreOnSnapshotStream(
-                    self.firestoreCollectionRef
+                    self.__firestoreCollectionRef
                       .where(
                         'fireStoreServerTimestamp',
                         '>',
-                        self.syncFSTimeStamp,
+                        self.__syncFSTimeStamp,
                       )
                       .orderBy('fireStoreServerTimestamp'),
                   )
@@ -215,7 +220,7 @@ function createPouchFireCollection(
                     .flatten()
                     .scan(async (prevPromise, firestoreChange) => {
                       await prevPromise
-                      await self.__updateFromFirestoreChangeToPDB(
+                      await self.__syncFirestoreChangeToPDB(
                         firestoreChange,
                       )
                       // syncSeqLS.save(firestoreChange.seq)
@@ -227,7 +232,7 @@ function createPouchFireCollection(
                       },
                     }),
                 )
-                const since = self.syncPDBSeq
+                const since = self.__syncPDBSeq
                 log.debug('since', since)
                 signInSubscriptions.push(
                   pouchDBChangesStream(
@@ -240,9 +245,7 @@ function createPouchFireCollection(
                   )
                     .scan(async (prevPromise, change) => {
                       await prevPromise
-                      await self.__updateFromPDBChangeToFirestore(
-                        change,
-                      )
+                      await self.__syncPDBChangeToFirestore(change)
                       // syncSeqLS.save(change.seq)
                     }, Promise.resolve())
                     .takeErrors(1)
@@ -256,11 +259,11 @@ function createPouchFireCollection(
             ),
           )
         },
-        async __updateFromFirestoreChangeToPDB(firestoreChange) {
+        async __syncFirestoreChangeToPDB(firestoreChange) {
           log.debug('sync downstream: fire2Pouch', firestoreChange)
         },
 
-        async __updateFromPDBChangeToFirestore(pdbChange) {
+        async __syncPDBChangeToFirestore(pdbChange) {
           log.debug(
             'sync upstream: pouch2Fire',
             ...R.compose(
@@ -274,7 +277,9 @@ function createPouchFireCollection(
           const localDoc = Model.create(pdbChange.doc)
           if (!localDoc.hasLocalActorId) return
 
-          const docRef = self.firestoreCollectionRef.doc(localDoc.id)
+          const docRef = self.__firestoreCollectionRef.doc(
+            localDoc.id,
+          )
 
           await docRef.firestore.runTransaction(async transaction => {
             const remoteDocSnapshot = await transaction.get(docRef)
@@ -299,7 +304,7 @@ function createPouchFireCollection(
             )
           })
           // self.syncFSTimeStamp = docChange.data().fireStoreServerTimestamp
-          self.syncPDBSeq = pdbChange.seq
+          self.__syncPDBSeq = pdbChange.seq
           function prepareForFirestoreSave(localDoc) {
             const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
             return R.compose(R.omit('_rev'), R.merge(localDoc))({
@@ -446,26 +451,29 @@ const Fire = types
       get isSignedIn() {
         return R.equals(self.authState, 'signedIn')
       },
+      userCollectionRef(collectionName) {
+        assert(RA.isNotNil(collectionName))
+        if (!self.isSignedIn || R.isNil(self.store)) return null
+        return self.store.collection(
+          `/users/${self.uid}/${collectionName}`,
+        )
+      },
+      userCollectionPath(collectionName) {
+        assert(RA.isNotNil(collectionName))
+        if (R.isNil(self.uid)) return null
+        return `/users/${self.uid}/${collectionName}`
+      },
+      get _grainsCollectionRef() {
+        assert(self.isSignedIn)
+        assert(RA.isNotNil(self.store))
+        return self.store.collection(`/users/${self.uid}/grains`)
+      },
+      get uid() {
+        return R.pathOr(null, 'userInfo.uid'.split('.'))(self)
+      },
     }
   })
-  .views(self => ({
-    userCollectionRef(collectionName) {
-      assert(RA.isNotNil(collectionName))
-      if (!self.isSignedIn || R.isNil(self.store)) return null
-      return self.store.collection(
-        `/users/${self.uid}/${collectionName}`,
-      )
-    },
-    get _grainsCollectionRef() {
-      assert(self.isSignedIn)
-      assert(RA.isNotNil(self.store))
-      return self.store.collection(`/users/${self.uid}/grains`)
-    },
-    get uid() {
-      assert(self.isSignedIn)
-      return self.userInfo.uid
-    },
-  }))
+
   .actions(self => {
     return {
       afterCreate: flow(function* afterCreate() {
