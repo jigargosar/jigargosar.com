@@ -7,6 +7,7 @@ import {LocalStorageItem} from '../local-storage-item'
 import {Fire} from './Fire'
 import {addDisposer, addSubscriptionDisposer} from './mst-utils'
 import firebase from 'firebase/app'
+import {updateFirestoreFromPDBChange} from './UpdateFirestore'
 
 require('firebase/auth')
 require('firebase/firestore')
@@ -100,7 +101,7 @@ function createPouchFireCollection(Model, modelName) {
       get allValues() {
         return Array.from(self.__idLookup.values())
       },
-      get __localAppActorId() {
+      get localAppActorId() {
         const localAppActorId = getEnv(self).localAppActorId
         assert(RA.isNotEmpty(localAppActorId))
         return localAppActorId
@@ -330,6 +331,11 @@ function createPouchFireCollection(Model, modelName) {
             })
         },
         async __syncPDBChangeToFirestore(pdbChange) {
+          // await updateFirestoreFromPDBChange({
+          //   pdbDoc: pdbChange.doc,
+          //   localAppActorId: self.localAppActorId,
+          //   collectionRef: self.__firestoreCollectionRef,
+          // })
           log.debug(
             'sync upstream: pdbChange',
             ...R.compose(
@@ -405,7 +411,7 @@ function createPouchFireCollection(Model, modelName) {
           createdAt: Date.now(),
           modifiedAt: Date.now(),
           archived: false,
-          actorId: self.__localAppActorId,
+          actorId: self.localAppActorId,
           version: 0,
         }
         return self.__putInDB(R.mergeDeepRight(extendedProps, props))
@@ -432,7 +438,7 @@ function createPouchFireCollection(Model, modelName) {
           return self.__putInDB(
             R.merge(changesMergedModel, {
               modifiedAt: Date.now(),
-              actorId: self.__localAppActorId,
+              actorId: self.localAppActorId,
             }),
           )
         }
