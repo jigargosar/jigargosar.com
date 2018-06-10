@@ -195,6 +195,54 @@ function createPouchFireCollection(
       }
 
       return {
+        __startDownStreamSync() {
+          const syncFSTimeStamp = self.__syncFSTimeStamp
+          log.info(
+            '__startDownStreamSync from syncFSTimeStamp',
+            syncFSTimeStamp,
+          )
+          return createFirestoreOnSnapshotStream(
+            self.__firestoreCollectionRef
+              .where('fireStoreServerTimestamp', '>', syncFSTimeStamp)
+              .orderBy('fireStoreServerTimestamp'),
+          )
+            .map(snapshot => snapshot.docChanges())
+            .flatten()
+            .scan(async (prevPromise, firestoreChange) => {
+              await prevPromise
+              await self.__syncFirestoreChangeToPDB(firestoreChange)
+              // syncSeqLS.save(firestoreChange.seq)
+            }, Promise.resolve())
+            .takeErrors(1)
+            .observe({
+              error(error) {
+                log.error('syncFromPDBToFireStore', error)
+              },
+            })
+        },
+        __startUpStreamSync() {
+          const since = self.__syncPDBSeq
+          log.info('__startUpStreamSync from seq', since)
+          return pouchDBChangesStream(
+            {
+              live: true,
+              include_docs: true,
+              since,
+            },
+            self.__db,
+          )
+            .scan(async (prevPromise, change) => {
+              await prevPromise
+              await self.__syncPDBChangeToFirestore(change)
+              // syncSeqLS.save(change.seq)
+            }, Promise.resolve())
+            .takeErrors(1)
+            .observe({
+              error(error) {
+                log.error('syncFromPDBToFireStore', error)
+              },
+            })
+        },
         afterCreate() {
           addDisposer(self, disposeSignInSubscriptions)
           addDisposer(
@@ -206,55 +254,9 @@ function createPouchFireCollection(
               },
               () => {
                 disposeSignInSubscriptions()
-                signInSubscriptions.push(
-                  createFirestoreOnSnapshotStream(
-                    self.__firestoreCollectionRef
-                      .where(
-                        'fireStoreServerTimestamp',
-                        '>',
-                        self.__syncFSTimeStamp,
-                      )
-                      .orderBy('fireStoreServerTimestamp'),
-                  )
-                    .map(snapshot => snapshot.docChanges())
-                    .flatten()
-                    .scan(async (prevPromise, firestoreChange) => {
-                      await prevPromise
-                      await self.__syncFirestoreChangeToPDB(
-                        firestoreChange,
-                      )
-                      // syncSeqLS.save(firestoreChange.seq)
-                    }, Promise.resolve())
-                    .takeErrors(1)
-                    .observe({
-                      error(error) {
-                        log.error('syncFromPDBToFireStore', error)
-                      },
-                    }),
-                )
-                const since = self.__syncPDBSeq
-                log.debug('since', since)
-                signInSubscriptions.push(
-                  pouchDBChangesStream(
-                    {
-                      live: true,
-                      include_docs: true,
-                      since: since,
-                    },
-                    self.__db,
-                  )
-                    .scan(async (prevPromise, change) => {
-                      await prevPromise
-                      await self.__syncPDBChangeToFirestore(change)
-                      // syncSeqLS.save(change.seq)
-                    }, Promise.resolve())
-                    .takeErrors(1)
-                    .observe({
-                      error(error) {
-                        log.error('syncFromPDBToFireStore', error)
-                      },
-                    }),
-                )
+                signInSubscriptions.push(self.__startDownStreamSync())
+
+                signInSubscriptions.push(self.__startUpStreamSync())
               },
             ),
           )
