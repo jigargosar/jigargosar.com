@@ -120,26 +120,32 @@ function createPouchFireCollection(Model, modelName) {
     })
     .actions(self => ({
       afterCreate() {
+        self.__db
+          .changes({include_docs: true})
+          .on('complete', self._onPouchDBChangesComplete)
+      },
+      _updateFromPDBChange(change) {
+        self.__idLookup.put(change.doc)
+      },
+      _onPouchDBChangesComplete({results, last_seq}) {
+        log.debug('_onPouchDBChangesComplete', results, last_seq)
+        R.forEach(self._updateFromPDBChange, results)
         addSubscriptionDisposer(
           self,
           createPouchDBChangesStream(
-            {live: true, include_docs: true},
+            {live: true, include_docs: true, since: last_seq},
             self.__db,
           )
-            .bufferWithTimeOrCount(500, 100)
-            .filter(RA.isNotEmpty)
-            .observe({value: self.__updateFromPDBBufferedChanges}),
+            .map(
+              R.tap(change =>
+                log.debug(
+                  'update idLookup from pdb change',
+                  change.doc,
+                ),
+              ),
+            )
+            .observe({value: self._updateFromPDBChange}),
         )
-      },
-      __updateFromPDBChange(change) {
-        self.__idLookup.put(change.doc)
-      },
-      __updateFromPDBBufferedChanges(bufferedChanges) {
-        log.debug(
-          'updating _idLookup from PDB bufferedChanges',
-          bufferedChanges,
-        )
-        R.forEach(self.__updateFromPDBChange, bufferedChanges)
       },
       __putInDB(modelProps) {
         return self.__db.put(
