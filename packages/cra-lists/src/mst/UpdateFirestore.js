@@ -3,56 +3,87 @@ import firebase from 'firebase/app'
 const log = require('nanologger')('UpdateFirestore')
 const R = require('ramda')
 
-function hasLocalAppActorId({pdbDoc, localAppActorId}) {
-  return R.equals(pdbDoc.actorId, localAppActorId)
+function isLocallyModified(doc, appActorId) {
+  return R.equals(doc.actorId, appActorId)
 }
 
-const isRemotelyModifiedDoc = R.complement(hasLocalAppActorId)
+const isRemotelyModified = R.complement(isLocallyModified)
 
-function docRef({pdbDoc, collectionRef}) {
-  return collectionRef.doc(pdbDoc._id)
+function getDocRef(doc, cRef) {
+  return cRef.doc(doc._id)
 }
 
-function runTransaction(fn, {collectionRef}) {
-  return collectionRef.firestore.runTransaction(fn)
+function runTransaction(fn, cRef) {
+  return cRef.firestore.runTransaction(fn)
 }
 
-function getDocForFirestore({pdbDoc}) {
-  log.trace('getDocForFirestore')
-  return R.compose(R.merge(pdbDoc))({
+function docToFirestoreData(doc) {
+  const firestoreData = R.merge(doc, {
     _rev: null,
     fireStoreServerTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
   })
+  log.trace('docToFirestoreData', doc, firestoreData)
+  return firestoreData
 }
 
-function setPouchDoc(transaction, dependencies) {
-  return transaction.set(docRef, getDocForFirestore(dependencies))
+function transactionSet(docRef, data, transaction) {
+  log.debug('transactionSet', data)
+  return transaction.set(docRef, data)
 }
 
-function isNewerThanPouchDoc(fireDoc, {pdbDoc}) {
-  return fireDoc.modifiedAt > pdbDoc
+function isNewer(fireData, doc) {
+  return fireData.modifiedAt > doc
 }
 
-function updateEmptyDoc(transaction, dependencies) {
-  log.debug('empty transaction update')
-  return transaction.update(docRef(dependencies), {})
+function transactionUpdateEmpty(docRef, transaction) {
+  log.debug('transactionUpdateEmpty')
+  return transaction.update(docRef, {})
+}
+function transactionSetInHistoryCollection(docRef, doc, transaction) {
+  log.debug('transactionSetInHistoryCollection')
+  transaction.set(
+    docRef.collection('history').doc(`${doc.modifiedAt}`),
+    doc,
+  )
 }
 
-export async function updateFirestoreFromPDBChange(dependencies) {
-  log.debug('updateFirestoreFromPouchDoc', dependencies.pdbDoc)
-  if (isRemotelyModifiedDoc(dependencies)) return
+function transactionUpdate(docRef, data, transaction) {
+  return transaction.update(docRef, data)
+}
+
+export async function updateFirestoreFromPouchDoc({
+  doc,
+  appActorId,
+  cRef,
+}) {
+  log.debug('updateFirestoreFromPouchDoc', doc)
+  if (isRemotelyModified(doc, appActorId)) return
 
   return runTransaction(async transaction => {
-    const snapshot = await transaction.get(docRef(dependencies))
-    log.debug('snapshot', snapshot)
+    const docRef = getDocRef(doc, cRef)
+    const snapshot = await transaction.get(docRef)
     if (!snapshot.exists) {
-      return setPouchDoc(transaction, dependencies)
+      return transactionSet(
+        docRef,
+        docToFirestoreData(doc),
+        transaction,
+      )
     }
-    const fireDoc = snapshot.data()
-    if (isNewerThanPouchDoc(fireDoc, dependencies)) {
-      return updateEmptyDoc(transaction, dependencies)
+    const fireData = snapshot.data()
+    log.debug('fireData', fireData)
+
+    if (isNewer(fireData, doc)) {
+      return transactionUpdateEmpty(docRef, transaction)
     }
 
-    throw new Error('Abort Transaction')
-  }, dependencies)
+    if (isRemotelyModified(fireData, appActorId)) {
+      transactionSetInHistoryCollection(docRef, fireData, transaction)
+    }
+
+    return transactionUpdate(
+      docRef,
+      docToFirestoreData(doc),
+      transaction,
+    )
+  }, cRef)
 }

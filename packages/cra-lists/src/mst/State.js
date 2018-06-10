@@ -7,7 +7,7 @@ import {LocalStorageItem} from '../local-storage-item'
 import {Fire} from './Fire'
 import {addDisposer, addSubscriptionDisposer} from './mst-utils'
 import firebase from 'firebase/app'
-import {updateFirestoreFromPDBChange} from './UpdateFirestore'
+import {updateFirestoreFromPouchDoc} from './UpdateFirestore'
 
 require('firebase/auth')
 require('firebase/firestore')
@@ -162,7 +162,7 @@ function createPouchFireCollection(Model, modelName) {
         get fire() {
           return getRoot(self).fire
         },
-        get __firestoreCollectionRef() {
+        get firestoreCollectionRef() {
           return self.fire.userCollectionRef(name)
         },
         get __syncFSTimeStamp() {
@@ -208,7 +208,7 @@ function createPouchFireCollection(Model, modelName) {
             reaction(
               () => {
                 // trace()
-                return [self.__firestoreCollectionRef]
+                return [self.firestoreCollectionRef]
               },
               () => {
                 disposeSignInSubscriptions()
@@ -225,7 +225,7 @@ function createPouchFireCollection(Model, modelName) {
             self.__syncFSTimeStamp,
           )
           return createFirestoreOnSnapshotStream(
-            self.__firestoreCollectionRef
+            self.firestoreCollectionRef
               .where(
                 'fireStoreServerTimestamp',
                 '>',
@@ -320,7 +320,12 @@ function createPouchFireCollection(Model, modelName) {
           )
             .scan(async (prevPromise, pdbChange) => {
               await prevPromise
-              await self.__syncPDBChangeToFirestore(pdbChange)
+              // await self.__syncPDBChangeToFirestore(pdbChange)
+              await updateFirestoreFromPouchDoc({
+                doc: pdbChange.doc,
+                appActorId: self.localAppActorId,
+                cRef: self.firestoreCollectionRef,
+              })
               self.__syncPDBSeq = pdbChange.seq
             }, Promise.resolve())
             .takeErrors(1)
@@ -330,12 +335,13 @@ function createPouchFireCollection(Model, modelName) {
               },
             })
         },
+        //<editor-fold desc="Ignored">
         async __syncPDBChangeToFirestore(pdbChange) {
-          // await updateFirestoreFromPDBChange({
-          //   pdbDoc: pdbChange.doc,
-          //   localAppActorId: self.localAppActorId,
-          //   collectionRef: self.__firestoreCollectionRef,
-          // })
+          await updateFirestoreFromPouchDoc({
+            doc: pdbChange.doc,
+            appActorId: self.localAppActorId,
+            cRef: self.firestoreCollectionRef,
+          })
           log.debug(
             'sync upstream: pdbChange',
             ...R.compose(
@@ -349,9 +355,7 @@ function createPouchFireCollection(Model, modelName) {
           const localDoc = Model.create(pdbChange.doc, getEnv(self))
           if (!localDoc.hasLocalAppActorId) return
 
-          const docRef = self.__firestoreCollectionRef.doc(
-            localDoc.id,
-          )
+          const docRef = self.firestoreCollectionRef.doc(localDoc.id)
 
           return docRef.firestore.runTransaction(
             async transaction => {
@@ -400,6 +404,7 @@ function createPouchFireCollection(Model, modelName) {
             )
           }
         },
+        //</editor-fold>
       }
     })
     .actions(self => ({
