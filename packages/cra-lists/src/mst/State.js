@@ -233,7 +233,7 @@ function createPouchFireCollection(Model, modelName) {
               )
               .orderBy('fireStoreServerTimestamp'),
           )
-            .bufferWithTimeOrCount(2000, 100)
+            .bufferWithTimeOrCount(5000, 100)
             .filter(RA.isNotEmpty)
             .flatten()
             .map(snapshot => snapshot.docChanges())
@@ -318,6 +318,7 @@ function createPouchFireCollection(Model, modelName) {
             },
             self.__db,
           )
+            .delay(3000)
             .scan(async (prevPromise, pdbChange) => {
               await prevPromise
               // await self.__syncPDBChangeToFirestore(pdbChange)

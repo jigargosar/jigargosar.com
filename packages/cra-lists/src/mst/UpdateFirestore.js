@@ -32,7 +32,7 @@ function transactionSet(docRef, data, transaction) {
 }
 
 function isNewer(fireData, doc) {
-  return fireData.modifiedAt > doc
+  return fireData.modifiedAt > doc.modifiedAt
 }
 
 function transactionUpdateEmpty(docRef, transaction) {
@@ -49,6 +49,10 @@ function transactionSetInHistoryCollection(docRef, doc, transaction) {
 
 function transactionUpdate(docRef, data, transaction) {
   return transaction.update(docRef, data)
+}
+
+function incrementVersion(data) {
+  return R.merge(data, {version: data.version + 1})
 }
 
 export async function updateFirestoreFromPouchDoc({
@@ -82,7 +86,7 @@ export async function updateFirestoreFromPouchDoc({
 
     return transactionUpdate(
       docRef,
-      docToFirestoreData(doc),
+      incrementVersion(docToFirestoreData(doc)),
       transaction,
     )
   }, cRef)
