@@ -509,12 +509,10 @@ const Fire = types
   .volatile(() => ({
     authState: 'loading',
     userInfo: null,
+    app: firebase.apps[0],
   }))
   .views(self => {
     return {
-      get app() {
-        return firebase.apps[0]
-      },
       get log() {
         return require('nanologger')('Fire')
       },
@@ -545,34 +543,27 @@ const Fire = types
   .actions(self => {
     return {
       afterCreate: function afterCreate() {
-        var config = {
-          apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
-          authDomain: 'not-now-142808.firebaseapp.com',
-          databaseURL: 'https://not-now-142808.firebaseio.com',
-          projectId: 'not-now-142808',
-          storageBucket: 'not-now-142808.appspot.com',
-          messagingSenderId: '476064436883',
-        }
-
         if (!self.app) {
-          const app = firebase.initializeApp(config)
-          const store = app.firestore()
-          store.settings({timestampsInSnapshots: true})
-          store
+          var config = {
+            apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
+            authDomain: 'not-now-142808.firebaseapp.com',
+            databaseURL: 'https://not-now-142808.firebaseio.com',
+            projectId: 'not-now-142808',
+            storageBucket: 'not-now-142808.appspot.com',
+            messagingSenderId: '476064436883',
+          }
+          self.app = firebase.initializeApp(config)
+          self.store.settings({timestampsInSnapshots: true})
+          self.store
             .enablePersistence()
             .catch(error =>
               self.log.trace('store enablePersistence result', error),
             )
-          self._startListeningToAuthStateChanges(app)
-          return
         }
-        self._startListeningToAuthStateChanges(self.app)
-      },
 
-      _startListeningToAuthStateChanges(app) {
         addDisposer(
           self,
-          app.auth().onAuthStateChanged(self._onAuthStateChanged),
+          self.auth.onAuthStateChanged(self._onAuthStateChanged),
         )
       },
 
