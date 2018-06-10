@@ -186,15 +186,15 @@ function createPouchFireCollection(Model, modelName) {
           return self.fire.userCollectionPath(name)
         },
         get __syncFSTimeStamp() {
-          return firebase.firestore.Timestamp.fromMillis(
+          return self.fire.FirestoreTimestamp.fromMillis(
             self.__syncFSMilliLS.load(),
           )
         },
         get __syncFSMilli() {
           return self.__syncFSMilliLS.load()
         },
-        set __syncFSTimeStamp(timestamp) {
-          return self.__syncFSMilliLS.save(timestamp.toMillis())
+        set __syncFSTimeStamp(Timestamp) {
+          return self.__syncFSMilliLS.save(Timestamp.toMillis())
         },
         set __syncPDBSeq(seq) {
           self.__syncPDBSeqLS.save(seq)
@@ -516,32 +516,30 @@ const omitFirebaseClutter = R.unless(
 
 const Fire = types
   .model('Fire')
-  .volatile(self => {
-    const log = require('nanologger')('Fire')
-    var config = {
-      apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
-      authDomain: 'not-now-142808.firebaseapp.com',
-      databaseURL: 'https://not-now-142808.firebaseio.com',
-      projectId: 'not-now-142808',
-      storageBucket: 'not-now-142808.appspot.com',
-      messagingSenderId: '476064436883',
-    }
-
-    const isAppInitialized = !R.isEmpty(firebase.apps)
-
-    if (!isAppInitialized) firebase.initializeApp(config)
-
-    return {
-      app: firebase,
-      store: isAppInitialized ? firebase.firestore() : null,
-      auth: firebase.auth(),
-      userInfo: null,
-      authState: 'loading',
-      log,
-    }
-  })
+  .volatile(() => ({
+    authState: 'loading',
+    userInfo: null,
+  }))
   .views(self => {
     return {
+      get app() {
+        return self.firebase.apps[0]
+      },
+      get log() {
+        return require('nanologger')('Fire')
+      },
+      get firebase() {
+        return getEnv(self).firebase
+      },
+      get store() {
+        return self.app.firestore()
+      },
+      get FirestoreTimestamp() {
+        return self.firebase.firestore.Timestamp
+      },
+      get auth() {
+        return self.app.auth()
+      },
       get isAuthLoading() {
         return R.equals(self.authState, 'loading')
       },
@@ -570,32 +568,30 @@ const Fire = types
       },
     }
   })
-
   .actions(self => {
     return {
       afterCreate: flow(function* afterCreate() {
-        addDisposer(
-          self,
-          reaction(
-            () => self.store,
-            () => {
-              self.log.trace('storeReady', RA.isNotNil(self.store))
-            },
-          ),
-        )
+        var config = {
+          apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
+          authDomain: 'not-now-142808.firebaseapp.com',
+          databaseURL: 'https://not-now-142808.firebaseio.com',
+          projectId: 'not-now-142808',
+          storageBucket: 'not-now-142808.appspot.com',
+          messagingSenderId: '476064436883',
+        }
+
+        if (!self.app) {
+          const app = self.firebase.initializeApp(config)
+          const store = app.firestore()
+          store.settings({timestampsInSnapshots: true})
+          const result = yield pReflect(store.enablePersistence())
+          self.log.trace('store enablePersistence result', result)
+        }
 
         addDisposer(
           self,
           self.auth.onAuthStateChanged(self._onAuthStateChanged),
         )
-
-        if (!self.store) {
-          const store = self.app.firestore()
-          store.settings({timestampsInSnapshots: true})
-          const result = yield pReflect(store.enablePersistence())
-          self.log.trace('store enablePersistence result', result)
-          self.store = store
-        }
       }),
 
       _onAuthStateChanged(user) {

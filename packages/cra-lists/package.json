@@ -33,7 +33,8 @@
     "react-dom": "^16.4.0",
     "react-scripts": "1.1.4",
     "recompose": "0.27.1",
-    "tachyons": "4.10.0"
+    "tachyons": "4.10.0",
+    "xstate": "3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",

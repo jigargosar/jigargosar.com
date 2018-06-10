@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import {StateProvider} from './StateContext'
-
 function render() {
   const App = require('./App').default
   ReactDOM.render(
