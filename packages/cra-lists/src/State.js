@@ -14,6 +14,9 @@ import Kefir from 'kefir'
 import {LocalStorageItem} from './local-storage-item'
 
 const firebase = require('firebase/app')
+require('firebase/auth')
+require('firebase/firestore')
+
 const pReflect = require('p-reflect')
 
 const R = require('ramda')
@@ -182,7 +185,7 @@ function createPouchFireCollection(Model, modelName) {
           return self.fire.userCollectionRef(name)
         },
         get __syncFSTimeStamp() {
-          return self.fire.FirestoreTimestamp.fromMillis(
+          return firebase.firestore.Timestamp.fromMillis(
             self.__syncFSMilliLS.load(),
           )
         },
@@ -510,19 +513,13 @@ const Fire = types
   .views(self => {
     return {
       get app() {
-        return self.firebase.apps[0]
+        return firebase.apps[0]
       },
       get log() {
         return require('nanologger')('Fire')
       },
-      get firebase() {
-        return getEnv(self).firebase
-      },
       get store() {
         return self.app.firestore()
-      },
-      get FirestoreTimestamp() {
-        return self.firebase.firestore.Timestamp
       },
       get auth() {
         return self.app.auth()
@@ -558,7 +555,7 @@ const Fire = types
         }
 
         if (!self.app) {
-          const app = self.firebase.initializeApp(config)
+          const app = firebase.initializeApp(config)
           const store = app.firestore()
           store.settings({timestampsInSnapshots: true})
           store

@@ -1,15 +1,11 @@
 import {State} from './State'
 import {getAppActorId} from './LocalStorage'
 
-const firebase = require('firebase/app')
-require('firebase/auth')
-require('firebase/firestore')
-
 const mst = require('mobx-state-tree')
 
 export const state = State.create(
   {},
-  {localAppActorId: getAppActorId(), firebase},
+  {localAppActorId: getAppActorId()},
 )
 
 if (module.hot) {
