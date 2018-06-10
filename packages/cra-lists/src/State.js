@@ -264,7 +264,7 @@ function createPouchFireCollection(
             if (!remoteDocSnapshot.exists) {
               transaction.set(
                 docRef,
-                mergeFirestoreServerTimestamp(localDoc),
+                prepareForFirestoreSave(localDoc),
               )
               return
             }
@@ -278,12 +278,12 @@ function createPouchFireCollection(
             }
             transaction.update(
               docRef,
-              mergeFirestoreServerTimestamp(localDoc),
+              prepareForFirestoreSave(localDoc),
             )
           })
-          function mergeFirestoreServerTimestamp(localDoc) {
+          function prepareForFirestoreSave(localDoc) {
             const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
-            return R.merge(localDoc, {
+            return R.compose(R.omit('_rev'), R.merge(localDoc))({
               fireStoreServerTimestamp,
             })
           }
