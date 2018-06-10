@@ -97,7 +97,7 @@ function createPouchFireCollection(Model, modelName) {
       __idLookup: types.optional(types.map(Model), {}),
     })
     .views(self => ({
-      get _all() {
+      get allValues() {
         return Array.from(self.__idLookup.values())
       },
       get __localAppActorId() {
@@ -461,7 +461,7 @@ const PFGrainCollection = types
     return {
       get list() {
         const sortWithProps = [R.descend(SF.prop('createdAt'))]
-        return R.sortWith(sortWithProps, self._collection._all)
+        return R.sortWith(sortWithProps, self._collection.allValues)
       },
     }
   })
