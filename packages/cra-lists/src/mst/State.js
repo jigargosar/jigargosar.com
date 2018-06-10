@@ -259,15 +259,14 @@ function createPouchFireCollection(Model, modelName) {
           return model.isEqualToFirestoreDocChange(docChange)
         },
         async __syncFirestoreChangeToPDB(firestoreChange) {
-          if (
-            self.__isFirestoreDocChangeEqualToModelInLookup(
-              firestoreChange,
-            )
-          ) {
-            return Promise.resolve()
-          }
           const changeDoc = firestoreChange.doc
           const changeDocData = changeDoc.data()
+          if (R.equals(changeDocData.actorId, self.localAppActorId)) {
+            log.debug(
+              'ignoring firebase change since it is from localAppActorId.',
+            )
+            return
+          }
 
           log.debug(
             'sync downstream: firestoreChange',
