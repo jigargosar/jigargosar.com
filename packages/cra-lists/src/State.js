@@ -564,9 +564,9 @@ const Fire = types
               self.log.trace('store enablePersistence result', error),
             )
           self._startListeningToAuthStateChanges(app)
-        } else {
-          self._startListeningToAuthStateChanges(self.app)
+          return
         }
+        self._startListeningToAuthStateChanges(self.app)
       },
 
       _startListeningToAuthStateChanges(app) {
