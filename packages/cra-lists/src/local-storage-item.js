@@ -1,8 +1,7 @@
 import * as R from 'ramda'
 
+const log = require('nanologger')(`local-storage-item`)
 export function LocalStorageItem(key, defaultValue) {
-  const log = require('nanologger')(`ls-item:${key}`)
-
   function load() {
     return R.defaultTo(
       defaultValue,
@@ -12,7 +11,7 @@ export function LocalStorageItem(key, defaultValue) {
 
   function save(obj) {
     const serialisedObj = JSON.stringify(obj, null, 2)
-    log.debug('serialised', serialisedObj)
+    log.trace(`saving ${key} =`, serialisedObj)
     window.localStorage.setItem(key, serialisedObj)
   }
 

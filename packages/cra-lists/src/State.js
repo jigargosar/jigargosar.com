@@ -325,7 +325,7 @@ function createPouchFireCollection(
 
         async __syncPDBChangeToFirestore(pdbChange) {
           log.debug(
-            'sync upstream: pouch2Fire',
+            'sync upstream: pdbChange',
             ...R.compose(
               R.values,
               R.flatten,
@@ -352,6 +352,7 @@ function createPouchFireCollection(
             }
             const remoteDoc = Model.create(remoteDocSnapshot.data())
             if (isNewerThan(remoteDoc, localDoc)) {
+              log.trace('sync upstream: empty transaction update')
               transaction.update(docRef, {})
               return
             }
@@ -366,6 +367,7 @@ function createPouchFireCollection(
           // self.syncFSTimeStamp = docChange.data().fireStoreServerTimestamp
           self.__syncPDBSeq = pdbChange.seq
           function prepareForFirestoreSave(localDoc) {
+            log.trace('sync upstream: prepareForFirestoreSave')
             const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
             return R.compose(R.merge(localDoc))({
               _rev: null,
