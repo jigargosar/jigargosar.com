@@ -261,11 +261,6 @@ function createPouchFireCollection(Model, modelName) {
               })
           )
         },
-        __isFirestoreDocChangeEqualToModelInLookup(docChange) {
-          const model = self.__idLookup.get(docChange.doc.id)
-          if (!model) return false
-          return model.isEqualToFirestoreDocChange(docChange)
-        },
         async __syncFirestoreChangeToPDB(firestoreChange) {
           const changeDoc = firestoreChange.doc
           const changeDocData = changeDoc.data()
