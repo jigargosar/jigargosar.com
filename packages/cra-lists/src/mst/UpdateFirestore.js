@@ -40,6 +40,7 @@ function transactionUpdateEmpty(docRef, transaction) {
   return transaction.update(docRef, {})
 }
 function transactionUpdate(docRef, data, transaction) {
+  log.debug('transactionUpdate', data)
   return transaction.update(docRef, data)
 }
 
