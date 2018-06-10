@@ -1,4 +1,6 @@
-import {addDisposer as mstAddDisposer, types} from 'mobx-state-tree'
+import {types} from 'mobx-state-tree'
+import {addDisposer} from './mst-utils'
+
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 const assert = require('assert')
@@ -7,16 +9,6 @@ const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
 const log = require('nanologger')('Fire')
-
-function addDisposer(target, disposer) {
-  return mstAddDisposer(target, () => {
-    try {
-      disposer()
-    } catch (e) {
-      console.error(e)
-    }
-  })
-}
 
 const omitFirebaseClutter = R.unless(
   R.isNil,

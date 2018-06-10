@@ -1,25 +1,17 @@
-// const log = require('nanologger')('rootStore')
-import {
-  addDisposer as mstAddDisposer,
-  getEnv,
-  getRoot,
-  getSnapshot,
-  types,
-} from 'mobx-state-tree'
-
+import {getEnv, getRoot, getSnapshot, types} from 'mobx-state-tree'
 import {reaction} from 'mobx'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
 import Kefir from 'kefir'
 import {LocalStorageItem} from './local-storage-item'
 import {Fire} from './Fire'
+import {addDisposer, addSubscriptionDisposer} from './mst-utils'
+import firebase from 'firebase/app'
 
-const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
 
 const pReflect = require('p-reflect')
-
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 const assert = require('assert')
@@ -79,18 +71,6 @@ function createPouchDBChangesStream(options, pouchDB) {
       return changes.cancel()
     }
   })
-}
-function addDisposer(target, disposer) {
-  return mstAddDisposer(target, () => {
-    try {
-      disposer()
-    } catch (e) {
-      console.error(e)
-    }
-  })
-}
-function addSubscriptionDisposer(target, subscription) {
-  return addDisposer(target, () => subscription.unsubscribe())
 }
 
 function createFirestoreOnSnapshotStream(query) {
