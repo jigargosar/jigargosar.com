@@ -263,8 +263,8 @@ function createPouchFireCollection(Model, modelName) {
         },
         async __syncFirestoreChangeToPDB(firestoreChange) {
           const changeDoc = firestoreChange.doc
-          const changeDocData = changeDoc.data()
-          if (R.equals(changeDocData.actorId, self.localAppActorId)) {
+          const fireData = changeDoc.data()
+          if (R.equals(fireData.actorId, self.localAppActorId)) {
             log.debug(
               'ignoring firebase change since it is from localAppActorId.',
             )
@@ -275,12 +275,12 @@ function createPouchFireCollection(Model, modelName) {
             'sync downstream: firestoreChange',
             changeDoc.id,
             changeDoc.metadata,
-            changeDocData,
+            fireData,
             firestoreChange,
           )
 
           const remoteModel = Model.create(
-            changeDocData,
+            fireData,
             getEnv(self),
           )
 
