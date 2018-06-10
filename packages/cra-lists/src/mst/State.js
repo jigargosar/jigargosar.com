@@ -237,11 +237,6 @@ function createPouchFireCollection(Model, modelName) {
             .flatten()
             .map(snapshot => snapshot.docChanges())
             .flatten()
-            .filter(
-              R.complement(
-                self.__isFirestoreDocChangeEqualToModelInLookup,
-              ),
-            )
             .scan(async (prevPromise, firestoreChange) => {
               const firestoreTimestamp = firestoreChange.doc.data()
                 .fireStoreServerTimestamp
@@ -263,6 +258,12 @@ function createPouchFireCollection(Model, modelName) {
           return model.isEqualToFirestoreDocChange(docChange)
         },
         async __syncFirestoreChangeToPDB(firestoreChange) {
+          if (
+            self.__isFirestoreDocChangeEqualToModelInLookup(
+              firestoreChange,
+            )
+          )
+            return Promise.resolve()
           const changeDoc = firestoreChange.doc
           const changeDocData = changeDoc.data()
 
