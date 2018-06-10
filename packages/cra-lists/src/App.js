@@ -82,7 +82,6 @@ const GrainListHeader = injectS(function GrainListHeader({s}) {
     <SpacedRow>
       LIST
       <button onClick={s.onAddNew}>Add</button>
-      <button onClick={s.onClear}>Clear</button>
     </SpacedRow>
   )
 })

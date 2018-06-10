@@ -421,7 +421,7 @@ function createPouchFireCollection(Model, modelName) {
       }
     })
     .actions(self => ({
-      _addNew(extendedProps = {}) {
+      addNew(extendedProps = {}) {
         assert(RA.isNotNil(extendedProps))
         const props = {
           _id: `${modelName}-${nanoid()}`,
@@ -434,7 +434,7 @@ function createPouchFireCollection(Model, modelName) {
         }
         return self.__putInDB(R.mergeDeepRight(extendedProps, props))
       },
-      _update({_id, _rev}, userChange = {}) {
+      update({_id, _rev}, userChange = {}) {
         assert(RA.isNotNil(userChange))
         const modelSnapshot = getSnapshot(self.__idLookup.get(_id))
 
@@ -462,9 +462,6 @@ function createPouchFireCollection(Model, modelName) {
         }
         return Promise.resolve()
       },
-      _clear() {
-        self.__idLookup.clear()
-      },
     }))
 }
 
@@ -472,26 +469,28 @@ const PFGrain = createPouchFireModel('Grain').props({
   text: types.string,
 })
 
-const PFGrainCollection = createPouchFireCollection(PFGrain, 'Grain')
+const PFGrainCollection = types
+  .model('PFGrainCollection', {
+    _collection: types.optional(
+      createPouchFireCollection(PFGrain, 'Grain'),
+      {},
+    ),
+  })
   .views(self => {
     return {
       get list() {
         const sortWithProps = [R.descend(SF.prop('createdAt'))]
-        return R.sortWith(sortWithProps, self._all)
-      },
-
-      clear() {
-        self._clear()
+        return R.sortWith(sortWithProps, self._collection._all)
       },
     }
   })
   .actions(self => {
     return {
       addNew() {
-        self._addNew({text: `${Math.random()}`})
+        self._collection.addNew({text: `${Math.random()}`})
       },
       update(grain) {
-        self._update(grain, {text: `${Math.random()}`})
+        self._collection.update(grain, {text: `${Math.random()}`})
       },
     }
   })
@@ -618,9 +617,6 @@ export const State = types
       },
       onUpdate(grain) {
         return () => self.grains.update(grain)
-      },
-      onClear() {
-        return self.grains.clear()
       },
     }
   })
