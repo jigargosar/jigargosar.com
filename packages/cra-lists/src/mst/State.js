@@ -242,12 +242,6 @@ function createPouchFireCollection(Model, modelName) {
                 self.__isFirestoreDocChangeEqualToModelInLookup,
               ),
             )
-            .filter(change => {
-              const serverTimestamp = change.doc.data()
-                .fireStoreServerTimestamp
-              assert(RA.isNotNil(serverTimestamp))
-              return serverTimestamp.toMillis() > self.__syncFSMilli
-            })
             .scan(async (prevPromise, firestoreChange) => {
               const firestoreTimestamp = firestoreChange.doc.data()
                 .fireStoreServerTimestamp
