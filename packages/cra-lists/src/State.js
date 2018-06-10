@@ -1,5 +1,5 @@
 // const log = require('nanologger')('rootStore')
-import {addDisposer, flow, getEnv, getRoot, getSnapshot, types,} from 'mobx-state-tree'
+import {addDisposer as mstAddDisposer, flow, getEnv, getRoot, getSnapshot, types,} from 'mobx-state-tree'
 import {reaction} from 'mobx'
 import {SF} from './safe-fun'
 import PouchDB from 'pouchdb-browser'
@@ -48,7 +48,15 @@ function pouchDBChangesStream(options, pouchDB) {
     return () => changes.cancel()
   })
 }
-
+function addDisposer(target, disposer) {
+  return mstAddDisposer(target, () => {
+    try {
+      disposer()
+    } catch (e) {
+      console.error(e)
+    }
+  })
+}
 function addSubscriptionDisposer(target, subscription) {
   return addDisposer(target, () => subscription.unsubscribe())
 }
@@ -148,7 +156,7 @@ function createPouchFireCollection(
 
       return {
         afterCreate() {
-          addSubscriptionDisposer(self, disposeSignInSubscriptions)
+          addDisposer(self, disposeSignInSubscriptions)
           addDisposer(
             self,
             reaction(
@@ -161,15 +169,20 @@ function createPouchFireCollection(
 
                 signInSubscriptions.push(
                   createFirestoreOnSnapshotStream(ucr).observe({
-                    value: self._onCollectionSnapshot,
+                    value: self._onFirestoreCollectionSnapshot,
                   }),
                 )
               },
             ),
           )
         },
-        _onCollectionSnapshot(snapshot) {
-          log.debug('snapshot.docChanges()', snapshot.docChanges())
+        _onFirestoreCollectionSnapshot(snapshot) {
+          const docChanges = snapshot.docChanges()
+          log.debug('fire: snapshot.docChanges()', docChanges)
+          R.forEach(self._onFirestoreCollectionChange, docChanges)
+        },
+        _onFirestoreCollectionChange(docChange) {
+          log.debug('fire: docChange', docChange)
         },
       }
     })
