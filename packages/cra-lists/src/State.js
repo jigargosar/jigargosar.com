@@ -1,5 +1,12 @@
 // const log = require('nanologger')('rootStore')
-import {addDisposer as mstAddDisposer, flow, getEnv, getRoot, getSnapshot, types,} from 'mobx-state-tree'
+import {
+  addDisposer as mstAddDisposer,
+  flow,
+  getEnv,
+  getRoot,
+  getSnapshot,
+  types,
+} from 'mobx-state-tree'
 
 import {reaction} from 'mobx'
 import {SF} from './safe-fun'
