@@ -127,7 +127,6 @@ function createPouchFireCollection(Model, modelName) {
           )
             .bufferWithTimeOrCount(500, 100)
             .filter(RA.isNotEmpty)
-            // .spy(`${name} buffered changes`)
             .observe({value: self.__updateFromPDBBufferedChanges}),
         )
       },
