@@ -9,7 +9,7 @@ const mst = require('mobx-state-tree')
 
 export const state = State.create(
   {},
-  {actorId: getAppActorId(), firebase},
+  {localAppActorId: getAppActorId(), firebase},
 )
 
 mst.addMiddleware(state, (call, next) => {

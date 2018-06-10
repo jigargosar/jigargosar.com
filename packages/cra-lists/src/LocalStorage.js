@@ -2,9 +2,9 @@ const R = require('ramda')
 const nanoid = require('nanoid')
 
 function getOrSetLocalStorage(id, setValue) {
-  let value = localStorage.getItem(id)
+  let value = window.localStorage.getItem(id)
   if (R.isNil(value)) {
-    value = localStorage.setItem(id, setValue)
+    value = window.localStorage.setItem(id, setValue)
   }
   return value
 }

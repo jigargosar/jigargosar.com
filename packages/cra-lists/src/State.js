@@ -22,6 +22,10 @@ const RA = require('ramda-adjunct')
 const assert = require('assert')
 const nanoid = require('nanoid')
 
+function omitRevAndTimestamp(obj) {
+  return SF.omit(['_rev', 'fireStoreServerTimestamp'])(obj)
+}
+
 const PouchFireBaseModel = types
   .model(`PouchFireBaseModel`, {
     _id: types.identifier(types.string),
@@ -40,8 +44,16 @@ const PouchFireBaseModel = types
       get rev() {
         return self._rev
       },
-      get hasLocalActorId() {
-        return R.equals(self.actorId, getRoot(self).actorId)
+      get hasLocalAppActorId() {
+        const localAppActorId = getEnv(self).localAppActorId
+        assert(RA.isNotEmpty(localAppActorId))
+        return localAppActorId === self.actorId
+      },
+      isEqualToFirestoreDocChange(docChange) {
+        return R.equals(
+          omitRevAndTimestamp(self),
+          omitRevAndTimestamp(docChange.doc.data()),
+        )
       },
     }
   })
@@ -84,11 +96,7 @@ function createFirestoreOnSnapshotStream(query) {
   })
 }
 
-function createPouchFireCollection(
-  Model,
-  modelName,
-  firestoreCollectionName,
-) {
+function createPouchFireCollection(Model, modelName) {
   const name = `PouchFire${modelName}Collection`
   const log = require('nanologger')(name)
 
@@ -98,7 +106,7 @@ function createPouchFireCollection(
   )
 
   function isValidChange(userChanges) {
-    return R.isEmpty(R.omit(userModifiableProps, userChanges))
+    return R.isEmpty(SF.omit(userModifiableProps, userChanges))
   }
 
   return types
@@ -109,8 +117,10 @@ function createPouchFireCollection(
       get _all() {
         return Array.from(self.__idLookup.values())
       },
-      get _actorId() {
-        return getEnv(self).actorId
+      get __localAppActorId() {
+        const localAppActorId = getEnv(self).localAppActorId
+        assert(RA.isNotEmpty(localAppActorId))
+        return localAppActorId
       },
     }))
     .volatile(self => {
@@ -149,7 +159,9 @@ function createPouchFireCollection(
         R.forEach(self.__updateFromPDBChange, bufferedChanges)
       },
       __putInDB(modelProps) {
-        return self.__db.put(getSnapshot(Model.create(modelProps)))
+        return self.__db.put(
+          getSnapshot(Model.create(modelProps, getEnv(self))),
+        )
       },
     }))
     .volatile(self => ({
@@ -177,6 +189,9 @@ function createPouchFireCollection(
           return firebase.firestore.Timestamp.fromMillis(
             self.__syncFSMilliLS.load(),
           )
+        },
+        get __syncFSMilli() {
+          return self.__syncFSMilliLS.load()
         },
         set __syncFSTimeStamp(timestamp) {
           return self.__syncFSMilliLS.save(timestamp.toMillis())
@@ -226,18 +241,40 @@ function createPouchFireCollection(
           )
         },
         __startDownStreamSync() {
-          const syncFSTimeStamp = self.__syncFSTimeStamp
           log.trace(
             '__startDownStreamSync from syncFSTimeStamp',
-            syncFSTimeStamp,
+            self.__syncFSTimeStamp,
           )
           return createFirestoreOnSnapshotStream(
             self.__firestoreCollectionRef
-              .where('fireStoreServerTimestamp', '>', syncFSTimeStamp)
+              .where(
+                'fireStoreServerTimestamp',
+                '>',
+                self.__syncFSTimeStamp,
+              )
               .orderBy('fireStoreServerTimestamp'),
           )
+            .bufferWithTimeOrCount(2000, 100)
+            .filter(RA.isNotEmpty)
+            .flatten()
+            .map(
+              R.tap(snapshot => {
+                // log.debug('snapshot', snapshot)
+              }),
+            )
             .map(snapshot => snapshot.docChanges())
             .flatten()
+            .filter(
+              R.complement(
+                self.__isFirestoreDocChangeEqualToModelInLookup,
+              ),
+            )
+            .filter(change => {
+              const serverTimestamp = change.doc.data()
+                .fireStoreServerTimestamp
+              assert(RA.isNotNil(serverTimestamp))
+              return serverTimestamp.toMillis() > self.__syncFSMilli
+            })
             .scan(async (prevPromise, firestoreChange) => {
               const firestoreTimestamp = firestoreChange.doc.data()
                 .fireStoreServerTimestamp
@@ -253,6 +290,14 @@ function createPouchFireCollection(
               },
             })
         },
+        __isFirestoreDocChangeEqualToModelInLookup(docChange) {
+          const model = self.__idLookup.get(docChange.doc.id)
+          if (!model) return false
+          const equalToFirestoreDocChange = model.isEqualToFirestoreDocChange(
+            docChange,
+          )
+          return equalToFirestoreDocChange
+        },
         async __syncFirestoreChangeToPDB(firestoreChange) {
           const changeDoc = firestoreChange.doc
           const changeDocData = changeDoc.data()
@@ -265,7 +310,10 @@ function createPouchFireCollection(
             firestoreChange,
           )
 
-          const remoteModel = Model.create(changeDocData)
+          const remoteModel = Model.create(
+            changeDocData,
+            getEnv(self),
+          )
           assert(R.isNil(remoteModel._rev))
 
           const docResult = await pReflect(
@@ -280,7 +328,10 @@ function createPouchFireCollection(
           if (docResult.isRejected) {
             return self.__putInDB(remoteModel)
           } else {
-            const localModel = Model.create(docResult.value)
+            const localModel = Model.create(
+              docResult.value,
+              getEnv(self),
+            )
             if (remoteModel.modifiedAt > localModel.modifiedAt) {
               return self.__putInDB(
                 R.merge(remoteModel, R.pick(['_rev'], localModel)),
@@ -301,10 +352,10 @@ function createPouchFireCollection(
             },
             self.__db,
           )
-            .scan(async (prevPromise, change) => {
+            .scan(async (prevPromise, pdbChange) => {
               await prevPromise
-              await self.__syncPDBChangeToFirestore(change)
-              // syncSeqLS.save(change.seq)
+              await self.__syncPDBChangeToFirestore(pdbChange)
+              self.__syncPDBSeq = pdbChange.seq
             }, Promise.resolve())
             .takeErrors(1)
             .observe({
@@ -320,42 +371,46 @@ function createPouchFireCollection(
               R.values,
               R.flatten,
               R.toPairs,
-              R.omit(['changes', 'doc']),
+              SF.omit(['changes', 'doc']),
             )(pdbChange),
             pdbChange.doc,
           )
-          const localDoc = Model.create(pdbChange.doc)
-          if (!localDoc.hasLocalActorId) return
+          const localDoc = Model.create(pdbChange.doc, getEnv(self))
+          if (!localDoc.hasLocalAppActorId) return
 
           const docRef = self.__firestoreCollectionRef.doc(
             localDoc.id,
           )
 
-          await docRef.firestore.runTransaction(async transaction => {
-            const remoteDocSnapshot = await transaction.get(docRef)
-            if (!remoteDocSnapshot.exists) {
-              transaction.set(
+          return docRef.firestore.runTransaction(
+            async transaction => {
+              const remoteDocSnapshot = await transaction.get(docRef)
+              if (!remoteDocSnapshot.exists) {
+                transaction.set(
+                  docRef,
+                  prepareForFirestoreSave(localDoc),
+                )
+                return
+              }
+              const remoteDoc = Model.create(
+                remoteDocSnapshot.data(),
+                getEnv(self),
+              )
+              if (isNewerThan(remoteDoc, localDoc)) {
+                log.trace('sync upstream: empty transaction update')
+                transaction.update(docRef, {})
+                return
+              }
+              if (!remoteDoc.hasLocalAppActorId) {
+                addToHistory(docRef, remoteDoc, transaction)
+              }
+              transaction.update(
                 docRef,
                 prepareForFirestoreSave(localDoc),
               )
-              return
-            }
-            const remoteDoc = Model.create(remoteDocSnapshot.data())
-            if (isNewerThan(remoteDoc, localDoc)) {
-              log.trace('sync upstream: empty transaction update')
-              transaction.update(docRef, {})
-              return
-            }
-            if (!remoteDoc.hasLocalActorId) {
-              addToHistory(docRef, remoteDoc, transaction)
-            }
-            transaction.update(
-              docRef,
-              prepareForFirestoreSave(localDoc),
-            )
-          })
+            },
+          )
           // self.syncFSTimeStamp = docChange.data().fireStoreServerTimestamp
-          self.__syncPDBSeq = pdbChange.seq
           function prepareForFirestoreSave(localDoc) {
             log.trace('sync upstream: prepareForFirestoreSave')
             const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
@@ -387,7 +442,7 @@ function createPouchFireCollection(
           createdAt: Date.now(),
           modifiedAt: Date.now(),
           archived: false,
-          actorId: self._actorId,
+          actorId: self.__localAppActorId,
           version: 0,
         }
         return self.__putInDB(R.mergeDeepRight(extendedProps, props))
@@ -414,7 +469,7 @@ function createPouchFireCollection(
           return self.__putInDB(
             R.merge(changesMergedModel, {
               modifiedAt: Date.now(),
-              actorId: self._actorId,
+              actorId: self.__localAppActorId,
             }),
           )
         }
@@ -430,11 +485,7 @@ const PFGrain = createPouchFireModel('Grain').props({
   text: types.string,
 })
 
-const PFGrainCollection = createPouchFireCollection(
-  PFGrain,
-  'Grain',
-  'grains',
-)
+const PFGrainCollection = createPouchFireCollection(PFGrain, 'Grain')
   .views(self => {
     return {
       get list() {
@@ -576,9 +627,6 @@ export const State = types
     return {
       get grainsList() {
         return self.grains.list
-      },
-      get actorId() {
-        return getEnv(self).actorId
       },
     }
   })
