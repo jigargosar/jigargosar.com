@@ -1,7 +1,6 @@
 // const log = require('nanologger')('rootStore')
 import {
   addDisposer as mstAddDisposer,
-  flow,
   getEnv,
   getRoot,
   getSnapshot,
@@ -182,9 +181,6 @@ function createPouchFireCollection(Model, modelName) {
         get __firestoreCollectionRef() {
           return self.fire.userCollectionRef(name)
         },
-        get __firestoreCollectionPath() {
-          return self.fire.userCollectionPath(name)
-        },
         get __syncFSTimeStamp() {
           return self.fire.FirestoreTimestamp.fromMillis(
             self.__syncFSMilliLS.load(),
@@ -193,12 +189,11 @@ function createPouchFireCollection(Model, modelName) {
         get __syncFSMilli() {
           return self.__syncFSMilliLS.load()
         },
-        set __syncFSTimeStamp(Timestamp) {
-          return self.__syncFSMilliLS.save(Timestamp.toMillis())
+        set __syncFSTimeStamp(timestamp) {
+          return self.__syncFSMilliLS.save(timestamp.toMillis())
         },
         set __syncPDBSeq(seq) {
           self.__syncPDBSeqLS.save(seq)
-          // self._syncPDBSeqLS.save(0)
         },
         get __syncPDBSeq() {
           return self.__syncPDBSeqLS.load()
@@ -257,11 +252,6 @@ function createPouchFireCollection(Model, modelName) {
             .bufferWithTimeOrCount(2000, 100)
             .filter(RA.isNotEmpty)
             .flatten()
-            .map(
-              R.tap(snapshot => {
-                // log.debug('snapshot', snapshot)
-              }),
-            )
             .map(snapshot => snapshot.docChanges())
             .flatten()
             .filter(
@@ -548,20 +538,10 @@ const Fire = types
       },
       userCollectionRef(collectionName) {
         assert(RA.isNotNil(collectionName))
-        if (!self.isSignedIn || R.isNil(self.store)) return null
+        if (!self.isSignedIn) return null
         return self.store.collection(
           `/users/${self.uid}/${collectionName}`,
         )
-      },
-      userCollectionPath(collectionName) {
-        assert(RA.isNotNil(collectionName))
-        if (R.isNil(self.uid)) return null
-        return `/users/${self.uid}/${collectionName}`
-      },
-      get _grainsCollectionRef() {
-        assert(self.isSignedIn)
-        assert(RA.isNotNil(self.store))
-        return self.store.collection(`/users/${self.uid}/grains`)
       },
       get uid() {
         return R.pathOr(null, 'userInfo.uid'.split('.'))(self)
@@ -570,22 +550,37 @@ const Fire = types
   })
   .actions(self => {
     return {
-      afterCreate: flow(function* afterCreate() {
-        if (!self.app) {
-          const app = self.firebase.initializeApp(
-            getEnv(self).firebaseConfig,
-          )
-          const store = app.firestore()
-          store.settings({timestampsInSnapshots: true})
-          const result = yield pReflect(store.enablePersistence())
-          self.log.trace('store enablePersistence result', result)
+      afterCreate: function afterCreate() {
+        var config = {
+          apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
+          authDomain: 'not-now-142808.firebaseapp.com',
+          databaseURL: 'https://not-now-142808.firebaseio.com',
+          projectId: 'not-now-142808',
+          storageBucket: 'not-now-142808.appspot.com',
+          messagingSenderId: '476064436883',
         }
 
+        if (!self.app) {
+          const app = self.firebase.initializeApp(config)
+          const store = app.firestore()
+          store.settings({timestampsInSnapshots: true})
+          store
+            .enablePersistence()
+            .catch(error =>
+              self.log.trace('store enablePersistence result', error),
+            )
+          self._startListeningToAuthStateChanges(app)
+        } else {
+          self._startListeningToAuthStateChanges(self.app)
+        }
+      },
+
+      _startListeningToAuthStateChanges(app) {
         addDisposer(
           self,
-          self.auth.onAuthStateChanged(self._onAuthStateChanged),
+          app.auth().onAuthStateChanged(self._onAuthStateChanged),
         )
-      }),
+      },
 
       _onAuthStateChanged(user) {
         self.userInfo = omitFirebaseClutter(user)
