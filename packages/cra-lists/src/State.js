@@ -397,7 +397,6 @@ function createPouchFireCollection(Model, modelName) {
               )
             },
           )
-          // self.syncFSTimeStamp = docChange.data().fireStoreServerTimestamp
           function prepareForFirestoreSave(localDoc) {
             log.trace('sync upstream: prepareForFirestoreSave')
             const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
