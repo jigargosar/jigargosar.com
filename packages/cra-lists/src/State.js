@@ -399,10 +399,9 @@ function createPouchFireCollection(Model, modelName) {
           )
           function prepareForFirestoreSave(localDoc) {
             log.trace('sync upstream: prepareForFirestoreSave')
-            const fireStoreServerTimestamp = firebase.firestore.FieldValue.serverTimestamp()
             return R.compose(R.merge(localDoc))({
               _rev: null,
-              fireStoreServerTimestamp,
+              fireStoreServerTimestamp: firebase.firestore.FieldValue.serverTimestamp(),
             })
           }
 
