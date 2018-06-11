@@ -230,36 +230,31 @@ function createPouchFireCollection(Model, modelName) {
             '__startDownStreamSync from syncFSTimeStamp',
             self.__syncFSTimeStamp,
           )
-          return (
-            createFirestoreOnSnapshotStream(
-              self.firestoreCollectionRef
-                .where(
-                  'fireStoreServerTimestamp',
-                  '>',
-                  self.__syncFSTimeStamp,
-                )
-                .orderBy('fireStoreServerTimestamp'),
-            )
-              // .bufferWithTimeOrCount(5000, 100)
-              // .filter(RA.isNotEmpty)
-              // .flatten()
-              .map(snapshot => snapshot.docChanges())
-              .flatten()
-              .scan(async (prevPromise, firestoreChange) => {
-                const firestoreTimestamp = firestoreChange.doc.data()
-                  .fireStoreServerTimestamp
-                assert(RA.isNotNil(firestoreTimestamp))
-                await prevPromise
-                await self.__syncFirestoreChangeToPDB(firestoreChange)
-                self.__syncFSTimeStamp = firestoreTimestamp
-              }, Promise.resolve())
-              .takeErrors(1)
-              .observe({
-                error(error) {
-                  log.error('syncFromPDBToFireStore', error)
-                },
-              })
+          return createFirestoreOnSnapshotStream(
+            self.firestoreCollectionRef
+              .where(
+                'fireStoreServerTimestamp',
+                '>',
+                self.__syncFSTimeStamp,
+              )
+              .orderBy('fireStoreServerTimestamp'),
           )
+            .map(snapshot => snapshot.docChanges())
+            .flatten()
+            .scan(async (prevPromise, firestoreChange) => {
+              const firestoreTimestamp = firestoreChange.doc.data()
+                .fireStoreServerTimestamp
+              assert(RA.isNotNil(firestoreTimestamp))
+              await prevPromise
+              await self.__syncFirestoreChangeToPDB(firestoreChange)
+              self.__syncFSTimeStamp = firestoreTimestamp
+            }, Promise.resolve())
+            .takeErrors(1)
+            .observe({
+              error(error) {
+                log.error('syncFromPDBToFireStore', error)
+              },
+            })
         },
         async __syncFirestoreChangeToPDB(firestoreChange) {
           const changeDoc = firestoreChange.doc
