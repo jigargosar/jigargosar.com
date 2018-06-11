@@ -68,8 +68,15 @@ export async function updateFirestoreFromPouchDoc({
   cRef,
 }) {
   log.debug('updateFirestoreFromPouchDoc', doc)
-  if (shouldIgnoreFirebaseUpdate(doc)) return
-  if (isRemotelyModified(doc, appActorId)) return
+  if (shouldIgnoreFirebaseUpdate(doc)) {
+    log.debug('ignoreFirebaseUpdate', doc)
+    return
+  }
+  if (isRemotelyModified(doc, appActorId)) {
+    log.debug('ignore: isRemotelyModified, should never happen', doc)
+    debugger
+    return
+  }
 
   return runTransaction(async transaction => {
     const docRef = getDocRef(doc, cRef)
