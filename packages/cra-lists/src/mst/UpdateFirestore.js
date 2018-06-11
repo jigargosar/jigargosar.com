@@ -52,11 +52,11 @@ function transactionUpdate(docRef, data, transaction) {
 //   )
 // }
 
-// function incrementVersion(data) {
-//   const version = data.version + 1
-//   log.debug('incrementVersion to:', version, 'from:', data.version)
-//   return R.merge(data, {version})
-// }
+function incrementVersion(data) {
+  const version = data.version + 1
+  log.debug('incrementVersion to:', version, 'from:', data.version)
+  return R.merge(data, {version})
+}
 
 function shouldIgnoreFirebaseUpdate(doc) {
   return doc.ignoreFirebaseUpdate
@@ -99,10 +99,10 @@ export async function updateFirestoreFromPouchDoc({
       // transactionSetInHistoryCollection(docRef, fireData, transaction)
     }
 
-    return transactionUpdate(
-      docRef,
-      docToFirestoreData(doc),
-      transaction,
-    )
+    const data = isRemotelyModified(fireData, appActorId)
+      ? incrementVersion(docToFirestoreData(doc))
+      : docToFirestoreData(doc)
+
+    return transactionUpdate(docRef, data, transaction)
   }, cRef)
 }
