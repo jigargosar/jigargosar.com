@@ -152,13 +152,15 @@ function createPouchFireCollection(Model, modelName) {
           getSnapshot(Model.create(modelProps, getEnv(self))),
         )
       },
-      __putInDBIgnoringFirebaseUpdate(modelProps) {
+      _putInDBIgnoringFirebaseUpdate(modelProps) {
         const snapshot = getSnapshot(
           Model.create(modelProps, getEnv(self)),
         )
-        return self.__db.put(
-          R.merge(snapshot, {ignoreFirebaseUpdate: true}),
-        )
+        const finalModel = R.merge(snapshot, {
+          ignoreFirebaseUpdate: true,
+        })
+        log.debug('_putInDBIgnoringFirebaseUpdate', finalModel)
+        return self.__db.put(finalModel)
       },
     }))
     .volatile(self => ({
@@ -288,7 +290,7 @@ function createPouchFireCollection(Model, modelName) {
           )
 
           if (docResult.isRejected) {
-            return self.__putInDBIgnoringFirebaseUpdate(remoteModel)
+            return self._putInDBIgnoringFirebaseUpdate(remoteModel)
           } else {
             const localModel = Model.create(
               docResult.value,
@@ -303,7 +305,7 @@ function createPouchFireCollection(Model, modelName) {
             }
             // if (remoteModel.modifiedAt > localModel.modifiedAt) {
             if (remoteModel.version > localModel.version) {
-              return self.__putInDBIgnoringFirebaseUpdate(
+              return self._putInDBIgnoringFirebaseUpdate(
                 R.merge(remoteModel, R.pick(['_rev'], localModel)),
               )
             }
