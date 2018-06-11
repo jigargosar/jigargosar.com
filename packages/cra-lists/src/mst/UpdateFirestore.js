@@ -58,12 +58,17 @@ function transactionUpdate(docRef, data, transaction) {
 //   return R.merge(data, {version})
 // }
 
+function shouldIgnoreFirebaseUpdate(doc) {
+  return doc.ignoreFirebaseUpdate
+}
+
 export async function updateFirestoreFromPouchDoc({
   doc,
   appActorId,
   cRef,
 }) {
   log.debug('updateFirestoreFromPouchDoc', doc)
+  if (shouldIgnoreFirebaseUpdate(doc)) return
   if (isRemotelyModified(doc, appActorId)) return
 
   return runTransaction(async transaction => {
