@@ -296,20 +296,31 @@ function createPouchFireCollection(Model, modelName) {
               docResult.value,
               getEnv(self),
             )
-            if (R.equals(fireData.actorId, self.localAppActorId)) {
-              log.debug(
-                'ignoring firebase change since ' +
-                  'it is from localAppActorId.',
-              )
-              return
-            }
+            // const isLocallyModified = R.equals(
+            //   fireData.actorId,
+            //   self.localAppActorId,
+            // )
+            // if (
+            //   isLocallyModified &&
+            //   !fireData.version > localModel.version
+            // ) {
+            //   log.debug(
+            //     'ignoring firebase change since ' +
+            //       'it is from localAppActorId, and version is not greater',
+            //   )
+            //   return
+            // }
             // if (remoteModel.modifiedAt > localModel.modifiedAt) {
             if (remoteModel.version > localModel.version) {
               return self._putInDBIgnoringFirebaseUpdate(
                 R.merge(remoteModel, R.pick(['_rev'], localModel)),
               )
+            } else {
+              log.warn(
+                'ignoring firebase change, ' +
+                  'since there is no version update',
+              )
             }
-            log.warn('When does this happen?')
           }
         },
         __startUpStreamSync() {
