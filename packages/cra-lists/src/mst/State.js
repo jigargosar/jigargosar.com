@@ -301,8 +301,8 @@ function createPouchFireCollection(Model, modelName) {
               )
               return
             }
-            if (remoteModel.modifiedAt > localModel.modifiedAt) {
-              // if (remoteModel.version > localModel.version) {
+            // if (remoteModel.modifiedAt > localModel.modifiedAt) {
+            if (remoteModel.version > localModel.version) {
               return self.__putInDBIgnoringFirebaseUpdate(
                 R.merge(remoteModel, R.pick(['_rev'], localModel)),
               )
