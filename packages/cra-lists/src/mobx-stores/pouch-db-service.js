@@ -3,15 +3,37 @@ import ReactDOM from 'react-dom'
 import PouchDB from 'pouchdb-browser'
 import ReactJson from 'react-json-view'
 import PropTypes from 'prop-types'
+import ow from 'ow'
 
-require('pouchdb-all-dbs')(PouchDB)
+const assert = require('assert')
 
-export function PouchDBStore() {
+if (!module.hot || !module.hot.data) {
+  require('pouchdb-all-dbs')(PouchDB)
+}
+
+export const PouchDbService = (function PouchDBStore() {
   return {
-    get allDbs() {
+    getAllDbNames() {
       return PouchDB.allDbs()
     },
+    create(name, options = {}) {
+      ow(name, ow.string.minLength(3))
+      return new PouchDB(name, options)
+    },
+    exists(name) {
+      return this.getAllDbNames().includes(name)
+    },
+    async destroy(name) {
+      const allDbNames = await this.getAllDbNames()
+      assert(allDbNames.includes(name))
+      return new PouchDB(name).destroy()
+    },
   }
+})()
+
+if (module.hot) {
+  window.x = PouchDbService
+  PouchDbService.getAllDbNames().then(console.log)
 }
 
 function RenderState({hide}) {
@@ -19,11 +41,12 @@ function RenderState({hide}) {
   return (
     <div className={'bg-black-40 absolute top-0 left-0 w-100'}>
       <div className={'bg-white pa3 ma3 shadow-1'}>
-        <ReactJson src={{PouchDBStore: PouchDBStore()}} />
+        <ReactJson src={{PouchDbService: PouchDbService()}} />
       </div>
     </div>
   )
 }
+
 RenderState.proptypes = {
   hide: PropTypes.bool,
 }
