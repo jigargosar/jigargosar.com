@@ -2,18 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/packages/basic-reason-app/basic-reason-app.iml" filepath="$PROJECT_DIR$/packages/basic-reason-app/basic-reason-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/boowa-static-choo/boowa-static-choo.iml" filepath="$PROJECT_DIR$/packages/boowa-static-choo/boowa-static-choo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/choo-lists/choo-lists.iml" filepath="$PROJECT_DIR$/packages/choo-lists/choo-lists.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/choo-notes/choo-notes.iml" filepath="$PROJECT_DIR$/packages/choo-notes/choo-notes.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/choo-site/choo-site.iml" filepath="$PROJECT_DIR$/packages/choo-site/choo-site.iml" />
       <module fileurl="file://$PROJECT_DIR$/packages/cra-lists/cra-lists.iml" filepath="$PROJECT_DIR$/packages/cra-lists/cra-lists.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/electron-react-reminder/electron-react-reminder.iml" filepath="$PROJECT_DIR$/packages/electron-react-reminder/electron-react-reminder.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/gatsby-site/gatsby-site.iml" filepath="$PROJECT_DIR$/packages/gatsby-site/gatsby-site.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/hacker-blog.iml" filepath="$PROJECT_DIR$/.idea/hacker-blog.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/nextjs-lists/nextjs-lists.iml" filepath="$PROJECT_DIR$/packages/nextjs-lists/nextjs-lists.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/reason-react/reason-react.iml" filepath="$PROJECT_DIR$/packages/reason-react/reason-react.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/spectacle-boilerplate/spectacle-boilerplate.iml" filepath="$PROJECT_DIR$/packages/spectacle-boilerplate/spectacle-boilerplate.iml" />
     </modules>
   </component>
 </project>
