@@ -1,11 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
 import PouchDB from 'pouchdb-browser'
-import PouchAllDBS from 'pouchdb-all-dbs'
 import ReactJson from 'react-json-view'
+import PropTypes from 'prop-types'
 
-PouchAllDBS(PouchDB)
+require('pouchdb-all-dbs')(PouchDB)
 
 export function PouchDBStore() {
   return {
@@ -13,7 +12,8 @@ export function PouchDBStore() {
   }
 }
 
-function RenderState() {
+function RenderState({hide}) {
+  if (hide) return null
   return (
     <div className={'bg-black-40 absolute top-0 left-0 w-100'}>
       <div className={'bg-white pa3 ma3 shadow-1'}>
@@ -22,7 +22,9 @@ function RenderState() {
     </div>
   )
 }
-
+RenderState.proptypes = {
+  hide: PropTypes.bool,
+}
 const RA = require('ramda-adjunct')
 
 function getOrAppendElementById(id) {
@@ -35,6 +37,6 @@ function getOrAppendElementById(id) {
 }
 
 ReactDOM.render(
-  <RenderState />,
+  <RenderState hide />,
   getOrAppendElementById('render-state'),
 )
