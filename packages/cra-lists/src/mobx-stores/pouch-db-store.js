@@ -8,7 +8,9 @@ require('pouchdb-all-dbs')(PouchDB)
 
 export function PouchDBStore() {
   return {
-    allDbs: PouchDB.allDbs,
+    get allDbs() {
+      return PouchDB.allDbs()
+    },
   }
 }
 
