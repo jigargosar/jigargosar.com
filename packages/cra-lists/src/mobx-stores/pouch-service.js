@@ -4,6 +4,7 @@ import PouchDB from 'pouchdb-browser'
 import ReactJson from 'react-json-view'
 import PropTypes from 'prop-types'
 import ow from 'ow'
+import {PouchStore} from './pouch-store'
 
 const assert = require('assert')
 
@@ -11,14 +12,14 @@ if (!module.hot || !module.hot.data) {
   require('pouchdb-all-dbs')(PouchDB)
 }
 
-export const PouchService = (function PouchDBStore() {
+export const PouchService = (function PouchService() {
   return {
     getAllDbNames() {
       return PouchDB.allDbs()
     },
     create(name, options = {}) {
       ow(name, ow.string.minLength(3))
-      return new PouchDB(name, options)
+      return PouchStore(new PouchDB(name, options), this)
     },
     exists(name) {
       return this.getAllDbNames().includes(name)
@@ -33,6 +34,7 @@ export const PouchService = (function PouchDBStore() {
 
 if (module.hot) {
   window.x = PouchService
+  window.p = PouchService.create('foo')
   PouchService.getAllDbNames().then(console.log)
 }
 
