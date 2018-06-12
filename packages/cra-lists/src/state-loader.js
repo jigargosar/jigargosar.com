@@ -1,5 +1,6 @@
 import {State} from './mst/State'
 import {getAppActorId} from './LocalStorage'
+import {PouchDBStore} from './mobx-stores/pouch-db-store'
 
 const mst = require('mobx-state-tree')
 
@@ -7,7 +8,7 @@ export const state = State.create(
   {},
   {localAppActorId: getAppActorId()},
 )
-
+window.x = PouchDBStore()
 if (module.hot) {
   window.state = state
   if (module.hot.data && module.hot.data.snapshot) {
