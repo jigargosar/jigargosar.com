@@ -1,3 +1,6 @@
+// import nanoid from 'nanoid'
+const R = require('ramda')
+
 export function PouchStore(db, service) {
   return {
     _db: db,
@@ -15,6 +18,10 @@ export function PouchStore(db, service) {
     },
     allDocs() {
       return db.allDocs({include_docs: true})
+    },
+    async allDocsArray() {
+      const res = await this.allDocs()
+      return R.map(R.prop('doc'), res.rows)
     },
     allChanges() {
       return db.changes({include_docs: true})
