@@ -11,7 +11,7 @@ if (!module.hot || !module.hot.data) {
   require('pouchdb-all-dbs')(PouchDB)
 }
 
-export const PouchDbService = (function PouchDBStore() {
+export const PouchService = (function PouchDBStore() {
   return {
     getAllDbNames() {
       return PouchDB.allDbs()
@@ -32,8 +32,8 @@ export const PouchDbService = (function PouchDBStore() {
 })()
 
 if (module.hot) {
-  window.x = PouchDbService
-  PouchDbService.getAllDbNames().then(console.log)
+  window.x = PouchService
+  PouchService.getAllDbNames().then(console.log)
 }
 
 function RenderState({hide}) {
@@ -41,7 +41,7 @@ function RenderState({hide}) {
   return (
     <div className={'bg-black-40 absolute top-0 left-0 w-100'}>
       <div className={'bg-white pa3 ma3 shadow-1'}>
-        <ReactJson src={{PouchDbService: PouchDbService()}} />
+        <ReactJson src={{PouchDbService: PouchService()}} />
       </div>
     </div>
   )
