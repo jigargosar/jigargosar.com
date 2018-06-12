@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="HaskellBuildOptions">
-    <ghcPath>/usr/local/bin/ghc</ghcPath>
-    <cabalPath>/usr/local/bin/cabal</cabalPath>
-    <stackPath>/usr/local/bin/stack</stackPath>
-  </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="JSX" />
-  </component>
-  <component name="JscsProjectComponent">
-    <option name="nodeInterpreter" value="" />
-    <option name="esprima" value="" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myNullables">
@@ -44,7 +35,6 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
   </component>
