@@ -149,14 +149,48 @@ const GrainsList = injectS(function GrainsList({s}) {
 const GrainEdit = injectS(function GrainEdit({s}) {
   if (s.editState.type === 'idle') return null
   return (
-    <div className={'vh-100 fixed absolute--fill bg-black-30 flex'}>
-      <div
-        className={'shadow-1 bg-white ma5 flex-auto flex flex-column'}
-      >
-        <div className={'f4 pa3 b bb b--light-silver'}>Edit</div>
-        <div className={'flex-auto'} />
+    <div
+      className={'vh-100 fixed absolute--fill bg-black-20 flex'}
+      onScroll={e => {
+        // e.stopImmediatePropagation()
+        e.stopPropagation()
+        e.preventDefault()
+      }}
+    >
+      <div className={'shadow-1 bg-white ma5 flex flex-column'}>
+        <div className={'flex-shrink-0 f4 pa3 b bb b--light-silver'}>
+          Edit
+        </div>
+        <div className={'flex-shrink-1 overflow-y-scroll pa2'}>
+          Loream Ipsum , nod anom. mamdke. Loream Ipsum , nod anom.
+          mamdke. Loream Ipsum , nod anom. mamdke. Loream Ipsum , nod
+          anom. mamdke. Loream Ipsum , nod anom. mamdke. Loream Ipsum
+          , nod anom. mamdke. Loream Ipsum , nod anom. mamdke. Loream
+          Ipsum , nod anom., nod anom. mamdke. Loream Ipsum , nod
+          anom. mamdke. Loream Ipsum , nod anom. mamdke.Loream Ipsum ,
+          nod anom. mamdke. Loream Ipsum , nod anom. mamdke. Loream
+          Ipsum , nod anom. mamdke. Loream Ipsum , nod anom. mamdke.
+          Loream Ipsum , nod anom. mamdke. Loream Ipsum , nod anom.
+          mamdke. Loream Ipsum , nod anom. mamdke. Loream Ipsum , nod
+          anom., nod anom. mamdke. Loream Ipsum , nod anom. mamdke.
+          Loream Ipsum , nod anom. mamdke.Loream Ipsum , nod anom.
+          mamdke. Loream Ipsum , nod anom. mamdke. Loream Ipsum , nod
+          anom. mamdke. Loream Ipsum , nod anom. mamdke. Loream Ipsum
+          , nod anom. mamdke. Loream Ipsum , nod anom. mamdke. Loream
+          Ipsum , nod anom. mamdke. Loream Ipsum , nod anom., nod
+          anom. mamdke. Loream Ipsum , nod anom. mamdke. Loream Ipsum
+          , nod anom. mamdke.Loream Ipsum , nod anom. mamdke. Loream
+          Ipsum , nod anom. mamdke. Loream Ipsum , nod anom. mamdke.
+          Loream Ipsum , nod anom. mamdke. Loream Ipsum , nod anom.
+          mamdke. Loream Ipsum , nod anom. mamdke. Loream Ipsum , nod
+          anom. mamdke. Loream Ipsum , nod anom., nod anom. mamdke.
+          Loream Ipsum , nod anom. mamdke. Loream Ipsum , nod anom.
+          mamdke.
+        </div>
         <div
-          className={'pa3 bt b--light-silver flex flex-row-reverse'}
+          className={
+            'flex-shrink-0 pa3 bt b--light-silver flex flex-row-reverse'
+          }
         >
           <button className={buttonCN}>ok</button>
           <button className={buttonCN}>cancel</button>
