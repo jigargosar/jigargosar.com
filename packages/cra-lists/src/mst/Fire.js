@@ -1,5 +1,6 @@
 import {types} from 'mobx-state-tree'
 import {addDisposer} from './mst-utils'
+import {SF} from '../safe-fun'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -10,13 +11,6 @@ require('firebase/auth')
 require('firebase/firestore')
 const log = require('nanologger')('Fire')
 
-const omitFirebaseClutter = R.unless(
-  R.isNil,
-  R.pickBy(
-    (val, key) =>
-      !(key.length <= 2 || RA.isFunction(val) || R.head(key) === '_'),
-  ),
-)
 export const Fire = types
   .model('Fire')
   .volatile(() => ({
@@ -70,6 +64,7 @@ export const Fire = types
               log.trace('store enablePersistence result', error),
             )
         }
+        self.store.disableNetwork()
 
         addDisposer(
           self,
@@ -78,7 +73,23 @@ export const Fire = types
       },
 
       _onAuthStateChanged(user) {
-        self.userInfo = omitFirebaseClutter(user)
+        //'metadata' : creationTime, lastSignInTime
+        self.userInfo = SF.pick(
+          [
+            'displayName',
+            'email',
+            'emailVerified',
+            'isAnonymous',
+            'metadata',
+            'phoneNumber',
+            'photoURL',
+            'providerData',
+            'providerId',
+            'refreshToken',
+            'uid',
+          ],
+          user,
+        )
         log.trace('onAuthStateChanged userInfo:', self.userInfo)
         self.authState = user ? 'signedIn' : 'signedOut'
       },

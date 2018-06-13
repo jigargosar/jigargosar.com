@@ -13,5 +13,10 @@ const omit = R.curry(function omit(props, obj) {
   return R.omit(props, obj)
 })
 
-const SF = {prop, omit}
+const pick = R.curry(function pick(props, obj) {
+  assert(RA.isArray(props))
+  return R.pick(props, obj)
+})
+
+const SF = {prop, omit, pick}
 export {SF}
