@@ -25,7 +25,7 @@ function SpacedRow({inline = false, className, children}) {
 const centeredContentClass = 'f5 center mw7 mv3 ph3'
 
 const buttonCN =
-  'input-reset pointer ttc bn blue link bg-white-30 pa0 ph2 br-pill hover-bg-white'
+  'input-reset pointer ttc bn blue link bg-white-30 pa1 ph2 br-pill hover-bg-white'
 
 const injectS = R.compose(withState, observer)
 
@@ -33,7 +33,7 @@ const SignInOutView = injectS(function SignInOutView({s}) {
   const userInfo = s.fire.userInfo
   const content = userInfo ? (
     <F>
-      <div className={'f5'}>{userInfo.displayName}</div>
+      <div>{userInfo.displayName}</div>
       <button className={cn(buttonCN)} onClick={s.fire.signOut}>
         Sign Out
       </button>
@@ -43,7 +43,11 @@ const SignInOutView = injectS(function SignInOutView({s}) {
       SignIn
     </button>
   )
-  return <SpacedRow inline>{content}</SpacedRow>
+  return (
+    <SpacedRow className={'f5'} inline>
+      {content}
+    </SpacedRow>
+  )
 })
 
 const Header = injectS(function Header({s}) {
