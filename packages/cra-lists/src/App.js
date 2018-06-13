@@ -173,10 +173,12 @@ const GrainEdit = injectS(function GrainEdit({s}) {
           </div>
         </div>
         <div className={'bt b--moon-gray pa3 flex flex-row-reverse'}>
-          <button onClick={s.onSaveClicked} className={buttonCN}>
+          <button onClick={s.onEditSave} className={buttonCN}>
             Ok
           </button>
-          <button className={buttonCN}>Cancel</button>
+          <button onClick={s.onEditCancel} className={buttonCN}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>
