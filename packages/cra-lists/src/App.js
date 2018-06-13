@@ -25,7 +25,7 @@ function SpacedRow({inline = false, className, children}) {
 const centeredContentClass = 'f5 center mw7 mv3 ph3'
 
 const buttonCN =
-  'input-reset pointer ttc bn blue link bg-white-30 p2 br-pill hover-bg-white'
+  'input-reset pointer ttc bn blue link bg-white-30 pa0 ph2 br-pill hover-bg-white'
 
 const injectS = R.compose(withState, observer)
 
@@ -62,7 +62,7 @@ const GrainItem = injectS(function GrainItem({s, grain, style}) {
   const toDisplayText = R.when(R.isEmpty, R.always('<empty>'))
   return (
     <div className={'pv3'} style={style}>
-      <SpacedRow className={'flex-nowrap hide-child'}>
+      <div className={'flex hide-child'}>
         <div className={'child'}>
           <button
             className={cn(buttonCN, 'w-100')}
@@ -98,7 +98,7 @@ const GrainItem = injectS(function GrainItem({s, grain, style}) {
             </SpacedRow>
           </div>
         </div>
-      </SpacedRow>
+      </div>
     </div>
   )
 })
