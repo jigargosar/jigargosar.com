@@ -80,7 +80,7 @@ const GrainItem = injectS(function GrainItem({s, grain, style}) {
             className={cn('pointer', {
               'black-70': R.isEmpty(grain.text),
             })}
-            onClick={s.onUpdate(grain)}
+            onClick={s.onStartEditing(grain)}
           >
             {toDisplayText(grain.text)}
           </div>

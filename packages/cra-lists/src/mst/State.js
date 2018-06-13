@@ -441,7 +441,10 @@ export const State = types
     fire: types.optional(Fire, {}),
   })
   .volatile(() => {
-    return {g: PouchCollectionStore('grain'), editState: null}
+    return {
+      g: PouchCollectionStore('grain'),
+      editState: {type: 'idle'},
+    }
   })
   .views(self => {
     return {
@@ -465,16 +468,27 @@ export const State = types
       //   return () => self.grains.update(grain)
       // },
       update: flow(function*(doc, change) {
-        self.editState = {doc, change}
+        self.editState = {type: 'saving', doc, form: change}
         try {
           yield self.g.upsert(R.merge(doc, change))
-          self.editState = null
+          self.editState = {type: 'idle'}
         } catch (e) {
+          self.editState = {type: 'error', doc, form: change}
           console.warn('Update failed', self.editState, e)
         }
       }),
       onUpdate(doc) {
         return () => self.update(doc, {text: `${Math.random()}`})
+      },
+      startEdit(doc) {
+        self.editState = {
+          type: 'editing',
+          doc,
+          form: {text: doc.text},
+        }
+      },
+      onStartEditing(doc) {
+        return () => self.startEdit(doc)
       },
       onToggleArchive(doc) {
         return () =>
