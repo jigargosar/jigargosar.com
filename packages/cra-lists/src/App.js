@@ -152,10 +152,10 @@ const GrainEdit = injectS(function GrainEdit({s}) {
     <div className={'fixed absolute--fill bg-black-20 pa4-ns'}>
       <div
         className={
-          'w-100 h-100 bg-white shadow-1 f4 flex flex-column'
+          'w-100 h-100 bg-white shadow-1 f5 flex flex-column'
         }
       >
-        <div className={'bb b--moon-gray pa3'}>Edit</div>
+        <div className={'bb b--moon-gray pa3 f4 b'}>Edit</div>
         <div className={'flex-auto mh3'}>
           <div className={'mv2 flex flex-wrap'}>
             <label className={'pv2 w-100'}>Text</label>
