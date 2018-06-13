@@ -501,7 +501,7 @@ export const State = types
           form: {text: doc.text},
         })
       },
-      onEditSave: flow(function*() {
+      saveEdit: flow(function*() {
         ow(self.editState.type, ow.string.equals('editing'))
         self.editState.type = 'saving'
         try {
@@ -514,10 +514,10 @@ export const State = types
           console.warn('Update failed', self.editState, e)
         }
       }),
-      onEditCancel: flow(function*() {
+      cancelEdit() {
         ow(self.editState.type, ow.string.oneOf(['editing', 'error']))
         self.editState.type = 'idle'
-      }),
+      },
       updateForm(fieldName, value) {
         ow(self.editState.type, ow.string.equals('editing'))
         self.editState.form[fieldName] = value
