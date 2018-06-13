@@ -62,16 +62,16 @@ const GrainItem = injectS(function GrainItem({s, grain, style}) {
     : [grain.text, '']
   return (
     <div className={'pv3'} style={style}>
-      <SpacedRow className={'flex-nowrap'}>
-        <div>
+      <SpacedRow className={'flex-nowrap hide-child'}>
+        <div className={'child'}>
           <button
-            className={'input-reset w-100'}
+            className={'input-reset outline-0 pointer w-100 '}
             onClick={s.onUpdate(grain)}
           >
             E
           </button>
           <button
-            className={'input-reset w-100'}
+            className={'input-reset outline-0 pointer w-100'}
             onClick={s.onToggleArchive(grain)}
           >
             X
