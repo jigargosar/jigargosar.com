@@ -52,6 +52,7 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
   return (
     <div className={'mv2'}>
       <button onClick={s.onUpdate(grain)}>E</button>
+      <button onClick={s.onToggleArchive(grain)}>X</button>
       <div className={cn}>{displayText}</div>
       <div className={'f6 black-50 ml2'}>
         <SpacedRow>
@@ -61,6 +62,7 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
           <div>cAt: {getFormattedDate(grain.createdAt)}</div>
           <div>mAt: {getFormattedDate(grain.modifiedAt)}</div>
           <div>ver: {grain.version}</div>
+          <div>X: {`${grain.isArchived}`}</div>
         </SpacedRow>
       </div>
     </div>

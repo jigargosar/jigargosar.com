@@ -43,6 +43,7 @@ export function PouchCollectionStore(modelName) {
             createdAt: Date.now(),
             modifiedAt: Date.now(),
             version: 0,
+            isArchived: false,
           }),
         )(doc)
         return pouchStore.put(updatedDoc)
