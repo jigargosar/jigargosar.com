@@ -1,7 +1,7 @@
 import nanoid from 'nanoid'
 import {PouchService} from './pouch-service'
 import {SF} from '../safe-fun'
-import {configure, observable, runInAction} from 'mobx'
+import {configure, observable, runInAction, trace} from 'mobx'
 
 configure({
   // disableErrorBoundaries: true,
@@ -20,7 +20,7 @@ export function PouchCollectionStore(modelName) {
       idLookup: observable.map([]),
       async load() {
         const {results, last_seq} = await pouchStore.allChanges()
-        const idLookup = new Map(
+        const idLookup = observable.map(
           R.map(
             R.compose(
               observable,
@@ -29,7 +29,7 @@ export function PouchCollectionStore(modelName) {
             ),
           )(results),
         )
-        runInAction(() => (this.idLookup = idLookup))
+        runInAction(() => this.idLookup.replace(idLookup))
 
         pouchStore
           .liveChanges({since: last_seq})
@@ -75,7 +75,7 @@ export function PouchCollectionStore(modelName) {
       },
     },
     {
-      idLookup: observable.deep,
+      idLookup: observable,
     },
     {name},
   )

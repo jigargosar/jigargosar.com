@@ -129,14 +129,7 @@ function renderAnimatedGrainsList(grains) {
   )
 }
 
-const GrainsList = R.compose(
-  injectS,
-  lifecycle({
-    componentDidMount() {
-      //how to disable transition on first render
-    },
-  }),
-)(function GrainsList({s}) {
+const GrainsList = injectS(function GrainsList({s}) {
   return (
     <F>
       {renderAnimatedGrainsList(s.g.active)}
