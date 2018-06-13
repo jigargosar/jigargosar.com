@@ -5,7 +5,6 @@ import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
 import {trace} from 'mobx'
-import {lifecycle} from 'recompose'
 
 const R = require('ramda')
 

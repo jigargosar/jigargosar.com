@@ -1,7 +1,7 @@
 import nanoid from 'nanoid'
 import {PouchService} from './pouch-service'
 import {SF} from '../safe-fun'
-import {configure, observable, runInAction, trace} from 'mobx'
+import {configure, observable, runInAction} from 'mobx'
 
 configure({
   // disableErrorBoundaries: true,
