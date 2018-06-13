@@ -473,14 +473,14 @@ export const State = types
         self.g.load()
       },
       onAddNew() {
-        return self.g.upsert({text: `${Math.random()}`})
+        return self.g.userUpsert({text: `${Math.random()}`})
       },
       // onUpdate(grain) {
       //   return () => self.grains.update(grain)
       // },
       update: flow(function*(doc, change) {
         try {
-          yield self.g.upsert(R.merge(doc, change))
+          yield self.g.userUpsert(R.merge(doc, change))
           self.editState = observable({type: 'idle'})
         } catch (e) {
           self.editState = observable({
@@ -505,7 +505,7 @@ export const State = types
         ow(self.editState.type, ow.string.equals('editing'))
         self.editState.type = 'saving'
         try {
-          yield self.g.upsert(
+          yield self.g.userUpsert(
             R.merge(self.editState.doc, self.editState.form),
           )
           self.editState = observable({type: 'idle'})

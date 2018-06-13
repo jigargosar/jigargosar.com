@@ -56,7 +56,7 @@ export function PouchCollectionStore(modelName) {
       get splitList() {
         return Array.from(R.concat(this.active, this.archived))
       },
-      upsert(doc) {
+      userUpsert(doc) {
         const updatedDoc = R.ifElse(
           R.has(idPropName),
           R.merge({modifiedAt: Date.now()}),
