@@ -2,6 +2,7 @@ import nanoid from 'nanoid'
 import {PouchService} from './pouch-service'
 import {SF} from '../safe-fun'
 import {configure, observable, runInAction} from 'mobx'
+import {getAppActorId} from '../LocalStorage'
 
 configure({
   // disableErrorBoundaries: true,
@@ -59,13 +60,14 @@ export function PouchCollectionStore(modelName) {
       userUpsert(doc) {
         const updatedDoc = R.ifElse(
           R.has(idPropName),
-          R.merge({modifiedAt: Date.now()}),
+          R.merge({modifiedAt: Date.now(), actorId: getAppActorId()}),
           R.merge({
             _id: nanoid(),
             createdAt: Date.now(),
             modifiedAt: Date.now(),
             version: 0,
             isArchived: false,
+            actorId: getAppActorId(),
           }),
         )(doc)
         return pouchStore.put(updatedDoc)
