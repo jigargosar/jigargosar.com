@@ -3,12 +3,19 @@ import {observer} from 'mobx-react'
 import {withState} from './StateContext'
 import formatDate from 'date-fns/format'
 import * as cn from 'classnames'
+import {Transition, animated} from 'react-spring'
 
 const R = require('ramda')
 
-function SpacedRow({inline = false, children}) {
+function SpacedRow({inline = false, className, children}) {
   return (
-    <div className={cn('SpacedRow', {'SpacedRow--inline': inline})}>
+    <div
+      className={cn(
+        'SpacedRow',
+        {'SpacedRow--inline': inline},
+        className,
+      )}
+    >
       {children}
     </div>
   )
@@ -45,16 +52,16 @@ function getFormattedDate(date) {
   return formatDate(date, `hh:mm a Do MMM 'YY`)
 }
 
-const GrainItem = injectS(function GrainItem({s, grain}) {
+const GrainItem = injectS(function GrainItem({s, grain, style}) {
   const [displayText, cn = ''] = R.isEmpty(grain.text)
     ? ['<empty>', 'black-70']
     : [grain.text]
   return (
-    <div className={'mv2'}>
+    <div className={'pv3'} style={style}>
       <button onClick={s.onUpdate(grain)}>E</button>
       <button onClick={s.onToggleArchive(grain)}>X</button>
       <div className={cn}>{displayText}</div>
-      <div className={'f6 black-50 ml2'}>
+      <div className={'f6 black-50 pl2'}>
         <SpacedRow>
           <div>id: {grain._id}</div>
           <div>rev: {grain._rev}</div>
@@ -72,30 +79,46 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
 const GrainsList = injectS(function GrainsList({s}) {
   function grainsList(grains) {
     return (
-      <div>
-        {R.map(grain => <GrainItem key={grain._id} grain={grain} />)(
-          grains,
-        )}
-      </div>
+      <Transition
+        native
+        keys={grains.map(item => item._id)}
+        from={{opacity: 0, height: 0}}
+        enter={{opacity: 1, height: 'auto'}}
+        leave={{opacity: 0, height: 0}}
+      >
+        {R.map(grain => style => (
+          <animated.div style={style}>
+            <GrainItem grain={grain} />
+          </animated.div>
+        ))(grains)}
+      </Transition>
     )
   }
 
   return (
     <F>
       {grainsList(s.g.active)}
-      {s.g.archived.length > 0 && (
-        <F>
-          <div className={'mv3 f3'}>Archived List</div>
-          {grainsList(s.g.archived)}
-        </F>
-      )}
+      <Transition
+        native
+        from={{opacity: 0}}
+        enter={{opacity: 1}}
+        leave={{opacity: 0}}
+      >
+        {s.g.archived.length > 0 &&
+          (style => (
+            <animated.div className={'pv2 f3'} style={style}>
+              Archived List
+            </animated.div>
+          ))}
+      </Transition>
+      {grainsList(s.g.archived)}
     </F>
   )
 })
 
 const GrainListHeader = injectS(function GrainListHeader({s}) {
   return (
-    <SpacedRow>
+    <SpacedRow className={'pv2'}>
       LIST
       <button onClick={s.onAddNew}>Add</button>
     </SpacedRow>
@@ -108,6 +131,7 @@ const App = injectS(function App() {
       <div className={`${centeredContentClass}`}>
         <GrainListHeader />
         <GrainsList />
+        <footer className={'pt3 pb7 '}>Footer</footer>
       </div>
     </F>
   )
