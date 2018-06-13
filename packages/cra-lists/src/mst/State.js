@@ -479,16 +479,15 @@ export const State = types
       //   return () => self.grains.update(grain)
       // },
       update: flow(function*(doc, change) {
-        self.editState = observable({
-          type: 'saving',
-          doc,
-          form: change,
-        })
         try {
           yield self.g.upsert(R.merge(doc, change))
           self.editState = observable({type: 'idle'})
         } catch (e) {
-          self.editState.type = 'error'
+          self.editState = observable({
+            type: 'error',
+            doc,
+            form: change,
+          })
           console.warn('Update failed', self.editState, e)
         }
       }),
