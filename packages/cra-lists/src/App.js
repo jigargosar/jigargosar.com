@@ -57,9 +57,7 @@ function getFormattedDate(date) {
   return formatDate(date, `hh:mm a Do MMM 'YY`)
 }
 const GrainItem = injectS(function GrainItem({s, grain, style}) {
-  const [displayText, textClassName = ''] = R.isEmpty(grain.text)
-    ? ['<empty>', 'black-70']
-    : [grain.text, '']
+  const toDisplayText = R.when(R.isEmpty, R.always('<empty>'))
   return (
     <div className={'pv3'} style={style}>
       <SpacedRow className={'flex-nowrap hide-child'}>
@@ -78,7 +76,14 @@ const GrainItem = injectS(function GrainItem({s, grain, style}) {
           </button>
         </div>
         <div className={'dib'}>
-          <div className={textClassName}>{displayText}</div>
+          <div
+            className={cn('pointer', {
+              'black-70': R.isEmpty(grain.text),
+            })}
+            onClick={s.onUpdate(grain)}
+          >
+            {toDisplayText(grain.text)}
+          </div>
           <div className={'f6 black-50 pl2'}>
             <SpacedRow>
               <div>id: {grain._id}</div>
