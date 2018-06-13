@@ -1,5 +1,5 @@
 import React, {Fragment as F} from 'react'
-import {observer, Observer} from 'mobx-react'
+import {observer} from 'mobx-react'
 import {withState} from './StateContext'
 import formatDate from 'date-fns/format'
 import * as cn from 'classnames'
@@ -124,10 +124,6 @@ function renderGrainsList(grains) {
   )
 }
 
-const ArchivedGrainList = injectS(function ArchivedGrainList({s}) {
-  trace()
-  return renderGrainsList(s.g.archived)
-})
 const GrainsList = injectS(function GrainsList({s}) {
   return (
     <F>
@@ -148,7 +144,7 @@ const GrainsList = injectS(function GrainsList({s}) {
             }
           : style => <animated.div style={style} />}
       </Transition>
-      <ArchivedGrainList />
+      {renderGrainsList(s.g.archived)}
     </F>
   )
 })
