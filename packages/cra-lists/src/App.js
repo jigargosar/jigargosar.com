@@ -5,6 +5,7 @@ import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
 import {trace} from 'mobx'
+import {lifecycle} from 'recompose'
 
 const R = require('ramda')
 
@@ -128,7 +129,14 @@ function renderGrainsList(grains) {
   )
 }
 
-const GrainsList = injectS(function GrainsList({s}) {
+const GrainsList = R.compose(
+  injectS,
+  lifecycle({
+    componentDidMount() {
+      //how to disable transition on first render
+    },
+  }),
+)(function GrainsList({s}) {
   return (
     <F>
       {renderGrainsList(s.g.active)}
