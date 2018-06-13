@@ -23,7 +23,7 @@ function SpacedRow({inline = false, className, children}) {
 
 const centeredContentClass = 'f5 center mw7 mv3 ph3'
 
-const buttonCN = 'input-reset outline-0 pointer ttu'
+const buttonCN = 'input-reset pointer ttc mh1 bn blue link'
 
 const injectS = R.compose(withState, observer)
 
@@ -146,7 +146,25 @@ const GrainsList = injectS(function GrainsList({s}) {
     </F>
   )
 })
-
+const GrainEdit = injectS(function GrainEdit({s}) {
+  if (s.editState.type === 'idle') return null
+  return (
+    <div className={'vh-100 fixed absolute--fill bg-black-30 flex'}>
+      <div
+        className={'shadow-1 bg-white ma5 flex-auto flex flex-column'}
+      >
+        <div className={'f4 pa3 b bb b--light-silver'}>Edit</div>
+        <div className={'flex-auto'} />
+        <div
+          className={'pa3 bt b--light-silver flex flex-row-reverse'}
+        >
+          <button className={buttonCN}>ok</button>
+          <button className={buttonCN}>cancel</button>
+        </div>
+      </div>
+    </div>
+  )
+})
 const GrainListHeader = injectS(function GrainListHeader({s}) {
   return (
     <SpacedRow className={'pv3'}>
@@ -164,6 +182,7 @@ const App = injectS(function App() {
       <div className={`${centeredContentClass}`}>
         <GrainListHeader />
         <GrainsList />
+        <GrainEdit />
         <footer className={'pt3 pb7 '}>Footer</footer>
       </div>
     </div>

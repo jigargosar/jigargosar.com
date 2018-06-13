@@ -5,7 +5,7 @@ import {
   getSnapshot,
   types,
 } from 'mobx-state-tree'
-import {reaction} from 'mobx'
+import {observable, reaction} from 'mobx'
 import {SF} from '../safe-fun'
 import PouchDB from 'pouchdb-browser'
 import Kefir from 'kefir'
@@ -433,7 +433,17 @@ const PFGrainCollection = types
       },
     }
   })
-
+const EditState = function() {
+  return observable(
+    {
+      type: 'idle',
+      doc: null,
+      form: null,
+    },
+    {},
+    {name: 'EditState'},
+  )
+}
 export const State = types
   .model('RootState', {
     pageTitle: 'CRA List Proto',
@@ -443,7 +453,7 @@ export const State = types
   .volatile(() => {
     return {
       g: PouchCollectionStore('grain'),
-      editState: {type: 'idle'},
+      editState: EditState(),
     }
   })
   .views(self => {
@@ -473,7 +483,7 @@ export const State = types
           yield self.g.upsert(R.merge(doc, change))
           self.editState = {type: 'idle'}
         } catch (e) {
-          self.editState = {type: 'error', doc, form: change}
+          self.editState.type = 'error'
           console.warn('Update failed', self.editState, e)
         }
       }),
