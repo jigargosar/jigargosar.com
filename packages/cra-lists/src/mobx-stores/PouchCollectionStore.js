@@ -6,17 +6,20 @@ import {observable, action} from 'mobx'
 const R = require('ramda')
 const idPropName = '_id'
 
-export async function PouchCollectionStore(modelName) {
-  const storeName = `${modelName}Collection`
-  const pouchStore = PouchService.create(storeName)
-  const docs = await pouchStore.getAll()
+export function PouchCollectionStore(modelName) {
+  const name = `${modelName}Collection`
+  const pouchStore = PouchService.create(name)
   return observable(
     {
-      idLookup: observable.map(
-        R.map(doc => [SF.prop(idPropName), doc])(docs),
-      ),
+      idLookup: observable.map(),
+      async load() {
+        const docs = await pouchStore.getAll()
+        this.idLookup = new Map(
+          R.map(doc => [SF.prop(idPropName), doc])(docs),
+        )
+      },
       get list() {
-        return R.compose(Array.from, R.values(this.idLookup))
+        return Array.from(this.idLookup.values())
       },
       upsert(doc) {
         const id = R.propOr(idPropName, nanoid())(doc)
@@ -24,6 +27,6 @@ export async function PouchCollectionStore(modelName) {
       },
     },
     {upsert: action},
-    {name: storeName},
+    {name},
   )
 }

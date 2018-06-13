@@ -8,6 +8,7 @@ import {Fire} from './Fire'
 import {addDisposer, addSubscriptionDisposer} from './mst-utils'
 import firebase from 'firebase/app'
 import {updateFirestoreFromPouchDoc} from './UpdateFirestore'
+import {PouchCollectionStore} from '../mobx-stores/PouchCollectionStore'
 
 require('firebase/auth')
 require('firebase/firestore')
@@ -433,10 +434,16 @@ export const State = types
     grains: types.optional(PFGrainCollection, {}),
     fire: types.optional(Fire, {}),
   })
+  .volatile(() => {
+    return {g: PouchCollectionStore('grain')}
+  })
   .views(self => {
     return {
+      // get grainsList() {
+      //   return self.grains.list
+      // },
       get grainsList() {
-        return self.grains.list
+        return self.g.list
       },
     }
   })
