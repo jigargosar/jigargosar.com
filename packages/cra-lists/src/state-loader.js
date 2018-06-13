@@ -1,6 +1,6 @@
 import {State} from './mst/State'
 import {getAppActorId} from './LocalStorage'
-import './mobx-stores/pouch-service'
+import './mobx-stores/PouchService'
 
 const mst = require('mobx-state-tree')
 

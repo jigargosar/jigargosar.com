@@ -4,7 +4,7 @@ import PouchDB from 'pouchdb-browser'
 import ReactJson from 'react-json-view'
 import PropTypes from 'prop-types'
 import ow from 'ow'
-import {PouchStore} from './pouch-store'
+import {PouchStore} from './PouchStore'
 
 const assert = require('assert')
 

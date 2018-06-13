@@ -1,5 +1,5 @@
 import nanoid from 'nanoid'
-import {PouchService} from './pouch-service'
+import {PouchService} from './PouchService'
 import {SF} from '../safe-fun'
 import {configure, observable, runInAction} from 'mobx'
 import {getAppActorId} from '../LocalStorage'
