@@ -35,17 +35,17 @@ export function PouchCollectionStore(modelName) {
         return Array.from(this.idLookup.values())
       },
       upsert(doc) {
-        return pouchStore.put(
-          R.merge(
-            {
-              _id: nanoid(),
-              createdAt: Date.now(),
-              modifiedAt: Date.now(),
-              version: 0,
-            },
-            doc,
-          ),
-        )
+        const updatedDoc = R.ifElse(
+          R.has(idPropName),
+          R.merge({modifiedAt: Date.now()}),
+          R.merge({
+            _id: nanoid(),
+            createdAt: Date.now(),
+            modifiedAt: Date.now(),
+            version: 0,
+          }),
+        )(doc)
+        return pouchStore.put(updatedDoc)
       },
     },
     {upsert: action},

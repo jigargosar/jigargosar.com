@@ -1,9 +1,9 @@
 import {
+  flow,
   getEnv,
   getRoot,
   getSnapshot,
   types,
-  flow,
 } from 'mobx-state-tree'
 import {reaction} from 'mobx'
 import {SF} from '../safe-fun'
@@ -464,8 +464,7 @@ export const State = types
       // onUpdate(grain) {
       //   return () => self.grains.update(grain)
       // },
-      update: flow(function*(doc) {
-        const change = {text: `${Math.random()}`}
+      update: flow(function*(doc, change) {
         self.editState = {doc, change}
         try {
           yield self.g.upsert(R.merge(doc, change))
@@ -475,7 +474,13 @@ export const State = types
         }
       }),
       onUpdate(doc) {
-        return () => self.update(doc)
+        return () => self.update(doc, {text: `${Math.random()}`})
+      },
+      onToggleArchive(doc) {
+        return () =>
+          self.update(doc, {
+            isArchived: !R.propOr(false, 'isArchived', doc),
+          })
       },
     }
   })
