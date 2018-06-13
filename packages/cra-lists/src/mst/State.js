@@ -485,7 +485,7 @@ export const State = types
         } catch (e) {
           self.editState = observable({
             type: 'error',
-            doc,
+            doc: R.clone(doc),
             form: change,
           })
           console.warn('Update failed', self.editState, e)
@@ -497,7 +497,7 @@ export const State = types
       startEdit(doc) {
         self.editState = observable({
           type: 'editing',
-          doc,
+          doc: R.clone(doc),
           form: {text: doc.text},
         })
       },
