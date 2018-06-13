@@ -1,4 +1,10 @@
-import {getEnv, getRoot, getSnapshot, types} from 'mobx-state-tree'
+import {
+  getEnv,
+  getRoot,
+  getSnapshot,
+  types,
+  flow,
+} from 'mobx-state-tree'
 import {reaction} from 'mobx'
 import {SF} from '../safe-fun'
 import PouchDB from 'pouchdb-browser'
@@ -435,7 +441,7 @@ export const State = types
     fire: types.optional(Fire, {}),
   })
   .volatile(() => {
-    return {g: PouchCollectionStore('grain')}
+    return {g: PouchCollectionStore('grain'), disabledId: null}
   })
   .views(self => {
     return {
@@ -461,9 +467,18 @@ export const State = types
       // onUpdate(grain) {
       //   return () => self.grains.update(grain)
       // },
+      update: flow(function*(doc) {
+        self.disabledId = doc._id
+        const change = {text: `${Math.random()}`}
+        try {
+          yield self.g.upsert(R.merge(doc, change))
+        } catch (e) {
+          console.warn('Update failed', change, e)
+        }
+        self.disabledId = null
+      }),
       onUpdate(doc) {
-        return () =>
-          self.g.upsert(R.merge(doc, {text: `${Math.random()}`}))
+        return () => self.update(doc)
       },
     }
   })
