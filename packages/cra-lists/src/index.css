@@ -4,7 +4,6 @@
 }
 .SpacedRow {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: row;
   margin: 0 calc(-1 * var(--default-row-spacing));
 }

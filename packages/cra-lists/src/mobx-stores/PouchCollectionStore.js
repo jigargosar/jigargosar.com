@@ -40,6 +40,9 @@ export function PouchCollectionStore(modelName) {
       get archived() {
         return R.filter(SF.prop('isArchived'), this.list)
       },
+      get splitList() {
+        return Array.from(R.concat(this.active, this.archived))
+      },
       upsert(doc) {
         const updatedDoc = R.ifElse(
           R.has(idPropName),
