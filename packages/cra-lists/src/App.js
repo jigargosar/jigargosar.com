@@ -70,12 +70,26 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
 })
 
 const GrainsList = injectS(function GrainsList({s}) {
+  function grainsList(grains) {
+    return (
+      <div>
+        {R.map(grain => <GrainItem key={grain._id} grain={grain} />)(
+          grains,
+        )}
+      </div>
+    )
+  }
+
   return (
-    <div>
-      {R.map(grain => <GrainItem key={grain._id} grain={grain} />)(
-        s.grainsList,
+    <F>
+      {grainsList(s.g.active)}
+      {s.g.archived.length > 0 && (
+        <F>
+          <div className={'mv3 f3'}>Archived List</div>
+          {grainsList(s.g.archived)}
+        </F>
       )}
-    </div>
+    </F>
   )
 })
 
