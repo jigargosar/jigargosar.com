@@ -2,9 +2,8 @@ import React, {Fragment as F} from 'react'
 import {observer} from 'mobx-react'
 import {withState} from './StateContext'
 import formatDate from 'date-fns/format'
-import * as cn from 'classnames'
+import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
-import {trace} from 'mobx'
 
 const R = require('ramda')
 
@@ -24,6 +23,8 @@ function SpacedRow({inline = false, className, children}) {
 
 const centeredContentClass = 'f5 center mw7 mv3 ph3'
 
+const buttonCN = 'input-reset outline-0 pointer ttu'
+
 const injectS = R.compose(withState, observer)
 
 const SignInOutView = injectS(function SignInOutView({s}) {
@@ -31,12 +32,12 @@ const SignInOutView = injectS(function SignInOutView({s}) {
   const content = userInfo ? (
     <F>
       <div>{userInfo.displayName}</div>
-      <button className={'input-reset'} onClick={s.fire.signOut}>
-        SignOut
+      <button className={cn(buttonCN)} onClick={s.fire.signOut}>
+        Sign Out
       </button>
     </F>
   ) : (
-    <button className={'input-reset'} onClick={s.fire.signIn}>
+    <button className={cn(buttonCN)} onClick={s.fire.signIn}>
       SignIn
     </button>
   )
@@ -52,41 +53,32 @@ const Header = injectS(function Header({s}) {
     </div>
   )
 })
-
 function getFormattedDate(date) {
   return formatDate(date, `hh:mm a Do MMM 'YY`)
 }
-
-const GrainItem = injectS(function GrainItem({
-  s,
-  grain: {_id},
-  style,
-}) {
-  trace()
-  const grain = s.g.idLookup.get(_id)
-  const [displayText, cn = ''] = R.isEmpty(grain.text)
+const GrainItem = injectS(function GrainItem({s, grain, style}) {
+  const [displayText, textClassName = ''] = R.isEmpty(grain.text)
     ? ['<empty>', 'black-70']
     : [grain.text, '']
-
   return (
     <div className={'pv3'} style={style}>
       <SpacedRow className={'flex-nowrap hide-child'}>
         <div className={'child'}>
           <button
-            className={'input-reset outline-0 pointer w-100 '}
+            className={cn(buttonCN, 'w-100')}
             onClick={s.onUpdate(grain)}
           >
             E
           </button>
           <button
-            className={'input-reset outline-0 pointer w-100'}
+            className={cn(buttonCN, 'w-100')}
             onClick={s.onToggleArchive(grain)}
           >
             X
           </button>
         </div>
         <div className={'dib'}>
-          <div className={cn}>{displayText}</div>
+          <div className={textClassName}>{displayText}</div>
           <div className={'f6 black-50 pl2'}>
             <SpacedRow>
               <div>id: {grain._id}</div>
@@ -104,8 +96,9 @@ const GrainItem = injectS(function GrainItem({
   )
 })
 const ArchivedListHeader = () => (
-  <div className={'pv2 f3'}>Archived List</div>
+  <div className={'pv2 f4 b'}>ARCHIVE</div>
 )
+
 function renderGrainsList(grains) {
   return (
     <Transition
@@ -153,7 +146,7 @@ const GrainListHeader = injectS(function GrainListHeader({s}) {
   return (
     <SpacedRow className={'pv3'}>
       <div className={'f4 b'}>LIST</div>
-      <button className={'input-reset'} onClick={s.onAddNew}>
+      <button className={cn(buttonCN)} onClick={s.onAddNew}>
         Add
       </button>
     </SpacedRow>

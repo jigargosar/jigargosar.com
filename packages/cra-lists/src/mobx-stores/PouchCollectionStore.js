@@ -1,17 +1,11 @@
 import nanoid from 'nanoid'
 import {PouchService} from './pouch-service'
 import {SF} from '../safe-fun'
-import {
-  action,
-  computed,
-  configure,
-  observable,
-  runInAction,
-} from 'mobx'
+import {configure, observable, runInAction} from 'mobx'
 
 configure({
   // disableErrorBoundaries: true,
-  computedRequiresReaction: true,
+  // computedRequiresReaction: true,
   enforceActions: true,
 })
 
@@ -24,23 +18,18 @@ export function PouchCollectionStore(modelName) {
   return observable(
     {
       idLookup: observable.map([]),
-      setIdLookup(idLookup) {
-        this.idLookup = idLookup
-      },
       async load() {
-        console.warn('loading')
         const {results, last_seq} = await pouchStore.allChanges()
-        this.setIdLookup(
-          new Map(
-            R.map(
-              R.compose(
-                observable,
-                doc => [SF.prop(idPropName, doc), doc],
-                SF.prop('doc'),
-              ),
-            )(results),
-          ),
+        const idLookup = new Map(
+          R.map(
+            R.compose(
+              observable,
+              doc => [SF.prop(idPropName, doc), doc],
+              SF.prop('doc'),
+            ),
+          )(results),
         )
+        runInAction(() => (this.idLookup = idLookup))
 
         pouchStore
           .liveChanges({since: last_seq})
@@ -87,11 +76,6 @@ export function PouchCollectionStore(modelName) {
     },
     {
       idLookup: observable.deep,
-      setIdLookup: action,
-      upsert: action,
-      list: computed,
-      active: computed,
-      archived: computed,
     },
     {name},
   )
