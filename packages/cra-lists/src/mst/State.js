@@ -15,6 +15,7 @@ import {addDisposer, addSubscriptionDisposer} from './mst-utils'
 import firebase from 'firebase/app'
 import {updateFirestoreFromPouchDoc} from './UpdateFirestore'
 import {PouchCollectionStore} from '../mobx-stores/PouchCollectionStore'
+import ow from 'ow'
 
 require('firebase/auth')
 require('firebase/firestore')
@@ -438,7 +439,7 @@ const EditState = function() {
     {
       type: 'idle',
       doc: null,
-      form: null,
+      form: observable({text: null}),
     },
     {},
     {name: 'EditState'},
@@ -478,10 +479,14 @@ export const State = types
       //   return () => self.grains.update(grain)
       // },
       update: flow(function*(doc, change) {
-        self.editState = {type: 'saving', doc, form: change}
+        self.editState = observable({
+          type: 'saving',
+          doc,
+          form: change,
+        })
         try {
           yield self.g.upsert(R.merge(doc, change))
-          self.editState = {type: 'idle'}
+          self.editState = observable({type: 'idle'})
         } catch (e) {
           self.editState.type = 'error'
           console.warn('Update failed', self.editState, e)
@@ -491,11 +496,34 @@ export const State = types
         return () => self.update(doc, {text: `${Math.random()}`})
       },
       startEdit(doc) {
-        self.editState = {
+        self.editState = observable({
           type: 'editing',
           doc,
           form: {text: doc.text},
+        })
+      },
+      onSaveClicked: flow(function*() {
+        {
+          ow(self.editState.type, ow.string.equals('editing'))
+          self.editState.type = 'saving'
+          try {
+            yield self.g.upsert(
+              R.merge(self.editState.doc, self.editState.form),
+            )
+            self.editState = observable({type: 'idle'})
+          } catch (e) {
+            self.editState.type = 'error'
+            console.warn('Update failed', self.editState, e)
+          }
         }
+      }),
+      updateForm(fieldName, value) {
+        ow(self.editState.type, ow.string.equals('editing'))
+        self.editState.form[fieldName] = value
+      },
+      onFormChange(fieldName) {
+        ow(fieldName, ow.string.equals('text'))
+        return event => self.updateForm(fieldName, event.target.value)
       },
       onStartEditing(doc) {
         return () => self.startEdit(doc)

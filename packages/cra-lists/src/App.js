@@ -4,6 +4,7 @@ import {withState} from './StateContext'
 import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
+import {configure, observable, runInAction, trace} from 'mobx'
 
 const R = require('ramda')
 
@@ -148,6 +149,7 @@ const GrainsList = injectS(function GrainsList({s}) {
 })
 const GrainEdit = injectS(function GrainEdit({s}) {
   if (s.editState.type === 'idle') return null
+  trace()
   return (
     <div className={'fixed absolute--fill bg-black-20 pa4-ns'}>
       <div
@@ -162,11 +164,15 @@ const GrainEdit = injectS(function GrainEdit({s}) {
             <input
               className={'pa2 h2 outline-0 f4 flex-auto'}
               placeholder={'e.g. Go Fish!'}
+              value={s.editState.form.text}
+              onChange={s.onFormChange('text')}
             />
           </div>
         </div>
         <div className={'bt b--moon-gray pa3 flex flex-row-reverse'}>
-          <button className={buttonCN}>Ok</button>
+          <button onClick={s.onSaveClicked} className={buttonCN}>
+            Ok
+          </button>
           <button className={buttonCN}>Cancel</button>
         </div>
       </div>
