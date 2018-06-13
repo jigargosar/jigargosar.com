@@ -23,13 +23,12 @@ export function PouchCollectionStore(modelName) {
         const idLookup = observable.map(
           R.map(
             R.compose(
-              observable,
               doc => [SF.prop(idPropName, doc), doc],
               SF.prop('doc'),
             ),
           )(results),
         )
-        runInAction(() => this.idLookup.replace(idLookup))
+        runInAction(() => (this.idLookup = idLookup))
 
         pouchStore
           .liveChanges({since: last_seq})
