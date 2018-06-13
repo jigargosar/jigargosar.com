@@ -4,7 +4,7 @@ import {withState} from './StateContext'
 import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
-import {configure, observable, runInAction, trace} from 'mobx'
+import {trace} from 'mobx'
 
 const R = require('ramda')
 
@@ -149,7 +149,9 @@ const GrainsList = injectS(function GrainsList({s}) {
 })
 const GrainEdit = injectS(function GrainEdit({s}) {
   if (s.editState.type === 'idle') return null
-  trace()
+  if (localStorage.traceEnabled) {
+    trace()
+  }
   return (
     <div className={'fixed absolute--fill bg-black-20 pa4-ns'}>
       <div

@@ -503,18 +503,16 @@ export const State = types
         })
       },
       onSaveClicked: flow(function*() {
-        {
-          ow(self.editState.type, ow.string.equals('editing'))
-          self.editState.type = 'saving'
-          try {
-            yield self.g.upsert(
-              R.merge(self.editState.doc, self.editState.form),
-            )
-            self.editState = observable({type: 'idle'})
-          } catch (e) {
-            self.editState.type = 'error'
-            console.warn('Update failed', self.editState, e)
-          }
+        ow(self.editState.type, ow.string.equals('editing'))
+        self.editState.type = 'saving'
+        try {
+          yield self.g.upsert(
+            R.merge(self.editState.doc, self.editState.form),
+          )
+          self.editState = observable({type: 'idle'})
+        } catch (e) {
+          self.editState.type = 'error'
+          console.warn('Update failed', self.editState, e)
         }
       }),
       updateForm(fieldName, value) {
