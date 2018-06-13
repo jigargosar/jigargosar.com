@@ -110,28 +110,33 @@ const ArchivedListHeader = () => (
   <div className={'pv2 f4 b'}>ARCHIVE</div>
 )
 
-function renderAnimatedGrainsList(grains) {
-  return (
-    <Transition
-      native
-      keys={grains.map(item => item._id)}
-      from={{opacity: 0, height: 0}}
-      enter={{opacity: 1, height: 'auto'}}
-      leave={{opacity: 0, height: 0}}
-    >
-      {R.map(grain => style => (
-        <animated.div style={style}>
-          <GrainItem grain={grain} />
-        </animated.div>
-      ))(grains)}
-    </Transition>
-  )
+function renderAnimatedGrainsList(grains, animate = false) {
+  if (animate) {
+    return (
+      <Transition
+        native
+        keys={grains.map(item => item._id)}
+        from={{opacity: 0, height: 0}}
+        enter={{opacity: 1, height: 'auto'}}
+        leave={{opacity: 0, height: 0}}
+      >
+        {R.map(grain => style => (
+          <animated.div style={style}>
+            <GrainItem grain={grain} />
+          </animated.div>
+        ))(grains)}
+      </Transition>
+    )
+  } else {
+    R.map(grain => <GrainItem key={grain._id} grain={grain} />)(
+      grains,
+    )
+  }
 }
 
-const GrainsList = injectS(function GrainsList({s}) {
-  return (
-    <F>
-      {renderAnimatedGrainsList(s.g.active)}
+function renderAnimatedArchivedHeader(s, animate) {
+  if (animate) {
+    return (
       <Transition
         native
         from={{opacity: 0, height: 0}}
@@ -148,7 +153,18 @@ const GrainsList = injectS(function GrainsList({s}) {
             }
           : style => <animated.div style={style} />}
       </Transition>
-      {renderAnimatedGrainsList(s.g.archived)}
+    )
+  } else {
+    return <ArchivedListHeader />
+  }
+}
+
+const GrainsList = injectS(function GrainsList({s}) {
+  return (
+    <F>
+      {renderAnimatedGrainsList(s.g.active, false)}
+      {renderAnimatedArchivedHeader(s, false)}
+      {renderAnimatedGrainsList(s.g.archived, false)}
     </F>
   )
 })
