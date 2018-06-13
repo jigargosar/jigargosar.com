@@ -449,8 +449,11 @@ export const State = types
   })
   .actions(self => {
     return {
+      // onAddNew() {
+      //   return self.grains.addNew()
+      // },
       onAddNew() {
-        return self.grains.addNew()
+        return self.g.upsert({text: `${Math.random()}`})
       },
       onUpdate(grain) {
         return () => self.grains.update(grain)
