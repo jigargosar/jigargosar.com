@@ -19,7 +19,7 @@ export function PouchStore(db, service) {
     allDocs() {
       return db.allDocs({include_docs: true})
     },
-    async allDocsArray() {
+    async getAll() {
       const res = await this.allDocs()
       return R.map(R.prop('doc'), res.rows)
     },
