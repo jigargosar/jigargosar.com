@@ -55,8 +55,8 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
       <div className={cn}>{displayText}</div>
       <div className={'f6 black-50 ml2'}>
         <SpacedRow>
-          <div>id: {grain.id}</div>
-          <div>rev: {grain.rev}</div>
+          <div>id: {grain._id}</div>
+          <div>rev: {grain._rev}</div>
           <div>a: {grain.actorId}</div>
           <div>cAt: {getFormattedDate(grain.createdAt)}</div>
           <div>mAt: {getFormattedDate(grain.modifiedAt)}</div>
@@ -70,7 +70,7 @@ const GrainItem = injectS(function GrainItem({s, grain}) {
 const GrainsList = injectS(function GrainsList({s}) {
   return (
     <div>
-      {R.map(grain => <GrainItem key={grain.id} grain={grain} />)(
+      {R.map(grain => <GrainItem key={grain._id} grain={grain} />)(
         s.grainsList,
       )}
     </div>

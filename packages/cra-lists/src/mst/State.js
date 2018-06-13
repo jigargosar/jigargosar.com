@@ -449,14 +449,21 @@ export const State = types
   })
   .actions(self => {
     return {
+      afterCreate() {
+        self.g.load()
+      },
       // onAddNew() {
       //   return self.grains.addNew()
       // },
       onAddNew() {
         return self.g.upsert({text: `${Math.random()}`})
       },
-      onUpdate(grain) {
-        return () => self.grains.update(grain)
+      // onUpdate(grain) {
+      //   return () => self.grains.update(grain)
+      // },
+      onUpdate(doc) {
+        return () =>
+          self.g.upsert(R.merge(doc, {text: `${Math.random()}`}))
       },
     }
   })
