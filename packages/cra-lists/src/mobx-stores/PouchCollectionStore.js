@@ -1,7 +1,19 @@
 import nanoid from 'nanoid'
 import {PouchService} from './pouch-service'
 import {SF} from '../safe-fun'
-import {action, observable} from 'mobx'
+import {
+  action,
+  computed,
+  configure,
+  observable,
+  runInAction,
+} from 'mobx'
+
+configure({
+  // disableErrorBoundaries: true,
+  computedRequiresReaction: true,
+  enforceActions: true,
+})
 
 const R = require('ramda')
 const idPropName = '_id'
@@ -11,13 +23,18 @@ export function PouchCollectionStore(modelName) {
   const pouchStore = PouchService.create(name)
   return observable(
     {
-      idLookup: observable.map(),
+      idLookup: observable.map([]),
+      setIdLookup(idLookup) {
+        this.idLookup = idLookup
+      },
       async load() {
+        console.warn('loading')
         const {results, last_seq} = await pouchStore.allChanges()
-        this.idLookup.replace(
+        this.setIdLookup(
           new Map(
             R.map(
               R.compose(
+                observable,
                 doc => [SF.prop(idPropName, doc), doc],
                 SF.prop('doc'),
               ),
@@ -28,7 +45,14 @@ export function PouchCollectionStore(modelName) {
         pouchStore
           .liveChanges({since: last_seq})
           .on('change', change => {
-            this.idLookup.set(change.id, change.doc)
+            runInAction(() => {
+              const doc = this.idLookup.get(change.id)
+              if (doc) {
+                Object.assign(doc, change.doc)
+              } else {
+                this.idLookup.set(change.id, change.doc)
+              }
+            })
           })
       },
       get list() {
@@ -39,6 +63,9 @@ export function PouchCollectionStore(modelName) {
       },
       get archived() {
         return R.filter(SF.prop('isArchived'), this.list)
+      },
+      get hasArchived() {
+        return this.archived.length > 0
       },
       get splitList() {
         return Array.from(R.concat(this.active, this.archived))
@@ -58,7 +85,14 @@ export function PouchCollectionStore(modelName) {
         return pouchStore.put(updatedDoc)
       },
     },
-    {upsert: action},
+    {
+      idLookup: observable,
+      setIdLookup: action,
+      upsert: action,
+      list: computed,
+      active: computed,
+      archived: computed,
+    },
     {name},
   )
 }

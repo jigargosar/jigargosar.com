@@ -1,9 +1,10 @@
 import React, {Fragment as F} from 'react'
-import {observer} from 'mobx-react'
+import {observer, Observer} from 'mobx-react'
 import {withState} from './StateContext'
 import formatDate from 'date-fns/format'
 import * as cn from 'classnames'
-import {Transition, animated} from 'react-spring'
+import {animated, Transition} from 'react-spring'
+import {trace} from 'mobx'
 
 const R = require('ramda')
 
@@ -56,10 +57,17 @@ function getFormattedDate(date) {
   return formatDate(date, `hh:mm a Do MMM 'YY`)
 }
 
-const GrainItem = injectS(function GrainItem({s, grain, style}) {
+const GrainItem = injectS(function GrainItem({
+  s,
+  grain: {_id},
+  style,
+}) {
+  trace()
+  const grain = s.g.idLookup.get(_id)
   const [displayText, cn = ''] = R.isEmpty(grain.text)
     ? ['<empty>', 'black-70']
     : [grain.text, '']
+
   return (
     <div className={'pv3'} style={style}>
       <SpacedRow className={'flex-nowrap hide-child'}>
@@ -98,60 +106,51 @@ const GrainItem = injectS(function GrainItem({s, grain, style}) {
 const ArchivedListHeader = () => (
   <div className={'pv2 f3'}>Archived List</div>
 )
-const GrainsList = injectS(function GrainsList({s}) {
-  function grainsList(grains) {
-    return (
-      <Transition
-        native
-        keys={grains.map(item => item._id)}
-        from={{opacity: 0, height: 0}}
-        enter={{opacity: 1, height: 'auto'}}
-        leave={{opacity: 0, height: 0}}
-      >
-        {R.map(grain => style => (
-          <animated.div style={style}>
-            <GrainItem grain={grain} />
-          </animated.div>
-        ))(grains)}
-      </Transition>
-    )
-  }
+function renderGrainsList(grains) {
+  return (
+    <Transition
+      native
+      keys={grains.map(item => item._id)}
+      from={{opacity: 0, height: 0}}
+      enter={{opacity: 1, height: 'auto'}}
+      leave={{opacity: 0, height: 0}}
+    >
+      {R.map(grain => style => (
+        <animated.div style={style}>
+          <GrainItem grain={grain} />
+        </animated.div>
+      ))(grains)}
+    </Transition>
+  )
+}
 
+const ArchivedGrainList = injectS(function ArchivedGrainList({s}) {
+  trace()
+  return renderGrainsList(s.g.archived)
+})
+const GrainsList = injectS(function GrainsList({s}) {
   return (
     <div>
-      {grainsList(s.g.active)}
+      {renderGrainsList(s.g.active)}
       <Transition
         native
         from={{opacity: 0, height: 0}}
         enter={{opacity: 1, height: 'auto'}}
         leave={{opacity: 0, height: 0}}
       >
-        {s.g.archived.length > 0
-          ? style => {
-              return (
-                <animated.div style={style}>
-                  <ArchivedListHeader />
-                </animated.div>
-              )
-            }
-          : style => <animated.div style={style} />}
+        {style =>
+          React.createElement(
+            animated.div,
+            {style},
+            s.g.hasArchived
+              ? React.createElement(ArchivedListHeader)
+              : null,
+          )
+        }
       </Transition>
-      {grainsList(s.g.archived)}
+      <ArchivedGrainList />
     </div>
   )
-
-  // return (
-  //   <Transition
-  //     keys={grains.map(g => g._id)}
-  //     from={{opacity: 0, height: 0}}
-  //     enter={{opacity: 1, height: 'auto'}}
-  //     leave={{opacity: 0, height: 0}}
-  //   >
-  //     {R.map(g => style => <div style={style}>{gr(g)(style)}</div>)(
-  //       s.g.splitList,
-  //     )}
-  //   </Transition>
-  // )
 })
 
 const GrainListHeader = injectS(function GrainListHeader({s}) {
