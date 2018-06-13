@@ -64,7 +64,7 @@ export const Fire = types
               log.trace('store enablePersistence result', error),
             )
         }
-        self.store.disableNetwork()
+        // self.store.disableNetwork()
 
         addDisposer(
           self,
@@ -74,22 +74,20 @@ export const Fire = types
 
       _onAuthStateChanged(user) {
         //'metadata' : creationTime, lastSignInTime
-        self.userInfo = SF.pick(
-          [
-            'displayName',
-            'email',
-            'emailVerified',
-            'isAnonymous',
-            'metadata',
-            'phoneNumber',
-            'photoURL',
-            'providerData',
-            'providerId',
-            'refreshToken',
-            'uid',
-          ],
-          user,
-        )
+        const userProps = [
+          'displayName',
+          'email',
+          'emailVerified',
+          'isAnonymous',
+          'metadata',
+          'phoneNumber',
+          'photoURL',
+          'providerData',
+          'providerId',
+          'refreshToken',
+          'uid',
+        ]
+        self.userInfo = R.unless(R.isNil, SF.pick(userProps), user)
         log.trace('onAuthStateChanged userInfo:', self.userInfo)
         self.authState = user ? 'signedIn' : 'signedOut'
       },

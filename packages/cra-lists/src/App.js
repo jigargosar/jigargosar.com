@@ -111,7 +111,7 @@ const ArchivedListHeader = () => (
   <div className={'pv2 f4 b'}>ARCHIVE</div>
 )
 
-function renderGrainsList(grains) {
+function renderAnimatedGrainsList(grains) {
   return (
     <Transition
       native
@@ -139,7 +139,7 @@ const GrainsList = R.compose(
 )(function GrainsList({s}) {
   return (
     <F>
-      {renderGrainsList(s.g.active)}
+      {renderAnimatedGrainsList(s.g.active)}
       <Transition
         native
         from={{opacity: 0, height: 0}}
@@ -156,7 +156,7 @@ const GrainsList = R.compose(
             }
           : style => <animated.div style={style} />}
       </Transition>
-      {renderGrainsList(s.g.archived)}
+      {renderAnimatedGrainsList(s.g.archived)}
     </F>
   )
 })
