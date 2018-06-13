@@ -128,13 +128,13 @@ function renderAnimatedGrainsList(grains, animate = false) {
       </Transition>
     )
   } else {
-    R.map(grain => <GrainItem key={grain._id} grain={grain} />)(
-      grains,
-    )
+    return R.map(grain => (
+      <GrainItem key={grain._id} grain={grain} />
+    ))(grains)
   }
 }
 
-function renderAnimatedArchivedHeader(s, animate) {
+function renderAnimatedArchivedHeader(s, animate = false) {
   if (animate) {
     return (
       <Transition
