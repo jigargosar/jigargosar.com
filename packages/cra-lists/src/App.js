@@ -130,7 +130,7 @@ const ArchivedGrainList = injectS(function ArchivedGrainList({s}) {
 })
 const GrainsList = injectS(function GrainsList({s}) {
   return (
-    <div>
+    <F>
       {renderGrainsList(s.g.active)}
       <Transition
         native
@@ -138,18 +138,18 @@ const GrainsList = injectS(function GrainsList({s}) {
         enter={{opacity: 1, height: 'auto'}}
         leave={{opacity: 0, height: 0}}
       >
-        {style =>
-          React.createElement(
-            animated.div,
-            {style},
-            s.g.hasArchived
-              ? React.createElement(ArchivedListHeader)
-              : null,
-          )
-        }
+        {s.g.hasArchived
+          ? style => {
+              return (
+                <animated.div style={style}>
+                  <ArchivedListHeader />
+                </animated.div>
+              )
+            }
+          : style => <animated.div style={style} />}
       </Transition>
       <ArchivedGrainList />
-    </div>
+    </F>
   )
 })
 

@@ -86,7 +86,7 @@ export function PouchCollectionStore(modelName) {
       },
     },
     {
-      idLookup: observable,
+      idLookup: observable.deep,
       setIdLookup: action,
       upsert: action,
       list: computed,
