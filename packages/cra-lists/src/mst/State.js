@@ -458,9 +458,6 @@ export const State = types
       afterCreate() {
         self.g.load()
       },
-      // onAddNew() {
-      //   return self.grains.addNew()
-      // },
       onAddNew() {
         return self.g.upsert({text: `${Math.random()}`})
       },
