@@ -441,7 +441,7 @@ export const State = types
     fire: types.optional(Fire, {}),
   })
   .volatile(() => {
-    return {g: PouchCollectionStore('grain'), changeState: null}
+    return {g: PouchCollectionStore('grain'), editState: null}
   })
   .views(self => {
     return {
@@ -466,12 +466,12 @@ export const State = types
       // },
       update: flow(function*(doc) {
         const change = {text: `${Math.random()}`}
-        self.changeState = {doc, change}
+        self.editState = {doc, change}
         try {
           yield self.g.upsert(R.merge(doc, change))
-          self.changeState = null
+          self.editState = null
         } catch (e) {
-          console.warn('Update failed', self.changeState, e)
+          console.warn('Update failed', self.editState, e)
         }
       }),
       onUpdate(doc) {
