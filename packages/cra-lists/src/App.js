@@ -156,12 +156,12 @@ const GrainEdit = injectS(function GrainEdit({s}) {
         }
       >
         <div className={'bb b--moon-gray pa3'}>Edit</div>
-        <div className={'flex-auto pa3 flex'}>
-          <div className={'flex-auto flex flex-column'}>
-            <label>foo</label>
+        <div className={'flex-auto mh3'}>
+          <div className={'mv2 flex flex-wrap'}>
+            <label className={'pv2 w-100'}>Text</label>
             <input
-              className={'link outline-0 f4 h2 pa2'}
-              placeholder={'Enter Text ...'}
+              className={'pa2 h2 outline-0 f4 flex-auto'}
+              placeholder={'e.g. Go Fish!'}
             />
           </div>
         </div>
