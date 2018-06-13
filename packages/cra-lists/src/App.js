@@ -150,7 +150,19 @@ const GrainEdit = injectS(function GrainEdit({s}) {
   if (s.editState.type === 'idle') return null
   return (
     <div className={'fixed absolute--fill bg-black-20 pa4-ns'}>
-      <div className={'w-100 h-100 bg-white pa2 shadow-1'}>HW</div>
+      <div className={'w-100 h-100 bg-white shadow-1 f4'}>
+        <div className={'bb b--moon-gray pa3'}>Edit</div>
+        <div className={'pa3 flex-1 flex flex-column'}>
+          <input
+            className={'link outline-0 f4 h2 pa2'}
+            placeholder={'Enter Text ...'}
+          />
+        </div>
+        <div className={'bt b--moon-gray pa3'}>
+          <button>Ok</button>
+          <button>Cancel</button>
+        </div>
+      </div>
     </div>
   )
 })
