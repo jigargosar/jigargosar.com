@@ -6,7 +6,7 @@ import {getAppActorId} from '../LocalStorage'
 const R = require('ramda')
 
 const firebase = require('firebase/app')
-// const Timestamp = firebase.firestore.Timestamp
+const Timestamp = firebase.firestore.Timestamp
 const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 const pouchSeqPred = ow.number.integer
   .label('pouch.seq')
@@ -22,42 +22,31 @@ export function FirePouchSync(pouchStore) {
         this.fireQueue.push(snapshot)
       },
       pouchChangesQueue: PouchChangesQueue(pouchStore),
+      firestoreChangesQueue: FirestoreChangesQueue(pouchStore),
+      trySync() {
+        if (FirebaseStore.user && !fireSync.syncing) {
+          try {
+            fireSync.syncing = true
+            const cRef = FirebaseStore.getUserCollectionRef(
+              pouchStore.name,
+            )
+            fireSync.pouchChangesQueue.syncToFirestore(cRef)
+            fireSync.firestoreChangesQueue.syncFromFirestore(cRef)
+          } catch (e) {
+            debugger
+            console.error(e)
+          }
+        }
+      },
     },
-    {queueFireSnapshot: action.bound},
+    {queueFireSnapshot: action.bound, trySync: action.bound},
     {name: `PouchFireSync: ${pouchStore.name}`},
   )
   reaction(
     () => [FirebaseStore.user, fireSync.syncing],
-    async () => {
-      if (FirebaseStore.user && !fireSync.syncing) {
-        let snapshotDisposer, changes
-        try {
-          fireSync.syncing = true
-          const cRef = FirebaseStore.getUserCollectionRef(
-            pouchStore.name,
-          )
-          fireSync.pouchChangesQueue.syncToFirestore(cRef)
-          // snapshotDisposer = await cRef
-          //   .where(
-          //     'serverTimestamp',
-          //     '>',
-          //     Timestamp.fromMillis(fireSync.syncMilli),
-          //   )
-          //   .onSnapshot(snapshot => fireSync.queueFireSnapshot)
-          //
-          // changes = await pouchStore
-          //   .liveChanges({
-          //     since: fireSync.syncSeq,
-          //   })
-          //   .on('change', fireSync.queuePouchChange)
-        } catch (e) {
-          console.error(e)
-          if (snapshotDisposer) snapshotDisposer()
-          if (changes) changes.cancel()
-        }
-      }
-    },
+    fireSync.trySync,
   )
+  // fireSync.trySync()
   return fireSync
 }
 
@@ -96,7 +85,7 @@ function versionMismatch(doc1, doc2) {
   const versionPred = ow.number.integer.greaterThanOrEqual(0)
   ow(doc1.version, versionPred)
   ow(doc2.version, versionPred)
-  return R.equals(doc1.version, doc2.version)
+  return !R.equals(doc1.version, doc2.version)
 }
 
 function PouchChangesQueue(pouchStore) {
@@ -110,22 +99,22 @@ function PouchChangesQueue(pouchStore) {
       pouchQueue: observable.array([], {deep: false}),
       cRef: null,
       syncing: false,
-      get syncSeqKey() {
+      get syncMilliKey() {
         const name = pouchStore.name
         ow(name, ow.string.nonEmpty)
         return `sync.lastSeq`
       },
-      async loadSyncSeq() {
-        const seq = await forage.getItem(this.syncSeqKey)
+      async loadSyncMilli() {
+        const seq = await forage.getItem(this.syncMilliKey)
         return ow.isValid(seq, pouchSeqPred) ? seq : 0
       },
-      async setSyncSeq(syncSeq) {
-        const currentSyncSeq = await this.loadSyncSeq()
+      async setSyncTimestamp(syncSeq) {
+        const currentSyncSeq = await this.loadSyncMilli()
         ow(
           syncSeq,
           pouchSeqPred.label('syncSeq').greaterThan(currentSyncSeq),
         )
-        return forage.setItem(this.syncSeqKey, syncSeq)
+        return forage.setItem(this.syncMilliKey, syncSeq)
       },
       queuePouchChange(change) {
         console.debug('queuePouchChange', change)
@@ -134,7 +123,7 @@ function PouchChangesQueue(pouchStore) {
       },
 
       async startQueuingChanges() {
-        const since = await pouchQueue.loadSyncSeq()
+        const since = await pouchQueue.loadSyncMilli()
         pouchStore
           .liveChanges({since: since})
           .on('change', pouchQueue.queuePouchChange)
@@ -186,7 +175,7 @@ function PouchChangesQueue(pouchStore) {
           }
 
           function transactionEmptyUpdate() {
-            return transaction.set(docRef, {})
+            return transaction.update(docRef, {})
           }
 
           function transactionSetWithTimestampAndIncrementVersion() {
@@ -244,7 +233,7 @@ function PouchChangesQueue(pouchStore) {
           return
         const change = R.head(this.pouchQueue)
         await this.processChange(change)
-        await this.setSyncSeq(change.seq)
+        await this.setSyncTimestamp(change.seq)
         this.pouchQueue.shift()
         this.stopSyncing(change)
         await this.tryProcessingQueue()
@@ -262,8 +251,8 @@ function PouchChangesQueue(pouchStore) {
   )
   pouchQueue.startQueuingChanges()
   pouchQueue
-    .loadSyncSeq()
-    .then(x => console.debug('pouchQueue.loadSyncSeq', x))
+    .loadSyncMilli()
+    .then(x => console.debug('pouchQueue.loadSyncMilli', x))
   return pouchQueue
 }
 
@@ -273,3 +262,87 @@ function PouchChangesQueue(pouchStore) {
 //   })
 //   return {}
 // })()
+
+function FirestoreChangesQueue(pouchStore) {
+  ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
+
+  const forage = localforage.createInstance({
+    name: `FirestoreChangesQueue.${pouchStore.name}`,
+  })
+  const fireQueue = observable(
+    {
+      fireQueue: observable.array([], {deep: false}),
+      cRef: null,
+      syncing: false,
+      get syncMilliKey() {
+        const name = pouchStore.name
+        ow(name, ow.string.nonEmpty)
+        return `sync.lastMilli`
+      },
+      async loadSyncMilli() {
+        const seq = await forage.getItem(this.syncMilliKey)
+        return ow.isValid(seq, pouchSeqPred) ? seq : 0
+      },
+      async setSyncTimestamp(timestamp) {
+        const syncMilli = timestamp.toMillis()
+        const currentSyncMilli = await this.loadSyncMilli()
+        debugger
+
+        ow(
+          syncMilli,
+          pouchSeqPred
+            .label('syncMilli')
+            .greaterThan(currentSyncMilli),
+        )
+        return forage.setItem(this.syncMilliKey, syncMilli)
+      },
+      queueFireQuerySnapshot(querySnapshot) {
+        console.debug('queueFireQuerySnapshot', querySnapshot)
+        this.fireQueue.push(...querySnapshot.docChanges())
+        this.tryProcessingQueue()
+      },
+
+      async processChange(docChange) {
+        if (!docChange) return
+        this.syncing = true
+        const doc = docChange.doc.data()
+        if (isModifiedByLocalActor(doc)) return
+        debugger
+      },
+      stopSyncing() {
+        this.syncing = false
+      },
+      async tryProcessingQueue() {
+        if (!this.cRef || this.syncing || this.fireQueue.length === 0)
+          return
+        const change = R.head(this.fireQueue)
+        await this.processChange(change)
+        await this.setSyncTimestamp(change.doc.data().serverTimestamp)
+        this.fireQueue.shift()
+        this.stopSyncing(change)
+        await this.tryProcessingQueue()
+      },
+      async startQueuingChanges() {
+        const since = await fireQueue.loadSyncMilli()
+        this.cRef
+          .where('serverTimestamp', '>', Timestamp.fromMillis(since))
+          .orderBy('serverTimestamp')
+          .onSnapshot(fireQueue.queueFireQuerySnapshot)
+      },
+
+      syncFromFirestore(cRef) {
+        this.cRef = cRef
+        this.startQueuingChanges()
+        this.tryProcessingQueue()
+      },
+    },
+    {
+      queueFireQuerySnapshot: action.bound,
+    },
+    {name: `FirestoreChangesQueue: ${pouchStore.name}`},
+  )
+  fireQueue
+    .loadSyncMilli()
+    .then(x => console.debug('fireQueue.loadSyncMilli', x))
+  return fireQueue
+}

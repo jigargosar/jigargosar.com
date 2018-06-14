@@ -38,7 +38,7 @@ export const FirebaseStore = (function() {
         this.user = user
       },
     },
-    {user: observable.ref, onAuthStateChanged: action},
+    {user: observable.ref, onAuthStateChanged: action.bound},
     {name: 'FirebaseStore'},
   )
   firebase.auth().onAuthStateChanged(firebaseStore.onAuthStateChanged)
