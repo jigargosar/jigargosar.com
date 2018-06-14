@@ -34,7 +34,6 @@ export function FirePouchSync(pouchStore) {
             fireSync.pouchChangesQueue.syncToFirestore(cRef)
             fireSync.firestoreChangesQueue.syncFromFirestore(cRef)
           } catch (e) {
-            debugger
             console.error(e)
           }
         }
@@ -94,7 +93,6 @@ function createLSItem(key, defaultValue) {
 const PQueue = require('p-queue')
 
 async function processChange(cRef, pouchStore, pouchChange) {
-  debugger
   const doc = pouchChange.doc
   if (shouldSkipFirestoreSync(doc) || isModifiedByRemoteActor(doc))
     return
@@ -197,10 +195,11 @@ function PouchChangesQueue(pouchStore) {
   return {
     syncToFirestore(cRef) {
       const since = syncSeq.get()
+      console.log('since', since)
       const changes = pouchStore
         .liveChanges({since: since})
         .on('change', change => {
-          queue.add(
+          queue.add(() =>
             processChange(cRef, pouchStore, change)
               .then(() => syncSeq.set(change.seq))
               .catch(e => {
@@ -237,8 +236,6 @@ function FirestoreChangesQueue(pouchStore) {
       async setSyncTimestamp(timestamp) {
         const syncMilli = timestamp.toMillis()
         const currentSyncMilli = await this.loadSyncMilli()
-        debugger
-
         ow(
           syncMilli,
           pouchSeqPred
