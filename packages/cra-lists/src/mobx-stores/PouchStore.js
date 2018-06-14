@@ -27,6 +27,7 @@ export function PouchStore(db, service) {
       return db.changes({include_docs: true})
     },
     liveChanges({since}) {
+      console.log(this.name, 'liveChanges: since', since)
       return this.changes({since, live: true})
     },
     changes({since = 0, live = false, ...rest} = {}) {

@@ -1,12 +1,13 @@
-const m = require('mobx')
+// const m = require('mobx')
 const ow = require('ow').default
 const R = require('ramda')
 
 function stringifyAndSetItem(key, value) {
+  ow(key, ow.string.nonEmpty)
   return window.localStorage.setItem(key, JSON.stringify(value))
 }
 
-function getParsedValueOrValue(key) {
+function getVaue(key) {
   const value = window.localStorage.getItem(key)
   try {
     return JSON.parse(value)
@@ -19,11 +20,11 @@ export const LocalStorageStore = (function LocalStorageStore() {
   return {
     getOr(defaultValue, key) {
       ow(key, ow.string.nonEmpty)
-      const value = getParsedValueOrValue(key)
+      const value = getVaue(key)
       if (R.isNil(value)) {
         stringifyAndSetItem(key, defaultValue)
       }
-      return getParsedValueOrValue(key)
+      return getVaue(key)
     },
     set(key, value) {
       return stringifyAndSetItem(key, value)

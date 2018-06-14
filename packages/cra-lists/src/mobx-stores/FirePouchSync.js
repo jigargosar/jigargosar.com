@@ -137,15 +137,15 @@ async function processChange(cRef, pouchStore, pouchChange) {
       return transaction.update(docRef, {})
     }
 
-    function transactionSetWithTimestampAndIncrementVersion() {
-      return transaction.set(
-        docRef,
-        R.merge(pouchChange.doc, {
-          serverTimestamp: serverTimestamp(),
-          version: fireDoc.version + 1,
-        }),
-      )
-    }
+    // function transactionSetDocWithTimestampAndIncrementVersion() {
+    //   return transaction.set(
+    //     docRef,
+    //     R.merge(pouchChange.doc, {
+    //       serverTimestamp: serverTimestamp(),
+    //       version: fireDoc.version + 1,
+    //     }),
+    //   )
+    // }
 
     function transactionSetInHistoryCollection(doc) {
       console.warn('transactionSetInHistoryCollection')
@@ -166,17 +166,19 @@ async function processChange(cRef, pouchStore, pouchChange) {
       }
     } else {
       if (isPouchDocOlderThanFireDoc) {
-        debugger // should local doc be put in history?
         transactionSetInHistoryCollection(doc)
         return transactionEmptyUpdate()
       } else {
-        debugger // should remote doc be put in history?
-        if (doc.version < fireDoc.version) {
-          transactionSetInHistoryCollection(fireDoc)
-        }
-        const result = await pouchStore.get(pouchChange.id)
-        debugger
-        return transactionSetWithTimestampAndIncrementVersion()
+        // debugger
+        // should remote doc be put in history?
+        // if (doc.version < fireDoc.version) {
+        //   transactionSetInHistoryCollection(fireDoc)
+        // }
+        // const result = await pouchStore.get(pouchChange.id)
+        // console.log(result)
+        // debugger
+        // return transactionSetDocWithTimestampAndIncrementVersion()
+        return transactionSetDocWithTimestamp()
       }
     }
   })
@@ -186,7 +188,7 @@ function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
   const syncSeq = createLSItem(
-    `firestore.${pouchStore}.lastSyncSeq`,
+    `PouchChangesQueue.${pouchStore.name}.lastSyncSeq`,
     0,
   )
 
@@ -194,10 +196,8 @@ function PouchChangesQueue(pouchStore) {
 
   return {
     syncToFirestore(cRef) {
-      const since = syncSeq.get()
-      console.log('since', since)
       const changes = pouchStore
-        .liveChanges({since: since})
+        .liveChanges({since: syncSeq.get()})
         .on('change', change => {
           queue.add(() =>
             processChange(cRef, pouchStore, change)
