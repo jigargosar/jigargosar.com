@@ -1,5 +1,5 @@
 import {FirebaseStore} from './FirebaseStore'
-import {action, observable, reaction, runInAction} from 'mobx'
+import {action, observable, reaction} from 'mobx'
 import ow from 'ow'
 import {getAppActorId} from '../LocalStorage'
 
