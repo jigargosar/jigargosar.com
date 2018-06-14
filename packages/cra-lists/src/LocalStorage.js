@@ -6,7 +6,7 @@ function getOrSetLocalStorage(id, setValue) {
   if (R.isNil(value)) {
     value = window.localStorage.setItem(id, setValue)
   }
-  return JSON.parse(value)
+  return value
 }
 
 export function getAppActorId() {

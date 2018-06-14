@@ -1,5 +1,5 @@
 import {FirebaseStore} from './FirebaseStore'
-import {observable, reaction, action, autorun} from 'mobx'
+import {action, observable, reaction, runInAction} from 'mobx'
 import ow from 'ow'
 import {getAppActorId} from '../LocalStorage'
 
@@ -7,6 +7,7 @@ const R = require('ramda')
 
 const firebase = require('firebase/app')
 const Timestamp = firebase.firestore.Timestamp
+const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 const pouchSeqPred = ow.number.integer
   .label('pouch.seq')
   .greaterThanOrEqual(0)
@@ -72,6 +73,10 @@ function isRemotelyModified(doc) {
   return !R.equals(doc.actorId, getAppActorId())
 }
 
+function shouldSkipFirestoreSync(doc) {
+  return doc.skipFirestoreSync
+}
+
 function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
@@ -113,18 +118,38 @@ function PouchChangesQueue(pouchStore) {
           .liveChanges({since: since})
           .on('change', pouchQueue.queuePouchChange)
       },
-      processChange(change) {
+      async processChange(change) {
+        if (!change) return
+        this.syncing = true
         const doc = change.doc
-        if (isRemotelyModified(doc)) return
-        debugger
+        if (shouldSkipFirestoreSync(doc) || isRemotelyModified(doc))
+          return
+        // modified locally by user
+        const docRef = this.cRef.doc(change.id)
+        await docRef.firestore.runTransaction(async transaction => {
+          const snap = await transaction.get(docRef)
+          if (snap.exists) {
+            debugger
+          } else {
+            debugger
+            return transaction.set(
+              docRef,
+              R.merge(change.doc, {
+                serverTimestamp: serverTimestamp(),
+              }),
+            )
+          }
+        })
+        runInAction(() => {
+          this.syncSeq = change.seq
+          this.pouchQueue.shift()
+          this.syncing = false
+          this.tryProcessingQueue()
+        })
       },
       tryProcessingQueue() {
         if (!this.cRef || this.syncing) return
-        const change = R.head(this.pouchQueue)
-        if (change) {
-          this.syncing = true
-          this.processChange(change)
-        }
+        this.processChange(R.head(this.pouchQueue))
       },
       syncToFirestore(cRef) {
         this.cRef = cRef
