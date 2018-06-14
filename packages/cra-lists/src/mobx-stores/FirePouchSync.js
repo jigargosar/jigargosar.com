@@ -17,7 +17,7 @@ export function FirePouchSync(pouchStore) {
       queueFireSnapshot(snapshot) {
         this.fireQueue.push(snapshot)
       },
-      pcq: PouchChangesQueue(pouchStore),
+      pouchChangesQueue: PouchChangesQueue(pouchStore),
     },
     {queueFireSnapshot: action.bound},
     {name: `PouchFireSync: ${pouchStore.name}`},
@@ -29,9 +29,10 @@ export function FirePouchSync(pouchStore) {
         let snapshotDisposer, changes
         try {
           fireSync.syncing = true
-          // const cRef = FirebaseStore.getUserCollectionRef(
-          //   pouchStore.name,
-          // )
+          const cRef = FirebaseStore.getUserCollectionRef(
+            pouchStore.name,
+          )
+          fireSync.pouchChangesQueue.syncToFirestore(cRef)
           // snapshotDisposer = await cRef
           //   .where(
           //     'serverTimestamp',
@@ -70,6 +71,8 @@ function PouchChangesQueue(pouchStore) {
   })
   const pouchQueue = observable(
     {
+      pouchQueue: [],
+      cRef: null,
       get syncSeqKey() {
         const name = pouchStore.name
         ow(name, ow.string.nonEmpty)
@@ -88,7 +91,6 @@ function PouchChangesQueue(pouchStore) {
         )
         return forage.setItem(this.syncSeqKey, syncSeq)
       },
-      pouchQueue: [],
       queuePouchChange(change) {
         console.debug('queuePouchChange', change)
         this.pouchQueue.push(change)
@@ -99,6 +101,9 @@ function PouchChangesQueue(pouchStore) {
         pouchStore
           .liveChanges({since: since})
           .on('change', pouchQueue.queuePouchChange)
+      },
+      syncToFirestore(cRef) {
+        this.cRef = cRef
       },
     },
     {
