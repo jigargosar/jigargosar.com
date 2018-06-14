@@ -16,6 +16,7 @@ import firebase from 'firebase/app'
 import {updateFirestoreFromPouchDoc} from './UpdateFirestore'
 import {PouchCollectionStore} from '../mobx-stores/PouchCollectionStore'
 import ow from 'ow'
+import {PouchFireSync} from '../mobx-stores/PouchFireSync'
 
 require('firebase/auth')
 require('firebase/firestore')
@@ -452,8 +453,10 @@ export const State = types
     fire: types.optional(Fire, {}),
   })
   .volatile(() => {
+    const g = PouchCollectionStore('grain')
     return {
-      g: PouchCollectionStore('grain'),
+      g,
+      pf: PouchFireSync(g),
       editState: EditState(),
     }
   })

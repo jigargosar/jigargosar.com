@@ -27,13 +27,17 @@ export function PouchStore(db, service) {
       return db.changes({include_docs: true})
     },
     liveChanges({since}) {
-      const changes = db.changes({
+      return this.changes({since, live: true})
+    },
+    changes({since = 0, live = false} = {}) {
+      const changesOptions = {
         include_docs: true,
         since,
-        live: true,
-      })
+        live: live,
+      }
+      const changes = db.changes(changesOptions)
       changes.on('error', e =>
-        console.error('liveChanges:', this.name, e),
+        console.error('changes:', this.name, changesOptions, e),
       )
       return changes
     },
