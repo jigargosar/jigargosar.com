@@ -7,7 +7,7 @@ function stringifyAndSetItem(key, value) {
   return window.localStorage.setItem(key, JSON.stringify(value))
 }
 
-function getVaue(key) {
+function getValue(key) {
   const value = window.localStorage.getItem(key)
   try {
     return JSON.parse(value)
@@ -20,16 +20,23 @@ export const LocalStorageStore = (function LocalStorageStore() {
   return {
     getOr(defaultValue, key) {
       ow(key, ow.string.nonEmpty)
-      const value = getVaue(key)
+      const value = getValue(key)
       if (R.isNil(value)) {
         stringifyAndSetItem(key, defaultValue)
       }
-      return getVaue(key)
+      return getValue(key)
     },
     set(key, value) {
       return stringifyAndSetItem(key, value)
     },
   }
 })()
+
+export function createLSItem(key, defaultValue) {
+  return {
+    get: () => ls.getOr(defaultValue, key),
+    set: value => ls.set(key, value),
+  }
+}
 
 export const ls = LocalStorageStore

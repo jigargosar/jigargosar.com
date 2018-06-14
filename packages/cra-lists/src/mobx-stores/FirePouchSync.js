@@ -2,13 +2,15 @@ import {FirebaseStore} from './FirebaseStore'
 import {action, observable, reaction} from 'mobx'
 import ow from 'ow'
 import {getAppActorId} from '../LocalStorage'
-import {ls} from './local-storage-store'
+import {createLSItem} from './local-storage-store'
 
 const R = require('ramda')
 
 const firebase = require('firebase/app')
 const Timestamp = firebase.firestore.Timestamp
 const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
+const PQueue = require('p-queue')
+
 const pouchSeqPred = ow.number.integer
   .label('pouch.seq')
   .greaterThanOrEqual(0)
@@ -46,36 +48,31 @@ export function FirePouchSync(pouchStore) {
     () => [FirebaseStore.user, fireSync.syncing],
     fireSync.trySync,
   )
-  // fireSync.trySync()
   return fireSync
 }
 
 const localforage = require('localforage')
-
 function isModifiedByLocalActor(doc) {
   ow(doc.actorId, ow.string.label('doc.actorId').nonEmpty)
   return R.equals(doc.actorId, getAppActorId())
 }
 
 const isModifiedByRemoteActor = R.complement(isModifiedByLocalActor)
-
 const nowPredicate = ow.number.integer.positive
+
 // const isNewer = function isNewer(doc1, doc2) {
 //   ow(doc1.modifiedAt, nowPredicate)
 //   ow(doc2.modifiedAt, nowPredicate)
 //   return doc1.modifiedAt > doc2.modifiedAt
 // }
-
 const isOlder = function isOlder(doc1, doc2) {
   ow(doc1.modifiedAt, nowPredicate)
   ow(doc2.modifiedAt, nowPredicate)
   return doc1.modifiedAt < doc2.modifiedAt
 }
-
 function shouldSkipFirestoreSync(doc) {
   return doc.skipFirestoreSync
 }
-
 function versionMismatch(doc1, doc2) {
   const versionPred = ow.number.integer.greaterThanOrEqual(0)
   ow(doc1.version, versionPred)
@@ -83,16 +80,7 @@ function versionMismatch(doc1, doc2) {
   return !R.equals(doc1.version, doc2.version)
 }
 
-function createLSItem(key, defaultValue) {
-  return {
-    get: () => ls.getOr(defaultValue, key),
-    set: value => ls.set(key, value),
-  }
-}
-
-const PQueue = require('p-queue')
-
-async function processChange(cRef, pouchStore, pouchChange) {
+async function processPouchChange(cRef, pouchStore, pouchChange) {
   const doc = pouchChange.doc
   if (shouldSkipFirestoreSync(doc) || isModifiedByRemoteActor(doc))
     return
@@ -200,7 +188,7 @@ function PouchChangesQueue(pouchStore) {
         .liveChanges({since: syncSeq.get()})
         .on('change', change => {
           queue.add(() =>
-            processChange(cRef, pouchStore, change)
+            processPouchChange(cRef, pouchStore, change)
               .then(() => syncSeq.set(change.seq))
               .catch(e => {
                 console.log('Error syncToFirestore. Stopping', e)
