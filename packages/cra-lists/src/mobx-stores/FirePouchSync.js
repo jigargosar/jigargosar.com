@@ -81,7 +81,7 @@ function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
   const forage = localforage.createInstance({
-    name: `${PouchChangesQueue}.${pouchStore.name}`,
+    name: `PouchChangesQueue.${pouchStore.name}`,
   })
   const pouchQueue = observable(
     {
@@ -97,12 +97,11 @@ function PouchChangesQueue(pouchStore) {
         const seq = await forage.getItem(this.syncSeqKey)
         return ow.isValid(seq, pouchSeqPred) ? seq : 0
       },
-      set syncSeq(syncSeq) {
+      async setSyncSeq(syncSeq) {
+        const currentSyncSeq = await this.loadSyncSeq()
         ow(
           syncSeq,
-          pouchSeqPred
-            .label('syncSeq')
-            .greaterThan(this.loadSyncSeq()),
+          pouchSeqPred.label('syncSeq').greaterThan(currentSyncSeq),
         )
         return forage.setItem(this.syncSeqKey, syncSeq)
       },
@@ -129,9 +128,13 @@ function PouchChangesQueue(pouchStore) {
         await docRef.firestore.runTransaction(async transaction => {
           const snap = await transaction.get(docRef)
           if (snap.exists) {
-            debugger
+            const fireDoc = snap.data()
+            if (isRemotelyModified(fireDoc)) {
+              debugger
+            } else {
+              debugger
+            }
           } else {
-            debugger
             return transaction.set(
               docRef,
               R.merge(change.doc, {
@@ -140,15 +143,21 @@ function PouchChangesQueue(pouchStore) {
             )
           }
         })
-        runInAction(() => {
-          this.syncSeq = change.seq
-          this.pouchQueue.shift()
-          this.syncing = false
-          this.tryProcessingQueue()
-        })
+        await this.changeProcessed(change)
+      },
+      async changeProcessed(change) {
+        this.pouchQueue.shift()
+        this.syncing = false
+        await this.setSyncSeq(change.seq)
+        this.tryProcessingQueue()
       },
       tryProcessingQueue() {
-        if (!this.cRef || this.syncing) return
+        if (
+          !this.cRef ||
+          this.syncing ||
+          this.pouchQueue.length === 0
+        )
+          return
         this.processChange(R.head(this.pouchQueue))
       },
       syncToFirestore(cRef) {
