@@ -91,20 +91,17 @@ function PouchChangesQueue(pouchStore) {
         )
         window.localStorage.setItem(this.syncSeqKey, syncSeq)
       },
-      queue: [],
+      pouchQueue: [],
       queuePouchChange(change) {
-        this.queue.push(change)
+        this.pouchQueue.push(change)
       },
     },
     {queuePouchChange: action.bound},
     {name: `PouchChangesQueue: ${pouchStore.name}`},
   )
-  // autorun(() => {
-  //   console.error(pouchQueue.syncSeq)
-  // })
-
-  // pouchQueue.syncSeq = 3
+  pouchStore
+    .liveChanges({since: pouchQueue.loadSyncSeq()})
+    .on('change', pouchQueue.queuePouchChange)
   console.warn('pouchQueue.loadSyncSeq', pouchQueue.loadSyncSeq())
-  // console.warn('pouchQueue.syncSeqKey', pouchQueue.syncSeqKey)
   return pouchQueue
 }
