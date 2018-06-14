@@ -68,10 +68,12 @@ export function FirePouchSync(pouchStore) {
 // })
 const localforage = require('localforage')
 
-function isRemotelyModified(doc) {
+function isModifiedByLocalActor(doc) {
   ow(doc.actorId, ow.string.label('doc.actorId').nonEmpty)
-  return !R.equals(doc.actorId, getAppActorId())
+  return R.equals(doc.actorId, getAppActorId())
 }
+
+const isModifiedByRemoteActor = R.complement(isModifiedByLocalActor)
 
 const nowPredicate = ow.number.integer.positive
 const isNewer = function isNewer(doc1, doc2) {
@@ -134,7 +136,10 @@ function PouchChangesQueue(pouchStore) {
         if (!change) return
         this.syncing = true
         const doc = change.doc
-        if (shouldSkipFirestoreSync(doc) || isRemotelyModified(doc))
+        if (
+          shouldSkipFirestoreSync(doc) ||
+          isModifiedByRemoteActor(doc)
+        )
           return
         // modified locally by user
         const docRef = this.cRef.doc(change.id)
@@ -159,19 +164,19 @@ function PouchChangesQueue(pouchStore) {
           }
           const firestoreDoc = snap.data()
 
-          if (isRemotelyModified(firestoreDoc)) {
-            if (isOlder(doc, firestoreDoc)) {
-              debugger // should local doc be put in history?
-            } else {
-              debugger // should remote doc be put in history?
-            }
-          } else {
+          if (isModifiedByLocalActor(firestoreDoc)) {
             // firestore was locally modified.
             // we shouldn't blindly push, unless local version is newer
             if (isOlder(doc, firestoreDoc)) {
               return transactionEmptyUpdate()
             } else {
               return transactionSetDocWithTimestamp()
+            }
+          } else {
+            if (isOlder(doc, firestoreDoc)) {
+              debugger // should local doc be put in history?
+            } else {
+              debugger // should remote doc be put in history?
             }
           }
         })
