@@ -51,11 +51,6 @@ export function FirePouchSync(pouchStore) {
   return fireSync
 }
 
-// const localX = observable()
-//
-// window.addEventListener('storage', function(e) {
-//
-// })
 const localforage = require('localforage')
 
 function isModifiedByLocalActor(doc) {
@@ -96,6 +91,99 @@ function createLSItem(key, defaultValue) {
   }
 }
 
+const PQueue = require('p-queue')
+
+async function processChange(cRef, pouchStore, pouchChange) {
+  debugger
+  const doc = pouchChange.doc
+  if (shouldSkipFirestoreSync(doc) || isModifiedByRemoteActor(doc))
+    return
+  // modified locally by user
+  const docRef = cRef.doc(pouchChange.id)
+  await docRef.firestore.runTransaction(async transaction => {
+    const snap = await transaction.get(docRef)
+
+    if (!snap.exists) {
+      return transactionSetDocWithTimestamp()
+    }
+    const fireDoc = snap.data()
+
+    const isPouchDocOlderThanFireDoc = isOlder(doc, fireDoc)
+    const areVersionsDifferent = versionMismatch(doc, fireDoc)
+    const wasFireDocModifiedByLocalActor = isModifiedByLocalActor(
+      fireDoc,
+    )
+
+    function logWarningForEmptyTransactionUpdate() {
+      if (areVersionsDifferent) {
+        console.warn(
+          'transactionEmptyUpdate: since versions are different',
+          doc,
+          fireDoc,
+        )
+      } else {
+        console.warn('transactionEmptyUpdate', doc, fireDoc)
+      }
+    }
+
+    function transactionSetDocWithTimestamp() {
+      return transaction.set(
+        docRef,
+        R.merge(pouchChange.doc, {
+          serverTimestamp: serverTimestamp(),
+        }),
+      )
+    }
+
+    function transactionEmptyUpdate() {
+      return transaction.update(docRef, {})
+    }
+
+    function transactionSetWithTimestampAndIncrementVersion() {
+      return transaction.set(
+        docRef,
+        R.merge(pouchChange.doc, {
+          serverTimestamp: serverTimestamp(),
+          version: fireDoc.version + 1,
+        }),
+      )
+    }
+
+    function transactionSetInHistoryCollection(doc) {
+      console.warn('transactionSetInHistoryCollection')
+      transaction.set(
+        docRef.collection('history').doc(`${doc.modifiedAt}`),
+        doc,
+      )
+    }
+
+    if (wasFireDocModifiedByLocalActor) {
+      // both docs were locally modified.
+      // we shouldn't blindly push, unless local version is newer
+      if (isPouchDocOlderThanFireDoc || areVersionsDifferent) {
+        logWarningForEmptyTransactionUpdate()
+        return transactionEmptyUpdate()
+      } else {
+        return transactionSetDocWithTimestamp()
+      }
+    } else {
+      if (isPouchDocOlderThanFireDoc) {
+        debugger // should local doc be put in history?
+        transactionSetInHistoryCollection(doc)
+        return transactionEmptyUpdate()
+      } else {
+        debugger // should remote doc be put in history?
+        if (doc.version < fireDoc.version) {
+          transactionSetInHistoryCollection(fireDoc)
+        }
+        const result = await pouchStore.get(pouchChange.id)
+        debugger
+        return transactionSetWithTimestampAndIncrementVersion()
+      }
+    }
+  })
+}
+
 function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
@@ -104,157 +192,27 @@ function PouchChangesQueue(pouchStore) {
     0,
   )
 
-  const pouchQueue = observable(
-    {
-      pouchQueue: observable.array([], {deep: false}),
-      cRef: null,
-      syncing: false,
-      queuePouchChange(change) {
-        console.debug('queuePouchChange', change)
-        this.pouchQueue.push(change)
-        this.tryProcessingQueue()
-      },
+  const queue = new PQueue({concurrency: 1})
 
-      async startQueuingChanges() {
-        const since = syncSeq.get()
-        pouchStore
-          .liveChanges({since: since})
-          .on('change', pouchQueue.queuePouchChange)
-      },
-      async processChange(change) {
-        if (!change) return
-        this.syncing = true
-        const doc = change.doc
-        if (
-          shouldSkipFirestoreSync(doc) ||
-          isModifiedByRemoteActor(doc)
-        )
-          return
-        // modified locally by user
-        const docRef = this.cRef.doc(change.id)
-        await docRef.firestore.runTransaction(async transaction => {
-          const snap = await transaction.get(docRef)
-
-          if (!snap.exists) {
-            return transactionSetDocWithTimestamp()
-          }
-          const fireDoc = snap.data()
-
-          const isPouchDocOlderThanFireDoc = isOlder(doc, fireDoc)
-          const areVersionsDifferent = versionMismatch(doc, fireDoc)
-          const wasFireDocModifiedByLocalActor = isModifiedByLocalActor(
-            fireDoc,
+  return {
+    syncToFirestore(cRef) {
+      const since = syncSeq.get()
+      const changes = pouchStore
+        .liveChanges({since: since})
+        .on('change', change => {
+          queue.add(
+            processChange(cRef, pouchStore, change)
+              .then(() => syncSeq.set(change.seq))
+              .catch(e => {
+                console.log('Error syncToFirestore. Stopping', e)
+                changes.cancel()
+                queue.clear()
+              }),
           )
-
-          function logWarningForEmptyTransactionUpdate() {
-            if (areVersionsDifferent) {
-              console.warn(
-                'transactionEmptyUpdate: since versions are different',
-                doc,
-                fireDoc,
-              )
-            } else {
-              console.warn('transactionEmptyUpdate', doc, fireDoc)
-            }
-          }
-
-          function transactionSetDocWithTimestamp() {
-            return transaction.set(
-              docRef,
-              R.merge(change.doc, {
-                serverTimestamp: serverTimestamp(),
-              }),
-            )
-          }
-
-          function transactionEmptyUpdate() {
-            return transaction.update(docRef, {})
-          }
-
-          function transactionSetWithTimestampAndIncrementVersion() {
-            return transaction.set(
-              docRef,
-              R.merge(change.doc, {
-                serverTimestamp: serverTimestamp(),
-                version: fireDoc.version + 1,
-              }),
-            )
-          }
-          function transactionSetInHistoryCollection(doc) {
-            console.warn('transactionSetInHistoryCollection')
-            transaction.set(
-              docRef.collection('history').doc(`${doc.modifiedAt}`),
-              doc,
-            )
-          }
-
-          if (wasFireDocModifiedByLocalActor) {
-            // both docs were locally modified.
-            // we shouldn't blindly push, unless local version is newer
-            if (isPouchDocOlderThanFireDoc || areVersionsDifferent) {
-              logWarningForEmptyTransactionUpdate()
-              return transactionEmptyUpdate()
-            } else {
-              return transactionSetDocWithTimestamp()
-            }
-          } else {
-            if (isPouchDocOlderThanFireDoc) {
-              debugger // should local doc be put in history?
-              transactionSetInHistoryCollection(doc)
-              return transactionEmptyUpdate()
-            } else {
-              debugger // should remote doc be put in history?
-              if (doc.version < fireDoc.version) {
-                transactionSetInHistoryCollection(fireDoc)
-              }
-              const result = await pouchStore.get(change.id)
-              debugger
-              return transactionSetWithTimestampAndIncrementVersion()
-            }
-          }
         })
-      },
-      stopSyncing() {
-        this.syncing = false
-      },
-      async tryProcessingQueue() {
-        if (
-          !this.cRef ||
-          this.syncing ||
-          this.pouchQueue.length === 0
-        )
-          return
-        const change = R.head(this.pouchQueue)
-        await this.processChange(change)
-        syncSeq.set(change.seq)
-        this.pouchQueue.shift()
-        this.stopSyncing(change)
-        await this.tryProcessingQueue()
-      },
-      syncToFirestore(cRef) {
-        this.cRef = cRef
-        this.tryProcessingQueue()
-      },
     },
-    {
-      queuePouchChange: action.bound,
-      startQueuingChanges: action.bound,
-    },
-    {name: `PouchChangesQueue: ${pouchStore.name}`},
-  )
-  pouchQueue.startQueuingChanges()
-  pouchQueue
-    .loadSyncMilli()
-    .then(x => console.debug('pouchQueue.loadSyncMilli', x))
-  return pouchQueue
+  }
 }
-
-// const MobxLocalStorage = (function MobxLocalStorage() {
-//   window.addEventListener('storage', function(e) {
-//     console.warn('storage event', e, e.key, e.value)
-//   })
-//   return {}
-// })()
 
 function FirestoreChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
