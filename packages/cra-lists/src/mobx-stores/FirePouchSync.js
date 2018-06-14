@@ -73,6 +73,19 @@ function isRemotelyModified(doc) {
   return !R.equals(doc.actorId, getAppActorId())
 }
 
+const nowPredicate = ow.number.integer.positive
+const isNewer = function isNewer(doc1, doc2) {
+  ow(doc1.modifiedAt, nowPredicate)
+  ow(doc2.modifiedAt, nowPredicate)
+  return doc1.modifiedAt > doc2.modifiedAt
+}
+
+const isOlder = function isOlder(doc1, doc2) {
+  ow(doc1.modifiedAt, nowPredicate)
+  ow(doc2.modifiedAt, nowPredicate)
+  return doc1.modifiedAt < doc2.modifiedAt
+}
+
 function shouldSkipFirestoreSync(doc) {
   return doc.skipFirestoreSync
 }
@@ -136,6 +149,7 @@ function PouchChangesQueue(pouchStore) {
               }),
             )
           }
+
           function transactionEmptyUpdate() {
             return transaction.set(docRef, {})
           }
@@ -146,15 +160,15 @@ function PouchChangesQueue(pouchStore) {
           const firestoreDoc = snap.data()
 
           if (isRemotelyModified(firestoreDoc)) {
-            if (doc.modifiedAt < firestoreDoc.modifiedAt) {
-              debugger
+            if (isOlder(doc, firestoreDoc)) {
+              debugger // should local doc be put in history?
             } else {
-              debugger
+              debugger // should remote doc be put in history?
             }
           } else {
             // firestore was locally modified.
             // we shouldn't blindly push, unless local version is newer
-            if (doc.modifiedAt < firestoreDoc.modifiedAt) {
+            if (isOlder(doc, firestoreDoc)) {
               return transactionEmptyUpdate()
             } else {
               return transactionSetDocWithTimestamp()
