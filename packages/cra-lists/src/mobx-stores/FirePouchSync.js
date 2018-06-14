@@ -153,6 +153,29 @@ function PouchChangesQueue(pouchStore) {
         await docRef.firestore.runTransaction(async transaction => {
           const snap = await transaction.get(docRef)
 
+          if (!snap.exists) {
+            return transactionSetDocWithTimestamp()
+          }
+          const fireDoc = snap.data()
+
+          const isPouchDocOlderThanFireDoc = isOlder(doc, fireDoc)
+          const areVersionsDifferent = versionMismatch(doc, fireDoc)
+          const wasFireDocModifiedByLocalActor = isModifiedByLocalActor(
+            fireDoc,
+          )
+
+          function logWarningForEmptyTransactionUpdate() {
+            if (areVersionsDifferent) {
+              console.warn(
+                'transactionEmptyUpdate: since versions are different',
+                doc,
+                fireDoc,
+              )
+            } else {
+              console.warn('transactionEmptyUpdate', doc, fireDoc)
+            }
+          }
+
           function transactionSetDocWithTimestamp() {
             return transaction.set(
               docRef,
@@ -166,27 +189,45 @@ function PouchChangesQueue(pouchStore) {
             return transaction.set(docRef, {})
           }
 
-          if (!snap.exists) {
-            return transactionSetDocWithTimestamp()
+          function transactionSetWithTimestampAndIncrementVersion() {
+            return transaction.set(
+              docRef,
+              R.merge(change.doc, {
+                serverTimestamp: serverTimestamp(),
+                version: fireDoc.version + 1,
+              }),
+            )
           }
-          const firestoreDoc = snap.data()
+          function transactionSetInHistoryCollection(doc) {
+            console.warn('transactionSetInHistoryCollection')
+            transaction.set(
+              docRef.collection('history').doc(`${doc.modifiedAt}`),
+              doc,
+            )
+          }
 
-          if (isModifiedByLocalActor(firestoreDoc)) {
-            // doc was locally modified.
+          if (wasFireDocModifiedByLocalActor) {
+            // both docs were locally modified.
             // we shouldn't blindly push, unless local version is newer
-            if (
-              isOlder(doc, firestoreDoc) ||
-              versionMismatch(doc, firestoreDoc)
-            ) {
+            if (isPouchDocOlderThanFireDoc || areVersionsDifferent) {
+              logWarningForEmptyTransactionUpdate()
               return transactionEmptyUpdate()
             } else {
               return transactionSetDocWithTimestamp()
             }
           } else {
-            if (isOlder(doc, firestoreDoc)) {
+            if (isPouchDocOlderThanFireDoc) {
               debugger // should local doc be put in history?
+              transactionSetInHistoryCollection(doc)
+              return transactionEmptyUpdate()
             } else {
               debugger // should remote doc be put in history?
+              if (doc.version < fireDoc.version) {
+                transactionSetInHistoryCollection(fireDoc)
+              }
+              const result = await pouchStore.get(change.id)
+              debugger
+              return transactionSetWithTimestampAndIncrementVersion()
             }
           }
         })
