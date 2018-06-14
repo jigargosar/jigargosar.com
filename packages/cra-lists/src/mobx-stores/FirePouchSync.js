@@ -182,3 +182,10 @@ function PouchChangesQueue(pouchStore) {
     .then(x => console.debug('pouchQueue.loadSyncSeq', x))
   return pouchQueue
 }
+
+const MobxLocalStorage = (function MobxLocalStorage() {
+  window.addEventListener('storage', function(e) {
+    console.warn('storage event', e, e.key, e.value)
+  })
+  return {}
+})()

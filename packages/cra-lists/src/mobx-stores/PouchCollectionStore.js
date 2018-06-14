@@ -1,7 +1,7 @@
 import nanoid from 'nanoid'
 import {PouchService} from './PouchService'
 import {SF} from '../safe-fun'
-import {configure, observable, runInAction} from 'mobx'
+import {configure, observable, runInAction, action} from 'mobx'
 import {getAppActorId} from '../LocalStorage'
 
 configure({
@@ -21,7 +21,18 @@ export function PouchCollectionStore(modelName) {
     {
       pouchStore,
       name,
-      idLookup: observable.map([]),
+      idLookup: observable.map([], {name: 'idLookup'}),
+      setIdLookup(idLookup) {
+        this.idLookup.replace(idLookup)
+      },
+      handleChange(change) {
+        const doc = this.idLookup.get(change.id)
+        if (doc) {
+          Object.assign(doc, change.doc)
+        } else {
+          this.idLookup.set(change.id, change.doc)
+        }
+      },
       async load() {
         const {results, last_seq} = await pouchStore.allChanges()
         const idLookup = R.map(
@@ -30,20 +41,11 @@ export function PouchCollectionStore(modelName) {
             SF.prop('doc'),
           ),
         )(results)
-        runInAction(() => this.idLookup.replace(idLookup))
+        this.setIdLookup(idLookup)
 
         pouchStore
           .liveChanges({since: last_seq})
-          .on('change', change => {
-            runInAction(() => {
-              const doc = this.idLookup.get(change.id)
-              if (doc) {
-                Object.assign(doc, change.doc)
-              } else {
-                this.idLookup.set(change.id, change.doc)
-              }
-            })
-          })
+          .on('change', this.handleChange)
       },
       get list() {
         return Array.from(this.idLookup.values())
@@ -78,6 +80,8 @@ export function PouchCollectionStore(modelName) {
     },
     {
       idLookup: observable,
+      setIdLookup: action.bound,
+      handleChange: action.bound,
     },
     {name},
   )

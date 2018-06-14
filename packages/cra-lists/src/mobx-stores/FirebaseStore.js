@@ -1,4 +1,4 @@
-import {observable, runInAction} from 'mobx'
+import {observable, action} from 'mobx'
 import ow from 'ow'
 
 const firebase = require('firebase/app')
@@ -34,14 +34,13 @@ export const FirebaseStore = (function() {
           .firestore()
           .collection(`/users/${this.uid}/${cName}/`)
       },
+      onAuthStateChanged(user) {
+        this.user = user
+      },
     },
-    {user: observable.ref},
+    {user: observable.ref, onAuthStateChanged: action},
     {name: 'FirebaseStore'},
   )
-  firebase
-    .auth()
-    .onAuthStateChanged(user =>
-      runInAction(() => (firebaseStore.user = user)),
-    )
+  firebase.auth().onAuthStateChanged(firebaseStore.onAuthStateChanged)
   return firebaseStore
 })()

@@ -5,6 +5,7 @@ import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
 import {trace} from 'mobx'
+import DevTools from 'mobx-react-devtools'
 
 const R = require('ramda')
 
@@ -224,6 +225,7 @@ const App = injectS(function App() {
         <GrainEdit />
         <footer className={'pt3 pb7 '}>Footer</footer>
       </div>
+      <DevTools />
     </div>
   )
 })
