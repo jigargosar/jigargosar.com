@@ -66,20 +66,22 @@ export function FirePouchSync(pouchStore) {
 // window.addEventListener('storage', function(e) {
 //
 // })
-
+const localforage = require('localforage')
 function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
+
+  const forage = localforage.createInstance({
+    name: `${PouchChangesQueue}.${pouchStore.name}`,
+  })
   const pouchQueue = observable(
     {
       get syncSeqKey() {
         const name = pouchStore.name
         ow(name, ow.string.nonEmpty)
-        return `${name}.sync.lastSeq`
+        return `sync.lastSeq`
       },
-      loadSyncSeq() {
-        const seq = JSON.parse(
-          window.localStorage.getItem(this.syncSeqKey),
-        )
+      async loadSyncSeq() {
+        const seq = await forage.getItem(this.syncSeqKey)
         return ow.isValid(seq, pouchSeqPred) ? seq : 0
       },
       set syncSeq(syncSeq) {
@@ -89,19 +91,27 @@ function PouchChangesQueue(pouchStore) {
             .label('syncSeq')
             .greaterThan(this.loadSyncSeq()),
         )
-        window.localStorage.setItem(this.syncSeqKey, syncSeq)
+        return forage.setItem(this.syncSeqKey, syncSeq)
       },
       pouchQueue: [],
       queuePouchChange(change) {
+        console.debug('queuePouchChange', change)
         this.pouchQueue.push(change)
       },
+
+      async start() {
+        const since = await pouchQueue.loadSyncSeq()
+        pouchStore
+          .liveChanges({since: since})
+          .on('change', pouchQueue.queuePouchChange)
+      },
     },
-    {queuePouchChange: action.bound},
+    {queuePouchChange: action.bound, start: action.bound},
     {name: `PouchChangesQueue: ${pouchStore.name}`},
   )
-  pouchStore
-    .liveChanges({since: pouchQueue.loadSyncSeq()})
-    .on('change', pouchQueue.queuePouchChange)
-  console.warn('pouchQueue.loadSyncSeq', pouchQueue.loadSyncSeq())
+  pouchQueue.start()
+  pouchQueue
+    .loadSyncSeq()
+    .then(x => console.debug('pouchQueue.loadSyncSeq', x))
   return pouchQueue
 }
