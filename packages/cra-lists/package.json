@@ -18,6 +18,7 @@
     "firebase": "5.0.4",
     "kefir": "3.8.3",
     "mobx": "4.3.1",
+    "mobx-localstorage": "0.2.4",
     "mobx-react": "5.2.1",
     "mobx-react-devtools": "5.0.1",
     "mobx-state-tree": "2.0.5",

@@ -21,6 +21,7 @@
       <w>noopener</w>
       <w>noreferrer</w>
       <w>plur</w>
+      <w>pred</w>
       <w>prismjs</w>
       <w>ramda</w>
       <w>sheetify</w>

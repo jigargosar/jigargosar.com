@@ -456,7 +456,7 @@ export const State = types
     const g = PouchCollectionStore('grain')
     return {
       g,
-      pf: FirePouchSync(g),
+      pf: FirePouchSync(g.pouchStore),
       editState: EditState(),
     }
   })

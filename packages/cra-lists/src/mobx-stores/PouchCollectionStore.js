@@ -19,6 +19,7 @@ export function PouchCollectionStore(modelName) {
   return observable(
     {
       pouchStore,
+      name,
       idLookup: observable.map([]),
       async load() {
         const {results, last_seq} = await pouchStore.allChanges()
