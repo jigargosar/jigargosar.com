@@ -46,9 +46,6 @@ export function FirePouchSync(pc) {
           console.error(e)
           if (snapshotDisposer) snapshotDisposer()
           if (changes) changes.cancel()
-          // runInAction(() => (fireSync.syncing = false))
-        } finally {
-          // runInAction(() => (fireSync.syncing = true))
         }
       }
     },
