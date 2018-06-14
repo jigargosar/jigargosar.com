@@ -180,22 +180,23 @@ function PouchChangesQueue(pouchStore) {
             }
           }
         })
-        await this.changeProcessed(change)
       },
-      async changeProcessed(change) {
-        this.pouchQueue.shift()
+      stopSyncing() {
         this.syncing = false
-        await this.setSyncSeq(change.seq)
-        this.tryProcessingQueue()
       },
-      tryProcessingQueue() {
+      async tryProcessingQueue() {
         if (
           !this.cRef ||
           this.syncing ||
           this.pouchQueue.length === 0
         )
           return
-        this.processChange(R.head(this.pouchQueue))
+        const change = R.head(this.pouchQueue)
+        await this.processChange(change)
+        await this.setSyncSeq(change.seq)
+        this.pouchQueue.shift()
+        this.stopSyncing(change)
+        await this.tryProcessingQueue()
       },
       syncToFirestore(cRef) {
         this.cRef = cRef
