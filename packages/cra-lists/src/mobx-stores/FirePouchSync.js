@@ -127,20 +127,25 @@ function PouchChangesQueue(pouchStore) {
         const docRef = this.cRef.doc(change.id)
         await docRef.firestore.runTransaction(async transaction => {
           const snap = await transaction.get(docRef)
-          if (snap.exists) {
-            const fireDoc = snap.data()
-            if (isRemotelyModified(fireDoc)) {
-              debugger
-            } else {
-              debugger
-            }
-          } else {
+
+          function transactionSetDocWithTimestamp() {
             return transaction.set(
               docRef,
               R.merge(change.doc, {
                 serverTimestamp: serverTimestamp(),
               }),
             )
+          }
+
+          if (snap.exists) {
+            const fireDoc = snap.data()
+            if (isRemotelyModified(fireDoc)) {
+              debugger
+            } else {
+              return transactionSetDocWithTimestamp()
+            }
+          } else {
+            return transactionSetDocWithTimestamp()
           }
         })
         await this.changeProcessed(change)
