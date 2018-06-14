@@ -92,6 +92,13 @@ function shouldSkipFirestoreSync(doc) {
   return doc.skipFirestoreSync
 }
 
+function versionMismatch(doc1, doc2) {
+  const versionPred = ow.number.integer.greaterThanOrEqual(0)
+  ow(doc1.version, versionPred)
+  ow(doc2.version, versionPred)
+  return R.equals(doc1.version, doc2.version)
+}
+
 function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
@@ -165,9 +172,12 @@ function PouchChangesQueue(pouchStore) {
           const firestoreDoc = snap.data()
 
           if (isModifiedByLocalActor(firestoreDoc)) {
-            // firestore was locally modified.
+            // doc was locally modified.
             // we shouldn't blindly push, unless local version is newer
-            if (isOlder(doc, firestoreDoc)) {
+            if (
+              isOlder(doc, firestoreDoc) ||
+              versionMismatch(doc, firestoreDoc)
+            ) {
               return transactionEmptyUpdate()
             } else {
               return transactionSetDocWithTimestamp()
