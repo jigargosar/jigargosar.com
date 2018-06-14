@@ -5,6 +5,7 @@ import {configure, observable, runInAction} from 'mobx'
 import {getAppActorId} from '../LocalStorage'
 
 configure({
+  // isolateGlobalState: true,
   // disableErrorBoundaries: true,
   // computedRequiresReaction: true,
   enforceActions: true,

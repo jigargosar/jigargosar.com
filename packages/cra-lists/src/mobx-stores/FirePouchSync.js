@@ -2,8 +2,6 @@ import {FirebaseStore} from './FirebaseStore'
 import {observable, reaction, action, autorun} from 'mobx'
 import ow from 'ow'
 
-const localStorageX = require('mobx-localstorage').default
-
 const firebase = require('firebase/app')
 const Timestamp = firebase.firestore.Timestamp
 const pouchSeqPred = ow.number.integer
@@ -36,22 +34,22 @@ export function FirePouchSync(pouchStore) {
         let snapshotDisposer, changes
         try {
           fireSync.syncing = true
-          const cRef = FirebaseStore.getUserCollectionRef(
-            pouchStore.name,
-          )
-          snapshotDisposer = await cRef
-            .where(
-              'serverTimestamp',
-              '>',
-              Timestamp.fromMillis(fireSync.syncMilli),
-            )
-            .onSnapshot(snapshot => fireSync.queueFireSnapshot)
-
-          changes = await pouchStore
-            .liveChanges({
-              since: fireSync.syncSeq,
-            })
-            .on('change', fireSync.queuePouchChange)
+          // const cRef = FirebaseStore.getUserCollectionRef(
+          //   pouchStore.name,
+          // )
+          // snapshotDisposer = await cRef
+          //   .where(
+          //     'serverTimestamp',
+          //     '>',
+          //     Timestamp.fromMillis(fireSync.syncMilli),
+          //   )
+          //   .onSnapshot(snapshot => fireSync.queueFireSnapshot)
+          //
+          // changes = await pouchStore
+          //   .liveChanges({
+          //     since: fireSync.syncSeq,
+          //   })
+          //   .on('change', fireSync.queuePouchChange)
         } catch (e) {
           console.error(e)
           if (snapshotDisposer) snapshotDisposer()
@@ -63,6 +61,12 @@ export function FirePouchSync(pouchStore) {
   return fireSync
 }
 
+// const localX = observable()
+//
+// window.addEventListener('storage', function(e) {
+//
+// })
+
 function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
   const pouchQueue = observable(
@@ -72,16 +76,20 @@ function PouchChangesQueue(pouchStore) {
         ow(name, ow.string.nonEmpty)
         return `${name}.sync.lastSeq`
       },
-      get syncSeq() {
-        const seq = localStorageX.getItem(this.syncSeqKey)
+      loadSyncSeq() {
+        const seq = JSON.parse(
+          window.localStorage.getItem(this.syncSeqKey),
+        )
         return ow.isValid(seq, pouchSeqPred) ? seq : 0
       },
       set syncSeq(syncSeq) {
         ow(
           syncSeq,
-          pouchSeqPred.label('syncSeq').greaterThan(this.syncSeq),
+          pouchSeqPred
+            .label('syncSeq')
+            .greaterThan(this.loadSyncSeq()),
         )
-        localStorageX.setItem(this.syncSeqKey, syncSeq)
+        window.localStorage.setItem(this.syncSeqKey, syncSeq)
       },
       queue: [],
       queuePouchChange(change) {
@@ -91,11 +99,12 @@ function PouchChangesQueue(pouchStore) {
     {queuePouchChange: action.bound},
     {name: `PouchChangesQueue: ${pouchStore.name}`},
   )
-  autorun(() => {
-    console.error(pouchQueue.syncSeq)
-  })
+  // autorun(() => {
+  //   console.error(pouchQueue.syncSeq)
+  // })
+
   // pouchQueue.syncSeq = 3
-  // console.warn('pouchQueue.syncSeq', pouchQueue.syncSeq)
+  console.warn('pouchQueue.loadSyncSeq', pouchQueue.loadSyncSeq())
   // console.warn('pouchQueue.syncSeqKey', pouchQueue.syncSeqKey)
   return pouchQueue
 }

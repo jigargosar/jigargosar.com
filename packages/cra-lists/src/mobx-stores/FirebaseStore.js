@@ -20,9 +20,7 @@ export const FirebaseStore = (function() {
     firebase
       .firestore()
       .enablePersistence()
-      .catch(error =>
-        console.warn('store enablePersistence result', error),
-      )
+      .catch(error => console.info('enablePersistenceFailed'))
   }
   const firebaseStore = observable(
     {
