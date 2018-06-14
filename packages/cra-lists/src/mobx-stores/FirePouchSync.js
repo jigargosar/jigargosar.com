@@ -2,6 +2,7 @@ import {FirebaseStore} from './FirebaseStore'
 import {action, observable, reaction} from 'mobx'
 import ow from 'ow'
 import {getAppActorId} from '../LocalStorage'
+import {ls} from './local-storage-store'
 
 const R = require('ramda')
 
@@ -88,34 +89,26 @@ function versionMismatch(doc1, doc2) {
   return !R.equals(doc1.version, doc2.version)
 }
 
+function createSyncSeq(key, defaultValue = 0) {
+  return {
+    get: () => ls.getOr(defaultValue, key),
+    set: value => ls.set(key, value),
+  }
+}
+
 function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
-  const forage = localforage.createInstance({
-    name: `PouchChangesQueue.${pouchStore.name}`,
-  })
+  const syncSeq = createSyncSeq(
+    `firestore.${pouchStore}.lastSyncSeq`,
+    0,
+  )
+
   const pouchQueue = observable(
     {
       pouchQueue: observable.array([], {deep: false}),
       cRef: null,
       syncing: false,
-      get syncMilliKey() {
-        const name = pouchStore.name
-        ow(name, ow.string.nonEmpty)
-        return `sync.lastSeq`
-      },
-      async loadSyncMilli() {
-        const seq = await forage.getItem(this.syncMilliKey)
-        return ow.isValid(seq, pouchSeqPred) ? seq : 0
-      },
-      async setSyncTimestamp(syncSeq) {
-        const currentSyncSeq = await this.loadSyncMilli()
-        ow(
-          syncSeq,
-          pouchSeqPred.label('syncSeq').greaterThan(currentSyncSeq),
-        )
-        return forage.setItem(this.syncMilliKey, syncSeq)
-      },
       queuePouchChange(change) {
         console.debug('queuePouchChange', change)
         this.pouchQueue.push(change)
@@ -123,7 +116,7 @@ function PouchChangesQueue(pouchStore) {
       },
 
       async startQueuingChanges() {
-        const since = await pouchQueue.loadSyncMilli()
+        const since = syncSeq.get()
         pouchStore
           .liveChanges({since: since})
           .on('change', pouchQueue.queuePouchChange)
@@ -233,7 +226,7 @@ function PouchChangesQueue(pouchStore) {
           return
         const change = R.head(this.pouchQueue)
         await this.processChange(change)
-        await this.setSyncTimestamp(change.seq)
+        syncSeq.set(change.seq)
         this.pouchQueue.shift()
         this.stopSyncing(change)
         await this.tryProcessingQueue()
@@ -307,7 +300,15 @@ function FirestoreChangesQueue(pouchStore) {
         this.syncing = true
         const doc = docChange.doc.data()
         if (isModifiedByLocalActor(doc)) return
-        debugger
+        return pouchStore
+          .get(doc._id)
+          .then(() => {
+            debugger
+          })
+          .catch(e => {
+            console.log(e)
+            pouchStore.put(doc)
+          })
       },
       stopSyncing() {
         this.syncing = false
