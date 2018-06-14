@@ -6,7 +6,7 @@ import {getAppActorId} from '../LocalStorage'
 const R = require('ramda')
 
 const firebase = require('firebase/app')
-const Timestamp = firebase.firestore.Timestamp
+// const Timestamp = firebase.firestore.Timestamp
 const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 const pouchSeqPred = ow.number.integer
   .label('pouch.seq')
@@ -196,9 +196,9 @@ function PouchChangesQueue(pouchStore) {
   return pouchQueue
 }
 
-const MobxLocalStorage = (function MobxLocalStorage() {
-  window.addEventListener('storage', function(e) {
-    console.warn('storage event', e, e.key, e.value)
-  })
-  return {}
-})()
+// const MobxLocalStorage = (function MobxLocalStorage() {
+//   window.addEventListener('storage', function(e) {
+//     console.warn('storage event', e, e.key, e.value)
+//   })
+//   return {}
+// })()
