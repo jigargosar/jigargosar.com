@@ -66,11 +66,11 @@ function isModifiedByLocalActor(doc) {
 const isModifiedByRemoteActor = R.complement(isModifiedByLocalActor)
 
 const nowPredicate = ow.number.integer.positive
-const isNewer = function isNewer(doc1, doc2) {
-  ow(doc1.modifiedAt, nowPredicate)
-  ow(doc2.modifiedAt, nowPredicate)
-  return doc1.modifiedAt > doc2.modifiedAt
-}
+// const isNewer = function isNewer(doc1, doc2) {
+//   ow(doc1.modifiedAt, nowPredicate)
+//   ow(doc2.modifiedAt, nowPredicate)
+//   return doc1.modifiedAt > doc2.modifiedAt
+// }
 
 const isOlder = function isOlder(doc1, doc2) {
   ow(doc1.modifiedAt, nowPredicate)
@@ -89,7 +89,7 @@ function versionMismatch(doc1, doc2) {
   return !R.equals(doc1.version, doc2.version)
 }
 
-function createSyncSeq(key, defaultValue = 0) {
+function createLSItem(key, defaultValue) {
   return {
     get: () => ls.getOr(defaultValue, key),
     set: value => ls.set(key, value),
@@ -99,7 +99,7 @@ function createSyncSeq(key, defaultValue = 0) {
 function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
-  const syncSeq = createSyncSeq(
+  const syncSeq = createLSItem(
     `firestore.${pouchStore}.lastSyncSeq`,
     0,
   )
