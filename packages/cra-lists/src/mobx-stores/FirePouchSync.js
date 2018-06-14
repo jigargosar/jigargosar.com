@@ -136,16 +136,29 @@ function PouchChangesQueue(pouchStore) {
               }),
             )
           }
+          function transactionEmptyUpdate() {
+            return transaction.set(docRef, {})
+          }
 
-          if (snap.exists) {
-            const fireDoc = snap.data()
-            if (isRemotelyModified(fireDoc)) {
+          if (!snap.exists) {
+            return transactionSetDocWithTimestamp()
+          }
+          const firestoreDoc = snap.data()
+
+          if (isRemotelyModified(firestoreDoc)) {
+            if (doc.modifiedAt < firestoreDoc.modifiedAt) {
               debugger
+            } else {
+              debugger
+            }
+          } else {
+            // firestore was locally modified.
+            // we shouldn't blindly push, unless local version is newer
+            if (doc.modifiedAt < firestoreDoc.modifiedAt) {
+              return transactionEmptyUpdate()
             } else {
               return transactionSetDocWithTimestamp()
             }
-          } else {
-            return transactionSetDocWithTimestamp()
           }
         })
         await this.changeProcessed(change)
