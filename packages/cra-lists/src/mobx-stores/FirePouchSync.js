@@ -12,19 +12,14 @@ export function FirePouchSync(pouchStore) {
   const fireSync = observable(
     {
       syncMilli: 0,
-      syncSeq: 0,
       syncing: false,
       fireQueue: [],
-      pouchQueue: [],
       queueFireSnapshot(snapshot) {
         this.fireQueue.push(snapshot)
       },
-      queuePouchChange(change) {
-        this.pouchQueue.push(change)
-      },
       pcq: PouchChangesQueue(pouchStore),
     },
-    {queueFireSnapshot: action.bound, queuePouchChange: action.bound},
+    {queueFireSnapshot: action.bound},
     {name: `PouchFireSync: ${pouchStore.name}`},
   )
   reaction(
@@ -99,17 +94,20 @@ function PouchChangesQueue(pouchStore) {
         this.pouchQueue.push(change)
       },
 
-      async start() {
+      async startQueuingChanges() {
         const since = await pouchQueue.loadSyncSeq()
         pouchStore
           .liveChanges({since: since})
           .on('change', pouchQueue.queuePouchChange)
       },
     },
-    {queuePouchChange: action.bound, start: action.bound},
+    {
+      queuePouchChange: action.bound,
+      startQueuingChanges: action.bound,
+    },
     {name: `PouchChangesQueue: ${pouchStore.name}`},
   )
-  pouchQueue.start()
+  pouchQueue.startQueuingChanges()
   pouchQueue
     .loadSyncSeq()
     .then(x => console.debug('pouchQueue.loadSyncSeq', x))
