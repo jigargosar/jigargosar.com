@@ -16,7 +16,7 @@ import firebase from 'firebase/app'
 import {updateFirestoreFromPouchDoc} from './UpdateFirestore'
 import {PouchCollectionStore} from '../mobx-stores/PouchCollectionStore'
 import ow from 'ow'
-import {PouchFireSync} from '../mobx-stores/PouchFireSync'
+import {FirePouchSync} from '../mobx-stores/FirePouchSync'
 
 require('firebase/auth')
 require('firebase/firestore')
@@ -456,7 +456,7 @@ export const State = types
     const g = PouchCollectionStore('grain')
     return {
       g,
-      pf: PouchFireSync(g),
+      pf: FirePouchSync(g),
       editState: EditState(),
     }
   })
