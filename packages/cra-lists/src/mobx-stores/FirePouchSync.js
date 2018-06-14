@@ -1,6 +1,9 @@
 import {FirebaseStore} from './FirebaseStore'
 import {observable, reaction, action, autorun} from 'mobx'
 import ow from 'ow'
+import {getAppActorId} from '../LocalStorage'
+
+const R = require('ramda')
 
 const firebase = require('firebase/app')
 const Timestamp = firebase.firestore.Timestamp
@@ -63,6 +66,12 @@ export function FirePouchSync(pouchStore) {
 //
 // })
 const localforage = require('localforage')
+
+function isRemotelyModified(doc) {
+  ow(doc.actorId, ow.string.label('doc.actorId').nonEmpty)
+  return !R.equals(doc.actorId, getAppActorId())
+}
+
 function PouchChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
@@ -71,8 +80,9 @@ function PouchChangesQueue(pouchStore) {
   })
   const pouchQueue = observable(
     {
-      pouchQueue: [],
+      pouchQueue: observable.array([], {deep: false}),
       cRef: null,
+      syncing: false,
       get syncSeqKey() {
         const name = pouchStore.name
         ow(name, ow.string.nonEmpty)
@@ -94,6 +104,7 @@ function PouchChangesQueue(pouchStore) {
       queuePouchChange(change) {
         console.debug('queuePouchChange', change)
         this.pouchQueue.push(change)
+        this.tryProcessingQueue()
       },
 
       async startQueuingChanges() {
@@ -102,8 +113,22 @@ function PouchChangesQueue(pouchStore) {
           .liveChanges({since: since})
           .on('change', pouchQueue.queuePouchChange)
       },
+      processChange(change) {
+        const doc = change.doc
+        if (isRemotelyModified(doc)) return
+        debugger
+      },
+      tryProcessingQueue() {
+        if (!this.cRef || this.syncing) return
+        const change = R.head(this.pouchQueue)
+        if (change) {
+          this.syncing = true
+          this.processChange(change)
+        }
+      },
       syncToFirestore(cRef) {
         this.cRef = cRef
+        this.tryProcessingQueue()
       },
     },
     {
