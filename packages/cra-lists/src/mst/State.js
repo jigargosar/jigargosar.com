@@ -1,10 +1,9 @@
 import {flow, types} from 'mobx-state-tree'
 import {observable} from 'mobx'
 import {SF} from '../safe-fun'
-import {Fire} from './Fire'
 import {PouchCollectionStore} from '../mobx-stores/PouchCollectionStore'
 import ow from 'ow'
-import {FirePouchSync} from '../mobx-stores/FirePouchSync'
+import {FirebaseService} from '../mobx-stores/FirebaseService'
 
 require('firebase/auth')
 require('firebase/firestore')
@@ -32,15 +31,13 @@ function noCAMDown(event) {
 export const State = types
   .model('RootState', {
     pageTitle: 'CRA List Proto',
-    fire: types.optional(Fire, {}),
     hideRenderState: true,
   })
   .volatile(() => {
-    const g = PouchCollectionStore('grain')
     return {
-      g,
-      pf: FirePouchSync(g.pouchStore),
+      g: PouchCollectionStore('grain'),
       editState: EditState(),
+      fire: FirebaseService,
     }
   })
   .views(self => {

@@ -33,7 +33,7 @@ const buttonCN =
 const injectS = R.compose(withState, observer)
 
 const SignInOutView = injectS(function SignInOutView({s}) {
-  const userInfo = s.fire.userInfo
+  const userInfo = s.fire.user
   const content = userInfo ? (
     <F>
       <div>{userInfo.displayName}</div>

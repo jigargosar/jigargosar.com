@@ -1,11 +1,11 @@
-import {observable, action} from 'mobx'
+import {action, observable} from 'mobx'
 import ow from 'ow'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
 
-export const FirebaseStore = (function() {
+export const FirebaseService = (function() {
   if (!firebase.apps[0]) {
     var config = {
       apiKey: 'AIzaSyAve3E-llOy2_ly87mJMSvcWDG6Uqyq8PA',
@@ -29,7 +29,7 @@ export const FirebaseStore = (function() {
         ow(this.user, ow.object.nonEmpty)
         return this.user.uid
       },
-      getUserCollectionRef(cName) {
+      createUserCollectionRef(cName) {
         return firebase
           .firestore()
           .collection(`/users/${this.uid}/${cName}/`)
@@ -37,9 +37,17 @@ export const FirebaseStore = (function() {
       onAuthStateChanged(user) {
         this.user = user
       },
+      signIn() {
+        const provider = new firebase.auth.GoogleAuthProvider()
+        provider.setCustomParameters({prompt: 'select_account'})
+        return firebase.auth().signInWithRedirect(provider)
+      },
+      signOut() {
+        return firebase.auth().signOut()
+      },
     },
     {user: observable.ref, onAuthStateChanged: action.bound},
-    {name: 'FirebaseStore'},
+    {name: 'FirebaseService'},
   )
   firebase.auth().onAuthStateChanged(firebaseStore.onAuthStateChanged)
   return firebaseStore

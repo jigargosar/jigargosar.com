@@ -1,7 +1,7 @@
-import {FirebaseStore} from './FirebaseStore'
+import {FirebaseService} from './FirebaseService'
 import {action, observable, reaction} from 'mobx'
 import ow from 'ow'
-import {getAppActorId} from '../LocalStorage'
+import {getAppActorId} from '../lib/app-actor-id'
 import {createLSItem} from '../lib/LocalStorageService'
 
 const R = require('ramda')
@@ -23,10 +23,10 @@ export function FirePouchSync(pouchStore) {
       pouchChangesQueue: PouchChangesQueue(pouchStore),
       syncFromFireStore: SyncFromFirestore(),
       trySync() {
-        if (FirebaseStore.user && !fireSync.syncing) {
+        if (FirebaseService.user && !fireSync.syncing) {
           try {
             fireSync.syncing = true
-            const cRef = FirebaseStore.getUserCollectionRef(
+            const cRef = FirebaseService.createUserCollectionRef(
               pouchStore.name,
             )
             fireSync.pouchChangesQueue.syncToFirestore(cRef)
@@ -44,7 +44,7 @@ export function FirePouchSync(pouchStore) {
     {name: `PouchFireSync: ${pouchStore.name}`},
   )
   reaction(
-    () => [FirebaseStore.user, fireSync.syncing],
+    () => [FirebaseService.user, fireSync.syncing],
     fireSync.trySync,
   )
   return fireSync

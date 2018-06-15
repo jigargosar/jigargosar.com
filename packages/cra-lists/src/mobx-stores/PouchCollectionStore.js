@@ -2,7 +2,8 @@ import nanoid from 'nanoid'
 import {PouchDBService} from '../lib/PouchDBService'
 import {SF} from '../safe-fun'
 import {action, observable} from 'mobx'
-import {getAppActorId} from '../LocalStorage'
+import {getAppActorId} from '../lib/app-actor-id'
+import {FirePouchSync} from './FirePouchSync'
 
 const m = require('mobx')
 m.configure({
@@ -23,6 +24,7 @@ export function PouchCollectionStore(modelName) {
       get name() {
         return name
       },
+      pf: FirePouchSync(pouchStore),
       get pouchStore() {
         return pouchStore
       },
