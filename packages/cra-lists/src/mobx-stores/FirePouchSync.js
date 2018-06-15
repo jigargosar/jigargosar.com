@@ -223,17 +223,38 @@ function SyncFromFirestore() {
         return syncTimestamp.set(firestoreTimestamp)
       }
 
-      function processFirestoreChange(cRef, pouchStore, doc) {
-        if (isModifiedByLocalActor(doc)) return Promise.resolve()
+      function processFirestoreDoc(fireDoc) {
+        if (isModifiedByLocalActor(fireDoc)) return Promise.resolve()
         return pouchStore
-          .get(doc._id)
+          .get(fireDoc._id)
           .then(() => {
             debugger
           })
           .catch(e => {
             console.log(e)
-            pouchStore.put(doc)
+            pouchStore.put(fireDoc)
           })
+      }
+
+      function onFirestoreDocChange(docChange) {
+        const fireDoc = docChange.doc.data()
+        console.log('fireDoc', fireDoc)
+        queue.add(() =>
+          processFirestoreDoc(fireDoc)
+            .then(() =>
+              setSyncFirestoreTimestamp(fireDoc.serverTimestamp),
+            )
+            .catch(e => {
+              console.log('Error syncFromFirestore. Stopping', e)
+              disposer()
+              queue.clear()
+            }),
+        )
+      }
+
+      function onFirestoreQuerySnapshot(querySnapshot) {
+        const docChanges = querySnapshot.docChanges()
+        docChanges.forEach(onFirestoreDocChange)
       }
 
       const firestoreTimestamp = getSyncFirestoreTimestamp()
@@ -241,24 +262,7 @@ function SyncFromFirestore() {
       const disposer = cRef
         .where('serverTimestamp', '>', firestoreTimestamp)
         .orderBy('serverTimestamp')
-        .onSnapshot(snapshot => {
-          const docChanges = snapshot.docChanges()
-          docChanges.forEach(docChange => {
-            const fireDoc = docChange.doc.data()
-            console.log('fireDoc', fireDoc)
-            queue.add(() =>
-              processFirestoreChange(cRef, pouchStore, fireDoc)
-                .then(() =>
-                  setSyncFirestoreTimestamp(fireDoc.serverTimestamp),
-                )
-                .catch(e => {
-                  console.log('Error syncFromFirestore. Stopping', e)
-                  disposer()
-                  queue.clear()
-                }),
-            )
-          })
-        })
+        .onSnapshot(onFirestoreQuerySnapshot)
     },
   }
 }
