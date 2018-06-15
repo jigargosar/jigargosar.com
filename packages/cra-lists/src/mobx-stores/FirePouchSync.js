@@ -196,19 +196,6 @@ function PouchChangesQueue(pouchStore) {
   }
 }
 
-function processFirestoreChange(cRef, pouchStore, doc) {
-  if (isModifiedByLocalActor(doc)) return Promise.resolve()
-  return pouchStore
-    .get(doc._id)
-    .then(() => {
-      debugger
-    })
-    .catch(e => {
-      console.log(e)
-      pouchStore.put(doc)
-    })
-}
-
 function FirestoreChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
@@ -258,4 +245,17 @@ function FirestoreChangesQueue(pouchStore) {
         })
     },
   }
+}
+
+function processFirestoreChange(cRef, pouchStore, doc) {
+  if (isModifiedByLocalActor(doc)) return Promise.resolve()
+  return pouchStore
+    .get(doc._id)
+    .then(() => {
+      debugger
+    })
+    .catch(e => {
+      console.log(e)
+      pouchStore.put(doc)
+    })
 }
