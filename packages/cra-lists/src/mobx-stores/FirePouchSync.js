@@ -213,7 +213,9 @@ function FirestoreChangesQueue(pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
   const syncTimestamp = createLSItem(
-    `FirestoreChangesQueue.${pouchStore.name}.lastSyncTimestamp`,
+    `FirestoreChangesQueue.${
+      pouchStore.name
+    }.lastSyncFirestoreTimestamp`,
     Timestamp.fromMillis(0),
   )
   function getSyncFirestoreTimestamp() {
