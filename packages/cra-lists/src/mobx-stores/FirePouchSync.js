@@ -253,10 +253,11 @@ function SyncFromFirestore() {
       }
 
       function onFirestoreQuerySnapshot(querySnapshot) {
-        const docChanges = querySnapshot.docChanges()
-        docChanges.forEach(onFirestoreDocChange)
+        queue.add(() => {
+          const docChanges = querySnapshot.docChanges()
+          docChanges.forEach(onFirestoreDocChange)
+        })
       }
-
       const firestoreTimestamp = getSyncFirestoreTimestamp()
       console.log('since firestoreTimestamp', firestoreTimestamp)
       const disposer = cRef
