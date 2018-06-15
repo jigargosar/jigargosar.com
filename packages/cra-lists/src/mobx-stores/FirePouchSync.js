@@ -232,12 +232,11 @@ function SyncFromFirestore() {
           })
       }
 
-      function onFireDocChange(docChange) {
+      async function onFireDocChange(docChange) {
         const fireDoc = docChange.doc.data()
         console.log('fireDoc', fireDoc)
-        return processFirestoreDoc(fireDoc).then(() =>
-          setSyncFirestoreTimestampFromFireDoc(fireDoc),
-        )
+        await processFirestoreDoc(fireDoc)
+        setSyncFirestoreTimestampFromFireDoc(fireDoc)
       }
 
       const firestoreTimestamp = getSyncFirestoreTimestamp()
@@ -246,16 +245,18 @@ function SyncFromFirestore() {
         .where('serverTimestamp', '>', firestoreTimestamp)
         .orderBy('serverTimestamp')
         .onSnapshot(querySnapshot =>
-          queue.add(() =>
-            pEachSeries(
-              querySnapshot.docChanges(),
-              onFireDocChange,
-            ).catch(e => {
+          queue.add(async () => {
+            try {
+              await pEachSeries(
+                querySnapshot.docChanges(),
+                onFireDocChange,
+              )
+            } catch (e) {
               console.log('Error syncFromFirestore. Stopping', e)
               disposer()
               queue.clear()
-            }),
-          ),
+            }
+          }),
         )
     },
   }
