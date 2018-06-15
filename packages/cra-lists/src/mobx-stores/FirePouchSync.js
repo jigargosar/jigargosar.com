@@ -2,7 +2,7 @@ import {FirebaseStore} from './FirebaseStore'
 import {action, observable, reaction} from 'mobx'
 import ow from 'ow'
 import {getAppActorId} from '../LocalStorage'
-import {createLSItem} from './local-storage-store'
+import {createLSItem} from './local-storage-service'
 
 const R = require('ramda')
 

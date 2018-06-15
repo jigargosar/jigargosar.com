@@ -16,7 +16,7 @@ function getParsedOrExactItem(key) {
   }
 }
 
-export const LocalStorageStore = (function LocalStorageStore() {
+export const LocalStorageService = (function LocalStorageStore() {
   return {
     getOr(defaultValue, key) {
       ow(key, ow.string.nonEmpty)
@@ -34,9 +34,7 @@ export const LocalStorageStore = (function LocalStorageStore() {
 
 export function createLSItem(key, defaultValue) {
   return {
-    get: () => ls.getOr(defaultValue, key),
-    set: value => ls.set(key, value),
+    get: () => LocalStorageService.getOr(defaultValue, key),
+    set: value => LocalStorageService.set(key, value),
   }
 }
-
-export const ls = LocalStorageStore
