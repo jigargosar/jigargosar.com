@@ -216,19 +216,25 @@ function FirestoreChangesQueue(pouchStore) {
     `FirestoreChangesQueue.${pouchStore.name}.lastSyncTimestamp`,
     Timestamp.fromMillis(0),
   )
+  function getSyncFirestoreTimestamp() {
+    return new Timestamp(
+      syncTimestamp.get().seconds,
+      syncTimestamp.get().nanoseconds,
+    )
+  }
+
+  function setSyncFirestoreTimestamp(firestoreTimestamp) {
+    return syncTimestamp.set(firestoreTimestamp)
+  }
 
   const queue = new PQueue({concurrency: 1})
 
   return {
     syncFromFirestore(cRef) {
-      const since = syncTimestamp.get()
-      console.log('sinceTimestamp', since)
+      const firestoreTimestamp = getSyncFirestoreTimestamp()
+      console.log('since firestoreTimestamp', firestoreTimestamp)
       const disposer = cRef
-        .where(
-          'serverTimestamp',
-          '>',
-          new Timestamp(since.seconds, since.nanoseconds),
-        )
+        .where('serverTimestamp', '>', firestoreTimestamp)
         .orderBy('serverTimestamp')
         .onSnapshot(snapshot => {
           const docChanges = snapshot.docChanges()
@@ -238,7 +244,7 @@ function FirestoreChangesQueue(pouchStore) {
             queue.add(() =>
               processFirestoreChange(cRef, pouchStore, fireDoc)
                 .then(() =>
-                  syncTimestamp.set(fireDoc.serverTimestamp),
+                  setSyncFirestoreTimestamp(fireDoc.serverTimestamp),
                 )
                 .catch(e => {
                   console.log('Error syncFromFirestore. Stopping', e)
