@@ -7,14 +7,14 @@ if (!module.hot || !module.hot.data) {
   require('pouchdb-all-dbs')(PouchDB)
 }
 
-export const PouchService = (function PouchService() {
+export const PouchDBService = (function PouchService() {
   return {
     getAllDbNames() {
       return PouchDB.allDbs()
     },
     create(name, options = {}) {
       ow(name, ow.string.minLength(3))
-      return PouchStore(new PouchDB(name, options), this)
+      return PouchDBHelper(new PouchDB(name, options), this)
     },
     exists(name) {
       return this.getAllDbNames().includes(name)
@@ -29,14 +29,13 @@ export const PouchService = (function PouchService() {
 
 if (module.hot) {
   window.requestAnimationFrame(() =>
-    PouchService.getAllDbNames().then(console.log),
+    PouchDBService.getAllDbNames().then(console.log),
   )
 }
 
-// import nanoid from 'nanoid'
 const R = require('ramda')
 
-function PouchStore(db, service) {
+function PouchDBHelper(db, service) {
   return {
     _db: db,
     get name() {

@@ -1,5 +1,5 @@
 import nanoid from 'nanoid'
-import {PouchService} from './PouchService'
+import {PouchDBService} from './PouchDBService'
 import {SF} from '../safe-fun'
 import {action, observable} from 'mobx'
 import {getAppActorId} from '../LocalStorage'
@@ -17,7 +17,7 @@ const idPropName = '_id'
 
 export function PouchCollectionStore(modelName) {
   const name = `${modelName}Collection`
-  const pouchStore = PouchService.create(name)
+  const pouchStore = PouchDBService.create(name)
   return m.observable(
     {
       get name() {
