@@ -1,10 +1,11 @@
 import nanoid from 'nanoid'
 import {PouchService} from './PouchService'
 import {SF} from '../safe-fun'
-import {action, configure, observable} from 'mobx'
+import {action, observable} from 'mobx'
 import {getAppActorId} from '../LocalStorage'
 
-configure({
+const m = require('mobx')
+m.configure({
   // isolateGlobalState: true,
   // disableErrorBoundaries: true,
   // computedRequiresReaction: true,
@@ -17,13 +18,15 @@ const idPropName = '_id'
 export function PouchCollectionStore(modelName) {
   const name = `${modelName}Collection`
   const pouchStore = PouchService.create(name)
-  return observable(
+  return m.observable(
     {
-      name,
+      get name() {
+        return name
+      },
       get pouchStore() {
         return pouchStore
       },
-      idLookup: observable.map([], {name: 'idLookup'}),
+      idLookup: m.observable.map([], {name: 'idLookup'}),
       setIdLookup(idLookup) {
         this.idLookup.replace(idLookup)
       },
@@ -79,11 +82,16 @@ export function PouchCollectionStore(modelName) {
         )(doc)
         return pouchStore.put(updatedDoc)
       },
+      toDebugState() {
+        return m.toJS(this)
+      },
     },
     {
       idLookup: observable,
       setIdLookup: action.bound,
       handleChange: action.bound,
+      load: action.bound,
+      userUpsert: action.bound,
     },
     {name},
   )

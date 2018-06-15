@@ -447,11 +447,18 @@ const EditState = function() {
     {name: 'EditState'},
   )
 }
+
+function noCAMDown(event) {
+  const camState = SF.pick(['ctrlKey', 'altKey', 'metaKey'], event)
+  return !R.any(R.identity, R.values(camState))
+}
+
 export const State = types
   .model('RootState', {
     pageTitle: 'CRA List Proto',
     grains: types.optional(PFGrainCollection, {}),
     fire: types.optional(Fire, {}),
+    hideRenderState: true,
   })
   .volatile(() => {
     const g = PouchCollectionStore('grain')
@@ -470,14 +477,26 @@ export const State = types
         return self.g.list
       },
       debugJSON() {
-        return R.merge(getSnapshot(self), {g: m.toJS(self.g)})
+        // return R.merge(getSnapshot(self), {g: m.toJS(self.g)})
+        return m.toJS(self.g)
       },
     }
   })
   .actions(self => {
     return {
       afterCreate() {
+        window.addEventListener('keypress', event => {
+          if (event.key === `~` && noCAMDown(event)) {
+            self.toggleRenderStateView()
+          }
+        })
         self.g.load()
+      },
+      toggleRenderStateView() {
+        self.hideRenderState = !self.hideRenderState
+      },
+      onCloseRenderState(e) {
+        self.hideRenderState = true
       },
       onAddNew() {
         return self.g.userUpsert({text: `${Math.random()}`})

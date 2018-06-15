@@ -12,6 +12,8 @@
       <w>graphql</w>
       <w>inspectable</w>
       <w>kefir</w>
+      <w>keydown</w>
+      <w>keypress</w>
       <w>klipse</w>
       <w>linter</w>
       <w>localforage</w>

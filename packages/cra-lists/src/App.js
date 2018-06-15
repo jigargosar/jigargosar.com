@@ -228,7 +228,11 @@ const App = injectS(function App({s}) {
       </div>
       <DevTools />
       {/*<RenderState src={s.toJSON()} />*/}
-      <RenderState src={s.debugJSON()} />
+      <RenderState
+        src={s.debugJSON()}
+        hide={s.hideRenderState}
+        onClose={s.onCloseRenderState}
+      />
     </div>
   )
 })

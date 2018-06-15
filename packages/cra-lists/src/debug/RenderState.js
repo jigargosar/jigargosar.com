@@ -6,11 +6,12 @@ import PropTypes from 'prop-types'
 
 const RA = require('ramda-adjunct')
 
-export function RenderState({hide, src = null}) {
+export function RenderState({hide, onClose = () => {}, src = null}) {
   if (hide) return null
   return (
-    <div className={'bg-black-40 absolute top-0 left-0 w-100'}>
-      <div className={'bg-white pa3 ma3 shadow-1'}>
+    <div className={'z-max bg-black-40 absolute top-0 left-0 w-100'}>
+      <div className={'z-0 bg-white pa3 ma3 shadow-1'}>
+        <button onClick={onClose}>X</button>
         <ReactJSON src={src} />
       </div>
     </div>
