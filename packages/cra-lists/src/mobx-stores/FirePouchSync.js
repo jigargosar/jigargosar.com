@@ -198,7 +198,7 @@ function PouchChangesQueue(pouchStore) {
     },
   }
 }
-const pMapSeries = require('p-map-series')
+const pEachSeries = require('p-each-series')
 
 function SyncFromFirestore() {
   const queue = new PQueue({concurrency: 1})
@@ -252,7 +252,7 @@ function SyncFromFirestore() {
         .orderBy('serverTimestamp')
         .onSnapshot(querySnapshot =>
           queue.add(() =>
-            pMapSeries(
+            pEachSeries(
               querySnapshot.docChanges(),
               onFireDocChange,
             ).catch(e => {

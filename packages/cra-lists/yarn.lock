@@ -5756,6 +5756,12 @@ ow@0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/ow/-/ow-0.5.0.tgz#63628c538291fce1299e88d9a62c3234a6d29980"
 
+p-each-series@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/p-each-series/-/p-each-series-1.0.0.tgz#930f3d12dd1f50e7434457a22cd6f04ac6ad7f71"
+  dependencies:
+    p-reduce "^1.0.0"
+
 p-finally@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"
