@@ -21,7 +21,7 @@ export function FirePouchSync(pouchStore) {
         this.fireQueue.push(snapshot)
       },
       pouchChangesQueue: PouchChangesQueue(pouchStore),
-      firestoreChangesQueue: FirestoreChangesQueue(pouchStore),
+      syncFromFireStore: SyncFromFirestore(),
       trySync() {
         if (FirebaseStore.user && !fireSync.syncing) {
           try {
@@ -30,7 +30,10 @@ export function FirePouchSync(pouchStore) {
               pouchStore.name,
             )
             fireSync.pouchChangesQueue.syncToFirestore(cRef)
-            fireSync.firestoreChangesQueue.syncFromFirestore(cRef)
+            fireSync.syncFromFireStore.startSyncFromFirestore(
+              cRef,
+              pouchStore,
+            )
           } catch (e) {
             console.error(e)
           }
@@ -196,43 +199,43 @@ function PouchChangesQueue(pouchStore) {
   }
 }
 
-function FirestoreChangesQueue(pouchStore) {
-  ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
-
-  const syncTimestamp = createLSItem(
-    `FirestoreChangesQueue.${
-      pouchStore.name
-    }.lastSyncFirestoreTimestamp`,
-    Timestamp.fromMillis(0),
-  )
-  function getSyncFirestoreTimestamp() {
-    return new Timestamp(
-      syncTimestamp.get().seconds,
-      syncTimestamp.get().nanoseconds,
-    )
-  }
-
-  function setSyncFirestoreTimestamp(firestoreTimestamp) {
-    return syncTimestamp.set(firestoreTimestamp)
-  }
-
-  function processFirestoreChange(cRef, pouchStore, doc) {
-    if (isModifiedByLocalActor(doc)) return Promise.resolve()
-    return pouchStore
-      .get(doc._id)
-      .then(() => {
-        debugger
-      })
-      .catch(e => {
-        console.log(e)
-        pouchStore.put(doc)
-      })
-  }
-
+function SyncFromFirestore() {
   const queue = new PQueue({concurrency: 1})
 
   return {
-    syncFromFirestore(cRef) {
+    startSyncFromFirestore(cRef, pouchStore) {
+      ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
+
+      const syncTimestamp = createLSItem(
+        `FirestoreChangesQueue.${
+          pouchStore.name
+        }.lastSyncFirestoreTimestamp`,
+        Timestamp.fromMillis(0),
+      )
+      function getSyncFirestoreTimestamp() {
+        return new Timestamp(
+          syncTimestamp.get().seconds,
+          syncTimestamp.get().nanoseconds,
+        )
+      }
+
+      function setSyncFirestoreTimestamp(firestoreTimestamp) {
+        return syncTimestamp.set(firestoreTimestamp)
+      }
+
+      function processFirestoreChange(cRef, pouchStore, doc) {
+        if (isModifiedByLocalActor(doc)) return Promise.resolve()
+        return pouchStore
+          .get(doc._id)
+          .then(() => {
+            debugger
+          })
+          .catch(e => {
+            console.log(e)
+            pouchStore.put(doc)
+          })
+      }
+
       const firestoreTimestamp = getSyncFirestoreTimestamp()
       console.log('since firestoreTimestamp', firestoreTimestamp)
       const disposer = cRef
