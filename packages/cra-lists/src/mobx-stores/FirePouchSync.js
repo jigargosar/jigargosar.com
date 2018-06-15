@@ -236,24 +236,30 @@ function SyncFromFirestore() {
           })
       }
 
+      function onFireDoc(fireDoc) {
+        console.log('fireDoc', fireDoc)
+        return processFirestoreDoc(fireDoc)
+          .then(() =>
+            setSyncFirestoreTimestamp(fireDoc.serverTimestamp),
+          )
+          .catch(e => {
+            console.log('Error syncFromFirestore. Stopping', e)
+            disposer()
+            queue.clear()
+          })
+      }
+
       function onFirestoreQuerySnapshot(querySnapshot) {
         queue.add(() => {
           const docChanges = querySnapshot.docChanges()
-          docChanges.forEach(function(docChange) {
-            const fireDoc = docChange.doc.data()
-            console.log('fireDoc', fireDoc)
-            queue.add(() =>
-              processFirestoreDoc(fireDoc)
-                .then(() =>
-                  setSyncFirestoreTimestamp(fireDoc.serverTimestamp),
-                )
-                .catch(e => {
-                  console.log('Error syncFromFirestore. Stopping', e)
-                  disposer()
-                  queue.clear()
-                }),
-            )
-          })
+          const fireDocs = R.map(
+            docChange => docChange.doc.data(),
+            docChanges,
+          )
+
+          fireDocs.forEach(fireDoc =>
+            queue.add(() => onFireDoc(fireDoc)),
+          )
         })
       }
       const firestoreTimestamp = getSyncFirestoreTimestamp()
