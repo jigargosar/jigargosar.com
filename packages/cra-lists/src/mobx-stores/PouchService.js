@@ -1,4 +1,3 @@
-import React from 'react'
 import PouchDB from 'pouchdb-browser'
 import ow from 'ow'
 import {PouchStore} from './PouchStore'

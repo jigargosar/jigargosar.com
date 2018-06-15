@@ -19,8 +19,10 @@ export function PouchCollectionStore(modelName) {
   const pouchStore = PouchService.create(name)
   return observable(
     {
-      pouchStore,
       name,
+      get pouchStore() {
+        return pouchStore
+      },
       idLookup: observable.map([], {name: 'idLookup'}),
       setIdLookup(idLookup) {
         this.idLookup.replace(idLookup)

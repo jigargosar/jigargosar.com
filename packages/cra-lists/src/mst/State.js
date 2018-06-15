@@ -21,6 +21,7 @@ import {FirePouchSync} from '../mobx-stores/FirePouchSync'
 require('firebase/auth')
 require('firebase/firestore')
 
+const m = require('mobx')
 const pReflect = require('p-reflect')
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -467,6 +468,9 @@ export const State = types
       // },
       get grainsList() {
         return self.g.list
+      },
+      debugJSON() {
+        return R.merge(getSnapshot(self), {g: m.toJS(self.g)})
       },
     }
   })

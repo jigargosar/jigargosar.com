@@ -6,6 +6,7 @@ import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
 import {trace} from 'mobx'
 import DevTools from 'mobx-react-devtools'
+import {RenderState} from './debug/RenderState'
 
 const R = require('ramda')
 
@@ -215,7 +216,7 @@ const GrainListHeader = injectS(function GrainListHeader({s}) {
     </SpacedRow>
   )
 })
-const App = injectS(function App() {
+const App = injectS(function App({s}) {
   return (
     <div className={'f6'}>
       <Header />
@@ -226,6 +227,8 @@ const App = injectS(function App() {
         <footer className={'pt3 pb7 '}>Footer</footer>
       </div>
       <DevTools />
+      {/*<RenderState src={s.toJSON()} />*/}
+      <RenderState src={s.debugJSON()} />
     </div>
   )
 })
