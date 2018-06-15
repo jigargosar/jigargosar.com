@@ -220,8 +220,8 @@ function SyncFromFirestore() {
         )
       }
 
-      function setSyncFirestoreTimestamp(firestoreTimestamp) {
-        return syncTimestamp.set(firestoreTimestamp)
+      function setSyncFirestoreTimestampFromFireDoc(fireDoc) {
+        return syncTimestamp.set(fireDoc.serverTimestamp)
       }
 
       function processFirestoreDoc(fireDoc) {
@@ -241,7 +241,7 @@ function SyncFromFirestore() {
         const fireDoc = docChange.doc.data()
         console.log('fireDoc', fireDoc)
         return processFirestoreDoc(fireDoc).then(() =>
-          setSyncFirestoreTimestamp(fireDoc.serverTimestamp),
+          setSyncFirestoreTimestampFromFireDoc(fireDoc),
         )
       }
 
