@@ -198,6 +198,7 @@ function PouchChangesQueue(pouchStore) {
     },
   }
 }
+const pMapSeries = require('p-map-series')
 
 function SyncFromFirestore() {
   const queue = new PQueue({concurrency: 1})
@@ -236,38 +237,31 @@ function SyncFromFirestore() {
           })
       }
 
-      function onFireDoc(fireDoc) {
+      function onFireDocChange(docChange) {
+        const fireDoc = docChange.doc.data()
         console.log('fireDoc', fireDoc)
-        return processFirestoreDoc(fireDoc)
-          .then(() =>
-            setSyncFirestoreTimestamp(fireDoc.serverTimestamp),
-          )
-          .catch(e => {
-            console.log('Error syncFromFirestore. Stopping', e)
-            disposer()
-            queue.clear()
-          })
+        return processFirestoreDoc(fireDoc).then(() =>
+          setSyncFirestoreTimestamp(fireDoc.serverTimestamp),
+        )
       }
 
-      function onFirestoreQuerySnapshot(querySnapshot) {
-        queue.add(() => {
-          const docChanges = querySnapshot.docChanges()
-          const fireDocs = R.map(
-            docChange => docChange.doc.data(),
-            docChanges,
-          )
-
-          fireDocs.forEach(fireDoc =>
-            queue.add(() => onFireDoc(fireDoc)),
-          )
-        })
-      }
       const firestoreTimestamp = getSyncFirestoreTimestamp()
       console.log('since firestoreTimestamp', firestoreTimestamp)
       const disposer = cRef
         .where('serverTimestamp', '>', firestoreTimestamp)
         .orderBy('serverTimestamp')
-        .onSnapshot(onFirestoreQuerySnapshot)
+        .onSnapshot(querySnapshot =>
+          queue.add(() =>
+            pMapSeries(
+              querySnapshot.docChanges(),
+              onFireDocChange,
+            ).catch(e => {
+              console.log('Error syncFromFirestore. Stopping', e)
+              disposer()
+              queue.clear()
+            }),
+          ),
+        )
     },
   }
 }
