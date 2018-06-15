@@ -7,7 +7,7 @@ function stringifyAndSetItem(key, value) {
   return window.localStorage.setItem(key, JSON.stringify(value))
 }
 
-function getValue(key) {
+function getParsedOrExactItem(key) {
   const value = window.localStorage.getItem(key)
   try {
     return JSON.parse(value)
@@ -20,11 +20,11 @@ export const LocalStorageStore = (function LocalStorageStore() {
   return {
     getOr(defaultValue, key) {
       ow(key, ow.string.nonEmpty)
-      const value = getValue(key)
+      const value = getParsedOrExactItem(key)
       if (R.isNil(value)) {
         stringifyAndSetItem(key, defaultValue)
       }
-      return getValue(key)
+      return getParsedOrExactItem(key)
     },
     set(key, value) {
       return stringifyAndSetItem(key, value)

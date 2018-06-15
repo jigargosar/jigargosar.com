@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactJSON from 'react-json-view'
-import {PouchDBService} from '../mobx-stores/PouchDBService'
+import {PouchDBService} from '../lib/PouchDBService'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
