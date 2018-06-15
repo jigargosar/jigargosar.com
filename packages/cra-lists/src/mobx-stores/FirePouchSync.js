@@ -216,6 +216,19 @@ function FirestoreChangesQueue(pouchStore) {
     return syncTimestamp.set(firestoreTimestamp)
   }
 
+  function processFirestoreChange(cRef, pouchStore, doc) {
+    if (isModifiedByLocalActor(doc)) return Promise.resolve()
+    return pouchStore
+      .get(doc._id)
+      .then(() => {
+        debugger
+      })
+      .catch(e => {
+        console.log(e)
+        pouchStore.put(doc)
+      })
+  }
+
   const queue = new PQueue({concurrency: 1})
 
   return {
@@ -245,17 +258,4 @@ function FirestoreChangesQueue(pouchStore) {
         })
     },
   }
-}
-
-function processFirestoreChange(cRef, pouchStore, doc) {
-  if (isModifiedByLocalActor(doc)) return Promise.resolve()
-  return pouchStore
-    .get(doc._id)
-    .then(() => {
-      debugger
-    })
-    .catch(e => {
-      console.log(e)
-      pouchStore.put(doc)
-    })
 }
