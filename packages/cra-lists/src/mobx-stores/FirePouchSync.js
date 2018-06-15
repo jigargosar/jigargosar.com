@@ -11,10 +11,6 @@ const Timestamp = firebase.firestore.Timestamp
 const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 const PQueue = require('p-queue')
 
-const pouchSeqPred = ow.number.integer
-  .label('pouch.seq')
-  .greaterThanOrEqual(0)
-
 export function FirePouchSync(pouchStore) {
   const fireSync = observable(
     {
@@ -51,7 +47,6 @@ export function FirePouchSync(pouchStore) {
   return fireSync
 }
 
-const localforage = require('localforage')
 function isModifiedByLocalActor(doc) {
   ow(doc.actorId, ow.string.label('doc.actorId').nonEmpty)
   return R.equals(doc.actorId, getAppActorId())
@@ -236,8 +231,8 @@ function FirestoreChangesQueue(pouchStore) {
         )
         .orderBy('serverTimestamp')
         .onSnapshot(snapshot => {
-          console.log(snapshot, docChanges)
           const docChanges = snapshot.docChanges()
+          console.log(snapshot, docChanges)
           docChanges.forEach(docChange => {
             const doc = docChange.doc.data()
             queue.add(() =>
