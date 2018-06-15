@@ -103,6 +103,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
       } else {
         console.warn('transactionEmptyUpdate', doc, fireDoc)
       }
+      debugger
     }
 
     function transactionSetDocWithTimestamp() {
