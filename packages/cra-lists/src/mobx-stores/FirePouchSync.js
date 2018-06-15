@@ -232,12 +232,14 @@ function FirestoreChangesQueue(pouchStore) {
         .orderBy('serverTimestamp')
         .onSnapshot(snapshot => {
           const docChanges = snapshot.docChanges()
-          console.log(snapshot, docChanges)
           docChanges.forEach(docChange => {
-            const doc = docChange.doc.data()
+            const fireDoc = docChange.doc.data()
+            console.log('fireDoc', fireDoc)
             queue.add(() =>
-              processFirestoreChange(cRef, pouchStore, doc)
-                .then(() => syncTimestamp.set(doc.serverTimestamp))
+              processFirestoreChange(cRef, pouchStore, fireDoc)
+                .then(() =>
+                  syncTimestamp.set(fireDoc.serverTimestamp),
+                )
                 .catch(e => {
                   console.log('Error syncFromFirestore. Stopping', e)
                   disposer()
