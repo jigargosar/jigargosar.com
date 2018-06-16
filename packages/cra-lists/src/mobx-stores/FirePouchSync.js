@@ -11,13 +11,22 @@ const Timestamp = firebase.firestore.Timestamp
 const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 const PQueue = require('p-queue')
 const pEachSeries = require('p-each-series')
+const m = require('mobx')
 
 export function FirePouchSync(pouchStore) {
   const fireSync = observable(
     {
       _syncing: false,
+      _disposers: m.observable.shallowArray([]),
+      disposeAll() {
+        this._disposers.forEach(fn => fn())
+        this._disposers.clear()
+      },
+      addDisposers(...disposers) {
+        this._disposers.push(...disposers)
+      },
     },
-    {},
+    {disposeAll: m.action.bound, addDisposers: m.action.bound},
     {name: `PouchFireSync: ${pouchStore.name}`},
   )
   reaction(
@@ -29,11 +38,20 @@ export function FirePouchSync(pouchStore) {
           pouchStore.name,
         )
         const queue = new PQueue({concurrency: 1})
-        SyncFromFirestore.syncToFirestore(queue, cRef, pouchStore)
-        SyncFromFirestore.startSyncFromFirestore(
-          queue,
-          cRef,
-          pouchStore,
+
+        function addToQueue(thunk) {
+          queue.add(() =>
+            thunk().catch(e => {
+              console.error('Stopping FirePouchSync', e)
+              fireSync.disposeAll()
+              queue.clear()
+            }),
+          )
+        }
+
+        fireSync.addDisposers(
+          syncToFirestore(addToQueue, cRef, pouchStore),
+          startSyncFromFirestore(addToQueue, cRef, pouchStore),
         )
       }
     },
@@ -157,90 +175,69 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
   })
 }
 
-const SyncFromFirestore = (function SyncFromFirestore() {
-  return {
-    startSyncFromFirestore(queue, cRef, pouchStore) {
-      ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
+function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
+  ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
-      const syncTimestamp = createLSItem(
-        `FirestoreChangesQueue.${
-          pouchStore.name
-        }.lastSyncFirestoreTimestamp`,
-        Timestamp.fromMillis(0),
-      )
-      function getSyncFirestoreTimestamp() {
-        return new Timestamp(
-          syncTimestamp.get().seconds,
-          syncTimestamp.get().nanoseconds,
-        )
-      }
-
-      function setSyncFirestoreTimestampFromFireDoc(fireDoc) {
-        return syncTimestamp.set(fireDoc.serverTimestamp)
-      }
-
-      function processFirestoreDoc(fireDoc) {
-        if (isModifiedByLocalActor(fireDoc)) return Promise.resolve()
-        return pouchStore
-          .get(fireDoc._id)
-          .then(() => {
-            debugger
-          })
-          .catch(e => {
-            console.log(e)
-            pouchStore.put(fireDoc)
-          })
-      }
-
-      async function onFireDocChange(docChange) {
-        const fireDoc = docChange.doc.data()
-        console.log('fireDoc', fireDoc)
-        await processFirestoreDoc(fireDoc)
-        setSyncFirestoreTimestampFromFireDoc(fireDoc)
-      }
-
-      const firestoreTimestamp = getSyncFirestoreTimestamp()
-      console.log('since firestoreTimestamp', firestoreTimestamp)
-      const disposer = cRef
-        .where('serverTimestamp', '>', firestoreTimestamp)
-        .orderBy('serverTimestamp')
-        .onSnapshot(querySnapshot =>
-          queue.add(async () => {
-            try {
-              await pEachSeries(
-                querySnapshot.docChanges(),
-                onFireDocChange,
-              )
-            } catch (e) {
-              console.log('Error syncFromFirestore. Stopping', e)
-              disposer()
-              queue.clear()
-            }
-          }),
-        )
-      return disposer
-    },
-    syncToFirestore(queue, cRef, pouchStore) {
-      ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
-
-      const syncSeq = createLSItem(
-        `PouchChangesQueue.${pouchStore.name}.lastSyncSeq`,
-        0,
-      )
-      const changes = pouchStore
-        .liveChanges({since: syncSeq.get()})
-        .on('change', change => {
-          queue.add(() =>
-            processPouchChange(cRef, pouchStore, change)
-              .then(() => syncSeq.set(change.seq))
-              .catch(e => {
-                console.log('Error syncToFirestore. Stopping', e)
-                changes.cancel()
-                queue.clear()
-              }),
-          )
-        })
-      return () => changes.cancel()
-    },
+  const syncTimestamp = createLSItem(
+    `FirestoreChangesQueue.${
+      pouchStore.name
+    }.lastSyncFirestoreTimestamp`,
+    Timestamp.fromMillis(0),
+  )
+  function getSyncFirestoreTimestamp() {
+    return new Timestamp(
+      syncTimestamp.get().seconds,
+      syncTimestamp.get().nanoseconds,
+    )
   }
-})()
+
+  function setSyncFirestoreTimestampFromFireDoc(fireDoc) {
+    return syncTimestamp.set(fireDoc.serverTimestamp)
+  }
+
+  function processFirestoreDoc(fireDoc) {
+    if (isModifiedByLocalActor(fireDoc)) return Promise.resolve()
+    return pouchStore
+      .get(fireDoc._id)
+      .then(() => {
+        debugger
+      })
+      .catch(e => {
+        console.log(e)
+        pouchStore.put(fireDoc)
+      })
+  }
+
+  async function onFireDocChange(docChange) {
+    const fireDoc = docChange.doc.data()
+    console.log('fireDoc', fireDoc)
+    await processFirestoreDoc(fireDoc)
+    setSyncFirestoreTimestampFromFireDoc(fireDoc)
+  }
+
+  const firestoreTimestamp = getSyncFirestoreTimestamp()
+  console.log('since firestoreTimestamp', firestoreTimestamp)
+  return cRef
+    .where('serverTimestamp', '>', firestoreTimestamp)
+    .orderBy('serverTimestamp')
+    .onSnapshot(querySnapshot =>
+      addToQueue(() =>
+        pEachSeries(querySnapshot.docChanges(), onFireDocChange),
+      ),
+    )
+}
+function syncToFirestore(addToQueue, cRef, pouchStore) {
+  ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
+
+  const syncSeq = createLSItem(
+    `PouchChangesQueue.${pouchStore.name}.lastSyncSeq`,
+    0,
+  )
+  const changes = pouchStore
+    .liveChanges({since: syncSeq.get()})
+    .on('change', async change => {
+      await processPouchChange(cRef, pouchStore, change)
+      syncSeq.set(change.seq)
+    })
+  return () => changes.cancel()
+}
