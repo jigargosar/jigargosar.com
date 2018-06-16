@@ -1,4 +1,4 @@
-import {flow, types} from 'mobx-state-tree'
+import {flow, types, getSnapshot} from 'mobx-state-tree'
 import {observable} from 'mobx'
 import {SF} from '../safe-fun'
 import {PouchCollectionStore} from '../mobx-stores/PouchCollectionStore'
@@ -46,8 +46,8 @@ export const State = types
         return self.g.list
       },
       debugJSON() {
-        // return R.merge(getSnapshot(self), {g: m.toJS(self.g)})
-        return m.toJS(self.g)
+        return R.merge(getSnapshot(self), {g: m.toJS(self.g)})
+        // return m.toJS(self.g)
       },
     }
   })
