@@ -56,9 +56,6 @@ export const FirebaseService = (function() {
   return wrapInValidateAccessProxy(
     m.observable(
       {
-        get displayName() {
-          return fireAuth.displayName
-        },
         createUserCollectionRef(collectionName) {
           validate('S', arguments)
           validate('S', arguments)
