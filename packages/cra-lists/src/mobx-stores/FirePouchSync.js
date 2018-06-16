@@ -94,13 +94,23 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
   await docRef.firestore.runTransaction(async transaction => {
     const snap = await transaction.get(docRef)
 
+    function transactionSetDocWithTimestamp() {
+      return transaction.set(
+        docRef,
+        R.merge(pouchChange.doc, {
+          serverTimestamp: serverTimestamp(),
+        }),
+      )
+    }
+
     if (!snap.exists) {
       return transactionSetDocWithTimestamp()
     }
-    const fireDoc = snap.data()
 
+    const fireDoc = snap.data()
     const isPouchDocOlderThanFireDoc = isOlder(doc, fireDoc)
     const areVersionsDifferent = versionMismatch(doc, fireDoc)
+
     const wasFireDocModifiedByLocalActor = isModifiedByLocalActor(
       fireDoc,
     )
@@ -117,28 +127,19 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
       }
     }
 
-    function transactionSetDocWithTimestamp() {
-      return transaction.set(
-        docRef,
-        R.merge(pouchChange.doc, {
-          serverTimestamp: serverTimestamp(),
-        }),
-      )
-    }
-
     function transactionEmptyUpdate() {
       return transaction.update(docRef, {})
     }
 
-    // function transactionSetDocWithTimestampAndIncrementVersion() {
-    //   return transaction.set(
-    //     docRef,
-    //     R.merge(pouchChange.doc, {
-    //       serverTimestamp: serverTimestamp(),
-    //       version: fireDoc.version + 1,
-    //     }),
-    //   )
-    // }
+    function transactionSetDocWithTimestampAndIncrementVersion() {
+      return transaction.set(
+        docRef,
+        R.merge(pouchChange.doc, {
+          serverTimestamp: serverTimestamp(),
+          version: fireDoc.version + 1,
+        }),
+      )
+    }
 
     function transactionSetInHistoryCollection(doc) {
       console.warn('transactionSetInHistoryCollection')
@@ -155,7 +156,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
         logWarningForEmptyTransactionUpdate()
         return transactionEmptyUpdate()
       } else {
-        return transactionSetDocWithTimestamp()
+        return transactionSetDocWithTimestampAndIncrementVersion()
       }
     } else {
       if (isPouchDocOlderThanFireDoc) {
@@ -170,8 +171,8 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
         // const result = await pouchStore.get(pouchChange.id)
         // console.log(result)
         // debugger
-        // return transactionSetDocWithTimestampAndIncrementVersion()
-        return transactionSetDocWithTimestamp()
+        return transactionSetDocWithTimestampAndIncrementVersion()
+        // return transactionSetDocWithTimestamp()
       }
     }
   })
