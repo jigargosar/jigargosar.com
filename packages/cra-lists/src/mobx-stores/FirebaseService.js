@@ -76,30 +76,19 @@ export const FirebaseService = (function() {
 })()
 
 function createFireAuth(firebase) {
-  var authMachine = nanostate('unknown', {
-    unknown: {userNotNil: 'signedIn', userNil: 'signedOut'},
-    signedIn: {userNil: 'signedOut'},
-    signedOut: {userNotNil: 'signedIn'},
-  })
-
-  var extendedState = {user: null}
-  const authMachineStateAtom = m.createAtom('authMachineState')
-
-  authMachine.on('*', () => authMachineStateAtom.reportChanged())
-
-  function getAuthState() {
-    authMachineStateAtom.reportObserved()
-    return {type: authMachine.state, user: extendedState.user}
-  }
   function signIn() {
     const provider = new firebase.auth.GoogleAuthProvider()
     provider.setCustomParameters({prompt: 'select_account'})
     return firebase.auth().signInWithRedirect(provider)
   }
-
   function signOut() {
     return firebase.auth().signOut()
   }
+  const authMachine = nanostate('unknown', {
+    unknown: {ON_USER_NOT_NIL: 'signedIn', ON_USER_NIL: 'signedOut'},
+    signedIn: {ON_USER_NIL: 'signedOut', ON_SIGNOUT: 'unknown'},
+    signedOut: {ON_USER_NOT_NIL: 'signedIn', ON_SIGNIN: 'unknown'},
+  })
 
   const fireAuth = m.observable.object(
     {
@@ -139,8 +128,9 @@ function createFireAuth(firebase) {
 
   firebase.auth().onAuthStateChanged(user => {
     fireAuth._onFirebaseAuthStateChanged(user)
-    extendedState.user = user
-    authMachine.emit(R.isNil(user) ? 'userNil' : 'userNotNil')
+    authMachine.emit(
+      R.isNil(user) ? 'ON_USER_NIL' : 'ON_USER_NOT_NIL',
+    )
   })
   return fireAuth
 }
