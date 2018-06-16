@@ -5,7 +5,7 @@ import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
 import {trace} from 'mobx'
 import DevTools from 'mobx-react-devtools'
-import {RenderState} from './debug/RenderState'
+// import {RenderState} from './debug/RenderState'
 // import Radium, {Style} from 'radium'
 
 const R = require('ramda')
@@ -226,9 +226,9 @@ const App = injectState(function App({s}) {
       <DevTools />
       {/*<RenderState src={s.toJSON()} />*/}
       {/*<RenderState*/}
-        {/*src={s.debugJSON()}*/}
-        {/*hide={s.hideRenderState}*/}
-        {/*onClose={s.onCloseRenderState}*/}
+      {/*src={s.debugJSON()}*/}
+      {/*hide={s.hideRenderState}*/}
+      {/*onClose={s.onCloseRenderState}*/}
       {/*/>*/}
     </div>
   )

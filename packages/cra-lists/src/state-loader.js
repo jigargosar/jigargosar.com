@@ -1,8 +1,6 @@
 import {State} from './mst/State'
 import './lib/PouchDBService'
 
-const mst = require('mobx-state-tree')
-
 if (module.hot) {
   window.state = State
   if (module.hot.data && module.hot.data.snapshot) {

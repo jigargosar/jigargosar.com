@@ -1,6 +1,7 @@
 import {PouchCollectionStore} from '../mobx-stores/PouchCollectionStore'
 import ow from 'ow'
 import {FirebaseService} from '../mobx-stores/FirebaseService'
+import {SF} from '../safe-fun'
 
 require('firebase/auth')
 require('firebase/firestore')
@@ -13,32 +14,73 @@ const EditState = function() {
     {
       type: 'idle',
       doc: null,
-      form: {text: null},
-      setIdle() {
+      form: {},
+      error: null,
+      _reset() {
         Object.assign(this, {
           type: 'idle',
           doc: null,
-          form: null,
+          form: {},
         })
       },
-
-      startEditing(doc, changes) {
+      cancelEdit() {
+        ow(this.type, ow.string.oneOf(['editing', 'error']))
+        this._reset()
+      },
+      startEditing(doc, fieldNames) {
         Object.assign(this, {
           type: 'editing',
           doc: R.clone(doc),
-          changes,
+          form: {},
         })
+
+        this.updateForm(SF.pick(fieldNames, doc))
       },
 
       setError(error) {
-        Object.assign(this, {type: error})
+        Object.assign(this, {type: 'error', error})
       },
 
-      updateForm(fieldName, value) {
-        this.form.set(fieldName, value)
+      setSaving() {
+        ow(this.type, ow.string.equals('editing'))
+        this.type = 'saving'
+      },
+
+      save: m.flow(function*(cb) {
+        ow(this.type, ow.string.equals('editing'))
+        this.type = 'saving'
+        try {
+          yield cb(this.doc, this.form)
+          this._reset()
+        } catch (error) {
+          Object.assign(this, {type: 'error', error})
+          console.error('Update failed', this.error)
+        }
+      }),
+
+      updateFormField(fieldName, value) {
+        ow(this.type, ow.string.equals('editing'))
+        m.set(this.form, fieldName, value)
+      },
+
+      updateForm(change) {
+        ow(this.type, ow.string.equals('editing'))
+        ow(change, ow.object.label('change').nonEmpty)
+        R.mapObjIndexed((v, k) => {
+          m.set(this.form, k, v)
+        }, change)
       },
     },
-    {setIdle: m.action.bound},
+    {
+      form: m.observable,
+      _reset: m.action.bound,
+      startEditing: m.action.bound,
+      setError: m.action.bound,
+      updateFormField: m.action.bound,
+      updateForm: m.action.bound,
+      cancelEdit: m.action.bound,
+      save: m.action.bound,
+    },
     {name: 'EditState'},
   )
 }
@@ -80,45 +122,30 @@ export const State = (() => {
       onAddNew() {
         return this.g.userUpsert({text: `${Math.random()}`})
       },
-      update: m.flow(function*(doc, change) {
-        try {
-          yield this.g.userUpsert(R.merge(doc, change))
-          this.editState.setIdle()
-        } catch (e) {
-          this.editState.setError(e)
-          console.warn('Update failed', this.editState, e)
-        }
-      }),
+      update(doc, change) {
+        this.startEdit(doc)
+        this.editState.updateForm(change)
+
+        this.editState.save((doc, form) =>
+          this.g.userUpsert(R.merge(doc, form)),
+        )
+      },
       onUpdate(doc) {
         return () => this.update(doc, {text: `${Math.random()}`})
       },
       startEdit(doc) {
-        this.editState = {
-          type: 'editing',
-          doc: R.clone(doc),
-          form: {text: doc.text},
-        }
+        this.editState.startEditing(doc, ['text'])
       },
-      saveEdit: m.flow(function*() {
-        ow(this.editState.type, ow.string.equals('editing'))
-        this.editState.type = 'saving'
-        try {
-          yield this.g.userUpsert(
-            R.merge(this.editState.doc, this.editState.form),
-          )
-          this.editState.setIdle()
-        } catch (e) {
-          this.editState.setError('error')
-          console.warn('Update failed', this.editState, e)
-        }
-      }),
+      saveEdit() {
+        this.editState.save((doc, form) =>
+          this.g.userUpsert(R.merge(doc, form)),
+        )
+      },
       cancelEdit() {
-        ow(this.editState.type, ow.string.oneOf(['editing', 'error']))
-        this.editState.setIdle()
+        this.editState.cancelEdit()
       },
       updateForm(fieldName, value) {
-        ow(this.editState.type, ow.string.equals('editing'))
-        this.editState.updateForm(fieldName, value)
+        this.editState.updateFormField(fieldName, value)
       },
       onFormChange(fieldName) {
         ow(fieldName, ow.string.equals('text'))
@@ -138,7 +165,7 @@ export const State = (() => {
       onAddNew: m.action.bound,
       // startEdit: m.action.bound,
       // updateForm: m.action.bound,
-      // saveEdit: m.action.bound,
+      saveEdit: m.action.bound,
       // cancelEdit: m.action.bound,
     },
     {name: 'State'},
