@@ -28,7 +28,6 @@ function wrapInValidateAccessProxy(obj, options) {
           target,
           options,
         )
-        debugger
         return new Error('Boom!!')
       }
       return Reflect.get(...arguments)
@@ -133,7 +132,6 @@ function createFireAuth(firebase) {
     get isAuthKnown() {
       return getAuthState().type !== 'unknown'
     },
-    getAuthState,
     signIn,
     signOut,
   }
