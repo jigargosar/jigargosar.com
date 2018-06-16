@@ -1,6 +1,6 @@
-import {PouchCollectionStore} from '../mobx-stores/PouchCollectionStore'
+import {PouchCollectionStore} from './PouchCollectionStore'
 import ow from 'ow'
-import {FirebaseService} from '../mobx-stores/FirebaseService'
+import {FirebaseService} from './FirebaseService'
 import {SF} from '../safe-fun'
 
 require('firebase/auth')

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import {StateProvider} from './StateContext'
-import {State} from './mst/State'
+import {State} from './mobx-stores/State'
 
 function render() {
   const App = require('./App').default

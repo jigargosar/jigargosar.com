@@ -1,4 +1,4 @@
-import {State} from './mst/State'
+import {State} from './mobx-stores/State'
 import './lib/PouchDBService'
 
 if (module.hot) {
