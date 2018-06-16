@@ -14,8 +14,31 @@ const EditState = function() {
       type: 'idle',
       doc: null,
       form: {text: null},
+      setIdle() {
+        Object.assign(this, {
+          type: 'idle',
+          doc: null,
+          form: null,
+        })
+      },
+
+      startEditing(doc, changes) {
+        Object.assign(this, {
+          type: 'editing',
+          doc: R.clone(doc),
+          changes,
+        })
+      },
+
+      setError(error) {
+        Object.assign(this, {type: error})
+      },
+
+      updateForm(fieldName, value) {
+        this.form.set(fieldName, value)
+      },
     },
-    {},
+    {setIdle: m.action.bound},
     {name: 'EditState'},
   )
 }
@@ -60,13 +83,9 @@ export const State = (() => {
       update: m.flow(function*(doc, change) {
         try {
           yield this.g.userUpsert(R.merge(doc, change))
-          this.editState = {type: 'idle'}
+          this.editState.setIdle()
         } catch (e) {
-          this.editState = {
-            type: 'error',
-            doc: R.clone(doc),
-            form: change,
-          }
+          this.editState.setError(e)
           console.warn('Update failed', this.editState, e)
         }
       }),
@@ -87,19 +106,19 @@ export const State = (() => {
           yield this.g.userUpsert(
             R.merge(this.editState.doc, this.editState.form),
           )
-          this.editState = {type: 'idle'}
+          this.editState.setIdle()
         } catch (e) {
-          this.editState.type = 'error'
+          this.editState.setError('error')
           console.warn('Update failed', this.editState, e)
         }
       }),
       cancelEdit() {
         ow(this.editState.type, ow.string.oneOf(['editing', 'error']))
-        this.editState.type = 'idle'
+        this.editState.setIdle()
       },
       updateForm(fieldName, value) {
         ow(this.editState.type, ow.string.equals('editing'))
-        this.editState.form[fieldName] = value
+        this.editState.updateForm(fieldName, value)
       },
       onFormChange(fieldName) {
         ow(fieldName, ow.string.equals('text'))
@@ -117,10 +136,10 @@ export const State = (() => {
     },
     {
       onAddNew: m.action.bound,
-      startEdit: m.action.bound,
-      updateForm: m.action.bound,
-      saveEdit: m.action.bound,
-      cancelEdit: m.action.bound,
+      // startEdit: m.action.bound,
+      // updateForm: m.action.bound,
+      // saveEdit: m.action.bound,
+      // cancelEdit: m.action.bound,
     },
     {name: 'State'},
   )
