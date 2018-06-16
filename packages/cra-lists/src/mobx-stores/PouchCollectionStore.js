@@ -24,7 +24,7 @@ export function PouchCollectionStore(modelName) {
       get name() {
         return name
       },
-      pf: FirePouchSync(pouchStore),
+      firePouchSync: FirePouchSync(pouchStore),
       get pouchStore() {
         return pouchStore
       },

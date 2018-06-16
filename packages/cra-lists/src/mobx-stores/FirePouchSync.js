@@ -14,7 +14,7 @@ const pEachSeries = require('p-each-series')
 const m = require('mobx')
 const validate = require('aproba')
 export function FirePouchSync(pouchStore) {
-  const fireSync = observable(
+  const fireSync = m.observable(
     {
       isSyncing: false,
       disposers: m.observable.array([], {deep: false}),
@@ -52,7 +52,6 @@ export function FirePouchSync(pouchStore) {
     () => [FirebaseService.user, fireSync.isSyncing],
     () => {
       if (FirebaseService.user && !fireSync.isSyncing) {
-        fireSync.syncing = true
         const cRef = FirebaseService.createUserCollectionRef(
           pouchStore.name,
         )
@@ -60,7 +59,7 @@ export function FirePouchSync(pouchStore) {
       }
     },
   )
-  return fireSync
+  return {startSync: fireSync.startSync}
 }
 
 function isModifiedByLocalActor(doc) {
