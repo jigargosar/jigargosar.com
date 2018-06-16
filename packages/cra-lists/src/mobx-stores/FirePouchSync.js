@@ -24,19 +24,15 @@ export function FirePouchSync(pouchStore) {
       syncFromFireStore: SyncFromFirestore(),
       trySync() {
         if (FirebaseService.user && !fireSync.syncing) {
-          try {
-            fireSync.syncing = true
-            const cRef = FirebaseService.createUserCollectionRef(
-              pouchStore.name,
-            )
-            fireSync.pouchChangesQueue.syncToFirestore(cRef)
-            fireSync.syncFromFireStore.startSyncFromFirestore(
-              cRef,
-              pouchStore,
-            )
-          } catch (e) {
-            console.error(e)
-          }
+          fireSync.syncing = true
+          const cRef = FirebaseService.createUserCollectionRef(
+            pouchStore.name,
+          )
+          fireSync.pouchChangesQueue.syncToFirestore(cRef)
+          fireSync.syncFromFireStore.startSyncFromFirestore(
+            cRef,
+            pouchStore,
+          )
         }
       },
     },

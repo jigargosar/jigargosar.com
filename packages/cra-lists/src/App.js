@@ -33,9 +33,9 @@ const buttonCN =
 const injectS = R.compose(withState, observer)
 
 const SignInOutView = injectS(function SignInOutView({s}) {
-  const content = s.fire.isSignedIn ? (
+  const content = s.fire.a.isSignedIn ? (
     <F>
-      <div>{s.fire.displayName}</div>
+      <div>{s.fire.a.displayName}</div>
       <button className={cn(buttonCN)} onClick={s.fire.signOut}>
         Sign Out
       </button>
@@ -56,8 +56,8 @@ const Header = injectS(function Header({s}) {
   return (
     <div className="bg-light-blue tc pa3">
       <div className="f1">{s.pageTitle}</div>
-      {s.fire.isAuthKnown && <SignInOutView />}
-      {!s.fire.isAuthKnown && <div>...Loading</div>}
+      {s.fire.a.isAuthKnown && <SignInOutView />}
+      {!s.fire.a.isAuthKnown && <div>...Loading</div>}
     </div>
   )
 })

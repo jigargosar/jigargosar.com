@@ -6,6 +6,8 @@ require('firebase/firestore')
 var nanostate = require('nanostate')
 const R = require('ramda')
 const m = require('mobx')
+var validate = require('aproba')
+
 export const FirebaseService = (function() {
   if (!firebase.apps[0]) {
     var config = {
@@ -21,9 +23,36 @@ export const FirebaseService = (function() {
     firebase
       .firestore()
       .enablePersistence()
-      .catch(() => console.info('enablePersistenceFailed'))
+      .catch(error => console.info('enablePersistenceFailed'))
   }
-  return createFireAuth(firebase)
+  const fireAuth = createFireAuth(firebase)
+  return m.observable(
+    {
+      get displayName() {
+        return fireAuth.displayName
+      },
+      createUserCollectionRef(collectionName) {
+        validate('S', arguments)
+        validate('S', arguments)
+        return createFirestoreUserCollection(
+          collectionName,
+          fireAuth.uid,
+          firebase.firestore(),
+        )
+      },
+      signIn() {
+        return fireAuth.signIn()
+      },
+      signOut() {
+        return fireAuth.signOut()
+      },
+      get a() {
+        return fireAuth
+      },
+    },
+    {},
+    {name: 'FirebaseService'},
+  )
 })()
 
 function createFireAuth(firebase) {
@@ -39,7 +68,7 @@ function createFireAuth(firebase) {
     authMachine.emit(R.isNil(user) ? 'userNil' : 'userNotNil')
   })
 
-  const authMachineStateAtom = m.createAtom('fireAuthState')
+  const authMachineStateAtom = m.createAtom('authMachineState')
   authMachine.on('*', () => authMachineStateAtom.reportChanged())
 
   function getAuthState() {
@@ -73,7 +102,18 @@ function createFireAuth(firebase) {
     get isAuthKnown() {
       return getAuthState().type !== 'unknown'
     },
+    getAuthState,
     signIn,
     signOut,
   }
+}
+
+function createFirestoreUserCollection(
+  collectionName,
+  uid,
+  firestore,
+) {
+  validate('SSO', arguments)
+  ow(uid, ow.string.label('uid').nonEmpty)
+  return firestore.collection(`/users/${uid}/${collectionName}/`)
 }
