@@ -84,9 +84,6 @@ export function PouchCollectionStore(modelName) {
         )(doc)
         return pouchStore.put(updatedDoc)
       },
-      toDebugState() {
-        return m.toJS(this)
-      },
     },
     {
       idLookup: observable,

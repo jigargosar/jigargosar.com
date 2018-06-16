@@ -10,38 +10,33 @@ const firebase = require('firebase/app')
 const Timestamp = firebase.firestore.Timestamp
 const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 const PQueue = require('p-queue')
+const pEachSeries = require('p-each-series')
 
 export function FirePouchSync(pouchStore) {
   const fireSync = observable(
     {
-      syncMilli: 0,
-      syncing: false,
-      fireQueue: [],
-      queueFireSnapshot(snapshot) {
-        this.fireQueue.push(snapshot)
-      },
+      _syncing: false,
       pouchChangesQueue: PouchChangesQueue(pouchStore),
       syncFromFireStore: SyncFromFirestore(),
-      trySync() {
-        if (FirebaseService.user && !fireSync.syncing) {
-          fireSync.syncing = true
-          const cRef = FirebaseService.createUserCollectionRef(
-            pouchStore.name,
-          )
-          fireSync.pouchChangesQueue.syncToFirestore(cRef)
-          fireSync.syncFromFireStore.startSyncFromFirestore(
-            cRef,
-            pouchStore,
-          )
-        }
-      },
     },
-    {queueFireSnapshot: action.bound, trySync: action.bound},
+    {},
     {name: `PouchFireSync: ${pouchStore.name}`},
   )
   reaction(
-    () => [FirebaseService.user, fireSync.syncing],
-    fireSync.trySync,
+    () => [FirebaseService.user, fireSync._syncing],
+    () => {
+      if (FirebaseService.user && !fireSync._syncing) {
+        fireSync.syncing = true
+        const cRef = FirebaseService.createUserCollectionRef(
+          pouchStore.name,
+        )
+        fireSync.pouchChangesQueue.syncToFirestore(cRef, pouchStore)
+        fireSync.syncFromFireStore.startSyncFromFirestore(
+          cRef,
+          pouchStore,
+        )
+      }
+    },
   )
   return fireSync
 }
@@ -162,18 +157,17 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
   })
 }
 
-function PouchChangesQueue(pouchStore) {
-  ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
-
-  const syncSeq = createLSItem(
-    `PouchChangesQueue.${pouchStore.name}.lastSyncSeq`,
-    0,
-  )
-
+function PouchChangesQueue() {
   const queue = new PQueue({concurrency: 1})
 
   return {
-    syncToFirestore(cRef) {
+    syncToFirestore(cRef, pouchStore) {
+      ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
+
+      const syncSeq = createLSItem(
+        `PouchChangesQueue.${pouchStore.name}.lastSyncSeq`,
+        0,
+      )
       const changes = pouchStore
         .liveChanges({since: syncSeq.get()})
         .on('change', change => {
@@ -190,7 +184,6 @@ function PouchChangesQueue(pouchStore) {
     },
   }
 }
-const pEachSeries = require('p-each-series')
 
 function SyncFromFirestore() {
   const queue = new PQueue({concurrency: 1})
