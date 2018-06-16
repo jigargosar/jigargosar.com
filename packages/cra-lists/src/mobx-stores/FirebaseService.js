@@ -7,6 +7,34 @@ var nanostate = require('nanostate')
 const R = require('ramda')
 const m = require('mobx')
 var validate = require('aproba')
+const RA = require('ramda-adjunct')
+
+function wrapInValidateAccessProxy(obj, options) {
+  m.observe(obj, change => {
+    debugger
+  })
+  return new Proxy(obj, {
+    get(target, property, receiver) {
+      const shouldValidate =
+        RA.isString(property) &&
+        !['isMobXComputedValue', '_reactFragment'].includes(property)
+      const isInvalid = !ow.isValid(
+        target,
+        ow.object.hasKeys(property),
+      )
+      if (shouldValidate && isInvalid) {
+        console.warn(
+          `Accessing non existent property ["${property}"] of `,
+          target,
+          options,
+        )
+        debugger
+        return new Error('Boom!!')
+      }
+      return Reflect.get(...arguments)
+    },
+  })
+}
 
 export const FirebaseService = (function() {
   if (!firebase.apps[0]) {
@@ -26,31 +54,34 @@ export const FirebaseService = (function() {
       .catch(error => console.info('enablePersistenceFailed'))
   }
   const fireAuth = createFireAuth(firebase)
-  return m.observable(
-    {
-      get displayName() {
-        return fireAuth.displayName
+  return wrapInValidateAccessProxy(
+    m.observable(
+      {
+        get displayName() {
+          return fireAuth.displayName
+        },
+        createUserCollectionRef(collectionName) {
+          validate('S', arguments)
+          validate('S', arguments)
+          return createFirestoreUserCollection(
+            collectionName,
+            fireAuth.uid,
+            firebase.firestore(),
+          )
+        },
+        signIn() {
+          return fireAuth.signIn()
+        },
+        signOut() {
+          return fireAuth.signOut()
+        },
+        get a() {
+          return fireAuth
+        },
       },
-      createUserCollectionRef(collectionName) {
-        validate('S', arguments)
-        validate('S', arguments)
-        return createFirestoreUserCollection(
-          collectionName,
-          fireAuth.uid,
-          firebase.firestore(),
-        )
-      },
-      signIn() {
-        return fireAuth.signIn()
-      },
-      signOut() {
-        return fireAuth.signOut()
-      },
-      get a() {
-        return fireAuth
-      },
-    },
-    {},
+      {},
+      {name: 'FirebaseService'},
+    ),
     {name: 'FirebaseService'},
   )
 })()
