@@ -157,14 +157,14 @@ export const State = (() => {
       cancelEdit() {
         this.editState.cancelEdit()
       },
-      onFormFieldChange: (fieldName, event) => {
+      onFormFieldChange(fieldName, event) {
         ow(fieldName, ow.string.equals('text'))
         return this.editState.updateForm({
           [fieldName]: event.target.value,
         })
       },
       onStartEditing(doc) {
-        return () => this.editState.startEditing(doc, ['text2'])
+        return () => this.editState.startEditing(doc, ['text'])
       },
       onToggleArchive(doc) {
         return () =>
