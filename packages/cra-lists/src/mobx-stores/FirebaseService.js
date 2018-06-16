@@ -115,6 +115,7 @@ function createFireAuth(firebase) {
         return this._authState === 'signedIn'
       },
       get isAuthKnown() {
+        m.trace(true)
         return this._authState !== 'unknown'
       },
       signIn,

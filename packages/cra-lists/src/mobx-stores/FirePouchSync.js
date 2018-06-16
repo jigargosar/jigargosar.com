@@ -1,5 +1,5 @@
 import {FirebaseService} from './FirebaseService'
-import {observable, reaction} from 'mobx'
+import {reaction} from 'mobx'
 import ow from 'ow'
 import {getAppActorId} from '../lib/app-actor-id'
 import {createLSItem} from '../lib/LocalStorageService'
