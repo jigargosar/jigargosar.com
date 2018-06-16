@@ -1,10 +1,11 @@
-import {action, observable} from 'mobx'
-import ow from 'ow'
+import ow from 'ow/dist/index'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
-
+var nanostate = require('nanostate')
+const R = require('ramda')
+const m = require('mobx')
 export const FirebaseService = (function() {
   if (!firebase.apps[0]) {
     var config = {
@@ -20,35 +21,59 @@ export const FirebaseService = (function() {
     firebase
       .firestore()
       .enablePersistence()
-      .catch(error => console.info('enablePersistenceFailed'))
+      .catch(() => console.info('enablePersistenceFailed'))
   }
-  const firebaseStore = observable(
-    {
-      user: null,
-      get uid() {
-        ow(this.user, ow.object.nonEmpty)
-        return this.user.uid
-      },
-      createUserCollectionRef(cName) {
-        return firebase
-          .firestore()
-          .collection(`/users/${this.uid}/${cName}/`)
-      },
-      onAuthStateChanged(user) {
-        this.user = user
-      },
-      signIn() {
-        const provider = new firebase.auth.GoogleAuthProvider()
-        provider.setCustomParameters({prompt: 'select_account'})
-        return firebase.auth().signInWithRedirect(provider)
-      },
-      signOut() {
-        return firebase.auth().signOut()
-      },
-    },
-    {user: observable.ref, onAuthStateChanged: action.bound},
-    {name: 'FirebaseService'},
-  )
-  firebase.auth().onAuthStateChanged(firebaseStore.onAuthStateChanged)
-  return firebaseStore
+  return createFireAuth(firebase)
 })()
+
+function createFireAuth(firebase) {
+  var authMachine = nanostate('unknown', {
+    unknown: {userNotNil: 'signedIn', userNil: 'signedOut'},
+    signedIn: {userNil: 'signedOut'},
+    signedOut: {userNotNil: 'signedIn'},
+  })
+
+  var extendedState = {user: null}
+  firebase.auth().onAuthStateChanged(user => {
+    extendedState.user = user
+    authMachine.emit(R.isNil(user) ? 'userNil' : 'userNotNil')
+  })
+
+  const authMachineStateAtom = m.createAtom('fireAuthState')
+  authMachine.on('*', () => authMachineStateAtom.reportChanged())
+
+  function getAuthState() {
+    authMachineStateAtom.reportObserved()
+    return {type: authMachine.state, user: extendedState.user}
+  }
+
+  function signIn() {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    provider.setCustomParameters({prompt: 'select_account'})
+    return firebase.auth().signInWithRedirect(provider)
+  }
+  function signOut() {
+    return firebase.auth().signOut()
+  }
+  return {
+    get uid() {
+      const user = getAuthState().user
+      ow(user, ow.object.label('user').hasKeys('uid'))
+      ow(user.uid, ow.string.label('uid').nonEmpty)
+      return user.uid
+    },
+    get displayName() {
+      const user = getAuthState().user
+      ow(user, ow.object.label('user').hasKeys('displayName'))
+      return user.displayName
+    },
+    get isSignedIn() {
+      return getAuthState().type === 'signedIn'
+    },
+    get isAuthKnown() {
+      return getAuthState().type !== 'unknown'
+    },
+    signIn,
+    signOut,
+  }
+}
