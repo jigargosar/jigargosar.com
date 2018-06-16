@@ -146,9 +146,6 @@ export const State = (() => {
           this.g.userUpsert(R.merge(doc, form)),
         )
       },
-      onUpdate(doc) {
-        return () => this.update(doc, {text: `${Math.random()}`})
-      },
       saveEdit() {
         this.editState.save((doc, form) =>
           this.g.userUpsert(R.merge(doc, form)),
@@ -156,6 +153,9 @@ export const State = (() => {
       },
       cancelEdit() {
         this.editState.cancelEdit()
+      },
+      onUpdate(doc) {
+        return () => this.update(doc, {text: `${Math.random()}`})
       },
       onFormFieldChange(fieldName, event) {
         ow(fieldName, ow.string.equals('text'))
