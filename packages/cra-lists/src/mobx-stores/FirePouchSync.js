@@ -1,5 +1,5 @@
 import {FirebaseService} from './FirebaseService'
-import {action, observable, reaction} from 'mobx'
+import {observable, reaction} from 'mobx'
 import ow from 'ow'
 import {getAppActorId} from '../lib/app-actor-id'
 import {createLSItem} from '../lib/LocalStorageService'
@@ -16,8 +16,6 @@ export function FirePouchSync(pouchStore) {
   const fireSync = observable(
     {
       _syncing: false,
-      pouchChangesQueue: PouchChangesQueue(pouchStore),
-      syncFromFireStore: SyncFromFirestore(),
     },
     {},
     {name: `PouchFireSync: ${pouchStore.name}`},
@@ -30,8 +28,10 @@ export function FirePouchSync(pouchStore) {
         const cRef = FirebaseService.createUserCollectionRef(
           pouchStore.name,
         )
-        fireSync.pouchChangesQueue.syncToFirestore(cRef, pouchStore)
-        fireSync.syncFromFireStore.startSyncFromFirestore(
+        const queue = new PQueue({concurrency: 1})
+        PouchChangesQueue.syncToFirestore(queue, cRef, pouchStore)
+        SyncFromFirestore.startSyncFromFirestore(
+          queue,
           cRef,
           pouchStore,
         )
@@ -157,11 +157,9 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
   })
 }
 
-function PouchChangesQueue() {
-  const queue = new PQueue({concurrency: 1})
-
+const PouchChangesQueue = (function PouchChangesQueue() {
   return {
-    syncToFirestore(cRef, pouchStore) {
+    syncToFirestore(queue, cRef, pouchStore) {
       ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
       const syncSeq = createLSItem(
@@ -181,15 +179,13 @@ function PouchChangesQueue() {
               }),
           )
         })
+      return () => changes.cancel()
     },
   }
-}
-
-function SyncFromFirestore() {
-  const queue = new PQueue({concurrency: 1})
-
+})()
+const SyncFromFirestore = (function SyncFromFirestore() {
   return {
-    startSyncFromFirestore(cRef, pouchStore) {
+    startSyncFromFirestore(queue, cRef, pouchStore) {
       ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
       const syncTimestamp = createLSItem(
@@ -248,6 +244,7 @@ function SyncFromFirestore() {
             }
           }),
         )
+      return disposer
     },
   }
-}
+})()
