@@ -85,6 +85,13 @@ function versionMismatch(doc1, doc2) {
   return !R.equals(doc1.version, doc2.version)
 }
 
+function isVersionOlder(doc1, doc2) {
+  const versionPred = ow.number.integer.greaterThanOrEqual(0)
+  ow(doc1.version, versionPred)
+  ow(doc2.version, versionPred)
+  return doc1.version < doc2.version
+}
+
 async function processPouchChange(cRef, pouchStore, pouchChange) {
   const doc = pouchChange.doc
   if (shouldSkipFirestoreSync(doc) || isModifiedByRemoteActor(doc))
@@ -110,6 +117,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
     const fireDoc = snap.data()
     const isPouchDocOlderThanFireDoc = isOlder(doc, fireDoc)
     const areVersionsDifferent = versionMismatch(doc, fireDoc)
+    const isPouchVersionOlderThenFire = isVersionOlder(doc, fireDoc)
 
     const wasFireDocModifiedByLocalActor = isModifiedByLocalActor(
       fireDoc,
@@ -125,6 +133,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
       } else {
         console.warn('transactionEmptyUpdate', doc, fireDoc)
       }
+      debugger
     }
 
     function transactionEmptyUpdate() {
@@ -152,7 +161,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
     if (wasFireDocModifiedByLocalActor) {
       // both docs were locally modified.
       // we shouldn't blindly push, unless local version is newer
-      if (isPouchDocOlderThanFireDoc || areVersionsDifferent) {
+      if (isPouchDocOlderThanFireDoc || isPouchVersionOlderThenFire) {
         logWarningForEmptyTransactionUpdate()
         return transactionEmptyUpdate()
       } else {
