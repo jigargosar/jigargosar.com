@@ -7,31 +7,6 @@ var nanostate = require('nanostate')
 const R = require('ramda')
 const m = require('mobx')
 const validate = require('aproba')
-const RA = require('ramda-adjunct')
-
-function wrapInValidateAccessProxy(obj, options) {
-  m.observe(obj, change => {})
-  return new Proxy(obj, {
-    get(target, property, receiver) {
-      const shouldValidate =
-        RA.isString(property) &&
-        !['isMobXComputedValue', '_reactFragment'].includes(property)
-      const isInvalid = !ow.isValid(
-        target,
-        ow.object.hasKeys(property),
-      )
-      if (shouldValidate && isInvalid) {
-        console.warn(
-          `Accessing non existent property ["${property}"] of `,
-          target,
-          options,
-        )
-        return new Error('Boom!!')
-      }
-      return Reflect.get(...arguments)
-    },
-  })
-}
 
 export const FirebaseService = (function() {
   if (!firebase.apps[0]) {
@@ -50,25 +25,22 @@ export const FirebaseService = (function() {
       .enablePersistence()
       .catch(error => console.info('enablePersistenceFailed'))
   }
-  const fireAuth = createFireAuth(firebase)
-  return wrapInValidateAccessProxy(
-    m.observable(
-      {
-        createUserCollectionRef(collectionName) {
-          validate('S', arguments)
-          return createFirestoreUserCollection(
-            collectionName,
-            fireAuth.uid,
-            firebase.firestore(),
-          )
-        },
-        get a() {
-          return fireAuth
-        },
+  return m.observable(
+    {
+      createUserCollectionRef(collectionName) {
+        validate('S', arguments)
+        return createFirestoreUserCollection(
+          collectionName,
+          this.a.uid,
+          firebase.firestore(),
+        )
       },
-      {},
-      {name: 'FirebaseService'},
-    ),
+      get a() {
+        m.trace()
+        return createFireAuth(firebase)
+      },
+    },
+    {},
     {name: 'FirebaseService'},
   )
 })()
@@ -88,7 +60,7 @@ function createFireAuth(firebase) {
     signedOut: {ON_USER_NOT_NIL: 'signedIn', ON_SIGNIN: 'unknown'},
   })
 
-  const fireAuth = m.observable.object(
+  const fireAuth = m.observable(
     {
       _user: null,
       _authState: authMachine.state,

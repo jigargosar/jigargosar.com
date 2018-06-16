@@ -129,3 +129,5 @@ export const State = types
       },
     }
   })
+
+const S = (() => {})()
