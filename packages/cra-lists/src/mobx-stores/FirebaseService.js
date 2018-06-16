@@ -58,7 +58,6 @@ export const FirebaseService = (function() {
       {
         createUserCollectionRef(collectionName) {
           validate('S', arguments)
-          validate('S', arguments)
           return createFirestoreUserCollection(
             collectionName,
             fireAuth.uid,
