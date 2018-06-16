@@ -6,7 +6,7 @@ require('firebase/firestore')
 var nanostate = require('nanostate')
 const R = require('ramda')
 const m = require('mobx')
-var validate = require('aproba')
+const validate = require('aproba')
 const RA = require('ramda-adjunct')
 
 function wrapInValidateAccessProxy(obj, options) {

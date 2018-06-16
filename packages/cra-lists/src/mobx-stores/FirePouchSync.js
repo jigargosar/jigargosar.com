@@ -12,47 +12,51 @@ const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
 const PQueue = require('p-queue')
 const pEachSeries = require('p-each-series')
 const m = require('mobx')
-
+const validate = require('aproba')
 export function FirePouchSync(pouchStore) {
   const fireSync = observable(
     {
-      _syncing: false,
-      _disposers: m.observable.shallowArray([]),
+      isSyncing: false,
+      disposers: m.observable.array([], {deep: false}),
       disposeAll() {
-        this._disposers.forEach(fn => fn())
-        this._disposers.clear()
+        this.disposers.forEach(fn => fn())
+        this.disposers.clear()
+        this.isSyncing = false
       },
-      addDisposers(...disposers) {
-        this._disposers.push(...disposers)
-      },
-    },
-    {disposeAll: m.action.bound, addDisposers: m.action.bound},
-    {name: `PouchFireSync: ${pouchStore.name}`},
-  )
-  reaction(
-    () => [FirebaseService.user, fireSync._syncing],
-    () => {
-      if (FirebaseService.user && !fireSync._syncing) {
-        fireSync.syncing = true
-        const cRef = FirebaseService.createUserCollectionRef(
-          pouchStore.name,
-        )
+      startSync(cRef) {
+        validate('O', arguments)
+        ow(this.isSyncing, ow.boolean.label('isSyncing').false)
+        this.isSyncing = true
         const queue = new PQueue({concurrency: 1})
 
         function addToQueue(thunk) {
           queue.add(() =>
             thunk().catch(e => {
               console.error('Stopping FirePouchSync', e)
-              fireSync.disposeAll()
+              this.disposeAll()
               queue.clear()
             }),
           )
         }
 
-        fireSync.addDisposers(
+        this.disposers.push(
           syncToFirestore(addToQueue, cRef, pouchStore),
           startSyncFromFirestore(addToQueue, cRef, pouchStore),
         )
+      },
+    },
+    {disposeAll: m.action.bound, startSync: m.action.bound},
+    {name: `PouchFireSync: ${pouchStore.name}`},
+  )
+  reaction(
+    () => [FirebaseService.user, fireSync.isSyncing],
+    () => {
+      if (FirebaseService.user && !fireSync.isSyncing) {
+        fireSync.syncing = true
+        const cRef = FirebaseService.createUserCollectionRef(
+          pouchStore.name,
+        )
+        fireSync.startSync(cRef)
       }
     },
   )
