@@ -83,48 +83,66 @@ function createFireAuth(firebase) {
   })
 
   var extendedState = {user: null}
-  firebase.auth().onAuthStateChanged(user => {
-    extendedState.user = user
-    authMachine.emit(R.isNil(user) ? 'userNil' : 'userNotNil')
-  })
-
   const authMachineStateAtom = m.createAtom('authMachineState')
+
   authMachine.on('*', () => authMachineStateAtom.reportChanged())
 
   function getAuthState() {
     authMachineStateAtom.reportObserved()
     return {type: authMachine.state, user: extendedState.user}
   }
-
   function signIn() {
     const provider = new firebase.auth.GoogleAuthProvider()
     provider.setCustomParameters({prompt: 'select_account'})
     return firebase.auth().signInWithRedirect(provider)
   }
+
   function signOut() {
     return firebase.auth().signOut()
   }
-  return {
-    get uid() {
-      const user = getAuthState().user
-      ow(user, ow.object.label('user').hasKeys('uid'))
-      ow(user.uid, ow.string.label('uid').nonEmpty)
-      return user.uid
+
+  const fireAuth = m.observable.object(
+    {
+      _user: m.observable.ref,
+      _authState: authMachine.state,
+      _onFirebaseAuthStateChanged(user) {
+        this._user = user
+      },
+      _onAuthMachineStateEntered(authState) {
+        this._authState = authState
+      },
+      get uid() {
+        const user = this._user
+        ow(user, ow.object.label('user').hasKeys('uid'))
+        ow(user.uid, ow.string.label('uid').nonEmpty)
+        return user.uid
+      },
+      get displayName() {
+        const user = this._user
+        ow(user, ow.object.label('user').hasKeys('displayName'))
+        return user.displayName
+      },
+      get isSignedIn() {
+        return this._authState === 'signedIn'
+      },
+      get isAuthKnown() {
+        return this._authState !== 'unknown'
+      },
+      signIn,
+      signOut,
     },
-    get displayName() {
-      const user = getAuthState().user
-      ow(user, ow.object.label('user').hasKeys('displayName'))
-      return user.displayName
-    },
-    get isSignedIn() {
-      return getAuthState().type === 'signedIn'
-    },
-    get isAuthKnown() {
-      return getAuthState().type !== 'unknown'
-    },
-    signIn,
-    signOut,
-  }
+    {},
+    {name: 'FireAuth'},
+  )
+
+  authMachine.on('*', fireAuth._onAuthMachineStateEntered)
+
+  firebase.auth().onAuthStateChanged(user => {
+    fireAuth._onFirebaseAuthStateChanged(user)
+    extendedState.user = user
+    authMachine.emit(R.isNil(user) ? 'userNil' : 'userNotNil')
+  })
+  return fireAuth
 }
 
 function createFirestoreUserCollection(
