@@ -121,7 +121,7 @@ function noCAMDown(event) {
       },
 */
 export const State = (() => {
-  return m.observable(
+  const state = m.observable(
     {
       pageTitle: 'CRA List Proto',
       get auth() {
@@ -157,7 +157,7 @@ export const State = (() => {
       cancelEdit() {
         this.editState.cancelEdit()
       },
-      onFormFieldChange(fieldName, event) {
+      onFormFieldChange: function(fieldName, event) {
         ow(fieldName, ow.string.equals('text'))
         return this.editState.updateForm({
           [fieldName]: event.target.value,
@@ -182,4 +182,6 @@ export const State = (() => {
     },
     {name: 'State'},
   )
+  state.onFormFieldChange = R.curryN(2, state.onFormFieldChange)
+  return state
 })()

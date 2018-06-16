@@ -187,7 +187,7 @@ const GrainEdit = injectState(function GrainEdit({s}) {
               className={'pa2 h2 outline-0 f4 flex-auto'}
               placeholder={'e.g. Go Fish!'}
               value={s.editState.form.text}
-              onChange={e => s.onFormFieldChange('text', e)}
+              onChange={s.onFormFieldChange('text')}
             />
           </div>
         </div>
