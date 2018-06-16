@@ -30,15 +30,15 @@ const buttonCN =
   'input-reset pointer ttc bn blue link bg-white-30 pa1 ph2 br-pill hover-bg-white'
 
 const SignInOutView = injectState(function SignInOutView({s}) {
-  const content = s.fire.a.isSignedIn ? (
+  const content = s.auth.isSignedIn ? (
     <F>
-      <div>{s.fire.a.displayName}</div>
-      <button className={cn(buttonCN)} onClick={s.fire.a.signOut}>
+      <div>{s.auth.displayName}</div>
+      <button className={cn(buttonCN)} onClick={s.auth.signOut}>
         Sign Out
       </button>
     </F>
   ) : (
-    <button className={cn(buttonCN)} onClick={s.fire.a.signIn}>
+    <button className={cn(buttonCN)} onClick={s.auth.signIn}>
       SignIn
     </button>
   )
@@ -53,8 +53,8 @@ const Header = injectState(function Header({s}) {
   return (
     <div className="bg-light-blue tc pa3">
       <div className="f1">{s.pageTitle}</div>
-      {s.fire.a.isAuthKnown && <SignInOutView />}
-      {!s.fire.a.isAuthKnown && <div>...Loading</div>}
+      {s.auth.isAuthKnown && <SignInOutView />}
+      {!s.auth.isAuthKnown && <div>...Loading</div>}
     </div>
   )
 })
