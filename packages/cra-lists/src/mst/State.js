@@ -167,7 +167,7 @@ export const State = (() => {
       // startEdit: m.action.bound,
       // updateForm: m.action.bound,
       saveEdit: m.action.bound,
-      // cancelEdit: m.action.bound,
+      cancelEdit: m.action.bound,
     },
     {name: 'State'},
   )
