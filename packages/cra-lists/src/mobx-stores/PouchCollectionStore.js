@@ -19,7 +19,7 @@ const idPropName = '_id'
 export function PouchCollectionStore(modelName) {
   const name = `${modelName}Collection`
   const pouchStore = PouchDBService.create(name)
-  return m.observable(
+  const pouchCollectionStore = m.observable(
     {
       get name() {
         return name
@@ -94,4 +94,6 @@ export function PouchCollectionStore(modelName) {
     },
     {name},
   )
+  pouchCollectionStore.load()
+  return pouchCollectionStore
 }

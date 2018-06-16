@@ -225,11 +225,11 @@ const App = injectState(function App({s}) {
       </div>
       <DevTools />
       {/*<RenderState src={s.toJSON()} />*/}
-      <RenderState
-        src={s.debugJSON()}
-        hide={s.hideRenderState}
-        onClose={s.onCloseRenderState}
-      />
+      {/*<RenderState*/}
+        {/*src={s.debugJSON()}*/}
+        {/*hide={s.hideRenderState}*/}
+        {/*onClose={s.onCloseRenderState}*/}
+      {/*/>*/}
     </div>
   )
 })

@@ -1,6 +1,4 @@
-import {flow, types, getSnapshot} from 'mobx-state-tree'
 import {observable} from 'mobx'
-import {SF} from '../safe-fun'
 import {PouchCollectionStore} from '../mobx-stores/PouchCollectionStore'
 import ow from 'ow'
 import {FirebaseService} from '../mobx-stores/FirebaseService'
@@ -23,43 +21,17 @@ const EditState = function() {
   )
 }
 
+/*
 function noCAMDown(event) {
   const camState = SF.pick(['ctrlKey', 'altKey', 'metaKey'], event)
   return !R.any(R.identity, R.values(camState))
 }
-
-export const State = types
-  .model('RootState', {
-    pageTitle: 'CRA List Proto',
-    hideRenderState: true,
-  })
-  .volatile(() => {
-    return {
-      g: PouchCollectionStore('grain'),
-      editState: EditState(),
-      fire: FirebaseService,
-    }
-  })
-  .views(self => {
-    return {
-      get grainsList() {
-        return self.g.list
-      },
-      debugJSON() {
-        return R.merge(getSnapshot(self), {g: m.toJS(self.g)})
-        // return m.toJS(self.g)
-      },
-    }
-  })
-  .actions(self => {
-    return {
       afterCreate() {
         window.addEventListener('keypress', event => {
           if (event.key === `~` && noCAMDown(event)) {
             self.toggleRenderStateView()
           }
         })
-        self.g.load()
       },
       toggleRenderStateView() {
         self.hideRenderState = !self.hideRenderState
@@ -67,67 +39,82 @@ export const State = types
       onCloseRenderState() {
         self.hideRenderState = true
       },
-      onAddNew() {
-        return self.g.userUpsert({text: `${Math.random()}`})
-      },
-      update: flow(function*(doc, change) {
-        try {
-          yield self.g.userUpsert(R.merge(doc, change))
-          self.editState = observable({type: 'idle'})
-        } catch (e) {
-          self.editState = observable({
-            type: 'error',
-            doc: R.clone(doc),
-            form: change,
-          })
-          console.warn('Update failed', self.editState, e)
-        }
-      }),
-      onUpdate(doc) {
-        return () => self.update(doc, {text: `${Math.random()}`})
-      },
-      startEdit(doc) {
-        self.editState = observable({
-          type: 'editing',
+*/
+export const State = (() => {
+  return m.observable({
+    pageTitle: 'CRA List Proto',
+    get auth() {
+      return FirebaseService.a
+    },
+    get fire() {
+      return FirebaseService
+    },
+    get g() {
+      m.trace()
+      return PouchCollectionStore('grain')
+    },
+    get editState() {
+      return EditState()
+    },
+    onAddNew() {
+      return this.g.userUpsert({text: `${Math.random()}`})
+    },
+    update: m.flow(function*(doc, change) {
+      try {
+        yield this.g.userUpsert(R.merge(doc, change))
+        this.editState = observable({type: 'idle'})
+      } catch (e) {
+        this.editState = observable({
+          type: 'error',
           doc: R.clone(doc),
-          form: {text: doc.text},
+          form: change,
         })
-      },
-      saveEdit: flow(function*() {
-        ow(self.editState.type, ow.string.equals('editing'))
-        self.editState.type = 'saving'
-        try {
-          yield self.g.userUpsert(
-            R.merge(self.editState.doc, self.editState.form),
-          )
-          self.editState = observable({type: 'idle'})
-        } catch (e) {
-          self.editState.type = 'error'
-          console.warn('Update failed', self.editState, e)
-        }
-      }),
-      cancelEdit() {
-        ow(self.editState.type, ow.string.oneOf(['editing', 'error']))
-        self.editState.type = 'idle'
-      },
-      updateForm(fieldName, value) {
-        ow(self.editState.type, ow.string.equals('editing'))
-        self.editState.form[fieldName] = value
-      },
-      onFormChange(fieldName) {
-        ow(fieldName, ow.string.equals('text'))
-        return event => self.updateForm(fieldName, event.target.value)
-      },
-      onStartEditing(doc) {
-        return () => self.startEdit(doc)
-      },
-      onToggleArchive(doc) {
-        return () =>
-          self.update(doc, {
-            isArchived: !R.propOr(false, 'isArchived', doc),
-          })
-      },
-    }
+        console.warn('Update failed', this.editState, e)
+      }
+    }),
+    onUpdate(doc) {
+      return () => this.update(doc, {text: `${Math.random()}`})
+    },
+    startEdit(doc) {
+      this.editState = observable({
+        type: 'editing',
+        doc: R.clone(doc),
+        form: {text: doc.text},
+      })
+    },
+    saveEdit: m.flow(function*() {
+      ow(this.editState.type, ow.string.equals('editing'))
+      this.editState.type = 'saving'
+      try {
+        yield this.g.userUpsert(
+          R.merge(this.editState.doc, this.editState.form),
+        )
+        this.editState = observable({type: 'idle'})
+      } catch (e) {
+        this.editState.type = 'error'
+        console.warn('Update failed', this.editState, e)
+      }
+    }),
+    cancelEdit() {
+      ow(this.editState.type, ow.string.oneOf(['editing', 'error']))
+      this.editState.type = 'idle'
+    },
+    updateForm(fieldName, value) {
+      ow(this.editState.type, ow.string.equals('editing'))
+      this.editState.form[fieldName] = value
+    },
+    onFormChange(fieldName) {
+      ow(fieldName, ow.string.equals('text'))
+      return event => this.updateForm(fieldName, event.target.value)
+    },
+    onStartEditing(doc) {
+      return () => this.startEdit(doc)
+    },
+    onToggleArchive(doc) {
+      return () =>
+        this.update(doc, {
+          isArchived: !R.propOr(false, 'isArchived', doc),
+        })
+    },
   })
-
-const S = (() => {})()
+})()

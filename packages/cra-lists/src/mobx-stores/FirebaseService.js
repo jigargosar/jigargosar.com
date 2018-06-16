@@ -39,6 +39,10 @@ export const FirebaseService = (function() {
         m.trace()
         return createFireAuth(firebase)
       },
+      get auth() {
+        m.trace()
+        return createFireAuth(firebase)
+      },
     },
     {},
     {name: 'FirebaseService'},
