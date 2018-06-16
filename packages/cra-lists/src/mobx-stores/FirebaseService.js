@@ -64,12 +64,6 @@ export const FirebaseService = (function() {
             firebase.firestore(),
           )
         },
-        signIn() {
-          return fireAuth.signIn()
-        },
-        signOut() {
-          return fireAuth.signOut()
-        },
         get a() {
           return fireAuth
         },

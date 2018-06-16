@@ -33,12 +33,12 @@ const SignInOutView = injectState(function SignInOutView({s}) {
   const content = s.fire.a.isSignedIn ? (
     <F>
       <div>{s.fire.a.displayName}</div>
-      <button className={cn(buttonCN)} onClick={s.fire.signOut}>
+      <button className={cn(buttonCN)} onClick={s.fire.a.signOut}>
         Sign Out
       </button>
     </F>
   ) : (
-    <button className={cn(buttonCN)} onClick={s.fire.signIn}>
+    <button className={cn(buttonCN)} onClick={s.fire.a.signIn}>
       SignIn
     </button>
   )
