@@ -29,7 +29,7 @@ export function FirePouchSync(pouchStore) {
           pouchStore.name,
         )
         const queue = new PQueue({concurrency: 1})
-        PouchChangesQueue.syncToFirestore(queue, cRef, pouchStore)
+        SyncFromFirestore.syncToFirestore(queue, cRef, pouchStore)
         SyncFromFirestore.startSyncFromFirestore(
           queue,
           cRef,
@@ -157,32 +157,6 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
   })
 }
 
-const PouchChangesQueue = (function PouchChangesQueue() {
-  return {
-    syncToFirestore(queue, cRef, pouchStore) {
-      ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
-
-      const syncSeq = createLSItem(
-        `PouchChangesQueue.${pouchStore.name}.lastSyncSeq`,
-        0,
-      )
-      const changes = pouchStore
-        .liveChanges({since: syncSeq.get()})
-        .on('change', change => {
-          queue.add(() =>
-            processPouchChange(cRef, pouchStore, change)
-              .then(() => syncSeq.set(change.seq))
-              .catch(e => {
-                console.log('Error syncToFirestore. Stopping', e)
-                changes.cancel()
-                queue.clear()
-              }),
-          )
-        })
-      return () => changes.cancel()
-    },
-  }
-})()
 const SyncFromFirestore = (function SyncFromFirestore() {
   return {
     startSyncFromFirestore(queue, cRef, pouchStore) {
@@ -245,6 +219,28 @@ const SyncFromFirestore = (function SyncFromFirestore() {
           }),
         )
       return disposer
+    },
+    syncToFirestore(queue, cRef, pouchStore) {
+      ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
+
+      const syncSeq = createLSItem(
+        `PouchChangesQueue.${pouchStore.name}.lastSyncSeq`,
+        0,
+      )
+      const changes = pouchStore
+        .liveChanges({since: syncSeq.get()})
+        .on('change', change => {
+          queue.add(() =>
+            processPouchChange(cRef, pouchStore, change)
+              .then(() => syncSeq.set(change.seq))
+              .catch(e => {
+                console.log('Error syncToFirestore. Stopping', e)
+                changes.cancel()
+                queue.clear()
+              }),
+          )
+        })
+      return () => changes.cancel()
     },
   }
 })()
