@@ -123,7 +123,7 @@ export const State = (() => {
         return this.g.userUpsert({text: `${Math.random()}`})
       },
       update(doc, change) {
-        this.startEdit(doc)
+        this.editState.startEditing(doc, ['text'])
         this.editState.updateForm(change)
 
         this.editState.save((doc, form) =>
@@ -132,9 +132,6 @@ export const State = (() => {
       },
       onUpdate(doc) {
         return () => this.update(doc, {text: `${Math.random()}`})
-      },
-      startEdit(doc) {
-        this.editState.startEditing(doc, ['text'])
       },
       saveEdit() {
         this.editState.save((doc, form) =>
@@ -149,10 +146,14 @@ export const State = (() => {
       },
       onFormChange(fieldName) {
         ow(fieldName, ow.string.equals('text'))
-        return event => this.updateForm(fieldName, event.target.value)
+        return event =>
+          this.editState.updateFormField(
+            fieldName,
+            event.target.value,
+          )
       },
       onStartEditing(doc) {
-        return () => this.startEdit(doc)
+        return () => this.editState.startEditing(doc, ['text'])
       },
       onToggleArchive(doc) {
         return () =>
@@ -165,7 +166,7 @@ export const State = (() => {
       onAddNew: m.action.bound,
       // startEdit: m.action.bound,
       // updateForm: m.action.bound,
-      // saveEdit: m.action.bound,
+      saveEdit: m.action.bound,
       // cancelEdit: m.action.bound,
     },
     {name: 'State'},
