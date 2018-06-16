@@ -10,9 +10,7 @@ const validate = require('aproba')
 const RA = require('ramda-adjunct')
 
 function wrapInValidateAccessProxy(obj, options) {
-  m.observe(obj, change => {
-    debugger
-  })
+  m.observe(obj, change => {})
   return new Proxy(obj, {
     get(target, property, receiver) {
       const shouldValidate =
@@ -112,26 +110,34 @@ function createFireAuth(firebase) {
         return user.displayName
       },
       get isSignedIn() {
-        return this._authState === 'signedIn'
+        return R.equals(this._authState, 'signedIn')
       },
       get isAuthKnown() {
-        m.trace(true)
-        return this._authState !== 'unknown'
+        return !R.equals(this._authState, 'unknown')
       },
       signIn,
       signOut,
     },
-    {},
+    {
+      _authState: m.observable.ref,
+      _onAuthMachineStateEntered: m.action.bound,
+      _onFirebaseAuthStateChanged: m.action.bound,
+    },
     {name: 'FireAuth'},
   )
-
+  // m.runInAction(() => (fireAuth._authState = authMachine.state))
   authMachine.on('*', fireAuth._onAuthMachineStateEntered)
 
   firebase.auth().onAuthStateChanged(user => {
     fireAuth._onFirebaseAuthStateChanged(user)
+
     authMachine.emit(
       R.isNil(user) ? 'ON_USER_NIL' : 'ON_USER_NOT_NIL',
     )
+  })
+
+  m.autorun(() => {
+    console.log(m.toJS(fireAuth))
   })
   return fireAuth
 }

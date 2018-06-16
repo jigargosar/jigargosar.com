@@ -5,7 +5,6 @@ export function addDisposer(target, disposer) {
     try {
       disposer()
     } catch (e) {
-      debugger
       console.error(e)
     }
   })

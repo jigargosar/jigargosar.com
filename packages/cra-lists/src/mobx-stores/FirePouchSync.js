@@ -115,7 +115,6 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
       } else {
         console.warn('transactionEmptyUpdate', doc, fireDoc)
       }
-      debugger
     }
 
     function transactionSetDocWithTimestamp() {
@@ -202,9 +201,7 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
     if (isModifiedByLocalActor(fireDoc)) return Promise.resolve()
     return pouchStore
       .get(fireDoc._id)
-      .then(() => {
-        debugger
-      })
+      .then(() => {})
       .catch(e => {
         console.log(e)
         pouchStore.put(fireDoc)

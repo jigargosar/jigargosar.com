@@ -74,7 +74,7 @@ export async function updateFirestoreFromPouchDoc({
   }
   if (isRemotelyModified(doc, appActorId)) {
     log.debug('ignore: isRemotelyModified, should never happen', doc)
-    debugger
+
     return
   }
 
