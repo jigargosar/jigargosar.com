@@ -1,6 +1,5 @@
 import React, {Fragment as F} from 'react'
-import {observer} from 'mobx-react'
-import {withState} from './StateContext'
+import {injectState} from './StateContext'
 import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
@@ -30,9 +29,7 @@ const centeredContentClass = 'f5 center mw7 mv3 ph3'
 const buttonCN =
   'input-reset pointer ttc bn blue link bg-white-30 pa1 ph2 br-pill hover-bg-white'
 
-const injectS = R.compose(withState, observer)
-
-const SignInOutView = injectS(function SignInOutView({s}) {
+const SignInOutView = injectState(function SignInOutView({s}) {
   const content = s.fire.a.isSignedIn ? (
     <F>
       <div>{s.fire.a.displayName}</div>
@@ -52,7 +49,7 @@ const SignInOutView = injectS(function SignInOutView({s}) {
   )
 })
 
-const Header = injectS(function Header({s}) {
+const Header = injectState(function Header({s}) {
   return (
     <div className="bg-light-blue tc pa3">
       <div className="f1">{s.pageTitle}</div>
@@ -64,7 +61,7 @@ const Header = injectS(function Header({s}) {
 function getFormattedDate(date) {
   return formatDate(date, `hh:mm a Do MMM 'YY`)
 }
-const GrainItem = injectS(function GrainItem({s, grain, style}) {
+const GrainItem = injectState(function GrainItem({s, grain, style}) {
   const toDisplayText = R.when(R.isEmpty, R.always('<empty>'))
   return (
     <div className={'pv3'} style={style}>
@@ -161,7 +158,7 @@ function renderAnimatedArchivedHeader(s, animate = false) {
   }
 }
 
-const GrainsList = injectS(function GrainsList({s}) {
+const GrainsList = injectState(function GrainsList({s}) {
   return (
     <F>
       {renderAnimatedGrainsList(s.g.active, false)}
@@ -170,7 +167,7 @@ const GrainsList = injectS(function GrainsList({s}) {
     </F>
   )
 })
-const GrainEdit = injectS(function GrainEdit({s}) {
+const GrainEdit = injectState(function GrainEdit({s}) {
   if (s.editState.type === 'idle') return null
   if (localStorage.traceEnabled) {
     trace()
@@ -206,7 +203,7 @@ const GrainEdit = injectS(function GrainEdit({s}) {
     </div>
   )
 })
-const GrainListHeader = injectS(function GrainListHeader({s}) {
+const GrainListHeader = injectState(function GrainListHeader({s}) {
   return (
     <SpacedRow className={'pv3'}>
       <div className={'f4 b'}>LIST</div>
@@ -216,7 +213,7 @@ const GrainListHeader = injectS(function GrainListHeader({s}) {
     </SpacedRow>
   )
 })
-const App = injectS(function App({s}) {
+const App = injectState(function App({s}) {
   return (
     <div className={'f6'}>
       <Header />
