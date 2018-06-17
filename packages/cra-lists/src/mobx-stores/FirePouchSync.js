@@ -235,9 +235,10 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
         return putDocWithSkipFirestoreSync(SF.omit(['_rev'], fireDoc))
       }
       if (isOlder(pouchDoc, fireDoc)) {
-        return putDocWithSkipFirestoreSync(R.merge(fireDoc), {
-          _rev: pouchDoc.rev,
+        const remoteDocWithLocalRev = R.merge(fireDoc, {
+          _rev: pouchDoc._rev,
         })
+        return putDocWithSkipFirestoreSync(remoteDocWithLocalRev)
       } else {
         console.warn(
           `ignoring 'older' firestore doc`,
@@ -250,7 +251,7 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
 
   async function onFireDocChange(docChange) {
     const fireDoc = docChange.doc.data()
-    console.log('fireDoc', fireDoc)
+    console.debug('onFireDocChange', fireDoc)
     await processFirestoreDoc(fireDoc)
     setSyncFirestoreTimestampFromFireDoc(fireDoc)
   }

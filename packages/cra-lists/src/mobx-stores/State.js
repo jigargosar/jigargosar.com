@@ -184,12 +184,26 @@ export const State = (() => {
     },
     {name: 'State'},
   )
-  state.onUpdateEvent = R.curryN(2, state.onUpdateEvent)
-  state.onFormFieldChangeEvent = R.curryN(
-    2,
-    state.onFormFieldChangeEvent,
-  )
-  state.onStartEditingEvent = R.curryN(2, state.onStartEditingEvent)
-  state.onToggleArchiveEvent = R.curryN(2, state.onToggleArchiveEvent)
+
+  const isEventHandler = R.allPass([
+    R.startsWith('on'),
+    R.endsWith('Event'),
+  ])
+  const keys = R.compose(R.filter(isEventHandler), R.keys)(state)
+  keys.forEach(key => {
+    state[key] = R.curryN(2, state[key].bind(state))
+  })
+  // debugger
+  //
+  // state.onUpdateEvent = R.curryN(2, state.onUpdateEvent)
+  // state.onFormFieldChangeEvent = R.curryN(
+  //   2,
+  //   state.onFormFieldChangeEvent,
+  // )
+  // state.onStartEditingEvent = R.curryN(2, state.onStartEditingEvent)
+  // state.onToggleArchiveEvent = R.curryN(
+  //   2,
+  //   state.onToggleArchiveEvent.bind(state),
+  // )
   return state
 })()
