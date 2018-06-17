@@ -3,6 +3,7 @@ import {reaction} from 'mobx'
 import ow from 'ow'
 import {getAppActorId} from '../lib/app-actor-id'
 import {createLSItem} from '../lib/LocalStorageService'
+import {SF} from '../safe-fun'
 
 const a = require('nanoassert')
 const R = require('ramda')
@@ -24,7 +25,12 @@ export function FirePouchSync(pouchStore) {
       disposeAll() {
         this.disposers.forEach(fn => fn())
         this.disposers.clear()
-        this.isSyncing = false
+      },
+      onError(e) {
+        console.error('Stopping FirePouchSync', e)
+        this.disposeAll()
+        this.queue.clear()
+        debugger
       },
       addToQueue(thunk, options = {}) {
         console.log('Entering addToQueue(thunk, options)', options)
@@ -38,11 +44,7 @@ export function FirePouchSync(pouchStore) {
                   ...args,
                 )
               })
-              .catch(e => {
-                console.error('Stopping FirePouchSync', e)
-                this.disposeAll()
-                this.queue.clear()
-              }),
+              .catch(this.onError),
           options,
         )
       },
@@ -63,6 +65,7 @@ export function FirePouchSync(pouchStore) {
       disposeAll: m.action.bound,
       startSync: m.action.bound,
       addToQueue: m.action.bound,
+      onError: m.action.bound,
     },
     {name: `PouchFireSync: ${pouchStore.name}`},
   )
@@ -107,7 +110,6 @@ function isVersionOlder(doc1, doc2) {
 }
 
 async function processPouchChange(cRef, pouchStore, pouchChange) {
-  // debugger
   const doc = pouchChange.doc
   if (shouldSkipFirestoreSync(doc)) return
   ow(
@@ -213,6 +215,7 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
   }
 
   async function processFirestoreDoc(fireDoc) {
+    debugger
     function putDocWithSkipFirestoreSync(doc) {
       return pouchStore.put(R.merge(doc, {skipFirestoreSync: true}))
     }
@@ -229,7 +232,7 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
         pouchDoc = await pouchStore.get(fireDoc._id)
       } catch (e) {
         console.log('inserting new remotely created doc', e)
-        return putDocWithSkipFirestoreSync(fireDoc)
+        return putDocWithSkipFirestoreSync(SF.omit(['_rev'], fireDoc))
       }
       if (isOlder(pouchDoc, fireDoc)) {
         return putDocWithSkipFirestoreSync(R.merge(fireDoc), {
@@ -278,7 +281,7 @@ function syncToFirestore(addToQueue, cRef, pouchStore) {
     .on('change', change =>
       addToQueue(
         async () => {
-          if (shouldSkipFirestoreSync(change.doc)) return
+          // if (shouldSkipFirestoreSync(change.doc)) return
           await processPouchChange(cRef, pouchStore, change)
           syncSeq.set(change.seq)
         },

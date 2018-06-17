@@ -213,7 +213,8 @@ const GrainListHeader = injectState(function GrainListHeader({s}) {
     </SpacedRow>
   )
 })
-const App = injectState(function App({s}) {
+
+export function App() {
   return (
     <div className={'f6'}>
       <Header />
@@ -232,6 +233,4 @@ const App = injectState(function App({s}) {
       {/*/>*/}
     </div>
   )
-})
-
-export default App
+}

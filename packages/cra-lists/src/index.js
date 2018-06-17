@@ -6,7 +6,7 @@ import {StateProvider} from './StateContext'
 import {State} from './mobx-stores/State'
 
 function render() {
-  const App = require('./App').default
+  const App = require('./App').App
   ReactDOM.render(
     <StateProvider value={State}>
       <App />
