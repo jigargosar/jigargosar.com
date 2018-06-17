@@ -109,10 +109,6 @@ export function State() {
         return FirebaseService.auth
       },
       get grains() {
-        // ;(function() {
-        //   m.trace(true)
-        // })()
-
         return PouchCollectionStore('grain')
       },
       editModal: EditModalState(),
