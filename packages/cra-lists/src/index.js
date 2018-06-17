@@ -21,6 +21,7 @@ function render() {
 render()
 
 if (module.hot) {
+  window.state = State
   module.hot.accept(['./state-loader'], () => {
     render()
   })

@@ -128,17 +128,14 @@ export const State = (() => {
     {
       pageTitle: 'CRA List Proto',
       get auth() {
-        return FirebaseService.a
-      },
-      get fire() {
-        return FirebaseService
+        return FirebaseService.auth
       },
       get grains() {
-        m.trace()
+        m.trace(true)
         return PouchCollectionStore('grain')
       },
       editModal: EditModalState(),
-      onAddNew() {
+      addNew() {
         return this.grains.userUpsert({text: `${Math.random()}`})
       },
       _update(doc, change, fieldNames) {
@@ -157,39 +154,42 @@ export const State = (() => {
       cancelEdit() {
         this.editModal.cancelEdit()
       },
-      onUpdate(doc) {
-        return () =>
-          this._update(doc, {text: `${Math.random()}`}, ['text'])
+      onUpdateEvent(doc) {
+        return this._update(doc, {text: `${Math.random()}`}, ['text'])
       },
-      onFormFieldChange(fieldName, event) {
+      onFormFieldChangeEvent(fieldName, event) {
         ow(fieldName, ow.string.equals('text'))
         return this.editModal.updateForm({
           [fieldName]: event.target.value,
         })
       },
-      onStartEditing(doc) {
-        return () => this.editModal.startEditing(doc, ['text'])
+      onStartEditingEvent(doc) {
+        return this.editModal.startEditing(doc, ['text'])
       },
-      onToggleArchive(doc) {
-        return () =>
-          this._update(
-            doc,
-            {
-              isArchived: !R.propOr(false, 'isArchived', doc),
-            },
-            ['isArchived'],
-          )
+      onToggleArchiveEvent(doc) {
+        return this._update(
+          doc,
+          {
+            isArchived: !R.propOr(false, 'isArchived', doc),
+          },
+          ['isArchived'],
+        )
       },
     },
     {
-      onAddNew: m.action.bound,
+      addNew: m.action.bound,
       _update: m.action.bound,
       saveEdit: m.action.bound,
       cancelEdit: m.action.bound,
-      onFormFieldChange: m.action.bound,
     },
     {name: 'State'},
   )
-  state.onFormFieldChange = R.curryN(2, state.onFormFieldChange)
+  state.onUpdateEvent = R.curryN(2, state.onUpdateEvent)
+  state.onFormFieldChangeEvent = R.curryN(
+    2,
+    state.onFormFieldChangeEvent,
+  )
+  state.onStartEditingEvent = R.curryN(2, state.onStartEditingEvent)
+  state.onToggleArchiveEvent = R.curryN(2, state.onToggleArchiveEvent)
   return state
 })()

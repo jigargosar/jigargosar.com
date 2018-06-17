@@ -84,13 +84,13 @@ class GrainItem extends C {
           <div className={'child'}>
             <button
               className={cn(buttonCN, 'w-100')}
-              onClick={s.onUpdate(grain)}
+              onClick={s.onUpdateEvent(grain)}
             >
               E
             </button>
             <button
               className={cn(buttonCN, 'w-100')}
-              onClick={s.onToggleArchive(grain)}
+              onClick={s.onToggleArchiveEvent(grain)}
             >
               X
             </button>
@@ -100,7 +100,7 @@ class GrainItem extends C {
               className={cn('pointer', {
                 'black-70': R.isEmpty(grain.text),
               })}
-              onClick={s.onStartEditing(grain)}
+              onClick={s.onStartEditingEvent(grain)}
             >
               {toDisplayText(grain.text)}
             </div>
@@ -210,7 +210,7 @@ class GrainEdit extends C {
                 className={'pa2 h2 outline-0 f4 flex-auto'}
                 placeholder={'e.g. Go Fish!'}
                 value={s.editModal.form.text}
-                onChange={s.onFormFieldChange('text')}
+                onChange={s.onFormFieldChangeEvent('text')}
               />
             </div>
           </div>
@@ -235,7 +235,7 @@ class GrainListHeader extends C {
     return (
       <SpacedRow className={'pv3'}>
         <div className={'f4 b'}>LIST</div>
-        <button className={cn(buttonCN)} onClick={s.onAddNew}>
+        <button className={cn(buttonCN)} onClick={s.addNew}>
           Add
         </button>
       </SpacedRow>

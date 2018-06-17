@@ -31,16 +31,12 @@ export const FirebaseService = (function() {
         validate('S', arguments)
         return createFirestoreUserCollection(
           collectionName,
-          this.a.uid,
+          this.auth.uid,
           firebase.firestore(),
         )
       },
-      get a() {
-        m.trace()
-        return createFireAuth(firebase)
-      },
       get auth() {
-        m.trace()
+        m.trace(true)
         return createFireAuth(firebase)
       },
     },
