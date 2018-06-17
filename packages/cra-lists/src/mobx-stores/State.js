@@ -101,7 +101,7 @@ const EditModalState = function() {
   )
 }
 
-export const State = (() => {
+export function State() {
   const state = m.observable(
     {
       pageTitle: 'CRA List Proto',
@@ -175,4 +175,4 @@ export const State = (() => {
     state[key] = R.curryN(2, state[key].bind(state))
   })
   return state
-})()
+}

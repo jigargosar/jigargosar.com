@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import {StateProvider} from './StateContext'
-import {State} from './mobx-stores/State'
 
-const App = require('./App').App
 function render() {
+  const App = require('./App').App
+  const state = require('./mobx-stores/State').State()
   ReactDOM.render(
     <React.Fragment>
-      <StateProvider value={State}>
+      <StateProvider value={state}>
         <App />
       </StateProvider>
       {/*<DevTools />*/}
@@ -21,8 +21,7 @@ function render() {
 render()
 
 if (module.hot) {
-  window.state = State
-  module.hot.accept(['./state-loader'], () => {
+  module.hot.accept(['./mobx-stores/State', './App'], () => {
     render()
   })
 }
