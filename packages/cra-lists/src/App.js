@@ -191,7 +191,7 @@ class GrainsList extends C {
 
 class GrainEdit extends C {
   r({s}) {
-    if (s.editModal.type === 'closed') return null
+    if (s.editModal.isClosed) return null
     if (localStorage.traceEnabled) {
       trace()
     }

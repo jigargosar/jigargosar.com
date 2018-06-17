@@ -43,6 +43,9 @@ const EditModalState = function() {
       form: {},
       error: null,
       fieldNames: [],
+      get isClosed() {
+        return (this.type = 'closed')
+      },
       _reset() {
         Object.assign(this, {
           type: 'closed',
