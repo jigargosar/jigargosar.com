@@ -105,9 +105,12 @@ const GrainItem = injectState(function GrainItem({s, grain, style}) {
     </div>
   )
 })
-const ArchivedListHeader = () => (
-  <div className={'pv2 f4 b'}>ARCHIVE</div>
-)
+
+class ArchivedListHeader extends C {
+  r() {
+    return <div className={'pv2 f4 b'}>ARCHIVE</div>
+  }
+}
 
 function renderAnimatedGrainsList(grains, animate = false) {
   if (animate) {
