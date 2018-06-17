@@ -13,7 +13,7 @@ function arrayToString(extraKeys) {
   return `[${R.join(`","`, extraKeys)}]`
 }
 
-const EditState = function() {
+const EditDialogState = function() {
   function validateChanges(change, fieldNames) {
     const changePred = ow.object.label('change')
     ow(change, changePred.nonEmpty)
@@ -97,7 +97,7 @@ const EditState = function() {
       cancelEdit: m.action.bound,
       save: m.action.bound,
     },
-    {name: 'EditState'},
+    {name: 'EditDialogState'},
   )
 }
 
@@ -134,7 +134,7 @@ export const State = (() => {
         m.trace()
         return PouchCollectionStore('grain')
       },
-      editState: EditState(),
+      editState: EditDialogState(),
       onAddNew() {
         return this.g.userUpsert({text: `${Math.random()}`})
       },
