@@ -1,10 +1,9 @@
 import React, {Fragment as F} from 'react'
-import {_injectState, C, injectState} from './StateContext'
+import {C, injectState} from './StateContext'
 import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
 import {trace} from 'mobx'
-import {observer} from 'mobx-react'
 
 // import {RenderState} from './debug/RenderState'
 // import Radium, {Style} from 'radium'

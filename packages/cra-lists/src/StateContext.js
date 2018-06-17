@@ -21,19 +21,6 @@ export const injectState = c => {
   )(c)
 }
 
-export const _injectState = c => {
-  return R.compose(
-    BaseComponent =>
-      function StateInjector(props) {
-        return (
-          <StateContext.Consumer>
-            {state => <BaseComponent s={state} {...props} />}
-          </StateContext.Consumer>
-        )
-      },
-  )(c)
-}
-
 export const C = observer(
   class C extends React.Component {
     render() {
@@ -44,8 +31,8 @@ export const C = observer(
       )
     }
 
-    r({render} = this.props) {
-      return render ? render(this.props) : null
+    r(props) {
+      return props.render ? props.render(this.props) : null
     }
   },
 )
