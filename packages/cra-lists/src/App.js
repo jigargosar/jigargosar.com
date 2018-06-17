@@ -1,5 +1,5 @@
 import React, {Fragment as F} from 'react'
-import {injectState} from './StateContext'
+import {_injectState, C, injectState} from './StateContext'
 import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
@@ -204,52 +204,37 @@ const GrainEdit = injectState(function GrainEdit({s}) {
     </div>
   )
 })
-class C extends React.Component {
-  render() {
-    return this.r(this.props)
-  }
-
-  r({render} = this.props) {
-    return render ? render(this.props) : null
+class GrainListHeader extends C {
+  r({s}) {
+    return (
+      <SpacedRow className={'pv3'}>
+        <div className={'f4 b'}>LIST</div>
+        <button className={cn(buttonCN)} onClick={s.onAddNew}>
+          Add
+        </button>
+      </SpacedRow>
+    )
   }
 }
-
-const GrainListHeader = injectState(
-  class GrainListHeader extends C {
-    r({s}) {
-      return (
-        <SpacedRow className={'pv3'}>
-          <div className={'f4 b'}>LIST</div>
-          <button className={cn(buttonCN)} onClick={s.onAddNew}>
-            Add
-          </button>
-        </SpacedRow>
-      )
-    }
-  },
-)
-
-export const App = injectState(
-  class App extends React.Component {
-    render() {
-      return (
-        <div className={'f6'}>
-          <Header />
-          <div className={`${centeredContentClass}`}>
-            <GrainListHeader />
-            <GrainsList />
-            <GrainEdit />
-            <footer className={'pt3 pb7 '}>Footer</footer>
-          </div>
-
-          {/*<RenderState src={s.toJSON()} />*/}
-          {/*<RenderState*/}
-          {/*src={s.debugJSON()}*/}
-          {/*hide={s.hideRenderState}*/}
-          {/*onClose={s.onCloseRenderState}*/}
-          {/*/>*/}
+export class App extends C {
+  r() {
+    return (
+      <div className={'f6'}>
+        <Header />
+        <div className={`${centeredContentClass}`}>
+          <GrainListHeader />
+          <GrainsList />
+          <GrainEdit />
+          <footer className={'pt3 pb7 '}>Footer</footer>
         </div>
-      )
-    }
-  },
-)
+
+        {/*<RenderState src={s.toJSON()} />*/}
+        {/*<RenderState*/}
+        {/*src={s.debugJSON()}*/}
+        {/*hide={s.hideRenderState}*/}
+        {/*onClose={s.onCloseRenderState}*/}
+        {/*/>*/}
+      </div>
+    )
+  }
+}
