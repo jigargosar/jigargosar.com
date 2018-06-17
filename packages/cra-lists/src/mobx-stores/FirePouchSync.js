@@ -285,9 +285,12 @@ function syncToFirestore(addToQueue, cRef, pouchStore) {
   )
   const changes = pouchStore
     .liveChanges({since: syncSeq.get()})
-    .on('change', async change => {
-      await processPouchChange(cRef, pouchStore, change)
-      syncSeq.set(change.seq)
-    })
+    .on('change', change =>
+      addToQueue(async () => {
+        // if (shouldSkipFirestoreSync(change.doc)) return
+        await processPouchChange(cRef, pouchStore, change)
+        syncSeq.set(change.seq)
+      }),
+    )
   return () => changes.cancel()
 }
