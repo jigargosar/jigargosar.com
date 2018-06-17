@@ -39,7 +39,9 @@ export const FirebaseService = (function() {
         )
       },
       get auth() {
-        m.trace(true)
+        // ;(function() {
+        //   m.trace(true)
+        // })()
         return createFireAuth(firebase)
       },
     },

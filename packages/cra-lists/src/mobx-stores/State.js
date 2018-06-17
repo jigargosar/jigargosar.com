@@ -128,7 +128,10 @@ export const State = (() => {
         return FirebaseService.auth
       },
       get grains() {
-        m.trace(true)
+        // ;(function() {
+        //   m.trace(true)
+        // })()
+
         return PouchCollectionStore('grain')
       },
       editModal: EditModalState(),
