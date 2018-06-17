@@ -261,7 +261,7 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
       addToQueue(
         () =>
           pEachSeries(querySnapshot.docChanges(), onFireDocChange),
-        {priority: 2},
+        {priority: 0},
       ),
     )
 }
@@ -282,7 +282,7 @@ function syncToFirestore(addToQueue, cRef, pouchStore) {
           await processPouchChange(cRef, pouchStore, change)
           syncSeq.set(change.seq)
         },
-        {priority: 3},
+        {priority: 0},
       ),
     )
   return () => changes.cancel()
