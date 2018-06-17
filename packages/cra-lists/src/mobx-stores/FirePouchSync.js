@@ -139,7 +139,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
     const isPouchDocOlderThanFireDoc = isOlder(doc, fireDoc)
     // const areVersionsDifferent = versionMismatch(doc, fireDoc)
     const isPouchVersionOlderThenFire = isVersionOlder(doc, fireDoc)
-    const isFireVersionOlderThenPouch = isVersionOlder(fireDoc, doc)
+    // const isFireVersionOlderThenPouch = isVersionOlder(fireDoc, doc)
 
     const wasFireDocModifiedByLocalActor = isModifiedByLocalActor(
       fireDoc,
@@ -161,6 +161,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
 
     function transactionSetInHistoryCollection(doc) {
       console.warn('transactionSetInHistoryCollection')
+      debugger
       transaction.set(
         docRef.collection('history').doc(`${doc.modifiedAt}`),
         doc,
@@ -180,12 +181,10 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
     } else {
       // pouch locallyModified, fire remotely modified
       if (isPouchDocOlderThanFireDoc) {
-        if (!isPouchVersionOlderThenFire) {
-          transactionSetInHistoryCollection(doc)
-        }
+        transactionSetInHistoryCollection(doc)
         return transactionEmptyUpdate()
       } else {
-        if (!isFireVersionOlderThenPouch) {
+        if (isPouchVersionOlderThenFire) {
           transactionSetInHistoryCollection(fireDoc)
         }
         return transactionSetDocWithTimestampAndIncrementVersion()

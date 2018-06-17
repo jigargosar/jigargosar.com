@@ -3,7 +3,6 @@ import {C} from './StateContext'
 import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
-import {trace} from 'mobx'
 
 // import {RenderState} from './debug/RenderState'
 // import Radium, {Style} from 'radium'
