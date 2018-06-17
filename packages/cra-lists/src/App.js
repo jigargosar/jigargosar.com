@@ -61,50 +61,53 @@ const Header = injectState(function Header({s}) {
 function getFormattedDate(date) {
   return formatDate(date, `hh:mm a Do MMM 'YY`)
 }
-const GrainItem = injectState(function GrainItem({s, grain, style}) {
-  const toDisplayText = R.when(R.isEmpty, R.always('<empty>'))
-  return (
-    <div className={'pv3'} style={style}>
-      <div className={'flex hide-child'}>
-        <div className={'child'}>
-          <button
-            className={cn(buttonCN, 'w-100')}
-            onClick={s.onUpdate(grain)}
-          >
-            E
-          </button>
-          <button
-            className={cn(buttonCN, 'w-100')}
-            onClick={s.onToggleArchive(grain)}
-          >
-            X
-          </button>
-        </div>
-        <div className={'dib'}>
-          <div
-            className={cn('pointer', {
-              'black-70': R.isEmpty(grain.text),
-            })}
-            onClick={s.onStartEditing(grain)}
-          >
-            {toDisplayText(grain.text)}
+
+class GrainItem extends C {
+  r({s, grain, style}) {
+    const toDisplayText = R.when(R.isEmpty, R.always('<empty>'))
+    return (
+      <div className={'pv3'} style={style}>
+        <div className={'flex hide-child'}>
+          <div className={'child'}>
+            <button
+              className={cn(buttonCN, 'w-100')}
+              onClick={s.onUpdate(grain)}
+            >
+              E
+            </button>
+            <button
+              className={cn(buttonCN, 'w-100')}
+              onClick={s.onToggleArchive(grain)}
+            >
+              X
+            </button>
           </div>
-          <div className={'f6 black-50 pl2'}>
-            <SpacedRow>
-              <div>id: {grain._id}</div>
-              <div>rev: {grain._rev}</div>
-              <div>a: {grain.actorId}</div>
-              <div>cAt: {getFormattedDate(grain.createdAt)}</div>
-              <div>mAt: {getFormattedDate(grain.modifiedAt)}</div>
-              <div>ver: {grain.version}</div>
-              <div>X: {`${grain.isArchived}`}</div>
-            </SpacedRow>
+          <div className={'dib'}>
+            <div
+              className={cn('pointer', {
+                'black-70': R.isEmpty(grain.text),
+              })}
+              onClick={s.onStartEditing(grain)}
+            >
+              {toDisplayText(grain.text)}
+            </div>
+            <div className={'f6 black-50 pl2'}>
+              <SpacedRow>
+                <div>id: {grain._id}</div>
+                <div>rev: {grain._rev}</div>
+                <div>a: {grain.actorId}</div>
+                <div>cAt: {getFormattedDate(grain.createdAt)}</div>
+                <div>mAt: {getFormattedDate(grain.modifiedAt)}</div>
+                <div>ver: {grain.version}</div>
+                <div>X: {`${grain.isArchived}`}</div>
+              </SpacedRow>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+}
 
 class ArchivedListHeader extends C {
   r() {
