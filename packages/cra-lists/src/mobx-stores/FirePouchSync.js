@@ -26,12 +26,17 @@ export function FirePouchSync(pouchStore) {
         this.isSyncing = false
       },
       addToQueue(thunk) {
+        console.log('Entering addToQueue(thunk)', ...arguments)
         this.queue.add(() =>
-          thunk().catch(e => {
-            console.error('Stopping FirePouchSync', e)
-            this.disposeAll()
-            this.queue.clear()
-          }),
+          thunk()
+            .then((...args) => {
+              console.log('Thunk processing complete', ...args)
+            })
+            .catch(e => {
+              console.error('Stopping FirePouchSync', e)
+              this.disposeAll()
+              this.queue.clear()
+            }),
         )
       },
 
@@ -83,6 +88,7 @@ const isOlder = function isOlder(doc1, doc2) {
 }
 
 function shouldSkipFirestoreSync(doc) {
+  // debugger
   return doc.skipFirestoreSync
 }
 
@@ -101,6 +107,7 @@ function isVersionOlder(doc1, doc2) {
 }
 
 async function processPouchChange(cRef, pouchStore, pouchChange) {
+  // debugger
   const doc = pouchChange.doc
   if (shouldSkipFirestoreSync(doc)) return
   ow(
@@ -138,7 +145,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
     function logWarningForEmptyTransactionUpdate() {
       if (areVersionsDifferent) {
         console.warn(
-          'transactionEmptyUpdate: since versions are different',
+          'transactionEmptyUpdate: since pouchDoc version is older than fire',
           doc,
           fireDoc,
         )
