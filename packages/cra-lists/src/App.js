@@ -167,42 +167,48 @@ const GrainsList = injectState(function GrainsList({s}) {
     </F>
   )
 })
-const GrainEdit = injectState(function GrainEdit({s}) {
-  if (s.editState.type === 'idle') return null
-  if (localStorage.traceEnabled) {
-    trace()
-  }
-  return (
-    <div className={'fixed absolute--fill bg-black-20 pa4-ns'}>
-      <div
-        className={
-          'w-100 h-100 bg-white shadow-1 f5 flex flex-column'
-        }
-      >
-        <div className={'bb b--moon-gray pa3 f4 b'}>Edit</div>
-        <div className={'flex-auto mh3'}>
-          <div className={'mv2 flex flex-wrap'}>
-            <label className={'pv2 w-100'}>Text</label>
-            <input
-              className={'pa2 h2 outline-0 f4 flex-auto'}
-              placeholder={'e.g. Go Fish!'}
-              value={s.editState.form.text}
-              onChange={s.onFormFieldChange('text')}
-            />
+
+class GrainEdit extends C {
+  r({s}) {
+    if (s.editState.type === 'idle') return null
+    if (localStorage.traceEnabled) {
+      trace()
+    }
+    return (
+      <div className={'fixed absolute--fill bg-black-20 pa4-ns'}>
+        <div
+          className={
+            'w-100 h-100 bg-white shadow-1 f5 flex flex-column'
+          }
+        >
+          <div className={'bb b--moon-gray pa3 f4 b'}>Edit</div>
+          <div className={'flex-auto mh3'}>
+            <div className={'mv2 flex flex-wrap'}>
+              <label className={'pv2 w-100'}>Text</label>
+              <input
+                className={'pa2 h2 outline-0 f4 flex-auto'}
+                placeholder={'e.g. Go Fish!'}
+                value={s.editState.form.text}
+                onChange={s.onFormFieldChange('text')}
+              />
+            </div>
+          </div>
+          <div
+            className={'bt b--moon-gray pa3 flex flex-row-reverse'}
+          >
+            <button onClick={s.saveEdit} className={buttonCN}>
+              Ok
+            </button>
+            <button onClick={s.cancelEdit} className={buttonCN}>
+              Cancel
+            </button>
           </div>
         </div>
-        <div className={'bt b--moon-gray pa3 flex flex-row-reverse'}>
-          <button onClick={s.saveEdit} className={buttonCN}>
-            Ok
-          </button>
-          <button onClick={s.cancelEdit} className={buttonCN}>
-            Cancel
-          </button>
-        </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+}
+
 class GrainListHeader extends C {
   r({s}) {
     return (
