@@ -13,6 +13,7 @@ const PQueue = require('p-queue')
 const pEachSeries = require('p-each-series')
 const m = require('mobx')
 const validate = require('aproba')
+
 export function FirePouchSync(pouchStore) {
   const fireSync = m.observable(
     {
@@ -75,9 +76,11 @@ const isOlder = function isOlder(doc1, doc2) {
   ow(doc2.modifiedAt, nowPredicate)
   return doc1.modifiedAt < doc2.modifiedAt
 }
+
 function shouldSkipFirestoreSync(doc) {
   return doc.skipFirestoreSync
 }
+
 function versionMismatch(doc1, doc2) {
   const versionPred = ow.number.integer.greaterThanOrEqual(0)
   ow(doc1.version, versionPred)
@@ -118,6 +121,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
     const isPouchDocOlderThanFireDoc = isOlder(doc, fireDoc)
     const areVersionsDifferent = versionMismatch(doc, fireDoc)
     const isPouchVersionOlderThenFire = isVersionOlder(doc, fireDoc)
+    const isFireVersionOlderThenPouch = isVersionOlder(fireDoc, doc)
 
     const wasFireDocModifiedByLocalActor = isModifiedByLocalActor(
       fireDoc,
@@ -160,28 +164,25 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
 
     if (wasFireDocModifiedByLocalActor) {
       // both docs were locally modified.
-      // we shouldn't blindly push, unless local version is newer
-      if (isPouchDocOlderThanFireDoc || isPouchVersionOlderThenFire) {
+      // we shouldn't blindly push, when pouch doc is older
+      if (isPouchVersionOlderThenFire) {
         logWarningForEmptyTransactionUpdate()
         return transactionEmptyUpdate()
       } else {
         return transactionSetDocWithTimestampAndIncrementVersion()
       }
     } else {
+      // pouch locallyModified, fire remotely modified
       if (isPouchDocOlderThanFireDoc) {
-        transactionSetInHistoryCollection(doc)
+        if (!isPouchVersionOlderThenFire) {
+          transactionSetInHistoryCollection(doc)
+        }
         return transactionEmptyUpdate()
       } else {
-        // debugger
-        // should remote doc be put in history?
-        // if (doc.version < fireDoc.version) {
-        //   transactionSetInHistoryCollection(fireDoc)
-        // }
-        // const result = await pouchStore.get(pouchChange.id)
-        // console.log(result)
-        // debugger
+        if (!isFireVersionOlderThenPouch) {
+          transactionSetInHistoryCollection(fireDoc)
+        }
         return transactionSetDocWithTimestampAndIncrementVersion()
-        // return transactionSetDocWithTimestamp()
       }
     }
   })
@@ -196,6 +197,7 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
     }.lastSyncFirestoreTimestamp`,
     Timestamp.fromMillis(0),
   )
+
   function getSyncFirestoreTimestamp() {
     return new Timestamp(
       syncTimestamp.get().seconds,
@@ -207,15 +209,37 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
     return syncTimestamp.set(fireDoc.serverTimestamp)
   }
 
-  function processFirestoreDoc(fireDoc) {
-    if (isModifiedByLocalActor(fireDoc)) return Promise.resolve()
-    return pouchStore
-      .get(fireDoc._id)
-      .then(() => {})
-      .catch(e => {
-        console.log(e)
-        pouchStore.put(fireDoc)
-      })
+  async function processFirestoreDoc(fireDoc) {
+    function putDocWithSkipFirestoreSync(doc) {
+      return pouchStore.put(R.merge(doc, {skipFirestoreSync: true}))
+    }
+
+    if (isModifiedByLocalActor(fireDoc)) {
+      try {
+        await putDocWithSkipFirestoreSync(fireDoc)
+      } catch (e) {
+        console.log('ignoring firestore update.', e, fireDoc)
+      }
+    } else {
+      let pouchDoc = null
+      try {
+        pouchDoc = await pouchStore.get(fireDoc._id)
+      } catch (e) {
+        console.log('inserting new remotely created doc', e)
+        return putDocWithSkipFirestoreSync(fireDoc)
+      }
+      if (isOlder(pouchDoc, fireDoc)) {
+        return putDocWithSkipFirestoreSync(R.merge(fireDoc), {
+          _rev: pouchDoc.rev,
+        })
+      } else {
+        console.warn(
+          `ignoring 'older' firestore doc`,
+          fireDoc,
+          pouchDoc,
+        )
+      }
+    }
   }
 
   async function onFireDocChange(docChange) {
@@ -236,6 +260,7 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
       ),
     )
 }
+
 function syncToFirestore(addToQueue, cRef, pouchStore) {
   ow(pouchStore.name, ow.string.label('pouchStore.name').nonEmpty)
 
