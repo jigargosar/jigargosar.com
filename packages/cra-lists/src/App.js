@@ -192,9 +192,6 @@ class GrainsList extends C {
 class GrainEdit extends C {
   r({s}) {
     if (s.editModal.isClosed) return null
-    if (localStorage.traceEnabled) {
-      trace()
-    }
     return (
       <div className={'fixed absolute--fill bg-black-20 pa4-ns'}>
         <div
