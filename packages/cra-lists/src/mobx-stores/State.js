@@ -101,7 +101,7 @@ const EditModalState = function() {
   )
 }
 
-export function State() {
+export function State(snapshot = {}) {
   const state = m.observable(
     {
       pageTitle: 'CRA List Proto',
@@ -109,7 +109,7 @@ export function State() {
         return FirebaseService.auth
       },
       get grains() {
-        return PouchCollectionStore('grain')
+        return PouchCollectionStore('grain', snapshot.items || [])
       },
       editModal: EditModalState(),
       addNew() {
@@ -151,6 +151,9 @@ export function State() {
           },
           ['isArchived'],
         )
+      },
+      getSnapshot() {
+        return {grains: this.grains.items}
       },
     },
     {

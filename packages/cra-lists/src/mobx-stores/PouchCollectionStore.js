@@ -16,7 +16,13 @@ m.configure({
 const R = require('ramda')
 const idPropName = '_id'
 
-export function PouchCollectionStore(modelName) {
+function toIdDocPairs(results) {
+  return R.map(
+    R.compose(doc => [SF.prop(idPropName, doc), doc], SF.prop('doc')),
+  )(results)
+}
+
+export function PouchCollectionStore(modelName, initialItems = []) {
   const name = `${modelName}Collection`
   const pouchStore = PouchDBService.create(name)
   const pouchCollectionStore = m.observable(
@@ -28,7 +34,12 @@ export function PouchCollectionStore(modelName) {
       get pouchStore() {
         return pouchStore
       },
-      idLookup: m.observable.map([], {name: 'idLookup'}),
+      idLookup: m.observable.map(toIdDocPairs(initialItems), {
+        name: 'idLookup',
+      }),
+      get items() {
+        return this.idLookup.values()
+      },
       setIdLookup(idLookup) {
         this.idLookup.replace(idLookup)
       },
@@ -42,12 +53,7 @@ export function PouchCollectionStore(modelName) {
       },
       async load() {
         const {results, last_seq} = await pouchStore.allChanges()
-        const idLookup = R.map(
-          R.compose(
-            doc => [SF.prop(idPropName, doc), doc],
-            SF.prop('doc'),
-          ),
-        )(results)
+        const idLookup = toIdDocPairs(results)
         this.setIdLookup(idLookup)
 
         pouchStore
