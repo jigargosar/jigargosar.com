@@ -4,9 +4,6 @@ import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
 
-// import {RenderState} from './debug/RenderState'
-// import Radium, {Style} from 'radium'
-
 const R = require('ramda')
 
 class SpacedRow extends C {
@@ -249,13 +246,6 @@ export class App extends C {
           <GrainEdit />
           <footer className={'pt3 pb7 '}>Footer</footer>
         </div>
-
-        {/*<RenderState src={s.toJSON()} />*/}
-        {/*<RenderState*/}
-        {/*src={s.debugJSON()}*/}
-        {/*hide={s.hideRenderState}*/}
-        {/*onClose={s.onCloseRenderState}*/}
-        {/*/>*/}
       </div>
     )
   }
