@@ -4,7 +4,8 @@ import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
 import {trace} from 'mobx'
-import DevTools from 'mobx-react-devtools'
+import {observer} from 'mobx-react'
+
 // import {RenderState} from './debug/RenderState'
 // import Radium, {Style} from 'radium'
 
@@ -214,23 +215,27 @@ const GrainListHeader = injectState(function GrainListHeader({s}) {
   )
 })
 
-export function App() {
-  return (
-    <div className={'f6'}>
-      <Header />
-      <div className={`${centeredContentClass}`}>
-        <GrainListHeader />
-        <GrainsList />
-        <GrainEdit />
-        <footer className={'pt3 pb7 '}>Footer</footer>
-      </div>
-      <DevTools />
-      {/*<RenderState src={s.toJSON()} />*/}
-      {/*<RenderState*/}
-      {/*src={s.debugJSON()}*/}
-      {/*hide={s.hideRenderState}*/}
-      {/*onClose={s.onCloseRenderState}*/}
-      {/*/>*/}
-    </div>
-  )
-}
+export const App = injectState(
+  class App extends React.Component {
+    render() {
+      return (
+        <div className={'f6'}>
+          <Header />
+          <div className={`${centeredContentClass}`}>
+            <GrainListHeader />
+            <GrainsList />
+            <GrainEdit />
+            <footer className={'pt3 pb7 '}>Footer</footer>
+          </div>
+
+          {/*<RenderState src={s.toJSON()} />*/}
+          {/*<RenderState*/}
+          {/*src={s.debugJSON()}*/}
+          {/*hide={s.hideRenderState}*/}
+          {/*onClose={s.onCloseRenderState}*/}
+          {/*/>*/}
+        </div>
+      )
+    }
+  },
+)

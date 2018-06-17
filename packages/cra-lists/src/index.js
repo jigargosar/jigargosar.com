@@ -4,13 +4,16 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import {StateProvider} from './StateContext'
 import {State} from './mobx-stores/State'
-
+// import DevTools from 'mobx-react-devtools'
 function render() {
   const App = require('./App').App
   ReactDOM.render(
-    <StateProvider value={State}>
-      <App />
-    </StateProvider>,
+    <React.Fragment>
+      <StateProvider value={State}>
+        <App />
+      </StateProvider>
+      {/*<DevTools />*/}
+    </React.Fragment>,
     document.getElementById('root'),
   )
 }

@@ -32,7 +32,7 @@ export function FirePouchSync(pouchStore) {
         this.queue.clear()
         debugger
       },
-      addToQueue(thunk, options = {}) {
+      addToQueue: function(thunk, options = {}) {
         console.log('Entering addToQueue(thunk, options)', options)
         this.queue.add(
           () =>
@@ -64,11 +64,11 @@ export function FirePouchSync(pouchStore) {
       queue: m.observable.ref,
       disposeAll: m.action.bound,
       startSync: m.action.bound,
-      addToQueue: m.action.bound,
       onError: m.action.bound,
     },
     {name: `PouchFireSync: ${pouchStore.name}`},
   )
+  fireSync.addToQueue = fireSync.addToQueue.bind(fireSync)
   reaction(
     () => [FirebaseService.auth.isSignedIn, fireSync.isSyncing],
     () => {
@@ -215,7 +215,6 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
   }
 
   async function processFirestoreDoc(fireDoc) {
-    debugger
     function putDocWithSkipFirestoreSync(doc) {
       return pouchStore.put(R.merge(doc, {skipFirestoreSync: true}))
     }
