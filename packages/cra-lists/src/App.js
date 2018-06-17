@@ -54,11 +54,17 @@ class SignInOutView extends C {
   }
 }
 
+class PageTitle extends C {
+  r({s}) {
+    return <div className="f1">{s.pageTitle}</div>
+  }
+}
+
 class Header extends C {
   r({s}) {
     return (
       <div className="bg-light-blue tc pa3">
-        <div className="f1">{s.pageTitle}</div>
+        <PageTitle />
         <SignInOutView />
       </div>
     )

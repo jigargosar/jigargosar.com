@@ -138,8 +138,8 @@ export const State = (() => {
       onAddNew() {
         return this.g.userUpsert({text: `${Math.random()}`})
       },
-      update(doc, change) {
-        this.editState.startEditing(doc, ['text'])
+      _update(doc, change, fieldNames) {
+        this.editState.startEditing(doc, fieldNames)
         this.editState.updateForm(change)
 
         this.editState.save((doc, form) =>
@@ -155,7 +155,8 @@ export const State = (() => {
         this.editState.cancelEdit()
       },
       onUpdate(doc) {
-        return () => this.update(doc, {text: `${Math.random()}`})
+        return () =>
+          this._update(doc, {text: `${Math.random()}`}, ['text'])
       },
       onFormFieldChange(fieldName, event) {
         ow(fieldName, ow.string.equals('text'))
@@ -168,14 +169,18 @@ export const State = (() => {
       },
       onToggleArchive(doc) {
         return () =>
-          this.update(doc, {
-            isArchived: !R.propOr(false, 'isArchived', doc),
-          })
+          this._update(
+            doc,
+            {
+              isArchived: !R.propOr(false, 'isArchived', doc),
+            },
+            ['isArchived'],
+          )
       },
     },
     {
       onAddNew: m.action.bound,
-      update: m.action.bound,
+      _update: m.action.bound,
       saveEdit: m.action.bound,
       cancelEdit: m.action.bound,
       onFormFieldChange: m.action.bound,

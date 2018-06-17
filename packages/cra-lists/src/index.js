@@ -21,7 +21,7 @@ function render() {
 render()
 
 if (module.hot) {
-  module.hot.accept(['./App', './state-loader'], () => {
+  module.hot.accept(['./state-loader'], () => {
     render()
   })
 }
