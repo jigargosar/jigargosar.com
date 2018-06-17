@@ -101,25 +101,6 @@ const EditModalState = function() {
   )
 }
 
-/*
-function noCAMDown(event) {
-  const camState = SF.pick(['ctrlKey', 'altKey', 'metaKey'], event)
-  return !R.any(R.identity, R.values(camState))
-}
-      afterCreate() {
-        window.addEventListener('keypress', event => {
-          if (event.key === `~` && noCAMDown(event)) {
-            self.toggleRenderStateView()
-          }
-        })
-      },
-      toggleRenderStateView() {
-        self.hideRenderState = !self.hideRenderState
-      },
-      onCloseRenderState() {
-        self.hideRenderState = true
-      },
-*/
 export const State = (() => {
   const state = m.observable(
     {

@@ -5,6 +5,25 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
 const RA = require('ramda-adjunct')
+/*
+function noCAMDown(event) {
+  const camState = SF.pick(['ctrlKey', 'altKey', 'metaKey'], event)
+  return !R.any(R.identity, R.values(camState))
+}
+      afterCreate() {
+        window.addEventListener('keypress', event => {
+          if (event.key === `~` && noCAMDown(event)) {
+            self.toggleRenderStateView()
+          }
+        })
+      },
+      toggleRenderStateView() {
+        self.hideRenderState = !self.hideRenderState
+      },
+      onCloseRenderState() {
+        self.hideRenderState = true
+      },
+*/
 
 export function RenderState({hide, onClose = () => {}, src = null}) {
   if (hide) return null
