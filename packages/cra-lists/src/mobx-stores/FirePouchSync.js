@@ -146,7 +146,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
     )
 
     function transactionEmptyUpdate() {
-      return transaction._update(docRef, {})
+      return transaction.update(docRef, {})
     }
 
     function transactionSetDocWithTimestampAndIncrementVersion() {

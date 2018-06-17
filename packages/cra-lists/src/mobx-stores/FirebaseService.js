@@ -8,6 +8,9 @@ const R = require('ramda')
 const m = require('mobx')
 const validate = require('aproba')
 
+if (module.hot) {
+  window.firebase = firebase
+}
 export const FirebaseService = (function() {
   if (!firebase.apps[0]) {
     var config = {

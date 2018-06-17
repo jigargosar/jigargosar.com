@@ -3,9 +3,6 @@ import ow from 'ow'
 import {FirebaseService} from './FirebaseService'
 import {SF} from '../safe-fun'
 
-require('firebase/auth')
-require('firebase/firestore')
-
 const m = require('mobx')
 const R = require('ramda')
 
