@@ -4,6 +4,7 @@ import ow from 'ow'
 import {getAppActorId} from '../lib/app-actor-id'
 import {createLSItem} from '../lib/LocalStorageService'
 
+const a = require('nanoassert')
 const R = require('ramda')
 
 const firebase = require('firebase/app')
@@ -25,18 +26,24 @@ export function FirePouchSync(pouchStore) {
         this.disposers.clear()
         this.isSyncing = false
       },
-      addToQueue(thunk) {
-        console.log('Entering addToQueue(thunk)', ...arguments)
-        this.queue.add(() =>
-          thunk()
-            .then((...args) => {
-              console.log('Thunk processing complete', ...args)
-            })
-            .catch(e => {
-              console.error('Stopping FirePouchSync', e)
-              this.disposeAll()
-              this.queue.clear()
-            }),
+      addToQueue(thunk, options = {}) {
+        console.log('Entering addToQueue(thunk, options)', options)
+        this.queue.add(
+          () =>
+            thunk()
+              .then((...args) => {
+                console.log(
+                  'Thunk processing complete',
+                  options,
+                  ...args,
+                )
+              })
+              .catch(e => {
+                console.error('Stopping FirePouchSync', e)
+                this.disposeAll()
+                this.queue.clear()
+              }),
+          options,
         )
       },
 
@@ -134,26 +141,13 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
 
     const fireDoc = snap.data()
     const isPouchDocOlderThanFireDoc = isOlder(doc, fireDoc)
-    const areVersionsDifferent = versionMismatch(doc, fireDoc)
+    // const areVersionsDifferent = versionMismatch(doc, fireDoc)
     const isPouchVersionOlderThenFire = isVersionOlder(doc, fireDoc)
     const isFireVersionOlderThenPouch = isVersionOlder(fireDoc, doc)
 
     const wasFireDocModifiedByLocalActor = isModifiedByLocalActor(
       fireDoc,
     )
-
-    function logWarningForEmptyTransactionUpdate() {
-      if (areVersionsDifferent) {
-        console.warn(
-          'transactionEmptyUpdate: since pouchDoc version is older than fire',
-          doc,
-          fireDoc,
-        )
-      } else {
-        console.warn('transactionEmptyUpdate', doc, fireDoc)
-      }
-      debugger
-    }
 
     function transactionEmptyUpdate() {
       return transaction.update(docRef, {})
@@ -179,13 +173,14 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
 
     if (wasFireDocModifiedByLocalActor) {
       // both docs were locally modified.
-      // we shouldn't blindly push, when pouch doc version is older
-      if (isPouchVersionOlderThenFire) {
-        logWarningForEmptyTransactionUpdate()
-        return transactionEmptyUpdate()
-      } else {
-        return transactionSetDocWithTimestampAndIncrementVersion()
-      }
+      // we shouldn't blindly push, when pouch doc is older
+      a.notOk(
+        isPouchDocOlderThanFireDoc,
+        'locally modified pouchDoc is older than locally modified fireDoc. This should never happen',
+        doc,
+        fireDoc,
+      )
+      return transactionSetDocWithTimestampAndIncrementVersion()
     } else {
       // pouch locallyModified, fire remotely modified
       if (isPouchDocOlderThanFireDoc) {
@@ -270,8 +265,10 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
     .where('serverTimestamp', '>', firestoreTimestamp)
     .orderBy('serverTimestamp')
     .onSnapshot(querySnapshot =>
-      addToQueue(() =>
-        pEachSeries(querySnapshot.docChanges(), onFireDocChange),
+      addToQueue(
+        () =>
+          pEachSeries(querySnapshot.docChanges(), onFireDocChange),
+        {priority: 2},
       ),
     )
 }
@@ -286,11 +283,14 @@ function syncToFirestore(addToQueue, cRef, pouchStore) {
   const changes = pouchStore
     .liveChanges({since: syncSeq.get()})
     .on('change', change =>
-      addToQueue(async () => {
-        // if (shouldSkipFirestoreSync(change.doc)) return
-        await processPouchChange(cRef, pouchStore, change)
-        syncSeq.set(change.seq)
-      }),
+      addToQueue(
+        async () => {
+          if (shouldSkipFirestoreSync(change.doc)) return
+          await processPouchChange(cRef, pouchStore, change)
+          syncSeq.set(change.seq)
+        },
+        {priority: 3},
+      ),
     )
   return () => changes.cancel()
 }
