@@ -19,40 +19,45 @@ export function FirePouchSync(pouchStore) {
     {
       isSyncing: false,
       disposers: m.observable.array([], {deep: false}),
+      queue: new PQueue({concurrency: 1}),
       disposeAll() {
         this.disposers.forEach(fn => fn())
         this.disposers.clear()
         this.isSyncing = false
       },
+      addToQueue(thunk) {
+        this.queue.add(() =>
+          thunk().catch(e => {
+            console.error('Stopping FirePouchSync', e)
+            this.disposeAll()
+            this.queue.clear()
+          }),
+        )
+      },
+
       startSync(cRef) {
         validate('O', arguments)
         ow(this.isSyncing, ow.boolean.label('isSyncing').false)
         this.isSyncing = true
-        const queue = new PQueue({concurrency: 1})
-
-        function addToQueue(thunk) {
-          queue.add(() =>
-            thunk().catch(e => {
-              console.error('Stopping FirePouchSync', e)
-              this.disposeAll()
-              queue.clear()
-            }),
-          )
-        }
 
         this.disposers.push(
-          syncToFirestore(addToQueue, cRef, pouchStore),
-          startSyncFromFirestore(addToQueue, cRef, pouchStore),
+          syncToFirestore(this.addToQueue, cRef, pouchStore),
+          startSyncFromFirestore(this.addToQueue, cRef, pouchStore),
         )
       },
     },
-    {disposeAll: m.action.bound, startSync: m.action.bound},
+    {
+      queue: m.observable.ref,
+      disposeAll: m.action.bound,
+      startSync: m.action.bound,
+      addToQueue: m.action.bound,
+    },
     {name: `PouchFireSync: ${pouchStore.name}`},
   )
   reaction(
-    () => [FirebaseService.user, fireSync.isSyncing],
+    () => [FirebaseService.auth.isSignedIn, fireSync.isSyncing],
     () => {
-      if (FirebaseService.user && !fireSync.isSyncing) {
+      if (FirebaseService.auth.isSignedIn && !fireSync.isSyncing) {
         const cRef = FirebaseService.createUserCollectionRef(
           pouchStore.name,
         )
