@@ -99,13 +99,6 @@ function shouldSkipFirestoreSync(doc) {
   return doc.skipFirestoreSync
 }
 
-// function versionMismatch(doc1, doc2) {
-//   const versionPred = ow.number.integer.greaterThanOrEqual(0)
-//   ow(doc1.version, versionPred)
-//   ow(doc2.version, versionPred)
-//   return !R.equals(doc1.version, doc2.version)
-// }
-
 function isVersionOlder(doc1, doc2) {
   const versionPred = ow.number.integer.greaterThanOrEqual(0)
   ow(doc1.version, versionPred)
