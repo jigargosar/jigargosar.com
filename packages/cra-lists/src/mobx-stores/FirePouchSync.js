@@ -179,7 +179,7 @@ async function processPouchChange(cRef, pouchStore, pouchChange) {
 
     if (wasFireDocModifiedByLocalActor) {
       // both docs were locally modified.
-      // we shouldn't blindly push, when pouch doc is older
+      // we shouldn't blindly push, when pouch doc version is older
       if (isPouchVersionOlderThenFire) {
         logWarningForEmptyTransactionUpdate()
         return transactionEmptyUpdate()
