@@ -111,6 +111,7 @@ function isVersionOlder(doc1, doc2) {
 
 async function processPouchChange(cRef, pouchStore, pouchChange) {
   const doc = pouchChange.doc
+  console.debug('processPouchChange', doc)
   if (shouldSkipFirestoreSync(doc)) return
   ow(
     isModifiedByLocalActor(doc),
