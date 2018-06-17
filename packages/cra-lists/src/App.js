@@ -161,7 +161,7 @@ function renderAnimatedArchivedHeader(s, animate = false) {
         enter={{opacity: 1, height: 'auto'}}
         leave={{opacity: 0, height: 0}}
       >
-        {s.g.hasArchived
+        {s.grains.hasArchived
           ? style => {
               return (
                 <animated.div style={style}>
@@ -181,9 +181,9 @@ class GrainsList extends C {
   r({s}) {
     return (
       <F>
-        {renderAnimatedGrainsList(s.g.active, false)}
+        {renderAnimatedGrainsList(s.grains.active, false)}
         {renderAnimatedArchivedHeader(s, false)}
-        {renderAnimatedGrainsList(s.g.archived, false)}
+        {renderAnimatedGrainsList(s.grains.archived, false)}
       </F>
     )
   }

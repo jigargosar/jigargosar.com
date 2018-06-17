@@ -133,25 +133,25 @@ export const State = (() => {
       get fire() {
         return FirebaseService
       },
-      get g() {
+      get grains() {
         m.trace()
         return PouchCollectionStore('grain')
       },
       editModal: EditModalState(),
       onAddNew() {
-        return this.g.userUpsert({text: `${Math.random()}`})
+        return this.grains.userUpsert({text: `${Math.random()}`})
       },
       _update(doc, change, fieldNames) {
         this.editModal.startEditing(doc, fieldNames)
         this.editModal.updateForm(change)
 
         this.editModal.save((doc, form) =>
-          this.g.userUpsert(R.merge(doc, form)),
+          this.grains.userUpsert(R.merge(doc, form)),
         )
       },
       saveEdit() {
         this.editModal.save((doc, form) =>
-          this.g.userUpsert(R.merge(doc, form)),
+          this.grains.userUpsert(R.merge(doc, form)),
         )
       },
       cancelEdit() {
