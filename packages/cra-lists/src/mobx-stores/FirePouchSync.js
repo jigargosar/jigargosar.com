@@ -68,12 +68,12 @@ function isModifiedByLocalActor(doc) {
   return R.equals(doc.actorId, getAppActorId())
 }
 
-const isModifiedByRemoteActor = R.complement(isModifiedByLocalActor)
-const nowPredicate = ow.number.integer.positive
+// const isModifiedByRemoteActor = R.complement(isModifiedByLocalActor)
+const dateMilliPredicate = ow.number.integer.positive
 
 const isOlder = function isOlder(doc1, doc2) {
-  ow(doc1.modifiedAt, nowPredicate)
-  ow(doc2.modifiedAt, nowPredicate)
+  ow(doc1.modifiedAt, dateMilliPredicate)
+  ow(doc2.modifiedAt, dateMilliPredicate)
   return doc1.modifiedAt < doc2.modifiedAt
 }
 

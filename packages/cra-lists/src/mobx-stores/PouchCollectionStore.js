@@ -72,7 +72,11 @@ export function PouchCollectionStore(modelName) {
       userUpsert(doc) {
         const updatedDoc = R.ifElse(
           R.has(idPropName),
-          R.merge({modifiedAt: Date.now(), actorId: getAppActorId()}),
+          R.merge({
+            modifiedAt: Date.now(),
+            actorId: getAppActorId(),
+            skipFirestoreSync: false,
+          }),
           R.merge({
             _id: nanoid(),
             createdAt: Date.now(),
