@@ -33,6 +33,7 @@ const buttonCN =
 
 class SignInOutView extends C {
   r({s}) {
+    if (!s.auth.isAuthKnown) return <div>...Loading</div>
     const content = s.auth.isSignedIn ? (
       <F>
         <div>{s.auth.displayName}</div>
@@ -58,8 +59,7 @@ class Header extends C {
     return (
       <div className="bg-light-blue tc pa3">
         <div className="f1">{s.pageTitle}</div>
-        {s.auth.isAuthKnown && <SignInOutView />}
-        {!s.auth.isAuthKnown && <div>...Loading</div>}
+        <SignInOutView />
       </div>
     )
   }
