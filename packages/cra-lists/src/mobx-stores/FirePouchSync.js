@@ -97,9 +97,12 @@ function isVersionOlder(doc1, doc2) {
 
 async function processPouchChange(cRef, pouchStore, pouchChange) {
   const doc = pouchChange.doc
-  if (shouldSkipFirestoreSync(doc) || isModifiedByRemoteActor(doc))
-    return
-  // modified locally by user
+  if (shouldSkipFirestoreSync(doc)) return
+  ow(
+    isModifiedByLocalActor(doc),
+    ow.boolean.label('isModifiedByLocalActor(doc)').true,
+  )
+  // continue since doc is modified locally
   const docRef = cRef.doc(pouchChange.id)
   await docRef.firestore.runTransaction(async transaction => {
     const snap = await transaction.get(docRef)
