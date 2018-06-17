@@ -29,7 +29,7 @@ export const PouchDBService = (function PouchService() {
 
 if (module.hot) {
   window.requestAnimationFrame(() =>
-    PouchDBService.getAllDbNames().then(console.log),
+    PouchDBService.getAllDbNames().then(console.debug),
   )
 }
 
@@ -61,7 +61,7 @@ function PouchDBHelper(db, service) {
       return db.changes({include_docs: true})
     },
     liveChanges({since}) {
-      console.log(this.name, 'liveChanges: since', since)
+      console.debug(this.name, 'liveChanges: since', since)
       return this.changes({since, live: true})
     },
     changes({since = 0, live = false, ...rest} = {}) {

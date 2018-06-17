@@ -38,7 +38,7 @@ export function FirePouchSync(pouchStore) {
           () =>
             thunk()
               .then((...args) => {
-                console.log(
+                console.debug(
                   'Thunk processing complete',
                   options,
                   ...args,
@@ -256,7 +256,7 @@ function startSyncFromFirestore(addToQueue, cRef, pouchStore) {
   }
 
   const firestoreTimestamp = getSyncFirestoreTimestamp()
-  console.log('since firestoreTimestamp', firestoreTimestamp)
+  console.debug('since firestoreTimestamp', firestoreTimestamp)
   return cRef
     .where('serverTimestamp', '>', firestoreTimestamp)
     .orderBy('serverTimestamp')
