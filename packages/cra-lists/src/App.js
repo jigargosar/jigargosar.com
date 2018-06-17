@@ -158,15 +158,17 @@ function renderAnimatedArchivedHeader(s, animate = false) {
   }
 }
 
-const GrainsList = injectState(function GrainsList({s}) {
-  return (
-    <F>
-      {renderAnimatedGrainsList(s.g.active, false)}
-      {renderAnimatedArchivedHeader(s, false)}
-      {renderAnimatedGrainsList(s.g.archived, false)}
-    </F>
-  )
-})
+class GrainsList extends C {
+  r({s}) {
+    return (
+      <F>
+        {renderAnimatedGrainsList(s.g.active, false)}
+        {renderAnimatedArchivedHeader(s, false)}
+        {renderAnimatedGrainsList(s.g.archived, false)}
+      </F>
+    )
+  }
+}
 
 class GrainEdit extends C {
   r({s}) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import './index.css'
-import {observer} from 'mobx-react'
+import {observer, Observer} from 'mobx-react'
 
 const R = require('ramda')
 
@@ -21,18 +21,20 @@ export const injectState = c => {
   )(c)
 }
 
-export const C = observer(
-  class C extends React.Component {
-    render() {
-      return (
-        <StateContext.Consumer>
-          {state => this.r({s: state, ...this.props})}
-        </StateContext.Consumer>
-      )
-    }
+export class C extends React.Component {
+  render() {
+    return (
+      <StateContext.Consumer>
+        {state => (
+          <Observer>
+            {() => this.r({s: state, ...this.props})}
+          </Observer>
+        )}
+      </StateContext.Consumer>
+    )
+  }
 
-    r(props) {
-      return props.render ? props.render(this.props) : null
-    }
-  },
-)
+  r(props) {
+    return props.render ? props.render(this.props) : null
+  }
+}
