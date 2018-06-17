@@ -5,8 +5,8 @@ import registerServiceWorker from './registerServiceWorker'
 import {StateProvider} from './StateContext'
 import {State} from './mobx-stores/State'
 // import DevTools from 'mobx-react-devtools'
-const App = require('./App').App
 function render() {
+  const App = require('./App').App
   ReactDOM.render(
     <React.Fragment>
       <StateProvider value={State}>
@@ -21,7 +21,7 @@ function render() {
 render()
 
 if (module.hot) {
-  module.hot.accept(['./state-loader'], () => {
+  module.hot.accept(['./App', './state-loader'], () => {
     render()
   })
 }

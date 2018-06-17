@@ -1,5 +1,5 @@
 import React, {Fragment as F} from 'react'
-import {C, injectState} from './StateContext'
+import {C} from './StateContext'
 import formatDate from 'date-fns/format'
 import cn from 'classnames'
 import {animated, Transition} from 'react-spring'
@@ -10,18 +10,20 @@ import {trace} from 'mobx'
 
 const R = require('ramda')
 
-function SpacedRow({inline = false, className, children}) {
-  return (
-    <div
-      className={cn(
-        'SpacedRow flex-wrap',
-        {'SpacedRow--inline': inline},
-        className,
-      )}
-    >
-      {children}
-    </div>
-  )
+class SpacedRow extends C {
+  r({inline = false, className, children}) {
+    return (
+      <div
+        className={cn(
+          'SpacedRow flex-wrap',
+          {'SpacedRow--inline': inline},
+          className,
+        )}
+      >
+        {children}
+      </div>
+    )
+  }
 }
 
 const centeredContentClass = 'f5 center mw7 mv3 ph3'
@@ -29,35 +31,40 @@ const centeredContentClass = 'f5 center mw7 mv3 ph3'
 const buttonCN =
   'input-reset pointer ttc bn blue link bg-white-30 pa1 ph2 br-pill hover-bg-white'
 
-const SignInOutView = injectState(function SignInOutView({s}) {
-  const content = s.auth.isSignedIn ? (
-    <F>
-      <div>{s.auth.displayName}</div>
-      <button className={cn(buttonCN)} onClick={s.auth.signOut}>
-        Sign Out
+class SignInOutView extends C {
+  r({s}) {
+    const content = s.auth.isSignedIn ? (
+      <F>
+        <div>{s.auth.displayName}</div>
+        <button className={cn(buttonCN)} onClick={s.auth.signOut}>
+          Sign Out
+        </button>
+      </F>
+    ) : (
+      <button className={cn(buttonCN)} onClick={s.auth.signIn}>
+        SignIn
       </button>
-    </F>
-  ) : (
-    <button className={cn(buttonCN)} onClick={s.auth.signIn}>
-      SignIn
-    </button>
-  )
-  return (
-    <SpacedRow className={'f5'} inline>
-      {content}
-    </SpacedRow>
-  )
-})
+    )
+    return (
+      <SpacedRow className={'f5'} inline>
+        {content}
+      </SpacedRow>
+    )
+  }
+}
 
-const Header = injectState(function Header({s}) {
-  return (
-    <div className="bg-light-blue tc pa3">
-      <div className="f1">{s.pageTitle}</div>
-      {s.auth.isAuthKnown && <SignInOutView />}
-      {!s.auth.isAuthKnown && <div>...Loading</div>}
-    </div>
-  )
-})
+class Header extends C {
+  r({s}) {
+    return (
+      <div className="bg-light-blue tc pa3">
+        <div className="f1">{s.pageTitle}</div>
+        {s.auth.isAuthKnown && <SignInOutView />}
+        {!s.auth.isAuthKnown && <div>...Loading</div>}
+      </div>
+    )
+  }
+}
+
 function getFormattedDate(date) {
   return formatDate(date, `hh:mm a Do MMM 'YY`)
 }
