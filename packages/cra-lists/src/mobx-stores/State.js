@@ -13,7 +13,7 @@ function arrayToString(extraKeys) {
   return `[${R.join(`","`, extraKeys)}]`
 }
 
-const EditDialogState = function() {
+const EditModalState = function() {
   function validateChanges(change, fieldNames) {
     const changePred = ow.object.label('change')
     ow(change, changePred.nonEmpty)
@@ -38,14 +38,14 @@ const EditDialogState = function() {
 
   return m.observable(
     {
-      type: 'idle',
+      type: 'closed',
       doc: null,
       form: {},
       error: null,
       fieldNames: [],
       _reset() {
         Object.assign(this, {
-          type: 'idle',
+          type: 'closed',
           doc: null,
           form: {},
         })
@@ -55,7 +55,7 @@ const EditDialogState = function() {
         this._reset()
       },
       startEditing(doc, fieldNames) {
-        ow(this.type, ow.string.equals('idle'))
+        ow(this.type, ow.string.equals('closed'))
         const change = SF.pick(fieldNames, doc)
         validateChanges(change, fieldNames)
         Object.assign(this, {
@@ -97,7 +97,7 @@ const EditDialogState = function() {
       cancelEdit: m.action.bound,
       save: m.action.bound,
     },
-    {name: 'EditDialogState'},
+    {name: 'EditModalState'},
   )
 }
 
@@ -134,25 +134,25 @@ export const State = (() => {
         m.trace()
         return PouchCollectionStore('grain')
       },
-      editState: EditDialogState(),
+      editModal: EditModalState(),
       onAddNew() {
         return this.g.userUpsert({text: `${Math.random()}`})
       },
       _update(doc, change, fieldNames) {
-        this.editState.startEditing(doc, fieldNames)
-        this.editState.updateForm(change)
+        this.editModal.startEditing(doc, fieldNames)
+        this.editModal.updateForm(change)
 
-        this.editState.save((doc, form) =>
+        this.editModal.save((doc, form) =>
           this.g.userUpsert(R.merge(doc, form)),
         )
       },
       saveEdit() {
-        this.editState.save((doc, form) =>
+        this.editModal.save((doc, form) =>
           this.g.userUpsert(R.merge(doc, form)),
         )
       },
       cancelEdit() {
-        this.editState.cancelEdit()
+        this.editModal.cancelEdit()
       },
       onUpdate(doc) {
         return () =>
@@ -160,12 +160,12 @@ export const State = (() => {
       },
       onFormFieldChange(fieldName, event) {
         ow(fieldName, ow.string.equals('text'))
-        return this.editState.updateForm({
+        return this.editModal.updateForm({
           [fieldName]: event.target.value,
         })
       },
       onStartEditing(doc) {
-        return () => this.editState.startEditing(doc, ['text'])
+        return () => this.editModal.startEditing(doc, ['text'])
       },
       onToggleArchive(doc) {
         return () =>

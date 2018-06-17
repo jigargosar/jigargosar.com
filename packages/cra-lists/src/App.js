@@ -191,7 +191,7 @@ class GrainsList extends C {
 
 class GrainEdit extends C {
   r({s}) {
-    if (s.editState.type === 'idle') return null
+    if (s.editModal.type === 'closed') return null
     if (localStorage.traceEnabled) {
       trace()
     }
@@ -209,7 +209,7 @@ class GrainEdit extends C {
               <input
                 className={'pa2 h2 outline-0 f4 flex-auto'}
                 placeholder={'e.g. Go Fish!'}
-                value={s.editState.form.text}
+                value={s.editModal.form.text}
                 onChange={s.onFormFieldChange('text')}
               />
             </div>
