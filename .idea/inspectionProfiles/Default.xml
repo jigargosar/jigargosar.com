@@ -3,6 +3,7 @@
     <option name="myName" value="Default" />
     <inspection_tool class="ES6ConvertVarToLetConst" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="JSConstructorReturnsPrimitive" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="JSMethodCanBeStatic" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="JSUnresolvedFunction" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="myStrictlyCheckGlobalDefinitions" value="true" />
     </inspection_tool>

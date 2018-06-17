@@ -204,16 +204,30 @@ const GrainEdit = injectState(function GrainEdit({s}) {
     </div>
   )
 })
-const GrainListHeader = injectState(function GrainListHeader({s}) {
-  return (
-    <SpacedRow className={'pv3'}>
-      <div className={'f4 b'}>LIST</div>
-      <button className={cn(buttonCN)} onClick={s.onAddNew}>
-        Add
-      </button>
-    </SpacedRow>
-  )
-})
+class C extends React.Component {
+  render() {
+    return this.r(this.props)
+  }
+
+  r({render} = this.props) {
+    return render ? render(this.props) : null
+  }
+}
+
+const GrainListHeader = injectState(
+  class GrainListHeader extends C {
+    r({s}) {
+      return (
+        <SpacedRow className={'pv3'}>
+          <div className={'f4 b'}>LIST</div>
+          <button className={cn(buttonCN)} onClick={s.onAddNew}>
+            Add
+          </button>
+        </SpacedRow>
+      )
+    }
+  },
+)
 
 export const App = injectState(
   class App extends React.Component {
