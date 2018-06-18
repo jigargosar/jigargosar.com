@@ -75,7 +75,7 @@ class App extends C {
   render() {
     const {} = this.props
     return (
-      <div className={cn('.sans-serif f5', container())}>
+      <div className={cn('.sans-serif lh-copy f5', container())}>
         {renderNav()}
         {renderRoutes()}
       </div>
