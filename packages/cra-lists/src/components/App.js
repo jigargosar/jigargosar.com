@@ -3,7 +3,7 @@
 /*eslint-disable*/
 import React, {Component as C} from 'react'
 import cn from 'classnames'
-import {Link, Route} from 'react-router-dom'
+import {Link, Route, Switch} from 'react-router-dom'
 import Dashboard from './Dashboard'
 import About from './About'
 
@@ -31,8 +31,15 @@ class App extends C {
           <NavLink to="/about">About</NavLink>
         </nav>
         <div>
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/about" component={About} />
+          <Switch>
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/about" component={About} />
+            <Route
+              children={({location: {pathname}}) => {
+                return `Page Not Found at ${pathname}`
+              }}
+            />
+          </Switch>
         </div>
       </div>
     )
