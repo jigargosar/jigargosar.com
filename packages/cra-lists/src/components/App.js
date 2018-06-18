@@ -31,6 +31,41 @@ const routes = [
   },
 ]
 
+function renderNav() {
+  return (
+    <nav className={cn(nh(1))}>
+      {routes.map(({path, label}, index) => {
+        if (!path || !label) return null
+        return (
+          <NavLink key={index} to={path}>
+            {label}
+          </NavLink>
+        )
+      })}
+    </nav>
+  )
+}
+
+function renderRoutes() {
+  return (
+    <div>
+      <Switch>
+        {routes.map(({path, component, children}, index) => {
+          return (
+            <Route
+              key={index}
+              path={path}
+              component={component}
+              children={children}
+            />
+          )
+        })}
+        />
+      </Switch>
+    </div>
+  )
+}
+
 class App extends C {
   state = {}
 
@@ -38,31 +73,8 @@ class App extends C {
     const {} = this.props
     return (
       <div className={cn('.sans-serif f5', container())}>
-        <nav className={cn(nh(1))}>
-          {routes.map(({path, label}, index) => {
-            if (!path || !label) return null
-            return (
-              <NavLink key={index} to={path}>
-                {label}
-              </NavLink>
-            )
-          })}
-        </nav>
-        <div>
-          <Switch>
-            {routes.map(({path, component, children}, index) => {
-              return (
-                <Route
-                  key={index}
-                  path={path}
-                  component={component}
-                  children={children}
-                />
-              )
-            })}
-            />
-          </Switch>
-        </div>
+        {renderNav()}
+        {renderRoutes()}
       </div>
     )
   }
