@@ -4,11 +4,19 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import App from './components/App'
 import {BrowserRouter} from 'react-router-dom'
+import {StateProvider} from './StateContext'
+import {FirebaseService} from './mobx-stores/FirebaseService'
+
+const state = {
+  fire: FirebaseService,
+}
 
 function render(App) {
   ReactDOM.render(
     <BrowserRouter>
-      <App />
+      <StateProvider value={state}>
+        <App />
+      </StateProvider>
     </BrowserRouter>,
     document.getElementById('root'),
   )

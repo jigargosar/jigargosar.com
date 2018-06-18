@@ -40,3 +40,5 @@ export const C = observer(
     }
   },
 )
+
+export const M = C

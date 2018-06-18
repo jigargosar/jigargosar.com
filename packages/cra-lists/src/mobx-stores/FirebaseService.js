@@ -69,6 +69,9 @@ function createFireAuth(firebase) {
     {
       _user: null,
       _authState: authMachine.state,
+      get state() {
+        return this._authState
+      },
       _onFirebaseAuthStateChanged(user) {
         this._user = user
       },

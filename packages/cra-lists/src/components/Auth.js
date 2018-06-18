@@ -9,39 +9,22 @@ import Fire from '../lib/Fire'
 import * as R from 'ramda'
 import RA from 'ramda-adjunct'
 import {nh} from './class-names'
+import {M} from '../StateContext'
 
 /*eslint-enable*/
 
 /*eslint-disable no-empty-pattern*/
-class Auth extends C {
-  fire = Fire()
-  auth = FireAuth(this.fire)
-  state = {}
-
-  componentDidMount() {
-    this.authDisposer = this.auth.on('*', () => {
-      this.forceUpdate()
-    })
-  }
-
-  componentWillUnmount() {
-    if (this.authDisposer) {
-      this.authDisposer()
-    }
-  }
-
-  render() {
-    const {} = this.props
-
+class Auth extends M {
+  r({s}) {
     const renderAuthState = R.cond([
       [
         R.equals('signedIn'),
         () => (
           <div className={cn(nh(1))}>
-            <div className={'dib mh1'}>{this.auth.displayName}</div>
+            <div className={'dib mh1'}>{s.fire.auth.displayName}</div>
             <button
               className={'input-reset f5 link blue mh1 mv0'}
-              onClick={this.auth.signOut}
+              onClick={s.fire.auth.signOut}
             >
               SignOut
             </button>
@@ -50,14 +33,14 @@ class Auth extends C {
       ],
       [
         R.equals('signedOut'),
-        () => <button onClick={this.auth.signIn}>SignIn</button>,
+        () => <button onClick={s.fire.auth.signIn}>SignIn</button>,
       ],
       [R.T, () => <div>Loading...</div>],
     ])
     return (
       <div className={'dib'}>
-        {/*<div className={cn(className)}>{this.auth.state}</div>*/}
-        {renderAuthState(this.auth.state)}
+        {/*<div className={cn(className)}>{s.fire.auth.state}</div>*/}
+        {renderAuthState(s.fire.auth.state)}
       </div>
     )
   }
