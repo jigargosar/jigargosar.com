@@ -39,8 +39,14 @@ class App extends C {
     return (
       <div className={cn('.sans-serif f5', container())}>
         <nav className={cn(nh(1))}>
-          <NavLink to="/dashboard">Dashboard</NavLink>
-          <NavLink to="/about">About</NavLink>
+          {routes.map(({path, label}, index) => {
+            if (!path || !label) return null
+            return (
+              <NavLink key={index} to={path}>
+                {label}
+              </NavLink>
+            )
+          })}
         </nav>
         <div>
           <Switch>
