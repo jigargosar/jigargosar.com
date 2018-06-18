@@ -1,4 +1,5 @@
 import ow from 'ow/dist/index'
+import * as mu from 'mobx-utils/lib/mobx-utils'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -46,6 +47,13 @@ export const FirebaseService = (function() {
       get auth() {
         m.trace(true)
         return createFireAuth(firebase)
+      },
+      get userDocFromPromise() {
+        return mu.fromPromise(async resolve => {
+          if (this.auth.isSignedIn) {
+            resolve(await this.userRef.get())
+          }
+        })
       },
     },
     {},
@@ -98,6 +106,7 @@ function createFireAuth(firebase) {
       get isAuthKnown() {
         return !R.equals(this._authState, 'unknown')
       },
+
       signIn,
       signOut,
     },
@@ -120,16 +129,6 @@ function createFireAuth(firebase) {
     )
   })
   return fireAuth
-}
-
-function createFirestoreUserCollection(
-  collectionName,
-  uid,
-  firestore,
-) {
-  validate('SSO', arguments)
-  ow(uid, ow.string.label('uid').nonEmpty)
-  return firestore.collection(`/users/${uid}/${collectionName}/`)
 }
 
 function createFirestoreUserRef(uid, firestore) {

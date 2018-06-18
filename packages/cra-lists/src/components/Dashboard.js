@@ -4,22 +4,32 @@
 import React, {Fragment as F, Component as C} from 'react'
 import PT from 'prop-types'
 import cn from 'classnames'
+import {injectState, M} from '../StateContext'
+import * as mu from 'mobx-utils'
 
+const m = require('mobx')
 /*eslint-enable*/
 
-class Dashboard extends C {
-  state = {}
-
-  render() {
-    const {className} = this.props
-    return (
-      <F>
-        <div className={cn(className)}>Dashboard</div>
-      </F>
-    )
-  }
-}
-
+const Dashboard = injectState(
+  class Dashboard extends M {
+    // s = m.observable.object({
+    //   doc: mu.fromPromise(this.props.fire.userRef.get()),
+    // })
+    r({fire, auth}) {
+      const userResult = fire.userDocFromPromise
+      return userResult.case({
+        pending: () => 'Loading...',
+        fulfilled: docSnap => {
+          return JSON.stringify(docSnap.data())
+        },
+        rejected: e => {
+          console.error(e)
+          return `Error ${e}`
+        },
+      })
+    }
+  },
+)
 Dashboard.propTypes = {
   className: PT.string,
 }
