@@ -27,8 +27,8 @@ class App extends C {
     return (
       <div className={cn('.sans-serif f5', container())}>
         <nav className={cn(nh(1))}>
-          <NL to="/dashboard">Dashboard</NL>
-          <NL to="/about">About</NL>
+          <NavLink to="/dashboard">Dashboard</NavLink>
+          <NavLink to="/about">About</NavLink>
         </nav>
         <div>
           <Route path="/dashboard" component={Dashboard} />
@@ -39,7 +39,7 @@ class App extends C {
   }
 }
 
-const NL = ({children, to}) => (
+const NavLink = ({children, to}) => (
   <Route
     path={to}
     children={({match}) => (
