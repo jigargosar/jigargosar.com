@@ -15,16 +15,16 @@ import {M} from '../StateContext'
 
 /*eslint-disable no-empty-pattern*/
 class Auth extends M {
-  r({s}) {
+  r({auth}) {
     const renderAuthState = R.cond([
       [
         R.equals('signedIn'),
         () => (
           <div className={cn(nh(1))}>
-            <div className={'dib mh1'}>{s.fire.auth.displayName}</div>
+            <div className={'dib mh1'}>{auth.displayName}</div>
             <button
               className={'input-reset f5 link blue mh1 mv0'}
-              onClick={s.fire.auth.signOut}
+              onClick={auth.signOut}
             >
               SignOut
             </button>
@@ -33,16 +33,11 @@ class Auth extends M {
       ],
       [
         R.equals('signedOut'),
-        () => <button onClick={s.fire.auth.signIn}>SignIn</button>,
+        () => <button onClick={auth.signIn}>SignIn</button>,
       ],
       [R.T, () => <div>Loading...</div>],
     ])
-    return (
-      <div className={'dib'}>
-        {/*<div className={cn(className)}>{s.fire.auth.state}</div>*/}
-        {renderAuthState(s.fire.auth.state)}
-      </div>
-    )
+    return <div className={'dib'}>{renderAuthState(auth.state)}</div>
   }
 }
 

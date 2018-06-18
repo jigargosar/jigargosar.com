@@ -28,7 +28,14 @@ export const C = observer(
         <StateContext.Consumer>
           {state => (
             <Observer>
-              {() => this.r({s: state, ...this.props})}
+              {() =>
+                this.r({
+                  s: state,
+                  fire: state.fire,
+                  auth: state.fire.auth,
+                  ...this.props,
+                })
+              }
             </Observer>
           )}
         </StateContext.Consumer>
