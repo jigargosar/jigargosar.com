@@ -1,10 +1,9 @@
 // Foo
 
 /*eslint-disable*/
-import React, {Fragment as F, Component as C} from 'react'
-import PT from 'prop-types'
+import React, {Component as C} from 'react'
 import cn from 'classnames'
-import {Link, NavLink, Route} from 'react-router-dom'
+import {Link, Route} from 'react-router-dom'
 import Dashboard from './Dashboard'
 import About from './About'
 
@@ -15,7 +14,10 @@ import About from './About'
 function nh(num) {
   return `nr${num} nl${num}`
 }
-const container = 'center mw7 mv3 ph3'
+
+function container() {
+  return 'center mw7 mv3 ph3'
+}
 
 class App extends C {
   state = {}
@@ -23,7 +25,7 @@ class App extends C {
   render() {
     const {} = this.props
     return (
-      <div className={cn('.sans-serif f5', container)}>
+      <div className={cn('.sans-serif f5', container())}>
         <nav className={cn(nh(1))}>
           <NL to="/dashboard">Dashboard</NL>
           <NL to="/about">About</NL>
