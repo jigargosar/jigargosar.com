@@ -1,7 +1,15 @@
-/*eslint-disable no-empty-pattern*/
+// Foo
+
+/*eslint-disable*/
 import React, {Fragment as F, Component as C} from 'react'
-import PT from 'prop-types' // eslint-disable-line
-import cn from 'classnames' // eslint-disable-line
+import PT from 'prop-types'
+import cn from 'classnames'
+import {Link, NavLink, Route} from 'react-router-dom'
+import Dashboard from './Dashboard'
+
+/*eslint-enable*/
+
+/*eslint-disable no-empty-pattern*/
 
 class App extends C {
   state = {}
@@ -9,9 +17,14 @@ class App extends C {
   render() {
     const {} = this.props
     return (
-      <F>
-        <div className={''}>App</div>
-      </F>
+      <div>
+        <nav>
+          <NavLink to="/dashboard">Dashboard</NavLink>
+        </nav>
+        <div>
+          <Route path="/dashboard" component={Dashboard} />
+        </div>
+      </div>
     )
   }
 }
