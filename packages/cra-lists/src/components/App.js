@@ -9,6 +9,7 @@ import About from './About'
 import NavLink from './NavLink'
 import {container, nh} from './class-names'
 import {BrowserRouter} from 'react-router-dom'
+import Auth from './Auth'
 /*eslint-enable*/
 
 /*eslint-disable no-empty-pattern*/
@@ -33,7 +34,7 @@ const routes = [
 
 function renderNav() {
   return (
-    <nav className={cn(nh(1))}>
+    <nav className={cn(nh(1), 'flex')}>
       {routes.map(({path, label}, index) => {
         if (!path || !label) return null
         return (
@@ -42,6 +43,8 @@ function renderNav() {
           </NavLink>
         )
       })}
+      <div className={'flex-auto'} />
+      <Auth />
     </nav>
   )
 }
