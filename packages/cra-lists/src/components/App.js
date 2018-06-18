@@ -15,16 +15,19 @@ import {BrowserRouter} from 'react-router-dom'
 
 const routes = [
   {
-    to: '/dashboard',
+    label: 'Dashboard',
+    path: '/dashboard',
     component: Dashboard,
   },
   {
-    to: '/dashboard',
-    component: Dashboard,
+    label: 'About',
+    path: '/about',
+    component: About,
   },
   {
-    to: '/dashboard',
-    component: Dashboard,
+    children: ({location: {pathname}}) => {
+      return `Page Not Found at ${pathname}`
+    },
   },
 ]
 
@@ -41,12 +44,16 @@ class App extends C {
         </nav>
         <div>
           <Switch>
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/about" component={About} />
-            <Route
-              children={({location: {pathname}}) => {
-                return `Page Not Found at ${pathname}`
-              }}
+            {routes.map(({path, component, children}, index) => {
+              return (
+                <Route
+                  key={index}
+                  path={path}
+                  component={component}
+                  children={children}
+                />
+              )
+            })}
             />
           </Switch>
         </div>
