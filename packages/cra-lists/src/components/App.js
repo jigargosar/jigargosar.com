@@ -12,14 +12,19 @@ import About from './About'
 
 /*eslint-disable no-empty-pattern*/
 
+function nh(num) {
+  return `nr${num} nl${num}`
+}
+const container = 'center mw7 mv3 ph3'
+
 class App extends C {
   state = {}
 
   render() {
     const {} = this.props
     return (
-      <div className={cn('.sans-serif f5 center mw7 mv3 ph3')}>
-        <nav className={'nr1 nl1'}>
+      <div className={cn('.sans-serif f5', container)}>
+        <nav className={cn(nh(1))}>
           <NL to="/dashboard">Dashboard</NL>
           <NL to="/about">About</NL>
         </nav>
