@@ -7,7 +7,9 @@ import {BrowserRouter} from 'react-router-dom'
 
 function render(App) {
   ReactDOM.render(
-    <App Router={BrowserRouter} />,
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
     document.getElementById('root'),
   )
 }
@@ -18,6 +20,6 @@ registerServiceWorker()
 
 if (module.hot) {
   module.hot.accept(['./components/App'], () => {
-    render(require('./components/App'))
+    render(require('./components/App').default)
   })
 }
