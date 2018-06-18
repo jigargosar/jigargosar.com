@@ -1,22 +1,21 @@
+/*eslint-disable no-empty-pattern*/
 import React, {Fragment as F, Component as C} from 'react'
-import PT from 'prop-types'
-import cn from 'classnames'
+import PT from 'prop-types' // eslint-disable-line
+import cn from 'classnames' // eslint-disable-line
 
 class App extends C {
   state = {}
 
   render() {
-    const {className} = this.props
+    const {} = this.props
     return (
       <F>
-        <div className={cn(className)}>App</div>
+        <div className={''}>App</div>
       </F>
     )
   }
 }
 
-App.propTypes = {
-  className: PT.string,
-}
+App.propTypes = {}
 
 export default App
