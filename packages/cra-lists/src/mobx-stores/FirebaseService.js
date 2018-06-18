@@ -28,20 +28,23 @@ export const FirebaseService = (function() {
       .enablePersistence()
       .catch(error => console.info('enablePersistenceFailed'))
   }
+  const firestore = firebase.firestore()
   return m.observable(
     {
       createUserCollectionRef(collectionName) {
         validate('S', arguments)
-        return createFirestoreUserCollection(
+        return this.userRef(this.auth.uid, firestore).collection(
           collectionName,
-          this.auth.uid,
-          firebase.firestore(),
         )
       },
+      get uid() {
+        return this.auth.uid
+      },
+      get userRef() {
+        return createFirestoreUserRef(this.uid, firestore)
+      },
       get auth() {
-        // ;(function() {
-        //   m.trace(true)
-        // })()
+        m.trace(true)
         return createFireAuth(firebase)
       },
     },
@@ -127,4 +130,10 @@ function createFirestoreUserCollection(
   validate('SSO', arguments)
   ow(uid, ow.string.label('uid').nonEmpty)
   return firestore.collection(`/users/${uid}/${collectionName}/`)
+}
+
+function createFirestoreUserRef(uid, firestore) {
+  validate('SO', arguments)
+  ow(uid, ow.string.label('uid').nonEmpty)
+  return firestore.doc(`/users/${uid}/`)
 }
