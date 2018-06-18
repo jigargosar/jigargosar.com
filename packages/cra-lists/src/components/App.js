@@ -7,49 +7,10 @@ import cn from 'classnames'
 import {Link, NavLink, Route} from 'react-router-dom'
 import Dashboard from './Dashboard'
 import About from './About'
-import Radium from 'radium'
 
 /*eslint-enable*/
 
 /*eslint-disable no-empty-pattern*/
-
-const styles = {
-  base: {
-    background: 'blue',
-    border: 0,
-    borderRadius: 4,
-    color: 'white',
-    padding: '1.5em',
-
-    ':hover': {
-      backgroundColor: 'red',
-    },
-
-    ':focus': {
-      backgroundColor: 'green',
-    },
-
-    ':active': {
-      backgroundColor: 'yellow',
-    },
-  },
-
-  block: {
-    display: 'block',
-
-    ':hover': {
-      boxShadow: '0 3px 0 rgba(0,0,0,0.2)',
-    },
-  },
-
-  box: {
-    margin: '0 -0.5em',
-  },
-
-  boxItem: {
-    margin: '0 0.5em',
-  },
-}
 
 class App extends C {
   state = {}
@@ -57,14 +18,10 @@ class App extends C {
   render() {
     const {} = this.props
     return (
-      <div>
-        <nav style={styles.box}>
-          <NavLink style={styles.boxItem} to="/dashboard">
-            Dashboard
-          </NavLink>
-          <NavLink style={styles.boxItem} to="/about">
-            About
-          </NavLink>
+      <div className={cn('.sans-serif f5 center mw7 mv3 ph3')}>
+        <nav className={'nr1 nl1'}>
+          <NL to="/dashboard">Dashboard</NL>
+          <NL to="/about">About</NL>
         </nav>
         <div>
           <Route path="/dashboard" component={Dashboard} />
@@ -75,6 +32,20 @@ class App extends C {
   }
 }
 
+const NL = ({children, to}) => (
+  <Route
+    path={to}
+    children={({match}) => (
+      <Link
+        className={cn('mh1 link', match ? 'orange' : 'blue')}
+        to={to}
+      >
+        {children}
+      </Link>
+    )}
+  />
+)
+
 App.propTypes = {}
 
-export default Radium(App)
+export default App
