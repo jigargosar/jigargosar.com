@@ -15,15 +15,6 @@ const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
-function isDocPath(firestorePath) {
-  return R.compose(
-    RA.isEven,
-    R.length,
-    R.tap(console.log),
-    R.split('/'),
-  )(firestorePath)
-}
-
 const fp = m.observable.object(
   {
     _path: '',
