@@ -71,15 +71,23 @@ function createFireAuth(firebase) {
   function signOut() {
     return firebase.auth().signOut()
   }
-  const authMachine = nanostate('unknown', {
-    unknown: {ON_USER_NOT_NIL: 'signedIn', ON_USER_NIL: 'signedOut'},
-    signedIn: {ON_USER_NIL: 'signedOut', ON_SIGNOUT: 'unknown'},
-    signedOut: {ON_USER_NOT_NIL: 'signedIn', ON_SIGNIN: 'unknown'},
-  })
+
+  const currentUser = firebase.auth().currentUser
+  const authMachine = nanostate(
+    currentUser ? 'signedIn' : 'unknown',
+    {
+      unknown: {
+        ON_USER_NOT_NIL: 'signedIn',
+        ON_USER_NIL: 'signedOut',
+      },
+      signedIn: {ON_USER_NIL: 'signedOut', ON_SIGNOUT: 'unknown'},
+      signedOut: {ON_USER_NOT_NIL: 'signedIn', ON_SIGNIN: 'unknown'},
+    },
+  )
 
   const fireAuth = m.observable(
     {
-      _user: null,
+      _user: currentUser || null,
       _authState: authMachine.state,
       get state() {
         return this._authState

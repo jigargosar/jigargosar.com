@@ -5,13 +5,11 @@ import registerServiceWorker from './registerServiceWorker'
 import App from './components/App'
 import {BrowserRouter} from 'react-router-dom'
 import {StateProvider} from './StateContext'
-import {FirebaseService} from './mobx-stores/FirebaseService'
-
-const state = {
-  fire: FirebaseService,
-}
 
 function render(App) {
+  const state = {
+    fire: require('./mobx-stores/FirebaseService').FirebaseService,
+  }
   ReactDOM.render(
     <BrowserRouter>
       <StateProvider value={state}>
@@ -27,7 +25,10 @@ render(App)
 registerServiceWorker()
 
 if (module.hot) {
-  module.hot.accept(['./components/App'], () => {
-    render(require('./components/App').default)
-  })
+  module.hot.accept(
+    ['./components/App', './mobx-stores/FirebaseService'],
+    () => {
+      render(require('./components/App').default)
+    },
+  )
 }
