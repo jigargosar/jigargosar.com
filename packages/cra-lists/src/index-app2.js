@@ -13,16 +13,18 @@ import createBrowserHistory from 'history/createBrowserHistory'
 
 /*eslint-enable*/
 
+const history = createBrowserHistory()
+
 function render(App) {
   const state = {
     fire: require('./mobx-stores/FirebaseService').FirebaseService,
   }
   ReactDOM.render(
-    <BrowserRouter>
+    <Router history={history}>
       <StateProvider value={state}>
         <App />
       </StateProvider>
-    </BrowserRouter>,
+    </Router>,
     document.getElementById('root'),
   )
 }
