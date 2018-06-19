@@ -56,6 +56,28 @@ export const FirebaseService = (function() {
           }
         })
       },
+      getFirestoreDocWithPath(path) {
+        m.trace()
+        return mu.fromPromise(async resolve => {
+          if (this.auth.isSignedIn) {
+            resolve(
+              await firestore.doc(`/users/${this.uid}/${path}`).get(),
+            )
+          }
+        })
+      },
+      getFirestoreCollectionWithPath(path) {
+        m.trace()
+        return mu.fromPromise(async resolve => {
+          if (this.auth.isSignedIn) {
+            resolve(
+              await firestore
+                .collection(`/users/${this.uid}/${path}`)
+                .get(),
+            )
+          }
+        })
+      },
     },
     {},
     {name: 'FirebaseService'},

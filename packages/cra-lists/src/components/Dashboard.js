@@ -22,6 +22,16 @@ const Dashboard = withRouter(
       console.log('R.merge(match, location)')
       console.table(R.merge(match, location))
       const userDocResult = fire.userDocFromPromise
+      const firestorePath = R.replace(
+        /^\/dashboard\/?/,
+        '',
+        location.pathname,
+      )
+      // const docPromise = R.compose(RA.isEven, R.length, R.split('/'))(
+      //   firestorePath,
+      // )
+      //   ? fire.getFirestoreDocWithPath(firestorePath)
+      //   : fire.getFirestoreCollectionWithPath(firestorePath)
       return (
         <F>
           <DashboardNav />
@@ -51,6 +61,20 @@ const Dashboard = withRouter(
               return `Error ${e}`
             },
           })}
+          {/*{docPromise.case({*/}
+          {/*pending: () => 'Loading...',*/}
+          {/*fulfilled: docSnap => {*/}
+          {/*return (*/}
+          {/*<F>*/}
+          {/*<ReactJSON name={'d/c'} src={docSnap.data()} />*/}
+          {/*</F>*/}
+          {/*)*/}
+          {/*},*/}
+          {/*rejected: e => {*/}
+          {/*console.error(e)*/}
+          {/*return `Error ${e}`*/}
+          {/*},*/}
+          {/*})}*/}
         </F>
       )
     }
