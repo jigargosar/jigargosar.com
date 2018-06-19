@@ -66,16 +66,7 @@ const Dashboard = withRouter(
     r({fire, auth, match, location, history}) {
       // console.log('R.merge(match, location)')
       // console.table(R.merge(match, location))
-      const userDocResult = fire.userDocFromPromise
-      // const firestorePath = R.replace(
-      //   /^\/dashboard\/?/,
-      //   '',
-      //   location.pathname,
-      // )
-      // const fireFunction = (isDocPath(firestorePath)
-      //   ? fire.getFirestoreDocWithPath
-      //   : fire.getFirestoreCollectionWithPath)
-      // fp.updatePath(firestorePath, fire)
+      const userDocResult = fire.store.userDoc
       console.debug(location)
       return (
         <F>

@@ -42,60 +42,21 @@ export const FirebaseService = (function() {
           collectionName,
         )
       },
+      get userRef() {
+        return createFirestoreUserRef(this.uid, firestore)
+      },
       get store() {
         return createFirestore(firebase, this)
       },
       get uid() {
         return this.auth.uid
       },
-      get userRef() {
-        return createFirestoreUserRef(this.uid, firestore)
-      },
       get auth() {
         m.trace()
         return createFireAuth(firebase)
       },
-      get userDocFromPromise() {
-        // m.trace()
-        return mu.fromPromise(async resolve => {
-          if (this.auth.isSignedIn) {
-            resolve(await this.userRef.get())
-          }
-        })
-      },
-      getFirestoreDocWithPath(path) {
-        return mu.fromPromise.reject('ERR')
-        // m.trace()
-        return mu.fromPromise(async resolve => {
-          if (this.auth.isSignedIn) {
-            // debugger
-            resolve(
-              await firestore.doc(`/users/${this.uid}/${path}`).get(),
-            )
-          }
-        })
-      },
-      getFirestoreCollectionWithPath(path) {
-        return mu.fromPromise.reject('ERR')
-        // m.trace()
-        // debugger
-        return mu.fromPromise(async resolve => {
-          const signedIn = this.auth.isSignedIn
-          if (signedIn) {
-            const uid = this.uid
-            const querySnapshot = await firestore
-              .collection(`/users/${uid}/${path}`)
-              .get()
-            console.log(querySnapshot)
-            resolve(querySnapshot)
-          }
-        })
-      },
     },
-    {
-      getFirestoreDocWithPath: m.action.bound,
-      getFirestoreCollectionWithPath: m.action.bound,
-    },
+    {},
     {name: 'FirebaseService'},
   )
 })()
@@ -122,7 +83,7 @@ function createFirestore(firebase, fire) {
       return createFirestoreUserRef(fire.auth.uid, firestore)
     },
     get userDoc() {
-      mu.fromPromise(async resolve => {
+      return mu.fromPromise(async resolve => {
         if (fire.auth.isSignedIn) {
           resolve(await this.userRef.get())
         }
