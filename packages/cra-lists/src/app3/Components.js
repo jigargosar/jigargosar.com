@@ -13,13 +13,13 @@ import {Button} from './UI'
 
 export class SignInButton extends M {
   r({auth}) {
-    if (!auth.isSignedIn) return null
+    if (auth.isSignedIn) return null
     return <Button onClick={auth.signIn}>SignIn</Button>
   }
 }
 export class SignOutButton extends M {
   r({auth}) {
-    if (auth.isSignedIn) return null
+    if (!auth.isSignedIn) return null
     return <Button onClick={auth.signOut}>SignOut</Button>
   }
 }
@@ -27,7 +27,11 @@ export class SignOutButton extends M {
 export class UserDisplayName extends M {
   r({auth}) {
     if (!auth.isSignedIn) return null
-    return <div className={'dib mh1'}>{auth.displayName}</div>
+    return (
+      <div className={'dib mh1'}>
+        {auth.isSignedIn && auth.displayName}
+      </div>
+    )
   }
 }
 
