@@ -21,3 +21,9 @@ export class SignOutButton extends M {
     return <Button onClick={auth.signOut}>SignOut</Button>
   }
 }
+
+export class UserDisplayName extends M {
+  r({auth}) {
+    return <div className={'dib mh1'}>{auth.displayName}</div>
+  }
+}

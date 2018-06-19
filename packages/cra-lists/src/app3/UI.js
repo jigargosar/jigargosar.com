@@ -13,7 +13,10 @@ import {M} from '../StateContext'
 export const Button = function({className, children, ...rest}) {
   return (
     <button
-      className={cn('input-reset f5 link blue mh1 mv0', className)}
+      className={cn(
+        'input-reset dib f5 link blue mh1 mv0',
+        className,
+      )}
       {...rest}
     >
       {children}
