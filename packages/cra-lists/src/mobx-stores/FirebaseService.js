@@ -49,7 +49,7 @@ export const FirebaseService = (function() {
         return createFireAuth(firebase)
       },
       get userDocFromPromise() {
-        m.trace()
+        // m.trace()
         return mu.fromPromise(async resolve => {
           if (this.auth.isSignedIn) {
             resolve(await this.userRef.get())
@@ -57,9 +57,10 @@ export const FirebaseService = (function() {
         })
       },
       getFirestoreDocWithPath(path) {
-        m.trace()
+        // m.trace()
         return mu.fromPromise(async resolve => {
           if (this.auth.isSignedIn) {
+            // debugger
             resolve(
               await firestore.doc(`/users/${this.uid}/${path}`).get(),
             )
@@ -67,19 +68,26 @@ export const FirebaseService = (function() {
         })
       },
       getFirestoreCollectionWithPath(path) {
-        m.trace()
+        // return mu.fromPromise.reject('ERR')
+        // m.trace()
+        // debugger
         return mu.fromPromise(async resolve => {
-          if (this.auth.isSignedIn) {
-            resolve(
-              await firestore
-                .collection(`/users/${this.uid}/${path}`)
-                .get(),
-            )
+          const signedIn = this.auth.isSignedIn
+          if (signedIn) {
+            const uid = this.uid
+            const querySnapshot = await firestore
+              .collection(`/users/${uid}/${path}`)
+              .get()
+            console.log(querySnapshot)
+            resolve(querySnapshot)
           }
         })
       },
     },
-    {},
+    {
+      getFirestoreDocWithPath: m.action.bound,
+      getFirestoreCollectionWithPath: m.action.bound,
+    },
     {name: 'FirebaseService'},
   )
 })()

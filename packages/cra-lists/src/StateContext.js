@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React from 'react'
 import './index.css'
 import {observer, Observer} from 'mobx-react'
@@ -5,6 +6,11 @@ import {observer, Observer} from 'mobx-react'
 const R = require('ramda')
 
 const StateContext = React.createContext(null)
+
+/*eslint-enable*/
+
+/*eslint-disable no-empty-pattern*/
+
 export const StateProvider = StateContext.Provider
 
 // export const injectState = c => {
@@ -68,3 +74,5 @@ export class RC extends React.Component {
     return props.render ? props.render(this.props) : null
   }
 }
+
+export {Observer as O}
