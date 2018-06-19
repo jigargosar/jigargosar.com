@@ -53,11 +53,12 @@ function renderRoutes() {
   return (
     <div>
       <Switch>
-        {routes.map(({path, component, children}, index) => {
+        {routes.map(({path, component, children, exact}, index) => {
           return (
             <Route
               key={index}
               path={path}
+              exact={exact}
               component={component}
               children={children}
             />
