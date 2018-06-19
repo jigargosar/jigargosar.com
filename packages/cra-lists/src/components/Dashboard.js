@@ -79,7 +79,14 @@ const Dashboard = withRouter(
             fulfilled: docSnap => {
               return (
                 <F>
-                  <ReactJSONView name={'user'} src={docSnap.data()} />
+                  <ReactJSONView
+                    collapseStringsAfterLength={10}
+                    displayDataTypes={false}
+                    collapsed={1}
+                    indentWidth={2}
+                    name={'user'}
+                    src={docSnap.data()}
+                  />
                 </F>
               )
             },
@@ -96,6 +103,12 @@ const Dashboard = withRouter(
                 <F>
                   <ReactJSONView
                     name={'d/c'}
+                    displayDataTypes={false}
+                    collapseStringsAfterLength={10}
+                    collapsed={2}
+                    indentWidth={2}
+                    groupArraysAfterLength={5}
+                    onSelect={console.warn}
                     src={
                       docSnap.data
                         ? docSnap.data()
