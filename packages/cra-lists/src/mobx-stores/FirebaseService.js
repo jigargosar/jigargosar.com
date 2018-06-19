@@ -38,6 +38,9 @@ export const FirebaseService = (function() {
           collectionName,
         )
       },
+      get store() {
+        return createFirestore(firebase, this)
+      },
       get uid() {
         return this.auth.uid
       },
@@ -57,6 +60,7 @@ export const FirebaseService = (function() {
         })
       },
       getFirestoreDocWithPath(path) {
+        return mu.fromPromise.reject('ERR')
         // m.trace()
         return mu.fromPromise(async resolve => {
           if (this.auth.isSignedIn) {
@@ -68,7 +72,7 @@ export const FirebaseService = (function() {
         })
       },
       getFirestoreCollectionWithPath(path) {
-        // return mu.fromPromise.reject('ERR')
+        return mu.fromPromise.reject('ERR')
         // m.trace()
         // debugger
         return mu.fromPromise(async resolve => {
@@ -91,6 +95,22 @@ export const FirebaseService = (function() {
     {name: 'FirebaseService'},
   )
 })()
+
+function createFirestore(firebase, fire) {
+  const firestore = firebase.firestore()
+  return m.observable.object({
+    get userRef() {
+      return createFirestoreUserRef(fire.auth.uid, firestore)
+    },
+    get userDoc() {
+      mu.fromPromise(async resolve => {
+        if (fire.auth.isSignedIn) {
+          resolve(await this.userRef.get())
+        }
+      })
+    },
+  })
+}
 
 function createFireAuth(firebase) {
   function signIn() {

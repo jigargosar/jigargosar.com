@@ -52,6 +52,7 @@ const Dashboard = withRouter(
         this.props.location.pathname,
       )
       fp.updatePath(firestorePath)
+      this.forceUpdate()
     }
 
     componentDidUpdate() {
