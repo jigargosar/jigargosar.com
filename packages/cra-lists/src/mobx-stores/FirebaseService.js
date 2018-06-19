@@ -92,6 +92,7 @@ function createFireAuth(firebase) {
   const fireAuth = m.observable(
     {
       _user: currentUser || null,
+      _authState: authMachine.state,
       get state() {
         return this._authState
       },
@@ -118,7 +119,6 @@ function createFireAuth(firebase) {
       get isAuthKnown() {
         return !R.equals(this._authState, 'unknown')
       },
-
       signIn,
       signOut,
     },
@@ -139,6 +139,9 @@ function createFireAuth(firebase) {
     authMachine.emit(
       R.isNil(user) ? 'ON_USER_NIL' : 'ON_USER_NOT_NIL',
     )
+  })
+  m.autorun(() => {
+    console.log(fireAuth._authState)
   })
   return fireAuth
 }
