@@ -4,7 +4,7 @@
 import React, {Fragment as F} from 'react'
 import PT from 'prop-types'
 import cn from 'classnames'
-import {injectState, M, RC} from '../StateContext'
+import {M, RC} from '../StateContext'
 import {Link, Route} from 'react-router-dom'
 
 const m = require('mobx')

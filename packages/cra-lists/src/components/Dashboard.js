@@ -4,7 +4,7 @@
 import React, {Fragment as F} from 'react'
 import PT from 'prop-types'
 import cn from 'classnames'
-import {injectState, M} from '../StateContext'
+import {M} from '../StateContext'
 import {Link, Redirect, Route, withRouter} from 'react-router-dom'
 import ReactJSON from 'react-json-view'
 import DashboardNav from './DashboardNav'
@@ -15,7 +15,7 @@ const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
-const Dashboard = R.compose(withRouter, injectState)(
+const Dashboard = withRouter(
   class Dashboard extends M {
     inputRef = React.createRef()
     r({fire, auth, match, location, history}) {
@@ -32,7 +32,7 @@ const Dashboard = R.compose(withRouter, injectState)(
               history.push(
                 `${location.pathname}/${this.inputRef.current.value}`,
               )
-              this.forceUpdate()
+              // this.forceUpdate()
             }}
           >
             <input ref={this.inputRef} />
