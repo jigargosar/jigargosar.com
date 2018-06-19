@@ -6,7 +6,8 @@ import PT from 'prop-types'
 import cn from 'classnames'
 import {injectState, M} from '../StateContext'
 import * as mu from 'mobx-utils'
-
+import {RenderState} from '../debug/RenderState'
+import ReactJSON from 'react-json-view'
 const m = require('mobx')
 /*eslint-enable*/
 
@@ -17,7 +18,8 @@ const Dashboard = injectState(
       return userDocResult.case({
         pending: () => 'Loading...',
         fulfilled: docSnap => {
-          return JSON.stringify(docSnap.data())
+          // return JSON.stringify(docSnap.data())
+          return <ReactJSON name={'user'} src={docSnap.data()} />
         },
         rejected: e => {
           console.error(e)

@@ -34,7 +34,7 @@ const routes = [
 
 function renderNav() {
   return (
-    <nav className={cn(nh(1), 'flex')}>
+    <nav className={cn(nh(1), 'flex', 'mb3')}>
       {routes.map(({path, label}, index) => {
         if (!path || !label) return null
         return (
