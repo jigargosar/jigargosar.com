@@ -1,20 +1,20 @@
 // Foo
 
 /*eslint-disable*/
-import React, {Component as C} from 'react'
+import React, {Component as RC} from 'react'
 import cn from 'classnames'
 import {container, nh} from './class-names'
-import {BrowserRouter} from 'react-router-dom'
+import {M} from '../StateContext'
+
 /*eslint-enable*/
 
 /*eslint-disable no-empty-pattern*/
 
-class App extends C {
-  render() {
-    const {} = this.props
+class App extends M {
+  r({auth}) {
     return (
       <div className={cn('.sans-serif lh-copy f5', container())}>
-        HW
+        HW {auth.state}
       </div>
     )
   }

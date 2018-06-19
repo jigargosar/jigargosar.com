@@ -36,8 +36,8 @@ export const StateProvider = StateContext.Provider
 //   )(c)
 // }
 
-export const C = observer(
-  class C extends React.Component {
+export const M = observer(
+  class M extends React.Component {
     render() {
       return (
         <StateContext.Consumer>
@@ -63,9 +63,7 @@ export const C = observer(
   },
 )
 
-export const M = C
-
-export class RC extends React.Component {
+export class C extends React.Component {
   render() {
     return this.r(this.props)
   }
