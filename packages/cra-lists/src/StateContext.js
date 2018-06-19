@@ -58,3 +58,13 @@ export const C = observer(
 )
 
 export const M = C
+
+export class RC extends React.Component {
+  render() {
+    return this.r(this.props)
+  }
+
+  r(props) {
+    return props.render ? props.render(this.props) : null
+  }
+}

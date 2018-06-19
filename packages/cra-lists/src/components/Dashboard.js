@@ -5,7 +5,7 @@ import React, {Fragment as F} from 'react'
 import PT from 'prop-types'
 import cn from 'classnames'
 import {injectState, M} from '../StateContext'
-import {Link, Route} from 'react-router-dom'
+import {Link, Redirect, Route, withRouter} from 'react-router-dom'
 import ReactJSON from 'react-json-view'
 import DashboardNav from './DashboardNav'
 
@@ -15,9 +15,10 @@ const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
-const Dashboard = injectState(
+const Dashboard = R.compose(withRouter, injectState)(
   class Dashboard extends M {
-    r({fire, auth, match, location}) {
+    inputRef = React.createRef()
+    r({fire, auth, match, location, history}) {
       console.log('R.merge(match, location)')
       console.table(R.merge(match, location))
       const userDocResult = fire.userDocFromPromise
@@ -27,10 +28,14 @@ const Dashboard = injectState(
           <form
             onSubmit={e => {
               e.preventDefault()
-              return alert('enter')
+              // this.forceUpdate()
+              history.push(
+                `${location.pathname}/${this.inputRef.current.value}`,
+              )
+              this.forceUpdate()
             }}
           >
-            <input />
+            <input ref={this.inputRef} />
           </form>
           {userDocResult.case({
             pending: () => 'Loading...',
