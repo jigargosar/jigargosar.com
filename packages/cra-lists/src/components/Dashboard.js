@@ -31,13 +31,10 @@ const fp = m.observable.object(
       this._path = path
     },
     get p() {
-      const firestorePath = this._path
-      const fire = FirebaseService
-      const fireFunction = isDocPath(firestorePath)
-        ? fire.getFirestoreDocWithPath
-        : fire.getFirestoreCollectionWithPath
       // debugger
-      return fireFunction(R.clone(firestorePath))
+      return FirebaseService.store.getFromUserPath(
+        R.clone(this._path),
+      )
     },
   },
   {updatePath: m.action.bound},
@@ -113,7 +110,6 @@ const Dashboard = withRouter(
           {fp.p.case({
             pending: () => 'Loading...',
             fulfilled: docSnap => {
-              debugger
               return (
                 <F>
                   <ReactJSON

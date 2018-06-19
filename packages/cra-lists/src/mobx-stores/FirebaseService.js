@@ -106,10 +106,17 @@ function createFirestore(firebase, fire) {
     R.reject(R.isEmpty),
     R.split('/'),
   )
-  const isCollectionPath = R.compose(RA.isEven, getPathLength)
+  const isCollectionPath = R.compose(RA.isOdd, getPathLength)
   const isDocumentPath = R.complement(isCollectionPath)
 
   const firestore = firebase.firestore()
+
+  function getRefFromPath(path, firestore) {
+    return isDocumentPath(path)
+      ? firestore.doc(path)
+      : firestore.collection(path)
+  }
+
   return m.observable.object({
     get userRef() {
       return createFirestoreUserRef(fire.auth.uid, firestore)
@@ -121,10 +128,15 @@ function createFirestore(firebase, fire) {
         }
       })
     },
-    get(path) {
-      mu.fromPromise(async resolve => {
+    getFromUserPath(path) {
+      return mu.fromPromise(async resolve => {
         if (fire.auth.isSignedIn) {
-          resolve(await firestore.get(path))
+          resolve(
+            await getRefFromPath(
+              `/users/${fire.auth.uid}/${path}`,
+              firestore,
+            ).get(),
+          )
         }
       })
     },
