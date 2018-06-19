@@ -7,6 +7,7 @@ import {container, nh} from './class-names'
 import {M} from '../StateContext'
 import {Button} from './UI'
 import {
+  Auth,
   SignInButton,
   SignOutButton,
   UserDisplayName,
@@ -21,9 +22,7 @@ class App extends M {
     return (
       <div className={cn('.sans-serif lh-copy f5', container())}>
         <div className={cn('dib mh1')}>{auth.state}</div>
-        <UserDisplayName />
-        <SignOutButton />
-        <SignInButton />
+        <Auth />
       </div>
     )
   }
