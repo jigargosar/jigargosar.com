@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import ow from 'ow/dist/index'
 import * as mu from 'mobx-utils/lib/mobx-utils'
 
@@ -8,6 +9,9 @@ var nanostate = require('nanostate')
 const R = require('ramda')
 const m = require('mobx')
 const validate = require('aproba')
+const RA = require('ramda-adjunct')
+
+/*eslint-enable*/
 
 if (module.hot) {
   window.firebase = firebase
@@ -97,6 +101,14 @@ export const FirebaseService = (function() {
 })()
 
 function createFirestore(firebase, fire) {
+  const getPathLength = R.compose(
+    R.length,
+    R.reject(R.isEmpty),
+    R.split('/'),
+  )
+  const isCollectionPath = R.compose(RA.isEven, getPathLength)
+  const isDocumentPath = R.complement(isCollectionPath)
+
   const firestore = firebase.firestore()
   return m.observable.object({
     get userRef() {
@@ -106,6 +118,13 @@ function createFirestore(firebase, fire) {
       mu.fromPromise(async resolve => {
         if (fire.auth.isSignedIn) {
           resolve(await this.userRef.get())
+        }
+      })
+    },
+    get(path) {
+      mu.fromPromise(async resolve => {
+        if (fire.auth.isSignedIn) {
+          resolve(await firestore.get(path))
         }
       })
     },
