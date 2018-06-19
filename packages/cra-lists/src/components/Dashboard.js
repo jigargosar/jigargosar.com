@@ -5,7 +5,7 @@ import React, {Fragment as F} from 'react'
 import PT from 'prop-types'
 import {M} from '../StateContext'
 import {withRouter} from 'react-router-dom'
-import ReactJSON from 'react-json-view'
+import ReactJSONView from 'react-json-view'
 import DashboardNav from './DashboardNav'
 import {FirebaseService} from '../mobx-stores/FirebaseService'
 
@@ -79,7 +79,7 @@ const Dashboard = withRouter(
             fulfilled: docSnap => {
               return (
                 <F>
-                  <ReactJSON name={'user'} src={docSnap.data()} />
+                  <ReactJSONView name={'user'} src={docSnap.data()} />
                 </F>
               )
             },
@@ -94,7 +94,7 @@ const Dashboard = withRouter(
             fulfilled: docSnap => {
               return (
                 <F>
-                  <ReactJSON
+                  <ReactJSONView
                     name={'d/c'}
                     src={
                       docSnap.data
