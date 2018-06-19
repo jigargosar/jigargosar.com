@@ -13,8 +13,8 @@ const m = require('mobx')
 const Dashboard = injectState(
   class Dashboard extends M {
     r({fire, auth}) {
-      const userResult = fire.userDocFromPromise
-      return userResult.case({
+      const userDocResult = fire.userDocFromPromise
+      return userDocResult.case({
         pending: () => 'Loading...',
         fulfilled: docSnap => {
           return JSON.stringify(docSnap.data())
