@@ -12,9 +12,6 @@ const m = require('mobx')
 
 const Dashboard = injectState(
   class Dashboard extends M {
-    // s = m.observable.object({
-    //   doc: mu.fromPromise(this.props.fire.userRef.get()),
-    // })
     r({fire, auth}) {
       const userResult = fire.userDocFromPromise
       return userResult.case({

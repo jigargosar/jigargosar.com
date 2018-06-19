@@ -45,10 +45,11 @@ export const FirebaseService = (function() {
         return createFirestoreUserRef(this.uid, firestore)
       },
       get auth() {
-        m.trace(true)
+        m.trace()
         return createFireAuth(firebase)
       },
       get userDocFromPromise() {
+        m.trace()
         return mu.fromPromise(async resolve => {
           if (this.auth.isSignedIn) {
             resolve(await this.userRef.get())
