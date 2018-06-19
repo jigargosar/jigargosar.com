@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
-import App from './components/App'
+import App from './components-2/App'
 import {BrowserRouter} from 'react-router-dom'
 import {StateProvider} from './StateContext'
 
@@ -35,9 +35,9 @@ registerServiceWorker()
 
 if (module.hot) {
   module.hot.accept(
-    ['./components/App', './mobx-stores/FirebaseService'],
+    ['./components-2/App', './mobx-stores/FirebaseService'],
     () => {
-      render(require('./components/App').default)
+      render(require('./components-2/App').default)
     },
   )
 }
