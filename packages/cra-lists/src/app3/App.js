@@ -20,11 +20,10 @@ class App extends M {
   r({auth}) {
     return (
       <div className={cn('.sans-serif lh-copy f5', container())}>
-        HW
-        {auth.state}
+        <div className={cn('dib mh1')}>{auth.state}</div>
         <UserDisplayName />
-        <SignInButton />
         <SignOutButton />
+        <SignInButton />
       </div>
     )
   }
