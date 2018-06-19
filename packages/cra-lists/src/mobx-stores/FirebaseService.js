@@ -80,7 +80,11 @@ function createFireAuth(firebase) {
         ON_USER_NOT_NIL: 'signedIn',
         ON_USER_NIL: 'signedOut',
       },
-      signedIn: {ON_USER_NIL: 'signedOut', ON_SIGNOUT: 'unknown'},
+      signedIn: {
+        ON_USER_NOT_NIL: 'signedIn',
+        ON_USER_NIL: 'signedOut',
+        ON_SIGNOUT: 'unknown',
+      },
       signedOut: {ON_USER_NOT_NIL: 'signedIn', ON_SIGNIN: 'unknown'},
     },
   )
@@ -88,7 +92,6 @@ function createFireAuth(firebase) {
   const fireAuth = m.observable(
     {
       _user: currentUser || null,
-      _authState: authMachine.state,
       get state() {
         return this._authState
       },
