@@ -47,11 +47,16 @@ class NoteItemText extends M {
   }
 }
 class NoteItemEdit extends M {
+  inputRef = React.createRef()
+  componentDidMount() {
+    this.inputRef.current.focus()
+  }
   r({ns, n}) {
     // return <div className={cn('f4 code blue')}>{`${n.text}`}</div>
     return (
       <div className={cn('flex')}>
         <input
+          ref={this.inputRef}
           className={cn('flex-auto pa2 f4 code blue')}
           defaultValue={n.text}
         />
