@@ -42,8 +42,7 @@ export class UserDisplayName extends M {
 
 export class AuthLoading extends M {
   r({auth}) {
-    if (auth.isAuthKnown) return null
-    return 'Loading...'
+    return !auth.isAuthKnown && 'Loading...'
   }
 }
 
