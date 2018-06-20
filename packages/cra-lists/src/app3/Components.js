@@ -13,7 +13,7 @@ import {Button} from './UI'
 
 export class SignInButton extends M {
   r({auth}) {
-    if (auth.isSignedIn) return null
+    if (!auth.isSignedOut) return null
     return <Button onClick={auth.signIn}>SignIn</Button>
   }
 }

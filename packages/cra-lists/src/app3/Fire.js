@@ -158,6 +158,9 @@ function createFireAuth(firebase) {
       get isSignedIn() {
         return R.equals(this._authState, 'signedIn')
       },
+      get isSignedOut() {
+        return R.equals(this._authState, 'signedOut')
+      },
       get isAuthKnown() {
         return !R.equals(this._authState, 'unknown')
       },
