@@ -29,11 +29,11 @@ export class Notes extends M {
   }
 }
 
-export const CollapsedString = o(
-  class CollapsedString extends C {
-    r({value, maxLength}) {
-      //todo: get some lib to do the truncation
-      return value
-    }
-  },
-)
+// export const CollapsedString = o(
+//   class CollapsedString extends C {
+//     r({value, maxLength}) {
+//       //todo: get some lib to do the truncation
+//       return value
+//     }
+//   },
+// )
