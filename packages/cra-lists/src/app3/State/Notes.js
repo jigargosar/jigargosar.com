@@ -31,7 +31,7 @@ function Notes(fire) {
           this.list,
         )
       },
-      onEditNext() {
+      onEditPrev() {
         ow(
           this._editingNoteId,
           ow.string.label('_editingNoteId').nonEmpty,
@@ -41,7 +41,7 @@ function Notes(fire) {
           this._editingNoteId = this.idAtIndex(prevIdx)
         }
       },
-      onEditPrev() {
+      onEditNext() {
         ow(
           this._editingNoteId,
           ow.string.label('_editingNoteId').nonEmpty,
