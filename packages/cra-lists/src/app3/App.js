@@ -12,6 +12,7 @@ import {
   SignOutButton,
   UserDisplayName,
 } from './Components'
+import {Notes} from './Components/Notes'
 
 /*eslint-enable*/
 
@@ -21,8 +22,11 @@ class App extends M {
   r({auth}) {
     return (
       <div className={cn('.sans-serif lh-copy f5', container())}>
-        <div className={cn('dib mh1')}>{auth.state}</div>
-        <Auth />
+        <div className={cn('mb3')}>
+          <div className={cn('dib mh1')}>{auth.state}</div>
+          <Auth />
+        </div>
+        <Notes />
       </div>
     )
   }

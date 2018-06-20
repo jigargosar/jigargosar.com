@@ -6,6 +6,7 @@ const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
 var nanostate = require('nanostate')
+var nanoid = require('nanoid')
 const R = require('ramda')
 const m = require('mobx')
 const validate = require('aproba')
@@ -18,13 +19,14 @@ function Notes(fire) {
     {
       _notes: m.observable.map([], {deep: false}),
       get list() {
-        return this._notes
+        return Array.from(this._notes.values())
       },
-      get add() {
-        return this._notes.push({text: `New Note`})
+      add() {
+        const id = nanoid()
+        return this._notes.set(id, {id, text: `New Note`})
       },
     },
-    {},
+    {add: m.action.bound},
     {name: 'Notes'},
   )
 }
