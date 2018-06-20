@@ -20,7 +20,7 @@ export class Notes extends M {
         <Button onClick={() => s.n.add()}>ADD</Button>
         {s.n.list.map(n => (
           <div key={n.id} className={cn('mv3')}>
-            <div className={cn('f6')}>{`Note ${n.id}`}</div>
+            <div className={cn('f6')}>{`Note id: ${n.id}`}</div>
             <div className={cn('f4 code')}>{`${n.text}`}</div>
           </div>
         ))}
