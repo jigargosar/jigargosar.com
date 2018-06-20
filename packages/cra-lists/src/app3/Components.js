@@ -42,7 +42,11 @@ export class UserDisplayName extends M {
 
 export class AuthLoading extends M {
   r({auth}) {
-    return !auth.isAuthKnown && 'Loading...'
+    return (
+      !auth.isAuthKnown && (
+        <div className={'dib mh1'}>'Loading...'</div>
+      )
+    )
   }
 }
 
