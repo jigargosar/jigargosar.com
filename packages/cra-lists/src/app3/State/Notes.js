@@ -19,8 +19,30 @@ function Notes(fire) {
     {
       _notes: m.observable.map([], {deep: false}),
       _eid: null,
+      _eText: null,
+
+      get _cRef() {
+        return fire.store.createUserCollectionRef('notes')
+      },
       onEdit(id) {
-        if (RA.isNotNil(this._eid)) this._eid = id
+        if (RA.isNotNil(this._eid)) {
+          this._cRef
+            .doc(id)
+            .update({text: this._eText})
+            .catch(console.error)
+          Object.assign(this, {
+            _eid: null,
+            _eText: null,
+          })
+        }
+
+        this._eid = id
+        this._eText = this._notes.get(id).text
+      },
+      onEditTextChange(val) {
+        validate('S', arguments)
+        ow(this._eid, ow.string.label('_eid').nonEmpty)
+        this._eText = val
       },
       idAtIndex(i) {
         return this.list[i].id
@@ -46,7 +68,10 @@ function Notes(fire) {
         return R.equals(this._eid, id)
       },
       get list() {
-        return Array.from(this._notes.values())
+        return R.sortBy(
+          R.prop('text'),
+          Array.from(this._notes.values()),
+        )
       },
       get listLength() {
         return this.list.length
@@ -65,6 +90,7 @@ function Notes(fire) {
     {
       add: m.action.bound,
       onEdit: m.action.bound,
+      onEditTextChange: m.action.bound,
       onEditNext: m.action.bound,
       onEditPrev: m.action.bound,
       _updateNotesListFromFirestore: m.action.bound,
