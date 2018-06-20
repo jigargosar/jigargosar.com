@@ -58,7 +58,7 @@ class NoteItemEdit extends M {
         <input
           ref={this.inputRef}
           onKeyDown={e => {
-            console.log('NodeEditKeyDown', e.key, e)
+            console.debug('NodeEditKeyDown', e.key, e)
             const mapping = {
               ArrowUp: ns.onEditPrev,
               ArrowDown: ns.onEditNext,
