@@ -1,7 +1,6 @@
 /*eslint-disable*/
 import ow from 'ow'
 import * as mu from 'mobx-utils/lib/mobx-utils'
-import Notes from './Notes'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -14,22 +13,20 @@ const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
-function State() {
-  const fire = require('./Fire').Fire()
+function Notes(fire) {
   return m.observable.object(
     {
-      fire,
-      n: Notes(fire),
+      _notes: m.observable.map([], {deep: false}),
+      get list() {
+        return this._notes
+      },
+      get add() {
+        return this._notes.push({text: `New Note`})
+      },
     },
     {},
-    {name: 'app3-state'},
+    {name: 'Notes'},
   )
 }
 
-const state = State()
-
-if (module.hot) {
-  window.s = state
-}
-
-export default state
+export default Notes
