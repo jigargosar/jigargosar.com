@@ -40,7 +40,7 @@ class NoteItemText extends M {
   r({ns, n}) {
     return (
       <div
-        className={cn('f4 code')}
+        className={cn('f4 code truncate')}
         onClick={() => ns.onEdit(n.id)}
       >{`${n.text}`}</div>
     )
