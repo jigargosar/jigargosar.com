@@ -52,7 +52,6 @@ export const Fire = function() {
         return this.auth.uid
       },
       get auth() {
-        m.trace()
         return createFireAuth(firebase)
       },
     },
