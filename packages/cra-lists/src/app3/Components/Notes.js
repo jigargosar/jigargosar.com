@@ -63,7 +63,7 @@ class NoteItemEdit extends M {
               ArrowUp: ns.onEditPrev,
               ArrowDown: ns.onEditNext,
             }
-            const mappingFn = R.propOr(R.identity, mapping)
+            const mappingFn = R.propOr(R.identity, R.__, mapping)
             mappingFn(e.key)()
           }}
           className={cn('flex-auto pa2 f4 code blue')}

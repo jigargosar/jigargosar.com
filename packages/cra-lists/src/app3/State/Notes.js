@@ -1,6 +1,7 @@
 /*eslint-disable*/
 
 import ow from 'ow'
+
 const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
@@ -21,13 +22,43 @@ function Notes(fire) {
       onEdit(id) {
         this._editingNoteId = id
       },
-      onEditPrev() {},
-      onEditNext() {},
+      idAtIndex(i) {
+        return this.list[i].id
+      },
+      get _indexOfEditingNoteId() {
+        return R.findIndex(
+          R.propEq('id', this._editingNoteId),
+          this.list,
+        )
+      },
+      onEditNext() {
+        ow(
+          this._editingNoteId,
+          ow.string.label('_editingNoteId').nonEmpty,
+        )
+        const prevIdx = this._indexOfEditingNoteId - 1
+        if (prevIdx >= 0) {
+          this._editingNoteId = this.idAtIndex(prevIdx)
+        }
+      },
+      onEditPrev() {
+        ow(
+          this._editingNoteId,
+          ow.string.label('_editingNoteId').nonEmpty,
+        )
+        const nextIdx = this._indexOfEditingNoteId + 1
+        if (nextIdx < this.listLength) {
+          this._editingNoteId = this.idAtIndex(nextIdx)
+        }
+      },
       isEditing(id) {
         return R.equals(this._editingNoteId, id)
       },
       get list() {
         return Array.from(this._notes.values())
+      },
+      get listLength() {
+        return this.list.length
       },
       add() {
         return this._put({id: nanoid(), text: `New Note`})
@@ -43,6 +74,8 @@ function Notes(fire) {
     {
       add: m.action.bound,
       onEdit: m.action.bound,
+      onEditNext: m.action.bound,
+      onEditPrev: m.action.bound,
       _updateNotesListFromFirestore: m.action.bound,
       _put: m.action.bound,
     },
