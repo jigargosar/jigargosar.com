@@ -182,9 +182,12 @@ function createFireAuth(firebase) {
       R.isNil(user) ? 'ON_USER_NIL' : 'ON_USER_NOT_NIL',
     )
   })
-  m.autorun(() => {
-    console.log(fireAuth._authState)
-  })
+  m.autorun(
+    () => {
+      console.debug('fireAuth._authState', fireAuth._authState)
+    },
+    {name: 'fireAuth._authState'},
+  )
   return fireAuth
 }
 
