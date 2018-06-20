@@ -29,7 +29,7 @@ class NoteItem extends M {
     const NoteComp = !ns.isEditing(n.id) ? NoteItemText : NoteItemEdit
     return (
       <div className={cn('mv3')}>
-        <div className={cn('f6')}>{`Note id: ${id}`}</div>
+        {/*<div className={cn('f6')}>{`Note id: ${id}`}</div>*/}
         <NoteComp n={n} />
       </div>
     )
@@ -48,7 +48,15 @@ class NoteItemText extends M {
 }
 class NoteItemEdit extends M {
   r({ns, n}) {
-    return <div className={cn('f4 code blue')}>{`${n.text}`}</div>
+    // return <div className={cn('f4 code blue')}>{`${n.text}`}</div>
+    return (
+      <div className={cn('flex')}>
+        <input
+          className={cn('flex-auto pa2 f4 code blue')}
+          defaultValue={n.text}
+        />
+      </div>
+    )
   }
 }
 
