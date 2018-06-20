@@ -17,6 +17,7 @@ function Notes(fire) {
   const notes = m.observable.object(
     {
       _notes: m.observable.map([], {deep: false}),
+      _editingNoteId: null,
       get list() {
         return Array.from(this._notes.values())
       },

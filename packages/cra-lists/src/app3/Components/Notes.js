@@ -18,17 +18,17 @@ export class Notes extends M {
     return (
       <div>
         <Button onClick={() => s.n.add()}>ADD</Button>
-        {s.n.list.map(n => <NoteItem key={n.id} n={n} />)}
+        {s.n.list.map(n => <NoteItem key={n.id} id={n.id} n={n} />)}
       </div>
     )
   }
 }
 
 class NoteItem extends M {
-  r({s, n}) {
+  r({s, n, id}) {
     return (
-      <div key={n.id} className={cn('mv3')}>
-        <div className={cn('f6')}>{`Note id: ${n.id}`}</div>
+      <div className={cn('mv3')}>
+        <div className={cn('f6')}>{`Note id: ${id}`}</div>
         <div className={cn('f4 code')}>{`${n.text}`}</div>
       </div>
     )
