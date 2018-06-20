@@ -18,41 +18,32 @@ function Notes(fire) {
   const notes = m.observable.object(
     {
       _notes: m.observable.map([], {deep: false}),
-      _editingNoteId: null,
+      _eid: null,
       onEdit(id) {
-        this._editingNoteId = id
+        if (RA.isNotNil(this._eid)) this._eid = id
       },
       idAtIndex(i) {
         return this.list[i].id
       },
       get _indexOfEditingNoteId() {
-        return R.findIndex(
-          R.propEq('id', this._editingNoteId),
-          this.list,
-        )
+        return R.findIndex(R.propEq('id', this._eid), this.list)
       },
       onEditPrev() {
-        ow(
-          this._editingNoteId,
-          ow.string.label('_editingNoteId').nonEmpty,
-        )
+        ow(this._eid, ow.string.label('_eid').nonEmpty)
         const prevIdx = this._indexOfEditingNoteId - 1
         if (prevIdx >= 0) {
-          this._editingNoteId = this.idAtIndex(prevIdx)
+          this.onEdit(this.idAtIndex(prevIdx))
         }
       },
       onEditNext() {
-        ow(
-          this._editingNoteId,
-          ow.string.label('_editingNoteId').nonEmpty,
-        )
+        ow(this._eid, ow.string.label('_eid').nonEmpty)
         const nextIdx = this._indexOfEditingNoteId + 1
         if (nextIdx < this.listLength) {
-          this._editingNoteId = this.idAtIndex(nextIdx)
+          this.onEdit(this.idAtIndex(nextIdx))
         }
       },
       isEditing(id) {
-        return R.equals(this._editingNoteId, id)
+        return R.equals(this._eid, id)
       },
       get list() {
         return Array.from(this._notes.values())
