@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import ow from 'ow'
 import * as mu from 'mobx-utils/lib/mobx-utils'
-import Notes from './Notes'
+import Notes from './State/Notes'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
