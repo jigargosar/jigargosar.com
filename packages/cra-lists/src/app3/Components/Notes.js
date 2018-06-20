@@ -57,7 +57,13 @@ class NoteItemEdit extends M {
       <div className={cn('flex')}>
         <input
           ref={this.inputRef}
-          onKeyDown={ns.onEditNoteKeyDown}
+          onKeyDown={e => {
+            if (e.key === 'ArrowUp') {
+              console.log('ArrowUp')
+            } else {
+              console.log(e)
+            }
+          }}
           className={cn('flex-auto pa2 f4 code blue')}
           defaultValue={n.text}
         />

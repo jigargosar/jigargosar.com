@@ -37,18 +37,10 @@ function Notes(fire) {
       _updateNotesListFromFirestore(notes) {
         notes.forEach(this._put)
       },
-      onEditNoteKeyDown(e) {
-        if (e.key === 'ArrowUp') {
-          console.log('ArrowUp')
-        } else {
-          console.log(e)
-        }
-      },
     },
     {
       add: m.action.bound,
       onEdit: m.action.bound,
-      onEditNoteKeyDown: m.action.bound,
       _updateNotesListFromFirestore: m.action.bound,
       _put: m.action.bound,
     },
