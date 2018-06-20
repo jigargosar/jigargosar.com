@@ -1,5 +1,6 @@
 /*eslint-disable*/
 
+import ow from 'ow'
 const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
@@ -23,6 +24,7 @@ function Notes(fire) {
         return this._put({id: nanoid(), text: `New Note`})
       },
       _put(n) {
+        ow(n, ow.object.label('note').hasKeys('id', 'text'))
         this._notes.set(n.id, n)
       },
       _updateNotesListFromFirestore(notes) {
@@ -41,7 +43,7 @@ function Notes(fire) {
       fire.store.createUserCollectionRef('notes').onSnapshot(qs => {
         const docs = qs
           .docChanges()
-          .map(dc => R.merge(dc.doc.data(), {id: dc.id}))
+          .map(dc => R.merge(dc.doc.data(), {id: dc.doc.id}))
         notes._updateNotesListFromFirestore(docs)
       })
     }
