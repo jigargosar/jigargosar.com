@@ -77,9 +77,7 @@ function createFirestore(firebase, fire) {
     },
     createUserCollectionRef(collectionName) {
       validate('S', arguments)
-      return this.userRef(fire.auth.uid, firestore).collection(
-        collectionName,
-      )
+      return this.userRef.collection(collectionName)
     },
     get userDoc() {
       return mu.fromPromise(async resolve => {

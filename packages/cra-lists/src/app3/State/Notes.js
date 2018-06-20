@@ -26,10 +26,14 @@ function Notes(fire) {
         this._notes.set(n.id, n)
       },
       _updateNotesListFromFirestore(notes) {
-        notes.for(this._put)
+        notes.forEach(this._put)
       },
     },
-    {add: m.action.bound},
+    {
+      add: m.action.bound,
+      _updateNotesListFromFirestore: m.action.bound,
+      _put: m.action.bound,
+    },
     {name: 'Notes'},
   )
   m.autorun(() => {
