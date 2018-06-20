@@ -3,8 +3,11 @@
 /*eslint-disable*/
 import React, {Fragment as F} from 'react'
 import cn from 'classnames'
-import {M} from '../../StateContext'
+import {C, M, o, O} from '../../StateContext'
 import {Button} from '../UI'
+
+const R = require('ramda')
+const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
@@ -26,4 +29,11 @@ export class Notes extends M {
   }
 }
 
-Notes.propTypes = {}
+export const CollapsedString = o(
+  class CollapsedString extends C {
+    r({value, maxLength}) {
+      //todo: get some lib to do the truncation
+      return value
+    }
+  },
+)

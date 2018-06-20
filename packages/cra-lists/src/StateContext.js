@@ -74,3 +74,4 @@ export class C extends React.Component {
 }
 
 export {Observer as O}
+export {observer as o}
