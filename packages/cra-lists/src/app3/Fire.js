@@ -36,12 +36,6 @@ export const Fire = function() {
   const firestore = firebase.firestore()
   return m.observable(
     {
-      createUserCollectionRef(collectionName) {
-        validate('S', arguments)
-        return this.userRef(this.auth.uid, firestore).collection(
-          collectionName,
-        )
-      },
       get userRef() {
         return createFirestoreUserRef(this.uid, firestore)
       },
@@ -80,6 +74,12 @@ function createFirestore(firebase, fire) {
   return m.observable.object({
     get userRef() {
       return createFirestoreUserRef(fire.auth.uid, firestore)
+    },
+    createUserCollectionRef(collectionName) {
+      validate('S', arguments)
+      return this.userRef(fire.auth.uid, firestore).collection(
+        collectionName,
+      )
     },
     get userDoc() {
       return mu.fromPromise(async resolve => {
