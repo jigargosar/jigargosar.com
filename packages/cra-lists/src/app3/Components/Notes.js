@@ -58,11 +58,13 @@ class NoteItemEdit extends M {
         <input
           ref={this.inputRef}
           onKeyDown={e => {
-            if (e.key === 'ArrowUp') {
-              console.log('ArrowUp')
-            } else {
-              console.log(e)
+            console.log('NodeEditKeyDown', e.key, e)
+            const mapping = {
+              ArrowUp: ns.onEditPrev,
+              ArrowDown: ns.onEditNext,
             }
+            const mappingFn = R.propOr(R.identity, mapping)
+            mappingFn(e.key)()
           }}
           className={cn('flex-auto pa2 f4 code blue')}
           defaultValue={n.text}

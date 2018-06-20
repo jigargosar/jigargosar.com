@@ -21,6 +21,8 @@ function Notes(fire) {
       onEdit(id) {
         this._editingNoteId = id
       },
+      onEditPrev() {},
+      onEditNext() {},
       isEditing(id) {
         return R.equals(this._editingNoteId, id)
       },
