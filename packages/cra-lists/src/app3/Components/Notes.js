@@ -26,15 +26,29 @@ export class Notes extends M {
 
 class NoteItem extends M {
   r({ns, n, id}) {
+    const NoteComp = !ns.isEditing(n.id) ? NoteItemText : NoteItemEdit
     return (
       <div className={cn('mv3')}>
         <div className={cn('f6')}>{`Note id: ${id}`}</div>
-        <div
-          className={cn('f4 code', {blue: ns.isEditing(id)})}
-          onClick={() => ns.onEdit(id)}
-        >{`${n.text}`}</div>
+        <NoteComp n={n} />
       </div>
     )
+  }
+}
+
+class NoteItemText extends M {
+  r({ns, n}) {
+    return (
+      <div
+        className={cn('f4 code')}
+        onClick={() => ns.onEdit(n.id)}
+      >{`${n.text}`}</div>
+    )
+  }
+}
+class NoteItemEdit extends M {
+  r({ns, n}) {
+    return <div className={cn('f4 code blue')}>{`${n.text}`}</div>
   }
 }
 
