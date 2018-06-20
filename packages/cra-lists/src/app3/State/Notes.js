@@ -18,6 +18,12 @@ function Notes(fire) {
     {
       _notes: m.observable.map([], {deep: false}),
       _editingNoteId: null,
+      onEdit(id) {
+        this._editingNoteId = id
+      },
+      isEditing(id) {
+        return R.equals(this._editingNoteId, id)
+      },
       get list() {
         return Array.from(this._notes.values())
       },
@@ -34,6 +40,7 @@ function Notes(fire) {
     },
     {
       add: m.action.bound,
+      onEdit: m.action.bound,
       _updateNotesListFromFirestore: m.action.bound,
       _put: m.action.bound,
     },

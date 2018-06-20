@@ -19,7 +19,7 @@ function State() {
   return m.observable.object(
     {
       fire,
-      n: Notes(fire),
+      ns: Notes(fire),
     },
     {},
     {name: 'app3-state'},

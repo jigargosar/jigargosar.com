@@ -48,6 +48,7 @@ export const M = observer(
                   s: state,
                   fire: state.fire,
                   auth: state.fire.auth,
+                  ns: state.ns,
                   ...this.props,
                 })
               }
