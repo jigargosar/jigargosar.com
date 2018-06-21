@@ -125,7 +125,7 @@ function Notes(fire) {
         this._insertNewAt(this._eIdx + 1)
       },
       add() {
-        this._insertNewAt(0)
+        return this._insertNewAt(0)
       },
       _insertNewAt: m.flow(function*(idx) {
         yield this._onPreEdit()
@@ -144,7 +144,7 @@ function Notes(fire) {
           ),
           R.insert(idx, newNote),
         )(this.list)
-        this.onEdit(id)
+        yield this.onEdit(id)
       }),
       _put(n) {
         ow(n, ow.object.label('note').hasKeys('id', 'text'))
