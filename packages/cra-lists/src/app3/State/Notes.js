@@ -63,7 +63,6 @@ function Notes(fire) {
       },
 
       _saveOrDeleteEditingNote: m.flow(function*() {
-        debugger
         if (this._shouldSkipSaveOrDeleteEdit) return
         const text = this._eText
         const docRef = this._cRef.doc(this._eid)
