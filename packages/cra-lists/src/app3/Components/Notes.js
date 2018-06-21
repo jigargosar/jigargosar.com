@@ -16,12 +16,12 @@ const RA = require('ramda-adjunct')
 export class Notes extends M {
   r({ns}) {
     return (
-      <div>
-        <div className={cn('mb3')}>
+      <F>
+        <div className={cn('mv3')}>
           <Button onClick={() => ns.add()}>ADD</Button>
         </div>
         {ns.list.map(n => <NoteItem key={n.id} id={n.id} n={n} />)}
-      </div>
+      </F>
     )
   }
 }
