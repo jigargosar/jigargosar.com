@@ -81,7 +81,7 @@ function Notes(fire) {
         })
       }),
       _wrapFirestoreMod: m.flow(function*(fn, list) {
-        yield fn
+        yield fn()
         yield R.compose(
           a => Promise.all(a),
           RA.mapIndexed((n, sortIdx) =>
