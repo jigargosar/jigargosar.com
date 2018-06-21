@@ -43,10 +43,9 @@ function Notes(fire) {
         return fire.store.createUserCollectionRef('notes')
       },
       _saveEditingNote() {
-        this._cRef
-          .doc(this._eid)
-          .update({text: this._eText})
-          .catch(console.error)
+        const text = this._eText
+        const docRef = this._cRef.doc(this._eid)
+        docRef.update({text}).catch(console.error)
         Object.assign(this, {
           _eid: null,
           _eText: null,
@@ -97,10 +96,12 @@ function Notes(fire) {
         }
       },
       add: m.flow(function*() {
+        const id = nanoid()
         yield this._saveNewNote({
-          id: nanoid(),
+          id,
           text: `New Note`,
         })
+        this.onEdit(id)
       }),
       _put(n) {
         ow(n, ow.object.label('note').hasKeys('id', 'text'))
