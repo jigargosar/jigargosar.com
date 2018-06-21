@@ -11,6 +11,7 @@ const R = require('ramda')
 const m = require('mobx')
 const validate = require('aproba')
 const RA = require('ramda-adjunct')
+const RX = require('ramda-extension')
 
 /*eslint-enable*/
 
@@ -45,7 +46,10 @@ function Notes(fire) {
       _saveEditingNote() {
         const text = this._eText
         const docRef = this._cRef.doc(this._eid)
-        docRef.update({text}).catch(console.error)
+        const res = RX.isNilOrEmptyString(text)
+          ? docRef.delete()
+          : docRef.update({text})
+        res.catch(console.error)
         Object.assign(this, {
           _eid: null,
           _eText: null,
