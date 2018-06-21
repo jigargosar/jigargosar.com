@@ -34,6 +34,9 @@ function Notes(fire) {
           _eText: null,
         })
       },
+      _saveNewNote(n) {
+        return this._cRef.doc(n.id).set({text: n.text})
+      },
       onEdit(id) {
         if (RA.isNotNil(this._eid)) {
           this._saveEditingNote()
@@ -83,7 +86,7 @@ function Notes(fire) {
         return this.list.length
       },
       add() {
-        return this._put({id: nanoid(), text: `New Note`})
+        return this._saveNewNote({id: nanoid(), text: `New Note`})
       },
       _put(n) {
         ow(n, ow.object.label('note').hasKeys('id', 'text'))
