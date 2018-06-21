@@ -56,6 +56,7 @@ class NoteItemEdit extends M {
     return (
       <div className={cn('flex')}>
         <input
+          key={n.id}
           ref={this.inputRef}
           onKeyDown={e => {
             console.debug('NodeEditKeyDown', e.key, e)
@@ -67,7 +68,7 @@ class NoteItemEdit extends M {
             mappingFn(e.key)()
           }}
           className={cn('flex-auto pa2 f4 code blue')}
-          defaultValue={n.text}
+          defaultValue={ns.editText}
           onChange={e => ns.onEditTextChange(e.target.value)}
         />
       </div>

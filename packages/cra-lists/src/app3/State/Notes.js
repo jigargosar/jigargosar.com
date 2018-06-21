@@ -24,20 +24,29 @@ function Notes(fire) {
       get _cRef() {
         return fire.store.createUserCollectionRef('notes')
       },
+      _saveEditingNote() {
+        this._cRef
+          .doc(this._eid)
+          .update({text: this._eText})
+          .catch(console.error)
+        Object.assign(this, {
+          _eid: null,
+          _eText: null,
+        })
+      },
       onEdit(id) {
         if (RA.isNotNil(this._eid)) {
-          this._cRef
-            .doc(id)
-            .update({text: this._eText})
-            .catch(console.error)
-          Object.assign(this, {
-            _eid: null,
-            _eText: null,
-          })
+          this._saveEditingNote()
         }
 
         this._eid = id
         this._eText = this._notes.get(id).text
+      },
+      isEditing(id) {
+        return R.equals(this._eid, id)
+      },
+      get editText() {
+        return this._eText
       },
       onEditTextChange(val) {
         validate('S', arguments)
@@ -64,9 +73,6 @@ function Notes(fire) {
           this.onEdit(this.idAtIndex(nextIdx))
         }
       },
-      isEditing(id) {
-        return R.equals(this._eid, id)
-      },
       get list() {
         return R.sortBy(
           R.prop('text'),
@@ -84,7 +90,7 @@ function Notes(fire) {
         this._notes.set(n.id, n)
       },
       _updateNotesListFromFirestore(notes) {
-        notes.forEach(this._put)
+        notes.forEach(n => this._put(n))
       },
     },
     {
@@ -94,7 +100,6 @@ function Notes(fire) {
       onEditNext: m.action.bound,
       onEditPrev: m.action.bound,
       _updateNotesListFromFirestore: m.action.bound,
-      _put: m.action.bound,
     },
     {name: 'Notes'},
   )
