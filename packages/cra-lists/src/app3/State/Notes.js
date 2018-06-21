@@ -21,6 +21,9 @@ function Notes(fire) {
       _eid: null,
       _eText: null,
 
+      get(id) {
+        return this._notes.get(id)
+      },
       get _cRef() {
         return fire.store.createUserCollectionRef('notes')
       },
@@ -43,7 +46,7 @@ function Notes(fire) {
         }
 
         this._eid = id
-        this._eText = this._notes.get(id).text
+        this._eText = this.get(id).text
       },
       isEditing(id) {
         return R.equals(this._eid, id)
