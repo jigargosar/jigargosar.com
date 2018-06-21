@@ -64,17 +64,37 @@ function Notes(fire) {
         if (this._shouldSkipSaveOrDeleteEdit) return
         const text = this._eText
         const docRef = this._cRef.doc(this._eid)
-        yield RX.isNilOrEmptyString(text)
-          ? docRef.delete()
-          : docRef.update({text})
+        yield this._wrapFirestoreMod(
+          () =>
+            RX.isNilOrEmptyString(text)
+              ? docRef.delete()
+              : docRef.update({text}),
+          this.list,
+        )
+
         Object.assign(this, {
           _eid: null,
           _eText: null,
         })
       }),
-      _saveNewNote(n) {
-        return this._cRef.doc(n.id).set(n)
-      },
+      _wrapFirestoreMod: m.flow(function*(fn, list) {
+        yield fn
+        yield R.compose(
+          a => Promise.all(a),
+          RA.mapIndexed(
+            (n, sortIdx) =>
+              R.propEq('sortIdx', n)
+                ? this._cRef.doc(n.id).update({sortIdx})
+                : Promise.resolve(),
+          ),
+        )(list)
+      }),
+      _saveNewNote: m.flow(function*(n) {
+        yield this._wrapFirestoreMod(
+          () => this._cRef.doc(n.id).set(n),
+          R.insert(n.sortIdx, n, this.list),
+        )
+      }),
       _eid: null,
       _eText: null,
       get _eIdx() {
@@ -141,13 +161,7 @@ function Notes(fire) {
           createdAt: Date.now(),
         }
         yield this._saveNewNote(newNote)
-        yield R.compose(
-          a => Promise.all(a),
-          RA.mapIndexed((n, sortIdx) =>
-            this._cRef.doc(n.id).update({sortIdx}),
-          ),
-          R.insert(idx, newNote),
-        )(this.list)
+
         yield this.onEdit(id)
       }),
       _put(n) {
