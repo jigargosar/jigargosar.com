@@ -77,10 +77,10 @@ function Notes(fire) {
         }
       },
       get list() {
-        return R.sortBy(
-          R.prop('text'),
-          Array.from(this._notes.values()),
-        )
+        return Array.from(this._notes.values())
+      },
+      get _sortedList() {
+        return R.sortBy(R.prop('text'), this.list)
       },
       get listLength() {
         return this.list.length
