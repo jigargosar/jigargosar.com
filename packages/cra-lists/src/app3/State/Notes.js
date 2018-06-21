@@ -49,7 +49,11 @@ function Notes(fire) {
       get _cRef() {
         return fire.store.createUserCollectionRef('notes')
       },
+      get _isEditClean() {
+        return R.equals(this._eText, this.get(this._eid).text)
+      },
       _saveEditingNote: m.flow(function*() {
+        if (this._isEditClean) return
         const text = this._eText
         const docRef = this._cRef.doc(this._eid)
         yield RX.isNilOrEmptyString(text)
