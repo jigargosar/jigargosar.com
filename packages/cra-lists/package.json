@@ -22,6 +22,7 @@
     "fluture": "8.0.2",
     "found": "0.3.11",
     "history": "4.7.2",
+    "is-hotkey": "0.1.2",
     "kefir": "3.8.3",
     "kuker-emitters": "6.7.4",
     "lodash": "4.17.10",

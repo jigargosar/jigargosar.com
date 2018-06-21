@@ -110,14 +110,32 @@ function Notes(fire) {
           this.onEdit(this.idAtIndex(nextIdx))
         }
       },
-      add: m.flow(function*() {
+      onEditInsertBelow() {
+        ow(this._eid, ow.string.label('_eid').nonEmpty)
+        const nextIdx = this._eIdx + 1
+        if (nextIdx < this.listLength) {
+          this.onEdit(this.idAtIndex(nextIdx))
+        }
+      },
+      add() {
+        this._insertNewAt(0)
+      },
+      _insertNewAt: m.flow(function*(idx) {
         const id = nanoid()
-        yield this._saveNewNote({
+        const newNote = {
           id,
           text: `New Note`,
-          sortIdx: 0,
+          sortIdx: idx,
           createdAt: Date.now(),
-        })
+        }
+        yield this._saveNewNote(newNote)
+        yield R.compose(
+          a => Promise.all(a),
+          RA.mapIndexed((n, sortIdx) =>
+            this._cRef.doc(n.id).update({sortIdx}),
+          ),
+          R.insert(idx, newNote),
+        )(this.list)
         this.onEdit(id)
       }),
       _put(n) {
@@ -138,10 +156,12 @@ function Notes(fire) {
     },
     {
       add: m.action.bound,
+      _insertNewAt: m.action.bound,
       onEdit: m.action.bound,
       startEditing: m.action.bound,
       onEditTextChange: m.action.bound,
       onEditNext: m.action.bound,
+      onEditInsertBelow: m.action.bound,
       onEditPrev: m.action.bound,
       _updateNotesListFromFirestore: m.action.bound,
       _onFirestoreDocChanges: m.action.bound,

@@ -3,8 +3,9 @@
 /*eslint-disable*/
 import React, {Fragment as F} from 'react'
 import cn from 'classnames'
-import {C, M, o, O} from '../../StateContext'
+import {M} from '../../StateContext'
 import {Button} from '../UI'
+import isHotKey from 'is-hotkey'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -50,11 +51,16 @@ class NoteItemText extends M {
     )
   }
 }
+
+const isAnyHotKey = R.compose(R.anyPass, R.map(R.curryN(2, isHotKey)))
+
 class NoteItemEdit extends M {
   inputRef = React.createRef()
+
   componentDidMount() {
     this.inputRef.current.focus()
   }
+
   r({ns, n}) {
     return (
       <div className={cn(' flex f4 code pa1')}>
@@ -64,12 +70,19 @@ class NoteItemEdit extends M {
           ref={this.inputRef}
           onKeyDown={e => {
             console.debug('NodeEditKeyDown', e.key, e)
-            const mapping = {
-              ArrowUp: ns.onEditPrev,
-              ArrowDown: ns.onEditNext,
-            }
-            const mappingFn = R.propOr(R.identity, R.__, mapping)
-            mappingFn(e.key)()
+            // const mapping = {
+            //   ArrowUp: ns.onEditPrev,
+            //   ArrowDown: ns.onEditNext,
+            //   Enter: ns.onEditNext,
+            // }
+            // const mappingFn = R.propOr(R.identity, R.__, mapping)
+            // mappingFn(e.key)(e)
+
+            R.cond([
+              [isHotKey('ArrowUp'), ns.onEditPrev],
+              [isAnyHotKey(['enter', 'ArrowDown']), ns.onEditNext],
+              [isHotKey('mod+enter'), ns.onEditInsertBelow],
+            ])(e)
           }}
           defaultValue={ns.editText}
           onChange={e => ns.onEditTextChange(e.target.value)}
