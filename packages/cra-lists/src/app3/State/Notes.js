@@ -1,6 +1,7 @@
 /*eslint-disable*/
 
 import ow from 'ow'
+import {SF} from '../../safe-fun'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -39,7 +40,10 @@ function Notes(fire) {
       },
       get _sortedList() {
         return R.sortWith(
-          [R.ascend(R.prop('sortIdx'), R.descend('createdAt'))],
+          [
+            R.ascend(R.prop('sortIdx')),
+            R.descend(R.prop('createdAt')),
+          ],
           this._values,
         )
       },
@@ -65,7 +69,7 @@ function Notes(fire) {
         })
       }),
       _saveNewNote(n) {
-        return this._cRef.doc(n.id).set({text: n.text})
+        return this._cRef.doc(n.id).set(n)
       },
       _eid: null,
       _eText: null,
