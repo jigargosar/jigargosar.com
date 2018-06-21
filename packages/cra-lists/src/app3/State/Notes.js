@@ -109,6 +109,8 @@ function Notes(fire) {
         yield this._saveNewNote({
           id,
           text: `New Note`,
+          sortIdx: 0,
+          createdAt: Date.now(),
         })
         this.onEdit(id)
       }),
