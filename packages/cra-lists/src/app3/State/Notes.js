@@ -96,9 +96,12 @@ function Notes(fire) {
           this.onEdit(this.idAtIndex(nextIdx))
         }
       },
-      add() {
-        return this._saveNewNote({id: nanoid(), text: `New Note`})
-      },
+      add: m.flow(function*() {
+        yield this._saveNewNote({
+          id: nanoid(),
+          text: `New Note`,
+        })
+      }),
       _put(n) {
         ow(n, ow.object.label('note').hasKeys('id', 'text'))
         this._notes.set(n.id, n)
