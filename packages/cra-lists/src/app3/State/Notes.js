@@ -129,7 +129,7 @@ function Notes(fire) {
       },
       _onFirestoreDocChanges(docChanges) {
         docChanges.forEach(dc => {
-          console.log('dc', dc)
+          console.debug('_onFirestoreDocChanges: dc', dc)
           R.equals(dc.type, 'removed')
             ? this._notes.delete(dc.doc.id)
             : this._put(R.merge(dc.doc.data(), {id: dc.doc.id}))
@@ -162,8 +162,10 @@ function Notes(fire) {
   })
   window.addEventListener('keydown', e => {
     console.debug('window.keydown', e)
-    if (RX.startsWithPrefix('Arrow')) {
+    if (RX.startsWithPrefix('Arrow', e.key)) {
       notes.startEditing()
+    } else if (R.equals('a', e.key)) {
+      notes.add()
     }
   })
   return notes
