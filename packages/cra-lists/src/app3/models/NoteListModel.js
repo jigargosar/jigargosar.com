@@ -30,9 +30,17 @@ export function NoteListViewModel(noteListModel) {
     {
       _eid: null,
       _eText: null,
-      idAt(idx) {
+      _idAt(idx) {
         return R.pathOr(null, [idx, 'id'])(this.list.get(idx))
       },
+
+      _propAt(idx, name) {
+        return R.pathOr(null, [idx, name])(this.list.get(idx))
+      },
+      _textAt(idx) {
+        return this._propAt(idx, 'text')
+      },
+
       get _eIdx() {
         return R.find(R.propEq('id', this._eid))(this.list)
       },
@@ -44,11 +52,23 @@ export function NoteListViewModel(noteListModel) {
         validate('S', this._eid)
         this._eText = text
       },
+      _saveOrDeleteEdit() {
+        validate('S', this._eid)
+      },
       onEditPrev() {
-        const newEid = this.get(this._eIdx - 1)
+        const clampListIdx = R.clamp(0, this.list.length - 1)
+        const newIdx = clampListIdx(this._eIdx - 1)
+
+        if (R.equals(newIdx, this._eIdx)) return
+
+        const newEid = this._idAt(newIdx)
+        const newEText = _textAt(newIdx)
         // todo: save prev editing
-        this._eid = null
-        this._eText = null
+
+        this._saveOrDeleteEdit()
+
+        this._eid = newEid
+        this._eText = newEText
       },
     },
     {},
