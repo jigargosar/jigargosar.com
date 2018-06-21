@@ -72,6 +72,11 @@ function Notes(fire) {
       isEditing(id) {
         return R.equals(this._eid, id)
       },
+      startEditing() {
+        if (R.isNil(this._eid) && this.listLength > 0) {
+          this.onEdit(this.idAtIndex(0))
+        }
+      },
       onEdit(id) {
         if (RA.isNotNil(this._eid)) {
           this._saveEditingNote()
@@ -118,6 +123,7 @@ function Notes(fire) {
     {
       add: m.action.bound,
       onEdit: m.action.bound,
+      startEditing: m.action.bound,
       onEditTextChange: m.action.bound,
       onEditNext: m.action.bound,
       onEditPrev: m.action.bound,
@@ -133,6 +139,12 @@ function Notes(fire) {
           .map(dc => R.merge(dc.doc.data(), {id: dc.doc.id}))
         notes._updateNotesListFromFirestore(docs)
       })
+    }
+  })
+  window.addEventListener('keydown', e => {
+    console.debug('window.keydown', e)
+    if (RX.startsWithPrefix('Arrow')) {
+      notes.startEditing()
     }
   })
   return notes
