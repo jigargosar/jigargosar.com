@@ -119,6 +119,14 @@ function Notes(fire) {
       _updateNotesListFromFirestore(notes) {
         notes.forEach(n => this._put(n))
       },
+      _onFirestoreDocChanges(docChanges) {
+        docChanges.forEach(dc => {
+          console.log('dc', dc)
+          R.equals(dc.type, 'removed')
+            ? this._notes.delete(dc.doc.id)
+            : this._put(R.merge(dc.doc.data(), {id: dc.doc.id}))
+        })
+      },
     },
     {
       add: m.action.bound,
@@ -128,16 +136,19 @@ function Notes(fire) {
       onEditNext: m.action.bound,
       onEditPrev: m.action.bound,
       _updateNotesListFromFirestore: m.action.bound,
+      _onFirestoreDocChanges: m.action.bound,
     },
     {name: 'Notes'},
   )
   m.autorun(() => {
     if (fire.auth.isSignedIn) {
       fire.store.createUserCollectionRef('notes').onSnapshot(qs => {
-        const docs = qs
-          .docChanges()
-          .map(dc => R.merge(dc.doc.data(), {id: dc.doc.id}))
-        notes._updateNotesListFromFirestore(docs)
+        const documentChanges = qs.docChanges()
+        notes._onFirestoreDocChanges(documentChanges)
+        // const docs = documentChanges.map(dc =>
+        //   R.merge(dc.doc.data(), {id: dc.doc.id}),
+        // )
+        // notes._updateNotesListFromFirestore(docs)
       })
     }
   })
