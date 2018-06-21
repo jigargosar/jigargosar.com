@@ -17,12 +17,6 @@ const RA = require('ramda-adjunct')
 function Notes(fire) {
   const notes = m.observable.object(
     {
-      _notes: m.observable.map([], {deep: false}),
-      _eid: null,
-      _eText: null,
-      get _eIdx() {
-        return R.findIndex(R.propEq('id', this._eid), this.list)
-      },
       // _eIdx: -1,
       // get _eid() {
       //   return R.path(['list', this._eIdx, 'id'], this)
@@ -32,8 +26,20 @@ function Notes(fire) {
       //   this._eIdx = R.findIndex(R.propEq('id', id), this.list)
       //   // we have to set _eText, etc.
       // },
+      _notes: m.observable.map([], {deep: false}),
+      get list() {
+        return Array.from(this._notes.values())
+      },
+      get _sortedList() {
+        return R.sortBy(R.prop('text'), this.list)
+      },
       get(id) {
         return this._notes.get(id)
+      },
+      _eid: null,
+      _eText: null,
+      get _eIdx() {
+        return R.findIndex(R.propEq('id', this._eid), this.list)
       },
       get _cRef() {
         return fire.store.createUserCollectionRef('notes')
@@ -86,12 +92,6 @@ function Notes(fire) {
         if (nextIdx < this.listLength) {
           this.onEdit(this.idAtIndex(nextIdx))
         }
-      },
-      get list() {
-        return Array.from(this._notes.values())
-      },
-      get _sortedList() {
-        return R.sortBy(R.prop('text'), this.list)
       },
       get listLength() {
         return this.list.length
