@@ -77,23 +77,6 @@ function Notes(fire) {
           _eText: null,
         })
       }),
-      _updateEditingNote: m.flow(function*() {
-        if (this._shouldSkipSaveOrDeleteEdit) return
-        const text = this._eText
-        const docRef = this._cRef.doc(this._eid)
-        yield this._wrapFirestoreMod(
-          () =>
-            RX.isNilOrEmptyString(text)
-              ? docRef.delete()
-              : docRef.update({text}),
-          this.list,
-        )
-
-        Object.assign(this, {
-          _eid: null,
-          _eText: null,
-        })
-      }),
       _wrapFirestoreMod: m.flow(function*(fn, list) {
         yield fn
         yield R.compose(
