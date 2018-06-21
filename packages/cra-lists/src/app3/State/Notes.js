@@ -29,13 +29,19 @@ function Notes(fire) {
       // },
       _notes: m.observable.map([], {deep: false}),
       get list() {
+        return this._sortedList
+      },
+      get _values() {
         return Array.from(this._notes.values())
       },
       get listLength() {
         return this.list.length
       },
       get _sortedList() {
-        return R.sortBy(R.prop('text'), this.list)
+        return R.sortWith(
+          [R.ascend(R.prop('sortIdx'), R.descend('createdAt'))],
+          this._values,
+        )
       },
       get(id) {
         return this._notes.get(id)
