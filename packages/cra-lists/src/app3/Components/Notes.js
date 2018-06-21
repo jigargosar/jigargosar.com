@@ -70,16 +70,9 @@ class NoteItemEdit extends M {
           className={cn('flex-auto lh-copy f4 pa1 ba bw1 b--blue')}
           key={n.id}
           ref={this.inputRef}
+          placeholder={'New Note...'}
           onKeyDown={e => {
             console.debug('NodeEditKeyDown', e.key, e)
-            // const mapping = {
-            //   ArrowUp: ns.onEditPrev,
-            //   ArrowDown: ns.onEditNext,
-            //   Enter: ns.onEditNext,
-            // }
-            // const mappingFn = R.propOr(R.identity, R.__, mapping)
-            // mappingFn(e.key)(e)
-
             R.cond([
               [isHotKey('ArrowUp'), ns.onEditPrev],
               [isAnyHotKey(['enter', 'ArrowDown']), ns.onEditNext],
