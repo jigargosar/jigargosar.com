@@ -20,7 +20,18 @@ function Notes(fire) {
       _notes: m.observable.map([], {deep: false}),
       _eid: null,
       _eText: null,
-
+      get _eIdx() {
+        return R.findIndex(R.propEq('id', this._eid), this.list)
+      },
+      // _eIdx: -1,
+      // get _eid() {
+      //   return R.path(['list', this._eIdx, 'id'], this)
+      // },
+      //
+      // set _eid(id) {
+      //   this._eIdx = R.findIndex(R.propEq('id', id), this.list)
+      //   // we have to set _eText, etc.
+      // },
       get(id) {
         return this._notes.get(id)
       },
@@ -62,19 +73,16 @@ function Notes(fire) {
       idAtIndex(i) {
         return this.list[i].id
       },
-      get _indexOfEditingNoteId() {
-        return R.findIndex(R.propEq('id', this._eid), this.list)
-      },
       onEditPrev() {
         ow(this._eid, ow.string.label('_eid').nonEmpty)
-        const prevIdx = this._indexOfEditingNoteId - 1
+        const prevIdx = this._eIdx - 1
         if (prevIdx >= 0) {
           this.onEdit(this.idAtIndex(prevIdx))
         }
       },
       onEditNext() {
         ow(this._eid, ow.string.label('_eid').nonEmpty)
-        const nextIdx = this._indexOfEditingNoteId + 1
+        const nextIdx = this._eIdx + 1
         if (nextIdx < this.listLength) {
           this.onEdit(this.idAtIndex(nextIdx))
         }
