@@ -17,7 +17,9 @@ export class Notes extends M {
   r({ns}) {
     return (
       <div>
-        <Button onClick={() => ns.add()}>ADD</Button>
+        <div className={cn('mb3')}>
+          <Button onClick={() => ns.add()}>ADD</Button>
+        </div>
         {ns.list.map(n => <NoteItem key={n.id} id={n.id} n={n} />)}
       </div>
     )
@@ -28,8 +30,8 @@ class NoteItem extends M {
   r({ns, n, id}) {
     const NoteComp = !ns.isEditing(n.id) ? NoteItemText : NoteItemEdit
     return (
-      <div className={cn('mv3')}>
-        <div className={cn('f6')}>{`Note id: ${id}`}</div>
+      <div className={cn('mv0')}>
+        {/*<div className={cn('f6')}>{`Note id: ${id}`}</div>*/}
         <NoteComp n={n} />
       </div>
     )
@@ -40,9 +42,11 @@ class NoteItemText extends M {
   r({ns, n}) {
     return (
       <div
-        className={cn('pa2 f4 code truncate ba bw1 b--transparent')}
+        className={cn('pa1 f4 code truncate ba bw1 b--transparent')}
         onClick={() => ns.onEdit(n.id)}
-      >{`${n.text}`}</div>
+      >
+        <div className={cn('pa1')}>{`${n.text}`}</div>
+      </div>
     )
   }
 }
@@ -53,7 +57,7 @@ class NoteItemEdit extends M {
   }
   r({ns, n}) {
     return (
-      <div className={cn('flex f4 code pa1')}>
+      <div className={cn(' flex f4 code pa1')}>
         <input
           className={cn('flex-auto lh-copy f4 pa1 ba bw1 b--blue')}
           key={n.id}
