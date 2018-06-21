@@ -184,15 +184,22 @@ function Notes(fire) {
       })
     }
   })
-  window.addEventListener('keydown', e => {
-    console.debug('window.keydown', e)
-    if (e.target instanceof window.HTMLInputElement) return
-    if (RX.startsWithPrefix('Arrow', e.key)) {
-      notes.startEditing()
-    } else if (R.equals('a', e.key)) {
-      notes.add()
-    }
-  })
+
+  function addWindowKeyEventListener() {
+    window.addEventListener('keydown', e => {
+      console.debug('window.keydown', e)
+      if (e.target instanceof window.HTMLInputElement) return
+      if (RX.startsWithPrefix('Arrow', e.key)) {
+        notes.startEditing()
+      } else if (R.equals('a', e.key)) {
+        notes.add()
+      }
+    })
+  }
+
+  if (!module.hot || !module.hot.data) {
+    addWindowKeyEventListener()
+  }
   return notes
 }
 
