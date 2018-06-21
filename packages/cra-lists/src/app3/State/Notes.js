@@ -232,7 +232,7 @@ function Notes(fire) {
 
 if (module.hot) {
   module.hot.dispose(data => {
-    console.warn(
+    console.debug(
       `window.removeEventListener('keydown', listener)`,
       listener,
     )
