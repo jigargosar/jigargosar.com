@@ -40,7 +40,7 @@ class NoteItemText extends M {
   r({ns, n}) {
     return (
       <div
-        className={cn('f4 code truncate')}
+        className={cn('pa2 f4 code truncate ba bw1 b--transparent')}
         onClick={() => ns.onEdit(n.id)}
       >{`${n.text}`}</div>
     )
@@ -52,10 +52,10 @@ class NoteItemEdit extends M {
     this.inputRef.current.focus()
   }
   r({ns, n}) {
-    // return <div className={cn('f4 code blue')}>{`${n.text}`}</div>
     return (
-      <div className={cn('flex')}>
+      <div className={cn('flex f4 code pa1')}>
         <input
+          className={cn('flex-auto lh-copy f4 pa1 ba bw1 b--blue')}
           key={n.id}
           ref={this.inputRef}
           onKeyDown={e => {
@@ -67,7 +67,6 @@ class NoteItemEdit extends M {
             const mappingFn = R.propOr(R.identity, R.__, mapping)
             mappingFn(e.key)()
           }}
-          className={cn('flex-auto pa2 f4 code blue')}
           defaultValue={ns.editText}
           onChange={e => ns.onEditTextChange(e.target.value)}
         />
