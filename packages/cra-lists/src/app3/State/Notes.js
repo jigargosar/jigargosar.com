@@ -30,16 +30,14 @@ function Notes(fire) {
       get list() {
         return Array.from(this._notes.values())
       },
+      get listLength() {
+        return this.list.length
+      },
       get _sortedList() {
         return R.sortBy(R.prop('text'), this.list)
       },
       get(id) {
         return this._notes.get(id)
-      },
-      _eid: null,
-      _eText: null,
-      get _eIdx() {
-        return R.findIndex(R.propEq('id', this._eid), this.list)
       },
       get _cRef() {
         return fire.store.createUserCollectionRef('notes')
@@ -57,6 +55,20 @@ function Notes(fire) {
       _saveNewNote(n) {
         return this._cRef.doc(n.id).set({text: n.text})
       },
+      _eid: null,
+      _eText: null,
+      get _eIdx() {
+        return R.findIndex(R.propEq('id', this._eid), this.list)
+      },
+      get editText() {
+        return this._eText
+      },
+      idAtIndex(i) {
+        return this.list[i].id
+      },
+      isEditing(id) {
+        return R.equals(this._eid, id)
+      },
       onEdit(id) {
         if (RA.isNotNil(this._eid)) {
           this._saveEditingNote()
@@ -65,19 +77,10 @@ function Notes(fire) {
         this._eid = id
         this._eText = this.get(id).text
       },
-      isEditing(id) {
-        return R.equals(this._eid, id)
-      },
-      get editText() {
-        return this._eText
-      },
       onEditTextChange(val) {
         validate('S', arguments)
         ow(this._eid, ow.string.label('_eid').nonEmpty)
         this._eText = val
-      },
-      idAtIndex(i) {
-        return this.list[i].id
       },
       onEditPrev() {
         ow(this._eid, ow.string.label('_eid').nonEmpty)
@@ -92,9 +95,6 @@ function Notes(fire) {
         if (nextIdx < this.listLength) {
           this.onEdit(this.idAtIndex(nextIdx))
         }
-      },
-      get listLength() {
-        return this.list.length
       },
       add() {
         return this._saveNewNote({id: nanoid(), text: `New Note`})
