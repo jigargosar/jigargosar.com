@@ -132,7 +132,7 @@ function Notes(fire) {
         const id = nanoid()
         const newNote = {
           id,
-          text: `New Note`,
+          text: ``,
           sortIdx: idx,
           createdAt: Date.now(),
         }
