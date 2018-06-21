@@ -16,6 +16,8 @@ const RX = require('ramda-extension')
 
 /*eslint-enable*/
 
+let listener = null
+
 function Notes(fire) {
   const notes = m.observable.object(
     {
@@ -61,6 +63,7 @@ function Notes(fire) {
       },
 
       _saveOrDeleteEditingNote: m.flow(function*() {
+        debugger
         if (this._shouldSkipSaveOrDeleteEdit) return
         const text = this._eText
         const docRef = this._cRef.doc(this._eid)
@@ -81,11 +84,8 @@ function Notes(fire) {
         yield fn
         yield R.compose(
           a => Promise.all(a),
-          RA.mapIndexed(
-            (n, sortIdx) =>
-              R.propEq('sortIdx', n)
-                ? this._cRef.doc(n.id).update({sortIdx})
-                : Promise.resolve(),
+          RA.mapIndexed((n, sortIdx) =>
+            this._cRef.doc(n.id).update({sortIdx}),
           ),
         )(list)
       }),
@@ -206,23 +206,27 @@ function Notes(fire) {
       })
     }
   })
-
-  function addWindowKeyEventListener() {
-    window.addEventListener('keydown', e => {
-      console.debug('window.keydown', e)
-      if (e.target instanceof window.HTMLInputElement) return
-      if (RX.startsWithPrefix('Arrow', e.key)) {
-        notes.startEditing()
-      } else if (R.equals('a', e.key)) {
-        notes.add()
-      }
-    })
+  listener = function(e) {
+    console.debug('window.keydown', e)
+    if (e.target instanceof window.HTMLInputElement) return
+    if (RX.startsWithPrefix('Arrow', e.key)) {
+      notes.startEditing()
+    } else if (R.equals('a', e.key)) {
+      notes.add()
+    }
   }
+  window.addEventListener('keydown', listener)
 
-  if (!module.hot || !module.hot.data) {
-    addWindowKeyEventListener()
-  }
   return notes
 }
 
+if (module.hot) {
+  module.hot.dispose(data => {
+    console.warn(
+      `window.removeEventListener('keydown', listener)`,
+      listener,
+    )
+    window.removeEventListener('keydown', listener)
+  })
+}
 export default Notes
