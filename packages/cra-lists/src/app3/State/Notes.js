@@ -56,8 +56,12 @@ function Notes(fire) {
       get _isEditClean() {
         return R.equals(this._eText, this.get(this._eid).text)
       },
-      _saveEditingNote: m.flow(function*() {
-        if (this._isEditClean) return
+      get _shouldSkipSaveOrDeleteEdit() {
+        return RA.isNonEmptyString(this._eText) && this._isEditClean
+      },
+
+      _saveOrDeleteEditingNote: m.flow(function*() {
+        if (this._shouldSkipSaveOrDeleteEdit) return
         const text = this._eText
         const docRef = this._cRef.doc(this._eid)
         yield RX.isNilOrEmptyString(text)
@@ -92,7 +96,7 @@ function Notes(fire) {
       },
       _onPreEdit() {
         if (RA.isNotNil(this._eid)) {
-          return this._saveEditingNote()
+          return this._saveOrDeleteEditingNote()
         }
       },
       onEdit: m.flow(function*(id) {
