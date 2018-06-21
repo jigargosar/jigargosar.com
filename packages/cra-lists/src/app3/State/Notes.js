@@ -1,7 +1,6 @@
 /*eslint-disable*/
 
 import ow from 'ow'
-import {SF} from '../../safe-fun'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -17,6 +16,23 @@ const RX = require('ramda-extension')
 /*eslint-enable*/
 
 let listener = null
+
+function createNewNoteAtIdx(idx) {
+  return {
+    id: nanoid(),
+    text: ``,
+    sortIdx: idx,
+    createdAt: Date.now(),
+  }
+}
+
+function updateNoteAndModifiedAtIfChanged({text}, note) {
+  if (R.equals(note, R.merge(note, {text}))) return note
+  return R.merge(note, {
+    text,
+    modifiedAt: Date.now(),
+  })
+}
 
 function Notes(fire) {
   const notes = m.observable.object(
@@ -152,16 +168,11 @@ function Notes(fire) {
       },
       _insertNewAt: m.flow(function*(idx) {
         yield this._onPreEdit()
-        const id = nanoid()
-        const newNote = {
-          id,
-          text: ``,
-          sortIdx: idx,
-          createdAt: Date.now(),
-        }
+
+        const newNote = createNewNoteAtIdx(idx)
         yield this._saveNewNote(newNote)
 
-        yield this.onEdit(id)
+        yield this.onEdit(newNote.id)
       }),
       _put(n) {
         ow(n, ow.object.label('note').hasKeys('id', 'text'))
