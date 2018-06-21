@@ -49,18 +49,17 @@ function Notes(fire) {
       get _cRef() {
         return fire.store.createUserCollectionRef('notes')
       },
-      _saveEditingNote() {
+      _saveEditingNote: m.flow(function*() {
         const text = this._eText
         const docRef = this._cRef.doc(this._eid)
-        const res = RX.isNilOrEmptyString(text)
+        yield RX.isNilOrEmptyString(text)
           ? docRef.delete()
           : docRef.update({text})
-        res.catch(console.error)
         Object.assign(this, {
           _eid: null,
           _eText: null,
         })
-      },
+      }),
       _saveNewNote(n) {
         return this._cRef.doc(n.id).set({text: n.text})
       },
@@ -83,14 +82,17 @@ function Notes(fire) {
           this.onEdit(this.idAtIndex(0))
         }
       },
-      onEdit(id) {
+      _onPreEdit() {
         if (RA.isNotNil(this._eid)) {
-          this._saveEditingNote()
+          return this._saveEditingNote()
         }
+      },
+      onEdit: m.flow(function*(id) {
+        yield this._onPreEdit()
 
         this._eid = id
         this._eText = this.get(id).text
-      },
+      }),
       onEditTextChange(val) {
         validate('S', arguments)
         ow(this._eid, ow.string.label('_eid').nonEmpty)
@@ -112,15 +114,13 @@ function Notes(fire) {
       },
       onEditInsertBelow() {
         ow(this._eid, ow.string.label('_eid').nonEmpty)
-        const nextIdx = this._eIdx + 1
-        if (nextIdx < this.listLength) {
-          this.onEdit(this.idAtIndex(nextIdx))
-        }
+        this._insertNewAt(this._eIdx + 1)
       },
       add() {
         this._insertNewAt(0)
       },
       _insertNewAt: m.flow(function*(idx) {
+        yield this._onPreEdit()
         const id = nanoid()
         const newNote = {
           id,
@@ -182,6 +182,7 @@ function Notes(fire) {
   })
   window.addEventListener('keydown', e => {
     console.debug('window.keydown', e)
+    if (e.target instanceof window.HTMLInputElement) return
     if (RX.startsWithPrefix('Arrow', e.key)) {
       notes.startEditing()
     } else if (R.equals('a', e.key)) {

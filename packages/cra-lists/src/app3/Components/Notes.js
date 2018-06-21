@@ -32,7 +32,9 @@ class NoteItem extends M {
     const NoteComp = !ns.isEditing(n.id) ? NoteItemText : NoteItemEdit
     return (
       <div className={cn('mv0')}>
-        {/*<div className={cn('f6')}>{`Note id: ${id}`}</div>*/}
+        <div className={cn('f6')}>{`Note id: ${id} sortIdx: ${
+          n.sortIdx
+        }`}</div>
         <NoteComp n={n} />
       </div>
     )
