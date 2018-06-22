@@ -26,26 +26,6 @@ const StateContext = React.createContext(null)
 
 export const StateProvider = StateContext.Provider
 
-export const withS = BaseComponent =>
-  class WithState extends React.Component {
-    render() {
-      const {children, ...rest} = this.props
-      return (
-        <StateContext.Consumer>
-          {state => (
-            <Observer>
-              {() => (
-                <BaseComponent state={state} {...rest}>
-                  {children}
-                </BaseComponent>
-              )}
-            </Observer>
-          )}
-        </StateContext.Consumer>
-      )
-    }
-  }
-
 export class C extends React.Component {
   render() {
     return this.r(this.props)
@@ -53,6 +33,23 @@ export class C extends React.Component {
 
   r(props) {
     return props.render ? props.render(this.props) : null
+  }
+}
+
+export const withS = BaseComponent => {
+  const ObserverBaseComponent = observer(BaseComponent)
+  return class WithS extends C {
+    r({children, ...rest}) {
+      return (
+        <StateContext.Consumer>
+          {state => (
+            <ObserverBaseComponent state={state} {...state} {...rest}>
+              {children}
+            </ObserverBaseComponent>
+          )}
+        </StateContext.Consumer>
+      )
+    }
   }
 }
 
