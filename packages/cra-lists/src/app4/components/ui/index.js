@@ -1,8 +1,7 @@
 // Foo
 
 /*eslint-disable*/
-import React, {Component as RC} from 'react'
-import cn from 'classnames'
+import React from 'react'
 import styled from 'styled-components'
 
 /*eslint-enable*/
