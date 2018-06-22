@@ -26,7 +26,7 @@ const StateContext = React.createContext(null)
 
 export const StateProvider = StateContext.Provider
 
-const withState = BaseComponent =>
+export const withS = BaseComponent =>
   class WithState extends React.Component {
     render() {
       const {children, ...rest} = this.props

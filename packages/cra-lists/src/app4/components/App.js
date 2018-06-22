@@ -9,7 +9,7 @@ import {
   RootContainer,
   Title,
 } from './ui'
-import {RC, renderKeyedById} from './utils'
+import {C, renderKeyedById, withS} from './utils'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -29,18 +29,20 @@ const NoteList = ({noteList}) => (
   <List>{renderKeyedById(Note, 'note', noteList)}</List>
 )
 
-class App extends RC {
-  render() {
-    return (
-      <RootContainer>
-        <CenterLayout>
-          <Title>Notes</Title>
-          <NoteList noteList={createNoteListOfSize(10)} />
-        </CenterLayout>
-      </RootContainer>
-    )
-  }
-}
+const App = withS(
+  class App extends C {
+    render() {
+      return (
+        <RootContainer>
+          <CenterLayout>
+            <Title>Notes</Title>
+            <NoteList noteList={createNoteListOfSize(10)} />
+          </CenterLayout>
+        </RootContainer>
+      )
+    }
+  },
+)
 
 App.propTypes = {}
 
