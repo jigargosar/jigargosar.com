@@ -1,6 +1,6 @@
 import {oObject} from './utils'
-import {NoteStore} from './NoteStore'
+import {NotesCollection} from './NotesCollection'
 
 export function State() {
-  return oObject({ns: NoteStore()})
+  return oObject({nc: NotesCollection()})
 }

@@ -1,5 +1,5 @@
 import {oObject} from './utils'
 
-export function NoteStore() {
+export function NotesCollection() {
   return oObject({notes: []})
 }
