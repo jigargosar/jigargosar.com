@@ -55,7 +55,7 @@
     "react-memoize-one": "0.1.0",
     "react-router": "4.3.1",
     "react-router-dom": "4.3.1",
-    "react-scripts": "^2.0.0-next.3e165448",
+    "react-scripts": "^1.1.4",
     "react-spring": "5.3.18",
     "recompose": "0.27.1",
     "tachyons": "4.10.0",
@@ -65,11 +65,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "ti": "env JEST_PUPPETEER_CONFIG=e2e/jest-puppeteer.config.js HEADLESS=false jest -c e2e/jest.config.js --watch",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
     "flow-bin": "0.75.0",
-    "jest-puppeteer": "^3.2.1"
+    "jest-puppeteer": "^3.2.1",
+    "puppeteer": "^1.5.0"
   },
   "browserslist": {
     "development": [
@@ -77,6 +79,10 @@
       "last 2 firefox versions",
       "last 2 edge versions"
     ],
-    "production": [">0.25%", "not op_mini all", "ie 11"]
+    "production": [
+      ">0.25%",
+      "not op_mini all",
+      "ie 11"
+    ]
   }
 }
