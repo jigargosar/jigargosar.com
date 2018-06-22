@@ -13,7 +13,7 @@ export const CenterContainer = styled.div.attrs({
   className: 'center mw7 mv3 ph3',
 })``
 
-export const Root = styled.div.attrs({
+export const RootContainer = styled.div.attrs({
   className: 'sans-serif f5 lh-copy',
 })``
 

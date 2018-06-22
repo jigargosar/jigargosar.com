@@ -3,7 +3,7 @@
 /*eslint-disable*/
 import React from 'react'
 import cn from 'classnames'
-import {CenterContainer, Root, Title} from './ui'
+import {CenterContainer, RootContainer, Title} from './ui'
 import {RC} from './utils'
 
 /*eslint-enable*/
@@ -13,12 +13,12 @@ import {RC} from './utils'
 class App extends RC {
   render() {
     return (
-      <Root>
+      <RootContainer>
         <CenterContainer>
           <Title>Notes</Title>
           <div>Notes List</div>
         </CenterContainer>
-      </Root>
+      </RootContainer>
     )
   }
 }
