@@ -40,8 +40,6 @@ class App extends RC {
       <RootContainer>
         <CenterLayout>
           <Title>Notes</Title>
-        </CenterLayout>
-        <CenterLayout>
           <List>{renderKeyedById(Note, 'note', noteList)}</List>
         </CenterLayout>
       </RootContainer>

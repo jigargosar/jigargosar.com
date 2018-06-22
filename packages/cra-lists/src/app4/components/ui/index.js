@@ -30,5 +30,5 @@ export const List = styled.div.attrs({
 })``
 
 export const ListItem = styled.div.attrs({
-  className: 'mv3 mh3',
+  className: 'ma3',
 })``
