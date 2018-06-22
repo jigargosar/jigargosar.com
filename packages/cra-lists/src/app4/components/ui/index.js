@@ -9,11 +9,11 @@ import {cx as cn} from 'ramda-extension'
 
 /*eslint-disable no-empty-pattern*/
 
-export const Container = styled.div.attrs({
+export const CenterContainer = styled.div.attrs({
   className: 'center mw7 mv3 ph3',
 })``
 
-export const RootContainer = styled(Container).attrs({
+export const Root = styled.div.attrs({
   className: 'sans-serif f5 lh-copy',
 })``
 
