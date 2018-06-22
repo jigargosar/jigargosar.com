@@ -1,7 +1,7 @@
 // Foo
 
 /*eslint-disable*/
-import React, {Fragment as F, Component as RC} from 'react'
+import React, {Component as RC, Fragment as F} from 'react'
 import {observer as o, Observer as O} from 'mobx-react'
 
 const R = require('ramda')
