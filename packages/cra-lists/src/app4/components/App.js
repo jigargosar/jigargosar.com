@@ -12,6 +12,7 @@ import {
   Title,
 } from './ui'
 import {RC} from './utils'
+import {o} from '../../StateContext'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -24,20 +25,24 @@ const createNoteListOfSize = R.compose(
   R.map(i => ({id: `${i}`, text: `Note Text ${i}`})),
   R.times(R.identity),
 )
+
+function renderKeyedById(Component, propName, idList) {
+  return R.map(value => (
+    <Component key={value.id} {...{[propName]: value}} />
+  ))(idList)
+}
+
+const Note = o(({note}) => <ListItem>{note.text}</ListItem>)
 class App extends RC {
   render() {
-    const list = createNoteListOfSize(10)
+    const noteList = createNoteListOfSize(10)
     return (
       <RootContainer>
         <CenterLayout>
           <Title>Notes</Title>
         </CenterLayout>
         <CenterLayout>
-          <List>
-            {R.map(({id, text}) => (
-              <ListItem key={id}>{text}</ListItem>
-            ))(list)}
-          </List>
+          <List>{renderKeyedById(Note, 'note', noteList)}</List>
         </CenterLayout>
       </RootContainer>
     )
