@@ -36,14 +36,17 @@ export class C extends React.Component {
   }
 }
 
-export const withS = BaseComponent => {
+export const i = (...statePropsNames) => BaseComponent => {
   const ObserverBaseComponent = observer(BaseComponent)
   return class WithS extends C {
     r({children, ...rest}) {
       return (
         <StateContext.Consumer>
           {state => (
-            <ObserverBaseComponent state={state} {...state} {...rest}>
+            <ObserverBaseComponent
+              {...R.pick(statePropsNames, state)}
+              {...rest}
+            >
               {children}
             </ObserverBaseComponent>
           )}

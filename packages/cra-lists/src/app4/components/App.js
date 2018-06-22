@@ -9,7 +9,7 @@ import {
   RootContainer,
   Title,
 } from './ui'
-import {C, o, renderKeyedById, withS} from './utils'
+import {C, o, renderKeyedById, i} from './utils'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -18,7 +18,7 @@ const RA = require('ramda-adjunct')
 
 /*eslint-disable no-empty-pattern*/
 
-const Note = withS(
+const Note = o(
   class Note extends C {
     r({note}) {
       return <ListItem>{note.text}</ListItem>
@@ -26,7 +26,7 @@ const Note = withS(
   },
 )
 
-const NoteList = withS(
+const NoteList = i('noteList')(
   class NoteList extends C {
     r({noteList}) {
       return <List>{renderKeyedById(Note, 'note', noteList)}</List>
@@ -34,7 +34,7 @@ const NoteList = withS(
   },
 )
 
-const App = withS(
+const App = o(
   class App extends C {
     r() {
       return (
