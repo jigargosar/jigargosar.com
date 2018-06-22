@@ -12,9 +12,6 @@
     "bracketSpacing": false,
     "jsxBracketSameLine": false
   },
-  "jest": {
-    "preset": "jest-puppeteer"
-  },
   "dependencies": {
     "aproba": "2.0.0",
     "ava": "0.25.0",
