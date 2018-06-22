@@ -1,6 +1,6 @@
 /*eslint-disable*/
 
-import {createTransformer, oObject} from '../o-util'
+import {createTransformer, oArray, oObject} from '../o-util'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -16,7 +16,7 @@ const RX = require('ramda-extension')
 /*eslint-enable*/
 
 export function NoteCollection(initialList = []) {
-  return oObject({list: initialList})
+  return oObject({list: oArray(initialList, {deep: true})})
 }
 const noteTransformer = vm => {
   validate('O', [vm])
