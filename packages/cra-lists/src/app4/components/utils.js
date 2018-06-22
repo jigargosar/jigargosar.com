@@ -26,56 +26,25 @@ const StateContext = React.createContext(null)
 
 export const StateProvider = StateContext.Provider
 
-export const withState = c => {
-  return R.compose(
-    BaseComponent =>
-      function StateInjector(props) {
-        return (
-          <StateContext.Consumer>
-            {state => (
-              <BaseComponent
-                {...{
-                  s: state,
-                  fire: state.fire,
-                  auth: state.fire.auth,
-                }}
-                {...props}
-              />
-            )}
-          </StateContext.Consumer>
-        )
-      },
-    observer,
-  )(c)
-}
-
-export const M = observer(
-  class M extends React.Component {
+const withState = BaseComponent =>
+  class WithState extends React.Component {
     render() {
+      const {children, ...rest} = this.props
       return (
         <StateContext.Consumer>
           {state => (
             <Observer>
-              {() =>
-                this.r({
-                  s: state,
-                  fire: state.fire,
-                  auth: state.fire.auth,
-                  ns: state.ns,
-                  ...this.props,
-                })
-              }
+              {() => (
+                <BaseComponent state={state} {...rest}>
+                  {children}
+                </BaseComponent>
+              )}
             </Observer>
           )}
         </StateContext.Consumer>
       )
     }
-
-    r(props) {
-      return props.render ? props.render(this.props) : null
-    }
-  },
-)
+  }
 
 export class C extends React.Component {
   render() {
