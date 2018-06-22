@@ -17,7 +17,7 @@ render()
 registerServiceWorker()
 
 if (module.hot) {
-  module.hot.accept(['./App'], () => {
+  module.hot.accept(['./components/App'], () => {
     render()
   })
 }
