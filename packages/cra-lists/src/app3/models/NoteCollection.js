@@ -15,8 +15,23 @@ const RX = require('ramda-extension')
 
 /*eslint-enable*/
 
+export function Note({id, text, sortIdx, createdAt}) {
+  validate('SSNN', [id, text, sortIdx, createdAt])
+  return oObject({id, text, sortIdx, createdAt})
+}
+
+export function createNewNote({
+  id,
+  text = '',
+  sortIdx = 0,
+  createdAt,
+} = {}) {
+  validate('ZSNZ', [id, text, sortIdx, createdAt])
+  return Note({id: nanoid(), text, sortIdx, createdAt: Date.now()})
+}
+
 export function NoteCollection(initialList = []) {
-  return oObject({list: oArray(initialList, {deep: true})})
+  return oObject({list: oArray(initialList)})
 }
 const noteTransformer = vm => {
   validate('O', [vm])

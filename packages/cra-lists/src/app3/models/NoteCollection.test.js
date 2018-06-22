@@ -1,7 +1,7 @@
 /*eslint-disable*/
 
-import {createTransformer, oArray, oObject} from '../o-util'
-import {NoteListViewModel} from './NoteCollection'
+import {createNewNote, NoteListViewModel} from './NoteCollection'
+import {oJS} from '../o-util'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -16,9 +16,21 @@ const RX = require('ramda-extension')
 
 /*eslint-enable*/
 
-describe('NoteCollection', function() {
-  it('should work', function() {
-    const vm = NoteListViewModel()
-    expect(vm.list).toEqual([])
+describe('NoteCollection', () => {
+  it('should have empty .list', () => {
+    expect(NoteListViewModel().list).toEqual([])
+  })
+})
+
+describe('Note', () => {
+  it('should createNewNote', () => {
+    const note = createNewNote()
+
+    expect(oJS(note)).toEqual({
+      id: expect.any(String),
+      createdAt: expect.any(Number),
+      sortIdx: 0,
+      text: '',
+    })
   })
 })
