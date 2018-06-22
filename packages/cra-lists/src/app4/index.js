@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
+import {oObject} from './mobx/utils'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -12,7 +13,7 @@ const RA = require('ramda-adjunct')
 /*eslint-enable*/
 
 const createNoteListOfSize = R.compose(
-  R.map(i => ({id: `${i}`, text: `Note Text ${i}`})),
+  R.map(i => oObject({id: `${i}`, text: `Note Text ${i}`})),
   R.times(R.identity),
 )
 
