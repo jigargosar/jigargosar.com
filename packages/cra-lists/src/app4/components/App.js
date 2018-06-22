@@ -1,9 +1,10 @@
 // Foo
 
 /*eslint-disable*/
-import React, {Component as RC} from 'react'
+import React from 'react'
 import cn from 'classnames'
 import {Container, RootContainer, Title} from './ui'
+import {RC} from './utils'
 
 /*eslint-enable*/
 
