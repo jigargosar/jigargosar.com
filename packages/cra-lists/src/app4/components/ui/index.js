@@ -24,3 +24,11 @@ export const Title = styled.div.attrs({
 export const Section = styled.div.attrs({
   className: 'mv3',
 })``
+
+export const List = styled.div.attrs({
+  className: 'mv3',
+})``
+
+export const ListItem = styled.div.attrs({
+  className: 'mv3',
+})``
