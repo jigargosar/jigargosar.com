@@ -4,18 +4,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
-import {StateProvider} from '../StateContext'
 
 /*eslint-enable*/
 
 function render() {
-  const App = require('./App').default
-  ReactDOM.render(
-    <StateProvider value={require('./State').default}>
-      <App />
-    </StateProvider>,
-    document.getElementById('root'),
-  )
+  const App = require('./components/App').default
+  ReactDOM.render(<App />, document.getElementById('root'))
 }
 
 render()
@@ -23,7 +17,7 @@ render()
 registerServiceWorker()
 
 if (module.hot) {
-  module.hot.accept(['./App', './State'], () => {
+  module.hot.accept(['./App'], () => {
     render()
   })
 }
