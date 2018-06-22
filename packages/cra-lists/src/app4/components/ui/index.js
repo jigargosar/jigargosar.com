@@ -3,6 +3,7 @@
 /*eslint-disable*/
 import React from 'react'
 import styled from 'styled-components'
+import {cx as cn} from 'ramda-extension'
 
 /*eslint-enable*/
 
@@ -10,4 +11,12 @@ import styled from 'styled-components'
 
 export const Container = styled.div.attrs({
   className: 'center mw7 mv3 ph3',
+})``
+
+export const RootContainer = styled(Container).attrs({
+  className: 'sans-serif f5 lh-copy',
+})``
+
+export const Title = styled.div.attrs({
+  className: 'f4 mb2',
 })``

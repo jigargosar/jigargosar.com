@@ -3,7 +3,7 @@
 /*eslint-disable*/
 import React, {Component as RC} from 'react'
 import cn from 'classnames'
-import {Container} from './ui'
+import {Container, RootContainer, Title} from './ui'
 
 /*eslint-enable*/
 
@@ -12,12 +12,10 @@ import {Container} from './ui'
 class App extends RC {
   render() {
     return (
-      <Container className={cn('.sans-serif lh-copy f5')}>
-        <div className={cn('mb3')}>
-          <div>Notes</div>
-        </div>
+      <RootContainer>
+        <Title>Notes</Title>
         <div>Notes List</div>
-      </Container>
+      </RootContainer>
     )
   }
 }
