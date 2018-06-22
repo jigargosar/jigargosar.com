@@ -24,6 +24,7 @@ const createNoteListOfSize = R.compose(
 )
 
 const Note = ({note}) => <ListItem>{note.text}</ListItem>
+
 const NoteList = ({noteList}) => (
   <List>{renderKeyedById(Note, 'note', noteList)}</List>
 )
