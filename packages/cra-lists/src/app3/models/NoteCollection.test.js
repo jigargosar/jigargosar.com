@@ -1,7 +1,7 @@
 /*eslint-disable*/
 
 import {createTransformer, oArray, oObject} from '../o-util'
-import {NoteListModel, NoteListViewModel} from './NoteListModel'
+import {NoteListViewModel} from './NoteCollection'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -16,8 +16,9 @@ const RX = require('ramda-extension')
 
 /*eslint-enable*/
 
-describe('NoteListModel', function() {
+describe('NoteCollection', function() {
   it('should work', function() {
-    NoteListViewModel(NoteListModel())
+    const vm = NoteListViewModel()
+    expect(vm.list).toEqual([])
   })
 })
