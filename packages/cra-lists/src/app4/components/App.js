@@ -2,16 +2,14 @@
 
 /*eslint-disable*/
 import React from 'react'
-import cn from 'classnames'
 import {
   CenterLayout,
   List,
   ListItem,
   RootContainer,
-  Section,
   Title,
 } from './ui'
-import {RC} from './utils'
+import {RC, renderKeyedById} from './utils'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -24,12 +22,6 @@ const createNoteListOfSize = R.compose(
   R.map(i => ({id: `${i}`, text: `Note Text ${i}`})),
   R.times(R.identity),
 )
-
-function renderKeyedById(Component, propName, idList) {
-  return R.map(value => (
-    <Component key={value.id} {...{[propName]: value}} />
-  ))(idList)
-}
 
 const Note = ({note}) => <ListItem>{note.text}</ListItem>
 
