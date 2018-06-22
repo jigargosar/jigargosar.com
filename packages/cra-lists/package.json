@@ -12,6 +12,9 @@
     "bracketSpacing": false,
     "jsxBracketSameLine": false
   },
+  "jest": {
+    "preset": "jest-puppeteer"
+  },
   "dependencies": {
     "aproba": "2.0.0",
     "ava": "0.25.0",
@@ -68,7 +71,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "flow-bin": "0.75.0"
+    "flow-bin": "0.75.0",
+    "jest-puppeteer": "^3.2.1"
   },
   "browserslist": {
     "development": [
@@ -76,10 +80,6 @@
       "last 2 firefox versions",
       "last 2 edge versions"
     ],
-    "production": [
-      ">0.25%",
-      "not op_mini all",
-      "ie 11"
-    ]
+    "production": [">0.25%", "not op_mini all", "ie 11"]
   }
 }
