@@ -12,7 +12,6 @@ import {
   Title,
 } from './ui'
 import {RC} from './utils'
-import {o} from '../../StateContext'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -32,7 +31,8 @@ function renderKeyedById(Component, propName, idList) {
   ))(idList)
 }
 
-const Note = o(({note}) => <ListItem>{note.text}</ListItem>)
+const Note = ({note}) => <ListItem>{note.text}</ListItem>
+
 class App extends RC {
   render() {
     const noteList = createNoteListOfSize(10)
