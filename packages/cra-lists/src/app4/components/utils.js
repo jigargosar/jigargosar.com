@@ -1,8 +1,8 @@
 // Foo
 
 /*eslint-disable*/
-import React from 'react'
-import {observer, Observer} from 'mobx-react'
+import React, {Fragment as F, Component as RC} from 'react'
+import {observer as o, Observer as O} from 'mobx-react'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -11,8 +11,7 @@ const RA = require('ramda-adjunct')
 
 /*eslint-disable no-empty-pattern*/
 
-export const RC = React.Component
-export const F = React.Fragment
+export {o, O, F, RC}
 
 export function renderKeyedById(Component, propName, idList) {
   return R.map(value => (
@@ -26,7 +25,7 @@ const StateContext = React.createContext(null)
 
 export const StateProvider = StateContext.Provider
 
-export class C extends React.Component {
+export class C extends RC {
   render() {
     return this.r(this.props)
   }
@@ -36,25 +35,19 @@ export class C extends React.Component {
   }
 }
 
-export const i = (...statePropsNames) => BaseComponent => {
-  const ObserverBaseComponent = observer(BaseComponent)
+export const i = (...statePropsNames) => BC => {
+  const OBC = o(BC)
   return class WithS extends C {
     r({children, ...rest}) {
       return (
         <StateContext.Consumer>
           {state => (
-            <ObserverBaseComponent
-              {...R.pick(statePropsNames, state)}
-              {...rest}
-            >
+            <OBC {...R.pick(statePropsNames, state)} {...rest}>
               {children}
-            </ObserverBaseComponent>
+            </OBC>
           )}
         </StateContext.Consumer>
       )
     }
   }
 }
-
-export {Observer as O}
-export {observer as o}
