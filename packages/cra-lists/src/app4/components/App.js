@@ -20,8 +20,13 @@ const RA = require('ramda-adjunct')
 
 /*eslint-disable no-empty-pattern*/
 
+const createNoteListOfSize = R.compose(
+  R.map(i => ({id: `${i}`, text: `Note Text ${i}`})),
+  R.times(R.identity),
+)
 class App extends RC {
   render() {
+    const list = createNoteListOfSize(10)
     return (
       <RootContainer>
         <CenterLayout>
@@ -29,10 +34,9 @@ class App extends RC {
         </CenterLayout>
         <CenterLayout>
           <List>
-            {R.times(
-              id => <ListItem key={id}>{`Note ${id}`}</ListItem>,
-              10,
-            )}
+            {R.map(({id, text}) => (
+              <ListItem key={id}>{text}</ListItem>
+            ))(list)}
           </List>
         </CenterLayout>
       </RootContainer>
