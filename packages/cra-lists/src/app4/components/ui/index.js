@@ -14,9 +14,13 @@ export const CenterLayout = styled.div.attrs({
 })``
 
 export const RootContainer = styled.div.attrs({
-  className: 'sans-serif f5 lh-copy',
+  className: 'sans-serif f5 lh-solid',
 })``
 
 export const Title = styled.div.attrs({
-  className: 'f4 mb2',
+  className: 'f4 lh-title',
+})``
+
+export const Section = styled.div.attrs({
+  className: 'mv3',
 })``
