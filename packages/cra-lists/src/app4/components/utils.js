@@ -2,6 +2,7 @@
 
 /*eslint-disable*/
 import React from 'react'
+import {observer} from 'mobx-react'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -18,3 +19,5 @@ export function renderKeyedById(Component, propName, idList) {
     <Component key={value.id} {...{[propName]: value}} />
   ))(idList)
 }
+
+export const ro = observer
