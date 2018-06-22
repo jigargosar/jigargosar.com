@@ -24,15 +24,17 @@ const createNoteListOfSize = R.compose(
 )
 
 const Note = ({note}) => <ListItem>{note.text}</ListItem>
+const NoteList = ({noteList}) => (
+  <List>{renderKeyedById(Note, 'note', noteList)}</List>
+)
 
 class App extends RC {
   render() {
-    const noteList = createNoteListOfSize(10)
     return (
       <RootContainer>
         <CenterLayout>
           <Title>Notes</Title>
-          <List>{renderKeyedById(Note, 'note', noteList)}</List>
+          <NoteList noteList={createNoteListOfSize(10)} />
         </CenterLayout>
       </RootContainer>
     )
