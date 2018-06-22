@@ -10,7 +10,7 @@ import {cx as cn} from 'ramda-extension'
 /*eslint-disable no-empty-pattern*/
 
 export const CenterLayout = styled.div.attrs({
-  className: 'center mw7 mv3 ph3',
+  className: 'center mw7 mv3',
 })``
 
 export const RootContainer = styled.div.attrs({
@@ -18,7 +18,7 @@ export const RootContainer = styled.div.attrs({
 })``
 
 export const Title = styled.div.attrs({
-  className: 'f4 lh-title',
+  className: 'f4 lh-title mh3',
 })``
 
 export const Section = styled.div.attrs({
@@ -30,5 +30,5 @@ export const List = styled.div.attrs({
 })``
 
 export const ListItem = styled.div.attrs({
-  className: 'mv3',
+  className: 'mv3 mh3',
 })``
