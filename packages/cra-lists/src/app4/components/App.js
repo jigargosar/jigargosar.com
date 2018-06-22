@@ -31,7 +31,7 @@ const NoteList = ({noteList}) => (
 
 const App = withS(
   class App extends C {
-    render() {
+    r() {
       return (
         <RootContainer>
           <CenterLayout>
