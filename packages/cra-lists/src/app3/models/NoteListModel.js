@@ -63,7 +63,6 @@ export function NoteListViewModel(noteListModel) {
 
         const newEid = this._idAt(newIdx)
         const newEText = _textAt(newIdx)
-        // todo: save prev editing
 
         this._saveOrDeleteEdit()
 
