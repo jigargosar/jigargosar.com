@@ -9,7 +9,13 @@ import {
   RootContainer,
   Title,
 } from './ui'
-import {C, injectAllStates, observer, renderKeyedById} from './utils'
+import {
+  C,
+  injectAllStates,
+  observer,
+  OC,
+  renderKeyedById,
+} from './utils'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -18,16 +24,14 @@ const RA = require('ramda-adjunct')
 
 /*eslint-disable no-empty-pattern*/
 
-const Note = observer(
-  class Note extends C {
-    r({note}) {
-      return <ListItem>{note.text}</ListItem>
-    }
-  },
-)
+class Note extends OC {
+  r({note}) {
+    return <ListItem>{note.text}</ListItem>
+  }
+}
 
 const NoteList = injectAllStates(
-  class NoteList extends C {
+  class NoteList extends OC {
     r({noteList}) {
       return <List>{renderKeyedById(Note, 'note', noteList)}</List>
     }
@@ -49,4 +53,4 @@ class App extends C {
 
 App.propTypes = {}
 
-export default observer(App)
+export default App

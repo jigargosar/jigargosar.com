@@ -37,6 +37,8 @@ export class C extends RC {
   }
 }
 
+export const OC = observer(C)
+
 // export const injectStatesNamed = (...statePropsNames) => BC => {
 //   const OBC = o(BC)
 //   return function injectState({children, ...rest}) {
@@ -53,12 +55,11 @@ export class C extends RC {
 // }
 
 export const injectMappedState = stateToProps => BC => {
-  const OBC = o(BC)
   return function injectState({children, ...rest}) {
     return (
       <StateContext.Consumer>
         {states => (
-          <OBC {...stateToProps(states, rest)}>{children}</OBC>
+          <BC {...stateToProps(states, rest)}>{children}</BC>
         )}
       </StateContext.Consumer>
     )
