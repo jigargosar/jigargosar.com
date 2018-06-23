@@ -2,7 +2,7 @@
 
 /*eslint-disable*/
 import React, {Component as RC, Fragment as F} from 'react'
-import {observer as o, Observer as O} from 'mobx-react'
+import {observer, Observer} from 'mobx-react'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -11,7 +11,9 @@ const RA = require('ramda-adjunct')
 
 /*eslint-disable no-empty-pattern*/
 
-export {o, O, F, RC}
+const o = observer
+const O = Observer
+export {o, O, F, RC, observer, Observer}
 
 export function renderKeyedById(Component, propName, idList) {
   return R.map(value => (
