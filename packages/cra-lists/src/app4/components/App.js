@@ -25,18 +25,20 @@ const RA = require('ramda-adjunct')
 
 /*eslint-disable no-empty-pattern*/
 
-class Note extends OC {
+class Note extends C {
   r({note}) {
-    return <ListItem>{note.text}</ListItem>
+    return <ListItem>{'foo' + note.text}</ListItem>
   }
 }
 
-class NoteList extends OC {
+class NoteList extends C {
   r() {
     return (
       <List>
         <WithState>
-          {({noteList}) => renderKeyedById(Note, 'note', noteList)}
+          {({noteList}) => {
+            return renderKeyedById(Note, 'note', noteList)
+          }}
         </WithState>
       </List>
     )

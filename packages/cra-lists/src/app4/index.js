@@ -24,6 +24,10 @@ const states = {
   noteList: createNoteListOfSize(10),
 }
 
+// setInterval(() => {
+//   states.noteList.forEach(n => (n.text = n.text + 1))
+// }, 1000)
+
 function render() {
   const App = require('./components/App').default
   ReactDOM.render(
