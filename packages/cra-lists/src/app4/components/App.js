@@ -26,7 +26,7 @@ const Note = observer(
   },
 )
 
-const NoteList = injectState('noteList')(
+const NoteList = injectState(
   class NoteList extends C {
     r({noteList}) {
       return <List>{renderKeyedById(Note, 'note', noteList)}</List>

@@ -6,6 +6,7 @@ import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
 import {oObject} from './mobx/utils'
+import {State, ViewState} from './mobx/State'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -17,10 +18,16 @@ const createNoteListOfSize = R.compose(
   R.times(R.identity),
 )
 
+const states = {
+  state: State(),
+  viewState: ViewState(State()),
+  noteList: createNoteListOfSize(10),
+}
+
 function render() {
   const App = require('./components/App').default
   ReactDOM.render(
-    <StateProvider value={{noteList: createNoteListOfSize(10)}}>
+    <StateProvider value={states}>
       <App />
     </StateProvider>,
     document.getElementById('root'),

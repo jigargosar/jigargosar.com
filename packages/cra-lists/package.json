@@ -56,9 +56,11 @@
     "react-memoize-one": "0.1.0",
     "react-router": "4.3.1",
     "react-router-dom": "4.3.1",
+    "react-router5": "^6.0.4",
     "react-scripts": "^1.1.4",
     "react-spring": "5.3.18",
     "recompose": "0.27.1",
+    "router5": "^6.2.4",
     "styled-components": "^3.3.3",
     "tachyons": "4.10.0",
     "xstate": "3.3.2"

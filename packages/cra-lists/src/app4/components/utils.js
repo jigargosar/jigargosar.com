@@ -37,13 +37,13 @@ export class C extends RC {
   }
 }
 
-export const injectState = (...statePropsNames) => BC => {
+export const injectState = BC => {
   const OBC = o(BC)
   return function injectState({children, ...rest}) {
     return (
       <StateContext.Consumer>
         {state => (
-          <OBC {...R.pick(statePropsNames, state)} {...rest}>
+          <OBC {...state} {...rest}>
             {children}
           </OBC>
         )}

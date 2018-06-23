@@ -5,6 +5,12 @@ export const Note = t.model({
   text: t.string,
 })
 
-export const NotesCollection = t.model({
-  idLookup: t.optional(t.map(Note), {}),
-})
+export const NotesCollection = t
+  .model({
+    idLookup: t.optional(t.map(Note), {}),
+  })
+  .views(self => ({
+    get all() {
+      return Array.from(self.idLookup.values())
+    },
+  }))
