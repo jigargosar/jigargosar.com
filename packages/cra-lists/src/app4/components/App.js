@@ -9,14 +9,7 @@ import {
   RootContainer,
   Title,
 } from './ui'
-import {
-  C,
-  o,
-  renderKeyedById,
-  i,
-  injectState,
-  observer,
-} from './utils'
+import {C, injectState, observer, renderKeyedById} from './utils'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
