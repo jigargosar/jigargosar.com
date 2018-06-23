@@ -6,7 +6,8 @@ import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
 import {oObject} from './mobx/utils'
-import {State, ViewState} from './mobx/State'
+import {NoteListView} from './mobx/NoteListView'
+import {NotesCollection} from './mobx/NotesCollection'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -18,9 +19,10 @@ const createNoteListOfSize = R.compose(
   R.times(R.identity),
 )
 
+const nc = NotesCollection.create()
 const states = {
-  state: State(),
-  viewState: ViewState(State()),
+  nc,
+  view: NoteListView(nc),
   noteList: createNoteListOfSize(10),
 }
 
