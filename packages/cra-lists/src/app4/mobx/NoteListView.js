@@ -1,4 +1,4 @@
-import {createTransformer, oObject} from './utils'
+import {autoRun, createTransformer, oObject} from './utils'
 
 const R = require('ramda')
 
@@ -11,6 +11,7 @@ const defineDelegatePropertyGetter = R.curry(
       enumerable: true,
     }),
 )
+
 export function NoteListView({nc}) {
   const noteTransformer = createTransformer(note => {
     const displayNote = {
@@ -27,9 +28,20 @@ export function NoteListView({nc}) {
   const noteListTransformer = createTransformer(
     R.map(noteTransformer),
   )
-  return oObject({
-    get noteList() {
+  const noteListView = oObject({
+    pred: R.allPass([R.propEq('deleted', false)]),
+
+    get transformedList() {
       return noteListTransformer(nc.all)
     },
+
+    get noteList() {
+      return R.filter(this.pred, this.transformedList)
+    },
   })
+  autoRun(r => {
+    r.trace()
+    console.log(noteListView.noteList.length)
+  })
+  return noteListView
 }

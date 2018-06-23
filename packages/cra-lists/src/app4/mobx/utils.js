@@ -20,6 +20,7 @@ export const oArray = m.observable.array
 export const oMap = m.observable.map
 export const oSet = m.set
 export const oValues = m.values
+export const autoRun = m.autorun
 export const createTransformer = mu.createTransformer
 export const oJS = m.toJS
 export const t = mst.types
