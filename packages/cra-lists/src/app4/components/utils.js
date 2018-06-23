@@ -37,19 +37,32 @@ export class C extends RC {
   }
 }
 
-export const injectState = BC => {
+// export const injectStatesNamed = (...statePropsNames) => BC => {
+//   const OBC = o(BC)
+//   return function injectState({children, ...rest}) {
+//     return (
+//       <StateContext.Consumer>
+//         {state => (
+//           <OBC {...R.pick(statePropsNames, state)} {...rest}>
+//             {children}
+//           </OBC>
+//         )}
+//       </StateContext.Consumer>
+//     )
+//   }
+// }
+
+export const injectMappedState = stateToProps => BC => {
   const OBC = o(BC)
   return function injectState({children, ...rest}) {
     return (
       <StateContext.Consumer>
-        {state => (
-          <OBC {...state} {...rest}>
-            {children}
-          </OBC>
+        {states => (
+          <OBC {...stateToProps(states, rest)}>{children}</OBC>
         )}
       </StateContext.Consumer>
     )
   }
 }
 
-export const i = injectState
+export const injectAllStates = injectMappedState(R.merge)

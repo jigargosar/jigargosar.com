@@ -9,7 +9,7 @@ import {
   RootContainer,
   Title,
 } from './ui'
-import {C, injectState, observer, renderKeyedById} from './utils'
+import {C, injectAllStates, observer, renderKeyedById} from './utils'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -26,7 +26,7 @@ const Note = observer(
   },
 )
 
-const NoteList = injectState(
+const NoteList = injectAllStates(
   class NoteList extends C {
     r({noteList}) {
       return <List>{renderKeyedById(Note, 'note', noteList)}</List>
