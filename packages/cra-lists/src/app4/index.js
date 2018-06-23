@@ -20,6 +20,11 @@ const createNoteListOfSize = R.compose(
 )
 
 const nc = NotesCollection.create()
+
+R.times(() => {
+  nc.add(nc.newNote())
+}, 10)
+
 const states = {
   nc,
   view: NoteListView(nc),
