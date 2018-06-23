@@ -1,3 +1,7 @@
 .idea/workspace.xml
 .idea/shelf/
 usage.statistics.xml
+packages/basic-reason-app/lib/
+packages/electron-react-reminder/flow-typed/npm/
+packages/nextjs-lists/.idea/
+packages/reason-react/lib/
