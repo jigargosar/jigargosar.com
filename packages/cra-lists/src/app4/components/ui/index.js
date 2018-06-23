@@ -30,5 +30,9 @@ export const List = styled.div.attrs({
 })``
 
 export const ListItem = styled.div.attrs({
-  className: 'ma3',
+  className: 'mv3 nr2 nl2 ph3',
+})``
+
+export const Button = styled.button.attrs({
+  className: 'input-reset link mh2 blue',
 })``

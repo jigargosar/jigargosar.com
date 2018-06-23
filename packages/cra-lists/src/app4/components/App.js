@@ -3,6 +3,7 @@
 /*eslint-disable*/
 import React from 'react'
 import {
+  Button,
   CenterLayout,
   List,
   ListItem,
@@ -30,8 +31,8 @@ const cn = RX.cx
 class Note extends C {
   r({note}) {
     return (
-      <ListItem className={cn('nr2 nl2 pl3')}>
-        <button className={cn('input-reset link mh2 blue')}>X</button>
+      <ListItem>
+        <Button>X</Button>
         {'foo' + note.text}
       </ListItem>
     )
