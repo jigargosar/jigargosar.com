@@ -18,7 +18,7 @@ const RA = require('ramda-adjunct')
 const nc = NotesCollection.create()
 
 R.times(() => {
-  nc.add(nc.newNote())
+  nc.addNewNote()
 }, 10)
 
 const states = {
