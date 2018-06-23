@@ -1,5 +1,5 @@
 import {autoRun, oObject} from './utils'
-import * as mu from "mobx-utils";
+import * as mu from 'mobx-utils'
 
 const R = require('ramda')
 
@@ -27,7 +27,7 @@ export function NoteListView({nc}) {
   })
 
   const noteListTransformer = mu.createTransformer(
-    R.map(noteTransformer)
+    R.map(noteTransformer),
   )
   const noteListView = oObject({
     pred: R.allPass([R.propEq('deleted', false)]),
@@ -38,6 +38,10 @@ export function NoteListView({nc}) {
 
     get noteList() {
       return R.filter(this.pred, this.transformedList)
+    },
+
+    onAddNewNoteEvent() {
+      nc.addNewNote()
     },
   })
   autoRun(r => {

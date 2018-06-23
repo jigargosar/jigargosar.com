@@ -8,6 +8,7 @@ import {
   List,
   ListItem,
   RootContainer,
+  Section,
   Text,
   Title,
 } from './ui'
@@ -44,10 +45,23 @@ class Note extends C {
   }
 }
 
+function ListToolbar() {
+  return (
+    <WithState>
+      {({view}) => (
+        <Section className={cn('pl3')}>
+          <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
+        </Section>
+      )}
+    </WithState>
+  )
+}
+
 class NoteList extends C {
   r() {
     return (
       <F>
+        <ListToolbar />
         <List>
           <WithState>
             {({view: {noteList}}) => {
