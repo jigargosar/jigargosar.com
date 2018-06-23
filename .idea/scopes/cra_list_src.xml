@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="cra-list-src" pattern="file[cra-lists]:src//*" />
-</component>

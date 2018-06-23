@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="list-src" pattern="file[choo-lists]:src//*||file[choo-lists]:index.js" />
-</component>
