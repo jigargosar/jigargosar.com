@@ -25,16 +25,20 @@ export const Section = styled.div.attrs({
   className: 'mv3',
 })``
 
+export const Text = styled.span.attrs({
+  className: 'mr2',
+})``
+
 export const List = styled.div.attrs({
   className: 'mv3',
 })``
 
 export const ListItem = styled.div.attrs({
-  className: 'mv3 nr2 nl2 ph3',
+  className: 'ma3',
 })``
 
 export const Button = styled.button.attrs({
-  className: 'input-reset link mh2 blue',
+  className: 'input-reset link mr2 blue inline-flex',
 })`
   user-select: none;
 `

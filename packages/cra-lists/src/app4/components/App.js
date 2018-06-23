@@ -8,6 +8,7 @@ import {
   List,
   ListItem,
   RootContainer,
+  Text,
   Title,
 } from './ui'
 import {
@@ -33,9 +34,9 @@ class Note extends C {
     return (
       <ListItem>
         <Button onClick={note.onToggleDeleteEvent}>X</Button>
-        <span className={cn({'o-50': note.deleted})}>
+        <Text className={cn({'o-50': note.deleted})}>
           {note.text}
-        </span>
+        </Text>
       </ListItem>
     )
   }
