@@ -19,6 +19,7 @@ import {
   O,
   observer,
   OC,
+  RC,
   renderKeyedById,
   WithState,
 } from './utils'
@@ -57,10 +58,37 @@ function ListToolbar() {
   )
 }
 
+class NoteListShortcuts extends C {
+  componentDidMount() {
+    console.log('componentDidMount')
+    window.addEventListener('keydown', this.onKeydown)
+  }
+  componentWillUnmount() {
+    console.log('componentWillUnmount')
+    window.removeEventListener('keydown', this.onKeydown)
+  }
+
+  render() {
+    return (
+      <WithState>
+        {({view}) => {
+          this.view = view
+          return null
+        }}
+      </WithState>
+    )
+  }
+
+  onKeydown = e => {
+    console.log(e)
+  }
+}
+
 class NoteList extends C {
   r() {
     return (
       <F>
+        <NoteListShortcuts />
         <ListToolbar />
         <List>
           <WithState>
