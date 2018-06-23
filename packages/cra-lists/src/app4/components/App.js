@@ -20,6 +20,8 @@ import {
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
+const RX = require('ramda-extension')
+const cn = RX.cx
 
 /*eslint-enable*/
 
@@ -27,7 +29,12 @@ const RA = require('ramda-adjunct')
 
 class Note extends C {
   r({note}) {
-    return <ListItem>{'foo' + note.text}</ListItem>
+    return (
+      <ListItem className={cn('nr2 nl2 pl3')}>
+        <button className={cn('input-reset link mh2 blue')}>X</button>
+        {'foo' + note.text}
+      </ListItem>
+    )
   }
 }
 
