@@ -33,8 +33,9 @@ class Note extends C {
     return (
       <ListItem>
         <Button onClick={note.onToggleDeleteEvent}>X</Button>
-        <span>{note.text}</span>
-        <span>{`X=${note.deleted}`}</span>
+        <span className={cn({'o-50': note.deleted})}>
+          {note.text}
+        </span>
       </ListItem>
     )
   }

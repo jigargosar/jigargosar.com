@@ -35,4 +35,6 @@ export const ListItem = styled.div.attrs({
 
 export const Button = styled.button.attrs({
   className: 'input-reset link mh2 blue',
-})``
+})`
+  user-select: none;
+`
