@@ -12,7 +12,7 @@ import {
   Title,
 } from './ui'
 import {
-  C,
+  C, F,
   injectAllStates,
   O,
   observer,
@@ -46,13 +46,13 @@ class Note extends C {
 class NoteList extends C {
   r() {
     return (
-      <List>
+      <F><List>
         <WithState>
           {({view: {noteList}}) => {
             return renderKeyedById(Note, 'note', noteList)
           }}
         </WithState>
-      </List>
+      </List></F>
     )
   }
 }
