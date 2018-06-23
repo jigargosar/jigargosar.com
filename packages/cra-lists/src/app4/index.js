@@ -27,7 +27,7 @@ R.times(() => {
 
 const states = {
   nc,
-  view: NoteListView(nc),
+  view: NoteListView({nc}),
   noteList: createNoteListOfSize(10),
 }
 

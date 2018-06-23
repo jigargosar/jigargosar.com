@@ -36,7 +36,7 @@ class NoteList extends C {
     return (
       <List>
         <WithState>
-          {({noteList}) => {
+          {({view: {noteList}}) => {
             return renderKeyedById(Note, 'note', noteList)
           }}
         </WithState>
