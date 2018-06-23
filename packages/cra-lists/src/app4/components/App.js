@@ -15,6 +15,7 @@ import {
   observer,
   OC,
   renderKeyedById,
+  WithState,
 } from './utils'
 
 const R = require('ramda')
@@ -30,13 +31,17 @@ class Note extends OC {
   }
 }
 
-const NoteList = injectAllStates(
-  class NoteList extends OC {
-    r({noteList}) {
-      return <List>{renderKeyedById(Note, 'note', noteList)}</List>
-    }
-  },
-)
+class NoteList extends OC {
+  r() {
+    return (
+      <List>
+        <WithState>
+          {({noteList}) => renderKeyedById(Note, 'note', noteList)}
+        </WithState>
+      </List>
+    )
+  }
+}
 
 class App extends C {
   r() {

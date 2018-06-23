@@ -54,14 +54,16 @@ export const OC = observer(C)
 //   }
 // }
 
+export const WithState = StateContext.Consumer
+
 export const injectMappedState = stateToProps => BC => {
   return function injectState({children, ...rest}) {
     return (
-      <StateContext.Consumer>
+      <WithState>
         {states => (
           <BC {...stateToProps(states, rest)}>{children}</BC>
         )}
-      </StateContext.Consumer>
+      </WithState>
     )
   }
 }
