@@ -34,21 +34,19 @@ const NoteList = injectAllStates(
   },
 )
 
-const App = observer(
-  class App extends C {
-    r() {
-      return (
-        <RootContainer>
-          <CenterLayout>
-            <Title>Notes</Title>
-            <NoteList />
-          </CenterLayout>
-        </RootContainer>
-      )
-    }
-  },
-)
+class App extends C {
+  r() {
+    return (
+      <RootContainer>
+        <CenterLayout>
+          <Title>Notes</Title>
+          <NoteList />
+        </CenterLayout>
+      </RootContainer>
+    )
+  }
+}
 
 App.propTypes = {}
 
-export default App
+export default observer(App)
