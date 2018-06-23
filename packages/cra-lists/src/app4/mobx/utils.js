@@ -17,6 +17,9 @@ const RX = require('ramda-extension')
 
 export const oObject = m.observable.object
 export const oArray = m.observable.array
+export const oMap = m.observable.map
+export const oSet = m.set
+export const oValues = m.values
 export const createTransformer = mu.createTransformer
 export const oJS = m.toJS
 export const t = mst.types
