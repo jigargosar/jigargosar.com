@@ -14,10 +14,6 @@ const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
-const createNoteListOfSize = R.compose(
-  R.map(i => oObject({id: `${i}`, text: `Note Text ${i}`})),
-  R.times(R.identity),
-)
 
 const nc = NotesCollection.create()
 
@@ -28,7 +24,6 @@ R.times(() => {
 const states = {
   nc,
   view: NoteListView({nc}),
-  noteList: createNoteListOfSize(10),
 }
 
 // setInterval(() => {
