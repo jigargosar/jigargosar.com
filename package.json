@@ -1,0 +1,8 @@
+{
+  "name": "hacker-blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:jigargosar/jigargosar.com.git",
+  "author": "Jigar Gosar <jigar.gosar@gmail.com>",
+  "license": "MIT"
+}

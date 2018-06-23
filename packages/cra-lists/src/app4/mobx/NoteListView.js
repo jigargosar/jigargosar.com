@@ -1,4 +1,5 @@
-import {autoRun, createTransformer, oObject} from './utils'
+import {autoRun, oObject} from './utils'
+import * as mu from "mobx-utils";
 
 const R = require('ramda')
 
@@ -13,7 +14,7 @@ const defineDelegatePropertyGetter = R.curry(
 )
 
 export function NoteListView({nc}) {
-  const noteTransformer = createTransformer(note => {
+  const noteTransformer = mu.createTransformer(note => {
     const displayNote = {
       onToggleDeleteEvent() {
         note.toggleDeleted()
@@ -25,8 +26,8 @@ export function NoteListView({nc}) {
     return oObject(displayNote)
   })
 
-  const noteListTransformer = createTransformer(
-    R.map(noteTransformer),
+  const noteListTransformer = mu.createTransformer(
+    R.map(noteTransformer)
   )
   const noteListView = oObject({
     pred: R.allPass([R.propEq('deleted', false)]),

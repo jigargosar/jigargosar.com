@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/packages/basic-reason-app" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/boowa-static-choo" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/choo-lists" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/choo-notes" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/choo-site" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/cra-list2" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/cra-next2-lists" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/electron-react-reminder" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/explore-rust" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/gatsby-blog" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/gatsby-default" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/gatsby-site" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/nextjs-lists" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/reason-react" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/reason-scripts-react" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/spectacle-boilerplate" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/with-zones-next-app" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
