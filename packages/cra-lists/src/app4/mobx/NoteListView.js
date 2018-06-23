@@ -43,6 +43,7 @@ export function NoteListView({nc}) {
     onAddNewNoteEvent() {
       nc.addNewNote()
     },
+    startEditing() {},
   })
   autoRun(r => {
     r.trace()

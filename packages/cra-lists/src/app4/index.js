@@ -14,12 +14,11 @@ const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
-
 const nc = NotesCollection.create()
 
 R.times(() => {
   nc.addNewNote()
-}, 10)
+}, 3)
 
 const states = {
   nc,

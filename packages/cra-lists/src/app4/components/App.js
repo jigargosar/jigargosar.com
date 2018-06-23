@@ -80,7 +80,13 @@ class NoteListShortcuts extends C {
   }
 
   onKeydown = e => {
-    console.log(e)
+    console.debug('window.keydown', e)
+    if (e.target instanceof window.HTMLInputElement) return
+    if (RX.startsWithPrefix('Arrow', e.key)) {
+      this.view.startEditing()
+    } else if (R.equals('a', e.key)) {
+      this.view.onAddNewNoteEvent(e)
+    }
   }
 }
 
