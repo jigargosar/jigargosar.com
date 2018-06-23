@@ -41,7 +41,7 @@ export function NoteListView({nc}) {
   })
   autoRun(r => {
     r.trace()
-    console.log(noteListView.noteList.length)
+    console.debug(noteListView.noteList.length)
   })
   return noteListView
 }
