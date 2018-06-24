@@ -40,7 +40,7 @@ class NoteInput extends C {
     return (
       <input
         autoFocus
-        className={cn('bw0 flex-auto ma0 pa1 lh-copy')}
+        className={cn('bw0 flex-auto ma0 pa1 lh-copy blue')}
         placeholder={'Note text ...'}
         value={note.text}
         onChange={note.onTextChange}

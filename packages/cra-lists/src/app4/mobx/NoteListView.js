@@ -119,7 +119,7 @@ export function NoteListView({nc}) {
     () => [view.noteList.length],
     () => {
       mTrace(rLength)
-      view.eidx = R.clamp(0, view.noteList.length - 1, view.eidx)
+      // view.eidx = R.clamp(0, view.noteList.length - 1, view.eidx)
       view.updateSortIdx()
     },
   )
