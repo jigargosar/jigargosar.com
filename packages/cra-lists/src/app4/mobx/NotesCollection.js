@@ -26,7 +26,7 @@ export const NotesCollection = (function NotesCollection() {
     return oObject(
       {
         idLookup: oObject(
-          R.compose(R.map(Note.create), R.propOr('idLookup', {}))(
+          R.compose(R.map(Note.create), R.propOr({}, 'idLookup'))(
             snapshot,
           ),
         ),
