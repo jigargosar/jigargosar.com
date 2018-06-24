@@ -8,9 +8,7 @@ import {
 } from './utils'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
-
-const R = require('ramda')
-// const RA = require('ramda-adjunct')
+import {R} from '../services/utils'
 
 export const Note = (function Note() {
   function create({id, text, deleted, sortIdx}) {

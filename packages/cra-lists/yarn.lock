@@ -7048,6 +7048,16 @@ raf@3.4.0:
   dependencies:
     performance-now "^2.1.0"
 
+rambda@^1.1.0, rambda@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/rambda/-/rambda-1.1.4.tgz#4899ad119c73daa9b44d7868587d2451775ed7f2"
+
+rambdax@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/rambdax/-/rambdax-0.9.1.tgz#8b93ffbfc719c36c3d6980a4ad5c1b57873f4036"
+  dependencies:
+    rambda "^1.1.0"
+
 ramda-adjunct@2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.9.0.tgz#1d9b149f987c0bec77fa34caa19cc7b9b9b55021"
