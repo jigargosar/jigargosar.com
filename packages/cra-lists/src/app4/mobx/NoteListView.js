@@ -1,4 +1,4 @@
-import {mReaction, oObject} from './utils'
+import {mReaction, mTrace, oObject} from './utils'
 import * as mu from 'mobx-utils'
 
 const R = require('ramda')
@@ -28,9 +28,6 @@ export function NoteListView({nc}) {
     get noteList() {
       return R.filter(this.pred, this.transformedList)
     },
-    findById(id) {
-      return R.find(R.propEq('id', id), this.noteList)
-    },
     onAddNewNoteEvent() {
       nc.addNewNote()
     },
@@ -46,14 +43,14 @@ export function NoteListView({nc}) {
   const rEid = mReaction(
     () => view.eid,
     () => {
-      rEid.trace()
+      mTrace(rEid)
       view.eidx = R.findIndex(R.propEq('id', view.eid), view.noteList)
     },
   )
   const rEidx = mReaction(
     () => view.eidx,
     () => {
-      rEidx.trace()
+      mTrace(rEidx)
       view.eid = R.pathOr(null, ['noteList', view.eidx, 'id'], view)
     },
   )
