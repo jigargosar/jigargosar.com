@@ -156,10 +156,10 @@ export function NoteListView({nc}) {
     },
   )
 
-  const rEidx = mReaction(
+  /*const rEidx =*/ mReaction(
     () => [view.sidx],
     () => {
-      mTrace(rEidx)
+      // mTrace(rEidx)
       if (view.sidx >= view.noteList.length) {
         view.sidx = 0
       }
