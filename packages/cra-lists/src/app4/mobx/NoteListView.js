@@ -110,13 +110,16 @@ export function NoteListView({nc}) {
         this.noteList[this.sidx].onToggleDeleteEvent()
       },
       insertAbove() {
-        this.addNewAt(this.sidx)
+        this.addNewAt(this.sidx - 1)
       },
       insertBelow() {
-        this.addNewAt(this.sidx + 1)
+        this.addNewAt(this.sidx)
       },
       gotoNext() {
         this.sidx = this.sidx + 1
+      },
+      gotoPrev() {
+        this.sidx = this.sidx - 1
       },
       onEnterKey() {
         if (this.noteList.length === 0) return
@@ -133,9 +136,6 @@ export function NoteListView({nc}) {
       },
       onEscapeKey() {
         this.editMode = 'selection'
-      },
-      gotoPrev() {
-        this.sidx = this.sidx - 1
       },
       isEditingNote(note) {
         return this.isModeEditing && R.equals(note.id, this.sid)
