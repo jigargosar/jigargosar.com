@@ -102,10 +102,12 @@ export function NoteListView({nc}) {
         if (this.noteList.length === 0) return
         if (this.isModeSelection) {
           this.editMode = 'editing'
-        } else if (this.sidx === this.noteList.length - 1) {
-          this.addNewAt(this.sidx + 1)
-        } else {
-          this.sidx = this.sidx + 1
+        } else if (this.isModeEditing) {
+          if (this.sidx === this.noteList.length - 1) {
+            this.addNewAt(this.sidx + 1)
+          } else {
+            this.sidx = this.sidx + 1
+          }
         }
       },
       gotoPrev() {
