@@ -40,7 +40,6 @@ export function NoteListView({nc}) {
         return view.editTextSelection
       },
       onEditTextSelect(e) {
-        e.persist()
         const target = e.target
         view.editTextSelection = {
           start: target.selectionStart,
