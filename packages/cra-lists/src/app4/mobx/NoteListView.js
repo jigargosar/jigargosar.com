@@ -35,7 +35,10 @@ export function NoteListView({nc}) {
   )
 
   const view = oObject({
-    eid: null,
+    // eid: null,
+    get eid() {
+      return R.pathOr(null, ['noteList', view.eidx, 'id'], view)
+    },
     eidx: -1,
     get isEditing() {
       return !R.isNil(this.eid)
@@ -51,8 +54,11 @@ export function NoteListView({nc}) {
       nc.addNewNote()
     },
     startEditing() {
-      if (this.isEditing || R.isEmpty(this.noteList)) return
-      this.eid = R.head(this.noteList).id
+      // if (this.isEditing || R.isEmpty(this.noteList)) return
+      // this.eid = R.head(this.noteList).id
+      if (!this.isEditing) {
+        this.eidx = 0
+      }
     },
     editNext() {
       this.eidx = this.eidx + 1
@@ -65,13 +71,13 @@ export function NoteListView({nc}) {
     },
   })
 
-  const rEid = mReaction(
-    () => view.eid,
-    () => {
-      mTrace(rEid)
-      view.eidx = R.findIndex(R.propEq('id', view.eid), view.noteList)
-    },
-  )
+  // const rEid = mReaction(
+  //   () => view.eid,
+  //   () => {
+  //     mTrace(rEid)
+  //     view.eidx = R.findIndex(R.propEq('id', view.eid), view.noteList)
+  //   },
+  // )
   const rEidx = mReaction(
     () => [view.eidx],
     () => {
@@ -82,7 +88,7 @@ export function NoteListView({nc}) {
       if (view.eidx < 0) {
         view.eidx = view.noteList.length - 1
       }
-      view.eid = R.pathOr(null, ['noteList', view.eidx, 'id'], view)
+      // view.eid = R.pathOr(null, ['noteList', view.eidx, 'id'], view)
     },
   )
 
