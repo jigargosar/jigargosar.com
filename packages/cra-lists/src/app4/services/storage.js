@@ -1,4 +1,4 @@
-export default {
+export const storage = {
   get: function(k) {
     try {
       return JSON.parse(window.localStorage.getItem(k))

@@ -8,6 +8,7 @@ import {StateProvider} from './components/utils'
 import {mAutoRun, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
 import {Auth0} from './services/auth0'
+import {storage} from './services/storage'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -38,19 +39,14 @@ registerServiceWorker()
 function createNC() {
   const NotesCollection = require('./mobx/NotesCollection')
     .NotesCollection
-  const ncSnapshot = R.compose(JSON.parse, R.defaultTo({}))(
-    localStorage.getItem('ncSnapshot'),
-  )
+  const ncSnapshot = storage.get('ncSnapshot') || {}
   return NotesCollection.create(ncSnapshot)
 }
 
 if (module.hot) {
   mAutoRun(() => {
     const ncSnapshot = states.nc.snapshot
-    localStorage.setItem(
-      'ncSnapshot',
-      JSON.stringify(ncSnapshot, null, 2),
-    )
+    storage.set('ncSnapshot', ncSnapshot)
     console.debug(ncSnapshot)
   })
 
