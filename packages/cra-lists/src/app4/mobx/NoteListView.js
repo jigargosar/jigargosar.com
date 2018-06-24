@@ -74,10 +74,10 @@ export function NoteListView({nc}) {
       onAddNewNoteEvent() {
         nc.addNewNote()
       },
-      editNext() {
+      gotoNext() {
         this.sidx = this.sidx + 1
       },
-      editPrev() {
+      gotoPrev() {
         this.sidx = this.sidx - 1
       },
       insertBelow() {
@@ -95,8 +95,8 @@ export function NoteListView({nc}) {
       },
     },
     {
-      editNext: mActionBound,
-      editPrev: mActionBound,
+      gotoNext: mActionBound,
+      gotoPrev: mActionBound,
     },
   )
 
