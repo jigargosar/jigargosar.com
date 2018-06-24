@@ -24,6 +24,7 @@ const states = oObject({
   nc,
   view: NoteListView({nc}),
 })
+
 // setInterval(() => {
 //   states.noteList.forEach(n => (n.text = n.text + 1))
 // }, 1000)
