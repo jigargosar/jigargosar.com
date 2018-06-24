@@ -110,6 +110,11 @@ export function NoteListView({nc}) {
       onAddNewNoteEvent() {
         this.addNewAt(0)
       },
+      onDeleteSelectionEvent() {
+        if (this.noteList.length === 0 || !this.isModeSelection)
+          return
+        this.noteList[this.sidx].onToggleDeleteEvent()
+      },
       insertAbove() {
         this.addNewAt(this.sidx)
       },
@@ -151,6 +156,7 @@ export function NoteListView({nc}) {
       onEscapeKey: mActionBound,
       gotoPrev: mActionBound,
       onAddNewNoteEvent: mActionBound,
+      onDeleteSelectionEvent: mActionBound,
       insertAbove: mActionBound,
       insertBelow: mActionBound,
     },

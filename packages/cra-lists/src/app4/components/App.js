@@ -131,7 +131,10 @@ class NoteListShortcuts extends C {
 
     if (e.target instanceof window.HTMLInputElement) return
 
-    R.cond([[isHotKey('a'), this.view.onAddNewNoteEvent]])(e)
+    R.cond([
+      [isHotKey('a'), this.view.onAddNewNoteEvent],
+      [isHotKey('d'), this.view.onDeleteSelectionEvent],
+    ])(e)
   }
 }
 
