@@ -1,4 +1,4 @@
-import {mJS, oObject, mSet, mValues, mActionBound} from './utils'
+import {mActionBound, mJS, mSet, mValues, oObject} from './utils'
 import nanoid from 'nanoid'
 
 const R = require('ramda')
@@ -23,9 +23,13 @@ export const Note = (function Note() {
 
 export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
-    const notesCollection = oObject(
+    return oObject(
       {
-        idLookup: oObject({}),
+        idLookup: oObject(
+          R.compose(R.map(Note.create), R.propOr('idLookup', {}))(
+            snapshot,
+          ),
+        ),
         get all() {
           return mValues(this.idLookup)
         },
@@ -53,11 +57,6 @@ export const NotesCollection = (function NotesCollection() {
       {put: mActionBound},
       {name: 'notesCollection'},
     )
-    R.compose(
-      R.forEach(R.compose(notesCollection.put, Note.create)),
-      R.propOr('idLookup', {}),
-    )(snapshot)
-    return notesCollection
   }
 
   return {create}
