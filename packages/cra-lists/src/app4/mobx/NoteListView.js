@@ -2,7 +2,7 @@ import {mReaction, oObject} from './utils'
 import * as mu from 'mobx-utils'
 
 const R = require('ramda')
-const RA = require('ramda-adjunct')
+// const RA = require('ramda-adjunct')
 
 const defineDelegatePropertyGetter = R.curry(
   (propertyName, src, target) =>
@@ -47,20 +47,14 @@ export function NoteListView({nc}) {
     () => view.eid,
     () => {
       rEid.trace()
-      if (RA.isNotNil(view.eid)) {
-        if (RA.isNotNil(view.findById(view.eid))) {
-          view.eidx = R.findIndex(
-            R.propEq('id', view.eid),
-            view.noteList,
-          )
-        } else {
-          view.eid = R.pathOr(
-            null,
-            ['noteList', view.eidx, 'id'],
-            view,
-          )
-        }
-      }
+      view.eidx = R.findIndex(R.propEq('id', view.eid), view.noteList)
+    },
+  )
+  const rEidx = mReaction(
+    () => view.eidx,
+    () => {
+      rEidx.trace()
+      view.eid = R.pathOr(null, ['noteList', view.eidx, 'id'], view)
     },
   )
 
