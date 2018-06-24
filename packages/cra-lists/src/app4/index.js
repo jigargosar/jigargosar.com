@@ -45,9 +45,7 @@ function createNC() {
 
 if (module.hot) {
   mAutoRun(() => {
-    const ncSnapshot = states.nc.snapshot
-    storage.set('ncSnapshot', ncSnapshot)
-    console.debug(ncSnapshot)
+    storage.set('ncSnapshot', states.nc.snapshot)
   })
 
   module.hot.accept(
