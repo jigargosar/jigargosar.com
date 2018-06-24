@@ -44,7 +44,7 @@ export function NoteListView({nc}) {
         }
       },
     }
-    ;['id', 'text', 'deleted', 'sortIdx'].forEach(
+    ;['id', 'parentId', 'text', 'deleted', 'sortIdx'].forEach(
       defineDelegatePropertyGetter(R.__, note, displayNote),
     )
     return oObject(displayNote)
@@ -72,7 +72,7 @@ export function NoteListView({nc}) {
       get isModeSelection() {
         return this.isEditMode('selection')
       },
-      pred: R.allPass([R.propEq('deleted', false)]),
+      pred: R.allPass([R.propEq('parentId', null)]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
       get transformedList() {
         return noteListTransformer(nc.all)
