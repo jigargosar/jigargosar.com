@@ -19,7 +19,7 @@ export const Note = (function Note() {
 })()
 
 export const NotesCollection = (function NotesCollection() {
-  function create(json = `{"idLookup":{}}`) {
+  function create(json) {
     const js = JSON.parse(json)
     return oObject({
       idLookup: oObject(js.idLookup || {}),
@@ -30,7 +30,7 @@ export const NotesCollection = (function NotesCollection() {
         const id = nanoid()
         return Note.create({
           id,
-          text: `Note Text : id:${id}`,
+          text: `NTTTT : id:${id}`,
           deleted: false,
         })
       },

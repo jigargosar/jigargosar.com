@@ -14,17 +14,16 @@ const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
-const nc = NotesCollection.create()
+const nc = NotesCollection.create('{}')
 
 R.times(() => {
   nc.addNewNote()
 }, 3)
 
-const states = {
+const states = oObject({
   nc,
   view: NoteListView({nc}),
-}
-
+})
 // setInterval(() => {
 //   states.noteList.forEach(n => (n.text = n.text + 1))
 // }, 1000)
@@ -46,13 +45,21 @@ registerServiceWorker()
 if (module.hot) {
   let ncJSON = '{}'
   autoRun(() => {
-    ncJSON = JSON.stringify(oJS(nc), null, 2)
+    ncJSON = JSON.stringify(oJS(states.nc), null, 2)
     console.log(ncJSON)
   })
 
   module.hot.accept(
-    ['./components/App', './mobx/NotesCollection'],
+    [
+      './components/App',
+      './mobx/NotesCollection',
+      './mobx/NoteListView',
+    ],
     () => {
+      const NotesCollection = require('./mobx/NotesCollection')
+        .NotesCollection
+      const NoteListView = require('./mobx/NoteListView').NoteListView
+
       states.nc = NotesCollection.create(ncJSON)
       states.view = NoteListView({nc: states.nc})
 
