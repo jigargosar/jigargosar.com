@@ -156,7 +156,8 @@ class NoteList extends C {
     )
   }
 }
-class Auth extends C {
+
+export class Auth extends C {
   r() {
     return (
       <WithState>
@@ -167,6 +168,7 @@ class Auth extends C {
     )
   }
 }
+
 class App extends C {
   r() {
     return (
@@ -174,7 +176,7 @@ class App extends C {
         <CenterLayout>
           <div className={'flex'}>
             <Title>Notes</Title>
-            <Auth />
+            {/*<Auth />*/}
           </div>
           <NoteList />
         </CenterLayout>

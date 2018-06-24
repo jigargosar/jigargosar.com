@@ -45,7 +45,7 @@ export const NotesCollection = (function NotesCollection() {
           const id = nanoid()
           return Note.create({
             id,
-            text: new Chance().aadhar(),
+            text: new Chance().word(),
             deleted: false,
             sortIdx,
           })
