@@ -122,6 +122,9 @@ export function NoteListView({nc}) {
           }
         }
       },
+      onEscapeKey() {
+        this.editMode = 'selection'
+      },
       gotoPrev() {
         this.sidx = this.sidx - 1
       },
@@ -139,6 +142,7 @@ export function NoteListView({nc}) {
     {
       gotoNext: mActionBound,
       onEnterKey: mActionBound,
+      onEscapeKey: mActionBound,
       gotoPrev: mActionBound,
       onAddNewNoteEvent: mActionBound,
     },
