@@ -33,6 +33,22 @@ const cn = RX.cx
 
 /*eslint-disable no-empty-pattern*/
 
+class NoteInput extends C {
+  r({note}) {
+    return (
+      <div className={cn('flex')}>
+        <input
+          autoFocus
+          className={cn('flex-auto pa2 mt2')}
+          placeholder={'Note text ...'}
+          value={note.text}
+          onChange={note.onTextChange}
+        />
+      </div>
+    )
+  }
+}
+
 class Note extends C {
   r({note}) {
     return (
@@ -46,6 +62,7 @@ class Note extends C {
         >
           {note.text}
         </Text>
+        {note.isEditing && <NoteInput note={note} />}
       </ListItem>
     )
   }
@@ -86,13 +103,15 @@ class NoteListShortcuts extends C {
 
   onKeydown = e => {
     console.debug('window.keydown', e)
-    if (e.target instanceof window.HTMLInputElement) return
     if (RX.startsWithPrefix('ArrowUp', e.key)) {
       this.view.editPrev()
-    }
-    if (RX.startsWithPrefix('ArrowDown', e.key)) {
+    } else if (RX.startsWithPrefix('ArrowDown', e.key)) {
       this.view.editNext()
-    } else if (R.equals('a', e.key)) {
+    }
+
+    if (e.target instanceof window.HTMLInputElement) return
+
+    if (R.equals('a', e.key)) {
       this.view.onAddNewNoteEvent(e)
     }
   }

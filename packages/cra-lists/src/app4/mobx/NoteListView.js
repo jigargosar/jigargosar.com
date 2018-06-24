@@ -23,6 +23,9 @@ export function NoteListView({nc}) {
       get isEditing() {
         return view.isEditingNote(this)
       },
+      onTextChange(e) {
+        note.text = e.target.value
+      },
     }
     ;['id', 'text', 'deleted'].forEach(
       defineDelegatePropertyGetter(R.__, note, displayNote),
