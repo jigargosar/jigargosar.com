@@ -25,6 +25,7 @@ import {
   renderKeyedById,
   WithState,
 } from './utils'
+import {mJS} from '../mobx/utils'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -37,8 +38,15 @@ const cn = RX.cx
 
 class NoteInput extends C {
   componentDidMount() {
-    console.log(this.props.note.textSelection)
+    console.log(mJS(this.props.note.textSelection))
   }
+
+  restoreSelection = e => {
+    const {start, end} = this.props.note.textSelection
+    e.target.selectionStart = start
+    e.target.selectionEnd = end
+  }
+
   r({note}) {
     return (
       <input
@@ -48,6 +56,7 @@ class NoteInput extends C {
         value={note.text}
         onChange={note.onTextChange}
         onSelect={note.onEditTextSelect}
+        onFocus={this.restoreSelection}
       />
     )
   }
