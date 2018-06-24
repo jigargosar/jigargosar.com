@@ -36,15 +36,13 @@ const cn = RX.cx
 class NoteInput extends C {
   r({note}) {
     return (
-      <div className={cn('flex')}>
-        <input
-          autoFocus
-          className={cn('flex-auto pa2 mt2')}
-          placeholder={'Note text ...'}
-          value={note.text}
-          onChange={note.onTextChange}
-        />
-      </div>
+      <input
+        autoFocus
+        className={cn('bw0 flex-auto ma0 pa1 lh-copy')}
+        placeholder={'Note text ...'}
+        value={note.text}
+        onChange={note.onTextChange}
+      />
     )
   }
 }
@@ -52,16 +50,19 @@ class NoteInput extends C {
 class Note extends C {
   r({note}) {
     return (
-      <ListItem>
+      <ListItem className={cn('flex items-center lh-copy')}>
         <Button onClick={note.onToggleDeleteEvent}>X</Button>
-        <Text
-          className={cn(
-            {'o-50': note.deleted},
-            {blue: note.isEditing},
-          )}
-        >
-          {note.text}
-        </Text>
+        {!note.isEditing && (
+          <Text
+            className={cn(
+              'pa1',
+              {'o-50': note.deleted},
+              {blue: note.isEditing},
+            )}
+          >
+            {note.text}
+          </Text>
+        )}
         {note.isEditing && <NoteInput note={note} />}
       </ListItem>
     )
