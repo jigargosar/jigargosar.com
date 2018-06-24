@@ -83,7 +83,6 @@ export function NoteListView({nc}) {
           nc.all,
         )
       },
-
       onAddNewNoteEvent() {
         const newNote = nc.newNote()
         this.sortedList.splice(0, 0, newNote)
