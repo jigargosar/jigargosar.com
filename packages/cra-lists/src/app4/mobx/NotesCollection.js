@@ -10,6 +10,10 @@ import {nanoid} from '../model/util'
 import Chance from 'chance'
 import {R} from '../services/utils'
 
+const deletedProp = R.propOr(false, 'deleted')
+const rejectDeleted = R.reject(deletedProp)
+const filterDeleted = R.filter(deletedProp)
+
 export const Note = (function Note() {
   function create({id, text, deleted, sortIdx}) {
     const note = oObject({
@@ -17,9 +21,6 @@ export const Note = (function Note() {
       text,
       deleted,
       sortIdx,
-      get all() {
-        return mValues(this.idMap)
-      },
       toggleDeleted() {
         this.deleted = !this.deleted
       },
@@ -49,8 +50,14 @@ export const NotesCollection = (function NotesCollection() {
     return oObject(
       {
         idMap: oObject(R.compose(R.map(Note.create))(snapshot)),
-        get all() {
+        get valuesArray() {
           return mValues(this.idMap)
+        },
+        get all() {
+          return rejectDeleted(this.valuesArray)
+        },
+        get deleted() {
+          return filterDeleted(this.valuesArray)
         },
         newNote({sortIdx = 0} = {}) {
           const id = nanoid()
