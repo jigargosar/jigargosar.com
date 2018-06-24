@@ -48,11 +48,15 @@ export function NoteListView({nc}) {
         return !R.isNil(this.eid)
       },
       pred: R.allPass([R.propEq('deleted', false)]),
+      sortComparators: [R.ascend(R.prop('sortIdx'))],
       get transformedList() {
         return noteListTransformer(nc.all)
       },
       get noteList() {
-        return R.filter(this.pred, this.transformedList)
+        return R.compose(
+          R.sortWith(this.sortComparators),
+          R.filter(this.pred),
+        )(this.transformedList)
       },
       onAddNewNoteEvent() {
         nc.addNewNote()
