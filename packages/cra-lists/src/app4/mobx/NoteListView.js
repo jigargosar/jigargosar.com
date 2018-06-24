@@ -95,10 +95,6 @@ export function NoteListView({nc}) {
       updateSortIdx() {
         this.sortedList.forEach((n, idx) => (n.sortIdx = idx))
       },
-      onAddNewNoteEvent() {
-        this.addNewAt(0)
-      },
-
       addNewAt(idx) {
         const newNote = nc.newNote()
         this.sortedList.splice(idx, 0, newNote)
@@ -106,6 +102,14 @@ export function NoteListView({nc}) {
         nc.add(newNote)
         this.sidx = idx
         this.editMode = 'editing'
+      },
+
+      onAddNewNoteEvent() {
+        this.addNewAt(0)
+      },
+      insertAbove() {
+        // this.sidx = this.sidx + 1
+        this.addNewAt(this.sidx)
       },
       gotoNext() {
         this.sidx = this.sidx + 1
@@ -128,10 +132,6 @@ export function NoteListView({nc}) {
       gotoPrev() {
         this.sidx = this.sidx - 1
       },
-      insertBelow() {
-        // this.sidx = this.sidx + 1
-        nc.addNewNote()
-      },
       isEditingNote(note) {
         return this.isModeEditing && R.equals(note.id, this.sid)
       },
@@ -145,6 +145,7 @@ export function NoteListView({nc}) {
       onEscapeKey: mActionBound,
       gotoPrev: mActionBound,
       onAddNewNoteEvent: mActionBound,
+      insertAbove: mActionBound,
     },
   )
 

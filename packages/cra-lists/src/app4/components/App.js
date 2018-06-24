@@ -128,7 +128,7 @@ class NoteListShortcuts extends C {
       [isHotKey('ArrowUp'), wrapPD(this.view.gotoPrev)],
       [isAnyHotKey(['ArrowDown']), wrapPD(this.view.gotoNext)],
       [isAnyHotKey(['enter']), this.view.onEnterKey],
-      [isHotKey('mod+enter'), this.view.insertBelow],
+      [isHotKey('mod+enter'), this.view.insertAbove],
       [isHotKey('escape'), this.view.onEscapeKey],
     ])(e)
 
