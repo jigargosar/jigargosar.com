@@ -2,6 +2,7 @@ import {mAutoRun, oObject} from './utils'
 import * as mu from 'mobx-utils'
 
 const R = require('ramda')
+const RA = require('ramda-adjunct')
 
 const defineDelegatePropertyGetter = R.curry(
   (propertyName, src, target) =>
@@ -16,6 +17,7 @@ const defineDelegatePropertyGetter = R.curry(
 export function NoteListView({nc}) {
   const view = oObject({
     eid: null,
+    eidx: -1,
     get isEditing() {
       return !R.isNil(this.eid)
     },
@@ -25,6 +27,9 @@ export function NoteListView({nc}) {
     },
     get noteList() {
       return R.filter(this.pred, this.transformedList)
+    },
+    findById(id) {
+      return R.find(R.propEq('id', id), this.noteList)
     },
     onAddNewNoteEvent() {
       nc.addNewNote()
@@ -37,6 +42,21 @@ export function NoteListView({nc}) {
       return this.isEditing && R.equals(note.id, this.eid)
     },
   })
+
+  mAutoRun(r => {
+    r.trace()
+    if (RA.isNotNil(view.eid)) {
+      if (RA.isNotNil(view.findById(view.eid))) {
+        view.eidx = R.findIndex(
+          R.propEq('id', view.eid),
+          view.noteList,
+        )
+      } else {
+        view.eid = R.pathOr(null, ['noteList', view.eidx, 'id'], view)
+      }
+    }
+  })
+
   const noteTransformer = mu.createTransformer(note => {
     const displayNote = {
       onToggleDeleteEvent() {
@@ -55,9 +75,5 @@ export function NoteListView({nc}) {
   const noteListTransformer = mu.createTransformer(
     R.map(noteTransformer),
   )
-  mAutoRun(r => {
-    r.trace()
-    console.debug(view.noteList.length)
-  })
   return view
 }
