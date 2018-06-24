@@ -42,13 +42,13 @@ export function NoteListView({nc}) {
 
   const view = oObject(
     {
-      // eid: null,
-      get eid() {
-        return R.pathOr(null, ['noteList', view.eidx, 'id'], view)
+      // sid: null,
+      get sid() {
+        return R.pathOr(null, ['noteList', view.sidx, 'id'], view)
       },
-      eidx: -1,
+      sidx: -1,
       get isEditing() {
-        return !R.isNil(this.eid)
+        return !R.isNil(this.sid)
       },
       pred: R.allPass([R.propEq('deleted', false)]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
@@ -66,23 +66,23 @@ export function NoteListView({nc}) {
       },
       startEditing() {
         // if (this.isEditing || R.isEmpty(this.noteList)) return
-        // this.eid = R.head(this.noteList).id
+        // this.sid = R.head(this.noteList).id
         if (!this.isEditing) {
-          this.eidx = 0
+          this.sidx = 0
         }
       },
       editNext() {
-        this.eidx = this.eidx + 1
+        this.sidx = this.sidx + 1
       },
       editPrev() {
-        this.eidx = this.eidx - 1
+        this.sidx = this.sidx - 1
       },
       insertBelow() {
-        // this.eidx = this.eidx + 1
+        // this.sidx = this.sidx + 1
         nc.addNewNote()
       },
       isEditingNote(note) {
-        return this.isEditing && R.equals(note.id, this.eid)
+        return this.isEditing && R.equals(note.id, this.sid)
       },
       updateSortIdx() {
         this.noteList.forEach((n, idx) => n.setSortIndex(idx))
@@ -95,23 +95,23 @@ export function NoteListView({nc}) {
   )
 
   // const rEid = mReaction(
-  //   () => view.eid,
+  //   () => view.sid,
   //   () => {
   //     mTrace(rEid)
-  //     view.eidx = R.findIndex(R.propEq('id', view.eid), view.noteList)
+  //     view.sidx = R.findIndex(R.propEq('id', view.sid), view.noteList)
   //   },
   // )
   const rEidx = mReaction(
-    () => [view.eidx],
+    () => [view.sidx],
     () => {
       mTrace(rEidx)
-      if (view.eidx >= view.noteList.length) {
-        view.eidx = 0
+      if (view.sidx >= view.noteList.length) {
+        view.sidx = 0
       }
-      if (view.eidx < 0) {
-        view.eidx = view.noteList.length - 1
+      if (view.sidx < 0) {
+        view.sidx = view.noteList.length - 1
       }
-      // view.eid = R.pathOr(null, ['noteList', view.eidx, 'id'], view)
+      // view.sid = R.pathOr(null, ['noteList', view.sidx, 'id'], view)
     },
   )
 
@@ -119,12 +119,12 @@ export function NoteListView({nc}) {
     () => [view.noteList.length],
     () => {
       mTrace(rLength)
-      // view.eidx = R.clamp(0, view.noteList.length - 1, view.eidx)
+      // view.sidx = R.clamp(0, view.noteList.length - 1, view.sidx)
       view.updateSortIdx()
     },
   )
 
-  view.eidx = 0
+  view.sidx = 0
 
   return view
 }
