@@ -29,6 +29,12 @@ export function NoteListView({nc}) {
   const noteListTransformer = mu.createTransformer(
     R.map(noteTransformer),
   )
+  const edit = oObject({
+    id: null,
+    get isEditing() {
+      return !R.isNil(this.id)
+    },
+  })
   const noteListView = oObject({
     pred: R.allPass([R.propEq('deleted', false)]),
 
@@ -43,7 +49,10 @@ export function NoteListView({nc}) {
     onAddNewNoteEvent() {
       nc.addNewNote()
     },
-    startEditing() {},
+    startEditing() {
+      if (edit.isEditing || R.isEmpty(this.noteList)) return
+      edit.id = R.head(this.noteList).id
+    },
   })
   mAutoRun(r => {
     r.trace()
