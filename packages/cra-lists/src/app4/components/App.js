@@ -71,9 +71,9 @@ class Note extends C {
         {!note.isEditing && (
           <Text
             className={cn(
-              'pa1',
+              'pa1 flex-auto',
               {'o-50': note.deleted},
-              {blue: note.isSelected},
+              {'blue bg-washed-yellow': note.isSelected},
             )}
           >
             {note.text}
