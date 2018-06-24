@@ -84,7 +84,11 @@ export function NoteListView({nc}) {
         )
       },
 
+      updateSortIdx() {
+        this.sortedList.forEach((n, idx) => n.setSortIndex(idx))
+      },
       onAddNewNoteEvent() {
+        // const newNote = nc.newNote()
         nc.addNewNote()
       },
       gotoNext() {
@@ -102,9 +106,6 @@ export function NoteListView({nc}) {
       },
       isSelectedNote(note) {
         return this.isModeSelection && R.equals(note.id, this.sid)
-      },
-      updateSortIdx() {
-        this.noteList.forEach((n, idx) => n.setSortIndex(idx))
       },
     },
     {
