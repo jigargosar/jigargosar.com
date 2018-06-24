@@ -80,16 +80,15 @@ export function NoteListView({nc}) {
 
       get sortedList() {
         return R.compose(oArray, R.sortWith(this.sortComparators))(
-          this.all,
+          nc.all,
         )
       },
 
-      updateSortIdx() {
-        this.sortedList.forEach((n, idx) => n.setSortIndex(idx))
-      },
       onAddNewNoteEvent() {
-        // const newNote = nc.newNote()
-        nc.addNewNote()
+        const newNote = nc.newNote()
+        this.sortedList.splice(0, 0, newNote)
+        this.sortedList.forEach((n, idx) => (n.sortIdx = idx))
+        nc.add(newNote)
       },
       gotoNext() {
         this.sidx = this.sidx + 1
@@ -111,6 +110,7 @@ export function NoteListView({nc}) {
     {
       gotoNext: mActionBound,
       gotoPrev: mActionBound,
+      onAddNewNoteEvent: mActionBound,
     },
   )
 
