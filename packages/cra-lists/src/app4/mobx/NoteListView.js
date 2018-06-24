@@ -91,6 +91,8 @@ export function NoteListView({nc}) {
         this.sortedList.splice(0, 0, newNote)
         this.updateSortIdx()
         nc.add(newNote)
+        this.sidx = 0
+        this.editMode = 'editing'
       },
       gotoNext() {
         this.sidx = this.sidx + 1
