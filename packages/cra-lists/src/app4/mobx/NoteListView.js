@@ -100,13 +100,6 @@ export function NoteListView({nc}) {
     },
   )
 
-  // const rEid = mReaction(
-  //   () => view.sid,
-  //   () => {
-  //     mTrace(rEid)
-  //     view.sidx = R.findIndex(R.propEq('id', view.sid), view.noteList)
-  //   },
-  // )
   const rEidx = mReaction(
     () => [view.sidx],
     () => {
