@@ -44,6 +44,7 @@ class NoteInput extends C {
         placeholder={'Note text ...'}
         value={note.text}
         onChange={note.onTextChange}
+        onSelect={note.onEditTextSelect}
       />
     )
   }

@@ -33,7 +33,15 @@ export function NoteListView({nc}) {
         return view.isSelectedNote(this)
       },
       onTextChange(e) {
-        note.text = e.target.value
+        const target = e.target
+        console.log(target)
+        note.text = target.value
+      },
+      onEditTextSelect(e) {
+        e.persist()
+        const target = e.target
+        console.log(target.selectionStart, target.selectionEnd)
+        console.log(e)
       },
     }
     ;['id', 'text', 'deleted', 'sortIdx'].forEach(
