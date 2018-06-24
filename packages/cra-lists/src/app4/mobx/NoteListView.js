@@ -83,10 +83,13 @@ export function NoteListView({nc}) {
           nc.all,
         )
       },
+      updateSortIdx() {
+        this.sortedList.forEach((n, idx) => (n.sortIdx = idx))
+      },
       onAddNewNoteEvent() {
         const newNote = nc.newNote()
         this.sortedList.splice(0, 0, newNote)
-        this.sortedList.forEach((n, idx) => (n.sortIdx = idx))
+        this.updateSortIdx()
         nc.add(newNote)
       },
       gotoNext() {
