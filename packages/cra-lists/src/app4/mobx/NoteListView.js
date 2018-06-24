@@ -1,10 +1,4 @@
-import {
-  mActionBound,
-  mReaction,
-  mTrace,
-  oArray,
-  oObject,
-} from './utils'
+import {mActionBound, mReaction, oArray, oObject} from './utils'
 import * as mu from 'mobx-utils'
 
 const R = require('ramda')
