@@ -1,4 +1,4 @@
-import {autoRun, oObject} from './utils'
+import {mAutoRun, oObject} from './utils'
 import * as mu from 'mobx-utils'
 
 const R = require('ramda')
@@ -45,7 +45,7 @@ export function NoteListView({nc}) {
     },
     startEditing() {},
   })
-  autoRun(r => {
+  mAutoRun(r => {
     r.trace()
     console.debug(noteListView.noteList.length)
   })

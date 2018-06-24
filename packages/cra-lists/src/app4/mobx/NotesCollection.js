@@ -1,4 +1,4 @@
-import {oJS, oObject, oSet, oValues} from './utils'
+import {mJS, oObject, mSet, mValues, mActionBound} from './utils'
 import nanoid from 'nanoid'
 
 const R = require('ramda')
@@ -11,7 +11,7 @@ export const Note = (function Note() {
       text,
       deleted,
       get all() {
-        return oValues(this.idLookup)
+        return mValues(this.idLookup)
       },
       toggleDeleted() {
         this.deleted = !this.deleted
@@ -23,33 +23,40 @@ export const Note = (function Note() {
 
 export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
-    let notesCollection = oObject({
-      idLookup: oObject({}),
-      get all() {
-        return oValues(this.idLookup)
+    const notesCollection = oObject(
+      {
+        idLookup: oObject({}),
+        get all() {
+          return mValues(this.idLookup)
+        },
+        newNote() {
+          const id = nanoid()
+          return Note.create({
+            id,
+            text: `Note Text : id:${id}`,
+            deleted: false,
+          })
+        },
+        put(note) {
+          mSet(this.idLookup, note.id, note)
+        },
+        add(note) {
+          this.put(note)
+        },
+        addNewNote() {
+          this.add(this.newNote())
+        },
+        get snapshot() {
+          return mJS(this)
+        },
       },
-      newNote() {
-        const id = nanoid()
-        return Note.create({
-          id,
-          text: `Note Text : id:${id}`,
-          deleted: false,
-        })
-      },
-      put(note) {
-        oSet(this.idLookup, note.id, note)
-      },
-      add(note) {
-        this.put(note)
-      },
-      addNewNote() {
-        this.add(this.newNote())
-      },
-      get snapshot() {
-        return oJS(this)
-      },
-    })
-    R.map(notesCollection.put)(snapshot.idLookup || {})
+      {put: mActionBound},
+      {name: 'notesCollection'},
+    )
+    R.compose(
+      R.forEach(R.compose(notesCollection.put, Note.create)),
+      R.propOr('idLookup', {}),
+    )(snapshot)
     return notesCollection
   }
 

@@ -1,6 +1,6 @@
 /*eslint-disable*/
 
-import {createTransformer} from "mobx-utils";
+import {createTransformer} from 'mobx-utils'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -19,10 +19,11 @@ const RX = require('ramda-extension')
 export const oObject = m.observable.object
 export const oArray = m.observable.array
 export const oMap = m.observable.map
-export const oSet = m.set
-export const oValues = m.values
-export const autoRun = m.autorun
-export const oJS = m.toJS
+export const mSet = m.set
+export const mValues = m.values
+export const mAutoRun = m.autorun
+export const mJS = m.toJS
+export const mActionBound = m.action.bound
 export const t = mst.types
 export const tModel = mst.types.model
 export const tMap = mst.types.map

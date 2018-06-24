@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
-import {autoRun, oJS, oObject} from './mobx/utils'
+import {mAutoRun, mJS, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
 import {NotesCollection} from './mobx/NotesCollection'
 
@@ -44,7 +44,7 @@ registerServiceWorker()
 
 if (module.hot) {
   let ncSnapshot = {}
-  autoRun(() => {
+  mAutoRun(() => {
     // ncSnapshot = JSON.stringify(oJS(states.nc), null, 2)
     ncSnapshot = states.nc.snapshot
     console.log(ncSnapshot)
