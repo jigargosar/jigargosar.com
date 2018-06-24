@@ -38,7 +38,12 @@ class Note extends C {
     return (
       <ListItem>
         <Button onClick={note.onToggleDeleteEvent}>X</Button>
-        <Text className={cn({'o-50': note.deleted})}>
+        <Text
+          className={cn(
+            {'o-50': note.deleted},
+            {blue: note.isEditing},
+          )}
+        >
           {note.text}
         </Text>
       </ListItem>
