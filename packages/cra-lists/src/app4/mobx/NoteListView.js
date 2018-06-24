@@ -73,7 +73,7 @@ export function NoteListView({nc}) {
     },
   )
   const rEidx = mReaction(
-    () => [view.eidx, view.noteList.length],
+    () => [view.eidx],
     () => {
       mTrace(rEidx)
       if (view.eidx >= view.noteList.length) {
@@ -83,6 +83,14 @@ export function NoteListView({nc}) {
         view.eidx = view.noteList.length - 1
       }
       view.eid = R.pathOr(null, ['noteList', view.eidx, 'id'], view)
+    },
+  )
+
+  const rLength = mReaction(
+    () => [view.noteList.length],
+    () => {
+      mTrace(rLength)
+      view.eidx = R.clamp(0, view.noteList.length - 1, view.eidx)
     },
   )
 
