@@ -110,10 +110,10 @@ export function NoteListView({nc}) {
         this.noteList[this.sidx].onToggleDeleteEvent()
       },
       insertAbove() {
-        this.addNewAt(this.sidx - 1)
+        this.addNewAt(this.sidx)
       },
       insertBelow() {
-        this.addNewAt(this.sidx)
+        this.addNewAt(this.sidx + 1)
       },
       gotoNext() {
         this.sidx = this.sidx + 1
