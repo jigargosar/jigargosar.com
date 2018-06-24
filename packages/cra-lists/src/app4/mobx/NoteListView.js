@@ -35,9 +35,6 @@ export function NoteListView({nc}) {
       onTextChange(e) {
         note.text = e.target.value
       },
-      setSortIndex(idx) {
-        note.sortIdx = idx
-      },
     }
     ;['id', 'text', 'deleted', 'sortIdx'].forEach(
       defineDelegatePropertyGetter(R.__, note, displayNote),
