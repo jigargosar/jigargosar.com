@@ -1,5 +1,8 @@
-import {oObject, oSet, oValues} from './utils'
+import {oJS, oObject, oSet, oValues} from './utils'
 import nanoid from 'nanoid'
+
+const R = require('ramda')
+// const RA = require('ramda-adjunct')
 
 export const Note = (function Note() {
   function create({id, text, deleted}) {
@@ -19,10 +22,9 @@ export const Note = (function Note() {
 })()
 
 export const NotesCollection = (function NotesCollection() {
-  function create(json) {
-    const js = JSON.parse(json)
-    return oObject({
-      idLookup: oObject(js.idLookup || {}),
+  function create(snapshot = {}) {
+    let notesCollection = oObject({
+      idLookup: oObject({}),
       get all() {
         return oValues(this.idLookup)
       },
@@ -30,7 +32,7 @@ export const NotesCollection = (function NotesCollection() {
         const id = nanoid()
         return Note.create({
           id,
-          text: `NTTTT : id:${id}`,
+          text: `Note Text : id:${id}`,
           deleted: false,
         })
       },
@@ -44,7 +46,12 @@ export const NotesCollection = (function NotesCollection() {
       addNewNote() {
         this.add(this.newNote())
       },
+      get snapshot() {
+        return oJS(this)
+      },
     })
+    R.map(notesCollection.put)(snapshot.idLookup || {})
+    return notesCollection
   }
 
   return {create}

@@ -14,7 +14,7 @@ const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
-const nc = NotesCollection.create('{}')
+const nc = NotesCollection.create()
 
 R.times(() => {
   nc.addNewNote()
@@ -43,10 +43,11 @@ render()
 registerServiceWorker()
 
 if (module.hot) {
-  let ncJSON = '{}'
+  let ncSnapshot = {}
   autoRun(() => {
-    ncJSON = JSON.stringify(oJS(states.nc), null, 2)
-    console.log(ncJSON)
+    // ncSnapshot = JSON.stringify(oJS(states.nc), null, 2)
+    ncSnapshot = states.nc.snapshot
+    console.log(ncSnapshot)
   })
 
   module.hot.accept(
@@ -60,7 +61,7 @@ if (module.hot) {
         .NotesCollection
       const NoteListView = require('./mobx/NoteListView').NoteListView
 
-      states.nc = NotesCollection.create(ncJSON)
+      states.nc = NotesCollection.create(ncSnapshot)
       states.view = NoteListView({nc: states.nc})
 
       render()
