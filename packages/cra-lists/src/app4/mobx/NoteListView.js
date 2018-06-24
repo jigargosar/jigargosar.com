@@ -84,10 +84,6 @@ export function NoteListView({nc}) {
         )
       },
 
-      // get viewModel() {
-      //   return createViewModel(oObject({sortedList: this.sortedList}))
-      // },
-
       onAddNewNoteEvent() {
         nc.addNewNote()
       },
