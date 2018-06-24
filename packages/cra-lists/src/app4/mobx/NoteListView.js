@@ -1,4 +1,4 @@
-import {mAutoRun, oObject} from './utils'
+import {mReaction, oObject} from './utils'
 import * as mu from 'mobx-utils'
 
 const R = require('ramda')
@@ -43,19 +43,26 @@ export function NoteListView({nc}) {
     },
   })
 
-  mAutoRun(r => {
-    r.trace()
-    if (RA.isNotNil(view.eid)) {
-      if (RA.isNotNil(view.findById(view.eid))) {
-        view.eidx = R.findIndex(
-          R.propEq('id', view.eid),
-          view.noteList,
-        )
-      } else {
-        view.eid = R.pathOr(null, ['noteList', view.eidx, 'id'], view)
+  const rEid = mReaction(
+    () => view.eid,
+    () => {
+      rEid.trace()
+      if (RA.isNotNil(view.eid)) {
+        if (RA.isNotNil(view.findById(view.eid))) {
+          view.eidx = R.findIndex(
+            R.propEq('id', view.eid),
+            view.noteList,
+          )
+        } else {
+          view.eid = R.pathOr(
+            null,
+            ['noteList', view.eidx, 'id'],
+            view,
+          )
+        }
       }
-    }
-  })
+    },
+  )
 
   const noteTransformer = mu.createTransformer(note => {
     const displayNote = {

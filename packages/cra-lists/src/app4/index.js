@@ -49,7 +49,7 @@ if (module.hot) {
       'ncSnapshot',
       JSON.stringify(ncSnapshot, null, 2),
     )
-    console.log(ncSnapshot)
+    console.debug(ncSnapshot)
   })
 
   module.hot.accept(

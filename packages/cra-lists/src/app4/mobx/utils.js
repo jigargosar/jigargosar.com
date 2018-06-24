@@ -22,6 +22,7 @@ export const oMap = m.observable.map
 export const mSet = m.set
 export const mValues = m.values
 export const mAutoRun = m.autorun
+export const mReaction = m.reaction
 export const mJS = m.toJS
 export const mSnapshot = R.compose(JSON.parse, JSON.stringify, mJS)
 export const mActionBound = m.action.bound
