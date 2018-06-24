@@ -5,7 +5,8 @@ import {
   mValues,
   oObject,
 } from './utils'
-import nanoid from 'nanoid'
+import {nanoid} from '../model/util'
+import Chance from 'chance'
 
 const R = require('ramda')
 // const RA = require('ramda-adjunct')
@@ -44,7 +45,7 @@ export const NotesCollection = (function NotesCollection() {
           const id = nanoid()
           return Note.create({
             id,
-            text: `Note Text : id:${id}`,
+            text: new Chance().aadhar(),
             deleted: false,
             sortIdx,
           })

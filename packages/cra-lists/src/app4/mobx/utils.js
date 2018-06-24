@@ -6,7 +6,7 @@ const firebase = require('firebase/app')
 require('firebase/auth')
 require('firebase/firestore')
 var nanostate = require('nanostate')
-var nanoid = require('nanoid')
+
 const R = require('ramda')
 const m = require('mobx')
 const mst = require('mobx-state-tree')

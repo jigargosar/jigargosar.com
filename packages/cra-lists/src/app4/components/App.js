@@ -138,13 +138,26 @@ class NoteList extends C {
     )
   }
 }
-
+class Auth extends C {
+  r() {
+    return (
+      <WithState>
+        {({auth0}) => (
+          <Button onClick={() => auth0.login()}>Login</Button>
+        )}
+      </WithState>
+    )
+  }
+}
 class App extends C {
   r() {
     return (
       <RootContainer>
         <CenterLayout>
-          <Title>Notes</Title>
+          <div className={'flex'}>
+            <Title>Notes</Title>
+            <Auth />
+          </div>
           <NoteList />
         </CenterLayout>
       </RootContainer>

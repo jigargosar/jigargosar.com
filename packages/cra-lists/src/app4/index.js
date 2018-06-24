@@ -7,6 +7,7 @@ import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
 import {mAutoRun, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
+import {Auth0} from './services/auth0'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -17,6 +18,7 @@ const nc = createNC()
 const states = oObject({
   nc,
   view: NoteListView({nc}),
+  auth0: new Auth0(),
 })
 
 function render() {

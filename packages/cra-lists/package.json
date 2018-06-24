@@ -14,10 +14,13 @@
   },
   "dependencies": {
     "aproba": "2.0.0",
+    "auth0-js": "^9.6.1",
     "ava": "0.25.0",
+    "chance": "^1.0.16",
     "classnames": "2.2.6",
     "console-feed": "2.8.1",
     "date-fns": "1.29.0",
+    "faker": "^4.1.0",
     "firebase": "5.1.0",
     "fluture": "8.0.2",
     "found": "0.3.11",
@@ -72,8 +75,7 @@
     "ti": "env JEST_PUPPETEER_CONFIG=e2e/jest-puppeteer.config.js HEADLESS=false jest -c e2e/jest.config.js --watch",
     "eject": "react-scripts eject"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "browserslist": {
     "development": [
       "last 2 chrome versions",
