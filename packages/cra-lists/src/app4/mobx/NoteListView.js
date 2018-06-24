@@ -151,6 +151,8 @@ export function NoteListView({nc}) {
       mTrace(rLength)
       if (listLength > 0) {
         view.sidx = R.clamp(0, listLength - 1, view.sidx)
+      } else {
+        view.sidx = -1
       }
       view.updateSortIdx()
     },
