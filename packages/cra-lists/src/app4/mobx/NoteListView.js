@@ -94,7 +94,7 @@ export function NoteListView({nc}) {
       updateSortIdx() {
         this.sortedList.forEach((n, idx) => (n.sortIdx = idx))
       },
-      addNewAt(idx) {
+      addNewAt(idx, {child = false} = {}) {
         const newNote = nc.newNote()
         this.sortedList.splice(idx, 0, newNote)
         this.updateSortIdx()
@@ -116,6 +116,9 @@ export function NoteListView({nc}) {
       },
       insertBelow() {
         this.addNewAt(this.sidx + 1)
+      },
+      insertChild() {
+        this.addNewAt(this.sidx + 1, {child: true})
       },
       gotoNext() {
         this.sidx = this.sidx + 1
@@ -155,6 +158,7 @@ export function NoteListView({nc}) {
       onDeleteSelectionEvent: mActionBound,
       insertAbove: mActionBound,
       insertBelow: mActionBound,
+      insertChild: mActionBound,
     },
   )
 

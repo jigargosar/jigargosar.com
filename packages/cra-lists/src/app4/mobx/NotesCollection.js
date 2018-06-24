@@ -16,9 +16,10 @@ const rejectDeleted = R.reject(deletedProp)
 const filterDeleted = R.filter(deletedProp)
 
 export const Note = (function Note() {
-  function create({id, text, deleted, sortIdx}) {
+  function create({id, parentId, text, deleted, sortIdx}) {
     const note = oObject({
       id,
+      parentId,
       text,
       deleted,
       sortIdx,
@@ -74,6 +75,7 @@ export const NotesCollection = (function NotesCollection() {
           const id = nanoid()
           return Note.create({
             id,
+            parentId: null,
             text: '',
             deleted: false,
             sortIdx: 0,
