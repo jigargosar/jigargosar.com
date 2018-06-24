@@ -175,10 +175,10 @@ export function NoteListView({nc}) {
     },
   )
 
-  const rLength = mReaction(
+  /*const rLength = */ mReaction(
     () => [view.noteList.length],
     ([listLength]) => {
-      mTrace(rLength)
+      // mTrace(rLength)
       if (listLength > 0) {
         view.sidx = R.clamp(0, listLength - 1, view.sidx)
       } else {
