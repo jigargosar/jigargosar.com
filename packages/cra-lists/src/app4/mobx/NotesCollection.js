@@ -70,13 +70,13 @@ export const NotesCollection = (function NotesCollection() {
         get deleted() {
           return filterDeleted(this.valuesArray)
         },
-        newNote({sortIdx = 0} = {}) {
+        newNote() {
           const id = nanoid()
           return Note.create({
             id,
             text: '',
             deleted: false,
-            sortIdx,
+            sortIdx: 0,
           })
         },
         put(note) {
@@ -84,9 +84,6 @@ export const NotesCollection = (function NotesCollection() {
         },
         add(note) {
           this.put(note)
-        },
-        addNewNote() {
-          this.add(this.newNote())
         },
         get snapshot() {
           return mJS(this.idMap)
