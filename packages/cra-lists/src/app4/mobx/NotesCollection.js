@@ -1,4 +1,10 @@
-import {mActionBound, mJS, mSet, mValues, oObject} from './utils'
+import {
+  mActionBound,
+  mSet,
+  mSnapshot,
+  mValues,
+  oObject,
+} from './utils'
 import nanoid from 'nanoid'
 
 const R = require('ramda')
@@ -51,7 +57,7 @@ export const NotesCollection = (function NotesCollection() {
           this.add(this.newNote())
         },
         get snapshot() {
-          return mJS(this)
+          return mSnapshot(this)
         },
       },
       {put: mActionBound},

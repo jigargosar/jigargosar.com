@@ -5,25 +5,23 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
-import {mAutoRun, mJS, oObject} from './mobx/utils'
+import {mAutoRun, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
-import {NotesCollection} from './mobx/NotesCollection'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
-const nc = NotesCollection.create()
-
-R.times(() => {
-  nc.addNewNote()
-}, 3)
-
+const nc = createNC()
 const states = oObject({
   nc,
   view: NoteListView({nc}),
 })
+
+// R.times(() => {
+//   states.nc.addNewNote()
+// }, 3)
 
 // setInterval(() => {
 //   states.noteList.forEach(n => (n.text = n.text + 1))
@@ -43,11 +41,22 @@ render()
 
 registerServiceWorker()
 
+function createNC() {
+  const NotesCollection = require('./mobx/NotesCollection')
+    .NotesCollection
+  const ncSnapshot = R.compose(R.defaultTo({}))(
+    localStorage.getItem('ncSnapshot'),
+  )
+  return NotesCollection.create(ncSnapshot)
+}
+
 if (module.hot) {
-  let ncSnapshot = {}
   mAutoRun(() => {
-    // ncSnapshot = JSON.stringify(oJS(states.nc), null, 2)
-    ncSnapshot = states.nc.snapshot
+    const ncSnapshot = states.nc.snapshot
+    localStorage.setItem(
+      'ncSnapshot',
+      JSON.stringify(ncSnapshot, null, 2),
+    )
     console.log(ncSnapshot)
   })
 
@@ -58,11 +67,9 @@ if (module.hot) {
       './mobx/NoteListView',
     ],
     () => {
-      const NotesCollection = require('./mobx/NotesCollection')
-        .NotesCollection
       const NoteListView = require('./mobx/NoteListView').NoteListView
 
-      states.nc = NotesCollection.create(ncSnapshot)
+      states.nc = createNC()
       states.view = NoteListView({nc: states.nc})
 
       render()

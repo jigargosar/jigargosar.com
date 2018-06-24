@@ -23,6 +23,7 @@ export const mSet = m.set
 export const mValues = m.values
 export const mAutoRun = m.autorun
 export const mJS = m.toJS
+export const mSnapshot = R.compose(JSON.parse, JSON.stringify, mJS)
 export const mActionBound = m.action.bound
 export const t = mst.types
 export const tModel = mst.types.model
