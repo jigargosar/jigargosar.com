@@ -1,4 +1,4 @@
-import {mReaction, mTrace, oObject} from './utils'
+import {mActionBound, mReaction, mTrace, oObject} from './utils'
 import * as mu from 'mobx-utils'
 
 const R = require('ramda')
@@ -37,46 +37,52 @@ export function NoteListView({nc}) {
     R.map(noteTransformer),
   )
 
-  const view = oObject({
-    // eid: null,
-    get eid() {
-      return R.pathOr(null, ['noteList', view.eidx, 'id'], view)
+  const view = oObject(
+    {
+      // eid: null,
+      get eid() {
+        return R.pathOr(null, ['noteList', view.eidx, 'id'], view)
+      },
+      eidx: -1,
+      get isEditing() {
+        return !R.isNil(this.eid)
+      },
+      pred: R.allPass([R.propEq('deleted', false)]),
+      get transformedList() {
+        return noteListTransformer(nc.all)
+      },
+      get noteList() {
+        return R.filter(this.pred, this.transformedList)
+      },
+      onAddNewNoteEvent() {
+        nc.addNewNote()
+      },
+      startEditing() {
+        // if (this.isEditing || R.isEmpty(this.noteList)) return
+        // this.eid = R.head(this.noteList).id
+        if (!this.isEditing) {
+          this.eidx = 0
+        }
+      },
+      editNext() {
+        this.eidx = this.eidx + 1
+      },
+      editPrev() {
+        this.eidx = this.eidx - 1
+      },
+      insertBelow() {
+        // this.eidx = this.eidx + 1
+        nc.addNewNote()
+      },
+      isEditingNote(note) {
+        return this.isEditing && R.equals(note.id, this.eid)
+      },
     },
-    eidx: -1,
-    get isEditing() {
-      return !R.isNil(this.eid)
+    {
+      editNext: mActionBound,
+      editPrev: mActionBound,
     },
-    pred: R.allPass([R.propEq('deleted', false)]),
-    get transformedList() {
-      return noteListTransformer(nc.all)
-    },
-    get noteList() {
-      return R.filter(this.pred, this.transformedList)
-    },
-    onAddNewNoteEvent() {
-      nc.addNewNote()
-    },
-    startEditing() {
-      // if (this.isEditing || R.isEmpty(this.noteList)) return
-      // this.eid = R.head(this.noteList).id
-      if (!this.isEditing) {
-        this.eidx = 0
-      }
-    },
-    editNext() {
-      this.eidx = this.eidx + 1
-    },
-    editPrev() {
-      this.eidx = this.eidx - 1
-    },
-    insertBelow() {
-      // this.eidx = this.eidx + 1
-      nc.addNewNote()
-    },
-    isEditingNote(note) {
-      return this.isEditing && R.equals(note.id, this.eid)
-    },
-  })
+  )
 
   // const rEid = mReaction(
   //   () => view.eid,
