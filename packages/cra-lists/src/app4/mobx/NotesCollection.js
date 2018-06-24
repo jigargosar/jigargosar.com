@@ -20,7 +20,7 @@ export const Note = (function Note() {
       deleted,
       sortIdx,
       get all() {
-        return mValues(this.idLookup)
+        return mValues(this.idMap)
       },
       toggleDeleted() {
         this.deleted = !this.deleted
@@ -50,9 +50,9 @@ export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
     return oObject(
       {
-        idLookup: oObject(R.compose(R.map(Note.create))(snapshot)),
+        idMap: oObject(R.compose(R.map(Note.create))(snapshot)),
         get all() {
-          return mValues(this.idLookup)
+          return mValues(this.idMap)
         },
         newNote({sortIdx = 0} = {}) {
           const id = nanoid()
@@ -64,7 +64,7 @@ export const NotesCollection = (function NotesCollection() {
           })
         },
         put(note) {
-          mSet(this.idLookup, note.id, note)
+          mSet(this.idMap, note.id, note)
         },
         add(note) {
           this.put(note)
@@ -73,7 +73,7 @@ export const NotesCollection = (function NotesCollection() {
           this.add(this.newNote())
         },
         get snapshot() {
-          return mJS(this.idLookup)
+          return mJS(this.idMap)
         },
       },
       {put: mActionBound},
