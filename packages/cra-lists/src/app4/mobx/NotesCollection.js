@@ -42,7 +42,6 @@ export const NotesCollection = (function NotesCollection() {
       add(note) {
         this.put(note)
       },
-
       addNewNote() {
         this.add(this.newNote())
       },
