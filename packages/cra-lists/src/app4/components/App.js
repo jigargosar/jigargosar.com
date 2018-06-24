@@ -36,6 +36,9 @@ const cn = RX.cx
 /*eslint-disable no-empty-pattern*/
 
 class NoteInput extends C {
+  componentDidMount() {
+    console.log(this.props.note.textSelection)
+  }
   r({note}) {
     return (
       <input

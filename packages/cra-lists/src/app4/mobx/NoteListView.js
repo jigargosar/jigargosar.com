@@ -34,14 +34,18 @@ export function NoteListView({nc}) {
       },
       onTextChange(e) {
         const target = e.target
-        console.log(target)
         note.text = target.value
+      },
+      get textSelection() {
+        return view.editTextSelection
       },
       onEditTextSelect(e) {
         e.persist()
         const target = e.target
-        console.log(target.selectionStart, target.selectionEnd)
-        console.log(e)
+        view.editTextSelection = {
+          start: target.selectionStart,
+          end: target.selectionEnd,
+        }
       },
     }
     ;['id', 'text', 'deleted', 'sortIdx'].forEach(
@@ -58,6 +62,7 @@ export function NoteListView({nc}) {
     {
       // sid: null,
       editMode: 'selection',
+      editTextSelection: {start: 0, end: 0},
       get sid() {
         return R.pathOr(null, ['noteList', view.sidx, 'id'], view)
       },
