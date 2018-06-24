@@ -50,10 +50,13 @@ if (module.hot) {
     console.log(ncJSON)
   })
 
-  module.hot.accept(['./components/App'], () => {
-    states.nc = NotesCollection.create(ncJSON)
-    states.view = NoteListView({nc: states.nc})
+  module.hot.accept(
+    ['./components/App', './mobx/NotesCollection'],
+    () => {
+      states.nc = NotesCollection.create(ncJSON)
+      states.view = NoteListView({nc: states.nc})
 
-    render()
-  })
+      render()
+    },
+  )
 }
