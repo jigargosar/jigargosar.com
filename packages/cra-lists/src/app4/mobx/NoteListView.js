@@ -15,6 +15,25 @@ const defineDelegatePropertyGetter = R.curry(
 )
 
 export function NoteListView({nc}) {
+  const noteTransformer = mu.createTransformer(note => {
+    const displayNote = {
+      onToggleDeleteEvent() {
+        note.toggleDeleted()
+      },
+      get isEditing() {
+        return view.isEditingNote(this)
+      },
+    }
+    ;['id', 'text', 'deleted'].forEach(
+      defineDelegatePropertyGetter(R.__, note, displayNote),
+    )
+    return oObject(displayNote)
+  })
+
+  const noteListTransformer = mu.createTransformer(
+    R.map(noteTransformer),
+  )
+
   const view = oObject({
     eid: null,
     eidx: -1,
@@ -55,23 +74,7 @@ export function NoteListView({nc}) {
     },
   )
 
-  const noteTransformer = mu.createTransformer(note => {
-    const displayNote = {
-      onToggleDeleteEvent() {
-        note.toggleDeleted()
-      },
-      get isEditing() {
-        return view.isEditingNote(this)
-      },
-    }
-    ;['id', 'text', 'deleted'].forEach(
-      defineDelegatePropertyGetter(R.__, note, displayNote),
-    )
-    return oObject(displayNote)
-  })
+  view.eidx = 0
 
-  const noteListTransformer = mu.createTransformer(
-    R.map(noteTransformer),
-  )
   return view
 }
