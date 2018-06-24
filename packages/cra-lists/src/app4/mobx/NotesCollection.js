@@ -29,6 +29,8 @@ export const Note = (function Note() {
   return {create}
 })()
 
+export const chance = new Chance()
+
 export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
     return oObject(
@@ -45,7 +47,7 @@ export const NotesCollection = (function NotesCollection() {
           const id = nanoid()
           return Note.create({
             id,
-            text: new Chance().word(),
+            text: '',
             deleted: false,
             sortIdx,
           })
