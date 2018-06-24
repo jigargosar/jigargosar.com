@@ -44,7 +44,8 @@ registerServiceWorker()
 function createNC() {
   const NotesCollection = require('./mobx/NotesCollection')
     .NotesCollection
-  const ncSnapshot = R.compose(R.defaultTo({}))(
+  const ncSnapshot = R.defaultTo(
+    {},
     localStorage.getItem('ncSnapshot'),
   )
   return NotesCollection.create(ncSnapshot)
