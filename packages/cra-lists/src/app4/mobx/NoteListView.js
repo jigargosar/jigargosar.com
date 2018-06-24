@@ -108,8 +108,10 @@ export function NoteListView({nc}) {
         this.addNewAt(0)
       },
       insertAbove() {
-        // this.sidx = this.sidx + 1
         this.addNewAt(this.sidx)
+      },
+      insertBelow() {
+        this.addNewAt(this.sidx + 1)
       },
       gotoNext() {
         this.sidx = this.sidx + 1
@@ -147,6 +149,7 @@ export function NoteListView({nc}) {
       gotoPrev: mActionBound,
       onAddNewNoteEvent: mActionBound,
       insertAbove: mActionBound,
+      insertBelow: mActionBound,
     },
   )
 
