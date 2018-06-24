@@ -3,6 +3,7 @@
 /*eslint-disable*/
 import React, {Component as RC, Fragment as F} from 'react'
 import {observer, Observer} from 'mobx-react'
+import isHotKey from 'is-hotkey'
 
 const R = require('ramda')
 const RA = require('ramda-adjunct')
@@ -13,8 +14,12 @@ const RA = require('ramda-adjunct')
 
 const o = observer
 const O = Observer
-export {o, O, F, RC, observer, Observer}
+export {o, O, F, RC, observer, Observer, isHotKey}
 
+export const isAnyHotKey = R.compose(
+  R.anyPass,
+  R.map(R.curryN(2, isHotKey)),
+)
 export function renderKeyedById(Component, propName, idList) {
   return R.map(value => (
     <Component key={value.id} {...{[propName]: value}} />
@@ -38,21 +43,6 @@ export class C extends RC {
 }
 
 export const OC = observer(C)
-
-// export const injectStatesNamed = (...statePropsNames) => BC => {
-//   const OBC = o(BC)
-//   return function injectState({children, ...rest}) {
-//     return (
-//       <StateContext.Consumer>
-//         {state => (
-//           <OBC {...R.pick(statePropsNames, state)} {...rest}>
-//             {children}
-//           </OBC>
-//         )}
-//       </StateContext.Consumer>
-//     )
-//   }
-// }
 
 export const WithState = function({children}) {
   return (

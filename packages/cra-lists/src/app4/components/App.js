@@ -16,6 +16,8 @@ import {
   C,
   F,
   injectAllStates,
+  isAnyHotKey,
+  isHotKey,
   O,
   observer,
   OC,
@@ -104,11 +106,11 @@ class NoteListShortcuts extends C {
 
   onKeydown = e => {
     console.debug('window.keydown', e)
-    if (RX.startsWithPrefix('ArrowUp', e.key)) {
-      this.view.editPrev()
-    } else if (RX.startsWithPrefix('ArrowDown', e.key)) {
-      this.view.editNext()
-    }
+    R.cond([
+      [isHotKey('ArrowUp'), this.view.editPrev],
+      [isAnyHotKey(['enter', 'ArrowDown']), this.view.editNext],
+      [isHotKey('mod+enter'), this.view.insertBelow],
+    ])(e)
 
     if (e.target instanceof window.HTMLInputElement) return
 

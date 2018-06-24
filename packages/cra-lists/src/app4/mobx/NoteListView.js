@@ -69,6 +69,10 @@ export function NoteListView({nc}) {
     editPrev() {
       this.eidx = this.eidx - 1
     },
+    insertBelow() {
+      // this.eidx = this.eidx + 1
+      nc.addNewNote()
+    },
     isEditingNote(note) {
       return this.isEditing && R.equals(note.id, this.eid)
     },
