@@ -54,6 +54,12 @@ export function NoteListView({nc}) {
       if (this.isEditing || R.isEmpty(this.noteList)) return
       this.eid = R.head(this.noteList).id
     },
+    editNext() {
+      this.eidx = this.eidx + 1
+    },
+    editPrev() {
+      this.eidx = this.eidx - 1
+    },
     isEditingNote(note) {
       return this.isEditing && R.equals(note.id, this.eid)
     },
