@@ -19,9 +19,10 @@ export const Note = (function Note() {
 })()
 
 export const NotesCollection = (function NotesCollection() {
-  function create() {
+  function create(json = `{"idLookup":{}}`) {
+    const js = JSON.parse(json)
     return oObject({
-      idLookup: oObject({}),
+      idLookup: oObject(js.idLookup || {}),
       get all() {
         return oValues(this.idLookup)
       },

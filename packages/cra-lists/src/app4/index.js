@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
-import {oObject} from './mobx/utils'
+import {autoRun, oJS, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
 import {NotesCollection} from './mobx/NotesCollection'
 
@@ -44,7 +44,16 @@ render()
 registerServiceWorker()
 
 if (module.hot) {
+  let ncJSON = '{}'
+  autoRun(() => {
+    ncJSON = JSON.stringify(oJS(nc), null, 2)
+    console.log(ncJSON)
+  })
+
   module.hot.accept(['./components/App'], () => {
+    states.nc = NotesCollection.create(ncJSON)
+    states.view = NoteListView({nc: states.nc})
+
     render()
   })
 }
