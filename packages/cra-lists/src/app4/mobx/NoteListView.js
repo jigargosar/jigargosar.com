@@ -1,4 +1,10 @@
-import {mActionBound, mReaction, mTrace, oObject} from './utils'
+import {
+  mActionBound,
+  mReaction,
+  mTrace,
+  oArray,
+  oObject,
+} from './utils'
 import * as mu from 'mobx-utils'
 
 const R = require('ramda')
@@ -71,6 +77,17 @@ export function NoteListView({nc}) {
           R.filter(this.pred),
         )(this.transformedList)
       },
+
+      get sortedList() {
+        return R.compose(oArray, R.sortWith(this.sortComparators))(
+          this.all,
+        )
+      },
+
+      // get viewModel() {
+      //   return createViewModel(oObject({sortedList: this.sortedList}))
+      // },
+
       onAddNewNoteEvent() {
         nc.addNewNote()
       },

@@ -30,4 +30,4 @@ export const mActionBound = m.action.bound
 export const t = mst.types
 export const tModel = mst.types.model
 export const tMap = mst.types.map
-export {createTransformer} from 'mobx-utils'
+export {createTransformer, createViewModel} from 'mobx-utils'
