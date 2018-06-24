@@ -101,7 +101,7 @@ export function NoteListView({nc}) {
       gotoNext() {
         this.sidx = this.sidx + 1
       },
-      onEditSelected() {
+      onEnterKey() {
         if (this.noteList.length === 0) return
         if (this.isModeSelection) {
           this.editMode = 'editing'
@@ -127,7 +127,7 @@ export function NoteListView({nc}) {
     },
     {
       gotoNext: mActionBound,
-      onEditSelected: mActionBound,
+      onEnterKey: mActionBound,
       gotoPrev: mActionBound,
       onAddNewNoteEvent: mActionBound,
     },
