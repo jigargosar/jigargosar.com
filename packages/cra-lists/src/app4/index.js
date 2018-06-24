@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
-import {mAutoRun, oObject} from './mobx/utils'
+import {mAutoRun, mReaction, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
 import {Auth0} from './services/auth0'
 import {storage} from './services/storage'
@@ -44,9 +44,12 @@ function createNC() {
 }
 
 if (module.hot) {
-  mAutoRun(() => {
-    storage.set('ncSnapshot', states.nc.snapshot)
-  })
+  mReaction(
+    () => [states.nc.snapshot],
+    () => {
+      storage.set('ncSnapshot', states.nc.snapshot)
+    },
+  )
 
   module.hot.accept(
     [

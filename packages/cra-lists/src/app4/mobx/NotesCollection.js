@@ -1,8 +1,8 @@
 import {
   mActionBound,
+  mJS,
   mReaction,
   mSet,
-  mSnapshot,
   mValues,
   oObject,
 } from './utils'
@@ -50,11 +50,7 @@ export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
     return oObject(
       {
-        idLookup: oObject(
-          R.compose(R.map(Note.create), R.propOr({}, 'idLookup'))(
-            snapshot,
-          ),
-        ),
+        idLookup: oObject(R.compose(R.map(Note.create))(snapshot)),
         get all() {
           return mValues(this.idLookup)
         },
@@ -77,7 +73,7 @@ export const NotesCollection = (function NotesCollection() {
           this.add(this.newNote())
         },
         get snapshot() {
-          return mSnapshot(this)
+          return mJS(this.idLookup)
         },
       },
       {put: mActionBound},
