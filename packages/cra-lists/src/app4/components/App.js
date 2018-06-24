@@ -95,11 +95,11 @@ function ListToolbar() {
 
 class NoteListShortcuts extends C {
   componentDidMount() {
-    console.log('componentDidMount')
+    console.debug('NoteListShortcuts: componentDidMount')
     window.addEventListener('keydown', this.onKeydown)
   }
   componentWillUnmount() {
-    console.log('componentWillUnmount')
+    console.debug('componentWillUnmount: componentWillUnmount')
     window.removeEventListener('keydown', this.onKeydown)
   }
 

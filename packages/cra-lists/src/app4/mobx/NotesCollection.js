@@ -1,5 +1,6 @@
 import {
   mActionBound,
+  mIntercept,
   mJS,
   mReaction,
   mSet,
@@ -37,6 +38,16 @@ export const Note = (function Note() {
         name: '[note.deleted]',
       },
     )
+    mIntercept(note, 'id', ({newValue, object}) => {
+      console.error(
+        `Cannot modify id after creation id:`,
+        object.id,
+        'newValue',
+        newValue,
+        object,
+      )
+      throw new Error(`attempting to modify id after creation`)
+    })
     return note
   }
 

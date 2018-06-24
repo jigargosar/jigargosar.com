@@ -25,6 +25,7 @@ export const mAutoRun = m.autorun
 export const mReaction = m.reaction
 export const mTrace = m.trace
 export const mJS = m.toJS
+export const mIntercept = m.intercept
 export const mActionBound = m.action.bound
 export const t = mst.types
 export const tModel = mst.types.model
