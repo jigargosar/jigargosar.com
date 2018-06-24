@@ -110,7 +110,6 @@ export function NoteListView({nc}) {
       if (view.sidx < 0) {
         view.sidx = view.noteList.length - 1
       }
-      // view.sid = R.pathOr(null, ['noteList', view.sidx, 'id'], view)
     },
   )
 
