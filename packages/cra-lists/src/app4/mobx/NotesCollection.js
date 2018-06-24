@@ -1,5 +1,6 @@
 import {
   mActionBound,
+  mReaction,
   mSet,
   mSnapshot,
   mValues,
@@ -13,7 +14,7 @@ const R = require('ramda')
 
 export const Note = (function Note() {
   function create({id, text, deleted, sortIdx}) {
-    return oObject({
+    const note = oObject({
       id,
       text,
       deleted,
@@ -25,7 +26,21 @@ export const Note = (function Note() {
         this.deleted = !this.deleted
       },
     })
+    mReaction(
+      () => [note.deleted],
+      dep => {
+        console.debug(`[note.deleted]`, ...dep)
+        if (note.deleted) {
+          note.sortIdx = 0
+        }
+      },
+      {
+        name: '[note.deleted]',
+      },
+    )
+    return note
   }
+
   return {create}
 })()
 
