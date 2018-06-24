@@ -24,7 +24,7 @@ export function NoteListView({nc}) {
         return view.isEditingNote(this)
       },
       get isSelected() {
-        return view.isSelected(this)
+        return view.isSelectedNote(this)
       },
       onTextChange(e) {
         note.text = e.target.value
@@ -51,15 +51,14 @@ export function NoteListView({nc}) {
         return R.pathOr(null, ['noteList', view.sidx, 'id'], view)
       },
       sidx: -1,
+      get isEditMode() {
+        return R.equals(this.editMode)
+      },
       get isModeEditing() {
-        return (
-          !R.isNil(this.sid) && R.equals(this.editMode, 'editing')
-        )
+        return this.isEditMode('editing')
       },
       get isModeSelection() {
-        return (
-          !R.isNil(this.sid) && R.equals(this.editMode, 'selection')
-        )
+        return this.isEditMode('selection')
       },
       pred: R.allPass([R.propEq('deleted', false)]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
@@ -74,13 +73,6 @@ export function NoteListView({nc}) {
       },
       onAddNewNoteEvent() {
         nc.addNewNote()
-      },
-      startEditing() {
-        // if (this.isModeEditing || R.isEmpty(this.noteList)) return
-        // this.sid = R.head(this.noteList).id
-        if (!this.isModeEditing) {
-          this.sidx = 0
-        }
       },
       editNext() {
         this.sidx = this.sidx + 1

@@ -60,7 +60,7 @@ class Note extends C {
             className={cn(
               'pa1',
               {'o-50': note.deleted},
-              {blue: note.isEditing},
+              {blue: note.isSelected},
             )}
           >
             {note.text}
