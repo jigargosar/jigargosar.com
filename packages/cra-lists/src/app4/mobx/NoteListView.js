@@ -23,6 +23,9 @@ export function NoteListView({nc}) {
       get isEditing() {
         return view.isEditingNote(this)
       },
+      get isSelected() {
+        return view.isSelected(this)
+      },
       onTextChange(e) {
         note.text = e.target.value
       },
@@ -43,12 +46,15 @@ export function NoteListView({nc}) {
   const view = oObject(
     {
       // sid: null,
+      editMode: 'selection',
       get sid() {
         return R.pathOr(null, ['noteList', view.sidx, 'id'], view)
       },
       sidx: -1,
       get isEditing() {
-        return !R.isNil(this.sid)
+        return (
+          !R.isNil(this.sid) && R.equals(this.editMode, 'editing')
+        )
       },
       pred: R.allPass([R.propEq('deleted', false)]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
@@ -117,9 +123,11 @@ export function NoteListView({nc}) {
 
   const rLength = mReaction(
     () => [view.noteList.length],
-    () => {
+    ([listLength]) => {
       mTrace(rLength)
-      // view.sidx = R.clamp(0, view.noteList.length - 1, view.sidx)
+      if (listLength > 0) {
+        view.sidx = R.clamp(0, listLength - 1, view.sidx)
+      }
       view.updateSortIdx()
     },
   )
