@@ -109,7 +109,8 @@ class NoteListShortcuts extends C {
     console.debug('window.keydown', e)
     R.cond([
       [isHotKey('ArrowUp'), this.view.gotoPrev],
-      [isAnyHotKey(['enter', 'ArrowDown']), this.view.gotoNext],
+      [isAnyHotKey(['ArrowDown']), this.view.gotoNext],
+      [isAnyHotKey(['enter']), this.view.onEditSelected],
       [isHotKey('mod+enter'), this.view.insertBelow],
     ])(e)
 

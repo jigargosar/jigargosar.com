@@ -87,15 +87,29 @@ export function NoteListView({nc}) {
         this.sortedList.forEach((n, idx) => (n.sortIdx = idx))
       },
       onAddNewNoteEvent() {
+        this.addNewAt(0)
+      },
+
+      addNewAt(idx) {
         const newNote = nc.newNote()
-        this.sortedList.splice(0, 0, newNote)
+        this.sortedList.splice(idx, 0, newNote)
         this.updateSortIdx()
         nc.add(newNote)
-        this.sidx = 0
+        this.sidx = idx
         this.editMode = 'editing'
       },
       gotoNext() {
         this.sidx = this.sidx + 1
+      },
+      onEditSelected() {
+        if (this.noteList.length === 0) return
+        if (this.isModeSelection) {
+          this.editMode = 'editing'
+        } else if (this.sidx === this.noteList.length - 1) {
+          this.addNewAt(this.sidx + 1)
+        } else {
+          this.sidx = this.sidx + 1
+        }
       },
       gotoPrev() {
         this.sidx = this.sidx - 1
@@ -113,6 +127,7 @@ export function NoteListView({nc}) {
     },
     {
       gotoNext: mActionBound,
+      onEditSelected: mActionBound,
       gotoPrev: mActionBound,
       onAddNewNoteEvent: mActionBound,
     },
