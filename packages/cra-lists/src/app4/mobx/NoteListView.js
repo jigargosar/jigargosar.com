@@ -85,9 +85,11 @@ export function NoteListView({nc}) {
       },
 
       get sortedList() {
-        return R.compose(oArray, R.sortWith(this.sortComparators))(
-          nc.all,
-        )
+        return R.compose(
+          oArray,
+          R.filter(this.pred),
+          R.sortWith(this.sortComparators),
+        )(nc.all)
       },
       updateSortIdx() {
         this.sortedList.forEach((n, idx) => (n.sortIdx = idx))
