@@ -19,14 +19,6 @@ const states = oObject({
   view: NoteListView({nc}),
 })
 
-// R.times(() => {
-//   states.nc.addNewNote()
-// }, 3)
-
-// setInterval(() => {
-//   states.noteList.forEach(n => (n.text = n.text + 1))
-// }, 1000)
-
 function render() {
   const App = require('./components/App').default
   ReactDOM.render(
