@@ -51,9 +51,14 @@ export function NoteListView({nc}) {
         return R.pathOr(null, ['noteList', view.sidx, 'id'], view)
       },
       sidx: -1,
-      get isEditing() {
+      get isModeEditing() {
         return (
           !R.isNil(this.sid) && R.equals(this.editMode, 'editing')
+        )
+      },
+      get isModeSelection() {
+        return (
+          !R.isNil(this.sid) && R.equals(this.editMode, 'selection')
         )
       },
       pred: R.allPass([R.propEq('deleted', false)]),
@@ -71,9 +76,9 @@ export function NoteListView({nc}) {
         nc.addNewNote()
       },
       startEditing() {
-        // if (this.isEditing || R.isEmpty(this.noteList)) return
+        // if (this.isModeEditing || R.isEmpty(this.noteList)) return
         // this.sid = R.head(this.noteList).id
-        if (!this.isEditing) {
+        if (!this.isModeEditing) {
           this.sidx = 0
         }
       },
@@ -88,7 +93,10 @@ export function NoteListView({nc}) {
         nc.addNewNote()
       },
       isEditingNote(note) {
-        return this.isEditing && R.equals(note.id, this.sid)
+        return this.isModeEditing && R.equals(note.id, this.sid)
+      },
+      isSelectedNote(note) {
+        return this.isModeSelection && R.equals(note.id, this.sid)
       },
       updateSortIdx() {
         this.noteList.forEach((n, idx) => n.setSortIndex(idx))
