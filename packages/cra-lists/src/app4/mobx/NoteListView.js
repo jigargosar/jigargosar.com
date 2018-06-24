@@ -23,14 +23,17 @@ const defineDelegatePropertyGetter = R.curry(
 export function NoteListView({nc}) {
   const noteTransformer = mu.createTransformer(note => {
     const displayNote = {
-      onToggleDeleteEvent() {
-        note.toggleDeleted()
+      get displayText() {
+        return R.when(R.isEmpty, R.always('<empty>'))(this.text)
       },
       get isEditing() {
         return view.isEditingNote(this)
       },
       get isSelected() {
         return view.isSelectedNote(this)
+      },
+      onToggleDeleteEvent() {
+        note.toggleDeleted()
       },
       onTextChange(e) {
         const target = e.target
@@ -39,7 +42,7 @@ export function NoteListView({nc}) {
       get textSelection() {
         return view.editTextSelection
       },
-      onEditTextSelect(e) {
+      onEditTextSelectionChange(e) {
         const target = e.target
         view.editTextSelection = {
           start: target.selectionStart,

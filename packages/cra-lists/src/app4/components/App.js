@@ -55,7 +55,7 @@ class NoteInput extends C {
         placeholder={'Note text ...'}
         value={note.text}
         onChange={note.onTextChange}
-        onSelect={note.onEditTextSelect}
+        onSelect={note.onEditTextSelectionChange}
         onFocus={this.restoreSelection}
       />
     )
@@ -76,7 +76,7 @@ class Note extends C {
               {'blue bg-washed-yellow': note.isSelected},
             )}
           >
-            {note.text}
+            {note.displayText}
           </Text>
         )}
         {note.isEditing && <NoteInput note={note} />}
