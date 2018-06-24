@@ -42,9 +42,9 @@ class NoteInput extends C {
   }
 
   restoreSelection = e => {
-    const {start, end} = this.props.note.textSelection
-    e.target.selectionStart = start
-    e.target.selectionEnd = end
+    // const {start, end} = this.props.note.textSelection
+    // e.target.selectionStart = start
+    // e.target.selectionEnd = end
   }
 
   r({note}) {
