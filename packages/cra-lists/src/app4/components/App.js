@@ -62,7 +62,6 @@ class Note extends C {
   r({note}) {
     return (
       <ListItem className={cn('flex items-center lh-copy')}>
-        <Button onClick={note.onToggleDeleteEvent}>X</Button>
         <Text>{`${note.sortIdx}`}</Text>
         {!note.isEditing && (
           <Text
@@ -133,7 +132,7 @@ class NoteListShortcuts extends C {
 
     R.cond([
       [isHotKey('a'), this.view.onAddNewNoteEvent],
-      [isHotKey('d'), this.view.onDeleteSelectionEvent],
+      [isHotKey('delete'), this.view.onDeleteSelectionEvent],
     ])(e)
   }
 }
