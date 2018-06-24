@@ -14,7 +14,12 @@ const defineDelegatePropertyGetter = R.curry(
 )
 
 export function NoteListView({nc}) {
-  const noteListView = oObject({
+  const view = oObject({
+    id: null,
+    get isEditing() {
+      return !R.isNil(this.id)
+    },
+
     pred: R.allPass([R.propEq('deleted', false)]),
 
     get transformedList() {
@@ -29,15 +34,8 @@ export function NoteListView({nc}) {
       nc.addNewNote()
     },
     startEditing() {
-      if (edit.isEditing || R.isEmpty(this.noteList)) return
-      edit.id = R.head(this.noteList).id
-    },
-  })
-
-  const edit = oObject({
-    id: null,
-    get isEditing() {
-      return !R.isNil(this.id)
+      if (this.isEditing || R.isEmpty(this.noteList)) return
+      this.id = R.head(this.noteList).id
     },
   })
   const noteTransformer = mu.createTransformer(note => {
@@ -46,7 +44,7 @@ export function NoteListView({nc}) {
         note.toggleDeleted()
       },
       get isEditing() {
-        return edit.isEditing && R.equals(this.id, edit.id)
+        return view.isEditing && R.equals(this.id, view.id)
       },
     }
     ;['id', 'text', 'deleted'].forEach(
@@ -60,7 +58,7 @@ export function NoteListView({nc}) {
   )
   mAutoRun(r => {
     r.trace()
-    console.debug(noteListView.noteList.length)
+    console.debug(view.noteList.length)
   })
-  return noteListView
+  return view
 }
