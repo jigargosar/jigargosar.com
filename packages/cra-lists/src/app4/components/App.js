@@ -54,6 +54,7 @@ class Note extends C {
     return (
       <ListItem className={cn('flex items-center lh-copy')}>
         <Button onClick={note.onToggleDeleteEvent}>X</Button>
+        <Text>{`${note.sortIdx}`}</Text>
         {!note.isEditing && (
           <Text
             className={cn(

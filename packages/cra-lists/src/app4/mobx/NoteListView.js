@@ -26,8 +26,11 @@ export function NoteListView({nc}) {
       onTextChange(e) {
         note.text = e.target.value
       },
+      setSortIndex(idx) {
+        note.sortIdx = idx
+      },
     }
-    ;['id', 'text', 'deleted'].forEach(
+    ;['id', 'text', 'deleted', 'sortIdx'].forEach(
       defineDelegatePropertyGetter(R.__, note, displayNote),
     )
     return oObject(displayNote)
@@ -81,6 +84,9 @@ export function NoteListView({nc}) {
       isEditingNote(note) {
         return this.isEditing && R.equals(note.id, this.eid)
       },
+      updateSortIdx() {
+        this.noteList.forEach((n, idx) => n.setSortIndex(idx))
+      },
     },
     {
       editNext: mActionBound,
@@ -114,6 +120,7 @@ export function NoteListView({nc}) {
     () => {
       mTrace(rLength)
       view.eidx = R.clamp(0, view.noteList.length - 1, view.eidx)
+      view.updateSortIdx()
     },
   )
 

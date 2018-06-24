@@ -11,11 +11,12 @@ const R = require('ramda')
 // const RA = require('ramda-adjunct')
 
 export const Note = (function Note() {
-  function create({id, text, deleted}) {
+  function create({id, text, deleted, sortIdx}) {
     return oObject({
       id,
       text,
       deleted,
+      sortIdx,
       get all() {
         return mValues(this.idLookup)
       },
@@ -39,12 +40,13 @@ export const NotesCollection = (function NotesCollection() {
         get all() {
           return mValues(this.idLookup)
         },
-        newNote() {
+        newNote({sortIdx = 0} = {}) {
           const id = nanoid()
           return Note.create({
             id,
             text: `Note Text : id:${id}`,
             deleted: false,
+            sortIdx,
           })
         },
         put(note) {
