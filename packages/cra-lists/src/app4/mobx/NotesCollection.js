@@ -1,6 +1,5 @@
 import {
   extendActions,
-  mActionBound,
   mIntercept,
   mJS,
   mReaction,
@@ -62,40 +61,36 @@ export const chance = new Chance()
 
 export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
-    return oObject(
-      {
-        idMap: oObject(R.compose(R.map(Note.create))(snapshot)),
-        get valuesArray() {
-          return mValues(this.idMap)
-        },
-        get all() {
-          return rejectDeleted(this.valuesArray)
-        },
-        get deleted() {
-          return filterDeleted(this.valuesArray)
-        },
-        get snapshot() {
-          return mJS(this.idMap)
-        },
-        newNote() {
-          const id = nanoid()
-          return Note.create({
-            id,
-            text: '',
-            deleted: false,
-            sortIdx: 0,
-          })
-        },
-        put(note) {
-          mSet(this.idMap, note.id, note)
-        },
-        add(note) {
-          this.put(note)
-        },
+    return R.compose(oObject)({
+      idMap: oObject(R.compose(R.map(Note.create))(snapshot)),
+      get valuesArray() {
+        return mValues(this.idMap)
       },
-      {put: mActionBound},
-      {name: 'notesCollection'},
-    )
+      get all() {
+        return rejectDeleted(this.valuesArray)
+      },
+      get deleted() {
+        return filterDeleted(this.valuesArray)
+      },
+      get snapshot() {
+        return mJS(this.idMap)
+      },
+      newNote() {
+        const id = nanoid()
+        return Note.create({
+          id,
+          text: '',
+          deleted: false,
+          sortIdx: 0,
+        })
+      },
+      put(note) {
+        mSet(this.idMap, note.id, note)
+      },
+      add(note) {
+        this.put(note)
+      },
+    })
   }
 
   return {create}
