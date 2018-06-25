@@ -17,6 +17,7 @@ const RX = require('ramda-extension')
 /*eslint-enable*/
 
 export const oObject = m.observable.object
+export const extendObservable = m.extendObservable
 export const oArray = m.observable.array
 export const oMap = m.observable.map
 export const mSet = m.set

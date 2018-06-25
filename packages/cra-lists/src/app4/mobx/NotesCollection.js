@@ -1,4 +1,5 @@
 import {
+  extendObservable,
   mActionBound,
   mAutoRun,
   mIntercept,
@@ -100,23 +101,25 @@ export const NotesCollection = (function NotesCollection() {
   return {create}
 })()
 
-function createStore(props, actions, name) {
-  return oObject(
-    R.merge(props, actions),
-    R.map(x => {
-      return mActionBound
-    })(actions),
+function createStore(props, actionsFn, name) {
+  const base = oObject(props)
+  const actions = actionsFn(base)
+
+  return extendObservable(
+    base,
+    actions,
+    R.map(R.always(mActionBound))(actions),
     {name},
   )
 }
 
 const foo = createStore(
   {p: 1},
-  {
+  self => ({
     foo() {
-      this.p = 2
+      self.p = self.p + 1
     },
-  },
+  }),
   'foo',
 )
 mAutoRun(() => {
