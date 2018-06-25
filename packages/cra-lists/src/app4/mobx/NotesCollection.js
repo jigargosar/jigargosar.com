@@ -71,6 +71,9 @@ export const NotesCollection = (function NotesCollection() {
         get deleted() {
           return filterDeleted(this.valuesArray)
         },
+        get snapshot() {
+          return mJS(this.idMap)
+        },
         newNote({parent = null} = {}) {
           const id = nanoid()
           return Note.create({
@@ -86,9 +89,6 @@ export const NotesCollection = (function NotesCollection() {
         },
         add(note) {
           this.put(note)
-        },
-        get snapshot() {
-          return mJS(this.idMap)
         },
       },
       {put: mActionBound},
