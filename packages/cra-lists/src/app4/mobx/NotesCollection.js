@@ -1,7 +1,9 @@
 import {
   extendObservable,
+  mAction,
   mActionBound,
   mAutoRun,
+  mComputed,
   mIntercept,
   mJS,
   mReaction,
@@ -138,23 +140,33 @@ mAutoRun(() => {
 })
 R.times(foo.foo, 2)
 
-const extendActions = function extendActions(
-  actionsCreator,
-  observable,
-) {
-  return extendObservable(observable, actionsCreator(observable))
-}
+const extendActions = R.curry((createActions, observable) => {
+  const actions = createActions(observable)
+  return extendObservable(observable, actions, R.map(mAction))
+})
 
-const bar = extendActions(
-  self => ({
+const extendComputed = R.curry((createComputed, observable) => {
+  const computed = createComputed(observable)
+  return extendObservable(observable, computed, R.map(mComputed))
+})
+
+const bar = R.compose(
+  extendComputed(self => ({
+    pc: () => self.p,
+    get pcp() {
+      return self.p
+    },
+  })),
+  extendActions(self => ({
     inc: () => self.p++,
-  }),
-  oObject({p: 1}),
-)
-
-console.log(`bar.inc()`, bar.inc())
+  })),
+  oObject,
+)({p: 1})
 
 mAutoRun(() => {
   console.log(`bar.p`, bar.p)
-  console.log(`bar.p`, bar.p)
+  console.log(`bar.pc`, bar.pc())
+  console.log(`bar.pcp`, bar.pcp)
 })
+
+bar.inc()
