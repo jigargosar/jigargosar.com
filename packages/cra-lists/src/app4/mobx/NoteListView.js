@@ -44,7 +44,7 @@ export function NoteListView({nc}) {
         }
       },
     }
-    ;['id', 'parentId', 'text', 'deleted', 'sortIdx'].forEach(
+    ;['id', 'text', 'deleted', 'sortIdx'].forEach(
       defineDelegatePropertyGetter(R.__, note, displayNote),
     )
     return oObject(displayNote)

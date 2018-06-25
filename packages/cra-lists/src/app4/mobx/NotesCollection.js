@@ -20,17 +20,19 @@ const rejectDeleted = R.reject(deletedProp)
 const filterDeleted = R.filter(deletedProp)
 
 export const Note = (function Note() {
-  function create({id, parentId, text, deleted, sortIdx}) {
-    const note = oObject({
+  function create({id, text, deleted, sortIdx}) {
+    const note = R.compose(
+      extendActions(s => ({
+        toggleDeleted: () => (s.deleted = !s.deleted),
+      })),
+      oObject,
+    )({
       id,
-      parentId,
       text,
       deleted,
       sortIdx,
-      toggleDeleted() {
-        this.deleted = !this.deleted
-      },
     })
+
     mReaction(
       () => [note.deleted],
       dep => {
@@ -78,11 +80,10 @@ export const NotesCollection = (function NotesCollection() {
         get snapshot() {
           return mJS(this.idMap)
         },
-        newNote({parent = null} = {}) {
+        newNote() {
           const id = nanoid()
           return Note.create({
             id,
-            parentId: R.isNil(parent) ? null : parent.id,
             text: '',
             deleted: false,
             sortIdx: 0,
