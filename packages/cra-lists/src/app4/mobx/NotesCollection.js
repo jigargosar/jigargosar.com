@@ -1,5 +1,6 @@
 import {
   mActionBound,
+  mAutoRun,
   mIntercept,
   mJS,
   mReaction,
@@ -98,3 +99,27 @@ export const NotesCollection = (function NotesCollection() {
 
   return {create}
 })()
+
+function createStore(props, actions, name) {
+  return oObject(
+    R.merge(props, actions),
+    R.map(x => {
+      return mActionBound
+    })(actions),
+    {name},
+  )
+}
+
+const foo = createStore(
+  {p: 1},
+  {
+    foo() {
+      this.p = 2
+    },
+  },
+  'foo',
+)
+mAutoRun(() => {
+  console.log(`foo.p`, foo.p)
+})
+R.times(foo.foo, 4)
