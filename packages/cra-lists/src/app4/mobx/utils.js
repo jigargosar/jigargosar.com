@@ -34,3 +34,36 @@ export const t = mst.types
 export const tModel = mst.types.model
 export const tMap = mst.types.map
 export {createTransformer, createViewModel} from 'mobx-utils'
+
+export const extendActions = R.curry((createActions, observable) => {
+  const actions = createActions(observable)
+  return extendObservable(observable, actions, R.map(mAction))
+})
+
+export const extendComputed = R.curry(
+  (createComputed, observable) => {
+    const computed = createComputed(observable)
+    return extendObservable(observable, computed, R.map(mComputed))
+  },
+)
+
+// const bar = R.compose(
+//   extendComputed(self => ({
+//     pc: () => self.p,
+//     get pcp() {
+//       return self.p
+//     },
+//   })),
+//   extendActions(self => ({
+//     inc: () => self.p++,
+//   })),
+//   oObject,
+// )({p: 1})
+//
+// mAutoRun(() => {
+//   console.log(`bar.p`, bar.p)
+//   console.log(`bar.pc`, bar.pc())
+//   console.log(`bar.pcp`, bar.pcp)
+// })
+//
+// bar.inc()
