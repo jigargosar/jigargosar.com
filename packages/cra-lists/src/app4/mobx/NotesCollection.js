@@ -101,20 +101,28 @@ export const NotesCollection = (function NotesCollection() {
   return {create}
 })()
 
-function createStore(props, actionsFn, name) {
+function createStore(props, viewsFn, actionsFn, name) {
   const base = oObject(props)
+  const views = viewsFn(base)
   const actions = actionsFn(base)
 
   return extendObservable(
     base,
     actions,
-    R.map(R.always(mActionBound))(actions),
+    {}, //R.map(R.always(mActionBound))(actions),
     {name},
   )
 }
 
 const foo = createStore(
   {p: 1},
+  self => {
+    return {
+      get value() {
+        return self.p
+      },
+    }
+  },
   self => ({
     foo() {
       self.p = self.p + 1
@@ -126,3 +134,13 @@ mAutoRun(() => {
   console.log(`foo.p`, foo.p)
 })
 R.times(foo.foo, 4)
+
+const bar = oObject({p: 1})
+
+function extendActions(actionsCreator, observable) {
+  return extendObservable(observable, actionsCreator(observable))
+}
+
+extendActions(self => ({inc: () => self.p++}), bar)
+
+console.log(`bar.inc()`, bar.inc())
