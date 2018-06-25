@@ -138,7 +138,10 @@ mAutoRun(() => {
 })
 R.times(foo.foo, 2)
 
-function extendActions(actionsCreator, observable) {
+const extendActions = function extendActions(
+  actionsCreator,
+  observable,
+) {
   return extendObservable(observable, actionsCreator(observable))
 }
 
@@ -152,5 +155,6 @@ const bar = extendActions(
 console.log(`bar.inc()`, bar.inc())
 
 mAutoRun(() => {
+  console.log(`bar.p`, bar.p)
   console.log(`bar.p`, bar.p)
 })
