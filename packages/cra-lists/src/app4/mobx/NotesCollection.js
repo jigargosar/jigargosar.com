@@ -103,42 +103,7 @@ export const NotesCollection = (function NotesCollection() {
   return {create}
 })()
 
-function createStore(props, viewsFn, actionsFn, name) {
-  const base = oObject(props)
-  // const views = viewsFn(base)
-  const actions = actionsFn(base)
-
-  return extendObservable(
-    base,
-    actions,
-    {}, //R.map(R.always(mActionBound))(actions),
-    {name},
-  )
-}
-
-const foo = createStore(
-  {p: 1},
-  self => {
-    return {
-      get value() {
-        return self.p
-      },
-    }
-  },
-  self => ({
-    foo() {
-      self.p = self.p + 1
-    },
-  }),
-  'foo',
-)
-
 console.clear()
-
-mAutoRun(() => {
-  console.log(`foo.p`, foo.p)
-})
-R.times(foo.foo, 2)
 
 const extendActions = R.curry((createActions, observable) => {
   const actions = createActions(observable)
