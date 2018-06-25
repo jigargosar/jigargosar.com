@@ -71,11 +71,11 @@ export const NotesCollection = (function NotesCollection() {
         get deleted() {
           return filterDeleted(this.valuesArray)
         },
-        newNote() {
+        newNote({parent = null} = {}) {
           const id = nanoid()
           return Note.create({
             id,
-            parentId: null,
+            parentId: R.isNil(parent) ? null : parent.id,
             text: '',
             deleted: false,
             sortIdx: 0,

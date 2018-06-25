@@ -72,7 +72,7 @@ export function NoteListView({nc}) {
       get isModeSelection() {
         return this.isEditMode('selection')
       },
-      pred: R.allPass([R.propEq('parentId', null)]),
+      pred: R.allPass([]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
       get transformedList() {
         return noteListTransformer(nc.all)
@@ -95,11 +95,13 @@ export function NoteListView({nc}) {
         this.sortedList.forEach((n, idx) => (n.sortIdx = idx))
       },
       addNewAt(idx, {child = false} = {}) {
-        const newNote = nc.newNote()
-        this.sortedList.splice(idx, 0, newNote)
+        const newNote = child
+          ? nc.newNote(this.noteList[idx])
+          : nc.newNote()
+        this.sortedList.splice(child ? idx + 1 : idx, 0, newNote)
         this.updateSortIdx()
         nc.add(newNote)
-        this.sidx = idx
+        this.sidx = child ? idx + 1 : idx
         this.editMode = 'editing'
       },
 
@@ -118,7 +120,7 @@ export function NoteListView({nc}) {
         this.addNewAt(this.sidx + 1)
       },
       insertChild() {
-        this.addNewAt(this.sidx + 1, {child: true})
+        this.addNewAt(this.sidx, {child: true})
       },
       gotoNext() {
         this.sidx = this.sidx + 1
