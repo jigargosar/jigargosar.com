@@ -103,20 +103,24 @@ class NoteListShortcuts extends C {
       e.preventDefault()
       fn(e)
     }
+    const view = this.view
     R.cond([
-      [isHotKey('ArrowUp'), wrapPD(this.view.gotoPrev)],
-      [isAnyHotKey(['ArrowDown']), wrapPD(this.view.gotoNext)],
-      [isHotKey('mod+shift+enter'), this.view.insertAbove],
-      [isHotKey('mod+enter'), this.view.insertBelow],
-      [isAnyHotKey(['enter']), this.view.onEnterKey],
-      [isHotKey('escape'), this.view.onEscapeKey],
+      [isHotKey('ArrowUp'), wrapPD(view.gotoPrev)],
+      [isAnyHotKey(['ArrowDown']), wrapPD(view.gotoNext)],
+      [isHotKey('mod+shift+enter'), view.insertAbove],
+      [isHotKey('mod+enter'), view.insertBelow],
+      [isAnyHotKey(['enter']), view.onEnterKey],
+      [isHotKey('escape'), view.onEscapeKey],
     ])(e)
 
     if (e.target instanceof window.HTMLInputElement) return
 
     R.cond([
-      [isHotKey('a'), wrapPD(this.view.onAddNewNoteEvent)],
-      [isAnyHotKey(['d', 'delete']), wrapPD(this.view)],
+      [isHotKey('a'), wrapPD(view.onAddNewNoteEvent)],
+      [
+        isAnyHotKey(['d', 'delete']),
+        wrapPD(view.onDeleteSelectionEvent),
+      ],
     ])(e)
   }
 }
