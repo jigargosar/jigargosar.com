@@ -88,14 +88,12 @@ export function NoteListView({nc}) {
       updateSortIdx() {
         this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
       },
-      addNewAt(idx, {child = false} = {}) {
-        const newNote = child
-          ? nc.newNote(this.noteDisplayList[idx])
-          : nc.newNote()
-        this.noteModelList.splice(child ? idx + 1 : idx, 0, newNote)
+      addNewAt(idx) {
+        const newNote = nc.newNote()
+        this.noteModelList.splice(idx, 0, newNote)
         this.updateSortIdx()
         nc.add(newNote)
-        this.sidx = child ? idx + 1 : idx
+        this.sidx = idx
         this.editMode = 'editing'
       },
 
@@ -115,9 +113,6 @@ export function NoteListView({nc}) {
       },
       insertBelow() {
         this.addNewAt(this.sidx + 1)
-      },
-      insertChild() {
-        this.addNewAt(this.sidx, {child: true})
       },
       gotoNext() {
         this.sidx = this.sidx + 1
@@ -157,7 +152,6 @@ export function NoteListView({nc}) {
       onDeleteSelectionEvent: mActionBound,
       insertAbove: mActionBound,
       insertBelow: mActionBound,
-      insertChild: mActionBound,
     },
   )
 
