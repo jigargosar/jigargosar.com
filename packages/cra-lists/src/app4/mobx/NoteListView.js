@@ -1,6 +1,6 @@
 import {mActionBound, mReaction, oArray, oObject} from './utils'
-import * as mu from 'mobx-utils'
 import {R} from '../utils'
+import * as mu from 'mobx-utils/lib/mobx-utils'
 
 const defineDelegatePropertyGetter = R.curry(
   (propertyName, src, target) =>
@@ -48,10 +48,6 @@ export function NoteListView({nc}) {
     return oObject(displayNote)
   })
 
-  const noteListTransformer = mu.createTransformer(
-    R.map(noteTransformer),
-  )
-
   const view = oObject(
     {
       editMode: 'selection',
@@ -71,31 +67,28 @@ export function NoteListView({nc}) {
       },
       pred: R.allPass([]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
-      get transformedList() {
-        return noteListTransformer(nc.all)
-      },
       get noteList() {
         return R.compose(
+          R.map(noteTransformer),
           R.sortWith(this.sortComparators),
           R.filter(this.pred),
-        )(this.transformedList)
+        )(nc.all)
       },
-
-      get sortedList() {
+      get noteModelList() {
         return R.compose(
           oArray,
-          R.filter(this.pred),
           R.sortWith(this.sortComparators),
+          R.filter(this.pred),
         )(nc.all)
       },
       updateSortIdx() {
-        this.sortedList.forEach((n, idx) => (n.sortIdx = idx))
+        this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
       },
       addNewAt(idx, {child = false} = {}) {
         const newNote = child
           ? nc.newNote(this.noteList[idx])
           : nc.newNote()
-        this.sortedList.splice(child ? idx + 1 : idx, 0, newNote)
+        this.noteModelList.splice(child ? idx + 1 : idx, 0, newNote)
         this.updateSortIdx()
         nc.add(newNote)
         this.sidx = child ? idx + 1 : idx
