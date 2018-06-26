@@ -118,8 +118,8 @@ export function NoteListView({nc}) {
       addNewAt(idx) {
         const newNote = nc.newNote()
         this.noteModelList.splice(idx, 0, newNote)
-        // this.updateSortIdx()
-        // nc.add(newNote)
+        this.updateSortIdx()
+        nc.add(newNote)
         this.sidx = idx
         this.editMode = 'editing'
       },
