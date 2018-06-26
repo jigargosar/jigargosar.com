@@ -1,8 +1,8 @@
 import {
   createOObj,
+  createTransformer,
   mActionBound,
   mReaction,
-  mTrace,
   oArray,
   oObject,
 } from './utils'
@@ -19,40 +19,40 @@ const EditMode = (() => {
   return {create}
 })()
 
-const noteTransformer = view => note => {
-  const displayNote = oObject({
-    get displayText() {
-      return R.when(R.isEmpty, R.always('<empty>'))(note.text)
-    },
-    get isEditing() {
-      return view.isModeEditing && R.equals(note.id, view.sid)
-    },
-    get isSelected() {
-      return view.isModeSelection && R.equals(note.id, view.sid)
-    },
-    onToggleDeleteEvent() {
-      note.toggleDeleted()
-    },
-    onTextChange(e) {
-      const target = e.target
-      note.text = target.value
-    },
-    get text() {
-      return note.text
-    },
-    get id() {
-      return note.id
-    },
-    get deleted() {
-      return note.deleted
-    },
-    get sortIdx() {
-      return note.sortIdx
-    },
-  })
-  mTrace(displayNote, 'sortIdx')
-  return displayNote
-}
+const noteTransformer = createTransformer(view =>
+  createTransformer(note =>
+    oObject({
+      get displayText() {
+        return R.when(R.isEmpty, R.always('<empty>'))(note.text)
+      },
+      get isEditing() {
+        return view.isModeEditing && R.equals(note.id, view.sid)
+      },
+      get isSelected() {
+        return view.isModeSelection && R.equals(note.id, view.sid)
+      },
+      onToggleDeleteEvent() {
+        note.toggleDeleted()
+      },
+      onTextChange(e) {
+        const target = e.target
+        note.text = target.value
+      },
+      get text() {
+        return note.text
+      },
+      get id() {
+        return note.id
+      },
+      get deleted() {
+        return note.deleted
+      },
+      get sortIdx() {
+        return note.sortIdx
+      },
+    }),
+  ),
+)
 
 export function NoteListView({nc}) {
   const view = oObject(
