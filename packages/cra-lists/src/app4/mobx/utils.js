@@ -10,8 +10,6 @@ var nanostate = require('nanostate')
 const R = require('ramda')
 const m = require('mobx')
 const mst = require('mobx-state-tree')
-const validate = require('aproba')
-const RX = require('ramda-extension')
 
 /*eslint-enable*/
 
