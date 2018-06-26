@@ -15,34 +15,18 @@ import {
 import {
   C,
   F,
-  injectAllStates,
   isAnyHotKey,
   isHotKey,
-  O,
-  observer,
-  OC,
-  RC,
   renderKeyedById,
   WithState,
 } from './utils'
-import {mJS} from '../mobx/utils'
-
-const R = require('ramda')
-const RA = require('ramda-adjunct')
-const RX = require('ramda-extension')
-const cn = RX.cx
+import {R} from '../utils'
 
 /*eslint-enable*/
 
 /*eslint-disable no-empty-pattern*/
 
 class NoteInput extends C {
-  restoreSelection = e => {
-    // const {start, end} = this.props.note.textSelection
-    // e.target.selectionStart = start
-    // e.target.selectionEnd = end
-  }
-
   r({note}) {
     return (
       <input
@@ -51,8 +35,6 @@ class NoteInput extends C {
         placeholder={'Note text ...'}
         value={note.text}
         onChange={note.onTextChange}
-        onSelect={note.onEditTextSelectionChange}
-        onFocus={this.restoreSelection}
       />
     )
   }
@@ -153,18 +135,6 @@ class NoteList extends C {
           </WithState>
         </List>
       </F>
-    )
-  }
-}
-
-export class Auth extends C {
-  r() {
-    return (
-      <WithState>
-        {({auth0}) => (
-          <Button onClick={() => auth0.login()}>Login</Button>
-        )}
-      </WithState>
     )
   }
 }

@@ -1,6 +1,6 @@
 import {mActionBound, mReaction, oArray, oObject} from './utils'
 import * as mu from 'mobx-utils'
-import {R} from '../services/utils'
+import {R} from '../utils'
 
 const defineDelegatePropertyGetter = R.curry(
   (propertyName, src, target) =>

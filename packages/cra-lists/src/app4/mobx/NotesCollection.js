@@ -8,7 +8,7 @@ import {
 } from './utils'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
-import {R} from '../services/utils'
+import {R} from '../utils'
 
 const deletedProp = R.propOr(false, 'deleted')
 const rejectDeleted = R.reject(deletedProp)
