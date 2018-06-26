@@ -53,7 +53,11 @@ export function NoteListView({nc}) {
       editMode: 'selection',
       editTextSelection: {start: 0, end: 0},
       get sid() {
-        return R.pathOr(null, ['noteList', view.sidx, 'id'], view)
+        return R.pathOr(
+          null,
+          ['noteDisplayList', view.sidx, 'id'],
+          view,
+        )
       },
       sidx: -1,
       get isEditMode() {
@@ -67,7 +71,7 @@ export function NoteListView({nc}) {
       },
       pred: R.allPass([]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
-      get noteList() {
+      get noteDisplayList() {
         return R.compose(
           R.map(noteTransformer),
           R.sortWith(this.sortComparators),
@@ -86,7 +90,7 @@ export function NoteListView({nc}) {
       },
       addNewAt(idx, {child = false} = {}) {
         const newNote = child
-          ? nc.newNote(this.noteList[idx])
+          ? nc.newNote(this.noteDisplayList[idx])
           : nc.newNote()
         this.noteModelList.splice(child ? idx + 1 : idx, 0, newNote)
         this.updateSortIdx()
@@ -99,9 +103,12 @@ export function NoteListView({nc}) {
         this.addNewAt(0)
       },
       onDeleteSelectionEvent() {
-        if (this.noteList.length === 0 || !this.isModeSelection)
+        if (
+          this.noteDisplayList.length === 0 ||
+          !this.isModeSelection
+        )
           return
-        this.noteList[this.sidx].onToggleDeleteEvent()
+        this.noteDisplayList[this.sidx].onToggleDeleteEvent()
       },
       insertAbove() {
         this.addNewAt(this.sidx)
@@ -119,7 +126,7 @@ export function NoteListView({nc}) {
         this.sidx = this.sidx - 1
       },
       onEnterKey() {
-        if (this.noteList.length === 0) return
+        if (this.noteDisplayList.length === 0) return
         if (this.isModeSelection) {
           this.editMode = 'editing'
         } else if (this.isModeEditing) {
@@ -158,17 +165,17 @@ export function NoteListView({nc}) {
     () => [view.sidx],
     () => {
       // mTrace(rEidx)
-      if (view.sidx >= view.noteList.length) {
+      if (view.sidx >= view.noteDisplayList.length) {
         view.sidx = 0
       }
       if (view.sidx < 0) {
-        view.sidx = view.noteList.length - 1
+        view.sidx = view.noteDisplayList.length - 1
       }
     },
   )
 
   /*const rLength = */ mReaction(
-    () => [view.noteList.length],
+    () => [view.noteDisplayList.length],
     ([listLength]) => {
       // mTrace(rLength)
       if (listLength > 0) {
