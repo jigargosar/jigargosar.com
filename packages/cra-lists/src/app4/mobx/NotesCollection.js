@@ -2,7 +2,6 @@ import {
   extendActions,
   mIntercept,
   mJS,
-  mReaction,
   mSet,
   mValues,
   oObject,
@@ -64,9 +63,8 @@ export const NotesCollection = (function NotesCollection() {
         return mJS(this.idMap)
       },
       newNote() {
-        const id = nanoid()
         return Note.create({
-          id,
+          id: nanoid(),
           text: '',
           deleted: false,
           sortIdx: 0,
