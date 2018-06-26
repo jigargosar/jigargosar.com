@@ -29,18 +29,6 @@ export const Note = (function Note() {
       sortIdx,
     })
 
-    mReaction(
-      () => [note.deleted],
-      dep => {
-        console.debug(`[note.deleted]`, ...dep)
-        if (note.deleted) {
-          note.sortIdx = 0
-        }
-      },
-      {
-        name: '[note.deleted]',
-      },
-    )
     mIntercept(note, 'id', ({newValue, object}) => {
       console.error(
         `Cannot modify id after creation id:`,
