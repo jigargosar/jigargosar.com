@@ -12,6 +12,13 @@ const defineDelegatePropertyGetter = R.curry(
     }),
 )
 
+const EditMode = (function EditMode() {
+  function create() {
+    return oObject({})
+  }
+  return {create}
+})()
+
 export function NoteListView({nc}) {
   const noteTransformer = mu.createTransformer(note => {
     const displayNote = {
@@ -51,6 +58,7 @@ export function NoteListView({nc}) {
   const view = oObject(
     {
       editMode: 'selection',
+      em: EditMode.create(),
       editTextSelection: {start: 0, end: 0},
       get sid() {
         return R.pathOr(
