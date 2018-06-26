@@ -148,11 +148,6 @@ export function NoteListView({nc}) {
           this.editMode = 'editing'
         } else if (this.isModeEditing) {
           this.editMode = 'selection'
-          // if (this.sidx === this.noteList.length - 1) {
-          //   this.addNewAt(this.sidx + 1)
-          // } else {
-          //   this.sidx = this.sidx + 1
-          // }
         }
       },
       onEscapeKey() {
