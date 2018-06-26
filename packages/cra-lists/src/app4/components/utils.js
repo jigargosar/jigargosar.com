@@ -39,8 +39,8 @@ export const WithState = function({children}) {
   )
 }
 
-export const injectMappedState = stateToProps => BC => {
-  return function injectState({children, ...rest}) {
+export const injectMappedState = stateToProps => BC =>
+  function injectState({children, ...rest}) {
     return (
       <WithState>
         {states => (
@@ -49,6 +49,5 @@ export const injectMappedState = stateToProps => BC => {
       </WithState>
     )
   }
-}
 
 export const injectAllStates = injectMappedState(R.merge)
