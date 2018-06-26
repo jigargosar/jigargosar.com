@@ -130,9 +130,9 @@ class NoteList extends C {
         <ListToolbar />
         <List>
           <WithState>
-            {({view: {noteList}}) => {
-              return renderKeyedById(Note, 'note', noteList)
-            }}
+            {({view}) =>
+              renderKeyedById(Note, 'note', view.noteDisplayList)
+            }
           </WithState>
         </List>
       </F>
