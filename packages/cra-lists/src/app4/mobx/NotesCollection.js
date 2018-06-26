@@ -81,5 +81,3 @@ export const NotesCollection = (function NotesCollection() {
 
   return {create}
 })()
-
-console.clear()

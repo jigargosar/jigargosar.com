@@ -51,6 +51,7 @@ if (module.hot) {
       './mobx/NoteListView',
     ],
     () => {
+      console.clear()
       const NoteListView = require('./mobx/NoteListView').NoteListView
 
       states.nc = createNC()

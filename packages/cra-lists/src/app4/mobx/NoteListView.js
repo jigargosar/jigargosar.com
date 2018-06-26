@@ -25,6 +25,7 @@ const EditMode = (() => {
       options: {name: 'EditMode'},
     })
   }
+
   return {create}
 })()
 
@@ -172,7 +173,8 @@ export function NoteListView({nc}) {
     },
   )
 
-  /*const rEidx =*/ mReaction(
+  /*const rEidx =*/
+  mReaction(
     () => [view.sidx],
     () => {
       // mTrace(rEidx)
@@ -185,7 +187,8 @@ export function NoteListView({nc}) {
     },
   )
 
-  /*const rLength = */ mReaction(
+  /*const rLength = */
+  mReaction(
     () => [view.noteDisplayList.length],
     ([listLength]) => {
       // mTrace(rLength)
