@@ -19,6 +19,10 @@ const EditMode = (() => {
   return {create}
 })()
 
+/**
+ *  @type function
+ *  @returns function
+ */
 const noteTransformer = createTransformer(view =>
   createTransformer(note =>
     oObject({
