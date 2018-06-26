@@ -1,5 +1,11 @@
-import {mActionBound, mReaction, oArray, oObject} from './utils'
-import {R} from '../utils'
+import {
+  mActionBound,
+  mReaction,
+  oArray,
+  oObject,
+  oObject3,
+} from './utils'
+import {_, R} from '../utils'
 import * as mu from 'mobx-utils/lib/mobx-utils'
 
 const defineDelegatePropertyGetter = R.curry(
@@ -12,9 +18,9 @@ const defineDelegatePropertyGetter = R.curry(
     }),
 )
 
-const EditMode = (function EditMode() {
+const EditMode = (() => {
   function create() {
-    return oObject({})
+    return R.compose(oObject3(R.__, {}, {name: 'EditMode'}))({})
   }
   return {create}
 })()
