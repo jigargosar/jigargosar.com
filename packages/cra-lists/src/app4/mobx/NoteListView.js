@@ -1,6 +1,7 @@
 import {
   createOObj,
   createTransformer,
+  createViewModel,
   mActionBound,
   mReaction,
   oArray,
@@ -41,6 +42,9 @@ const noteTransformer = createTransformer(view =>
       onTextChange(e) {
         const target = e.target
         note.text = target.value
+      },
+      get form() {
+        return createViewModel(note)
       },
       get text() {
         return note.text
