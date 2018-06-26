@@ -29,8 +29,8 @@ const EditMode = (() => {
   return {create}
 })()
 
-export function NoteListView({nc}) {
-  const noteTransformer = mu.createTransformer(note => {
+const noteTransformer = view =>
+  mu.createTransformer(note => {
     const displayNote = {
       get displayText() {
         return R.when(R.isEmpty, R.always('<empty>'))(this.text)
@@ -64,7 +64,7 @@ export function NoteListView({nc}) {
     )
     return oObject(displayNote)
   })
-
+export function NoteListView({nc}) {
   const view = oObject(
     {
       editMode: 'selection',
@@ -91,7 +91,7 @@ export function NoteListView({nc}) {
       sortComparators: [R.ascend(R.prop('sortIdx'))],
       get noteDisplayList() {
         return R.compose(
-          R.map(noteTransformer),
+          R.map(noteTransformer(view)),
           // R.sortWith(this.sortComparators),
           // R.filter(this.pred),
         )(this.noteModelList)
