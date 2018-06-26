@@ -26,39 +26,42 @@ const EditMode = (() => {
  */
 const noteTransformer = createTransformer(view =>
   createTransformer(note =>
-    oObject({
-      get displayText() {
-        return R.when(R.isEmpty, R.always('<empty>'))(note.text)
+    oObject(
+      {
+        get displayText() {
+          return R.when(R.isEmpty, R.always('<empty>'))(note.text)
+        },
+        get isEditing() {
+          return view.isModeEditing && R.equals(note.id, view.sid)
+        },
+        get isSelected() {
+          return view.isModeSelection && R.equals(note.id, view.sid)
+        },
+        onToggleDeleteEvent() {
+          note.toggleDeleted()
+        },
+        onTextChange(e) {
+          const target = e.target
+          this.form.text = target.value
+        },
+        get form() {
+          return createViewModel(note)
+        },
+        get text() {
+          return note.text
+        },
+        get id() {
+          return note.id
+        },
+        get deleted() {
+          return note.deleted
+        },
+        get sortIdx() {
+          return note.sortIdx
+        },
       },
-      get isEditing() {
-        return view.isModeEditing && R.equals(note.id, view.sid)
-      },
-      get isSelected() {
-        return view.isModeSelection && R.equals(note.id, view.sid)
-      },
-      onToggleDeleteEvent() {
-        note.toggleDeleted()
-      },
-      onTextChange(e) {
-        const target = e.target
-        note.text = target.value
-      },
-      get form() {
-        return createViewModel(note)
-      },
-      get text() {
-        return note.text
-      },
-      get id() {
-        return note.id
-      },
-      get deleted() {
-        return note.deleted
-      },
-      get sortIdx() {
-        return note.sortIdx
-      },
-    }),
+      {onTextChange: mActionBound},
+    ),
   ),
 )
 

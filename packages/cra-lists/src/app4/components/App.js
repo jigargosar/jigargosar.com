@@ -35,7 +35,7 @@ class NoteInput extends OC {
         autoFocus
         className={cn('bw0 flex-auto ma0 pa1 lh-copy blue')}
         placeholder={'Note text ...'}
-        value={note.text}
+        value={note.form.text}
         onChange={note.onTextChange}
       />
     )
