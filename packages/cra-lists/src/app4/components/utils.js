@@ -1,21 +1,10 @@
-// Foo
-
-/*eslint-disable*/
 import React, {Component as RC, Fragment as F} from 'react'
 import {observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
+import {R, RX} from '../utils'
 
-const R = require('ramda')
-const RA = require('ramda-adjunct')
-
-/*eslint-enable*/
-
-/*eslint-disable no-empty-pattern*/
-
-const o = observer
-const O = Observer
-export {o, O, F, RC, observer, Observer, isHotKey}
-
+export {F, RC, observer, Observer, isHotKey}
+export const cn = RX.cx
 export const isAnyHotKey = R.compose(
   R.anyPass,
   R.map(R.curryN(2, isHotKey)),
@@ -25,8 +14,6 @@ export function renderKeyedById(Component, propName, idList) {
     <Component key={value.id} {...{[propName]: value}} />
   ))(idList)
 }
-
-// export const ro = observer
 
 const StateContext = React.createContext(null)
 

@@ -1,9 +1,9 @@
 /*eslint-disable*/
-const R = require('ramda')
-const RA = require('ramda-adjunct')
-const RX = require('ramda-extension')
-const RB = require('rambda')
-const RBX = require('rambdax')
+import * as R from 'ramda'
+import RA from 'ramda-adjunct'
+import * as RX from 'ramda-extension'
+import * as RB from 'rambdax'
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
-export {R, RA, RB, RX, RBX}
+export const _ = RB
+export {R, RA, RX, RB}
