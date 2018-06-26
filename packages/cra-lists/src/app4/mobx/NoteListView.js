@@ -153,12 +153,6 @@ export function NoteListView({nc}) {
       onEscapeKey() {
         this.editMode = 'selection'
       },
-      isEditingNote(note) {
-        return this.isModeEditing && R.equals(note.id, this.sid)
-      },
-      isSelectedNote(note) {
-        return this.isModeSelection && R.equals(note.id, this.sid)
-      },
     },
     {
       gotoNext: mActionBound,
