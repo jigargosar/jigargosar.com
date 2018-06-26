@@ -11,7 +11,6 @@ const R = require('ramda')
 const m = require('mobx')
 const mst = require('mobx-state-tree')
 const validate = require('aproba')
-const RA = require('ramda-adjunct')
 const RX = require('ramda-extension')
 
 /*eslint-enable*/
