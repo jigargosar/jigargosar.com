@@ -5,8 +5,11 @@ export {createTransformer, createViewModel} from 'mobx-utils'
 
 export const oObject = m.observable.object
 export const oObject3 = _.curryN(3, m.observable.object)
-export const createOObj = ({props, decorators, options}) =>
-  oObject(props, decorators, options)
+export const createOObj = ({
+  props = {},
+  decorators = {},
+  options = {},
+} = {}) => oObject(props, decorators, options)
 export const extendObservable = m.extendObservable
 export const oArray = m.observable.array
 export const oMap = m.observable.map
