@@ -54,7 +54,6 @@ export function NoteListView({nc}) {
 
   const view = oObject(
     {
-      // sid: null,
       editMode: 'selection',
       editTextSelection: {start: 0, end: 0},
       get sid() {
