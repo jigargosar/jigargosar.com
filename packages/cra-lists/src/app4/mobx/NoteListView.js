@@ -66,7 +66,6 @@ const noteTransformer = createTransformer(view =>
 )
 
 export function NoteListView({nc}) {
-  const allNotesPlain = nc.all
   const view = oObject(
     {
       editMode: 'selection',
@@ -111,7 +110,7 @@ export function NoteListView({nc}) {
           oArray,
           R.sortWith(this.sortComparators),
           R.filter(this.pred),
-        )(allNotesPlain)
+        )(nc.all)
       },
       updateSortIdx() {
         this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
