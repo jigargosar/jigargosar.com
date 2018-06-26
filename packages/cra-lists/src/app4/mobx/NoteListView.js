@@ -98,7 +98,6 @@ export function NoteListView({nc}) {
       sortComparators: [R.ascend(R.prop('sortIdx'))],
       get noteDisplayList() {
         return R.compose(
-          oArray,
           R.map(noteTransformer(view)),
           R.sortWith(this.sortComparators),
           R.filter(this.pred),
