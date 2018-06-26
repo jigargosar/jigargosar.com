@@ -1,11 +1,4 @@
-import {
-  extendActions,
-  mIntercept,
-  mJS,
-  mSet,
-  mValues,
-  oObject,
-} from './utils'
+import {mIntercept, mJS, mSet, mValues, oObject} from './utils'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
 import {R} from '../utils'
@@ -16,16 +9,14 @@ const filterDeleted = R.filter(deletedProp)
 
 export const Note = (function Note() {
   function create({id, text, deleted, sortIdx}) {
-    const note = R.compose(
-      extendActions(s => ({
-        toggleDeleted: () => (s.deleted = !s.deleted),
-      })),
-      oObject,
-    )({
+    const note = oObject({
       id,
       text,
       deleted,
       sortIdx,
+      toggleDeleted() {
+        this.deleted = !this.deleted
+      },
     })
 
     mIntercept(note, 'id', ({newValue, object}) => {
@@ -48,7 +39,7 @@ export const chance = new Chance()
 
 export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
-    return R.compose(oObject)({
+    return oObject({
       idMap: oObject(R.compose(R.map(Note.create))(snapshot)),
       get valuesArray() {
         return mValues(this.idMap)

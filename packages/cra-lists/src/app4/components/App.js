@@ -18,6 +18,7 @@ import {
   F,
   isAnyHotKey,
   isHotKey,
+  OC,
   renderKeyedById,
   WithState,
 } from './utils'
@@ -27,7 +28,7 @@ import {R} from '../utils'
 
 /*eslint-disable no-empty-pattern*/
 
-class NoteInput extends C {
+class NoteInput extends OC {
   r({note}) {
     return (
       <input

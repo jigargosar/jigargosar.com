@@ -1,7 +1,9 @@
-import {_} from '../utils'
 import * as m from 'mobx'
+import {_, R} from '../utils'
 import * as mst from 'mobx-state-tree'
 export {createTransformer, createViewModel} from 'mobx-utils'
+
+m.configure({computedRequiresReaction: true})
 
 export const oObject = m.observable.object
 export const oObject3 = _.curryN(3, m.observable.object)
@@ -37,4 +39,14 @@ export const extendComputed = _.curry(
     const computed = createComputed(observable)
     return extendObservable(observable, computed, _.map(mComputed))
   },
+)
+
+export const defineDelegatePropertyGetter = R.curry(
+  (propertyName, src, target) =>
+    Object.defineProperty(target, propertyName, {
+      get() {
+        return src[propertyName]
+      },
+      enumerable: true,
+    }),
 )

@@ -29,7 +29,7 @@ export class C extends RC {
   }
 }
 
-// export const OC = observer(C)
+export const OC = observer(C)
 
 export const WithState = ({children}) => (
   <StateContext.Consumer>

@@ -7,17 +7,6 @@ import {
   oObject,
 } from './utils'
 import {R} from '../utils'
-import * as mu from 'mobx-utils/lib/mobx-utils'
-
-const defineDelegatePropertyGetter = R.curry(
-  (propertyName, src, target) =>
-    Object.defineProperty(target, propertyName, {
-      get() {
-        return src[propertyName]
-      },
-      enumerable: true,
-    }),
-)
 
 const EditMode = (() => {
   function create() {
@@ -30,35 +19,40 @@ const EditMode = (() => {
   return {create}
 })()
 
-const noteTransformer = view =>
-  mu.createTransformer(note => {
-    const displayNote = {
-      get displayText() {
-        return R.when(R.isEmpty, R.always('<empty>'))(note.text)
-      },
-      get isEditing() {
-        return view.isModeEditing && R.equals(note.id, view.sid)
-      },
-      get isSelected() {
-        return view.isModeSelection && R.equals(note.id, view.sid)
-      },
-      onToggleDeleteEvent() {
-        note.toggleDeleted()
-      },
-      onTextChange(e) {
-        const target = e.target
-        note.text = target.value
-      },
-      get text() {
-        return note.text
-      },
-    }
-    ;['id', 'deleted', 'sortIdx'].forEach(
-      defineDelegatePropertyGetter(R.__, note, displayNote),
-    )
-    mTrace(note, 'text')
-    return oObject(displayNote)
+const noteTransformer = view => note => {
+  const displayNote = oObject({
+    get displayText() {
+      return R.when(R.isEmpty, R.always('<empty>'))(note.text)
+    },
+    get isEditing() {
+      return view.isModeEditing && R.equals(note.id, view.sid)
+    },
+    get isSelected() {
+      return view.isModeSelection && R.equals(note.id, view.sid)
+    },
+    onToggleDeleteEvent() {
+      note.toggleDeleted()
+    },
+    onTextChange(e) {
+      const target = e.target
+      note.text = target.value
+    },
+    get text() {
+      return note.text
+    },
+    get id() {
+      return note.id
+    },
+    get deleted() {
+      return note.deleted
+    },
+    get sortIdx() {
+      return note.sortIdx
+    },
   })
+  mTrace(displayNote, 'sortIdx')
+  return displayNote
+}
 
 export function NoteListView({nc}) {
   const view = oObject(
@@ -86,6 +80,7 @@ export function NoteListView({nc}) {
       sortComparators: [R.ascend(R.prop('sortIdx'))],
       get noteDisplayList() {
         return R.compose(
+          oArray,
           R.map(noteTransformer(view)),
           R.sortWith(this.sortComparators),
           R.filter(this.pred),
