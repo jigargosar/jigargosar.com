@@ -33,23 +33,3 @@ export const extendComputed = _.curry(
   },
 )
 
-// const bar = _.compose(
-//   extendComputed(self => ({
-//     pc: () => self.p,
-//     get pcp() {
-//       return self.p
-//     },
-//   })),
-//   extendActions(self => ({
-//     inc: () => self.p++,
-//   })),
-//   oObject,
-// )({p: 1})
-//
-// mAutoRun(() => {
-//   console.log(`bar.p`, bar.p)
-//   console.log(`bar.pc`, bar.pc())
-//   console.log(`bar.pcp`, bar.pcp)
-// })
-//
-// bar.inc()

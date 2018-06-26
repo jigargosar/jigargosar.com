@@ -7,8 +7,3 @@ import RA from 'ramda-adjunct'
 const _ = R
 
 export {_, R, RX, RB, RA, validate}
-
-// function foo() {
-//   validate('|', arguments)
-// }
-// foo('a')
