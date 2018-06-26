@@ -66,6 +66,7 @@ const noteTransformer = createTransformer(view =>
 )
 
 export function NoteListView({nc}) {
+  const allNotesPlain = nc.all
   const view = oObject(
     {
       editMode: 'selection',
@@ -110,7 +111,7 @@ export function NoteListView({nc}) {
           oArray,
           R.sortWith(this.sortComparators),
           R.filter(this.pred),
-        )(nc.all)
+        )(allNotesPlain)
       },
       updateSortIdx() {
         this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
@@ -118,8 +119,8 @@ export function NoteListView({nc}) {
       addNewAt(idx) {
         const newNote = nc.newNote()
         this.noteModelList.splice(idx, 0, newNote)
-        this.updateSortIdx()
-        nc.add(newNote)
+        // this.updateSortIdx()
+        // nc.add(newNote)
         this.sidx = idx
         this.editMode = 'editing'
       },
@@ -193,7 +194,7 @@ export function NoteListView({nc}) {
 
   /*const rLength = */
   mReaction(
-    () => [view.noteDisplayList.length],
+    () => [view.noteModelList.length],
     ([listLength]) => {
       // mTrace(rLength)
       if (listLength > 0) {
