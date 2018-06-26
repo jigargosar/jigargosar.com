@@ -2,6 +2,7 @@ import {
   createOObj,
   mActionBound,
   mReaction,
+  mTrace,
   oArray,
   oObject,
 } from './utils'
@@ -33,7 +34,7 @@ const noteTransformer = view =>
   mu.createTransformer(note => {
     const displayNote = {
       get displayText() {
-        return R.when(R.isEmpty, R.always('<empty>'))(this.text)
+        return R.when(R.isEmpty, R.always('<empty>'))(note.text)
       },
       get isEditing() {
         return view.isModeEditing && R.equals(note.id, view.sid)
@@ -48,10 +49,14 @@ const noteTransformer = view =>
         const target = e.target
         note.text = target.value
       },
+      get text() {
+        return note.text
+      },
     }
-    ;['id', 'text', 'deleted', 'sortIdx'].forEach(
+    ;['id', 'deleted', 'sortIdx'].forEach(
       defineDelegatePropertyGetter(R.__, note, displayNote),
     )
+    mTrace(note, 'text')
     return oObject(displayNote)
   })
 
@@ -82,9 +87,9 @@ export function NoteListView({nc}) {
       get noteDisplayList() {
         return R.compose(
           R.map(noteTransformer(view)),
-          // R.sortWith(this.sortComparators),
-          // R.filter(this.pred),
-        )(this.noteModelList)
+          R.sortWith(this.sortComparators),
+          R.filter(this.pred),
+        )(nc.all)
       },
       get noteModelList() {
         return R.compose(

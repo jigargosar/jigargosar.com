@@ -37,6 +37,7 @@ function createNC() {
 }
 
 if (module.hot) {
+  window.s = states
   mReaction(
     () => [states.nc.snapshot],
     () => {
