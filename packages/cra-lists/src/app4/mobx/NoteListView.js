@@ -36,10 +36,10 @@ const noteTransformer = view =>
         return R.when(R.isEmpty, R.always('<empty>'))(this.text)
       },
       get isEditing() {
-        return view.isEditingNote(this)
+        return view.isModeEditing && R.equals(note.id, view.sid)
       },
       get isSelected() {
-        return view.isSelectedNote(this)
+        return view.isModeSelection && R.equals(note.id, view.sid)
       },
       onToggleDeleteEvent() {
         note.toggleDeleted()
