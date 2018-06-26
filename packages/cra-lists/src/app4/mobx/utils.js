@@ -1,17 +1,7 @@
-/*eslint-disable*/
-
-import {createTransformer} from 'mobx-utils'
-
-const firebase = require('firebase/app')
-require('firebase/auth')
-require('firebase/firestore')
-var nanostate = require('nanostate')
-
-const R = require('ramda')
-const m = require('mobx')
-const mst = require('mobx-state-tree')
-
-/*eslint-enable*/
+import {_} from '../utils'
+import * as m from 'mobx'
+import * as mst from 'mobx-state-tree'
+export {createTransformer, createViewModel} from 'mobx-utils'
 
 export const oObject = m.observable.object
 export const extendObservable = m.extendObservable
@@ -30,21 +20,20 @@ export const mComputed = m.computed
 export const t = mst.types
 export const tModel = mst.types.model
 export const tMap = mst.types.map
-export {createTransformer, createViewModel} from 'mobx-utils'
 
-export const extendActions = R.curry((createActions, observable) => {
+export const extendActions = _.curry((createActions, observable) => {
   const actions = createActions(observable)
-  return extendObservable(observable, actions, R.map(mAction))
+  return extendObservable(observable, actions, _.map(mAction))
 })
 
-export const extendComputed = R.curry(
+export const extendComputed = _.curry(
   (createComputed, observable) => {
     const computed = createComputed(observable)
-    return extendObservable(observable, computed, R.map(mComputed))
+    return extendObservable(observable, computed, _.map(mComputed))
   },
 )
 
-// const bar = R.compose(
+// const bar = _.compose(
 //   extendComputed(self => ({
 //     pc: () => self.p,
 //     get pcp() {
