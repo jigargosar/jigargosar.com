@@ -1,8 +1,6 @@
 import {mActionBound, mReaction, oArray, oObject} from './utils'
 import * as mu from 'mobx-utils'
-
-const R = require('ramda')
-// const RA = require('ramda-adjunct')
+import {R} from '../services/utils'
 
 const defineDelegatePropertyGetter = R.curry(
   (propertyName, src, target) =>
