@@ -74,9 +74,9 @@ export function NoteListView({nc}) {
       get noteDisplayList() {
         return R.compose(
           R.map(noteTransformer),
-          R.sortWith(this.sortComparators),
-          R.filter(this.pred),
-        )(nc.all)
+          // R.sortWith(this.sortComparators),
+          // R.filter(this.pred),
+        )(this.noteModelList)
       },
       get noteModelList() {
         return R.compose(
