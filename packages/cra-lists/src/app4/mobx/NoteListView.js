@@ -84,6 +84,13 @@ export function NoteListView({nc}) {
       get isModeEditing() {
         return this.isEditMode('editing')
       },
+      get editingNoteForm() {
+        return R.pathOr(
+          null,
+          ['noteDisplayList', view.sidx, 'form'],
+          view,
+        )
+      },
       get isModeSelection() {
         return this.isEditMode('selection')
       },
@@ -147,6 +154,9 @@ export function NoteListView({nc}) {
         if (this.isModeSelection) {
           this.editMode = 'editing'
         } else if (this.isModeEditing) {
+          if (this.editingNoteForm) {
+            this.editingNoteForm.submit()
+          }
           this.editMode = 'selection'
         }
       },
