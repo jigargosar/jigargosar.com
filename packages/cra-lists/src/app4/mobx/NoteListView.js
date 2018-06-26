@@ -64,6 +64,7 @@ const noteTransformer = view =>
     )
     return oObject(displayNote)
   })
+
 export function NoteListView({nc}) {
   const view = oObject(
     {
@@ -122,8 +123,9 @@ export function NoteListView({nc}) {
         if (
           this.noteDisplayList.length === 0 ||
           !this.isModeSelection
-        )
+        ) {
           return
+        }
         this.noteDisplayList[this.sidx].onToggleDeleteEvent()
       },
       insertAbove() {
@@ -133,13 +135,15 @@ export function NoteListView({nc}) {
         this.addNewAt(this.sidx + 1)
       },
       gotoNext() {
-        this.sidx = this.sidx + 1
+        this.sidx += 1
       },
       gotoPrev() {
-        this.sidx = this.sidx - 1
+        this.sidx -= 1
       },
       onEnterKey() {
-        if (this.noteDisplayList.length === 0) return
+        if (this.noteDisplayList.length === 0) {
+          return
+        }
         if (this.isModeSelection) {
           this.editMode = 'editing'
         } else if (this.isModeEditing) {
