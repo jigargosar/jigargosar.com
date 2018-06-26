@@ -48,16 +48,6 @@ const noteTransformer = view =>
         const target = e.target
         note.text = target.value
       },
-      get textSelection() {
-        return view.editTextSelection
-      },
-      onEditTextSelectionChange(e) {
-        const target = e.target
-        view.editTextSelection = {
-          start: target.selectionStart,
-          end: target.selectionEnd,
-        }
-      },
     }
     ;['id', 'text', 'deleted', 'sortIdx'].forEach(
       defineDelegatePropertyGetter(R.__, note, displayNote),
@@ -70,7 +60,6 @@ export function NoteListView({nc}) {
     {
       editMode: 'selection',
       em: EditMode.create(),
-      editTextSelection: {start: 0, end: 0},
       get sid() {
         return R.pathOr(
           null,
