@@ -116,7 +116,7 @@ class NoteListShortcuts extends C {
 
     R.cond([
       [isHotKey('a'), wrapPD(this.view.onAddNewNoteEvent)],
-      [isHotKey('delete'), this.view.onDeleteSelectionEvent],
+      [isAnyHotKey(['d', 'delete']), wrapPD(this.view)],
     ])(e)
   }
 }
