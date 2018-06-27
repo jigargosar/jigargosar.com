@@ -5,14 +5,18 @@ import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
 import {mReaction, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
-import {Auth0} from './services/auth0'
 import {storage} from './services/storage'
 
+import {createStore} from 'mobx-app'
+import {appStores} from './mobx-app-stores'
+
 const nc = createNC()
+const store = createStore(appStores, {})
+
 const states = oObject({
   nc,
   view: NoteListView({nc}),
-  auth0: new Auth0(),
+  ...store,
 })
 
 function render() {
