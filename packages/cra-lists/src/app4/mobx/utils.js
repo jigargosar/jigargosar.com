@@ -1,7 +1,11 @@
 import * as m from 'mobx'
 import {_, R, RB} from '../utils'
 import * as mst from 'mobx-state-tree'
-import {ArrayFormatter, ObjectFormatter} from './utils/formatters'
+import {
+  ArrayFormatter,
+  MapFormatter,
+  ObjectFormatter,
+} from './utils/formatters'
 
 export {createTransformer, createViewModel} from 'mobx-utils'
 
@@ -61,17 +65,18 @@ if (module.hot) {
 
   window.devtoolsFormatters = window.devtoolsFormatters || []
 
-  const formatters = [ObjectFormatter, ArrayFormatter]
+  const formatters = [MapFormatter, ObjectFormatter, ArrayFormatter]
 
   const hotFormatters = _.compose(
     _.defaultTo([]),
     RB.path('hot.data.devtoolsFormatters'),
   )(module)
 
-  window.devtoolsFormatters = [
+  window.devtoolsFormatters.unshift(
     ...formatters,
     ..._.without(hotFormatters, window.devtoolsFormatters),
-  ]
+  )
+
   module.hot.dispose(data => {
     data.devtoolsFormatters = formatters
   })

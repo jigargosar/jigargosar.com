@@ -6,10 +6,10 @@ const listStyle = {
 }
 const mobxNameStyle = {style: 'color: rgb(232,98,0)'}
 const nullStyle = {style: 'color: #777'}
-const renderIterableHeader = (iterable, name = 'Iterable') => [
+const renderIterableHeader = (length, name = 'Iterable') => [
   'span',
   ['span', mobxNameStyle, name],
-  ['span', `[${iterable.length}]`],
+  ['span', `[${length}]`],
 ]
 
 const reference = (object, config) => {
@@ -24,8 +24,16 @@ const reference = (object, config) => {
 const hasBody = (collection, config) =>
   collection.length > 0 && !(config && config.noPreview)
 
-const renderIterableBody = (collection, mapper, options = {}) => {
-  const children = Object.entries(mobx.toJS(collection)).map(mapper)
+const simpleMapper = ([key, value]) => [
+  'li',
+  {},
+  reference(key),
+  ': ',
+  reference(value),
+]
+
+const renderIterableBody = (collection, mapper = simpleMapper) => {
+  const children = mobx.entries(collection).map(mapper)
   return ['ol', listStyle, ...children]
 }
 
@@ -34,18 +42,21 @@ export const ObjectFormatter = {
     if (!mobx.isObservableObject(o)) {
       return null
     }
-    return renderIterableHeader(Object.keys(o), 'Object')
+    return renderIterableHeader(mobx.keys(o).length, 'Object')
   },
-  hasBody: o => hasBody(Object.keys(o)),
-  body(o) {
-    return renderIterableBody(o, ([key, value]) => [
-      'li',
-      {},
-      reference(key),
-      ': ',
-      reference(value),
-    ])
+  hasBody: o => hasBody(mobx.keys(o)),
+  body: renderIterableBody,
+}
+
+export const MapFormatter = {
+  header(o) {
+    if (!mobx.isObservableMap(o)) {
+      return null
+    }
+    return renderIterableHeader(Array.from(o.keys()), 'Map')
   },
+  hasBody: o => hasBody(Array.from(o.keys())),
+  body: renderIterableBody,
 }
 
 export const ArrayFormatter = {
@@ -56,10 +67,5 @@ export const ArrayFormatter = {
     return renderIterableHeader(o, 'Array')
   },
   hasBody,
-  body(o) {
-    return renderIterableBody(o, ([index, value]) => [
-      'li',
-      reference(value),
-    ])
-  },
+  body: renderIterableBody,
 }
