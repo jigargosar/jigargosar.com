@@ -78,8 +78,8 @@ export function NoteListView({nc}) {
         )
       },
       sidx: -1,
-      get isEditMode() {
-        return this.sidx !== -1 && R.equals(this.editMode)
+      isEditMode(mode) {
+        return this.sidx !== -1 && R.equals(this.editMode, mode)
       },
       get isModeEditing() {
         return this.isEditMode('editing')
