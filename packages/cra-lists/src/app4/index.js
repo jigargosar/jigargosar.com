@@ -44,6 +44,7 @@ function createAppStore() {
 
 if (module.hot) {
   window.s = states
+  Object.assign(window, require('mobx'))
   mReaction(
     () => [states.nc.snapshot],
     () => storage.set('ncSnapshot', states.nc.snapshot),
@@ -54,11 +55,11 @@ if (module.hot) {
   )
 
   module.hot['accept'](
-    [
-      './components/App',
-      './mobx/NotesCollection',
-      './mobx/NoteListView',
-    ],
+    // [
+    //   './components/App',
+    //   './mobx/NotesCollection',
+    //   './mobx/NoteListView',
+    // ],
     () => {
       console.clear()
       const NoteListView = require('./mobx/NoteListView').NoteListView
