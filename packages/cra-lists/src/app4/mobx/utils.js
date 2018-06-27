@@ -54,6 +54,8 @@ export const defineDelegatePropertyGetter = R.curry(
 )
 
 if (module.hot) {
+  const window = global.window
+
   Object.assign(window, require('mobx'))
   Object.assign(window, require('mobx-utils'))
 
