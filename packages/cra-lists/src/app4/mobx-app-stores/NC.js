@@ -1,15 +1,22 @@
-import {extendObservable} from '../mobx/utils'
+import {extendObservable, oArray} from '../mobx/utils'
+import {_} from '../utils'
+import {collection, value} from 'mobx-app'
+
+const itemFactory = _.identity
 
 const notesCollectionActions = state => {
+  const itemActions = collection(state.nc.items, itemFactory)
+
   function foo() {
     console.log(`console`, 'foo')
   }
-  return {foo}
+  return {foo, ...itemActions}
 }
 export const NC = (state, initialData) => {
+  const items = _.pathOr([], ['nc.items'], initialData)
   extendObservable(state, {
     nc: {
-      idLookup: {},
+      items: oArray(items),
     },
   })
 
