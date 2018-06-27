@@ -21,8 +21,8 @@ const reference = (object, config) => {
   return ['object', {object, config}]
 }
 
-const hasBody = (collection, config) =>
-  collection.length > 0 && !(config && config.noPreview)
+const hasBody = (length, config) =>
+  length > 0 && !(config && config.noPreview)
 
 const simpleMapper = ([key, value]) => [
   'li',
@@ -44,7 +44,7 @@ export const ObjectFormatter = {
     }
     return renderIterableHeader(mobx.keys(o).length, 'Object')
   },
-  hasBody: o => hasBody(mobx.keys(o)),
+  hasBody: o => hasBody(mobx.keys(o).length),
   body: renderIterableBody,
 }
 
@@ -53,9 +53,9 @@ export const MapFormatter = {
     if (!mobx.isObservableMap(o)) {
       return null
     }
-    return renderIterableHeader(Array.from(o.keys()), 'Map')
+    return renderIterableHeader(o.size, 'Map')
   },
-  hasBody: o => hasBody(Array.from(o.keys())),
+  hasBody: o => hasBody(o.size),
   body: renderIterableBody,
 }
 
@@ -66,6 +66,6 @@ export const ArrayFormatter = {
     }
     return renderIterableHeader(o, 'Array')
   },
-  hasBody,
+  hasBody: o => hasBody(o.length),
   body: renderIterableBody,
 }

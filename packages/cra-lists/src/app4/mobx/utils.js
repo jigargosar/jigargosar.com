@@ -9,7 +9,7 @@ import {
 
 export {createTransformer, createViewModel} from 'mobx-utils'
 
-m.configure({computedRequiresReaction: true})
+m.configure({computedRequiresReaction: true, enforceActions: true})
 
 export const oObject = m.observable.object
 export const oObject3 = _.curryN(3, m.observable.object)

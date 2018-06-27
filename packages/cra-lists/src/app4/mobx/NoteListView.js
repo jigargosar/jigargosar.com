@@ -205,7 +205,6 @@ export function NoteListView({nc}) {
     },
   )
 
-  view.sidx = 0
 
   return view
 }
