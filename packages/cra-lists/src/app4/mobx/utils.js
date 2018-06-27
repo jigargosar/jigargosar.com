@@ -50,3 +50,9 @@ export const defineDelegatePropertyGetter = R.curry(
       enumerable: true,
     }),
 )
+
+if (module.hot) {
+  Object.assign(window, require('mobx'))
+  Object.assign(window, require('mobx-utils'))
+  Object.assign(window, require('ramda'))
+}

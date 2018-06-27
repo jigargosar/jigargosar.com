@@ -44,7 +44,6 @@ function createAppStore() {
 
 if (module.hot) {
   window.s = states
-  Object.assign(window, require('mobx'))
   mReaction(
     () => [states.nc.snapshot],
     () => storage.set('ncSnapshot', states.nc.snapshot),
