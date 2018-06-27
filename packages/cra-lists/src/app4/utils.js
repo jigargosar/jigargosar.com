@@ -7,3 +7,7 @@ import RA from 'ramda-adjunct'
 const _ = R
 
 export {_, R, RX, RB, RA, validate}
+
+if (module.hot) {
+  Object.assign(window, require('ramda'))
+}
