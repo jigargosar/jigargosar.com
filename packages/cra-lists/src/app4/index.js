@@ -8,7 +8,6 @@ import {NoteListView} from './mobx/NoteListView'
 import {storage} from './services/storage'
 
 import {createStore} from 'mobx-app'
-import {appStores} from './mobx-app-stores'
 
 const nc = createNC()
 const states = oObject({
@@ -47,15 +46,11 @@ if (module.hot) {
   window.s = states
   mReaction(
     () => [states.nc.snapshot],
-    () => {
-      storage.set('ncSnapshot', states.nc.snapshot)
-    },
+    () => storage.set('ncSnapshot', states.nc.snapshot),
   )
   mReaction(
     () => [states.state],
-    () => {
-      storage.set('app-state', states.state)
-    },
+    () => storage.set('app-state', states.state),
   )
 
   module.hot.accept(

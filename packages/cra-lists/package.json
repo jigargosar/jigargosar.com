@@ -12,9 +12,6 @@
     "bracketSpacing": false,
     "jsxBracketSameLine": false
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "dependencies": {
     "aproba": "2.0.0",
     "auth0-js": "^9.6.1",

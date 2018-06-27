@@ -3,6 +3,7 @@
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$/packages/cra-lists" libraries="{cra list node_modules}" />
     <file url="file://$PROJECT_DIR$/packages/ember-quickstart" libraries="{node_modules ember-quickstart}" />
+    <file url="PROJECT" libraries="{@types/webpack, @types/webpack-hot-client}" />
     <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>
