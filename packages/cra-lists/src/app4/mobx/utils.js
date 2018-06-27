@@ -1,7 +1,7 @@
 import * as m from 'mobx'
 import {_, R} from '../utils'
 import * as mst from 'mobx-state-tree'
-import {ObjectFormatter} from './utils/formatters'
+import {ArrayFormatter, ObjectFormatter} from './utils/formatters'
 
 export {createTransformer, createViewModel} from 'mobx-utils'
 
@@ -61,14 +61,5 @@ if (module.hot) {
 
   window.devtoolsFormatters = window.devtoolsFormatters || []
 
-  window.devtoolsFormatters.unshift(ObjectFormatter)
-
-  //   window.devtoolsFormatters = [{
-  //     header: function(obj){
-  //         return ["div", {}, obj.toString()]
-  //     },
-  //     hasBody: function(){
-  //         return false;
-  //     }
-  // }]
+  window.devtoolsFormatters.unshift(ObjectFormatter, ArrayFormatter)
 }

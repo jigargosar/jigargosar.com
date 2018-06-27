@@ -47,3 +47,19 @@ export const ObjectFormatter = {
     ])
   },
 }
+
+export const ArrayFormatter = {
+  header(o) {
+    if (!mobx.isObservableArray(o)) {
+      return null
+    }
+    return renderIterableHeader(o, 'Array')
+  },
+  hasBody,
+  body(o) {
+    return renderIterableBody(o, ([index, value]) => [
+      'li',
+      reference(value),
+    ])
+  },
+}
