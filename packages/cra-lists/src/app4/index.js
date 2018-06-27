@@ -11,16 +11,14 @@ import {createStore} from 'mobx-app'
 import {appStores} from './mobx-app-stores'
 
 const nc = createNC()
-const store = createStore(appStores, {})
-
 const states = oObject({
   nc,
   view: NoteListView({nc}),
-  ...store,
+  ...createAppStore(),
 })
 
+const App = require('./components/App').default
 function render() {
-  const App = require('./components/App').default
   ReactDOM.render(
     <StateProvider value={states}>
       <App />
@@ -40,12 +38,23 @@ function createNC() {
   return NotesCollection.create(ncSnapshot)
 }
 
+function createAppStore() {
+  const appStores = require('./mobx-app-stores').appStores
+  return createStore(appStores, storage.get('app-state'))
+}
+
 if (module.hot) {
   window.s = states
   mReaction(
     () => [states.nc.snapshot],
     () => {
       storage.set('ncSnapshot', states.nc.snapshot)
+    },
+  )
+  mReaction(
+    () => [states.state],
+    () => {
+      storage.set('app-state', states.state)
     },
   )
 
@@ -59,8 +68,11 @@ if (module.hot) {
       console.clear()
       const NoteListView = require('./mobx/NoteListView').NoteListView
 
-      states.nc = createNC()
-      states.view = NoteListView({nc: states.nc})
+      Object.assign(states, {
+        nc: createNC(),
+        view: NoteListView({nc: states.nc}),
+        ...createAppStore(),
+      })
 
       render()
     },
