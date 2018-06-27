@@ -1,6 +1,8 @@
 import * as m from 'mobx'
 import {_, R} from '../utils'
 import * as mst from 'mobx-state-tree'
+import {ObjectFormatter} from './utils/formatters'
+
 export {createTransformer, createViewModel} from 'mobx-utils'
 
 m.configure({computedRequiresReaction: true})
@@ -51,60 +53,13 @@ export const defineDelegatePropertyGetter = R.curry(
     }),
 )
 
-if (module.hot && !module.hot.data) {
+if (module.hot) {
   Object.assign(window, require('mobx'))
   Object.assign(window, require('mobx-utils'))
+
   window.devtoolsFormatters = window.devtoolsFormatters || []
 
-  const listStyle = {
-    style:
-      'list-style-type: none; padding: 0; margin: 0 0 0 12px; font-style: normal',
-  }
-  const mobxNameStyle = {style: 'color: rgb(232,98,0)'}
-  const nullStyle = {style: 'color: #777'}
-
-  const renderIterableHeader = (iterable, name = 'Iterable') => [
-    'span',
-    ['span', mobxNameStyle, name],
-    ['span', `[${iterable.length}]`],
-  ]
-
-  const reference = (object, config) => {
-    if (typeof object === 'undefined') {
-      return ['span', nullStyle, 'undefined']
-    } else if (object === 'null') {
-      return ['span', nullStyle, 'null']
-    }
-
-    return ['object', {object, config}]
-  }
-
-  const hasBody = (collection, config) =>
-    collection.length > 0 && !(config && config.noPreview)
-
-  const renderIterableBody = (collection, mapper, options = {}) => {
-    const children = Object.entries(m.toJS(collection)).map(mapper)
-    return ['ol', listStyle, ...children]
-  }
-
-  window.devtoolsFormatters.push({
-    header(o) {
-      if (!m.isObservableObject(o)) {
-        return null
-      }
-      return renderIterableHeader(Object.keys(o), 'Object')
-    },
-    hasBody: o => hasBody(Object.keys(o)),
-    body(o) {
-      return renderIterableBody(o, ([key, value]) => [
-        'li',
-        {},
-        reference(key),
-        ': ',
-        reference(value),
-      ])
-    },
-  })
+  window.devtoolsFormatters.unshift(ObjectFormatter)
 
   //   window.devtoolsFormatters = [{
   //     header: function(obj){
