@@ -53,7 +53,7 @@ if (module.hot) {
     () => storage.set('app-state', states.state),
   )
 
-  module.hot.accept(
+  module.hot['accept'](
     [
       './components/App',
       './mobx/NotesCollection',
