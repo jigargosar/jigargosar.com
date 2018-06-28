@@ -61,7 +61,6 @@ if (module.hot) {
     () => mJS(states.state),
     state => {
       storage.set('app-state', state)
-      console.log(state.nc.items)
     },
   )
 
