@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
-import {mJS, mReaction, oObject} from './mobx/utils'
+import {mAutoRun, mJS, mReaction, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
 import {storage} from './services/storage'
 
@@ -54,9 +54,15 @@ if (module.hot) {
     () => [states.nc.snapshot],
     () => storage.set('ncSnapshot', states.nc.snapshot),
   )
+  mAutoRun(() => {
+    console.log(`states.nc.items`, ...mJS(states.state.nc.items))
+  })
   mReaction(
     () => mJS(states.state),
-    state => storage.set('app-state', state),
+    state => {
+      storage.set('app-state', state)
+      console.log(state.nc.items)
+    },
   )
 
   module.hot['accept'](
