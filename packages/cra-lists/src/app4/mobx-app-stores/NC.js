@@ -18,7 +18,7 @@ const notesCollectionActions = state => {
   return {addNew, foo, ...itemActions}
 }
 export const NC = (state, initialData) => {
-  const items = _.pathOr([], ['nc.items'], initialData)
+  const items = _.pathOr([], ['nc', 'items'], initialData)
   extendObservable(state, {
     nc: {
       items: oArray(),
