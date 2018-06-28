@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$/packages/cra-lists" libraries="{HTML, cra list node_modules}" />
-    <file url="file://$PROJECT_DIR$/packages/ember-quickstart" libraries="{node_modules ember-quickstart}" />
+    <file url="file://$PROJECT_DIR$" libraries="{Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/packages/cra-lists" libraries="{HTML, Node.js Core}" />
     <file url="PROJECT" libraries="{HTML}" />
-    <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>

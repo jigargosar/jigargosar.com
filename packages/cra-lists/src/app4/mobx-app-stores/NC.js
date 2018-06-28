@@ -1,6 +1,7 @@
 import {extendObservable, oArray} from '../mobx/utils'
 import {_} from '../utils'
-import {collection, value} from 'mobx-app'
+import {collection} from 'mobx-app'
+import {nanoid} from '../model/util'
 
 const itemFactory = _.identity
 
@@ -10,7 +11,11 @@ const notesCollectionActions = state => {
   function foo() {
     console.log(`console`, 'foo')
   }
-  return {foo, ...itemActions}
+
+  function addNew() {
+    itemActions.addItem({id: nanoid(), text: 'new note'})
+  }
+  return {addNew, foo, ...itemActions}
 }
 export const NC = (state, initialData) => {
   const items = _.pathOr([], ['nc.items'], initialData)

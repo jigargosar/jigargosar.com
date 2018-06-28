@@ -67,9 +67,10 @@ class Note extends C {
 function ListToolbar() {
   return (
     <WithState>
-      {({view}) => (
+      {({view, actions}) => (
         <Section className={cn('pl3')}>
           <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
+          <Button onClick={actions.nc.addNew}>ADD2</Button>
         </Section>
       )}
     </WithState>
