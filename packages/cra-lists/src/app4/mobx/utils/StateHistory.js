@@ -1,27 +1,27 @@
 import {mJS, mReaction, mSpy, oArray} from '../utils'
 
 export function createObservableHistory(obs) {
-  // /*const historyList = oArray([mJS(obs)], {name: 'historyList'})
-  //
-  // mReaction(
-  //   () => mJS(obs),
-  //   newState => {
-  //     historyList.push(newState)
-  //     console.log(`historyList.length`, historyList.length)
-  //   },
-  //   {name: 'StateHistory'},
-  // )
-  //
-  // return historyList*/
+  const historyList = oArray([mJS(obs)], {name: 'historyList'})
+
+  mReaction(
+    () => mJS(obs),
+    newState => {
+      historyList.push(newState)
+      console.log(`historyList.length`, historyList.length)
+    },
+    {name: 'StateHistory'},
+  )
+
+  return historyList
 }
-mSpy(change => {
-  if (change.spyReportStart) {
-    console.groupCollapsed(change.type, change.name)
-    console.log(`change`, change)
-  } else if (change.spyReportEnd) {
-    console.groupEnd()
-    // count -= 1
-  } else {
-    console.log(`change`, change)
-  }
-})
+// mSpy(change => {
+//   if (change.spyReportStart) {
+//     console.groupCollapsed(change.type, change.name)
+//     console.log(`change`, change)
+//   } else if (change.spyReportEnd) {
+//     console.groupEnd()
+//     // count -= 1
+//   } else {
+//     console.log(`change`, change)
+//   }
+// })
