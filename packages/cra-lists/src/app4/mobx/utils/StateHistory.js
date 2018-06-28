@@ -7,7 +7,7 @@ export function createObservableHistory(obs) {
     () => mJS(obs),
     newState => {
       historyList.push(newState)
-      console.log(`historyList.length`, historyList.length)
+      console.debug(`historyList.length`, historyList.length)
     },
     {name: 'StateHistory'},
   )
