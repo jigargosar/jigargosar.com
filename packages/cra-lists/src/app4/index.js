@@ -8,6 +8,7 @@ import {NoteListView} from './mobx/NoteListView'
 import {storage} from './services/storage'
 
 import {createStore} from 'mobx-app'
+import {createObservableHistory} from './mobx/utils/StateHistory'
 
 const nc = createNC()
 const states = oObject({
@@ -44,6 +45,7 @@ function createAppStore() {
 
 if (module.hot) {
   window.s = states
+  createObservableHistory(states)
   mReaction(
     () => [states.nc.snapshot],
     () => storage.set('ncSnapshot', states.nc.snapshot),
