@@ -49,10 +49,8 @@ if (module.hot) {
     () => storage.set('ncSnapshot', states.nc.snapshot),
   )
   mReaction(
-    () => [mJS(states.state)],
-    state => {
-      return storage.set('app-state', state)
-    },
+    () => mJS(states.state),
+    state => storage.set('app-state', state),
   )
 
   module.hot['accept'](

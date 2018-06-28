@@ -3,6 +3,8 @@
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$" libraries="{Node.js Core}" />
     <file url="file://$PROJECT_DIR$/packages/cra-lists" libraries="{HTML, Node.js Core}" />
+    <file url="file://$PROJECT_DIR$/packages/ember-quickstart" libraries="{Node.js Core}" />
     <file url="PROJECT" libraries="{HTML}" />
+    <excludedPredefinedLibrary name="hacker-blog/packages/ember-quickstart/node_modules" />
   </component>
 </project>
