@@ -25,6 +25,7 @@ export const mSet = m.set
 export const mValues = m.values
 export const mAutoRun = m.autorun
 export const mReaction = m.reaction
+export const mRunInAction = m.runInAction
 export const mTrace = m.trace
 export const mJS = m.toJS
 export const mSpy = m.spy

@@ -11,7 +11,7 @@ const notesCollectionActions = state => {
   function addNew() {
     itemActions.addItem({id: nanoid(), text: 'new note'})
   }
-  return {addNew, replace: itemActions.setItems}
+  return {addNew, _replace: itemActions.setItems}
 }
 
 export const NC = (state, initialData, namespace) => {
@@ -23,7 +23,7 @@ export const NC = (state, initialData, namespace) => {
   })
   const actions = notesCollectionActions(state[namespace])
 
-  actions.replace(items)
+  actions._replace(items)
 
   return actions
 }

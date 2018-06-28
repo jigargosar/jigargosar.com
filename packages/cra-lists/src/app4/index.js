@@ -3,12 +3,19 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
-import {mAutoRun, mJS, mReaction, oObject} from './mobx/utils'
+import {
+  mAutoRun,
+  mJS,
+  mReaction,
+  mRunInAction,
+  oObject,
+} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
 import {storage} from './services/storage'
 
 import {createStore} from 'mobx-app'
 import {createObservableHistory} from './mobx/utils/StateHistory'
+import {_} from './utils'
 
 const nc = createNC()
 const states = oObject(
@@ -43,7 +50,7 @@ function createNC() {
 }
 
 function createAppStore() {
-  const appStores = require('./mobx-app-stores').appStores
+  const appStores = require('./mobx-app-stores/index.js').appStores
   return createStore(appStores, storage.get('app-state'))
 }
 
@@ -65,22 +72,24 @@ if (module.hot) {
   )
 
   module.hot['accept'](
-    // [
-    //   './components/App',
-    //   './mobx/NotesCollection',
-    //   './mobx/NoteListView',
-    // ],
-    () => {
+    [
+      './components/App',
+      './mobx/NotesCollection',
+      './mobx/NoteListView',
+      './mobx-app-stores/index.js',
+    ],
+    _.tryCatch(() => {
       console.clear()
       const NoteListView = require('./mobx/NoteListView').NoteListView
-
-      Object.assign(states, {
-        nc: createNC(),
-        view: NoteListView({nc: states.nc}),
-        ...createAppStore(),
-      })
-
+      const appStore = createAppStore()
+      mRunInAction('Hot Update States', () =>
+        Object.assign(states, {
+          nc: createNC(),
+          view: NoteListView({nc: states.nc}),
+          ...appStore,
+        }),
+      )
       render()
-    },
+    }, console.error),
   )
 }
