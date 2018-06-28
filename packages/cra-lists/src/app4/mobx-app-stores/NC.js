@@ -6,25 +6,22 @@ import {nanoid} from '../model/util'
 const itemFactory = _.identity
 
 const notesCollectionActions = state => {
-  const itemActions = collection(state.nc.items, itemFactory)
-
-  function foo() {
-    console.log(`console`, 'foo')
-  }
+  const itemActions = collection(state.items, itemFactory)
 
   function addNew() {
     itemActions.addItem({id: nanoid(), text: 'new note'})
   }
-  return {addNew, foo, ...itemActions}
+  return {addNew, ...itemActions}
 }
-export const NC = (state, initialData) => {
+
+export const NC = (state, initialData, namespace) => {
   const items = _.pathOr([], 'nc.items'.split('.'), initialData)
   extendObservable(state, {
-    nc: {
+    [namespace]: {
       items: oArray(),
     },
   })
-  const actions = notesCollectionActions(state)
+  const actions = notesCollectionActions(state[namespace])
 
   actions.setItems(items)
 
