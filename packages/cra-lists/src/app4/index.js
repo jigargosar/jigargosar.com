@@ -11,11 +11,15 @@ import {createStore} from 'mobx-app'
 import {createObservableHistory} from './mobx/utils/StateHistory'
 
 const nc = createNC()
-const states = oObject({
-  nc,
-  view: NoteListView({nc}),
-  ...createAppStore(),
-})
+const states = oObject(
+  {
+    nc,
+    view: NoteListView({nc}),
+    ...createAppStore(),
+  },
+  {},
+  {name: 'states'},
+)
 
 const App = require('./components/App').default
 function render() {

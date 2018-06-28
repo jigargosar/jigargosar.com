@@ -61,6 +61,7 @@ const noteTransformer = createTransformer(view =>
         },
       },
       {onTextChange: mActionBound},
+      {name: 'DisplayNote'},
     ),
   ),
 )
@@ -175,6 +176,7 @@ export function NoteListView({nc}) {
       insertAbove: mActionBound,
       insertBelow: mActionBound,
     },
+    {name: 'NoteListView'},
   )
 
   /*const rEidx =*/

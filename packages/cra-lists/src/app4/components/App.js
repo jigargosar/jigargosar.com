@@ -16,6 +16,7 @@ import {
   C,
   cn,
   F,
+  injectAllStates,
   isAnyHotKey,
   isHotKey,
   OC,
@@ -77,7 +78,7 @@ function ListToolbar() {
   )
 }
 
-class NoteListShortcuts extends C {
+class NoteListShortcuts extends OC {
   componentDidMount() {
     console.debug('NoteListShortcuts: componentDidMount')
     window.addEventListener('keydown', this.onKeydown)
@@ -126,32 +127,28 @@ class NoteListShortcuts extends C {
   }
 }
 
-class NoteList extends C {
-  r() {
-    return (
-      <F>
-        <NoteListShortcuts />
-        <ListToolbar />
-        <List>
-          <WithState>
-            {({view}) =>
-              renderKeyedById(Note, 'note', view.noteDisplayList)
-            }
-          </WithState>
-        </List>
-      </F>
-    )
-  }
-}
-
-class App extends C {
+const NoteList = injectAllStates(
+  class NoteList extends OC {
+    r({view}) {
+      return (
+        <div>
+          <NoteListShortcuts />
+          <ListToolbar />
+          <List>
+            {renderKeyedById(Note, 'note', view.noteDisplayList)}
+          </List>
+        </div>
+      )
+    }
+  },
+)
+class App extends OC {
   r() {
     return (
       <RootContainer>
         <CenterLayout>
           <div className={'flex'}>
             <Title>Notes</Title>
-            {/*<Auth />*/}
           </div>
           <NoteList />
         </CenterLayout>

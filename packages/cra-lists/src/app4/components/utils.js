@@ -31,19 +31,17 @@ export class C extends RC {
 
 export const OC = observer(C)
 
-export const WithState = ({children}) => (
-  <StateContext.Consumer>
-    {state => <Observer>{() => children(state)}</Observer>}
-  </StateContext.Consumer>
+export const WithState = function WithState({children}) {
+  return <StateContext.Consumer>{children}</StateContext.Consumer>
+}
+
+export const injectMappedState = stateToProps => BC => ({
+  children,
+  ...rest
+}) => (
+  <WithState>
+    {states => <BC {...stateToProps(states, rest)}>{children}</BC>}
+  </WithState>
 )
 
-// export const injectMappedState = stateToProps => BC => ({
-//   children,
-//   ...rest
-// }) => (
-//   <WithState>
-//     {states => <BC {...stateToProps(states, rest)}>{children}</BC>}
-//   </WithState>
-// )
-
-// export const injectAllStates = injectMappedState(R.merge)
+export const injectAllStates = injectMappedState(R.merge)
