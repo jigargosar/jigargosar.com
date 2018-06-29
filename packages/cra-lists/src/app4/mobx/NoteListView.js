@@ -139,12 +139,6 @@ export function NoteListView({nc}) {
         this.addNewAt(0)
       },
       onDeleteSelectionEvent() {
-        // if (
-        //   this.noteDisplayList.length === 0 ||
-        //   !this.mode.isSelect
-        // ) {
-        //   return
-        // }
         const displayNote = this.noteDisplayList[this.mode.sidx]
         if (displayNote) {
           displayNote.onToggleDeleteEvent()
