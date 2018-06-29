@@ -13,11 +13,6 @@ m.configure({computedRequiresReaction: true, enforceActions: true})
 
 export const oObject = m.observable.object
 export const oObject3 = _.curryN(3, m.observable.object)
-export const createOObj = ({
-  props = {},
-  decorators = {},
-  options = {},
-} = {}) => oObject(props, decorators, options)
 export const extendObservable = m.extendObservable
 export const extendObservable2 = _.curryN(2, m.extendObservable)
 export const extendObservable3 = _.curryN(3, m.extendObservable)

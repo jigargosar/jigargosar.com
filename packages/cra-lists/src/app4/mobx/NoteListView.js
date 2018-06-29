@@ -1,6 +1,5 @@
 import {
   createObservableObject,
-  createOObj,
   createTransformer,
   mReaction,
   oArray,
@@ -8,11 +7,10 @@ import {
 } from './utils'
 import {R} from '../utils'
 
-const EditMode = (() => {
+const ViewMode = (() => {
   function create() {
-    return R.compose(createOObj)({
-      props: {type: null},
-      options: {name: 'EditMode'},
+    return createObservableObject({
+      name: 'ViewMode',
     })
   }
 
@@ -66,7 +64,7 @@ export function NoteListView({nc}) {
   const view = createObservableObject({
     props: {
       editMode: 'selection',
-      em: EditMode.create(),
+      mode: ViewMode.create(),
       get sid() {
         return R.pathOr(
           null,
