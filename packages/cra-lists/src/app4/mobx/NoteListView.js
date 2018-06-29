@@ -2,7 +2,6 @@ import {
   createObservableObject,
   createOObj,
   createTransformer,
-  createViewModel,
   mActionBound,
   mReaction,
   oArray,
@@ -58,7 +57,7 @@ const noteTransformer = createTransformer(view =>
           return note.sortIdx
         },
       },
-      {onTextChange: mActionBound},
+      {},
       {name: 'DisplayNote'},
     ),
   ),
