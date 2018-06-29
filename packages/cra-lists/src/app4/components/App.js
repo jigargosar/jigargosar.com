@@ -19,13 +19,9 @@ import {
   isAnyHotKey,
   isHotKey,
   observer,
-  OC,
-  RC,
   renderKeyedById,
-  WithState,
 } from './utils'
-import {_, R} from '../utils'
-import {o} from '../../StateContext'
+import {R} from '../utils'
 
 /*eslint-enable*/
 
@@ -43,7 +39,7 @@ const NoteInput = observer(function NoteInput({note}) {
   )
 })
 
-const NoteText = o(function NoteText({note}) {
+const NoteText = observer(function NoteText({note}) {
   return (
     <Text
       className={cn(
@@ -57,7 +53,7 @@ const NoteText = o(function NoteText({note}) {
   )
 })
 
-const Note = o(function Note({note}) {
+const Note = observer(function Note({note}) {
   const NoteContent = note.isEditing ? NoteInput : NoteText
   return (
     <ListItem className={cn('flex items-center lh-copy')}>
@@ -130,7 +126,7 @@ const NoteList = injectAll(function NoteList({view}) {
   )
 })
 
-const App = o(function App() {
+const App = observer(function App() {
   return (
     <RootContainer>
       <CenterLayout>
