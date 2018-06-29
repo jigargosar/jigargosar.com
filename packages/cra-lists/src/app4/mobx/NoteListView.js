@@ -43,10 +43,7 @@ const noteTransformer = createTransformer(view =>
         },
         onTextChange(e) {
           const target = e.target
-          this.form.text = target.value
-        },
-        get form() {
-          return createViewModel(note)
+          note.text = target.value
         },
         get text() {
           return note.text
@@ -86,26 +83,15 @@ export function NoteListView({nc}) {
       get isModeEditing() {
         return this.isEditMode('editing')
       },
-      get editingNoteForm() {
-        return R.pathOr(
-          null,
-          ['noteDisplayList', view.sidx, 'form'],
-          view,
-        )
-      },
       get isModeSelection() {
         return this.isEditMode('selection')
       },
       pred: R.allPass([]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
       get noteDisplayList() {
-        return R.compose(
-          oArray,
-          R.map(noteTransformer(view)),
-          // R.sortWith(this.sortComparators),
-          // R.filter(this.pred),
-          // )(nc.active)
-        )(this.noteModelList)
+        return R.compose(oArray, R.map(noteTransformer(view)))(
+          this.noteModelList,
+        )
       },
       get noteModelList() {
         return R.compose(
@@ -156,9 +142,6 @@ export function NoteListView({nc}) {
         if (this.isModeSelection) {
           this.editMode = 'editing'
         } else if (this.isModeEditing) {
-          if (this.editingNoteForm) {
-            this.editingNoteForm.submit()
-          }
           this.editMode = 'selection'
         }
       },
