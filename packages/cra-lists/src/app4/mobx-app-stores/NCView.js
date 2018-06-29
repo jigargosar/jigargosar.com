@@ -1,4 +1,4 @@
-import {extendObservable} from '../mobx/utils'
+import {extendObservable, oObject} from '../mobx/utils'
 import {_} from '../utils'
 
 const ncViewActions = state => {
@@ -8,12 +8,12 @@ const ncViewActions = state => {
 export const NCView = (state, initialData, namespace) => {
   // const items = _.pathOr([], [namespace, 'items'], initialData)
   extendObservable(state, {
-    [namespace]: {
+    [namespace]: oObject({
       get notes() {
-        return state.notes
-        // return state.notes.filter(_.propOr(false, 'deleted'))
+        // return state.notes
+        return state.notes.filter(_.propOr(false, 'deleted'))
       },
-    },
+    }),
   })
   const actions = ncViewActions(state[namespace])
 

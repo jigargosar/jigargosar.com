@@ -31,8 +31,10 @@ export class C extends RC {
 
 export const OC = observer(C)
 
+const StateContextConsumer = observer(StateContext.Consumer)
+
 export const WithState = function WithState({children}) {
-  return <StateContext.Consumer>{children}</StateContext.Consumer>
+  return <StateContextConsumer>{children}</StateContextConsumer>
 }
 
 export const injectMappedState = stateToProps => BC => ({
