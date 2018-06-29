@@ -1,8 +1,6 @@
 import {
   createObservableObject,
   createTransformer,
-  mAutoRun,
-  mComputed,
   mGet,
   mReaction,
   mTrace,
@@ -48,9 +46,6 @@ const ViewMode = (() => {
         get sidx() {
           return this._idx
         },
-        set sidx(num) {
-          return (this._idx = num)
-        },
         overMode(cases) {
           return cases[this._type](this._idx)
         },
@@ -72,14 +67,7 @@ const ViewMode = (() => {
       },
       actions: {
         cycleSidx(listLength) {
-          mAutoRun(
-            r => {
-              mTrace(r)
-              this.overSidx(idx => cycleIdx(idx, listLength))
-              console.log(`this._idx`, this._idx)
-            },
-            {name: 'cycleIdx'},
-          )
+          this.overSidx(idx => cycleIdx(idx, listLength))
         },
         overSidx(fn) {
           this._idx = fn(this._idx)
@@ -217,7 +205,19 @@ export function NoteListView({nc}) {
     name: 'NoteListView',
   })
 
-  view.mode.cycleSidx(mComputed(() => view.noteDisplayList.length))
+  // view.mode.cycleSidx(() => view.noteDisplayList.length)
+
+  const r = mReaction(
+    () => [view.noteDisplayList.length, view.mode.sidx],
+    ([listLength, sidx]) => {
+      mTrace(r)
+      view.mode.cycleSidx(listLength)
+      // console.log(`this._idx`, view.mode._idx)
+      // console.log(`listLength`, listLength)
+      // console.log(`this.sidx`, view.mode.sidx)
+    },
+    {name: 'cycleIdx'},
+  )
 
   // mReaction(
   //   () => [view.mode.sidx],
