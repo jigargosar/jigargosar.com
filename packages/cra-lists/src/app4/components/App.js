@@ -42,27 +42,29 @@ const NoteInput = observer(function NoteInput({note}) {
   )
 })
 
-class Note extends C {
-  r({note}) {
-    return (
-      <ListItem className={cn('flex items-center lh-copy')}>
-        <Text>{`${note.sortIdx}`}</Text>
-        {!note.isEditing && (
-          <Text
-            className={cn(
-              'pa1 flex-auto',
-              {'o-50': note.deleted},
-              {'blue bg-washed-yellow': note.isSelected},
-            )}
-          >
-            {note.displayText}
-          </Text>
-        )}
-        {note.isEditing && <NoteInput note={note} />}
-      </ListItem>
-    )
-  }
-}
+const NoteText = o(function NoteText({note}) {
+  return (
+    <Text
+      className={cn(
+        'pa1 flex-auto',
+        {'o-50': note.deleted},
+        {'blue bg-washed-yellow': note.isSelected},
+      )}
+    >
+      {note.displayText}
+    </Text>
+  )
+})
+
+const Note = o(function Note({note}) {
+  const NoteContent = note.isEditing ? NoteInput : NoteText
+  return (
+    <ListItem className={cn('flex items-center lh-copy')}>
+      <Text>{`${note.sortIdx}`}</Text>
+      <NoteContent note={note} />
+    </ListItem>
+  )
+})
 
 function ListToolbar() {
   return (
