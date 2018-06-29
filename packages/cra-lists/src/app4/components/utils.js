@@ -62,8 +62,12 @@ const injectState = _.curry((stateToProps, BC) => {
 
 export const injectAll = injectState(R.merge)
 
+/**
+ * @return {null}
+ */
 export function Debugger() {
   if (process.env.NODE_ENV !== 'production') {
     debugger
   }
+  return null
 }
