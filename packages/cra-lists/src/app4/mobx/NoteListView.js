@@ -185,7 +185,7 @@ export function NoteListView({nc}) {
 
   /*const rLength = */
   mReaction(
-    () => [view.noteModelList.length],
+    () => [view.noteDisplayList.length],
     ([listLength]) => {
       // mTrace(rLength)
       if (listLength > 0) {
