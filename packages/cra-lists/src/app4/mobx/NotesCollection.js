@@ -1,7 +1,5 @@
 import {
   createObservableObject,
-  extendObservable,
-  mAction,
   mIntercept,
   mJS,
   mSet,
@@ -10,7 +8,7 @@ import {
 } from './utils'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
-import {_, R} from '../utils'
+import {R} from '../utils'
 
 const deletedProp = R.propOr(false, 'deleted')
 const rejectDeleted = R.reject(deletedProp)
