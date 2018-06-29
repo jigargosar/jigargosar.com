@@ -132,9 +132,9 @@ export function NoteListView({nc}) {
       get noteDisplayList() {
         return R.compose(
           oArray,
+          R.map(noteTransformer(view)),
           R.sortWith(this.sortComparators),
           R.filter(this.pred),
-          R.map(noteTransformer(view)),
         )(nc.active)
       },
     },
