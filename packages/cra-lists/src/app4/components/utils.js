@@ -31,7 +31,7 @@ export class C extends RC {
 
 export const OC = observer(C)
 
-const StateContextConsumer = observer(StateContext.Consumer)
+const StateContextConsumer = StateContext.Consumer
 
 export const WithState = function WithState({children}) {
   return (
