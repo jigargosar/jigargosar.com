@@ -44,15 +44,10 @@ export const WithState = function WithState({children}) {
 export const injectMappedState = stateToProps => BC => ({
   children,
   ...rest
-}) => {
-  const OBC = observer(BC)
-  return (
-    <WithState>
-      {states => (
-        <OBC {...stateToProps(states, rest)}>{children}</OBC>
-      )}
-    </WithState>
-  )
-}
+}) => (
+  <WithState>
+    {states => <BC {...stateToProps(states, rest)}>{children}</BC>}
+  </WithState>
+)
 
 export const injectAllStates = injectMappedState(R.merge)

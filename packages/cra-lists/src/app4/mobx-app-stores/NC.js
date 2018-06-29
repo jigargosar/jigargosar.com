@@ -21,7 +21,7 @@ const itemFactory = createTransformer(note =>
 
 const actions = {
   addNew: mAction(state => {
-    state.notes.unshift(itemFactory({id: nanoid(), text: '21'}))
+    state.notes.unshift(itemFactory({id: nanoid(), text: '77'}))
   }),
   replace: mAction((items, state) => {
     state.notes.replace(items.map(itemFactory))
