@@ -43,10 +43,8 @@ export const WithState = function WithState({children}) {
   )
 }
 
-const injectState = _.curry(function injectState(stateToProps, BC) {
-  return _.compose(
-    setDisplayName(wrapDisplayName(BC, 'inject')),
-  )(function injectState({children, ...rest}) {
+const injectState = _.curry((stateToProps, BC) => {
+  const hoc = ({children, ...rest}) => {
     const OBC = observer(BC)
     return (
       <StateContextConsumer>
@@ -55,11 +53,17 @@ const injectState = _.curry(function injectState(stateToProps, BC) {
         )}
       </StateContextConsumer>
     )
-  })
+  }
+  if (process.env.NODE_ENV !== 'production') {
+    return setDisplayName(wrapDisplayName(BC, 'inject'))(hoc)
+  }
+  return hoc
 })
 
 export const injectAll = injectState(R.merge)
 
 export function Debugger() {
-  debugger
+  if (process.env.NODE_ENV !== 'production') {
+    debugger
+  }
 }
