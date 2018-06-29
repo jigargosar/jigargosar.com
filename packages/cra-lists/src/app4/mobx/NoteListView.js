@@ -12,6 +12,13 @@ import {_, R} from '../utils'
 const SELECT_MODE = 'SELECT_MODE'
 const EDIT_MODE = 'EDIT_MODE'
 
+function clampListIdx(list, idx) {
+  if (list.length < 0) {
+    return -1
+  }
+  return _.clamp(0, list.length - 1, idx)
+}
+
 const ViewMode = (() => {
   function create() {
     const viewMode = createObservableObject({
@@ -175,7 +182,7 @@ export function NoteListView({nc}) {
       onAddNewNoteEvent() {
         this.addNewAt(0)
       },
-      onDeleteSelectionEvent() {
+      onToggleDeleteSelectedEvent() {
         this.mode.overSidx(this.noteDisplayList, dn =>
           dn.onToggleDeleteEvent(),
         )

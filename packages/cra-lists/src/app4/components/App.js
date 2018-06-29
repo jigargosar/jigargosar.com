@@ -128,7 +128,7 @@ class NoteListShortcuts extends OC {
       [isHotKey('q'), wrapPD(view.onAddNewNoteEvent)],
       [
         isAnyHotKey(['d', 'delete']),
-        wrapPD(view.onDeleteSelectionEvent),
+        wrapPD(view.onToggleDeleteSelectedEvent),
       ],
     ])(e)
   }
