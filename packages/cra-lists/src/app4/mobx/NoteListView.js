@@ -151,15 +151,11 @@ export function NoteListView({nc}) {
       pred: R.allPass([]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
       get noteDisplayList() {
-        return R.compose(oArray, R.map(noteTransformer(view)))(
-          this.noteModelList,
-        )
-      },
-      get noteModelList() {
         return R.compose(
           oArray,
           R.sortWith(this.sortComparators),
           R.filter(this.pred),
+          R.map(noteTransformer(view)),
         )(nc.active)
       },
     },
