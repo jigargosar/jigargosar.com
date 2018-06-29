@@ -170,7 +170,7 @@ export function NoteListView({nc}) {
         this.mode.overListWithSidx(
           this.noteDisplayList,
           (dn, sidx) => {
-            dn._updateSortIndex(sidx + 1)
+            dn._updateSortIndex(sidx + 2)
             this.gotoNext()
           },
         )
