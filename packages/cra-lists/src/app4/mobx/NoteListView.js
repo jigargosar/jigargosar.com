@@ -25,6 +25,12 @@ const ViewMode = (() => {
         overMode(cases) {
           return cases[this._type](this._idx)
         },
+        overSidx(list, fn) {
+          const item = list[this._idx]
+          if (item) {
+            fn(item)
+          }
+        },
         isMode(mode) {
           return this._idx !== -1 && R.equals(this._type, mode)
         },
@@ -139,10 +145,9 @@ export function NoteListView({nc}) {
         this.addNewAt(0)
       },
       onDeleteSelectionEvent() {
-        const displayNote = this.noteDisplayList[this.mode.sidx]
-        if (displayNote) {
-          displayNote.onToggleDeleteEvent()
-        }
+        this.mode.overSidx(this.noteDisplayList, dn =>
+          dn.onToggleDeleteEvent(),
+        )
       },
       insertAbove() {
         this.addNewAt(this.mode.sidx)
