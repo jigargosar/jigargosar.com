@@ -92,7 +92,7 @@ const NoteListShortcuts = injectAll(
     }
 
     onKeydown = e => {
-      console.debug('window.keydown', e)
+      console.debug('NoteListShortcuts.onKeydown', e)
       const wrapPD = fn => e => {
         e.preventDefault()
         fn(e)
