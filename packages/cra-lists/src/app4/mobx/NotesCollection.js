@@ -74,6 +74,8 @@ export const NotesCollection = (function NotesCollection() {
         get snapshot() {
           return mJS(this.idMap)
         },
+      },
+      actions: {
         newNote() {
           return Note.create({
             id: nanoid(),
