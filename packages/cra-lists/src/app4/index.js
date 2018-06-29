@@ -62,10 +62,7 @@ if (module.hot) {
     () => storage.set('ncSnapshot', states.nc.snapshot),
   )
   mAutoRun(() => {
-    console.log(`states.nc.items`, ...mJS(states.state.nc.items))
-  })
-  mAutoRun(() => {
-    console.log(`states.state.view`, states.state.view)
+    console.log(`mJS(states.state)`, mJS(states.state))
   })
   mReaction(
     () => mJS(states.state),

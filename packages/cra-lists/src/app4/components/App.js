@@ -137,7 +137,7 @@ const NoteList = _.compose(injectAllStates, observer)(
         <ListToolbar />
         <List>
           {renderKeyedById(Note, 'note', view.noteDisplayList)}
-          {renderKeyedById(Note, 'note', state.view.notes)}
+          {renderKeyedById(Note, 'note', state.notes)}
         </List>
       </div>
     )

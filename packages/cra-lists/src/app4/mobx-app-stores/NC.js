@@ -1,32 +1,43 @@
-import {extendObservable, oArray} from '../mobx/utils'
+import {
+  createTransformer,
+  extendObservable,
+  mAction,
+  oArray,
+} from '../mobx/utils'
 import {_} from '../utils'
-import {collection} from 'mobx-app'
 import {nanoid} from '../model/util'
 
-const itemFactory = _.identity
+const itemFactory = createTransformer(note =>
+  extendObservable(note, {
+    get displayText() {
+      return this.text
+    },
+    get sortIdx() {
+      return 0
+    },
+  }),
+)
 
 const notesCollectionActions = state => {
-  const itemActions = collection(state.items, itemFactory)
-
   function addNew() {
-    itemActions.addItem({id: nanoid(), text: 'new note'})
+    state.notes.add(itemFactory({id: nanoid(), text: ' note'}))
   }
-  return {addNew, _replace: itemActions.setItems}
+  return {
+    addNew: addNew,
+    _replace: mAction(function _replace(items) {
+      state.notes.replace(items.map(itemFactory))
+    }),
+  }
 }
 
-export const NC = (state, initialData, namespace) => {
-  const items = _.pathOr([], [namespace, 'items'], initialData)
+export const NC = (state, initialData) => {
+  const notes = _.pathOr([], ['notes'], initialData)
   extendObservable(state, {
-    get notes() {
-      return state[namespace].items
-    },
-    [namespace]: {
-      items: oArray(),
-    },
+    notes: oArray(),
   })
-  const actions = notesCollectionActions(state[namespace])
+  const actions = notesCollectionActions(state)
 
-  actions._replace(items)
+  actions._replace(notes)
 
   return actions
 }
