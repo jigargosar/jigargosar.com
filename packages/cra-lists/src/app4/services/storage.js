@@ -16,5 +16,12 @@ function Storage() {
       ls.setItem(k, value)
       return value
     },
+    keys() {
+      return Object.keys(ls)
+    },
   }
+}
+
+if (module.hot) {
+  global.window.ls = storage
 }
