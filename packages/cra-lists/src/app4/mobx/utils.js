@@ -40,6 +40,23 @@ export const t = mst.types
 export const tModel = mst.types.model
 export const tMap = mst.types.map
 
+function extendObservableWithBoundActions(obs, actions) {
+  return extendObservable(
+    obs,
+    actions,
+    _.map(_.always(mActionBound), actions),
+  )
+}
+
+export function createObservableObject({
+  props = {},
+  actions = {},
+  name = 'ObservableObject',
+} = {}) {
+  const oObj = oObject(props, {}, {name})
+  return extendObservableWithBoundActions(oObj, actions)
+}
+
 export const extendObservableWithActionFactory = _.curry(
   (createActions, observable) => {
     const actions = createActions(observable)

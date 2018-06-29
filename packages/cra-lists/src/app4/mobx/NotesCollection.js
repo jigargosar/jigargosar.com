@@ -1,4 +1,5 @@
 import {
+  createObservableObject,
   extendObservable,
   mAction,
   mIntercept,
@@ -48,23 +49,6 @@ export const Note = (function Note() {
 })()
 
 export const chance = new Chance()
-
-function extendObservableWithAction(obs, actions) {
-  return extendObservable(
-    obs,
-    actions,
-    _.map(_.always(mAction), actions),
-  )
-}
-
-function createObservableObject({
-  props = {},
-  actions = {},
-  name = 'ObservableObject',
-} = {}) {
-  const oObj = oObject(props, {}, {name})
-  return extendObservableWithAction(oObj, actions)
-}
 
 export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
