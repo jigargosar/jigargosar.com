@@ -18,15 +18,16 @@ const itemFactory = createTransformer(note =>
   }),
 )
 
-const actions = {
-  addNew: mAction(state => {
-    state.notes.unshift(itemFactory({id: nanoid(), text: '11'}))
-  }),
-  replace: mAction((items, state) => {
-    state.notes.replace(items.map(itemFactory))
-  }),
-}
+const mapActions = _.map(mAction)
 
+const actions = mapActions({
+  addNew: state => {
+    state.notes.unshift(itemFactory({id: nanoid(), text: '2'}))
+  },
+  replace: (items, state) => {
+    state.notes.replace(items.map(itemFactory))
+  },
+})
 const initState = (state, initialData) => {
   const notes = _.pathOr([], ['notes'], initialData)
   extendObservable(state, {
