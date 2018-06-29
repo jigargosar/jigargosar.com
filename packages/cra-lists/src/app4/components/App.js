@@ -24,24 +24,23 @@ import {
   WithState,
 } from './utils'
 import {_, R} from '../utils'
+import {o} from '../../StateContext'
 
 /*eslint-enable*/
 
 /*eslint-disable no-empty-pattern*/
 
-class NoteInput extends OC {
-  r({note}) {
-    return (
-      <input
-        autoFocus
-        className={cn('bw0 flex-auto ma0 pa1 lh-copy blue')}
-        placeholder={'Note text ...'}
-        value={note.text}
-        onChange={note.onTextChange}
-      />
-    )
-  }
-}
+const NoteInput = observer(function NoteInput({note}) {
+  return (
+    <input
+      autoFocus
+      className={cn('bw0 flex-auto ma0 pa1 lh-copy blue')}
+      placeholder={'Note text ...'}
+      value={note.text}
+      onChange={note.onTextChange}
+    />
+  )
+})
 
 class Note extends C {
   r({note}) {
