@@ -87,7 +87,6 @@ if (module.hot) {
       './mobx/NotesCollection',
       './mobx/NoteListView',
       './mobx-app-stores/index.js',
-      './mobx-app-stores/NC',
     ],
     _.tryCatch(() => {
       console.clear()
