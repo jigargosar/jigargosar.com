@@ -179,7 +179,7 @@ export function NoteListView({nc}) {
         this.mode.overListWithSidx(
           this.noteDisplayList,
           (dn, sidx) => {
-            dn._updateSortIndex(sidx - 1)
+            dn._updateSortIndex(sidx - 2)
             this.gotoPrev()
           },
         )
@@ -212,6 +212,13 @@ export function NoteListView({nc}) {
     () => [view.noteDisplayList.length],
     ([listLength]) => {
       view.mode.clampSidx(listLength)
+      // view.updateSortIdx()
+    },
+  )
+  mReaction(
+    () => [view.noteDisplayList],
+    () => {
+      // view.mode.clampSidx(listLength)
       view.updateSortIdx()
     },
   )
