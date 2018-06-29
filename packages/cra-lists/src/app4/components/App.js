@@ -73,7 +73,7 @@ function ListToolbar() {
       {({view, actions}) => (
         <Section className={cn('pl3')}>
           <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
-          <Button onClick={actions.nc.addNew}>ADD2</Button>
+          {/*<Button onClick={actions.nc.addNew}>ADD2</Button>*/}
         </Section>
       )}
     </WithState>
@@ -137,7 +137,7 @@ const NoteList = _.compose(injectAllStates, observer)(
         <ListToolbar />
         <List>
           {renderKeyedById(Note, 'note', view.noteDisplayList)}
-          {renderKeyedById(Note, 'note', state.notes)}
+          {/*{renderKeyedById(Note, 'note', state.notes)}*/}
         </List>
       </div>
     )

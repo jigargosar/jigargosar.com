@@ -18,7 +18,26 @@ const itemFactory = createTransformer(note =>
   }),
 )
 
-const notesCollectionActions = state => {
+const actions = {
+  addNew: mAction(state => {
+    state.notes.add(itemFactory({id: nanoid(), text: ' note'}))
+  }),
+  replace: mAction((items, state) => {
+    state.notes.replace(items.map(itemFactory))
+  }),
+}
+
+const initState = (state, initialData) => {
+  const notes = _.pathOr([], ['notes'], initialData)
+  extendObservable(state, {
+    notes: oArray(),
+  })
+  actions.replace(notes, state)
+}
+
+export const nc = {initState, actions}
+
+const createActions = state => {
   function addNew() {
     state.notes.add(itemFactory({id: nanoid(), text: ' note'}))
   }
@@ -35,7 +54,7 @@ export const NC = (state, initialData) => {
   extendObservable(state, {
     notes: oArray(),
   })
-  const actions = notesCollectionActions(state)
+  const actions = createActions(state)
 
   actions._replace(notes)
 

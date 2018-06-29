@@ -22,7 +22,7 @@ const states = oObject(
   {
     nc,
     view: NoteListView({nc}),
-    ...createAppStore(),
+    // ...createAppStore(),
   },
   {},
   {name: 'states'},
@@ -49,10 +49,10 @@ function createNC() {
   return NotesCollection.create(ncSnapshot)
 }
 
-function createAppStore() {
-  const appStores = require('./mobx-app-stores/index.js').appStores
-  return createStore(appStores, storage.get('app-state'))
-}
+// function createAppStore() {
+//   const appStores = require('./mobx-app-stores/index.js').appStores
+//   return createStore(appStores, storage.get('app-state'))
+// }
 
 if (module.hot) {
   window.s = states
@@ -61,15 +61,15 @@ if (module.hot) {
     () => [states.nc.snapshot],
     () => storage.set('ncSnapshot', states.nc.snapshot),
   )
-  mAutoRun(() => {
-    console.log(`mJS(states.state)`, mJS(states.state))
-  })
-  mReaction(
-    () => mJS(states.state),
-    state => {
-      storage.set('app-state', state)
-    },
-  )
+  // mAutoRun(() => {
+  //   console.log(`mJS(states.state)`, mJS(states.state))
+  // })
+  // mReaction(
+  //   () => mJS(states.state),
+  //   state => {
+  //     storage.set('app-state', state)
+  //   },
+  // )
 
   module.hot['accept'](
     [
@@ -81,12 +81,12 @@ if (module.hot) {
     _.tryCatch(() => {
       console.clear()
       const NoteListView = require('./mobx/NoteListView').NoteListView
-      const appStore = createAppStore()
+      // const appStore = createAppStore()
       mRunInAction('Hot Update States', () =>
         Object.assign(states, {
           nc: createNC(),
           view: NoteListView({nc: states.nc}),
-          ...appStore,
+          // ...appStore,
         }),
       )
       render()
