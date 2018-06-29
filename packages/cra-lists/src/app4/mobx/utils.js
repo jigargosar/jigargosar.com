@@ -40,16 +40,18 @@ export const t = mst.types
 export const tModel = mst.types.model
 export const tMap = mst.types.map
 
-export const extendActions = _.curry((createActions, observable) => {
-  const actions = createActions(observable)
-  return extendObservable(
-    observable,
-    actions,
-    _.map(_.always(mAction), actions),
-  )
-})
+export const extendObservableWithActionFactory = _.curry(
+  (createActions, observable) => {
+    const actions = createActions(observable)
+    return extendObservable(
+      observable,
+      actions,
+      _.map(_.always(mAction), actions),
+    )
+  },
+)
 
-export const extendComputed = _.curry(
+export const extendObservableWithComputedFactory = _.curry(
   (createComputed, observable) => {
     const computed = createComputed(observable)
     return extendObservable(
@@ -60,7 +62,7 @@ export const extendComputed = _.curry(
   },
 )
 
-export const extendObservableWith = (
+export const extendObservableWithFactories = (
   {
     props = {},
     views = RX.alwaysEmptyObject,
@@ -69,8 +71,8 @@ export const extendObservableWith = (
   obs,
 ) => {
   return _.compose(
-    extendComputed(views),
-    extendActions(actions),
+    extendObservableWithComputedFactory(views),
+    extendObservableWithActionFactory(actions),
     // extendObservable2(_.__, props),
     RX.defaultToEmptyObject,
   )(obs)

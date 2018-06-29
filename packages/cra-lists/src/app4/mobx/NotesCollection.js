@@ -1,5 +1,6 @@
 import {
   extendObservable,
+  mAction,
   mIntercept,
   mJS,
   mSet,
@@ -8,7 +9,7 @@ import {
 } from './utils'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
-import {R} from '../utils'
+import {_, R} from '../utils'
 
 const deletedProp = R.propOr(false, 'deleted')
 const rejectDeleted = R.reject(deletedProp)
@@ -48,13 +49,21 @@ export const Note = (function Note() {
 
 export const chance = new Chance()
 
+function extendObservableWithAction(obs, actions) {
+  return extendObservable(
+    obs,
+    actions,
+    _.map(_.always(mAction), actions),
+  )
+}
+
 function createObservableObject({
   props = {},
   actions = {},
   name = 'ObservableObject',
 } = {}) {
   const oObj = oObject(props, {}, {name})
-  return extendObservable(oObj, actions)
+  return extendObservableWithAction(oObj, actions)
 }
 
 export const NotesCollection = (function NotesCollection() {
