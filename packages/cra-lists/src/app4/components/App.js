@@ -69,17 +69,9 @@ const Note = o(function Note({note}) {
 function ListToolbar() {
   return (
     <WithState>
-      {({view, actions, state}) => (
+      {({view}) => (
         <Section className={cn('pl3')}>
           <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
-          {/*<Button onClick={() => nc.actions.addNew(state)}>*/}
-          {/*ADD2*/}
-          {/*</Button>*/}
-          {
-            <Button onClick={() => actions.nc.addNew(state)}>
-              ADD3
-            </Button>
-          }
         </Section>
       )}
     </WithState>
