@@ -29,7 +29,7 @@ const EDIT_MODE = 'EDIT_MODE'
 // }
 
 function cycleIdx(idx, listLength) {
-  if (listLength < 0) {
+  if (listLength <= 0) {
     return -1
   } else if (idx < 0) {
     return listLength - 1
@@ -44,7 +44,7 @@ const ViewMode = (() => {
     const viewMode = createObservableObject({
       props: {
         _type: SELECT_MODE,
-        _idx: -1,
+        _idx: 0,
         get sidx() {
           return this._idx
         },
