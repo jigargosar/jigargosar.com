@@ -36,7 +36,7 @@ const StateContextConsumer = observer(StateContext.Consumer)
 export const WithState = function WithState({children}) {
   return (
     <StateContextConsumer>
-      {s => <Observer>{() => children(s)}</Observer>}
+      {s => <Observer render={() => children(s)} />}
     </StateContextConsumer>
   )
 }
