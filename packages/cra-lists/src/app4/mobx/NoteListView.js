@@ -117,12 +117,13 @@ export function NoteListView({nc}) {
     },
     actions: {
       updateSortIdx() {
+        debugger
         this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
       },
       addNewAt(idx) {
-        const newNote = nc.newNote()
-        this.noteModelList.splice(idx, 0, newNote)
-        this.updateSortIdx()
+        const newNote = nc.newNote({sortIdx: idx})
+        // this.noteModelList.splice(idx, 0, newNote)
+        // this.updateSortIdx()
         nc.add(newNote)
         this.sidx = idx
         this.editMode = 'editing'

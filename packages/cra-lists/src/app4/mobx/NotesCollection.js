@@ -67,12 +67,12 @@ export const NotesCollection = (function NotesCollection() {
         },
       },
       actions: {
-        newNote() {
+        newNote({sortIdx = 0} = {}) {
           return Note.create({
             id: nanoid(),
             text: '',
             deleted: false,
-            sortIdx: 0,
+            sortIdx,
           })
         },
         put(note) {
