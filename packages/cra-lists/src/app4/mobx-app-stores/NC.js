@@ -15,7 +15,7 @@ const notesCollectionActions = state => {
 }
 
 export const NC = (state, initialData, namespace) => {
-  const items = _.pathOr([], 'nc.items'.split('.'), initialData)
+  const items = _.pathOr([], [namespace, 'items'], initialData)
   extendObservable(state, {
     [namespace]: {
       items: oArray(),
