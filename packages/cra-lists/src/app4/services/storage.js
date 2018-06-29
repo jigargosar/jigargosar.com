@@ -1,17 +1,18 @@
-function getLocalStorage() {
-  return global.window.localStorage
-}
+export const storage = Storage()
 
-export const storage = {
-  get: k => {
-    try {
-      return JSON.parse(getLocalStorage().getItem(k))
-    } catch (e) {
-      console.error(`storage.get`, e)
-      return null
-    }
-  },
-  set: function(k, v) {
-    global.window.localStorage.setItem(k, JSON.stringify(v))
-  },
+function Storage() {
+  const ls = global.window.localStorage
+  return {
+    get: k => {
+      try {
+        return JSON.parse(ls.getItem(k))
+      } catch (e) {
+        console.error(`storage.get`, e)
+        return null
+      }
+    },
+    set: function(k, v) {
+      ls.setItem(k, JSON.stringify(v))
+    },
+  }
 }
