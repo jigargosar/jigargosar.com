@@ -117,7 +117,6 @@ export function NoteListView({nc}) {
     },
     actions: {
       updateSortIdx() {
-        debugger
         this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
       },
       addNewAt(idx) {
