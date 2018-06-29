@@ -18,14 +18,13 @@ const EDIT_MODE = 'EDIT_MODE'
 //   return _.clamp(0, list.length - 1, idx)
 // }
 
-function clampIdx(idx, listLength) {
+const clampIdx = _.curry(function clampIdx(listLength, idx) {
   if (listLength < 0) {
     return -1
   }
   return _.clamp(0, listLength - 1, idx)
-}
-
-function cycleIdx(idx, listLength) {
+})
+const cycleIdx = _.curry(function cycleIdx(listLength, idx) {
   if (listLength <= 0) {
     return -1
   } else if (idx < 0) {
@@ -34,7 +33,7 @@ function cycleIdx(idx, listLength) {
     return 0
   }
   return idx
-}
+})
 
 const ViewMode = (() => {
   function create() {
@@ -66,10 +65,10 @@ const ViewMode = (() => {
       },
       actions: {
         cycleSidx(listLength) {
-          this.overSidx(idx => cycleIdx(idx, listLength))
+          this.overSidx(idx => cycleIdx(listLength, idx))
         },
         clampSidx(listLength) {
-          this.overSidx(idx => clampIdx(idx, listLength))
+          this.overSidx(idx => clampIdx(listLength, idx))
         },
         overSidx(fn) {
           this._idx = fn(this._idx)
