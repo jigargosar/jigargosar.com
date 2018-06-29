@@ -4,7 +4,6 @@ import {
   mJS,
   mSet,
   mValues,
-  oObject,
 } from './utils'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
@@ -16,19 +15,23 @@ const filterDeleted = R.filter(deletedProp)
 
 export const Note = (function Note() {
   function create({id, text, deleted, sortIdx}) {
-    const note = oObject(
-      {
+    const note = createObservableObject({
+      props: {
         id,
         text,
         deleted,
         sortIdx,
+      },
+      actions: {
         toggleDeleted() {
           this.deleted = !this.deleted
         },
+        updateText(text) {
+          this.text = text
+        },
       },
-      {},
-      {name: `Note@${id}`},
-    )
+      name: `Note@${id}`,
+    })
 
     mIntercept(note, 'id', ({newValue, object}) => {
       console.error(

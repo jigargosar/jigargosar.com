@@ -5,11 +5,51 @@ import {
   oArray,
   oObject,
 } from './utils'
-import {R} from '../utils'
+import {_, R} from '../utils'
+
+const SELECT_MODE = 'SELECT_MODE'
+const EDIT_MODE = 'EDIT_MODE'
 
 const ViewMode = (() => {
   function create() {
     return createObservableObject({
+      props: {
+        _type: SELECT_MODE,
+        _idx: -1,
+        get sidx() {
+          return this._idx
+        },
+        set sidx(num) {
+          return (this._idx = num)
+        },
+        overMode(cases) {
+          return cases[this._type](this._idx)
+        },
+        isMode(mode) {
+          return this._idx !== -1 && R.equals(this._type, mode)
+        },
+        get isEdit() {
+          return this.isMode(EDIT_MODE)
+        },
+        get isSelect() {
+          return this.isMode(SELECT_MODE)
+        },
+      },
+      actions: {
+        toggle() {
+          this._type = this.overMode({
+            SELECT_MODE: _.always(EDIT_MODE),
+            EDIT_MODE: _.always(SELECT_MODE),
+          })
+        },
+        switchToSelect() {
+          this._type = SELECT_MODE
+        },
+        switchToEdit(idx = this._idx) {
+          this._type = EDIT_MODE
+          this._idx = idx
+        },
+      },
       name: 'ViewMode',
     })
   }
@@ -29,17 +69,17 @@ const noteTransformer = createTransformer(view =>
           return R.when(R.isEmpty, R.always('<empty>'))(note.text)
         },
         get isEditing() {
-          return view.isModeEditing && R.equals(note.id, view.sid)
+          return view.mode.isEdit && R.equals(note.id, view.sid)
         },
         get isSelected() {
-          return view.isModeSelection && R.equals(note.id, view.sid)
+          return view.mode.isSelect && R.equals(note.id, view.sid)
         },
         onToggleDeleteEvent() {
           note.toggleDeleted()
         },
         onTextChange(e) {
           const target = e.target
-          note.text = target.value
+          note.updateText(target.value)
         },
         get text() {
           return note.text
@@ -63,24 +103,13 @@ const noteTransformer = createTransformer(view =>
 export function NoteListView({nc}) {
   const view = createObservableObject({
     props: {
-      editMode: 'selection',
       mode: ViewMode.create(),
       get sid() {
         return R.pathOr(
           null,
-          ['noteDisplayList', view.sidx, 'id'],
+          ['noteDisplayList', view.mode.sidx, 'id'],
           view,
         )
-      },
-      sidx: -1,
-      isEditMode(mode) {
-        return this.sidx !== -1 && R.equals(this.editMode, mode)
-      },
-      get isModeEditing() {
-        return this.isEditMode('editing')
-      },
-      get isModeSelection() {
-        return this.isEditMode('selection')
       },
       pred: R.allPass([]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
@@ -104,58 +133,56 @@ export function NoteListView({nc}) {
       addNewAt(idx) {
         const newNote = nc.newNote({sortIdx: idx - 1})
         nc.add(newNote)
-        this.sidx = idx
-        this.editMode = 'editing'
+        this.mode.switchToEdit(idx)
       },
       onAddNewNoteEvent() {
         this.addNewAt(0)
       },
       onDeleteSelectionEvent() {
-        if (
-          this.noteDisplayList.length === 0 ||
-          !this.isModeSelection
-        ) {
-          return
+        // if (
+        //   this.noteDisplayList.length === 0 ||
+        //   !this.mode.isSelect
+        // ) {
+        //   return
+        // }
+        const displayNote = this.noteDisplayList[this.mode.sidx]
+        if (displayNote) {
+          displayNote.onToggleDeleteEvent()
         }
-        this.noteDisplayList[this.sidx].onToggleDeleteEvent()
       },
       insertAbove() {
-        this.addNewAt(this.sidx)
+        this.addNewAt(this.mode.sidx)
       },
       insertBelow() {
-        this.addNewAt(this.sidx + 1)
+        this.addNewAt(this.mode.sidx + 1)
       },
       gotoNext() {
-        this.sidx += 1
+        this.mode.sidx += 1
       },
       gotoPrev() {
-        this.sidx -= 1
+        this.mode.sidx -= 1
       },
       onEnterKey() {
         if (this.noteDisplayList.length === 0) {
           return
         }
-        if (this.isModeSelection) {
-          this.editMode = 'editing'
-        } else if (this.isModeEditing) {
-          this.editMode = 'selection'
-        }
+        this.mode.toggle()
       },
       onEscapeKey() {
-        this.editMode = 'selection'
+        this.mode.switchToSelect()
       },
     },
     name: 'NoteListView',
   })
 
   mReaction(
-    () => [view.sidx],
+    () => [view.mode.sidx],
     () => {
-      if (view.sidx >= view.noteDisplayList.length) {
-        view.sidx = 0
+      if (view.mode.sidx >= view.noteDisplayList.length) {
+        view.mode.sidx = 0
       }
-      if (view.sidx < 0) {
-        view.sidx = view.noteDisplayList.length - 1
+      if (view.mode.sidx < 0) {
+        view.mode.sidx = view.noteDisplayList.length - 1
       }
     },
   )
@@ -164,9 +191,9 @@ export function NoteListView({nc}) {
     () => [view.noteDisplayList.length],
     ([listLength]) => {
       if (listLength > 0) {
-        view.sidx = R.clamp(0, listLength - 1, view.sidx)
+        view.mode.sidx = R.clamp(0, listLength - 1, view.mode.sidx)
       } else {
-        view.sidx = -1
+        view.mode.sidx = -1
       }
       view.updateSortIdx()
     },
