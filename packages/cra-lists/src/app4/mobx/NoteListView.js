@@ -205,12 +205,10 @@ export function NoteListView({nc}) {
     name: 'NoteListView',
   })
 
-  // view.mode.cycleSidx(() => view.noteDisplayList.length)
-
-  const r = mReaction(
+  /*const r = */ mReaction(
     () => [view.noteDisplayList.length, view.mode.sidx],
     ([listLength, sidx]) => {
-      mTrace(r)
+      // mTrace(r)
       view.mode.cycleSidx(listLength)
       // console.log(`this._idx`, view.mode._idx)
       // console.log(`listLength`, listLength)
