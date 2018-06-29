@@ -219,18 +219,6 @@ export function NoteListView({nc}) {
     {name: 'cycleIdx'},
   )
 
-  // mReaction(
-  //   () => [view.mode.sidx],
-  //   () => {
-  //     if (view.mode.sidx >= view.noteDisplayList.length) {
-  //       view.mode.sidx = 0
-  //     }
-  //     if (view.mode.sidx < 0) {
-  //       view.mode.sidx = view.noteDisplayList.length - 1
-  //     }
-  //   },
-  // )
-
   mReaction(
     () => [view.noteDisplayList.length],
     () => {
