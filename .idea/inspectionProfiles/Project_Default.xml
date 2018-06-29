@@ -57,7 +57,6 @@
       <option name="myCheckGuessedTypes" value="true" />
     </inspection_tool>
     <inspection_tool class="JSDeprecatedSymbols" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="JSFunctionExpressionToArrowFunction" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JSIgnoredPromiseFromCall" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JSNonASCIINames" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myAllowOnlyAscii" value="true" />

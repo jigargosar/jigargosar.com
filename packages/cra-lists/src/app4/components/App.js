@@ -19,11 +19,13 @@ import {
   injectAllStates,
   isAnyHotKey,
   isHotKey,
+  observer,
   OC,
   renderKeyedById,
   WithState,
 } from './utils'
-import {R} from '../utils'
+import {_, R} from '../utils'
+import {o} from '../../StateContext'
 
 /*eslint-enable*/
 
@@ -127,21 +129,21 @@ class NoteListShortcuts extends OC {
   }
 }
 
-const NoteList = injectAllStates(
-  class NoteList extends OC {
-    r({view}) {
-      return (
-        <div>
-          <NoteListShortcuts />
-          <ListToolbar />
-          <List>
-            {renderKeyedById(Note, 'note', view.noteDisplayList)}
-          </List>
-        </div>
-      )
-    }
+const NoteList = _.compose(injectAllStates, observer)(
+  function NoteList({view, state}) {
+    return (
+      <div>
+        <NoteListShortcuts />
+        <ListToolbar />
+        <List>
+          {renderKeyedById(Note, 'note', view.noteDisplayList)}
+          {renderKeyedById(Note, 'note', state.view.notes)}
+        </List>
+      </div>
+    )
   },
 )
+
 class App extends OC {
   r() {
     return (

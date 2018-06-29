@@ -64,6 +64,9 @@ if (module.hot) {
   mAutoRun(() => {
     console.log(`states.nc.items`, ...mJS(states.state.nc.items))
   })
+  mAutoRun(() => {
+    console.log(`states.state.view`, states.state.view)
+  })
   mReaction(
     () => mJS(states.state),
     state => {
