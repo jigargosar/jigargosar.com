@@ -3,7 +3,6 @@ import {
   createTransformer,
   mGet,
   mReaction,
-  mTrace,
   oArray,
   oObject,
 } from './utils'
