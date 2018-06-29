@@ -120,7 +120,7 @@ export function NoteListView({nc}) {
         this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
       },
       addNewAt(idx) {
-        const newNote = nc.newNote({sortIdx: idx})
+        const newNote = nc.newNote({sortIdx: idx - 1})
         nc.add(newNote)
         this.sidx = idx
         this.editMode = 'editing'
