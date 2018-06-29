@@ -18,12 +18,12 @@ const EDIT_MODE = 'EDIT_MODE'
 //   return _.clamp(0, list.length - 1, idx)
 // }
 
-// function clampIdx(idx, listLength) {
-//   if (listLength < 0) {
-//     return -1
-//   }
-//   return _.clamp(0, listLength - 1, idx)
-// }
+function clampIdx(idx, listLength) {
+  if (listLength < 0) {
+    return -1
+  }
+  return _.clamp(0, listLength - 1, idx)
+}
 
 function cycleIdx(idx, listLength) {
   if (listLength <= 0) {
@@ -67,6 +67,9 @@ const ViewMode = (() => {
       actions: {
         cycleSidx(listLength) {
           this.overSidx(idx => cycleIdx(idx, listLength))
+        },
+        clampSidx(listLength) {
+          this.overSidx(idx => clampIdx(idx, listLength))
         },
         overSidx(fn) {
           this._idx = fn(this._idx)
@@ -203,21 +206,18 @@ export function NoteListView({nc}) {
     name: 'NoteListView',
   })
 
-  /*const r = */ mReaction(
-    () => [view.noteDisplayList.length, view.mode.sidx],
-    ([listLength, sidx]) => {
-      // mTrace(r)
-      view.mode.cycleSidx(listLength)
-      // console.log(`this._idx`, view.mode._idx)
-      // console.log(`listLength`, listLength)
-      // console.log(`this.sidx`, view.mode.sidx)
+  mReaction(
+    () => [view.mode.sidx],
+    () => {
+      view.mode.cycleSidx(view.noteDisplayList.length)
     },
     {name: 'cycleIdx'},
   )
 
   mReaction(
     () => [view.noteDisplayList.length],
-    () => {
+    ([listLength]) => {
+      view.mode.clampSidx(listLength)
       view.updateSortIdx()
     },
   )
