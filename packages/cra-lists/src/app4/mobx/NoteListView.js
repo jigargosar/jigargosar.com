@@ -70,6 +70,7 @@ const noteTransformer = createTransformer(view =>
 export function NoteListView({nc}) {
   const view = createObservableObject({
     props: {
+      viewModelList: null,
       editMode: 'selection',
       em: EditMode.create(),
       get sid() {
@@ -116,6 +117,15 @@ export function NoteListView({nc}) {
       },
     },
     actions: {
+      getOrCreateViewModelList() {
+        if (!(this.viewModelList && this.viewModelList.isDirty)) {
+          this.viewModelList = createViewModel(
+            oObject({notes: this.noteModelList}),
+          )
+        }
+        return this.viewModelList
+      },
+
       updateSortIdx() {
         this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
       },
@@ -127,7 +137,6 @@ export function NoteListView({nc}) {
         this.sidx = idx
         this.editMode = 'editing'
       },
-
       onAddNewNoteEvent() {
         this.addNewAt(0)
       },
