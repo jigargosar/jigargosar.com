@@ -1,6 +1,7 @@
 import {
   createObservableObject,
   createTransformer,
+  mComputed,
   mReaction,
   oArray,
   oObject,
@@ -12,7 +13,7 @@ const EDIT_MODE = 'EDIT_MODE'
 
 const ViewMode = (() => {
   function create() {
-    return createObservableObject({
+    const viewMode = createObservableObject({
       props: {
         _type: SELECT_MODE,
         _idx: -1,
@@ -42,6 +43,19 @@ const ViewMode = (() => {
         },
       },
       actions: {
+        cycleSidx(listLength) {
+          mReaction(
+            () => [viewMode.sidx],
+            () => {
+              if (viewMode.sidx >= listLength) {
+                viewMode.sidx = 0
+              }
+              if (viewMode.sidx < 0) {
+                viewMode.sidx = listLength - 1
+              }
+            },
+          )
+        },
         toggle() {
           this._type = this.overMode({
             SELECT_MODE: _.always(EDIT_MODE),
@@ -58,6 +72,7 @@ const ViewMode = (() => {
       },
       name: 'ViewMode',
     })
+    return viewMode
   }
 
   return {create}
@@ -174,17 +189,19 @@ export function NoteListView({nc}) {
     name: 'NoteListView',
   })
 
-  mReaction(
-    () => [view.mode.sidx],
-    () => {
-      if (view.mode.sidx >= view.noteDisplayList.length) {
-        view.mode.sidx = 0
-      }
-      if (view.mode.sidx < 0) {
-        view.mode.sidx = view.noteDisplayList.length - 1
-      }
-    },
-  )
+  view.mode.cycleSidx(mComputed(() => view.noteDisplayList.length))
+
+  // mReaction(
+  //   () => [view.mode.sidx],
+  //   () => {
+  //     if (view.mode.sidx >= view.noteDisplayList.length) {
+  //       view.mode.sidx = 0
+  //     }
+  //     if (view.mode.sidx < 0) {
+  //       view.mode.sidx = view.noteDisplayList.length - 1
+  //     }
+  //   },
+  // )
 
   mReaction(
     () => [view.noteDisplayList.length],
