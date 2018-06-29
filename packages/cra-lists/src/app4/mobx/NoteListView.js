@@ -169,7 +169,6 @@ export function NoteListView({nc}) {
     name: 'NoteListView',
   })
 
-  /*const rEidx =*/
   mReaction(
     () => [view.sidx],
     () => {
@@ -183,7 +182,6 @@ export function NoteListView({nc}) {
     },
   )
 
-  /*const rLength = */
   mReaction(
     () => [view.noteDisplayList.length],
     ([listLength]) => {
