@@ -1,6 +1,3 @@
-// Foo
-
-/*eslint-disable*/
 import React from 'react'
 import {
   Button,
@@ -21,11 +18,7 @@ import {
   observer,
   renderKeyedById,
 } from './utils'
-import {R} from '../utils'
-
-/*eslint-enable*/
-
-/*eslint-disable no-empty-pattern*/
+import {_} from '../utils'
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
@@ -70,6 +63,7 @@ const ListToolbar = injectAll(function ListToolbar({view}) {
     </Section>
   )
 })
+
 const NoteListShortcuts = injectAll(
   class NoteListShortcuts extends C {
     componentDidMount() {
@@ -89,7 +83,7 @@ const NoteListShortcuts = injectAll(
         fn(e)
       }
       const {view} = this.props
-      R.cond([
+      _.cond([
         [isHotKey('ArrowUp'), wrapPD(view.gotoPrev)],
         [isAnyHotKey(['ArrowDown']), wrapPD(view.gotoNext)],
         [isHotKey('mod+shift+enter'), view.insertAbove],
@@ -102,7 +96,7 @@ const NoteListShortcuts = injectAll(
         return
       }
 
-      R.cond([
+      _.cond([
         [isAnyHotKey(['q']), wrapPD(view.onAddNewNoteEvent)],
         [isAnyHotKey(['a']), wrapPD(view.insertBelow)],
         [isAnyHotKey(['shift+a']), wrapPD(view.insertAbove)],
@@ -114,6 +108,7 @@ const NoteListShortcuts = injectAll(
     }
   },
 )
+
 const NoteList = injectAll(function NoteList({view}) {
   return (
     <div>
