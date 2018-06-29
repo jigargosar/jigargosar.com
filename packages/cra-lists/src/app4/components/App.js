@@ -15,7 +15,6 @@ import {
 import {
   C,
   cn,
-  F,
   injectAllStates,
   isAnyHotKey,
   isHotKey,
@@ -25,8 +24,6 @@ import {
   WithState,
 } from './utils'
 import {_, R} from '../utils'
-import {o} from '../../StateContext'
-import {nc} from '../mobx-app-stores/NC'
 
 /*eslint-enable*/
 
@@ -74,9 +71,14 @@ function ListToolbar() {
       {({view, actions, state}) => (
         <Section className={cn('pl3')}>
           <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
-          <Button onClick={() => nc.actions.addNew(state)}>
-            ADD2
-          </Button>
+          {/*<Button onClick={() => nc.actions.addNew(state)}>*/}
+          {/*ADD2*/}
+          {/*</Button>*/}
+          {
+            <Button onClick={() => actions.nc.addNew(state)}>
+              ADD3
+            </Button>
+          }
         </Section>
       )}
     </WithState>
@@ -132,6 +134,10 @@ class NoteListShortcuts extends OC {
   }
 }
 
+export function foo() {
+  debugger
+}
+
 const NoteList = _.compose(injectAllStates, observer)(
   function NoteList({view, state}) {
     return (
@@ -140,6 +146,7 @@ const NoteList = _.compose(injectAllStates, observer)(
         <ListToolbar />
         <List>
           {renderKeyedById(Note, 'note', view.noteDisplayList)}
+          {/*{foo()}*/}
           {renderKeyedById(Note, 'note', state.notes)}
         </List>
       </div>

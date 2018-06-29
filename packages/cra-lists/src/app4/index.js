@@ -3,17 +3,9 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {StateProvider} from './components/utils'
-import {
-  mAutoRun,
-  mJS,
-  mReaction,
-  mRunInAction,
-  oObject,
-} from './mobx/utils'
+import {mJS, mReaction, mRunInAction, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
 import {storage} from './services/storage'
-
-import {createStore} from 'mobx-app'
 import {createObservableHistory} from './mobx/utils/StateHistory'
 import {_} from './utils'
 
@@ -23,7 +15,7 @@ const states = oObject(
     nc,
     view: NoteListView({nc}),
     // ...createAppStore(),
-    state: createAppState(),
+    ...createAppState(),
   },
   {},
   {name: 'states'},
@@ -67,7 +59,9 @@ function createAppState() {
     ),
     _.keys,
   )(storeConfig)
-  return state
+  const actions = _.map(_.prop('actions'), storeConfig)
+  return oObject({state, actions: oObject(actions)})
+  // return {state}
 }
 
 if (module.hot) {
@@ -93,6 +87,7 @@ if (module.hot) {
       './mobx/NotesCollection',
       './mobx/NoteListView',
       './mobx-app-stores/index.js',
+      './mobx-app-stores/NC',
     ],
     _.tryCatch(() => {
       console.clear()
@@ -103,7 +98,7 @@ if (module.hot) {
           nc: createNC(),
           view: NoteListView({nc: states.nc}),
           // ...appStore,
-          state: createAppState(),
+          ...createAppState(),
         }),
       )
       render()

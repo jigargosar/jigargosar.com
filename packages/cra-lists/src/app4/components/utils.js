@@ -34,16 +34,25 @@ export const OC = observer(C)
 const StateContextConsumer = observer(StateContext.Consumer)
 
 export const WithState = function WithState({children}) {
-  return <StateContextConsumer>{children}</StateContextConsumer>
+  return (
+    <StateContextConsumer>
+      {s => <Observer>{() => children(s)}</Observer>}
+    </StateContextConsumer>
+  )
 }
 
 export const injectMappedState = stateToProps => BC => ({
   children,
   ...rest
-}) => (
-  <WithState>
-    {states => <BC {...stateToProps(states, rest)}>{children}</BC>}
-  </WithState>
-)
+}) => {
+  const OBC = observer(BC)
+  return (
+    <WithState>
+      {states => (
+        <OBC {...stateToProps(states, rest)}>{children}</OBC>
+      )}
+    </WithState>
+  )
+}
 
 export const injectAllStates = injectMappedState(R.merge)
