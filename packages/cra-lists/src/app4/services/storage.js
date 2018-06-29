@@ -19,6 +19,8 @@ function Storage() {
     keys() {
       return Object.keys(ls)
     },
+
+    clear: () => ls.clear(),
   }
 }
 
