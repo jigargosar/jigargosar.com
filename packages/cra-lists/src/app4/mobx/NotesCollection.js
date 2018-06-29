@@ -1,4 +1,11 @@
-import {mIntercept, mJS, mSet, mValues, oObject} from './utils'
+import {
+  createTransformer,
+  mIntercept,
+  mJS,
+  mSet,
+  mValues,
+  oObject,
+} from './utils'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
 import {R} from '../utils'
@@ -36,7 +43,9 @@ export const Note = (function Note() {
     return note
   }
 
-  return {create}
+  const transform = createTransformer(create)
+
+  return {create, transform}
 })()
 
 export const chance = new Chance()
@@ -45,7 +54,7 @@ export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
     return oObject(
       {
-        idMap: R.compose(R.map(Note.create))(snapshot),
+        idMap: R.compose(R.map(Note.transform))(snapshot),
         get valuesArray() {
           return mValues(this.idMap)
         },
@@ -59,7 +68,7 @@ export const NotesCollection = (function NotesCollection() {
           return mJS(this.idMap)
         },
         newNote() {
-          return Note.create({
+          return Note.transform({
             id: nanoid(),
             text: '',
             deleted: false,
