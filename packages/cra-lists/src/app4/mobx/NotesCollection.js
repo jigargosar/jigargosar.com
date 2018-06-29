@@ -56,7 +56,7 @@ export const NotesCollection = (function NotesCollection() {
         get valuesArray() {
           return mValues(this.idMap)
         },
-        get all() {
+        get active() {
           return rejectDeleted(this.valuesArray)
         },
         get deleted() {

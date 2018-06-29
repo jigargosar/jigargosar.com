@@ -103,7 +103,7 @@ export function NoteListView({nc}) {
           R.map(noteTransformer(view)),
           // R.sortWith(this.sortComparators),
           // R.filter(this.pred),
-          // )(nc.all)
+          // )(nc.active)
         )(this.noteModelList)
       },
       get noteModelList() {
@@ -111,7 +111,7 @@ export function NoteListView({nc}) {
           oArray,
           R.sortWith(this.sortComparators),
           R.filter(this.pred),
-        )(nc.all)
+        )(nc.active)
       },
       updateSortIdx() {
         this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
