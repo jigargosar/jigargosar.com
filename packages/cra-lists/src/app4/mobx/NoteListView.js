@@ -172,7 +172,6 @@ export function NoteListView({nc}) {
   mReaction(
     () => [view.sidx],
     () => {
-      // mTrace(rEidx)
       if (view.sidx >= view.noteDisplayList.length) {
         view.sidx = 0
       }
@@ -185,7 +184,6 @@ export function NoteListView({nc}) {
   mReaction(
     () => [view.noteDisplayList.length],
     ([listLength]) => {
-      // mTrace(rLength)
       if (listLength > 0) {
         view.sidx = R.clamp(0, listLength - 1, view.sidx)
       } else {
