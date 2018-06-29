@@ -24,6 +24,7 @@ const clampIdx = _.curry(function clampIdx(listLength, idx) {
   }
   return _.clamp(0, listLength - 1, idx)
 })
+
 const cycleIdx = _.curry(function cycleIdx(listLength, idx) {
   if (listLength <= 0) {
     return -1
@@ -65,10 +66,10 @@ const ViewMode = (() => {
       },
       actions: {
         cycleSidx(listLength) {
-          this.overSidx(idx => cycleIdx(listLength, idx))
+          this.overSidx(cycleIdx(listLength))
         },
         clampSidx(listLength) {
-          this.overSidx(idx => clampIdx(listLength, idx))
+          this.overSidx(clampIdx(listLength))
         },
         overSidx(fn) {
           this._idx = fn(this._idx)
