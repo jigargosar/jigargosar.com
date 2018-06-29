@@ -1,9 +1,11 @@
 import {
   createObservableObject,
   createTransformer,
+  mAutoRun,
   mComputed,
   mGet,
   mReaction,
+  mTrace,
   oArray,
   oObject,
 } from './utils'
@@ -12,11 +14,29 @@ import {_, R} from '../utils'
 const SELECT_MODE = 'SELECT_MODE'
 const EDIT_MODE = 'EDIT_MODE'
 
-function clampListIdx(list, idx) {
-  if (list.length < 0) {
+// function clampListIdx(list, idx) {
+//   if (list.length < 0) {
+//     return -1
+//   }
+//   return _.clamp(0, list.length - 1, idx)
+// }
+
+// function clampIdx(idx, listLength) {
+//   if (listLength < 0) {
+//     return -1
+//   }
+//   return _.clamp(0, listLength - 1, idx)
+// }
+
+function cycleIdx(idx, listLength) {
+  if (listLength < 0) {
     return -1
+  } else if (idx < 0) {
+    return listLength - 1
+  } else if (idx >= listLength) {
+    return 0
   }
-  return _.clamp(0, list.length - 1, idx)
+  return idx
 }
 
 const ViewMode = (() => {
@@ -34,7 +54,7 @@ const ViewMode = (() => {
         overMode(cases) {
           return cases[this._type](this._idx)
         },
-        overSidx(list, fn) {
+        overListWithSidx(list, fn) {
           const item = mGet(list, this._idx)
           if (item) {
             fn(item)
@@ -52,32 +72,17 @@ const ViewMode = (() => {
       },
       actions: {
         cycleSidx(listLength) {
-          mReaction(
-            () => [viewMode.sidx],
-            () => {
-              if (viewMode.sidx >= listLength) {
-                viewMode.sidx = 0
-              }
-              if (viewMode.sidx < 0) {
-                viewMode.sidx = listLength - 1
-              }
+          mAutoRun(
+            r => {
+              mTrace(r)
+              this.overSidx(idx => cycleIdx(idx, listLength))
+              console.log(`this._idx`, this._idx)
             },
+            {name: 'cycleIdx'},
           )
-
-          mReaction(
-            () => [listLength],
-            ([listLength]) => {
-              if (listLength > 0) {
-                viewMode.sidx = R.clamp(
-                  0,
-                  listLength - 1,
-                  viewMode.sidx,
-                )
-              } else {
-                viewMode.sidx = -1
-              }
-            },
-          )
+        },
+        overSidx(fn) {
+          this._idx = fn(this._idx)
         },
         toggle() {
           this._type = this.overMode({
@@ -183,7 +188,7 @@ export function NoteListView({nc}) {
         this.addNewAt(0)
       },
       onToggleDeleteSelectedEvent() {
-        this.mode.overSidx(this.noteDisplayList, dn =>
+        this.mode.overListWithSidx(this.noteDisplayList, dn =>
           dn.onToggleDeleteEvent(),
         )
       },
@@ -194,10 +199,10 @@ export function NoteListView({nc}) {
         this.addNewAt(this.mode.sidx + 1)
       },
       gotoNext() {
-        this.mode.sidx += 1
+        this.mode.overSidx(_.inc)
       },
       gotoPrev() {
-        this.mode.sidx -= 1
+        this.mode.overSidx(_.dec)
       },
       onEnterKey() {
         if (this.noteDisplayList.length === 0) {
