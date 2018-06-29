@@ -11,8 +11,10 @@ function Storage() {
         return null
       }
     },
-    set: function(k, v) {
-      ls.setItem(k, JSON.stringify(v))
+    set: (k, v) => {
+      const value = JSON.stringify(v)
+      ls.setItem(k, value)
+      return value
     },
   }
 }
