@@ -1,4 +1,5 @@
 import {
+  createObservableObject,
   createOObj,
   createTransformer,
   createViewModel,
@@ -67,8 +68,8 @@ const noteTransformer = createTransformer(view =>
 )
 
 export function NoteListView({nc}) {
-  const view = oObject(
-    {
+  const view = createObservableObject({
+    props: {
       editMode: 'selection',
       em: EditMode.create(),
       get sid() {
@@ -113,6 +114,8 @@ export function NoteListView({nc}) {
           R.filter(this.pred),
         )(nc.active)
       },
+    },
+    actions: {
       updateSortIdx() {
         this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
       },
@@ -166,18 +169,8 @@ export function NoteListView({nc}) {
         this.editMode = 'selection'
       },
     },
-    {
-      gotoNext: mActionBound,
-      onEnterKey: mActionBound,
-      onEscapeKey: mActionBound,
-      gotoPrev: mActionBound,
-      onAddNewNoteEvent: mActionBound,
-      onDeleteSelectionEvent: mActionBound,
-      insertAbove: mActionBound,
-      insertBelow: mActionBound,
-    },
-    {name: 'NoteListView'},
-  )
+    name: 'NoteListView',
+  })
 
   /*const rEidx =*/
   mReaction(
