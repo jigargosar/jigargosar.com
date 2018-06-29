@@ -14,7 +14,7 @@ import {
 } from './ui'
 import {
   cn,
-  injectAllStates,
+  injectAll,
   isAnyHotKey,
   isHotKey,
   observer,
@@ -129,10 +129,7 @@ class NoteListShortcuts extends OC {
   }
 }
 
-const NoteList = _.compose(injectAllStates)(function NoteList({
-  view,
-  state,
-}) {
+const NoteList = injectAll(function NoteList({view}) {
   return (
     <div>
       <NoteListShortcuts />
