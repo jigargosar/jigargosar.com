@@ -71,3 +71,8 @@ export function Debugger() {
   }
   return null
 }
+
+export const wrapPD = fn => e => {
+  e.preventDefault()
+  fn(e)
+}

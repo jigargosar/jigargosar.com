@@ -17,6 +17,7 @@ import {
   isHotKey,
   observer,
   renderKeyedById,
+  wrapPD,
 } from './utils'
 import {_} from '../utils'
 
@@ -78,10 +79,6 @@ const NoteListShortcuts = injectAll(
 
     onKeydown = e => {
       console.debug('NoteListShortcuts.onKeydown', e)
-      const wrapPD = fn => e => {
-        e.preventDefault()
-        fn(e)
-      }
       const {view} = this.props
       _.cond([
         [isHotKey('ArrowUp'), wrapPD(view.gotoPrev)],
