@@ -14,7 +14,6 @@ const states = oObject(
   {
     nc,
     view: NoteListView({nc}),
-    // ...createAppStore(),
     ...createAppState(),
   },
   {},
@@ -42,15 +41,12 @@ function createNC() {
   return NotesCollection.create(ncSnapshot)
 }
 
-// function createAppStore() {
-//   const appStores = require('./mobx-app-stores/index.js').appStores
-//   return createStore(appStores, storage.get('app-state'))
-// }
-
 function createAppState() {
   const storeConfig = require('./mobx-app-stores/index.js')
     .storeConfig
-  // return createStore(appStores, storage.get('app-state'))
+  const actions = _.compose(oObject, _.map(_.prop('actions')))(
+    storeConfig,
+  )
   const initialData = storage.get('app-state')
   const state = oObject({})
   _.compose(
@@ -59,8 +55,7 @@ function createAppState() {
     ),
     _.keys,
   )(storeConfig)
-  const actions = _.map(_.prop('actions'), storeConfig)
-  return oObject({state, actions: oObject(actions)})
+  return oObject({state, actions})
   // return {state}
 }
 
@@ -71,9 +66,6 @@ if (module.hot) {
     () => [states.nc.snapshot],
     () => storage.set('ncSnapshot', states.nc.snapshot),
   )
-  // mAutoRun(() => {
-  //   console.log(`mJS(states.state)`, mJS(states.state))
-  // })
   mReaction(
     () => mJS(states.state),
     state => {
