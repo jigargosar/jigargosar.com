@@ -189,7 +189,7 @@ export function NoteListView({nc}) {
         const [x, y] = [sidx - 1, sidx]
         a.splice(y, 1, a.splice(x, 1, a[y])[0])
         this.updateSortIdx()
-        this.gotoNext()
+        this.gotoPrev()
       },
       gotoPrev() {
         this.mode.overSidx(_.dec)
