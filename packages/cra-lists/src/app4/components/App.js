@@ -129,19 +129,20 @@ class NoteListShortcuts extends OC {
   }
 }
 
-const NoteList = _.compose(injectAllStates, observer)(
-  function NoteList({view, state}) {
-    return (
-      <div>
-        <NoteListShortcuts />
-        <ListToolbar />
-        <List>
-          {renderKeyedById(Note, 'note', view.noteDisplayList)}
-        </List>
-      </div>
-    )
-  },
-)
+const NoteList = _.compose(injectAllStates)(function NoteList({
+  view,
+  state,
+}) {
+  return (
+    <div>
+      <NoteListShortcuts />
+      <ListToolbar />
+      <List>
+        {renderKeyedById(Note, 'note', view.noteDisplayList)}
+      </List>
+    </div>
+  )
+})
 
 class App extends OC {
   r() {
