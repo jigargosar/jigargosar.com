@@ -7,34 +7,10 @@ import {
   oObject,
 } from './utils'
 import {_, R} from '../utils'
+import {clampIdx, cycleIdx} from '../model/util'
 
 const SELECT_MODE = 'SELECT_MODE'
 const EDIT_MODE = 'EDIT_MODE'
-
-// function clampListIdx(list, idx) {
-//   if (list.length < 0) {
-//     return -1
-//   }
-//   return _.clamp(0, list.length - 1, idx)
-// }
-
-const clampIdx = _.curry(function clampIdx(listLength, idx) {
-  if (listLength < 0) {
-    return -1
-  }
-  return _.clamp(0, listLength - 1, idx)
-})
-
-const cycleIdx = _.curry(function cycleIdx(listLength, idx) {
-  if (listLength <= 0) {
-    return -1
-  } else if (idx < 0) {
-    return listLength - 1
-  } else if (idx >= listLength) {
-    return 0
-  }
-  return idx
-})
 
 const ViewMode = (() => {
   function create() {
