@@ -67,18 +67,13 @@ const Note = o(function Note({note}) {
   )
 })
 
-function ListToolbar() {
+const ListToolbar = injectAll(function ListToolbar({view}) {
   return (
-    <WithState>
-      {({view}) => (
-        <Section className={cn('pl3')}>
-          <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
-        </Section>
-      )}
-    </WithState>
+    <Section className={cn('pl3')}>
+      <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
+    </Section>
   )
-}
-
+})
 const NoteListShortcuts = injectAll(
   class NoteListShortcuts extends C {
     componentDidMount() {
