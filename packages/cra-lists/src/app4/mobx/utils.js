@@ -1,5 +1,5 @@
 import * as m from 'mobx'
-import {_, R, RB} from '../utils'
+import {_, R, RB, RX} from '../utils'
 import * as mst from 'mobx-state-tree'
 import {
   ArrayFormatter,
@@ -19,6 +19,8 @@ export const createOObj = ({
   options = {},
 } = {}) => oObject(props, decorators, options)
 export const extendObservable = m.extendObservable
+export const extendObservable2 = _.curryN(2, m.extendObservable)
+export const extendObservable3 = _.curryN(3, m.extendObservable)
 export const oArray = m.observable.array
 export const oMap = m.observable.map
 export const mSet = m.set
@@ -39,13 +41,38 @@ export const tMap = mst.types.map
 
 export const extendActions = _.curry((createActions, observable) => {
   const actions = createActions(observable)
-  return extendObservable(observable, actions, _.map(mAction))
+  return extendObservable(
+    observable,
+    actions,
+    _.map(_.always(mAction), actions),
+  )
 })
 
 export const extendComputed = _.curry(
   (createComputed, observable) => {
     const computed = createComputed(observable)
-    return extendObservable(observable, computed, _.map(mComputed))
+    return extendObservable(
+      observable,
+      computed,
+      _.map(_.always(mComputed), computed),
+    )
+  },
+)
+
+export const extendObservableWith = _.curry(
+  (
+    {
+      props = {},
+      views = RX.alwaysEmptyObject,
+      actions = RX.alwaysEmptyObject,
+    } = {},
+    obs,
+  ) => {
+    return _.compose(
+      extendComputed(views),
+      extendActions(actions),
+      extendObservable2(_.__, props),
+    )(obs)
   },
 )
 
@@ -83,3 +110,15 @@ if (module.hot) {
     data.devtoolsFormatters = formatters
   })
 }
+
+const oFoo = extendObservableWith({props: {_foo: 1}}, oObject({}))
+
+mAutoRun(
+  () => {
+    console.log(`oFoo.foo`, oFoo.foo)
+  },
+  {name: 'oFoo.foo'},
+)
+
+console.log(`oFoo`, oFoo)
+console.log(`oFoo`, mJS(oFoo))
