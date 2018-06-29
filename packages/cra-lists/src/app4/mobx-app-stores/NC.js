@@ -28,6 +28,7 @@ const actions = mapActions({
     state.notes.replace(items.map(itemFactory))
   },
 })
+
 const initState = (state, initialData) => {
   const notes = _.pathOr([], ['notes'], initialData)
   extendObservable(state, {
