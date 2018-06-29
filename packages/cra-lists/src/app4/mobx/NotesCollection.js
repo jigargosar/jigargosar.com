@@ -29,6 +29,9 @@ export const Note = (function Note() {
         updateText(text) {
           this.text = text
         },
+        updateSortIdx(sortIdx) {
+          this.sortIdx = sortIdx
+        },
       },
       name: `Note@${id}`,
     })

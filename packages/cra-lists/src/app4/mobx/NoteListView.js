@@ -117,6 +117,7 @@ const noteTransformer = createTransformer(view =>
           const target = e.target
           note.updateText(target.value)
         },
+        _updateSortIndex: note.updateSortIdx,
         get text() {
           return note.text
         },
@@ -164,7 +165,9 @@ export function NoteListView({nc}) {
     },
     actions: {
       updateSortIdx() {
-        this.noteModelList.forEach((n, idx) => (n.sortIdx = idx))
+        this.noteDisplayList.forEach((n, idx) =>
+          n._updateSortIndex(idx),
+        )
       },
       addNewAt(idx) {
         const newNote = nc.newNote({sortIdx: idx - 1})
