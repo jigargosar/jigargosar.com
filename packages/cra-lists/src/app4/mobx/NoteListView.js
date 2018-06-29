@@ -27,7 +27,7 @@ const ViewMode = (() => {
         overListWithSidx(list, fn) {
           const item = mGet(list, this._idx)
           if (item) {
-            fn(item)
+            fn(item, this._idx)
           }
         },
         isMode(mode) {
@@ -165,6 +165,24 @@ export function NoteListView({nc}) {
       },
       gotoNext() {
         this.mode.overSidx(_.inc)
+      },
+      moveDown() {
+        this.mode.overListWithSidx(
+          this.noteDisplayList,
+          (dn, sidx) => {
+            dn._updateSortIndex(sidx + 1)
+            this.gotoNext()
+          },
+        )
+      },
+      moveUp() {
+        this.mode.overListWithSidx(
+          this.noteDisplayList,
+          (dn, sidx) => {
+            dn._updateSortIndex(sidx - 1)
+            this.gotoPrev()
+          },
+        )
       },
       gotoPrev() {
         this.mode.overSidx(_.dec)
