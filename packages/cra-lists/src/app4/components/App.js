@@ -13,7 +13,6 @@ import {
   Title,
 } from './ui'
 import {
-  C,
   cn,
   injectAllStates,
   isAnyHotKey,
@@ -83,6 +82,7 @@ class NoteListShortcuts extends OC {
     console.debug('NoteListShortcuts: componentDidMount')
     window.addEventListener('keydown', this.onKeydown)
   }
+
   componentWillUnmount() {
     console.debug('componentWillUnmount: componentWillUnmount')
     window.removeEventListener('keydown', this.onKeydown)
@@ -144,21 +144,17 @@ const NoteList = _.compose(injectAllStates)(function NoteList({
   )
 })
 
-class App extends OC {
-  r() {
-    return (
-      <RootContainer>
-        <CenterLayout>
-          <div className={'flex'}>
-            <Title>Notes</Title>
-          </div>
-          <NoteList />
-        </CenterLayout>
-      </RootContainer>
-    )
-  }
-}
-
-App.propTypes = {}
+const App = o(function App() {
+  return (
+    <RootContainer>
+      <CenterLayout>
+        <div className={'flex'}>
+          <Title>Notes</Title>
+        </div>
+        <NoteList />
+      </CenterLayout>
+    </RootContainer>
+  )
+})
 
 export default App
