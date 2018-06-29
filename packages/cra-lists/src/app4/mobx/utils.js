@@ -19,6 +19,7 @@ export const extendObservable3 = _.curryN(3, m.extendObservable)
 export const oArray = m.observable.array
 export const oMap = m.observable.map
 export const mSet = m.set
+export const mGet = m.get
 export const mValues = m.values
 export const mAutoRun = m.autorun
 export const mReaction = m.reaction

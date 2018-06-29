@@ -2,6 +2,7 @@ import {
   createObservableObject,
   createTransformer,
   mComputed,
+  mGet,
   mReaction,
   oArray,
   oObject,
@@ -27,7 +28,7 @@ const ViewMode = (() => {
           return cases[this._type](this._idx)
         },
         overSidx(list, fn) {
-          const item = list[this._idx]
+          const item = mGet(list, this._idx)
           if (item) {
             fn(item)
           }
@@ -52,6 +53,21 @@ const ViewMode = (() => {
               }
               if (viewMode.sidx < 0) {
                 viewMode.sidx = listLength - 1
+              }
+            },
+          )
+
+          mReaction(
+            () => [listLength],
+            ([listLength]) => {
+              if (listLength > 0) {
+                viewMode.sidx = R.clamp(
+                  0,
+                  listLength - 1,
+                  viewMode.sidx,
+                )
+              } else {
+                viewMode.sidx = -1
               }
             },
           )
@@ -205,12 +221,7 @@ export function NoteListView({nc}) {
 
   mReaction(
     () => [view.noteDisplayList.length],
-    ([listLength]) => {
-      if (listLength > 0) {
-        view.mode.sidx = R.clamp(0, listLength - 1, view.mode.sidx)
-      } else {
-        view.mode.sidx = -1
-      }
+    () => {
       view.updateSortIdx()
     },
   )
