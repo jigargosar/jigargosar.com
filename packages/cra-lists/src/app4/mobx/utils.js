@@ -35,6 +35,7 @@ export const mIntercept = m.intercept
 export const mActionBound = m.action.bound
 export const mAction = m.action
 export const mComputed = m.computed
+export const mIsObservable = m.isObservable
 export const t = mst.types
 export const tModel = mst.types.model
 export const tMap = mst.types.map
