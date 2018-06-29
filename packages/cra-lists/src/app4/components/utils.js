@@ -1,7 +1,8 @@
 import React, {Component as RC, Fragment as F} from 'react'
 import {observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
-import {R, RX} from '../utils'
+import {_, R, RX} from '../utils'
+import {setDisplayName, wrapDisplayName} from 'recompose'
 
 export {F, RC, observer, Observer, isHotKey}
 export const cn = RX.cx
@@ -9,6 +10,7 @@ export const isAnyHotKey = R.compose(
   R.anyPass,
   R.map(R.curryN(2, isHotKey)),
 )
+
 export function renderKeyedById(Component, propName, idList) {
   return R.map(value => (
     <Component key={value.id} {...{[propName]: value}} />
@@ -41,8 +43,10 @@ export const WithState = function WithState({children}) {
   )
 }
 
-function injectState(BC, stateToProps) {
-  return function injectState({children, ...rest}) {
+const injectState = _.curry(function injectState(stateToProps, BC) {
+  return _.compose(
+    setDisplayName(wrapDisplayName(BC, 'inject')),
+  )(function injectState({children, ...rest}) {
     const OBC = observer(BC)
     return (
       <StateContextConsumer>
@@ -51,13 +55,10 @@ function injectState(BC, stateToProps) {
         )}
       </StateContextConsumer>
     )
-  }
-}
+  })
+})
 
-export const injectMappedState = stateToProps => BC =>
-  injectState(BC, stateToProps)
-
-export const injectAll = injectMappedState(R.merge)
+export const injectAll = injectState(R.merge)
 
 export function Debugger() {
   debugger
