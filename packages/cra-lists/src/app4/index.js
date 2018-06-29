@@ -42,7 +42,8 @@ function createNC() {
 
 if (module.hot) {
   window.s = states
-  createObservableHistory(states)
+  // createObservableHistory(states)
+  console.debug(`createObservableHistory`, createObservableHistory)
   mReaction(
     () => [states.nc.snapshot],
     () => storage.set('ncSnapshot', states.nc.snapshot),
