@@ -26,6 +26,7 @@ import {
 } from './utils'
 import {_, R} from '../utils'
 import {o} from '../../StateContext'
+import {nc} from '../mobx-app-stores/NC'
 
 /*eslint-enable*/
 
@@ -70,10 +71,12 @@ class Note extends C {
 function ListToolbar() {
   return (
     <WithState>
-      {({view, actions}) => (
+      {({view, actions, state}) => (
         <Section className={cn('pl3')}>
           <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
-          {/*<Button onClick={actions.nc.addNew}>ADD2</Button>*/}
+          <Button onClick={() => nc.actions.addNew(state)}>
+            ADD2
+          </Button>
         </Section>
       )}
     </WithState>
@@ -137,7 +140,7 @@ const NoteList = _.compose(injectAllStates, observer)(
         <ListToolbar />
         <List>
           {renderKeyedById(Note, 'note', view.noteDisplayList)}
-          {/*{renderKeyedById(Note, 'note', state.notes)}*/}
+          {renderKeyedById(Note, 'note', state.notes)}
         </List>
       </div>
     )

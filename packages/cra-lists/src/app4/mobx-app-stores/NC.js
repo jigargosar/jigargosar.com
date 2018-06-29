@@ -3,6 +3,7 @@ import {
   extendObservable,
   mAction,
   oArray,
+  oObject,
 } from '../mobx/utils'
 import {_} from '../utils'
 import {nanoid} from '../model/util'
@@ -20,7 +21,7 @@ const itemFactory = createTransformer(note =>
 
 const actions = {
   addNew: mAction(state => {
-    state.notes.add(itemFactory({id: nanoid(), text: ' note'}))
+    state.notes.unshift(itemFactory({id: nanoid(), text: 'aa'}))
   }),
   replace: mAction((items, state) => {
     state.notes.replace(items.map(itemFactory))
@@ -35,7 +36,7 @@ const initState = (state, initialData) => {
   actions.replace(notes, state)
 }
 
-export const nc = {initState, actions}
+export const nc = oObject({initState, actions})
 
 const createActions = state => {
   function addNew() {

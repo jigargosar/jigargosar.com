@@ -23,6 +23,7 @@ const states = oObject(
     nc,
     view: NoteListView({nc}),
     // ...createAppStore(),
+    state: createAppState(),
   },
   {},
   {name: 'states'},
@@ -54,6 +55,21 @@ function createNC() {
 //   return createStore(appStores, storage.get('app-state'))
 // }
 
+function createAppState() {
+  const storeConfig = require('./mobx-app-stores/index.js')
+    .storeConfig
+  // return createStore(appStores, storage.get('app-state'))
+  const initialData = storage.get('app-state')
+  const state = oObject({})
+  _.compose(
+    _.forEach(key =>
+      storeConfig[key].initState(state, initialData, key),
+    ),
+    _.keys,
+  )(storeConfig)
+  return state
+}
+
 if (module.hot) {
   window.s = states
   createObservableHistory(states)
@@ -64,12 +80,12 @@ if (module.hot) {
   // mAutoRun(() => {
   //   console.log(`mJS(states.state)`, mJS(states.state))
   // })
-  // mReaction(
-  //   () => mJS(states.state),
-  //   state => {
-  //     storage.set('app-state', state)
-  //   },
-  // )
+  mReaction(
+    () => mJS(states.state),
+    state => {
+      storage.set('app-state', state)
+    },
+  )
 
   module.hot['accept'](
     [
@@ -87,6 +103,7 @@ if (module.hot) {
           nc: createNC(),
           view: NoteListView({nc: states.nc}),
           // ...appStore,
+          state: createAppState(),
         }),
       )
       render()
