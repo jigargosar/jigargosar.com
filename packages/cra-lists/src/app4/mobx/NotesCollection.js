@@ -1,5 +1,5 @@
 import {
-  createTransformer,
+  extendObservable,
   mIntercept,
   mJS,
   mSet,
@@ -43,17 +43,24 @@ export const Note = (function Note() {
     return note
   }
 
-  const transform = createTransformer(create)
-
-  return {create, transform}
+  return {create}
 })()
 
 export const chance = new Chance()
 
+function createObservableObject({
+  props = {},
+  actions = {},
+  name = 'ObservableObject',
+} = {}) {
+  const oObj = oObject(props, {}, {name})
+  return extendObservable(oObj, actions)
+}
+
 export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
-    return oObject(
-      {
+    return createObservableObject({
+      props: {
         idMap: R.compose(R.map(Note.create))(snapshot),
         get valuesArray() {
           return mValues(this.idMap)
@@ -68,7 +75,7 @@ export const NotesCollection = (function NotesCollection() {
           return mJS(this.idMap)
         },
         newNote() {
-          return Note.transform({
+          return Note.create({
             id: nanoid(),
             text: '',
             deleted: false,
@@ -82,9 +89,8 @@ export const NotesCollection = (function NotesCollection() {
           this.put(note)
         },
       },
-      {},
-      {name: 'NotesCollection'},
-    )
+      name: 'NotesCollection',
+    })
   }
 
   return {create}
