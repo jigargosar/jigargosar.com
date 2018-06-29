@@ -13,12 +13,14 @@ import {
   Title,
 } from './ui'
 import {
+  C,
   cn,
   injectAll,
   isAnyHotKey,
   isHotKey,
   observer,
   OC,
+  RC,
   renderKeyedById,
   WithState,
 } from './utils'
@@ -77,58 +79,48 @@ function ListToolbar() {
   )
 }
 
-class NoteListShortcuts extends OC {
-  componentDidMount() {
-    console.debug('NoteListShortcuts: componentDidMount')
-    window.addEventListener('keydown', this.onKeydown)
-  }
-
-  componentWillUnmount() {
-    console.debug('componentWillUnmount: componentWillUnmount')
-    window.removeEventListener('keydown', this.onKeydown)
-  }
-
-  render() {
-    return (
-      <WithState>
-        {({view}) => {
-          this.view = view
-          return null
-        }}
-      </WithState>
-    )
-  }
-
-  onKeydown = e => {
-    console.debug('window.keydown', e)
-    const wrapPD = fn => e => {
-      e.preventDefault()
-      fn(e)
-    }
-    const view = this.view
-    R.cond([
-      [isHotKey('ArrowUp'), wrapPD(view.gotoPrev)],
-      [isAnyHotKey(['ArrowDown']), wrapPD(view.gotoNext)],
-      [isHotKey('mod+shift+enter'), view.insertAbove],
-      [isHotKey('mod+enter'), view.insertBelow],
-      [isAnyHotKey(['enter']), view.onEnterKey],
-      [isHotKey('escape'), view.onEscapeKey],
-    ])(e)
-
-    if (e.target instanceof window.HTMLInputElement) {
-      return
+const NoteListShortcuts = injectAll(
+  class NoteListShortcuts extends C {
+    componentDidMount() {
+      console.debug('NoteListShortcuts: componentDidMount')
+      window.addEventListener('keydown', this.onKeydown)
     }
 
-    R.cond([
-      [isHotKey('q'), wrapPD(view.onAddNewNoteEvent)],
-      [
-        isAnyHotKey(['d', 'delete']),
-        wrapPD(view.onToggleDeleteSelectedEvent),
-      ],
-    ])(e)
-  }
-}
+    componentWillUnmount() {
+      console.debug('componentWillUnmount: componentWillUnmount')
+      window.removeEventListener('keydown', this.onKeydown)
+    }
 
+    onKeydown = e => {
+      console.debug('window.keydown', e)
+      const wrapPD = fn => e => {
+        e.preventDefault()
+        fn(e)
+      }
+      const {view} = this.props
+      R.cond([
+        [isHotKey('ArrowUp'), wrapPD(view.gotoPrev)],
+        [isAnyHotKey(['ArrowDown']), wrapPD(view.gotoNext)],
+        [isHotKey('mod+shift+enter'), view.insertAbove],
+        [isHotKey('mod+enter'), view.insertBelow],
+        [isAnyHotKey(['enter']), view.onEnterKey],
+        [isHotKey('escape'), view.onEscapeKey],
+      ])(e)
+
+      if (e.target instanceof window.HTMLInputElement) {
+        return
+      }
+
+      R.cond([
+        [isHotKey('q'), wrapPD(view.onAddNewNoteEvent)],
+        [
+          isAnyHotKey(['d', 'delete']),
+          wrapPD(view.onToggleDeleteSelectedEvent),
+        ],
+      ])(e)
+    }
+  },
+)
 const NoteList = injectAll(function NoteList({view}) {
   return (
     <div>
