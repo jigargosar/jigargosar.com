@@ -122,7 +122,9 @@ class NoteListShortcuts extends OC {
       [isHotKey('escape'), view.onEscapeKey],
     ])(e)
 
-    if (e.target instanceof window.HTMLInputElement) return
+    if (e.target instanceof window.HTMLInputElement) {
+      return
+    }
 
     R.cond([
       [isHotKey('q'), wrapPD(view.onAddNewNoteEvent)],
@@ -134,10 +136,6 @@ class NoteListShortcuts extends OC {
   }
 }
 
-export function foo() {
-  debugger
-}
-
 const NoteList = _.compose(injectAllStates, observer)(
   function NoteList({view, state}) {
     return (
@@ -146,8 +144,6 @@ const NoteList = _.compose(injectAllStates, observer)(
         <ListToolbar />
         <List>
           {renderKeyedById(Note, 'note', view.noteDisplayList)}
-          {/*{foo()}*/}
-          {renderKeyedById(Note, 'note', state.notes)}
         </List>
       </div>
     )

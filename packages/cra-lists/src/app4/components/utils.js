@@ -51,3 +51,7 @@ export const injectMappedState = stateToProps => BC => ({
 )
 
 export const injectAllStates = injectMappedState(R.merge)
+
+export function Debugger() {
+  debugger
+}
