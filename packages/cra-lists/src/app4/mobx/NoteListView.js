@@ -140,6 +140,7 @@ export function NoteListView({nc}) {
     },
     actions: {
       updateSortIdx() {
+        // debugger
         this.noteDisplayList.forEach((n, idx) =>
           n._updateSortIndex(idx),
         )
@@ -167,24 +168,28 @@ export function NoteListView({nc}) {
         this.mode.overSidx(_.inc)
       },
       moveDown() {
-        this.mode.overListWithSidx(
-          this.noteDisplayList,
-          (dn, sidx) => {
-            dn._updateSortIndex(sidx + 1)
-            this.updateSortIdx()
-            this.gotoNext()
-          },
-        )
+        const sidx = this.mode.sidx
+        const listLength = this.noteDisplayList.length
+        if (listLength <= 1 || sidx >= listLength - 1) {
+          return
+        }
+        const a = this.noteDisplayList
+        const [x, y] = [sidx, sidx + 1]
+        a.splice(y, 1, a.splice(x, 1, a[y])[0])
+        this.updateSortIdx()
+        this.gotoNext()
       },
       moveUp() {
-        this.mode.overListWithSidx(
-          this.noteDisplayList,
-          (dn, sidx) => {
-            dn._updateSortIndex(sidx - 1)
-            this.updateSortIdx()
-            this.gotoPrev()
-          },
-        )
+        const sidx = this.mode.sidx
+        const listLength = this.noteDisplayList.length
+        if (listLength <= 1 || sidx <= 0) {
+          return
+        }
+        const a = this.noteDisplayList
+        const [x, y] = [sidx - 1, sidx]
+        a.splice(y, 1, a.splice(x, 1, a[y])[0])
+        this.updateSortIdx()
+        this.gotoNext()
       },
       gotoPrev() {
         this.mode.overSidx(_.dec)
