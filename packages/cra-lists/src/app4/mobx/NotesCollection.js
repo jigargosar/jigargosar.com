@@ -54,7 +54,7 @@ export const NotesCollection = (function NotesCollection() {
   function create(snapshot = {}) {
     return oObject(
       {
-        idMap: R.compose(R.map(Note.transform))(snapshot),
+        idMap: R.compose(R.map(Note.create))(snapshot),
         get valuesArray() {
           return mValues(this.idMap)
         },
