@@ -158,11 +158,9 @@ export function NoteListView({nc}) {
       },
     },
     actions: {
-      updateSortIdx() {
+      updateSortIdx(list = this.noteDisplayList) {
         // debugger
-        this.noteDisplayList.forEach((n, idx) =>
-          n._updateSortIndex(idx),
-        )
+        list.forEach((n, idx) => n._updateSortIndex(idx))
       },
       addNewAt(idx) {
         const newNote = nc.newNote({sortIdx: idx - 1})
@@ -174,10 +172,13 @@ export function NoteListView({nc}) {
         if (listLength <= 1) {
           return
         }
-        const sidx = this.sidx
-        const newSidx = cycleIdx(listLength, sidx + moveBy)
-        swapElementsAt(sidx, newSidx, this.noteDisplayList)
-        this.updateSortIdx()
+        const newSidx = cycleIdx(listLength, this.sidx + moveBy)
+        const swappedList = swapElementsAt(
+          this.sidx,
+          newSidx,
+          this.noteDisplayList,
+        )
+        this.updateSortIdx(swappedList)
         this.mode.overSidx(_.always(newSidx))
       },
       onAddNewNoteEvent() {
