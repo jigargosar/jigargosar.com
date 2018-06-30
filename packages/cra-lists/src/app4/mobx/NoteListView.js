@@ -129,9 +129,12 @@ export function NoteListView({nc}) {
       get sid() {
         return R.pathOr(
           null,
-          ['noteDisplayList', view.mode.sidx, 'id'],
-          view,
+          ['noteDisplayList', this.sidx, 'id'],
+          this,
         )
+      },
+      get sidx() {
+        return this.mode.sidx
       },
       pred: R.allPass([]),
       sortComparators: [R.ascend(R.prop('sortIdx'))],
