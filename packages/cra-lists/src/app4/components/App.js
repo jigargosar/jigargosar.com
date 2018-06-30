@@ -22,6 +22,9 @@ import {
 } from './utils'
 import {_} from '../utils'
 import FocusChild from './mobx/FocusChild'
+import {inject} from 'mobx-react'
+
+const enhance = _.compose(inject('states'), observer)
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
@@ -113,21 +116,36 @@ const NoteListShortcuts = injectAll(
   },
 )
 
-const NoteList = injectAll(function NoteList({view}) {
+const NoteList = enhance(function NoteList({states}) {
   return (
     <div>
       <NoteListShortcuts />
       <ListToolbar />
       <Paper>
         <List>
-          {renderKeyedById(Note, 'note', view.noteDisplayList)}
+          {renderKeyedById(Note, 'note', states.view.noteDisplayList)}
         </List>
       </Paper>
     </div>
   )
 })
 
-const App = observer(function App() {
+// const NoteList = injectAll(function NoteList({view}) {
+//   return (
+//     <div>
+//       <NoteListShortcuts />
+//       <ListToolbar />
+//       <Paper>
+//         <List>
+//           {renderKeyedById(Note, 'note', view.noteDisplayList)}
+//         </List>
+//       </Paper>
+//     </div>
+//   )
+// })
+//
+const App = enhance(function App({states}) {
+  console.log(`states`, states)
   return (
     <RootContainer>
       <CenterLayout>

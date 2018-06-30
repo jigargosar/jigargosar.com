@@ -169,9 +169,6 @@ if (module.hot) {
 // console.log(`oFoo`, mJS(oFoo))
 // oFoo.foo = 1
 // oFoo.foo = 1
-// oFoo.foo = 1
-// oFoo.foo = 1
-// oFoo.foo = 1
 // oFoo.foo = 2
 // oFoo.foo = 1
 // oFoo.foo = 2

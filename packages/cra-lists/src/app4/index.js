@@ -8,6 +8,7 @@ import {NoteListView} from './mobx/NoteListView'
 import {storage} from './services/storage'
 import {createObservableHistory} from './mobx/utils/StateHistory'
 import {_} from './utils'
+import {Provider} from 'mobx-react'
 
 const nc = createNC()
 const states = oObject(
@@ -20,11 +21,14 @@ const states = oObject(
 )
 
 const App = require('./components/App').default
+
 function render() {
   ReactDOM.render(
-    <StateProvider value={states}>
-      <App />
-    </StateProvider>,
+    <Provider states={states}>
+      <StateProvider value={states}>
+        <App />
+      </StateProvider>
+    </Provider>,
     document.getElementById('root'),
   )
 }
@@ -53,10 +57,10 @@ if (module.hot) {
     [
       './components/App',
       './mobx/NoteCollection',
-      // './mobx/NoteListView',
+      './mobx/NoteListView',
     ],
     _.tryCatch(() => {
-      console.clear()
+      // console.clear()
       const NoteListView = require('./mobx/NoteListView').NoteListView
       mRunInAction('Hot Update States', () =>
         Object.assign(states, {
