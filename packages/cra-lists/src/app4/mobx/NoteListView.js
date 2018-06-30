@@ -89,6 +89,10 @@ const noteTransformer = createTransformer(view =>
         get isSelected() {
           return view.mode.isSelect && R.equals(note.id, view.sid)
         },
+        get indentLevel() {
+          const parent = view.parentNote(this)
+          return _.isNil(parent) ? 0 : parent.indentLevel + 1
+        },
         onToggleDeleteEvent() {
           note.toggleDeleted()
         },
@@ -109,6 +113,9 @@ const noteTransformer = createTransformer(view =>
         },
         get sortIdx() {
           return note.sortIdx
+        },
+        get parentId() {
+          return note.parentId
         },
       },
       {},
@@ -167,6 +174,11 @@ export function NoteListView({nc}) {
       },
     },
     actions: {
+      parentNote(note) {
+        return this.noteDisplayList.find(
+          _.propEq('id', note.parentId),
+        )
+      },
       updateSortIdx() {
         // debugger
         this.noteDisplayList.forEach((n, idx) =>
@@ -216,8 +228,10 @@ export function NoteListView({nc}) {
         this.cyclicMoveBy(-1)
       },
       indentSelected() {
+        const prevSid = this.prevSid
+        debugger
         this.mode.overListItemWithSidx(this.noteDisplayList, dn =>
-          dn._updateParentId(this.prevSid),
+          dn._updateParentId(prevSid),
         )
       },
       unIndentSelected() {

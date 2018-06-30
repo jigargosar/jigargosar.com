@@ -51,7 +51,9 @@ const Note = observer(function Note({note}) {
   const NoteContent = note.isEditing ? NoteInput : NoteText
   return (
     <ListItem className={cn('flex items-center lh-copy')}>
-      <Text>{`${note.sortIdx}`}</Text>
+      <Text>{`sidx: ${note.sortIdx}`}</Text>
+      <Text>{`indent: ${note.indentLevel}`}</Text>
+      <Text>{`pid: ${note.parentId}`}</Text>
       <NoteContent note={note} />
     </ListItem>
   )
