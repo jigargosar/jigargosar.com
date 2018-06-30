@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types'
 import React from 'react'
-import ReactDOM from 'react-dom'
 import {
   Button,
   CenterLayout,
@@ -23,7 +21,7 @@ import {
   wrapPD,
 } from './utils'
 import {_} from '../utils'
-import {mAutoRun} from '../mobx/utils'
+import {FocusChild} from './mobx/FocusChild'
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
@@ -45,44 +43,10 @@ const NoteText = observer(function NoteText({note}) {
   )
 })
 
-const Focus = observer(
-  class Focus extends React.Component {
-    static propTypes = {
-      children: PropTypes.node.isRequired,
-      shouldFocus: PropTypes.bool.isRequired,
-    }
-
-    disposer = _.F
-
-    componentDidMount() {
-      this.disposer = mAutoRun(
-        () => {
-          if (!this.props.shouldFocus) {
-            return
-          }
-          const dom = ReactDOM.findDOMNode(this)
-          requestAnimationFrame(() => {
-            dom.focus()
-          })
-        },
-        {name: 'Focus Component'},
-      )
-    }
-
-    componentWillUnmount() {
-      this.disposer()
-    }
-
-    render() {
-      return this.props.children
-    }
-  },
-)
-
 const Note = observer(function Note({note, focusComponentRef}) {
   const NoteContent = note.isEditing ? NoteInput : NoteText
   return (
-    <Focus shouldFocus={note.isSelected}>
+    <FocusChild shouldFocus={note.isSelected}>
       <ListItem
         ref={focusComponentRef}
         className={cn('flex items-center lh-copy', {
@@ -95,7 +59,7 @@ const Note = observer(function Note({note, focusComponentRef}) {
         <Text>{`sidx: ${note.sortIdx}`}</Text>
         <NoteContent note={note} />
       </ListItem>
-    </Focus>
+    </FocusChild>
   )
 })
 const ListToolbar = injectAll(function ListToolbar({view}) {
