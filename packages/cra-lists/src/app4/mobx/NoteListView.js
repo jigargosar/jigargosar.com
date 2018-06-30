@@ -228,10 +228,8 @@ export function NoteListView({nc}) {
         this.cyclicMoveBy(-1)
       },
       indentSelected() {
-        const prevSid = this.prevSid
-        debugger
         this.mode.overListItemWithSidx(this.noteDisplayList, dn =>
-          dn._updateParentId(prevSid),
+          dn._updateParentId(this.prevSid),
         )
       },
       unIndentSelected() {
