@@ -52,8 +52,6 @@ const Note = observer(function Note({note}) {
   return (
     <ListItem className={cn('flex items-center lh-copy')}>
       <Text>{`sidx: ${note.sortIdx}`}</Text>
-      <Text>{`indent: ${note.indentLevel}`}</Text>
-      <Text>{`pid: ${note.parentId}`}</Text>
       <NoteContent note={note} />
     </ListItem>
   )

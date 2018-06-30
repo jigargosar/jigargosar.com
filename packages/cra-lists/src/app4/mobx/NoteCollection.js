@@ -14,14 +14,13 @@ const rejectDeleted = R.reject(deletedProp)
 const filterDeleted = R.filter(deletedProp)
 
 export const Note = (function Note() {
-  function create({id, text, deleted, sortIdx, parentId}) {
+  function create({id, text, deleted, sortIdx}) {
     const note = createObservableObject({
       props: {
         id,
         text,
         deleted,
         sortIdx,
-        parentId,
       },
       actions: {
         toggleDeleted() {
@@ -32,9 +31,6 @@ export const Note = (function Note() {
         },
         updateSortIdx(sortIdx) {
           this.sortIdx = sortIdx
-        },
-        updateParentId(parentId) {
-          this.parentId = parentId
         },
       },
       name: `Note@${id}`,
@@ -83,7 +79,6 @@ export const NoteCollection = (function NotesCollection() {
             text: '',
             deleted: false,
             sortIdx,
-            parentId: null,
           })
         },
         put(note) {

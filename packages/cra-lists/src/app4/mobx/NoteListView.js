@@ -89,10 +89,6 @@ const noteTransformer = createTransformer(view =>
         get isSelected() {
           return view.mode.isSelect && R.equals(note.id, view.sid)
         },
-        get indentLevel() {
-          const parent = view.parentDisplayNote(this)
-          return _.isNil(parent) ? 0 : parent.indentLevel + 1
-        },
         onToggleDeleteEvent() {
           note.toggleDeleted()
         },
@@ -101,7 +97,6 @@ const noteTransformer = createTransformer(view =>
           note.updateText(target.value)
         },
         _updateSortIndex: note.updateSortIdx,
-        _updateParentId: note.updateParentId,
         get text() {
           return note.text
         },
@@ -113,9 +108,6 @@ const noteTransformer = createTransformer(view =>
         },
         get sortIdx() {
           return note.sortIdx
-        },
-        get parentId() {
-          return note.parentId
         },
       },
       {},
@@ -147,11 +139,6 @@ export function NoteListView({nc}) {
           R.sortWith(this.sortComparators),
           R.filter(this.pred),
         )(nc.active)
-      },
-      parentDisplayNote(note) {
-        return this.noteDisplayList.find(
-          _.propEq('id', note.parentId),
-        )
       },
       findDisplayNoteById(id) {
         return this.noteDisplayList.find(_.propEq('id', id))
