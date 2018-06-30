@@ -116,6 +116,12 @@ const noteTransformer = createTransformer(view =>
   ),
 )
 
+function swapElementsAt(x, y, a) {
+  const [ax, ay] = [a[x], a[y]]
+  a[x] = ay
+  a[y] = ax
+}
+
 export function NoteListView({nc}) {
   const view = createObservableObject({
     props: {
@@ -150,6 +156,17 @@ export function NoteListView({nc}) {
         nc.add(newNote)
         this.mode.switchToEdit(idx)
       },
+      cyclicMoveBy(moveBy) {
+        const listLength = this.noteDisplayList.length
+        if (listLength <= 1) {
+          return
+        }
+        const sidx = this.mode.sidx
+        const newSidx = cycleIdx(listLength, sidx + moveBy)
+        swapElementsAt(sidx, newSidx, this.noteDisplayList)
+        this.updateSortIdx()
+        this.mode.overSidx(_.always(newSidx))
+      },
       onAddNewNoteEvent() {
         this.addNewAt(0)
       },
@@ -168,36 +185,10 @@ export function NoteListView({nc}) {
         this.mode.overSidx(_.inc)
       },
       moveDown() {
-        const sidx = this.mode.sidx
-        const listLength = this.noteDisplayList.length
-        if (listLength <= 1) {
-          return
-        }
-        const a = this.noteDisplayList
-        const newSidx = cycleIdx(listLength, sidx + 1)
-        const [x, y] = [sidx, newSidx]
-        const [ax, ay] = [a[x], a[y]]
-        a[x] = ay
-        a[y] = ax
-        // a.splice(y, 1, a.splice(x, 1, a[y])[0])
-        this.updateSortIdx()
-        this.mode.overSidx(_.always(newSidx))
+        this.cyclicMoveBy(1)
       },
       moveUp() {
-        const sidx = this.mode.sidx
-        const listLength = this.noteDisplayList.length
-        if (listLength <= 1) {
-          return
-        }
-        const a = this.noteDisplayList
-        const newSidx = cycleIdx(listLength, sidx - 1)
-        const [x, y] = [sidx, newSidx]
-        const [ax, ay] = [a[x], a[y]]
-        a[x] = ay
-        a[y] = ax
-        // a.splice(y, 1, a.splice(x, 1, a[y])[0])
-        this.updateSortIdx()
-        this.mode.overSidx(_.always(newSidx))
+        this.cyclicMoveBy(-1)
       },
       gotoPrev() {
         this.mode.overSidx(_.dec)
