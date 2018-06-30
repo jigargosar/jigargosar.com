@@ -85,8 +85,6 @@ const NoteListShortcuts = injectAll(
       _.cond([
         [isHotKey('ArrowUp'), wrapPD(view.gotoPrev)],
         [isAnyHotKey(['ArrowDown']), wrapPD(view.gotoNext)],
-        [isAnyHotKey(['Tab']), wrapPD(view.indentSelected)],
-        [isAnyHotKey(['shift+Tab']), wrapPD(view.unIndentSelected)],
         [isAnyHotKey(['mod+ArrowDown']), wrapPD(view.moveDown)],
         [isAnyHotKey(['mod+ArrowUp']), wrapPD(view.moveUp)],
         [isHotKey('mod+shift+enter'), view.insertAbove],

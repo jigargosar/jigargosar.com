@@ -6,7 +6,7 @@ import {
   oArray,
   oObject,
 } from './utils'
-import {_, R} from '../utils'
+import {_, R, swapElementsAt} from '../utils'
 import {clampIdx, cycleIdx} from '../model/util'
 
 const SELECT_MODE = 'SELECT_MODE'
@@ -124,16 +124,6 @@ const noteTransformer = createTransformer(view =>
   ),
 )
 
-function swapElementsAt(x, y, a) {
-  const [ax, ay] = [a[x], a[y]]
-  a[x] = ay
-  a[y] = ax
-}
-
-function isInvalidListIdx(idx, list) {
-  return idx < 0 || idx >= list.length
-}
-
 export function NoteListView({nc}) {
   const view = createObservableObject({
     props: {
@@ -144,22 +134,6 @@ export function NoteListView({nc}) {
           ['noteDisplayList', this.sidx, 'id'],
           this,
         )
-      },
-      get prevSid() {
-        const prevSidx = this.sidx - 1
-        if (isInvalidListIdx(prevSidx, this.noteDisplayList)) {
-          return null
-        }
-        return _.path(['noteDisplayList', prevSidx, 'id'], this)
-      },
-      get prevParent() {
-        return _.isNil(this.prevSid)
-          ? null
-          : this.findDisplayNoteById(this.prevSid)
-      },
-      get prevParentId() {
-        const prevParent = this.prevParent
-        return _.isNil(prevParent) ? null : prevParent.id
       },
       get sidx() {
         return this.mode.sidx
@@ -231,16 +205,6 @@ export function NoteListView({nc}) {
       },
       moveUp() {
         this.cyclicMoveBy(-1)
-      },
-      indentSelected() {
-        this.mode.overListItemWithSidx(this.noteDisplayList, dn =>
-          dn._updateParentId(this.prevSid),
-        )
-      },
-      unIndentSelected() {
-        this.mode.overListItemWithSidx(this.noteDisplayList, dn =>
-          dn._updateParentId(this.nextSid),
-        )
       },
       onEnterKey() {
         if (this.noteDisplayList.length === 0) {
