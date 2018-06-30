@@ -187,14 +187,14 @@ export function NoteListView({nc}) {
       gotoNext() {
         this.mode.overSidx(_.inc)
       },
+      gotoPrev() {
+        this.mode.overSidx(_.dec)
+      },
       moveDown() {
         this.cyclicMoveBy(1)
       },
       moveUp() {
         this.cyclicMoveBy(-1)
-      },
-      gotoPrev() {
-        this.mode.overSidx(_.dec)
       },
       onEnterKey() {
         if (this.noteDisplayList.length === 0) {
