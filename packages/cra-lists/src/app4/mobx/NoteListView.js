@@ -164,7 +164,7 @@ export function NoteListView({nc}) {
         if (listLength <= 1) {
           return
         }
-        const sidx = this.mode.sidx
+        const sidx = this.sidx
         const newSidx = cycleIdx(listLength, sidx + moveBy)
         swapElementsAt(sidx, newSidx, this.noteDisplayList)
         this.updateSortIdx()
@@ -179,10 +179,10 @@ export function NoteListView({nc}) {
         )
       },
       insertAbove() {
-        this.addNewAt(this.mode.sidx)
+        this.addNewAt(this.sidx)
       },
       insertBelow() {
-        this.addNewAt(this.mode.sidx + 1)
+        this.addNewAt(this.sidx + 1)
       },
       gotoNext() {
         this.mode.overSidx(_.inc)
