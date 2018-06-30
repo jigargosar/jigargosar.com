@@ -36,13 +36,7 @@ const NoteInput = observer(function NoteInput({note}) {
 
 const NoteText = observer(function NoteText({note}) {
   return (
-    <Text
-      className={cn(
-        'pa1 flex-auto',
-        {'o-50': note.deleted},
-        {'blue bg-washed-yellow': note.isSelected},
-      )}
-    >
+    <Text className={cn('pa1 flex-auto', {'o-50': note.deleted})}>
       {note.displayText}
     </Text>
   )
@@ -51,7 +45,12 @@ const NoteText = observer(function NoteText({note}) {
 const Note = observer(function Note({note}) {
   const NoteContent = note.isEditing ? NoteInput : NoteText
   return (
-    <ListItem className={cn('flex items-center lh-copy')}>
+    <ListItem
+      className={cn('flex items-center lh-copy', {
+        'blue bg-washed-yellow': note.isSelected,
+      })}
+      tabIndex={note.isSelected ? 0 : null}
+    >
       <Text>{`sidx: ${note.sortIdx}`}</Text>
       <NoteContent note={note} />
     </ListItem>
