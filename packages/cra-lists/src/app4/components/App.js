@@ -131,20 +131,6 @@ const NoteList = enhance(function NoteList({states}) {
   )
 })
 
-// const NoteList = injectAll(function NoteList({view}) {
-//   return (
-//     <div>
-//       <NoteListShortcuts />
-//       <ListToolbar />
-//       <Paper>
-//         <List>
-//           {renderKeyedById(Note, 'note', view.noteDisplayList)}
-//         </List>
-//       </Paper>
-//     </div>
-//   )
-// })
-//
 const App = enhance(function App({states}) {
   console.log(`states`, states)
   return (
