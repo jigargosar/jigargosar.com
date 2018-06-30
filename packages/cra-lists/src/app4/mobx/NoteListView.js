@@ -184,10 +184,10 @@ export function NoteListView({nc}) {
       insertBelow() {
         this.addNewAt(this.sidx + 1)
       },
-      gotoNext() {
+      gotoNext: function() {
         this.mode.overSidx(_.inc)
       },
-      gotoPrev() {
+      gotoPrev: function() {
         this.mode.overSidx(_.dec)
       },
       moveDown() {
