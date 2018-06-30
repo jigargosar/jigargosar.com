@@ -5,36 +5,36 @@ import {_} from '../../utils'
 import {mAutoRun} from '../../mobx/utils'
 import ReactDOM from 'react-dom'
 
-export const FocusChild = observer(
-  class FocusChild extends React.Component {
-    static propTypes = {
-      children: PropTypes.node.isRequired,
-      shouldFocus: PropTypes.bool.isRequired,
-    }
+class FocusChild extends React.Component {
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    shouldFocus: PropTypes.bool.isRequired,
+  }
 
-    disposer = _.F
+  disposer = _.F
 
-    componentDidMount() {
-      this.disposer = mAutoRun(
-        () => {
-          if (!this.props.shouldFocus) {
-            return
-          }
-          const dom = ReactDOM.findDOMNode(this)
-          requestAnimationFrame(() => {
-            dom.focus()
-          })
-        },
-        {name: 'FocusChild Component'},
-      )
-    }
+  componentDidMount() {
+    this.disposer = mAutoRun(
+      () => {
+        if (!this.props.shouldFocus) {
+          return
+        }
+        const dom = ReactDOM.findDOMNode(this)
+        requestAnimationFrame(() => {
+          dom.focus()
+        })
+      },
+      {name: 'FocusChild Component'},
+    )
+  }
 
-    componentWillUnmount() {
-      this.disposer()
-    }
+  componentWillUnmount() {
+    this.disposer()
+  }
 
-    render() {
-      return this.props.children
-    }
-  },
-)
+  render() {
+    return this.props.children
+  }
+}
+
+export default observer(FocusChild)

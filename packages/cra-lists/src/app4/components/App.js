@@ -21,7 +21,7 @@ import {
   wrapPD,
 } from './utils'
 import {_} from '../utils'
-import {FocusChild} from './mobx/FocusChild'
+import FocusChild from './mobx/FocusChild'
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
