@@ -90,7 +90,7 @@ const noteTransformer = createTransformer(view =>
           return view.mode.isSelect && R.equals(note.id, view.sid)
         },
         get indentLevel() {
-          const parent = view.parentNote(this)
+          const parent = view.parentDisplayNote(this)
           return _.isNil(parent) ? 0 : parent.indentLevel + 1
         },
         onToggleDeleteEvent() {
@@ -152,12 +152,14 @@ export function NoteListView({nc}) {
         }
         return _.path(['noteDisplayList', prevSidx, 'id'], this)
       },
-      get nextSid() {
-        const prevSidx = this.sidx - 1
-        if (isInvalidListIdx(prevSidx, this.noteDisplayList)) {
-          return null
-        }
-        return _.path(['noteDisplayList', prevSidx, 'id'], this)
+      get prevParent() {
+        return _.isNil(this.prevSid)
+          ? null
+          : this.findDisplayNoteById(this.prevSid)
+      },
+      get prevParentId() {
+        const prevParent = this.prevParent
+        return _.isNil(prevParent) ? null : prevParent.id
       },
       get sidx() {
         return this.mode.sidx
@@ -172,13 +174,16 @@ export function NoteListView({nc}) {
           R.filter(this.pred),
         )(nc.active)
       },
-    },
-    actions: {
-      parentNote(note) {
+      parentDisplayNote(note) {
         return this.noteDisplayList.find(
           _.propEq('id', note.parentId),
         )
       },
+      findDisplayNoteById(id) {
+        return this.noteDisplayList.find(_.propEq('id', id))
+      },
+    },
+    actions: {
       updateSortIdx() {
         // debugger
         this.noteDisplayList.forEach((n, idx) =>
