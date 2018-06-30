@@ -54,7 +54,7 @@ export const Note = (function Note() {
 
 export const chance = new Chance()
 
-export const NotesCollection = (function NotesCollection() {
+export const NoteCollection = (function NotesCollection() {
   function create(snapshot = {}) {
     return createObservableObject({
       props: {
@@ -88,7 +88,7 @@ export const NotesCollection = (function NotesCollection() {
           this.put(note)
         },
       },
-      name: 'NotesCollection',
+      name: 'NoteCollection',
     })
   }
 

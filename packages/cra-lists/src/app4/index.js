@@ -34,10 +34,10 @@ render()
 registerServiceWorker()
 
 function createNC() {
-  const NotesCollection = require('./mobx/NotesCollection')
-    .NotesCollection
+  const NoteCollection = require('./mobx/NoteCollection')
+    .NoteCollection
   const ncSnapshot = storage.get('ncSnapshot') || {}
-  return NotesCollection.create(ncSnapshot)
+  return NoteCollection.create(ncSnapshot)
 }
 
 if (module.hot) {
@@ -52,7 +52,7 @@ if (module.hot) {
   module.hot['accept'](
     [
       './components/App',
-      './mobx/NotesCollection',
+      './mobx/NoteCollection',
       // './mobx/NoteListView',
     ],
     _.tryCatch(() => {
