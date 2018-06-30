@@ -33,6 +33,9 @@ export const Note = (function Note() {
         updateSortIdx(sortIdx) {
           this.sortIdx = sortIdx
         },
+        updateParentId(parentId) {
+          this.parentId = parentId
+        },
       },
       name: `Note@${id}`,
     })

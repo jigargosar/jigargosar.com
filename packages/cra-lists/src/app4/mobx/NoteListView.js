@@ -24,7 +24,7 @@ const ViewMode = (() => {
         overMode(cases) {
           return cases[this._type](this._idx)
         },
-        overListWithSidx(list, fn) {
+        overListItemWithSidx(list, fn) {
           const item = mGet(list, this._idx)
           if (item) {
             fn(item, this._idx)
@@ -97,6 +97,7 @@ const noteTransformer = createTransformer(view =>
           note.updateText(target.value)
         },
         _updateSortIndex: note.updateSortIdx,
+        _updateParentId: note.updateParentId,
         get text() {
           return note.text
         },
@@ -122,6 +123,10 @@ function swapElementsAt(x, y, a) {
   a[y] = ax
 }
 
+function isInvalidListIdx(idx, list) {
+  return idx < 0 || idx >= list.length
+}
+
 export function NoteListView({nc}) {
   const view = createObservableObject({
     props: {
@@ -132,6 +137,20 @@ export function NoteListView({nc}) {
           ['noteDisplayList', this.sidx, 'id'],
           this,
         )
+      },
+      get prevSid() {
+        const prevSidx = this.sidx - 1
+        if (isInvalidListIdx(prevSidx, this.noteDisplayList)) {
+          return null
+        }
+        return _.path(['noteDisplayList', prevSidx, 'id'], this)
+      },
+      get nextSid() {
+        const prevSidx = this.sidx - 1
+        if (isInvalidListIdx(prevSidx, this.noteDisplayList)) {
+          return null
+        }
+        return _.path(['noteDisplayList', prevSidx, 'id'], this)
       },
       get sidx() {
         return this.mode.sidx
@@ -174,7 +193,7 @@ export function NoteListView({nc}) {
         this.addNewAt(0)
       },
       onToggleDeleteSelectedEvent() {
-        this.mode.overListWithSidx(this.noteDisplayList, dn =>
+        this.mode.overListItemWithSidx(this.noteDisplayList, dn =>
           dn.onToggleDeleteEvent(),
         )
       },
@@ -195,6 +214,16 @@ export function NoteListView({nc}) {
       },
       moveUp() {
         this.cyclicMoveBy(-1)
+      },
+      indentSelected() {
+        this.mode.overListItemWithSidx(this.noteDisplayList, dn =>
+          dn._updateParentId(this.prevSid),
+        )
+      },
+      unIndentSelected() {
+        this.mode.overListItemWithSidx(this.noteDisplayList, dn =>
+          dn._updateParentId(this.nextSid),
+        )
       },
       onEnterKey() {
         if (this.noteDisplayList.length === 0) {
