@@ -78,6 +78,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "@firebase/app-types": "^0.3.2",
     "react-app-rewire-hot-loader": "^1.0.1",
     "react-app-rewired": "^1.5.2",
     "react-hot-loader": "^4.3.3"
