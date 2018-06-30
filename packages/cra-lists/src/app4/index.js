@@ -3,21 +3,31 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {mReaction, mRunInAction, oObject} from './mobx/utils'
-import {NoteListView} from './mobx/NoteListView'
 import {storage} from './services/storage'
 import {createObservableHistory} from './mobx/utils/StateHistory'
 import {_} from './utils'
 import {Provider} from 'mobx-react'
 
-const nc = createNC()
-const states = oObject(
-  {
+function createNotesCollection() {
+  const ncSnapshot = storage.get('ncSnapshot') || {}
+  return require('./mobx/NoteCollection').NoteCollection.create(
+    ncSnapshot,
+  )
+}
+
+function createNoteListView(nc) {
+  return require('./mobx/NoteListView').NoteListView({nc})
+}
+
+function createStates() {
+  const nc = createNotesCollection()
+  return {
     nc,
-    view: NoteListView({nc}),
-  },
-  {},
-  {name: 'states'},
-)
+    view: createNoteListView(nc),
+  }
+}
+
+const states = oObject({...createStates()}, {}, {name: 'states'})
 
 function render() {
   const App = require('./components/App').default
@@ -32,13 +42,6 @@ function render() {
 render()
 
 registerServiceWorker()
-
-function createNC() {
-  const NoteCollection = require('./mobx/NoteCollection')
-    .NoteCollection
-  const ncSnapshot = storage.get('ncSnapshot') || {}
-  return NoteCollection.create(ncSnapshot)
-}
 
 if (module.hot) {
   window.s = states
@@ -57,12 +60,8 @@ if (module.hot) {
     ],
     _.tryCatch(() => {
       // console.clear()
-      const NoteListView = require('./mobx/NoteListView').NoteListView
       mRunInAction('Hot Update States', () =>
-        Object.assign(states, {
-          nc: createNC(),
-          view: NoteListView({nc: states.nc}),
-        }),
+        Object.assign(states, ...createStates()),
       )
       render()
     }, console.error),
