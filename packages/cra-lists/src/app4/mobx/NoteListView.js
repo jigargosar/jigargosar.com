@@ -176,7 +176,10 @@ export function NoteListView({nc}) {
         const a = this.noteDisplayList
         const newSidx = cycleIdx(listLength, sidx + 1)
         const [x, y] = _.sortBy(_.identity, [sidx, newSidx])
-        a.splice(y, 1, a.splice(x, 1, a[y])[0])
+        const [ax, ay] = [a[x], a[y]]
+        a[x] = ay
+        a[y] = ax
+        // a.splice(y, 1, a.splice(x, 1, a[y])[0])
         this.updateSortIdx()
         this.mode.overSidx(_.always(newSidx))
       },
@@ -189,7 +192,10 @@ export function NoteListView({nc}) {
         const a = this.noteDisplayList
         const newSidx = cycleIdx(listLength, sidx - 1)
         const [x, y] = _.sortBy(_.identity, [sidx, newSidx])
-        a.splice(y, 1, a.splice(x, 1, a[y])[0])
+        const [ax, ay] = [a[x], a[y]]
+        a[x] = ay
+        a[y] = ax
+        // a.splice(y, 1, a.splice(x, 1, a[y])[0])
         this.updateSortIdx()
         this.mode.overSidx(_.always(newSidx))
       },
