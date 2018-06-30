@@ -4,6 +4,7 @@ import {
   CenterLayout,
   List,
   ListItem,
+  Paper,
   RootContainer,
   Section,
   Text,
@@ -113,9 +114,11 @@ const NoteList = injectAll(function NoteList({view}) {
     <div>
       <NoteListShortcuts />
       <ListToolbar />
-      <List>
-        {renderKeyedById(Note, 'note', view.noteDisplayList)}
-      </List>
+      <Paper>
+        <List>
+          {renderKeyedById(Note, 'note', view.noteDisplayList)}
+        </List>
+      </Paper>
     </div>
   )
 })

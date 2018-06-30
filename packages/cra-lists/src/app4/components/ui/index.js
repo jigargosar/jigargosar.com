@@ -29,12 +29,16 @@ export const Text = styled.span.attrs({
   className: 'mr2',
 })``
 
+export const Paper = styled.div.attrs({
+  className: 'bg-white shadow-1',
+})``
+
 export const List = styled.div.attrs({
-  className: 'mv3 bg-white shadow-1',
+  className: 'pv1',
 })``
 
 export const ListItem = styled.div.attrs({
-  className: 'ma3',
+  className: 'ph3 pv2',
 })``
 
 export const Button = styled.button.attrs({
