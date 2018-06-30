@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types'
 import React from 'react'
+import ReactDOM from 'react-dom'
 import {
   Button,
   CenterLayout,
@@ -21,6 +23,7 @@ import {
   wrapPD,
 } from './utils'
 import {_} from '../utils'
+import {mAutoRun} from '../mobx/utils'
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
@@ -42,21 +45,59 @@ const NoteText = observer(function NoteText({note}) {
   )
 })
 
-const Note = observer(function Note({note}) {
+const Focus = observer(
+  class Focus extends React.Component {
+    static propTypes = {
+      children: PropTypes.node.isRequired,
+      shouldFocus: PropTypes.bool.isRequired,
+    }
+
+    disposer = _.F
+
+    componentDidMount() {
+      this.disposer = mAutoRun(
+        () => {
+          if (!this.props.shouldFocus) {
+            return
+          }
+          const dom = ReactDOM.findDOMNode(this)
+          requestAnimationFrame(() => {
+            dom.focus()
+          })
+        },
+        {name: 'Focus Component'},
+      )
+    }
+
+    componentWillUnmount() {
+      this.disposer()
+    }
+
+    render() {
+      return this.props.children
+    }
+  },
+)
+
+const Note = observer(function Note({note, focusComponentRef}) {
   const NoteContent = note.isEditing ? NoteInput : NoteText
   return (
-    <ListItem
-      className={cn('flex items-center lh-copy', {
-        'blue bg-washed-yellow': note.isSelected,
-      })}
-      tabIndex={note.isSelected ? 0 : null}
-    >
-      <Text>{`sidx: ${note.sortIdx}`}</Text>
-      <NoteContent note={note} />
-    </ListItem>
+    <Focus shouldFocus={note.isSelected}>
+      <ListItem
+        ref={focusComponentRef}
+        className={cn('flex items-center lh-copy', {
+          'blue bg-washed-yellow': note.isSelected,
+        })}
+        tabIndex={note.isSelected ? 0 : null}
+        // tabIndex={0}
+      >
+        {/*<Focus />*/}
+        <Text>{`sidx: ${note.sortIdx}`}</Text>
+        <NoteContent note={note} />
+      </ListItem>
+    </Focus>
   )
 })
-
 const ListToolbar = injectAll(function ListToolbar({view}) {
   return (
     <Section className={cn('pl3')}>
