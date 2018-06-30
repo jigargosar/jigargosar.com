@@ -175,7 +175,7 @@ export function NoteListView({nc}) {
         }
         const a = this.noteDisplayList
         const newSidx = cycleIdx(listLength, sidx + 1)
-        const [x, y] = _.sortBy(_.identity, [sidx, newSidx])
+        const [x, y] = [sidx, newSidx]
         const [ax, ay] = [a[x], a[y]]
         a[x] = ay
         a[y] = ax
@@ -191,7 +191,7 @@ export function NoteListView({nc}) {
         }
         const a = this.noteDisplayList
         const newSidx = cycleIdx(listLength, sidx - 1)
-        const [x, y] = _.sortBy(_.identity, [sidx, newSidx])
+        const [x, y] = [sidx, newSidx]
         const [ax, ay] = [a[x], a[y]]
         a[x] = ay
         a[y] = ax
