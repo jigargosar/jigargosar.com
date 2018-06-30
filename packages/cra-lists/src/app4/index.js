@@ -53,7 +53,7 @@ if (module.hot) {
     [
       './components/App',
       './mobx/NotesCollection',
-      './mobx/NoteListView',
+      // './mobx/NoteListView',
     ],
     _.tryCatch(() => {
       console.clear()
