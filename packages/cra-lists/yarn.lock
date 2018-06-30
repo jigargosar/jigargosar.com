@@ -120,9 +120,9 @@
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/@firebase/database-types/-/database-types-0.3.2.tgz#70611a64dd460e0e253c7427f860d56a1afd86fe"
 
-"@firebase/database@0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@firebase/database/-/database-0.3.3.tgz#01123d4e0f8cb020e685ead27d795ef8794b2991"
+"@firebase/database@0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@firebase/database/-/database-0.3.4.tgz#67fd48ed6d8fffc81c6c6f8e68bde70b99ba8ca9"
   dependencies:
     "@firebase/database-types" "0.3.2"
     "@firebase/logger" "0.1.1"
@@ -134,9 +134,9 @@
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@firebase/firestore-types/-/firestore-types-0.4.3.tgz#0baa4f68aa8889474f582320af577f1e9a78fab6"
 
-"@firebase/firestore@0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-0.5.5.tgz#cb41fd528520e45374cf0da4a7e87382b515840c"
+"@firebase/firestore@0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-0.5.6.tgz#2d859b319680ad61c6b72a2d821588949ac8b491"
   dependencies:
     "@firebase/firestore-types" "0.4.3"
     "@firebase/logger" "0.1.1"
@@ -144,15 +144,15 @@
     grpc "1.11.3"
     tslib "1.9.0"
 
-"@firebase/functions-types@0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@firebase/functions-types/-/functions-types-0.1.3.tgz#17bc08a51f92b4eb5d1498f18b363f6c0e3a2df8"
+"@firebase/functions-types@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@firebase/functions-types/-/functions-types-0.2.0.tgz#936d3f77957431a8ef1817975fee26464575802b"
 
-"@firebase/functions@0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@firebase/functions/-/functions-0.2.4.tgz#4d7acbc1feb8a1503f12072e40ea797d42bdb6b7"
+"@firebase/functions@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@firebase/functions/-/functions-0.3.0.tgz#61fbf0ec7fb997c1cd5c726cc16171fa32a9fd3b"
   dependencies:
-    "@firebase/functions-types" "0.1.3"
+    "@firebase/functions-types" "0.2.0"
     "@firebase/messaging-types" "0.2.3"
     isomorphic-fetch "2.2.1"
     tslib "1.9.0"
@@ -276,7 +276,7 @@ ajv-keywords@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-2.1.1.tgz#617997fc5f60576894c435f940d819e135b80762"
 
-ajv-keywords@^3.0.0:
+ajv-keywords@^3.0.0, ajv-keywords@^3.1.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.2.0.tgz#e86b819c602cf8821ad637413698f1dec021847a"
 
@@ -289,7 +289,7 @@ ajv@^5.0.0, ajv@^5.1.0, ajv@^5.1.5, ajv@^5.2.0:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
 
-ajv@^6.0.1:
+ajv@^6.0.1, ajv@^6.1.0:
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.5.1.tgz#88ebc1263c7133937d108b80c5572e64e1d9322d"
   dependencies:
@@ -2767,6 +2767,10 @@ dom-urls@^1.1.0:
   dependencies:
     urijs "^1.16.1"
 
+dom-walk@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
+
 domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
@@ -2808,7 +2812,7 @@ dotenv-expand@4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-4.2.0.tgz#def1f1ca5d6059d24a766e587942c21106ce1275"
 
-dotenv@4.0.0:
+dotenv@4.0.0, dotenv@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
@@ -3494,7 +3498,7 @@ fast-json-stable-stringify@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.0.0.tgz#d5142c0caee6b1189f87d3a76111064f86c8bbf2"
 
-fast-levenshtein@~2.0.4:
+fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.4:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
 
@@ -3655,15 +3659,15 @@ find-up@^2.0.0, find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-firebase@5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/firebase/-/firebase-5.1.0.tgz#9f56f910ef4e5e605c0f3de910b2070d2a1c3b55"
+firebase@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-5.2.0.tgz#aae53339ab510f523217fedd92246fe9f05cfd66"
   dependencies:
     "@firebase/app" "0.3.3"
     "@firebase/auth" "0.7.0"
-    "@firebase/database" "0.3.3"
-    "@firebase/firestore" "0.5.5"
-    "@firebase/functions" "0.2.4"
+    "@firebase/database" "0.3.4"
+    "@firebase/firestore" "0.5.6"
+    "@firebase/functions" "0.3.0"
     "@firebase/messaging" "0.3.5"
     "@firebase/polyfill" "0.3.3"
     "@firebase/storage" "0.2.3"
@@ -3918,6 +3922,13 @@ global-prefix@^1.0.1:
     ini "^1.3.4"
     is-windows "^1.0.1"
     which "^1.2.14"
+
+global@^4.3.0:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/global/-/global-4.3.2.tgz#e76989268a6c74c38908b1305b10fc0e394e9d0f"
+  dependencies:
+    min-document "^2.19.0"
+    process "~0.5.1"
 
 globals@^9.17.0, globals@^9.18.0:
   version "9.18.0"
@@ -5693,6 +5704,12 @@ mimic-fn@^1.0.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-1.2.0.tgz#820c86a39334640e99516928bd03fca88057d022"
 
+min-document@^2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/min-document/-/min-document-2.19.0.tgz#7bd282e3f5842ed295bb748cdd9f1ffa2c824685"
+  dependencies:
+    dom-walk "^0.1.0"
+
 minimalistic-assert@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
@@ -5756,10 +5773,6 @@ mobx-app@^1.0.3:
   resolved "https://registry.yarnpkg.com/mobx-app/-/mobx-app-1.0.3.tgz#a54cd3994e63f962fe9f8f1f1c2f32b4d4dae7cb"
   dependencies:
     invariant "^2.2.1"
-
-mobx-react-devtools@5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/mobx-react-devtools/-/mobx-react-devtools-5.0.1.tgz#9473c85929b2fc0c95086430419028cebd96fb3b"
 
 mobx-react@5.2.3:
   version "5.2.3"
@@ -5831,9 +5844,9 @@ nanobus@^4.3.1:
     nanotiming "^7.2.0"
     remove-array-items "^1.0.0"
 
-nanoid@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-1.0.3.tgz#3ff31779301f481baa52a6a31a67c8f6e91949d2"
+nanoid@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-1.0.4.tgz#29ffb9a4fcbb671fca98da5e14e5c5e21ba76cd4"
 
 nanologger@1.3.1:
   version "1.3.1"
@@ -6898,6 +6911,10 @@ process@^0.11.10:
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
 
+process@~0.5.1:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/process/-/process-0.5.2.tgz#1638d8a8e34c2f440a91db95ab9aeb677fc185cf"
+
 progress@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.0.tgz#8a1be366bf8fc23db2bd23f10c6fe920b4389d1f"
@@ -7054,9 +7071,13 @@ raf@3.4.0:
   dependencies:
     performance-now "^2.1.0"
 
-rambda@^1.1.0, rambda@^1.1.4:
+rambda@^1.1.0:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/rambda/-/rambda-1.1.4.tgz#4899ad119c73daa9b44d7868587d2451775ed7f2"
+
+rambda@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/rambda/-/rambda-1.1.5.tgz#8ac65f7396f20cc122ba01fb6a4fb3ceb3befd20"
 
 rambdax@^0.9.1:
   version "0.9.1"
@@ -7068,9 +7089,9 @@ ramda-adjunct@2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.9.0.tgz#1d9b149f987c0bec77fa34caa19cc7b9b9b55021"
 
-ramda-extension@0.3.7:
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/ramda-extension/-/ramda-extension-0.3.7.tgz#9bbe66ad0507fb874b9135e7f9099c2b002d2929"
+ramda-extension@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/ramda-extension/-/ramda-extension-0.4.0.tgz#26e4594d203bc52be04116bde6d73e613279ebde"
 
 ramda@0.25.0:
   version "0.25.0"
@@ -7119,9 +7140,22 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-base16-styling@^0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/react-base16-styling/-/react-base16-styling-0.5.3.tgz#3858f24e9c4dd8cbd3f702f3f74d581ca2917269"
+react-app-rewire-hot-loader@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-app-rewire-hot-loader/-/react-app-rewire-hot-loader-1.0.1.tgz#511f06d85e1c05d3ea1c3cdaede352e1871183ba"
+  dependencies:
+    webpack "^3.6.0"
+
+react-app-rewired@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/react-app-rewired/-/react-app-rewired-1.5.2.tgz#0f5cdbc92f47f166bb0bcadf8a5d00999b90f68f"
+  dependencies:
+    cross-spawn "^5.1.0"
+    dotenv "^4.0.0"
+
+react-base16-styling@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/react-base16-styling/-/react-base16-styling-0.6.0.tgz#ef2156d66cf4139695c8a167886cb69ea660792c"
   dependencies:
     base16 "^1.0.0"
     lodash.curry "^4.0.1"
@@ -7171,6 +7205,17 @@ react-error-overlay@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
 
+react-hot-loader@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.3.3.tgz#37409a3341c7787563d0972007ba02521f82f5d5"
+  dependencies:
+    fast-levenshtein "^2.0.6"
+    global "^4.3.0"
+    hoist-non-react-statics "^2.5.0"
+    prop-types "^15.6.1"
+    react-lifecycles-compat "^3.0.4"
+    shallowequal "^1.0.2"
+
 react-inspector@2.3.0, react-inspector@^2.2.2:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/react-inspector/-/react-inspector-2.3.0.tgz#fc9c1d38ab687fc0d190dcaf133ae40158968fc8"
@@ -7182,15 +7227,16 @@ react-is@^16.3.1, react-is@^16.3.2:
   version "16.4.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.1.tgz#d624c4650d2c65dbd52c72622bbf389435d9776e"
 
-react-json-view@1.17.1:
-  version "1.17.1"
-  resolved "https://registry.yarnpkg.com/react-json-view/-/react-json-view-1.17.1.tgz#16a9eb82ee3b1975aa3cbe551cbb0edab1da99d5"
+react-json-view@1.18.1:
+  version "1.18.1"
+  resolved "https://registry.yarnpkg.com/react-json-view/-/react-json-view-1.18.1.tgz#bf7b49e90e50d98af4880e1a3704b35fc1f87493"
   dependencies:
     flux "^3.1.3"
-    react-base16-styling "^0.5.3"
-    react-textarea-autosize "^5.1.0"
+    react-base16-styling "^0.6.0"
+    react-lifecycles-compat "^3.0.4"
+    react-textarea-autosize "^6.1.0"
 
-react-lifecycles-compat@^3.0.2:
+react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
@@ -7297,9 +7343,9 @@ react-static-container@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-static-container/-/react-static-container-1.0.2.tgz#30a4f7548860be1d55d5eb4c20645b835c2bdf34"
 
-react-textarea-autosize@^5.1.0:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-5.2.1.tgz#2b78f9067180f41b08ac59f78f1581abadd61e54"
+react-textarea-autosize@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-6.1.0.tgz#df91387f8a8f22020b77e3833c09829d706a09a5"
   dependencies:
     prop-types "^15.6.0"
 
@@ -7880,6 +7926,10 @@ sha.js@^2.4.0, sha.js@^2.4.8:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+shallowequal@^1.0.2:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.1.0.tgz#188d521de95b9087404fd4dcb68b13df0ae4e7f8"
 
 shebang-command@^1.2.0:
   version "1.2.0"
@@ -8973,6 +9023,33 @@ webpack@3.8.1:
     acorn-dynamic-import "^2.0.0"
     ajv "^5.1.5"
     ajv-keywords "^2.0.0"
+    async "^2.1.2"
+    enhanced-resolve "^3.4.0"
+    escope "^3.6.0"
+    interpret "^1.0.0"
+    json-loader "^0.5.4"
+    json5 "^0.5.1"
+    loader-runner "^2.3.0"
+    loader-utils "^1.1.0"
+    memory-fs "~0.4.1"
+    mkdirp "~0.5.0"
+    node-libs-browser "^2.0.0"
+    source-map "^0.5.3"
+    supports-color "^4.2.1"
+    tapable "^0.2.7"
+    uglifyjs-webpack-plugin "^0.4.6"
+    watchpack "^1.4.0"
+    webpack-sources "^1.0.1"
+    yargs "^8.0.2"
+
+webpack@^3.6.0:
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.12.0.tgz#3f9e34360370602fcf639e97939db486f4ec0d74"
+  dependencies:
+    acorn "^5.0.0"
+    acorn-dynamic-import "^2.0.0"
+    ajv "^6.1.0"
+    ajv-keywords "^3.1.0"
     async "^2.1.2"
     enhanced-resolve "^3.4.0"
     escope "^3.6.0"

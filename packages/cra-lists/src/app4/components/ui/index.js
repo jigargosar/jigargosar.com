@@ -30,7 +30,7 @@ export const Text = styled.span.attrs({
 })``
 
 export const List = styled.div.attrs({
-  className: 'mv3',
+  className: 'mv3 bg-white shadow-1',
 })``
 
 export const ListItem = styled.div.attrs({
