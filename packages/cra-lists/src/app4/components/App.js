@@ -56,9 +56,7 @@ const Note = observer(function Note({note, focusComponentRef}) {
           'blue bg-washed-yellow': note.isSelected,
         })}
         tabIndex={note.isSelected ? 0 : null}
-        // tabIndex={0}
       >
-        {/*<Focus />*/}
         <Text>{`sidx: ${note.sortIdx}`}</Text>
         <NoteContent note={note} />
       </ListItem>
