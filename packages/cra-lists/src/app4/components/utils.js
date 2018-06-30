@@ -6,20 +6,31 @@ import {setDisplayName, wrapDisplayName} from 'recompose'
 
 export {F, RC, observer, Observer, isHotKey}
 export const cn = RX.cx
+
 export const isAnyHotKey = R.compose(
   R.anyPass,
   R.map(R.curryN(2, isHotKey)),
 )
+export const wrapPD = fn => e => {
+  e.preventDefault()
+  fn(e)
+}
+
+/**
+ * @return {null}
+ */
+export function Debugger() {
+  if (process.env.NODE_ENV !== 'production') {
+    debugger
+  }
+  return null
+}
 
 export function renderKeyedById(Component, propName, idList) {
   return R.map(value => (
     <Component key={value.id} {...{[propName]: value}} />
   ))(idList)
 }
-
-const StateContext = React.createContext(null)
-
-export const StateProvider = StateContext.Provider
 
 export class C extends RC {
   render() {
@@ -32,6 +43,10 @@ export class C extends RC {
 }
 
 export const OC = observer(C)
+
+const StateContext = React.createContext(null)
+
+export const StateProvider = StateContext.Provider
 
 const StateContextConsumer = StateContext.Consumer
 
@@ -61,18 +76,3 @@ const injectState = _.curry((stateToProps, BC) => {
 })
 
 export const injectAll = injectState(R.merge)
-
-/**
- * @return {null}
- */
-export function Debugger() {
-  if (process.env.NODE_ENV !== 'production') {
-    debugger
-  }
-  return null
-}
-
-export const wrapPD = fn => e => {
-  e.preventDefault()
-  fn(e)
-}
