@@ -11,6 +11,5 @@
       <excludeFolder url="file://$MODULE_DIR$/src/mobx-stores" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="node_modules_cra" level="project" />
   </component>
 </module>
