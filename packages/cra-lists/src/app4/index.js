@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
-import {StateProvider} from './components/utils'
 import {mReaction, mRunInAction, oObject} from './mobx/utils'
 import {NoteListView} from './mobx/NoteListView'
 import {storage} from './services/storage'
@@ -20,14 +19,11 @@ const states = oObject(
   {name: 'states'},
 )
 
-const App = require('./components/App').default
-
 function render() {
+  const App = require('./components/App').default
   ReactDOM.render(
     <Provider states={states}>
-      <StateProvider value={states}>
-        <App />
-      </StateProvider>
+      <App />
     </Provider>,
     document.getElementById('root'),
   )

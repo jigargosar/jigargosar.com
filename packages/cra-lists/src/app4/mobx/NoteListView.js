@@ -203,9 +203,6 @@ export function NoteListView({nc}) {
       onEscapeKey() {
         this.mode.switchToSelect()
       },
-      // onEscapeKey2() {
-      //   this.mode.switchToSelect()
-      // },
     },
     name: 'NoteListView',
   })
