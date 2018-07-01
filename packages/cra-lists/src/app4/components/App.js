@@ -50,7 +50,7 @@ const Note = observer(function Note({note, focusComponentRef}) {
       <ListItem
         ref={focusComponentRef}
         className={cn('flex items-center lh-copy', {
-          'blue bg-washed-yellow': note.isSelected,
+          'bg-lightest-blue': note.isSelected,
         })}
         tabIndex={note.isSelected ? 0 : null}
       >
