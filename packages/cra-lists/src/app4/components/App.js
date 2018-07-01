@@ -16,6 +16,7 @@ import {
   isAnyHotKey,
   isHotKey,
   observer,
+  RC,
   renderKeyedById,
   wrapPD,
 } from './utils'
@@ -24,7 +25,10 @@ import FocusChild from './mobx/FocusChild'
 import {inject} from 'mobx-react'
 import {mTrace} from '../mobx/utils'
 
-const enhance = _.compose(inject('states'), observer)
+const injectStatesAndMakeObserver = _.compose(
+  inject('states'),
+  observer,
+)
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
@@ -63,7 +67,9 @@ const Note = observer(function Note({note, focusComponentRef}) {
     </FocusChild>
   )
 })
-const ListToolbar = enhance(function ListToolbar({states: {view}}) {
+const ListToolbar = injectStatesAndMakeObserver(function ListToolbar({
+  states: {view},
+}) {
   return (
     <Section className={cn('pl3')}>
       <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
@@ -71,7 +77,7 @@ const ListToolbar = enhance(function ListToolbar({states: {view}}) {
   )
 })
 
-const NoteListShortcuts = enhance(
+const NoteListShortcuts = injectStatesAndMakeObserver(
   class NoteListShortcuts extends C {
     componentDidMount() {
       console.debug('NoteListShortcuts: componentDidMount')
@@ -114,7 +120,9 @@ const NoteListShortcuts = enhance(
   },
 )
 
-const NoteList = enhance(function NoteList({states}) {
+const NoteList = injectStatesAndMakeObserver(function NoteList({
+  states,
+}) {
   mTrace()
   return (
     <div>
@@ -129,7 +137,7 @@ const NoteList = enhance(function NoteList({states}) {
   )
 })
 
-const App = enhance(function App({states}) {
+const App = injectStatesAndMakeObserver(function App({states}) {
   console.log(`states`, states)
   return (
     <RootContainer>
