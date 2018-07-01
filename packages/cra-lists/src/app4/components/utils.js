@@ -58,7 +58,7 @@ export const WithState = function WithState({children}) {
   )
 }
 
-const injectState = _.curry((stateToProps, BC) => {
+const withState = _.curry((stateToProps, BC) => {
   const hoc = ({children, ...rest}) => {
     const OBC = observer(BC)
     return (
@@ -75,10 +75,9 @@ const injectState = _.curry((stateToProps, BC) => {
   return hoc
 })
 
-export const injectAll = injectState(R.merge)
+export const withAllStates = withState(R.merge)
 
 export const mrInjectAllAndMakeObserver = _.compose(
-  // inject('states'),
   inject(({states}, props) => ({
     ...states,
     ...props,
