@@ -153,6 +153,7 @@ const AppHeader = mrInjectAll(function AppHeader({fire}) {
     </div>
   )
 })
+
 const App = observer(function App() {
   return (
     <RootContainer>
