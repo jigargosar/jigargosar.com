@@ -61,6 +61,7 @@ const Note = observer(function Note({note, focusComponentRef}) {
     </FocusChild>
   )
 })
+
 const ListToolbar = injectStatesAndMakeObserver(function ListToolbar({
   states: {view},
 }) {
