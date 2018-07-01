@@ -126,10 +126,16 @@ const NoteList = mrInjectAll(function NoteList({view}) {
   )
 })
 
-const AppHeader = mrInjectAll(function AppHeader() {
+const AppHeader = mrInjectAll(function AppHeader({fire}) {
   return (
     <div className={'flex'}>
       <Title>Notes</Title>
+      <Title>{fire.auth.state}</Title>
+      <Button onClick={fire.auth.signIn}>SignIn</Button>
+      <Button onClick={fire.auth.signInWithPopup}>
+        SignInWithPopup
+      </Button>
+      <Button onClick={fire.auth.signOut}>SignOut</Button>
     </div>
   )
 })

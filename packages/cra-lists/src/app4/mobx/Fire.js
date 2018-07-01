@@ -107,6 +107,11 @@ function createFireAuth(firebase) {
     provider.setCustomParameters({prompt: 'select_account'})
     return firebase.auth().signInWithRedirect(provider)
   }
+  function signInWithPopup() {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    provider.setCustomParameters({prompt: 'select_account'})
+    return firebase.auth().signInWithPopup(provider)
+  }
   function signOut() {
     return firebase.auth().signOut()
   }
@@ -157,6 +162,7 @@ function createFireAuth(firebase) {
       },
       signIn,
       signOut,
+      signInWithPopup,
     },
     actions: {
       _onFirebaseAuthStateChanged(user) {
