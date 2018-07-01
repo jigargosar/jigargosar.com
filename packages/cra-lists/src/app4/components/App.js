@@ -13,7 +13,7 @@ import {
 import {
   C,
   cn,
-  mrInjectAllAndMakeObserver,
+  mrInjectAll,
   isAnyHotKey,
   isHotKey,
   observer,
@@ -61,9 +61,7 @@ const Note = observer(function Note({note, focusComponentRef}) {
   )
 })
 
-const ListToolbar = mrInjectAllAndMakeObserver(function ListToolbar({
-  view,
-}) {
+const ListToolbar = mrInjectAll(function ListToolbar({view}) {
   return (
     <Section className={cn('pl3')}>
       <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
@@ -71,7 +69,7 @@ const ListToolbar = mrInjectAllAndMakeObserver(function ListToolbar({
   )
 })
 
-const NoteListShortcuts = mrInjectAllAndMakeObserver(
+const NoteListShortcuts = mrInjectAll(
   class NoteListShortcuts extends C {
     componentDidMount() {
       console.debug('NoteListShortcuts: componentDidMount')
@@ -114,9 +112,7 @@ const NoteListShortcuts = mrInjectAllAndMakeObserver(
   },
 )
 
-const NoteList = mrInjectAllAndMakeObserver(function NoteList({
-  view,
-}) {
+const NoteList = mrInjectAll(function NoteList({view}) {
   return (
     <div>
       <NoteListShortcuts />
@@ -130,13 +126,18 @@ const NoteList = mrInjectAllAndMakeObserver(function NoteList({
   )
 })
 
+const AppHeader = mrInjectAll(function AppHeader() {
+  return (
+    <div className={'flex'}>
+      <Title>Notes</Title>
+    </div>
+  )
+})
 const App = observer(function App() {
   return (
     <RootContainer>
       <CenterLayout>
-        <div className={'flex'}>
-          <Title>Notes</Title>
-        </div>
+        <AppHeader />
         <NoteList />
       </CenterLayout>
     </RootContainer>
