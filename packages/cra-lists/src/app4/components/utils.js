@@ -1,5 +1,5 @@
 import React, {Component as RC, Fragment as F} from 'react'
-import {observer, Observer} from 'mobx-react'
+import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import {_, R, RX} from '../utils'
 import {setDisplayName, wrapDisplayName} from 'recompose'
@@ -76,3 +76,8 @@ const injectState = _.curry((stateToProps, BC) => {
 })
 
 export const injectAll = injectState(R.merge)
+
+export const injectStatesAndMakeObserver = _.compose(
+  inject('states'),
+  observer,
+)

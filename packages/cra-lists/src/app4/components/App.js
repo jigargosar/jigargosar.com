@@ -13,6 +13,7 @@ import {
 import {
   C,
   cn,
+  injectStatesAndMakeObserver,
   isAnyHotKey,
   isHotKey,
   observer,
@@ -21,13 +22,7 @@ import {
 } from './utils'
 import {_} from '../utils'
 import FocusChild from './mobx/FocusChild'
-import {inject} from 'mobx-react'
 import {mTrace} from '../mobx/utils'
-
-const injectStatesAndMakeObserver = _.compose(
-  inject('states'),
-  observer,
-)
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
