@@ -2,51 +2,15 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
-import {mReaction, mRunInAction, mWhen, oObject} from './mobx/utils'
+import {mReaction, mRunInAction, oObject} from './mobx/utils'
 import {storage} from './services/storage'
 import {createObservableHistory} from './mobx/utils/StateHistory'
 import {_} from './utils'
 import {Provider} from 'mobx-react'
-import {Fire} from './mobx/Fire'
+import {initExtension} from './extension'
+import {createState} from './mobx'
 
-function createNotesCollection() {
-  const ncSnapshot = storage.get('ncSnapshot') || {}
-  return require('./mobx/NoteCollection').NoteCollection.create(
-    ncSnapshot,
-  )
-}
-
-function createNoteListView(nc) {
-  return require('./mobx/NoteListView').NoteListView({nc})
-}
-
-function createStateProps() {
-  const nc = createNotesCollection()
-  return {
-    nc,
-    view: createNoteListView(nc),
-    fire: Fire(),
-  }
-}
-
-const appState = oObject(
-  {
-    ...createStateProps(),
-    isAuthKnown() {
-      return this.fire.auth.isAuthKnown
-    },
-
-    isSignedIn() {
-      return this.fire.auth.isSignedIn
-    },
-
-    isSignedOut() {
-      return this.fire.auth.isSignedOut
-    },
-  },
-  {},
-  {name: 'appState'},
-)
+const appState = oObject(createState(), {}, {name: 'appState'})
 
 function render() {
   const App = require('./components/App').default
@@ -67,75 +31,7 @@ mReaction(
   () => storage.set('ncSnapshot', appState.nc.snapshot),
 )
 
-function getLocationHash() {
-  return global.window.location.hash
-}
-
-function getLocation() {
-  return global.window.location
-}
-
-function isLocationHashSignIn() {
-  return _.equals(getLocationHash(), '#signIn')
-}
-
-function removeLocationHash() {
-  global.window.history.replaceState(
-    {},
-    null,
-    `${getLocation().pathname}${getLocation().search}`,
-  )
-}
-
-function isAuthKnown() {
-  return appState.fire.auth.isAuthKnown
-}
-
-function isSignedIn() {
-  return appState.fire.auth.isSignedIn
-}
-
-function isSignedOut() {
-  return appState.fire.auth.isSignedOut
-}
-
-const ext = (async () => {
-  const query = _.pathOr(null, 'chrome.tabs.query'.split('.'))(global)
-  if (query) {
-    const result = await new Promise(resolve =>
-      query({active: true, currentWindow: true}, resolve),
-    )
-    const tabInfo = _.head(result)
-    console.log(`tabInfo.url`, tabInfo.url)
-    if (!_.isNil(tabInfo.url)) {
-      const note = appState.nc.newNote({sortIdx: -1})
-      appState.nc.add(note)
-      note.updateText(`${tabInfo.title} -- ${tabInfo.url}`)
-    }
-
-    mWhen(
-      isSignedIn,
-      () => {
-        if (isLocationHashSignIn()) {
-          removeLocationHash()
-        }
-      },
-      {name: 'removeLocationHash #signIn'},
-    )
-
-    mWhen(
-      isAuthKnown,
-      () => {
-        if (isSignedOut()) {
-          appState.fire.auth.signInWithPopup()
-        }
-      },
-      {name: '#signIn'},
-    )
-  }
-})()
-
-ext.catch(console.error)
+initExtension(appState).catch(console.error)
 
 if (module.hot) {
   window.s = appState
@@ -151,7 +47,7 @@ if (module.hot) {
     _.tryCatch(() => {
       console.clear()
       mRunInAction('Hot Update States', () =>
-        Object.assign(appState, ...createStateProps()),
+        Object.assign(appState, ...createState()),
       )
       render()
     }, console.error),
