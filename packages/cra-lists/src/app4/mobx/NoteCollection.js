@@ -8,6 +8,7 @@ import {
 import {nanoid} from '../model/util'
 import Chance from 'chance'
 import {R} from '../utils'
+import {localActorId} from '../services/ActorId'
 
 const deletedProp = R.propOr(false, 'deleted')
 const rejectDeleted = R.reject(deletedProp)
@@ -21,6 +22,7 @@ export const Note = (function Note() {
     sortIdx,
     createdAt = Date.now(),
     modifiedAt = Date.now(),
+    actorId = localActorId,
   }) {
     const note = createObservableObject({
       props: {
@@ -30,6 +32,7 @@ export const Note = (function Note() {
         sortIdx,
         createdAt,
         modifiedAt,
+        actorId,
       },
       actions: {
         toggleDeleted() {
@@ -40,6 +43,11 @@ export const Note = (function Note() {
         },
         updateSortIdx(sortIdx) {
           this.sortIdx = sortIdx
+        },
+        localActorUpdate(props) {
+          Object.assign(this, props)
+          this.modifiedAt = Date.now()
+          this.actorId = localActorId
         },
       },
       name: `Note@${id}`,
@@ -90,6 +98,7 @@ export const NoteCollection = (function NotesCollection() {
             sortIdx,
             createdAt: Date.now(),
             modifiedAt: Date.now(),
+            actorId: localActorId,
           })
         },
         put(note) {
