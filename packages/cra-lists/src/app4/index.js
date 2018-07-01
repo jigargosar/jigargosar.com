@@ -20,7 +20,7 @@ function createNoteListView(nc) {
   return require('./mobx/NoteListView').NoteListView({nc})
 }
 
-function createStateItems() {
+function createStateProps() {
   const nc = createNotesCollection()
   return {
     nc,
@@ -30,7 +30,20 @@ function createStateItems() {
 }
 
 const appState = oObject(
-  {...createStateItems()},
+  {
+    ...createStateProps(),
+    isAuthKnown() {
+      return this.fire.auth.isAuthKnown
+    },
+
+    isSignedIn() {
+      return this.fire.auth.isSignedIn
+    },
+
+    isSignedOut() {
+      return this.fire.auth.isSignedOut
+    },
+  },
   {},
   {name: 'appState'},
 )
@@ -138,7 +151,7 @@ if (module.hot) {
     _.tryCatch(() => {
       console.clear()
       mRunInAction('Hot Update States', () =>
-        Object.assign(appState, ...createStateItems()),
+        Object.assign(appState, ...createStateProps()),
       )
       render()
     }, console.error),
