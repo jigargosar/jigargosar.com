@@ -117,7 +117,6 @@ const NoteListShortcuts = injectStatesAndMakeObserver(
 const NoteList = injectStatesAndMakeObserver(function NoteList({
   states,
 }) {
-  mTrace()
   return (
     <div>
       <NoteListShortcuts />
@@ -131,8 +130,7 @@ const NoteList = injectStatesAndMakeObserver(function NoteList({
   )
 })
 
-const App = injectStatesAndMakeObserver(function App({states}) {
-  console.log(`states`, states)
+const App = observer(function App() {
   return (
     <RootContainer>
       <CenterLayout>
