@@ -71,9 +71,11 @@
     "xstate": "^3.3.2"
   },
   "scripts": {
-    "start": "nodemon -w config-overrides.js -x react-app-rewired start",
-    "_start": "react-scripts start",
+    "_start": "nodemon -w config-overrides.js -x react-app-rewired start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
+    "_watch": "nodemon -w config-overrides.js -x react-app-rewired -- build --watch",
+    "watch": "cra-build-watch",
     "test": "react-scripts test --env=jsdom",
     "ti": "env JEST_PUPPETEER_CONFIG=e2e/jest-puppeteer.config.js HEADLESS=false jest -c e2e/jest.config.js --watch",
     "eject": "react-scripts eject"
@@ -82,6 +84,7 @@
     "@firebase/app-types": "^0.3.2",
     "babel-plugin-transform-decorators": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "cra-build-watch": "^1.0.3",
     "react-app-rewire-build-dev": "^1.0.1",
     "react-app-rewire-hot-loader": "^1.0.1",
     "react-app-rewired": "^1.5.2",
