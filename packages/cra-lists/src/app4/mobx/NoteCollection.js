@@ -19,8 +19,8 @@ export const Note = (function Note() {
     text,
     deleted,
     sortIdx,
-    createdAt,
-    modifiedAt,
+    createdAt = Date.now(),
+    modifiedAt = Date.now(),
   }) {
     const note = createObservableObject({
       props: {
