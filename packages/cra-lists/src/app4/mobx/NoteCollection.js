@@ -14,13 +14,22 @@ const rejectDeleted = R.reject(deletedProp)
 const filterDeleted = R.filter(deletedProp)
 
 export const Note = (function Note() {
-  function create({id, text, deleted, sortIdx}) {
+  function create({
+    id,
+    text,
+    deleted,
+    sortIdx,
+    createdAt,
+    modifiedAt,
+  }) {
     const note = createObservableObject({
       props: {
         id,
         text,
         deleted,
         sortIdx,
+        createdAt,
+        modifiedAt,
       },
       actions: {
         toggleDeleted() {
@@ -79,6 +88,8 @@ export const NoteCollection = (function NotesCollection() {
             text: '',
             deleted: false,
             sortIdx,
+            createdAt: Date.now(),
+            modifiedAt: Date.now(),
           })
         },
         put(note) {
