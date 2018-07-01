@@ -82,6 +82,7 @@
     "@firebase/app-types": "^0.3.2",
     "babel-plugin-transform-decorators": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "react-app-rewire-build-dev": "^1.0.1",
     "react-app-rewire-hot-loader": "^1.0.1",
     "react-app-rewired": "^1.5.2",
     "react-hot-loader": "^4.3.3"
