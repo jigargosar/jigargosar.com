@@ -6,5 +6,8 @@
     "default_popup": "index.html",
     "default_title": "React Ext"
   },
+  "permissions": [
+    "activeTab"
+  ],
   "version": "1.0"
 }

@@ -27,7 +27,11 @@ function createStateItems() {
   }
 }
 
-const appState = oObject({...createStateItems()}, {}, {name: 'appState'})
+const appState = oObject(
+  {...createStateItems()},
+  {},
+  {name: 'appState'},
+)
 
 function render() {
   const App = require('./components/App').default
@@ -43,14 +47,31 @@ render()
 
 registerServiceWorker()
 
+mReaction(
+  () => [appState.nc.snapshot],
+  () => storage.set('ncSnapshot', appState.nc.snapshot),
+)
+
+const ext = (async () => {
+  const query = _.pathOr(null, 'chrome.tabs.query'.split('.'))(global)
+  if (query) {
+    const result = await new Promise(resolve =>
+      query({active: true, currentWindow: true}, resolve),
+    )
+    const tabInfo = _.head(result)
+    console.log(`tabInfo.url`, tabInfo.url)
+    const note = appState.nc.newNote({sortIdx: -1})
+    appState.nc.add(note)
+    note.updateText(`${tabInfo.title} -- ${tabInfo.url}`)
+  }
+})()
+
+ext.catch(console.error)
+
 if (module.hot) {
   window.s = appState
   // createObservableHistory(appState)
   console.debug(`createObservableHistory`, createObservableHistory)
-  mReaction(
-    () => [appState.nc.snapshot],
-    () => storage.set('ncSnapshot', appState.nc.snapshot),
-  )
 
   module.hot['accept'](
     [
