@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
-import {mReaction, mRunInAction, oObject} from './mobx/utils'
+import {mReaction, mRunInAction, mWhen, oObject} from './mobx/utils'
 import {storage} from './services/storage'
 import {createObservableHistory} from './mobx/utils/StateHistory'
 import {_} from './utils'
@@ -54,6 +54,30 @@ mReaction(
   () => storage.set('ncSnapshot', appState.nc.snapshot),
 )
 
+function getLocationHash() {
+  return global.window.location.hash
+}
+
+function isLocationHashSignIn() {
+  return _.equals(getLocationHash(), '#signIn')
+}
+
+function removeLocationHash() {
+  global.window.location.hash = ''
+}
+
+function isAuthKnown() {
+  return appState.fire.auth.isAuthKnown
+}
+
+function isSignedIn() {
+  return appState.fire.auth.isSignedIn
+}
+
+function isSignedOut() {
+  return appState.fire.auth.isSignedOut
+}
+
 const ext = (async () => {
   const query = _.pathOr(null, 'chrome.tabs.query'.split('.'))(global)
   if (query) {
@@ -62,12 +86,31 @@ const ext = (async () => {
     )
     const tabInfo = _.head(result)
     console.log(`tabInfo.url`, tabInfo.url)
-    if (_.isNil(tabInfo.url)) {
-      return
+    if (!_.isNil(tabInfo.url)) {
+      const note = appState.nc.newNote({sortIdx: -1})
+      appState.nc.add(note)
+      note.updateText(`${tabInfo.title} -- ${tabInfo.url}`)
     }
-    const note = appState.nc.newNote({sortIdx: -1})
-    appState.nc.add(note)
-    note.updateText(`${tabInfo.title} -- ${tabInfo.url}`)
+
+    mWhen(
+      isSignedIn,
+      () => {
+        if (isLocationHashSignIn()) {
+          removeLocationHash()
+        }
+      },
+      {name: 'removeLocationHash #signIn'},
+    )
+
+    mWhen(
+      isAuthKnown,
+      () => {
+        if (isSignedOut()) {
+          appState.fire.auth.signInWithPopup()
+        }
+      },
+      {name: '#signIn'},
+    )
   }
 })()
 
