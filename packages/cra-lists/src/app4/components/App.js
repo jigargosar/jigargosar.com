@@ -16,7 +16,6 @@ import {
   isAnyHotKey,
   isHotKey,
   observer,
-  RC,
   renderKeyedById,
   wrapPD,
 } from './utils'
