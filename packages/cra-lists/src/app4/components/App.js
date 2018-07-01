@@ -13,7 +13,7 @@ import {
 import {
   C,
   cn,
-  injectStatesAndMakeObserver,
+  mrInjectAllAndMakeObserver,
   isAnyHotKey,
   isHotKey,
   observer,
@@ -61,8 +61,8 @@ const Note = observer(function Note({note, focusComponentRef}) {
   )
 })
 
-const ListToolbar = injectStatesAndMakeObserver(function ListToolbar({
-  states: {view},
+const ListToolbar = mrInjectAllAndMakeObserver(function ListToolbar({
+  view,
 }) {
   return (
     <Section className={cn('pl3')}>
@@ -71,7 +71,7 @@ const ListToolbar = injectStatesAndMakeObserver(function ListToolbar({
   )
 })
 
-const NoteListShortcuts = injectStatesAndMakeObserver(
+const NoteListShortcuts = mrInjectAllAndMakeObserver(
   class NoteListShortcuts extends C {
     componentDidMount() {
       console.debug('NoteListShortcuts: componentDidMount')
@@ -85,7 +85,7 @@ const NoteListShortcuts = injectStatesAndMakeObserver(
 
     onKeydown = e => {
       console.debug('NoteListShortcuts.onKeydown', e)
-      const {view} = this.props.states
+      const {view} = this.props
       _.cond([
         [isHotKey('ArrowUp'), wrapPD(view.gotoPrev)],
         [isAnyHotKey(['ArrowDown']), wrapPD(view.gotoNext)],
@@ -114,8 +114,8 @@ const NoteListShortcuts = injectStatesAndMakeObserver(
   },
 )
 
-const NoteList = injectStatesAndMakeObserver(function NoteList({
-  states,
+const NoteList = mrInjectAllAndMakeObserver(function NoteList({
+  view,
 }) {
   return (
     <div>
@@ -123,7 +123,7 @@ const NoteList = injectStatesAndMakeObserver(function NoteList({
       <ListToolbar />
       <Paper>
         <List>
-          {renderKeyedById(Note, 'note', states.view.noteDisplayList)}
+          {renderKeyedById(Note, 'note', view.noteDisplayList)}
         </List>
       </Paper>
     </div>

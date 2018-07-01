@@ -77,7 +77,11 @@ const injectState = _.curry((stateToProps, BC) => {
 
 export const injectAll = injectState(R.merge)
 
-export const injectStatesAndMakeObserver = _.compose(
-  inject('states'),
+export const mrInjectAllAndMakeObserver = _.compose(
+  // inject('states'),
+  inject(({states}, props) => ({
+    ...states,
+    ...props,
+  })),
   observer,
 )
