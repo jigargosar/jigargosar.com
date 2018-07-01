@@ -22,7 +22,6 @@ import {
 } from './utils'
 import {_} from '../utils'
 import FocusChild from './mobx/FocusChild'
-import {mTrace} from '../mobx/utils'
 
 const NoteInput = observer(function NoteInput({note}) {
   return (

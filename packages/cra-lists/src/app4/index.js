@@ -59,7 +59,7 @@ if (module.hot) {
       './mobx/NoteListView',
     ],
     _.tryCatch(() => {
-      // console.clear()
+      console.clear()
       mRunInAction('Hot Update States', () =>
         Object.assign(states, ...createStates()),
       )
