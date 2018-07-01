@@ -1,19 +1,25 @@
 <component name="ProjectDictionaryState">
   <dictionary name="jigargosar">
     <words>
+      <w>appspot</w>
       <w>crae</w>
       <w>devtools</w>
       <w>eidx</w>
       <w>eslint</w>
       <w>firebase</w>
+      <w>firebaseapp</w>
+      <w>firestore</w>
       <w>formatters</w>
       <w>jigargosar</w>
       <w>keydown</w>
       <w>mobx</w>
       <w>nanoid</w>
+      <w>nanostate</w>
       <w>pred</w>
       <w>ramda</w>
       <w>sidx</w>
+      <w>signin</w>
+      <w>signout</w>
       <w>unmount</w>
     </words>
   </dictionary>
