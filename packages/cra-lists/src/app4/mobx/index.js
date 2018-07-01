@@ -1,5 +1,6 @@
 import {storage} from '../services/storage'
 import {Fire} from './Fire'
+import {mReaction} from './utils'
 
 function createNotesCollection() {
   const ncSnapshot = storage.get('ncSnapshot') || {}
@@ -12,7 +13,7 @@ function createNoteListView(nc) {
 
 export function createState() {
   const nc = createNotesCollection()
-  return {
+  const state = {
     nc,
     view: createNoteListView(nc),
     fire: Fire(),
@@ -28,4 +29,11 @@ export function createState() {
       return this.fire.auth.isSignedOut
     },
   }
+
+  mReaction(
+    () => [nc.snapshot],
+    () => storage.set('ncSnapshot', nc.snapshot),
+  )
+
+  return state
 }

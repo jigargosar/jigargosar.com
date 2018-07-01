@@ -2,8 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
-import {mReaction, mRunInAction, oObject} from './mobx/utils'
-import {storage} from './services/storage'
+import {mRunInAction, oObject} from './mobx/utils'
 import {createObservableHistory} from './mobx/utils/StateHistory'
 import {_} from './utils'
 import {Provider} from 'mobx-react'
@@ -26,11 +25,6 @@ render()
 
 registerServiceWorker()
 
-mReaction(
-  () => [appState.nc.snapshot],
-  () => storage.set('ncSnapshot', appState.nc.snapshot),
-)
-
 initExtension(appState).catch(console.error)
 
 if (module.hot) {
@@ -39,11 +33,7 @@ if (module.hot) {
   console.debug(`createObservableHistory`, createObservableHistory)
 
   module.hot['accept'](
-    [
-      './components/App',
-      './mobx/NoteCollection',
-      './mobx/NoteListView',
-    ],
+    ['./components/App', './mobx'],
     _.tryCatch(() => {
       console.clear()
       mRunInAction('Hot Update States', () =>
