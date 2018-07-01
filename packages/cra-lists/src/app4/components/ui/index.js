@@ -30,11 +30,11 @@ export const Text = styled.span.attrs({
 })``
 
 export const Paper = styled.div.attrs({
-  className: 'bg-white shadow-1',
+  className: 'bg-white shadow-1 ma0 ns-ma3',
 })``
 
 export const List = styled.div.attrs({
-  className: 'pv1',
+  className: 'pv0',
 })``
 
 export const ListItem = styled.div.attrs({
