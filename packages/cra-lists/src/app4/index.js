@@ -58,12 +58,20 @@ function getLocationHash() {
   return global.window.location.hash
 }
 
+function getLocation() {
+  return global.window.location
+}
+
 function isLocationHashSignIn() {
   return _.equals(getLocationHash(), '#signIn')
 }
 
 function removeLocationHash() {
-  global.window.location.hash = ''
+  global.window.history.replaceState(
+    {},
+    null,
+    `${getLocation().pathname}${getLocation().search}`,
+  )
 }
 
 function isAuthKnown() {
