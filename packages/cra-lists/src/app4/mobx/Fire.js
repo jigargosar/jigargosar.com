@@ -102,7 +102,7 @@ function createFirestore(firebase, fire) {
 }
 
 function createFireAuth(firebase) {
-  function signIn() {
+  function signInWithRedirect() {
     const provider = new firebase.auth.GoogleAuthProvider()
     provider.setCustomParameters({prompt: 'select_account'})
     return firebase.auth().signInWithRedirect(provider)
@@ -160,7 +160,7 @@ function createFireAuth(firebase) {
       get isAuthKnown() {
         return !R.equals(this._authState, 'unknown')
       },
-      signIn,
+      signInWithRedirect,
       signOut,
       signInWithPopup,
     },

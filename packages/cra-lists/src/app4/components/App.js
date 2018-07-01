@@ -19,6 +19,7 @@ import {
   observer,
   renderKeyedById,
   wrapPD,
+  F,
 } from './utils'
 import {_} from '../utils'
 import FocusChild from './mobx/FocusChild'
@@ -131,11 +132,19 @@ const AppHeader = mrInjectAll(function AppHeader({fire}) {
     <div className={'flex'}>
       <Title>Notes</Title>
       <Title>{fire.auth.state}</Title>
-      <Button onClick={fire.auth.signIn}>SignIn</Button>
-      <Button onClick={fire.auth.signInWithPopup}>
-        SignInWithPopup
-      </Button>
-      <Button onClick={fire.auth.signOut}>SignOut</Button>
+      {fire.auth.isSignedOut && (
+        <F>
+          <Button onClick={fire.auth.signInWithRedirect}>
+            SignIn
+          </Button>
+          <Button onClick={fire.auth.signInWithPopup}>
+            SignInWithPopup
+          </Button>
+        </F>
+      )}
+      {fire.auth.isSignedIn && (
+        <Button onClick={fire.auth.signOut}>SignOut</Button>
+      )}
     </div>
   )
 })
