@@ -58,30 +58,28 @@ export const WithState = function WithState({children}) {
   )
 }
 
-const withStateContextConsumerToProps = _.curry(
-  (stateToProps, BC) => {
-    const hoc = ({children, ...rest}) => {
-      const OBC = observer(BC)
-      return (
-        <StateContextConsumer>
-          {states => (
-            <OBC {...stateToProps(states, rest)}>{children}</OBC>
-          )}
-        </StateContextConsumer>
-      )
-    }
-    if (process.env.NODE_ENV !== 'production') {
-      return setDisplayName(wrapDisplayName(BC, 'inject'))(hoc)
-    }
-    return hoc
-  },
-)
+const withStateToProps = _.curry((stateToProps, BC) => {
+  const hoc = ({children, ...rest}) => {
+    const OBC = observer(BC)
+    return (
+      <StateContextConsumer>
+        {states => (
+          <OBC {...stateToProps(states, rest)}>{children}</OBC>
+        )}
+      </StateContextConsumer>
+    )
+  }
+  if (process.env.NODE_ENV !== 'production') {
+    return setDisplayName(wrapDisplayName(BC, 'inject'))(hoc)
+  }
+  return hoc
+})
 
-export const injectAll = withStateContextConsumerToProps(R.merge)
+export const withStateMergedWithProps = withStateToProps(R.merge)
 
 export const mrInjectAllAndMakeObserver = _.compose(
-  inject(({states}, props) => ({
-    ...states,
+  inject(({appState}, props) => ({
+    ...appState,
     ...props,
   })),
   observer,

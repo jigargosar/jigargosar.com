@@ -19,7 +19,7 @@ function createNoteListView(nc) {
   return require('./mobx/NoteListView').NoteListView({nc})
 }
 
-function createStates() {
+function createStateItems() {
   const nc = createNotesCollection()
   return {
     nc,
@@ -27,12 +27,12 @@ function createStates() {
   }
 }
 
-const states = oObject({...createStates()}, {}, {name: 'states'})
+const appState = oObject({...createStateItems()}, {}, {name: 'appState'})
 
 function render() {
   const App = require('./components/App').default
   ReactDOM.render(
-    <Provider states={states}>
+    <Provider appState={appState}>
       <App />
     </Provider>,
     document.getElementById('root'),
@@ -44,12 +44,12 @@ render()
 registerServiceWorker()
 
 if (module.hot) {
-  window.s = states
-  // createObservableHistory(states)
+  window.s = appState
+  // createObservableHistory(appState)
   console.debug(`createObservableHistory`, createObservableHistory)
   mReaction(
-    () => [states.nc.snapshot],
-    () => storage.set('ncSnapshot', states.nc.snapshot),
+    () => [appState.nc.snapshot],
+    () => storage.set('ncSnapshot', appState.nc.snapshot),
   )
 
   module.hot['accept'](
@@ -61,7 +61,7 @@ if (module.hot) {
     _.tryCatch(() => {
       console.clear()
       mRunInAction('Hot Update States', () =>
-        Object.assign(states, ...createStates()),
+        Object.assign(appState, ...createStateItems()),
       )
       render()
     }, console.error),
