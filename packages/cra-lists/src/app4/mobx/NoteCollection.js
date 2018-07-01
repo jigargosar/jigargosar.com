@@ -7,7 +7,7 @@ import {
 } from './utils'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
-import {R} from '../utils'
+import {_, R} from '../utils'
 import {localActorId} from '../services/ActorId'
 
 const deletedProp = R.propOr(false, 'deleted')
@@ -75,9 +75,9 @@ export const NoteCollection = (function NotesCollection() {
   function create(snapshot = {}) {
     return createObservableObject({
       props: {
-        idMap: R.compose(R.map(Note.create))(snapshot),
+        idLookup: R.map(Note.create)(snapshot),
         get valuesArray() {
-          return mValues(this.idMap)
+          return mValues(this.idLookup)
         },
         get active() {
           return rejectDeleted(this.valuesArray)
@@ -86,7 +86,14 @@ export const NoteCollection = (function NotesCollection() {
           return filterDeleted(this.valuesArray)
         },
         get snapshot() {
-          return mJS(this.idMap)
+          return mJS(this.idLookup)
+        },
+        getLocallyModifiedSince(timestamp) {
+          return this.valuesArray.filter(
+            n =>
+              n.modifiedAt > timestamp &&
+              _.equals(n.actorId, localActorId),
+          )
         },
       },
       actions: {
@@ -102,10 +109,13 @@ export const NoteCollection = (function NotesCollection() {
           })
         },
         put(note) {
-          mSet(this.idMap, note.id, note)
+          mSet(this.idLookup, note.id, note)
         },
         add(note) {
           this.put(note)
+        },
+        createAndAddFromExternalStore(props) {
+          this.put(Note.create(props))
         },
       },
       name: 'NoteCollection',
