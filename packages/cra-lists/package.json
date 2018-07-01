@@ -71,7 +71,8 @@
     "xstate": "^3.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "nodemon -w config-override.js -x react-app-rewired start",
+    "_start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "ti": "env JEST_PUPPETEER_CONFIG=e2e/jest-puppeteer.config.js HEADLESS=false jest -c e2e/jest.config.js --watch",
