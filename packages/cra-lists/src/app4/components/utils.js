@@ -75,7 +75,7 @@ const withStateToProps = _.curry((stateToProps, BC) => {
   return hoc
 })
 
-export const withStateMergedWithProps = withStateToProps(R.merge)
+export const withStateMergedIntoProps = withStateToProps(R.merge)
 
 export const mrInjectAllAndMakeObserver = _.compose(
   inject(({appState}, props) => ({
