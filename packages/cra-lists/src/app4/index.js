@@ -7,6 +7,7 @@ import {storage} from './services/storage'
 import {createObservableHistory} from './mobx/utils/StateHistory'
 import {_} from './utils'
 import {Provider} from 'mobx-react'
+import {Fire} from './mobx/Fire'
 
 function createNotesCollection() {
   const ncSnapshot = storage.get('ncSnapshot') || {}
@@ -24,6 +25,7 @@ function createStateItems() {
   return {
     nc,
     view: createNoteListView(nc),
+    fire: Fire(),
   }
 }
 
