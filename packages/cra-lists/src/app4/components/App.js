@@ -127,27 +127,24 @@ const NoteList = mrInjectAll(function NoteList({view}) {
   )
 })
 
-const AppHeader = mrInjectAll(function AppHeader({fire}) {
+const AppHeader = mrInjectAll(function AppHeader({fire: {auth}}) {
   return (
     <div className={'flex'}>
       <Title className={cn('flex-auto')}>Notes</Title>
       <div className={cn('flex')}>
-        {!fire.auth.isAuthKnown && <Title>Loading</Title>}
-        {fire.auth.isAuthKnown && (
-          <Title>{fire.auth.displayName}</Title>
-        )}
-        {fire.auth.isSignedOut && (
+        <Title>
+          {auth.isAuthKnown ? auth.displayName : 'Loading...'}
+        </Title>
+        {auth.isSignedOut && (
           <F>
-            <Button onClick={fire.auth.signInWithRedirect}>
-              SignIn
-            </Button>
-            <Button onClick={fire.auth.signInWithPopup}>
+            <Button onClick={auth.signInWithRedirect}>SignIn</Button>
+            <Button onClick={auth.signInWithPopup}>
               SignInWithPopup
             </Button>
           </F>
         )}
-        {fire.auth.isSignedIn && (
-          <Button onClick={fire.auth.signOut}>SignOut</Button>
+        {auth.isSignedIn && (
+          <Button onClick={auth.signOut}>SignOut</Button>
         )}
       </div>
     </div>
