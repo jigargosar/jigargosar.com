@@ -62,6 +62,9 @@ const ext = (async () => {
     )
     const tabInfo = _.head(result)
     console.log(`tabInfo.url`, tabInfo.url)
+    if (_.isNil(tabInfo.url)) {
+      return
+    }
     const note = appState.nc.newNote({sortIdx: -1})
     appState.nc.add(note)
     note.updateText(`${tabInfo.title} -- ${tabInfo.url}`)
