@@ -129,12 +129,12 @@ const NoteList = mrInjectAll(function NoteList({view}) {
 
 const AppHeader = mrInjectAll(function AppHeader({fire: {auth}}) {
   return (
-    <div className={'flex'}>
+    <div className={'flex pv3 shadow-1 bg-light-blue'}>
       <Title className={cn('flex-auto')}>Notes</Title>
-      <div className={cn('flex')}>
-        <Title>
+      <div className={cn('flex items-center')}>
+        <Text>
           {auth.isAuthKnown ? auth.displayName : 'Loading...'}
-        </Title>
+        </Text>
         {auth.isSignedOut && (
           <F>
             <Button onClick={auth.signInWithRedirect}>SignIn</Button>

@@ -10,7 +10,7 @@ import {cx as cn} from 'ramda-extension'
 /*eslint-disable no-empty-pattern*/
 
 export const CenterLayout = styled.div.attrs({
-  className: 'center mw7 mv3',
+  className: 'center mw7',
 })``
 
 export const RootContainer = styled.div.attrs({
