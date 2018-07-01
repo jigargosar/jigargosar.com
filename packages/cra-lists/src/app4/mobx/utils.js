@@ -1,5 +1,5 @@
 import * as m from 'mobx'
-import {_, R, RB, RX} from '../utils'
+import {_, R, RX} from '../utils'
 import * as mst from 'mobx-state-tree'
 import {
   ArrayFormatter,
@@ -111,9 +111,9 @@ if (module.hot) {
 
   const formatters = [MapFormatter, ObjectFormatter, ArrayFormatter]
 
-  const hotFormatters = _.compose(
-    _.defaultTo([]),
-    RB.path('hot.data.devtoolsFormatters'),
+  const hotFormatters = _.pathOr(
+    [],
+    'hot.data.devtoolsFormatters'.split('.'),
   )(module)
 
   window.devtoolsFormatters.unshift(

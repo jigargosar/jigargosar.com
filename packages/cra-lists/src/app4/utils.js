@@ -1,13 +1,12 @@
 import * as R from 'ramda'
 import * as RX from 'ramda-extension'
-import * as RB from 'rambdax'
-import validate from 'aproba'
+import validate from './vendor/aproba'
 import * as RA from 'ramda-adjunct'
 import assert from 'assert'
 
 const _ = R
 
-export {_, R, RX, RB, RA, validate}
+export {_, R, RX, RA, validate}
 
 if (module.hot) {
   Object.assign(window, require('ramda'))
