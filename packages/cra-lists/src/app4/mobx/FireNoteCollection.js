@@ -1,6 +1,6 @@
 import {mWhen} from './utils'
 import {storage} from '../services/storage'
-import {_} from '../utils'
+import {_, validate} from '../utils'
 import {
   firestoreServerTimestamp,
   zeroFirestoreTimestamp,
@@ -11,20 +11,39 @@ function dcData(c) {
   return c.doc.data()
 }
 
+const StorageItem = ({name, getInitial, postLoad = _.identity}) => {
+  validate('SFF', [name, getInitial, postLoad])
+
+  const getItem = () => storage.get(name)
+  const setItem = val => storage.set(name, val)
+
+  if (_.isNil(getItem())) {
+    setItem(getInitial())
+  }
+
+  return {
+    save: setItem,
+    load: getItem,
+  }
+}
+
+const lastModifiedAt = StorageItem({
+  name: 'bookmarkNotes.lastModifiedAt',
+  getInitial: _.always(0),
+})
+
 export function FireNoteCollection({fire, nc}) {
   async function startSync() {
     const cRef = fire.store.createUserCollectionRef('bookmarkNotes')
-    const syncedTillLocalTimestamp = _.defaultTo(
-      0,
-      storage.get('bookmarkNotes.syncedTillLocalTimestamp'),
-    )
     const locallyModifiedList = nc.getLocallyModifiedSince(
-      syncedTillLocalTimestamp,
+      lastModifiedAt.load(),
     )
+
     console.log(
       `locallyModifiedList.length`,
       locallyModifiedList.length,
     )
+
     if (!_.isEmpty(locallyModifiedList)) {
       const pResults = locallyModifiedList.map(n =>
         cRef
@@ -34,11 +53,8 @@ export function FireNoteCollection({fire, nc}) {
           ),
       )
       const results = await Promise.all(pResults)
-      console.log(`update firestore results`, results)
-      storage.set(
-        'bookmarkNotes.syncedTillLocalTimestamp',
-        _.last(locallyModifiedList).modifiedAt,
-      )
+      console.log(`update firestore results`, results.length)
+      lastModifiedAt.set(_.last(locallyModifiedList).modifiedAt)
     }
 
     const syncedTillFirestoreTimestamp = _.defaultTo(
