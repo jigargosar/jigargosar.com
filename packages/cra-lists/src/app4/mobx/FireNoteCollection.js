@@ -1,4 +1,4 @@
-import {mAutoRun, mWhen, oObject} from './utils'
+import {createObservableObject, mAutoRun, mWhen} from './utils'
 import {storage} from '../services/storage'
 import {_, validate} from '../utils'
 import {
@@ -46,15 +46,18 @@ const lastServerTimestamp = StorageItem({
 })
 
 function syncToFirestore(nc, cRef) {
-  const sync = oObject({
-    get lastModifiedAt() {
-      lastModifiedAt.load()
+  const sync = createObservableObject({
+    props: {
+      lastModifiedAt: lastModifiedAt.load(),
+      get locallyModifiedList() {
+        return nc.getLocallyModifiedSince(this.lastModifiedAt)
+      },
     },
-    set lastModifiedAt(val) {
-      lastModifiedAt.save(val)
-    },
-    get locallyModifiedList() {
-      return nc.getLocallyModifiedSince(this.lastModifiedAt)
+    actions: {
+      setLastModifiedAt(val) {
+        this.lastModifiedAt = val
+        lastModifiedAt.save(val)
+      },
     },
   })
 
@@ -62,7 +65,7 @@ function syncToFirestore(nc, cRef) {
     async () => {
       const {locallyModifiedList} = sync
       console.log(
-        `locallyModifiedList.length`,
+        `[ToFire] locallyModifiedList.length`,
         locallyModifiedList.length,
       )
 
@@ -75,8 +78,11 @@ function syncToFirestore(nc, cRef) {
           ),
         )
         const results = await Promise.all(pResults)
-        console.log(`update firestore results`, results.length)
-        sync.lastModifiedAt = _.last(locallyModifiedList).modifiedAt
+        console.log(
+          `[ToFire] update firestore results`,
+          results.length,
+        )
+        sync.setLastModifiedAt(_.last(locallyModifiedList).modifiedAt)
       }
     },
     {name: 'syncToFirestore'},
