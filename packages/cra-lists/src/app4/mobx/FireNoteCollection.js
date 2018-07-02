@@ -1,7 +1,6 @@
 import {
   createObservableObject,
   mFlow,
-  mJS,
   mReaction,
   mWhen,
 } from './utils'
@@ -13,6 +12,7 @@ import {
   zeroFirestoreTimestamp,
 } from './Fire'
 import {localActorId} from '../services/ActorId'
+import debounce from 'lodash/debounce'
 
 function dcData(c) {
   return c.doc.data()
@@ -64,50 +64,48 @@ function syncToFirestore(nc, cRef) {
         this.lastModifiedAt = val
         lastModifiedAt.save(val)
       },
-      update: mFlow(function*() {
-        const {locallyModifiedList} = sync
-        console.log(
-          `[ToFire] locallyModifiedList.length`,
-          locallyModifiedList.length,
-        )
-
-        if (!_.isEmpty(locallyModifiedList)) {
-          const pResults = locallyModifiedList.map(n =>
-            cRef.doc(n.id).set(
-              _.merge(n, {
-                serverTimestamp: firestoreServerTimestamp(),
-              }),
-            ),
-          )
-          const results = yield Promise.all(pResults)
+      update: debounce(
+        mFlow(function*() {
+          const {locallyModifiedList} = sync
           console.log(
-            `[ToFire] update firestore results`,
-            results.length,
+            `[ToFire] locallyModifiedList.length`,
+            locallyModifiedList.length,
           )
-          sync.setLastModifiedAt(
-            _.last(locallyModifiedList).modifiedAt,
-          )
-        }
-      }),
+
+          if (!_.isEmpty(locallyModifiedList)) {
+            const pResults = locallyModifiedList.map(n =>
+              cRef.doc(n.id).set(
+                _.merge(n, {
+                  serverTimestamp: firestoreServerTimestamp(),
+                }),
+              ),
+            )
+            const results = yield Promise.all(pResults)
+            console.log(
+              `[ToFire] update firestore results`,
+              results.length,
+            )
+            sync.setLastModifiedAt(
+              _.last(locallyModifiedList).modifiedAt,
+            )
+          }
+        }),
+        5000,
+      ),
     },
   })
 
-  return mReaction(
-    // () => {
-    //   const notes = nc
-    //     .getLocallyModifiedSince(sync.lastModifiedAt)
-    //     .map(mJS)
-    //   console.log(`notes`, mJS(notes))
-    //   return notes
-    // },
+  const iReactionDisposer = mReaction(
     () => sync.locallyModifiedList,
     sync.update,
     {
-      delay: 3000,
+      delay: 400,
       name: 'syncToFirestore',
       // scheduler: f => {},
     },
   )
+  // mTrace(iReactionDisposer)
+  return iReactionDisposer
 }
 
 function syncFromFirestore(nc, cRef) {
