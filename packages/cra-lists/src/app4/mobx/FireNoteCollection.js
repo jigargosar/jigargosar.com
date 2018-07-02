@@ -11,8 +11,14 @@ function dcData(c) {
   return c.doc.data()
 }
 
-const StorageItem = ({name, getInitial, postLoad = _.identity}) => {
-  validate('SFF', [name, getInitial, postLoad])
+const dcListLastServerTimestampFrom = _.compose(
+  _.prop('serverTimestamp'),
+  dcData,
+  _.last,
+)
+
+const StorageItem = ({name, getInitial}) => {
+  validate('SF', [name, getInitial])
 
   const getItem = () => storage.get(name)
   const setItem = val => storage.set(name, val)
@@ -30,6 +36,11 @@ const StorageItem = ({name, getInitial, postLoad = _.identity}) => {
 const lastModifiedAt = StorageItem({
   name: 'bookmarkNotes.lastModifiedAt',
   getInitial: _.always(0),
+})
+
+const lastServerTimestamp = StorageItem({
+  name: 'bookmarkNotes.lastServerTimestamp',
+  getInitial: _.always(zeroFirestoreTimestamp),
 })
 
 export function FireNoteCollection({fire, nc}) {
@@ -63,14 +74,14 @@ export function FireNoteCollection({fire, nc}) {
     )
 
     const withQuerySnapshot = qs => {
-      // console.log(`qs`, qs)
+      console.debug(`qs`, qs)
       const docChanges = qs.docChanges()
       console.debug(`qs.docChanges()`, docChanges)
 
       console.log(`docChanges.length`, docChanges.length)
       if (docChanges.length > 0) {
         docChanges.forEach(c => {
-          console.debug(`c.doc.data()`, c.doc.data())
+          console.log(`dcData(c)`, dcData(c))
         })
 
         const remoteChanges = docChanges.filter(
@@ -79,14 +90,8 @@ export function FireNoteCollection({fire, nc}) {
         console.log(`remoteChanges.length`, remoteChanges.length)
         remoteChanges.map(dcData).map(nc.upsertFromExternalStore)
 
-        const lastServerTimestamp = _.compose(
-          _.prop('serverTimestamp'),
-          dcData,
-          _.last,
-        )(docChanges)
-        storage.set(
-          'bookmarkNotes.syncedTillFirestoreTimestamp',
-          lastServerTimestamp,
+        lastServerTimestamp.set(
+          dcListLastServerTimestampFrom(docChanges),
         )
       }
     }
