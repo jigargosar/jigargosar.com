@@ -45,13 +45,13 @@ export const Note = (function Note() {
       },
       actions: {
         toggleDeleted() {
-          this.deleted = !this.deleted
+          this.localActorUpdate({deleted: !this.deleted})
         },
         updateText(text) {
-          this.text = text
+          this.localActorUpdate({text})
         },
         updateSortIdx(sortIdx) {
-          this.sortIdx = sortIdx
+          this.localActorUpdate({sortIdx})
         },
         localActorUpdate(props) {
           Object.assign(this, props)
