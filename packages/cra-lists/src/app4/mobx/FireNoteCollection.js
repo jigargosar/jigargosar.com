@@ -1,4 +1,10 @@
-import {createObservableObject, mReaction, mWhen} from './utils'
+import {
+  createObservableObject,
+  mFlow,
+  mJS,
+  mReaction,
+  mWhen,
+} from './utils'
 import {storage} from '../services/storage'
 import {_, validate} from '../utils'
 import {
@@ -58,7 +64,7 @@ function syncToFirestore(nc, cRef) {
         this.lastModifiedAt = val
         lastModifiedAt.save(val)
       },
-      *update() {
+      update: mFlow(function*() {
         const {locallyModifiedList} = sync
         console.log(
           `[ToFire] locallyModifiedList.length`,
@@ -82,14 +88,22 @@ function syncToFirestore(nc, cRef) {
             _.last(locallyModifiedList).modifiedAt,
           )
         }
-      },
+      }),
     },
   })
 
   return mReaction(
+    // () => {
+    //   const notes = nc
+    //     .getLocallyModifiedSince(sync.lastModifiedAt)
+    //     .map(mJS)
+    //   console.log(`notes`, mJS(notes))
+    //   return notes
+    // },
     () => sync.locallyModifiedList,
-    () => sync.update(),
+    sync.update,
     {
+      delay: 3000,
       name: 'syncToFirestore',
       // scheduler: f => {},
     },

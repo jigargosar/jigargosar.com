@@ -24,6 +24,7 @@ export const mValues = m.values
 export const mAutoRun = m.autorun
 export const mReaction = m.reaction
 export const mWhen = m.when
+export const mFlow = m.flow
 
 export const mRunInAction = m.runInAction
 export const mTrace = m.trace
