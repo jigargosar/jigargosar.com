@@ -7,7 +7,7 @@ import {
 } from './utils'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
-import {_, R} from '../utils'
+import {_, R, validate} from '../utils'
 import {localActorId} from '../services/ActorId'
 
 const deletedProp = R.propOr(false, 'deleted')
@@ -24,6 +24,15 @@ export const Note = (function Note() {
     modifiedAt = Date.now(),
     actorId = localActorId,
   }) {
+    validate('SSBNNNS', [
+      id,
+      text,
+      deleted,
+      sortIdx,
+      createdAt,
+      modifiedAt,
+      actorId,
+    ])
     const note = createObservableObject({
       props: {
         id,
