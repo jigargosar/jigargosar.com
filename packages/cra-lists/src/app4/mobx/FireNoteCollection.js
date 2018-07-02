@@ -109,7 +109,7 @@ function syncFromFirestore(nc, cRef) {
     const docChanges = qs.docChanges()
     console.debug(`[FromFire] qs.docChanges()`, docChanges)
 
-    console.log(`[FromFire] docChanges.length`, docChanges.length)
+    console.debug(`[FromFire] docChanges.length`, docChanges.length)
     if (docChanges.length > 0) {
       docChanges.forEach(c => {
         console.debug(`[FromFire] dcData(c)`, dcData(c))
