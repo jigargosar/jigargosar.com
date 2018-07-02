@@ -2,6 +2,7 @@ import {
   createObservableObject,
   mFlow,
   mReaction,
+  mTrace,
   mWhen,
 } from './utils'
 import {storage} from '../services/storage'
@@ -68,7 +69,10 @@ function syncToFirestore(nc, cRef) {
         ),
       )
       const results = yield Promise.all(pResults)
-      console.log(`[ToFire] update firestore results`, results.length)
+      console.debug(
+        `[ToFire] update firestore results`,
+        results.length,
+      )
       sync.setLastModifiedAt(_.last(locallyModifiedList).modifiedAt)
     }
   })
@@ -92,18 +96,16 @@ function syncToFirestore(nc, cRef) {
     () => sync.locallyModifiedList,
     sync.update,
     {
-      delay: 400,
       name: 'syncToFirestore',
-      // scheduler: f => {},
     },
   )
-  // mTrace(iReactionDisposer)
+  mTrace(iReactionDisposer)
   return iReactionDisposer
 }
 
 function syncFromFirestore(nc, cRef) {
   const withQuerySnapshot = qs => {
-    console.debug('[FromFire] withQuerySnapshot called')
+    console.log('[FromFire] withQuerySnapshot called')
 
     console.debug(`[FromFire] qs`, qs)
     const docChanges = qs.docChanges()
@@ -118,7 +120,7 @@ function syncFromFirestore(nc, cRef) {
       const remoteChanges = docChanges.filter(
         c => !_.equals(dcData(c).actorId, localActorId),
       )
-      console.log(
+      console.debug(
         `[FromFire] remoteChanges.length`,
         remoteChanges.length,
       )
@@ -134,7 +136,13 @@ function syncFromFirestore(nc, cRef) {
     .where('serverTimestamp', '>', lastServerTimestamp.load())
     .orderBy('serverTimestamp', 'asc')
   // withQuerySnapshot(await query.get())
-  return query.onSnapshot(withQuerySnapshot)
+  const disposer = query.onSnapshot(withQuerySnapshot)
+  if (module.hot) {
+    module.hot.dispose(() => {
+      disposer()
+    })
+  }
+  return disposer
 }
 
 export function FireNoteCollection({fire, nc}) {
@@ -152,15 +160,7 @@ export function FireNoteCollection({fire, nc}) {
   mWhen(
     () => fire.auth.isSignedIn,
     () => {
-      const disposer = startSync()
-
-      if (module.hot) {
-        module.hot.dispose(data => {
-          disposer()
-        })
-      }
-
-      mWhen(() => fire.auth.isSignedOut, disposer)
+      mWhen(() => fire.auth.isSignedOut, startSync())
     },
   )
 }
