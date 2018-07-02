@@ -91,7 +91,7 @@ function syncToFirestore(nc, cRef) {
 
 function syncFromFirestore(nc, cRef) {
   const withQuerySnapshot = qs => {
-    console.log('[FromFire] withQuerySnapshot called')
+    console.debug('[FromFire] withQuerySnapshot called')
 
     console.debug(`[FromFire] qs`, qs)
     const docChanges = qs.docChanges()
