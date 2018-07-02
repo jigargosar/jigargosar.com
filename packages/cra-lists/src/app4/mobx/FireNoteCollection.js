@@ -91,22 +91,25 @@ function syncToFirestore(nc, cRef) {
 
 function syncFromFirestore(nc, cRef) {
   const withQuerySnapshot = qs => {
-    console.log('withQuerySnapshot called')
+    console.log('[FromFire] withQuerySnapshot called')
 
-    console.debug(`qs`, qs)
+    console.debug(`[FromFire] qs`, qs)
     const docChanges = qs.docChanges()
-    console.debug(`qs.docChanges()`, docChanges)
+    console.debug(`[FromFire] qs.docChanges()`, docChanges)
 
-    console.log(`docChanges.length`, docChanges.length)
+    console.log(`[FromFire] docChanges.length`, docChanges.length)
     if (docChanges.length > 0) {
       docChanges.forEach(c => {
-        console.debug(`dcData(c)`, dcData(c))
+        console.debug(`[FromFire] dcData(c)`, dcData(c))
       })
 
       const remoteChanges = docChanges.filter(
         c => !_.equals(dcData(c).actorId, localActorId),
       )
-      console.log(`remoteChanges.length`, remoteChanges.length)
+      console.log(
+        `[FromFire] remoteChanges.length`,
+        remoteChanges.length,
+      )
       remoteChanges.map(dcData).map(nc.upsertFromExternalStore)
 
       lastServerTimestamp.save(
