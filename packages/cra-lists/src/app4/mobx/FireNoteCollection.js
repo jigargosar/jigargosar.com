@@ -152,7 +152,15 @@ export function FireNoteCollection({fire, nc}) {
   mWhen(
     () => fire.auth.isSignedIn,
     () => {
-      mWhen(() => fire.auth.isSignedOut, startSync())
+      const disposer = startSync()
+
+      if (module.hot) {
+        module.hot.dispose(data => {
+          disposer()
+        })
+      }
+
+      mWhen(() => fire.auth.isSignedOut, disposer)
     },
   )
 }
