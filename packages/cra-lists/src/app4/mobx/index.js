@@ -1,6 +1,7 @@
 import {storage} from '../services/storage'
 import {Fire} from './Fire'
 import {mReaction} from './utils'
+import {FireNoteCollection} from './FireNoteCollection'
 
 function createNotesCollection() {
   const ncSnapshot = storage.get('ncSnapshot') || {}
@@ -29,6 +30,8 @@ export function createState() {
       return this.fire.auth.isSignedOut
     },
   }
+
+  FireNoteCollection(state)
 
   mReaction(
     () => [nc.snapshot],

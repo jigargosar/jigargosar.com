@@ -98,10 +98,12 @@ export const NoteCollection = (function NotesCollection() {
           return mJS(this.idLookup)
         },
         getLocallyModifiedSince(timestamp) {
-          return this.valuesArray.filter(
-            n =>
-              n.modifiedAt > timestamp &&
-              _.equals(n.actorId, localActorId),
+          return _.sortWith([_.ascend(_.prop('modifiedAt'))])(
+            this.valuesArray.filter(
+              n =>
+                n.modifiedAt > timestamp &&
+                _.equals(n.actorId, localActorId),
+            ),
           )
         },
       },
