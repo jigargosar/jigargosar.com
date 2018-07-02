@@ -74,6 +74,8 @@ export function FireNoteCollection({fire, nc}) {
     )
 
     const withQuerySnapshot = qs => {
+      console.log('withQuerySnapshot called')
+
       console.debug(`qs`, qs)
       const docChanges = qs.docChanges()
       console.debug(`qs.docChanges()`, docChanges)
@@ -81,7 +83,7 @@ export function FireNoteCollection({fire, nc}) {
       console.log(`docChanges.length`, docChanges.length)
       if (docChanges.length > 0) {
         docChanges.forEach(c => {
-          console.log(`dcData(c)`, dcData(c))
+          console.debug(`dcData(c)`, dcData(c))
         })
 
         const remoteChanges = docChanges.filter(
