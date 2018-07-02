@@ -1,4 +1,4 @@
-import {mWhen} from './utils'
+import {mAutoRun, mWhen, oObject} from './utils'
 import {storage} from '../services/storage'
 import {_, validate} from '../utils'
 import {
@@ -45,28 +45,42 @@ const lastServerTimestamp = StorageItem({
   postLoad: createFirestoreTimestamp,
 })
 
-async function syncToFirestore(nc, cRef) {
-  const locallyModifiedList = nc.getLocallyModifiedSince(
-    lastModifiedAt.load(),
-  )
+function syncToFirestore(nc, cRef) {
+  const sync = oObject({
+    get lastModifiedAt() {
+      lastModifiedAt.load()
+    },
+    set lastModifiedAt(val) {
+      lastModifiedAt.save(val)
+    },
+    get locallyModifiedList() {
+      return nc.getLocallyModifiedSince(this.lastModifiedAt)
+    },
+  })
 
-  console.log(
-    `locallyModifiedList.length`,
-    locallyModifiedList.length,
-  )
+  return mAutoRun(
+    async () => {
+      const {locallyModifiedList} = sync
+      console.log(
+        `locallyModifiedList.length`,
+        locallyModifiedList.length,
+      )
 
-  if (!_.isEmpty(locallyModifiedList)) {
-    const pResults = locallyModifiedList.map(n =>
-      cRef
-        .doc(n.id)
-        .set(
-          _.merge(n, {serverTimestamp: firestoreServerTimestamp()}),
-        ),
-    )
-    const results = await Promise.all(pResults)
-    console.log(`update firestore results`, results.length)
-    lastModifiedAt.save(_.last(locallyModifiedList).modifiedAt)
-  }
+      if (!_.isEmpty(locallyModifiedList)) {
+        const pResults = locallyModifiedList.map(n =>
+          cRef.doc(n.id).set(
+            _.merge(n, {
+              serverTimestamp: firestoreServerTimestamp(),
+            }),
+          ),
+        )
+        const results = await Promise.all(pResults)
+        console.log(`update firestore results`, results.length)
+        sync.lastModifiedAt = _.last(locallyModifiedList).modifiedAt
+      }
+    },
+    {name: 'syncToFirestore'},
+  )
 }
 
 function syncFromFirestore(nc, cRef) {
@@ -103,12 +117,21 @@ function syncFromFirestore(nc, cRef) {
 }
 
 export function FireNoteCollection({fire, nc}) {
-  async function startSync() {
+  function startSync() {
     const cRef = fire.store.createUserCollectionRef('bookmarkNotes')
-    await syncToFirestore(nc, cRef)
-    const disposer = syncFromFirestore(nc, cRef)
-    disposer()
+    const disposers = [
+      syncFromFirestore(nc, cRef),
+      syncToFirestore(nc, cRef),
+    ]
+    return () => {
+      disposers.forEach(_.invoker(0, 'call'))
+    }
   }
 
-  mWhen(() => fire.auth.isSignedIn, startSync)
+  mWhen(
+    () => fire.auth.isSignedIn,
+    () => {
+      mWhen(() => fire.auth.isSignedOut, startSync())
+    },
+  )
 }
