@@ -21,6 +21,7 @@
       <w>signin</w>
       <w>signout</w>
       <w>unmount</w>
+      <w>upsert</w>
     </words>
   </dictionary>
 </component>

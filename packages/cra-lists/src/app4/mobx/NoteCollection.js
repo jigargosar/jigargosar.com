@@ -125,7 +125,7 @@ export const NoteCollection = (function NotesCollection() {
         add(note) {
           this.put(note)
         },
-        createAndAddFromExternalStore(props) {
+        upsertFromExternalStore(props) {
           this.put(Note.create(props))
         },
       },

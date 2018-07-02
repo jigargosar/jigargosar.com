@@ -13,6 +13,17 @@ const RA = require('ramda-adjunct')
 
 /*eslint-enable*/
 
+export const firestoreServerTimestamp = () =>
+  firebase.firestore.FieldValue.serverTimestamp()
+
+export const FirestoreTimestamp = ({seconds, nanoseconds}) =>
+  new firebase.firestore.Timestamp(seconds, nanoseconds)
+
+export const zeroFirestoreTimestamp = new firebase.firestore.Timestamp(
+  0,
+  0,
+)
+
 if (module.hot) {
   window.firebase = firebase
 }
