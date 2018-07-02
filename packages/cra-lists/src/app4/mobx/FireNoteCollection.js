@@ -52,6 +52,26 @@ const lastServerTimestamp = StorageItem({
 })
 
 function syncToFirestore(nc, cRef) {
+  const update = mFlow(function*() {
+    const {locallyModifiedList} = sync
+    console.log(
+      `[ToFire] locallyModifiedList.length`,
+      locallyModifiedList.length,
+    )
+
+    if (!_.isEmpty(locallyModifiedList)) {
+      const pResults = locallyModifiedList.map(n =>
+        cRef.doc(n.id).set(
+          _.merge(n, {
+            serverTimestamp: firestoreServerTimestamp(),
+          }),
+        ),
+      )
+      const results = yield Promise.all(pResults)
+      console.log(`[ToFire] update firestore results`, results.length)
+      sync.setLastModifiedAt(_.last(locallyModifiedList).modifiedAt)
+    }
+  })
   const sync = createObservableObject({
     props: {
       lastModifiedAt: lastModifiedAt.load(),
@@ -64,34 +84,7 @@ function syncToFirestore(nc, cRef) {
         this.lastModifiedAt = val
         lastModifiedAt.save(val)
       },
-      update: debounce(
-        mFlow(function*() {
-          const {locallyModifiedList} = sync
-          console.log(
-            `[ToFire] locallyModifiedList.length`,
-            locallyModifiedList.length,
-          )
-
-          if (!_.isEmpty(locallyModifiedList)) {
-            const pResults = locallyModifiedList.map(n =>
-              cRef.doc(n.id).set(
-                _.merge(n, {
-                  serverTimestamp: firestoreServerTimestamp(),
-                }),
-              ),
-            )
-            const results = yield Promise.all(pResults)
-            console.log(
-              `[ToFire] update firestore results`,
-              results.length,
-            )
-            sync.setLastModifiedAt(
-              _.last(locallyModifiedList).modifiedAt,
-            )
-          }
-        }),
-        5000,
-      ),
+      update: debounce(update, 5000),
     },
   })
 
