@@ -1,4 +1,4 @@
-import {createObservableObject, mAutoRun, mWhen} from './utils'
+import {createObservableObject, mReaction, mWhen} from './utils'
 import {storage} from '../services/storage'
 import {_, validate} from '../utils'
 import {
@@ -58,34 +58,41 @@ function syncToFirestore(nc, cRef) {
         this.lastModifiedAt = val
         lastModifiedAt.save(val)
       },
+      *update() {
+        const {locallyModifiedList} = sync
+        console.log(
+          `[ToFire] locallyModifiedList.length`,
+          locallyModifiedList.length,
+        )
+
+        if (!_.isEmpty(locallyModifiedList)) {
+          const pResults = locallyModifiedList.map(n =>
+            cRef.doc(n.id).set(
+              _.merge(n, {
+                serverTimestamp: firestoreServerTimestamp(),
+              }),
+            ),
+          )
+          const results = yield Promise.all(pResults)
+          console.log(
+            `[ToFire] update firestore results`,
+            results.length,
+          )
+          sync.setLastModifiedAt(
+            _.last(locallyModifiedList).modifiedAt,
+          )
+        }
+      },
     },
   })
 
-  return mAutoRun(
-    async () => {
-      const {locallyModifiedList} = sync
-      console.log(
-        `[ToFire] locallyModifiedList.length`,
-        locallyModifiedList.length,
-      )
-
-      if (!_.isEmpty(locallyModifiedList)) {
-        const pResults = locallyModifiedList.map(n =>
-          cRef.doc(n.id).set(
-            _.merge(n, {
-              serverTimestamp: firestoreServerTimestamp(),
-            }),
-          ),
-        )
-        const results = await Promise.all(pResults)
-        console.log(
-          `[ToFire] update firestore results`,
-          results.length,
-        )
-        sync.setLastModifiedAt(_.last(locallyModifiedList).modifiedAt)
-      }
+  return mReaction(
+    () => sync.locallyModifiedList,
+    () => sync.update(),
+    {
+      name: 'syncToFirestore',
+      // scheduler: f => {},
     },
-    {name: 'syncToFirestore'},
   )
 }
 
