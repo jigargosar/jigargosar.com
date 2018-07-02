@@ -3,6 +3,7 @@ import {storage} from '../services/storage'
 import {_, validate} from '../utils'
 import {
   firestoreServerTimestamp,
+  createFirestoreTimestamp,
   zeroFirestoreTimestamp,
 } from './Fire'
 import {localActorId} from '../services/ActorId'
@@ -17,8 +18,8 @@ const dcListLastServerTimestampFrom = _.compose(
   _.last,
 )
 
-const StorageItem = ({name, getInitial}) => {
-  validate('SF', [name, getInitial])
+const StorageItem = ({name, getInitial, postLoad = _.identity}) => {
+  validate('SFF', [name, getInitial, postLoad])
 
   const getItem = () => storage.get(name)
   const setItem = val => storage.set(name, val)
@@ -29,7 +30,7 @@ const StorageItem = ({name, getInitial}) => {
 
   return {
     save: setItem,
-    load: getItem,
+    load: _.compose(postLoad, getItem),
   }
 }
 
@@ -41,6 +42,7 @@ const lastModifiedAt = StorageItem({
 const lastServerTimestamp = StorageItem({
   name: 'bookmarkNotes.lastServerTimestamp',
   getInitial: _.always(zeroFirestoreTimestamp),
+  postLoad: createFirestoreTimestamp,
 })
 
 export function FireNoteCollection({fire, nc}) {
@@ -65,13 +67,8 @@ export function FireNoteCollection({fire, nc}) {
       )
       const results = await Promise.all(pResults)
       console.log(`update firestore results`, results.length)
-      lastModifiedAt.set(_.last(locallyModifiedList).modifiedAt)
+      lastModifiedAt.save(_.last(locallyModifiedList).modifiedAt)
     }
-
-    const syncedTillFirestoreTimestamp = _.defaultTo(
-      zeroFirestoreTimestamp,
-      storage.get('bookmarkNotes.syncedTillFirestoreTimestamp'),
-    )
 
     const withQuerySnapshot = qs => {
       console.log('withQuerySnapshot called')
@@ -92,18 +89,17 @@ export function FireNoteCollection({fire, nc}) {
         console.log(`remoteChanges.length`, remoteChanges.length)
         remoteChanges.map(dcData).map(nc.upsertFromExternalStore)
 
-        lastServerTimestamp.set(
+        lastServerTimestamp.save(
           dcListLastServerTimestampFrom(docChanges),
         )
       }
     }
 
-    const qs = await cRef
-      .where('serverTimestamp', '>', syncedTillFirestoreTimestamp)
+    const query = cRef
+      .where('serverTimestamp', '>', lastServerTimestamp.load())
       .orderBy('serverTimestamp', 'asc')
-      .get()
-    // .onSnapshot(withQuerySnapshot)
-    withQuerySnapshot(qs)
+    // withQuerySnapshot(await query.get())
+    query.onSnapshot(withQuerySnapshot)
   }
 
   mWhen(() => fire.auth.isSignedIn, startSync)

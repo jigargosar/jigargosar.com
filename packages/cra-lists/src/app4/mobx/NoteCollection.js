@@ -125,6 +125,7 @@ export const NoteCollection = (function NotesCollection() {
         add(note) {
           this.put(note)
         },
+        upsertFromFirestoreDocChanges() {},
         upsertFromExternalStore(props) {
           this.put(Note.create(props))
         },

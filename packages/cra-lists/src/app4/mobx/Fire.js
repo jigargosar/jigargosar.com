@@ -16,8 +16,10 @@ const RA = require('ramda-adjunct')
 export const firestoreServerTimestamp = () =>
   firebase.firestore.FieldValue.serverTimestamp()
 
-export const FirestoreTimestamp = ({seconds, nanoseconds}) =>
-  new firebase.firestore.Timestamp(seconds, nanoseconds)
+export const createFirestoreTimestamp = ({seconds, nanoseconds}) => {
+  validate('NN', [seconds, nanoseconds])
+  return new firebase.firestore.Timestamp(seconds, nanoseconds)
+}
 
 export const zeroFirestoreTimestamp = new firebase.firestore.Timestamp(
   0,
