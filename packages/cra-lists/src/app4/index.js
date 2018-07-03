@@ -33,7 +33,7 @@ if (module.hot) {
   console.debug(`createObservableHistory`, createObservableHistory)
 
   module.hot['accept'](
-    ['./components/App', './mobx'],
+    ['./components/App'],
     _.tryCatch(() => {
       console.clear()
       mRunInAction('Hot Update States', () =>

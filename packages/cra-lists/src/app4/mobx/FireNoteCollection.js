@@ -93,15 +93,13 @@ function syncToFirestore(nc, cRef) {
     },
   })
   sync.update()
-  const iReactionDisposer = mReaction(
+  return mReaction(
     () => sync.locallyModifiedList,
     () => sync.update(),
     {
       name: 'syncToFirestore',
     },
   )
-  // mTrace(iReactionDisposer)
-  return iReactionDisposer
 }
 
 function syncFromFirestore(nc, cRef) {
@@ -166,10 +164,4 @@ export function FireNoteCollection({fire, nc}) {
     },
     {name: 'FireNoteCollection sync ar'},
   )
-}
-
-if (module.hot) {
-  module.hot.dispose(() => {
-    disposer()
-  })
 }
