@@ -17,7 +17,8 @@ import {
 import {localActorId} from '../services/ActorId'
 import debounce from 'lodash/debounce'
 
-/*eslint-enable, eslint-disable no-empty-pattern*/
+/*eslint-enable*/
+/*eslint-disable no-empty-pattern, no-unused-vars*/
 
 function dcData(c) {
   return c.doc.data()
@@ -56,21 +57,48 @@ const lastServerTimestamp = StorageItem({
   postLoad: createFirestoreTimestamp,
 })
 
+function mergeServerTimestamp(n) {
+  return _.merge(n, {
+    serverTimestamp: firestoreServerTimestamp(),
+  })
+}
+
 function update(cRef) {
   const {locallyModifiedList} = this
   console.log(
     `[ToFire] locallyModifiedList.length`,
     locallyModifiedList.length,
   )
+  const lastModifiedAt = this.lastModifiedAt
+
+  function getLocalModifications(n) {
+    const localUpdates = _.path(['actorUpdates', localActorId], n)
+    let modifications = _.compose(
+      _.merge(_.__, {[`actorUpdates.${localActorId}`]: localUpdates}),
+      _.pick(_.__, n),
+      _.keys,
+      _.filter(modifiedAt => modifiedAt > lastModifiedAt),
+    )(localUpdates)
+    // console.log(`modifications`, modifications)
+    return modifications
+  }
 
   if (!_.isEmpty(locallyModifiedList)) {
-    const pResults = locallyModifiedList.map(n =>
-      cRef.doc(n.id).set(
-        _.merge(n, {
-          serverTimestamp: firestoreServerTimestamp(),
-        }),
-      ),
-    )
+    const pResults = locallyModifiedList.map(n => {
+      const docRef = cRef.doc(n.id)
+      if (n.createdAt > lastModifiedAt) {
+        const newData = mergeServerTimestamp(n)
+        console.log(`newData`, newData)
+        return docRef.set(newData)
+      } else {
+        const updatedData = _.compose(
+          mergeServerTimestamp,
+          getLocalModifications,
+        )(n)
+        console.log(`updatedData`, updatedData)
+        return docRef.update(updatedData)
+      }
+    })
     Promise.all(pResults).then(results => {
       console.debug(
         `[ToFire] update firestore results`,
@@ -158,7 +186,7 @@ export function startFireNoteCollectionSync({fire, nc}) {
         )
 
         disposers.push(
-          syncFromFirestore(nc, cRef),
+          // syncFromFirestore(nc, cRef),
           syncToFirestore(nc, cRef),
         )
       }

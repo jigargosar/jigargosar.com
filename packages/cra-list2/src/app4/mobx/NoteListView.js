@@ -154,6 +154,7 @@ export function NoteListView({nc}) {
       addNewAt(idx) {
         const newNote = nc.newNote({sortIdx: idx - 1})
         nc.add(newNote)
+        this.updateSortIdx()
         this.mode.switchToEdit(idx)
       },
       cyclicMoveBy(moveBy) {
@@ -177,6 +178,7 @@ export function NoteListView({nc}) {
         this.mode.overListItemWithSidx(this.noteDisplayList, dn =>
           dn.onToggleDeleteEvent(),
         )
+        this.updateSortIdx()
       },
       insertAbove() {
         this.addNewAt(this.sidx)

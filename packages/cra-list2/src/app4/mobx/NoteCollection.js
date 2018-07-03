@@ -21,17 +21,15 @@ export const Note = (function Note() {
     deleted,
     sortIdx,
     createdAt = Date.now(),
-    modifiedAt = Date.now(),
-    actorId = localActorId,
+    actorUpdates = {},
   }) {
-    validate('SSBNNNS', [
+    validate('SSBNNO', [
       id,
       text,
       deleted,
       sortIdx,
       createdAt,
-      modifiedAt,
-      actorId,
+      actorUpdates,
     ])
     const note = createObservableObject({
       props: {
@@ -40,26 +38,33 @@ export const Note = (function Note() {
         deleted,
         sortIdx,
         createdAt,
-        modifiedAt,
-        actorId,
+        actorUpdates,
+        get localActorUpdates() {
+          return this.actorUpdates[localActorId]
+        },
+        isModifiedSince(ts) {},
       },
       actions: {
         toggleDeleted() {
-          this.localActorUpdate({deleted: !this.deleted})
+          this._localActorUpdate({deleted: !this.deleted})
         },
         updateText(text) {
-          this.localActorUpdate({text})
+          this._localActorUpdate({text})
         },
         updateSortIdx(sortIdx) {
-          this.localActorUpdate({sortIdx})
+          this._localActorUpdate({sortIdx})
         },
-        localActorUpdate(props) {
-          if (_.eqBy(_.pick(_.keys(props)), this, props)) {
+        _localActorUpdate(props) {
+          const keys = _.keys(props)
+          if (_.eqBy(_.pick(keys), this, props)) {
             return
           }
           Object.assign(this, props)
-          this.modifiedAt = Date.now()
-          this.actorId = localActorId
+          const modifiedAt = Date.now()
+          this.actorUpdates[localActorId] = _.merge(
+            this.actorUpdates[localActorId],
+            _.zipObj(keys, _.repeat(modifiedAt, keys.length)),
+          )
         },
       },
       name: `Note@${id}`,
@@ -101,13 +106,18 @@ export const NoteCollection = (function NotesCollection() {
           return mJS(this.idLookup)
         },
         getLocallyModifiedSince(timestamp) {
-          return _.sortWith([_.ascend(_.prop('modifiedAt'))])(
-            this.valuesArray.filter(
-              n =>
-                n.modifiedAt > timestamp &&
-                _.equals(n.actorId, localActorId),
-            ),
-          )
+          const sortByModifiedAt = _.sortWith([
+            _.ascend(_.prop('modifiedAt')),
+          ])
+
+          const modifiedSinceTimestampPred = n =>
+            n.modifiedAt > timestamp &&
+            _.equals(n.actorId, localActorId)
+
+          return _.compose(
+            sortByModifiedAt,
+            _.filter(modifiedSinceTimestampPred),
+          )(this.valuesArray)
         },
       },
       actions: {
@@ -118,8 +128,6 @@ export const NoteCollection = (function NotesCollection() {
             deleted: false,
             sortIdx,
             createdAt: Date.now(),
-            modifiedAt: Date.now(),
-            actorId: localActorId,
           })
         },
         put(note) {

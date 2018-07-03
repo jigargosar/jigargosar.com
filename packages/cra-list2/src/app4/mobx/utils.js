@@ -9,7 +9,9 @@ import {
   ObjectFormatter,
 } from './utils/formatters'
 
-/*eslint-enable, eslint-disable no-empty-pattern*/
+/*eslint-enable*/
+
+/*eslint-disable no-empty-pattern*/
 
 export {createTransformer, createViewModel} from 'mobx-utils'
 
