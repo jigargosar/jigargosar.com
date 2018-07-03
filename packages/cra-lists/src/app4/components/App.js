@@ -132,7 +132,7 @@ const AppHeader = mrInjectAll(function AppHeader({fire: {auth}}) {
     <div className={'flex pv3 shadow-1 bg-light-blue'}>
       <Title className={cn('flex-auto')}>Notes</Title>
       <div className={cn('flex items-center')}>
-        {!auth.isAuthKnown && <Text>'Loading...'</Text>}
+        {!auth.isAuthKnown && <Text>Loading...</Text>}
 
         {auth.isSignedOut && (
           <F>
