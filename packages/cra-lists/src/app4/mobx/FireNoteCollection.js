@@ -1,7 +1,9 @@
 import {
   createObservableObject,
+  mAutoRun,
   mFlow,
   mReaction,
+  mTrace,
   mWhen,
 } from './utils'
 import {storage} from '../services/storage'
@@ -137,11 +139,11 @@ function syncFromFirestore(nc, cRef) {
     .orderBy('serverTimestamp', 'asc')
   // withQuerySnapshot(await query.get())
   const disposer = query.onSnapshot(withQuerySnapshot)
-  // if (module.hot) {
-  //   module.hot.dispose(() => {
-  //     disposer()
-  //   })
-  // }
+  if (module.hot) {
+    module.hot.dispose(() => {
+      disposer()
+    })
+  }
   return disposer
 }
 
@@ -157,16 +159,16 @@ export function FireNoteCollection({fire, nc}) {
     }
   }
 
-  mWhen(
-    () => fire.auth.isSignedIn,
-    () => {
-      const disposer = startSync()
-      if (module.hot) {
-        module.hot.dispose(() => {
-          disposer()
-        })
-      }
-      mWhen(() => fire.auth.isSignedOut, disposer)
+  mAutoRun(
+    r => {
+      mTrace(r)
+      mWhen(
+        () => fire.auth.isSignedIn,
+        () => {
+          mWhen(() => fire.auth.isSignedOut, startSync())
+        },
+      )
     },
+    {name: 'FireNoteCollection sync ar'},
   )
 }

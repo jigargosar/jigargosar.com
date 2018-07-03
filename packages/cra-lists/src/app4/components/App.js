@@ -132,9 +132,8 @@ const AppHeader = mrInjectAll(function AppHeader({fire: {auth}}) {
     <div className={'flex pv3 shadow-1 bg-light-blue'}>
       <Title className={cn('flex-auto')}>Notes</Title>
       <div className={cn('flex items-center')}>
-        <Text>
-          {auth.isAuthKnown ? auth.displayName : 'Loading...'}
-        </Text>
+        {!auth.isAuthKnown && <Text>'Loading...'</Text>}
+
         {auth.isSignedOut && (
           <F>
             <Button onClick={auth.signInWithRedirect}>SignIn</Button>
@@ -144,7 +143,10 @@ const AppHeader = mrInjectAll(function AppHeader({fire: {auth}}) {
           </F>
         )}
         {auth.isSignedIn && (
-          <Button onClick={auth.signOut}>SignOut</Button>
+          <F>
+            <Text>{auth.displayName}</Text>
+            <Button onClick={auth.signOut}>SignOut</Button>
+          </F>
         )}
       </div>
     </div>
