@@ -42,6 +42,10 @@ function _pick(props, obj) {
   return R.pick(props, obj)
 }
 
+export function tryCatchLogError(trier) {
+  return _.tryCatch(trier, console.error)
+}
+
 export const vProp = R.curry(_prop)
 export const vOmit = R.curry(_omit)
 export const vPick = R.curry(_pick)

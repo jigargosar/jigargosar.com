@@ -1,11 +1,15 @@
+/*eslint-disable*/
+
 import * as m from 'mobx'
-import {_, R, RX} from '../utils'
+import {_, R} from '../utils'
 import * as mst from 'mobx-state-tree'
 import {
   ArrayFormatter,
   MapFormatter,
   ObjectFormatter,
 } from './utils/formatters'
+
+/*eslint-enable, eslint-disable no-empty-pattern*/
 
 export {createTransformer, createViewModel} from 'mobx-utils'
 
@@ -50,48 +54,10 @@ function extendObservableWithBoundActions(obs, actions) {
 export function createObservableObject({
   props = {},
   actions = {},
-  name = 'ObservableObject',
+  // name = 'ObservableObject',
 } = {}) {
-  const oObj = oObject(props, {}, {name})
+  const oObj = oObject(props, {} /*, {name}*/)
   return extendObservableWithBoundActions(oObj, actions)
-}
-
-export const extendObservableWithActionFactory = _.curry(
-  (createActions, observable) => {
-    const actions = createActions(observable)
-    return extendObservable(
-      observable,
-      actions,
-      _.map(_.always(mAction), actions),
-    )
-  },
-)
-
-export const extendObservableWithComputedFactory = _.curry(
-  (createComputed, observable) => {
-    const computed = createComputed(observable)
-    return extendObservable(
-      observable,
-      computed,
-      _.map(_.always(mComputed), computed),
-    )
-  },
-)
-
-export const extendObservableWithFactories = (
-  {
-    props = {},
-    views = RX.alwaysEmptyObject,
-    actions = RX.alwaysEmptyObject,
-  } = {},
-  obs,
-) => {
-  return _.compose(
-    extendObservableWithComputedFactory(views),
-    extendObservableWithActionFactory(actions),
-    // extendObservable2(_.__, props),
-    RX.defaultToEmptyObject,
-  )(obs)
 }
 
 export const defineDelegatePropertyGetter = R.curry(
@@ -128,54 +94,3 @@ if (module.hot) {
     data.devtoolsFormatters = formatters
   })
 }
-
-// const oFoo = extendObservableWith(
-//   {
-//     props: {
-//       _foo: 1,
-//       set foo(val) {
-//         return (this._foo = val)
-//       },
-//       get foo() {
-//         return this._foo
-//       },
-//     },
-//     views: obs => ({}),
-//     actions: obs => ({
-//       getFoo() {
-//         return obs._foo
-//       },
-//       setFoo(val) {
-//         return (obs._foo = val)
-//       },
-//     }),
-//   },
-//   {
-//     _foo: 1,
-//     set foo(val) {
-//       return (this._foo = val)
-//     },
-//     get foo() {
-//       return this._foo
-//     },
-//   },
-// )
-//
-// mAutoRun(
-//   () => {
-//     console.log(`oFoo.foo`, oFoo.foo)
-//   },
-//   {name: 'oFoo.foo'},
-// )
-//
-// console.log(`oFoo`, oFoo)
-// console.log(`oFoo`, mJS(oFoo))
-// oFoo.foo = 1
-// oFoo.foo = 1
-// oFoo.foo = 2
-// oFoo.foo = 1
-// oFoo.foo = 2
-// oFoo.foo = 1
-// oFoo.foo = 2
-// oFoo.foo = 2
-// oFoo.foo = 2

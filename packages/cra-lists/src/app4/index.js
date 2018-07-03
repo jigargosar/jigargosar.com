@@ -7,9 +7,12 @@ import {createObservableHistory} from './mobx/utils/StateHistory'
 import {_} from './utils'
 import {Provider} from 'mobx-react'
 import {initExtension} from './extension'
-import {createState} from './mobx'
 
-const appState = oObject(createState(), {}, {name: 'appState'})
+function getState() {
+  return require('./mobx').createState()
+}
+
+const appState = oObject(getState(), {}, {name: 'appState'})
 
 function render() {
   const App = require('./components/App').default
@@ -33,11 +36,11 @@ if (module.hot) {
   console.debug(`createObservableHistory`, createObservableHistory)
 
   module.hot['accept'](
-    ['./components/App'],
+    ['./components/App', './mobx'],
     _.tryCatch(() => {
-      console.clear()
+      // console.clear()
       mRunInAction('Hot Update States', () =>
-        Object.assign(appState, ...createState()),
+        Object.assign(appState, ...getState()),
       )
       render()
     }, console.error),
