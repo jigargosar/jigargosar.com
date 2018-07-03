@@ -141,14 +141,7 @@ function syncFromFirestore(nc, cRef) {
         console.debug(`[FromFire] dcData(c)`, dcData(c))
       })
 
-      const remoteChanges = docChanges.filter(
-        c => !_.equals(dcData(c).actorId, localActorId),
-      )
-      console.log(
-        `[FromFire] remoteChanges.length`,
-        remoteChanges.length,
-      )
-      const dataList = remoteChanges.map(dcData)
+      const dataList = docChanges.map(dcData)
       nc.upsertListFromRemoteStore(dataList)
 
       lastServerTimestamp.save(
@@ -176,7 +169,7 @@ export function startFireNoteCollectionSync({fire, nc}) {
         )
 
         disposers.push(
-          // syncFromFirestore(nc, cRef),
+          syncFromFirestore(nc, cRef),
           syncToFirestore(nc, cRef),
         )
       }

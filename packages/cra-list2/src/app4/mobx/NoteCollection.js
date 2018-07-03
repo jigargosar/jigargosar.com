@@ -14,6 +14,8 @@ const deletedProp = R.propOr(false, 'deleted')
 const rejectDeleted = R.reject(deletedProp)
 const filterDeleted = R.filter(deletedProp)
 
+const getLocalActorUpdates = _.path(['actorUpdates', localActorId])
+
 export const Note = (function Note() {
   function create({
     id,
@@ -40,7 +42,8 @@ export const Note = (function Note() {
         createdAt,
         actorUpdates,
         get localActorUpdates() {
-          return this.actorUpdates[localActorId]
+          return getLocalActorUpdates(this)
+          // return this.actorUpdates[localActorId]
         },
         set localActorUpdates(updates) {
           this.actorUpdates[localActorId] = updates
@@ -86,7 +89,48 @@ export const Note = (function Note() {
             _.zipObj(keys, _.repeat(Date.now(), keys.length)),
           )
         },
-        updateFromRemoteStore(props) {},
+        updateFromRemoteStore(props) {
+          if (_.eqProps('actorUpdates', this, props)) {
+            console.log(
+              'ignoring updateFromRemoteStore',
+              this.actorUpdates,
+              props.actorUpdates,
+            )
+            return
+          }
+
+          const localActorUpdates = getLocalActorUpdates(props)
+
+          const mergeAllWithMax = _.reduce(_.mergeWith(_.max), {})
+          const latestRemoteActorUpdates = _.compose(
+            mergeAllWithMax,
+            _.values,
+            _.omit([localActorId]),
+            _.prop('actorUpdates'),
+          )(props)
+
+          const filteredRemoteActorUpdateKeys = _.compose(
+            _.map(_.head),
+            _.filter(([key, modifiedAt]) => {
+              const localActorModifiedAt = localActorUpdates[key]
+              return (
+                _.isNil(localActorModifiedAt) ||
+                modifiedAt > localActorModifiedAt
+              )
+            }),
+            _.toPairs,
+          )(latestRemoteActorUpdates)
+
+          const remoteProps = _.pick(
+            filteredRemoteActorUpdateKeys,
+            props,
+          )
+          console.log(`remoteProps`, remoteProps, props.actorUpdates)
+          debugger
+          Object.assign(this, remoteProps, {
+            actorUpdates: props.actorUpdates,
+          })
+        },
       },
       name: `Note@${id}`,
     })
