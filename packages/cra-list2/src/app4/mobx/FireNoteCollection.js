@@ -130,7 +130,8 @@ function syncFromFirestore(nc, cRef) {
         `[FromFire] remoteChanges.length`,
         remoteChanges.length,
       )
-      remoteChanges.map(dcData).map(nc.upsertFromExternalStore)
+      const dataList = remoteChanges.map(dcData)
+      nc.upsertListFromExternalStore(dataList)
 
       lastServerTimestamp.save(
         dcListLastServerTimestampFrom(docChanges),

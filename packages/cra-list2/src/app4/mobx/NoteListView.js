@@ -109,6 +109,9 @@ const noteTransformer = createTransformer(view =>
         get sortIdx() {
           return note.sortIdx
         },
+        get actorId() {
+          return note.actorId
+        },
       },
       {},
       {name: 'DisplayNote'},
@@ -146,7 +149,6 @@ export function NoteListView({nc}) {
     },
     actions: {
       updateSortIdx(list = this.noteDisplayList) {
-        // debugger
         list.forEach((n, idx) => n._updateSortIndex(idx))
       },
       addNewAt(idx) {
@@ -219,7 +221,7 @@ export function NoteListView({nc}) {
     () => [view.noteDisplayList.length],
     ([listLength]) => {
       view.mode.clampSidx(listLength)
-      view.updateSortIdx()
+      // view.updateSortIdx()
     },
   )
 

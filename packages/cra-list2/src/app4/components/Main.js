@@ -40,7 +40,7 @@ const NoteInput = observer(function NoteInput({note}) {
 const NoteText = observer(function NoteText({note}) {
   return (
     <Text className={cn('pa1 flex-auto', {'o-50': note.deleted})}>
-      {`A:${shortenAID(localActorId)}: ${note.displayText}`}
+      {`A:${shortenAID(note.actorId)}: ${note.displayText}`}
     </Text>
   )
 })

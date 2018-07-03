@@ -54,6 +54,9 @@ export const Note = (function Note() {
           this.localActorUpdate({sortIdx})
         },
         localActorUpdate(props) {
+          if (_.eqBy(_.pick(_.keys(props)), this, props)) {
+            return
+          }
           Object.assign(this, props)
           this.modifiedAt = Date.now()
           this.actorId = localActorId
@@ -125,7 +128,9 @@ export const NoteCollection = (function NotesCollection() {
         add(note) {
           this.put(note)
         },
-        upsertFromFirestoreDocChanges() {},
+        upsertListFromExternalStore(notes) {
+          notes.forEach(this.upsertFromExternalStore)
+        },
         upsertFromExternalStore(props) {
           this.put(Note.create(props))
         },

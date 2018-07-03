@@ -1,5 +1,5 @@
 import {storage} from './storage'
-import {_} from '../utils'
+import {_, validate} from '../utils'
 import {nanoid} from '../model/util'
 
 export const localActorId = (() => {
@@ -12,5 +12,6 @@ export const localActorId = (() => {
 })()
 
 export function shortenAID(aid) {
+  validate('S', [aid])
   return _.take(4, aid)
 }
