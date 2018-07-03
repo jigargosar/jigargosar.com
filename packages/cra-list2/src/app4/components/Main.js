@@ -127,12 +127,11 @@ const NoteList = mrInjectAll(function NoteList({view}) {
   )
 })
 
-const AppHeader = mrInjectAll(function AppHeader({foo, fire}) {
+const AppHeader = mrInjectAll(function AppHeader({fire}) {
   const {auth} = fire
   return (
     <div className={'flex pv3 shadow-1 bg-light-blue'}>
       <Title className={cn('flex-auto')}>Notes</Title>
-      <Title className={cn('flex-auto')}>{`foo=${foo}`}</Title>
       <div className={cn('flex items-center')}>
         {!auth.isAuthKnown && <Text>Loading...</Text>}
 

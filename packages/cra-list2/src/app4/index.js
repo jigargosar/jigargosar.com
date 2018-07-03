@@ -12,7 +12,6 @@ function render() {
   mRunInAction('Hot Update States', () => {
     // console.clear()
     Object.assign(appState, require('./mobx').state)
-    appState.foo = 1
     const App = require('./components/Main').default
     ReactDOM.render(
       <Provider appState={appState}>
