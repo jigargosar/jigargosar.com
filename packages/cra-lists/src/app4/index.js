@@ -7,11 +7,11 @@ import {_} from './utils'
 import {Provider} from 'mobx-react'
 import {initExtension} from './extension'
 
-function getState() {
-  return require('./mobx').createState()
-}
-
 const appState = oObject(getState(), {}, {name: 'appState'})
+
+function getState() {
+  return require('./mobx/index.js').createState()
+}
 
 function render() {
   const App = require('./components/App').default
@@ -33,11 +33,15 @@ if (module.hot) {
   window.s = appState
 
   module.hot['accept'](
-    ['./components/App', './mobx'],
+    ['./components/App', './mobx/index.js'],
     _.tryCatch(() => {
-      console.clear()
+      // console.clear()
+      appState.disposer()
       mRunInAction('Hot Update States', () =>
-        Object.assign(appState, ...getState()),
+        Object.assign(
+          appState,
+          ...require('./mobx/index.js').createState(),
+        ),
       )
       render()
     }, console.error),

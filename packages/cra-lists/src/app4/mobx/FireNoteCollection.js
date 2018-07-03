@@ -89,18 +89,19 @@ function syncToFirestore(nc, cRef) {
       get locallyModifiedList() {
         return nc.getLocallyModifiedSince(this.lastModifiedAt)
       },
-      get updateFn() {
-        return debounce(update, 5000).bind(this)
-      },
+      // get updateFn() {
+      //   return debounce(update, 5000)
+      // },
     },
     actions: {
       setLastModifiedAt(val) {
         this.lastModifiedAt = val
         lastModifiedAt.save(val)
       },
-      update(cref) {
-        this.updateFn(cref)
-      },
+      // update(cref) {
+      //   this.updateFn(cref)
+      // },
+      update: update,
     },
   })
 
@@ -156,13 +157,13 @@ function syncFromFirestore(nc, cRef) {
     .orderBy('serverTimestamp', 'asc')
   // withQuerySnapshot(await query.get())
   const disposer = query.onSnapshot(withQuerySnapshot)
-  if (module.hot) {
-    module.hot.dispose(
-      tryCatchLogError(() => {
-        disposer()
-      }),
-    )
-  }
+  // if (module.hot) {
+  //   module.hot.dispose(
+  //     tryCatchLogError(() => {
+  //       disposer()
+  //     }),
+  //   )
+  // }
   return disposer
 }
 
@@ -174,18 +175,18 @@ function Disposers() {
       list.forEach(_.call)
       list.splice(0, list.length)
     },
+    length: () => list.length,
   }
 }
 
-export function FireNoteCollection({fire, nc}) {
+export function startFireNoteCollectionSync({fire, nc}) {
   const disposers = Disposers()
-  mAutoRun(
+  const arDisposer = mAutoRun(
     r => {
       mTrace(r)
       disposers.dispose()
       if (fire.auth.isSignedIn) {
         console.log('startSync')
-        // console.log('startSync')
         // console.log('startSync')
         // console.log('startSync')
         const cRef = fire.store.createUserCollectionRef(
@@ -200,16 +201,18 @@ export function FireNoteCollection({fire, nc}) {
     },
     {name: 'FireNoteCollection sync ar'},
   )
+  return () => {
+    disposers.dispose()
+    arDisposer()
+  }
 }
 
-// let disposers = []
-//
 // if (module.hot) {
 //   module.hot.dispose(
 //     tryCatchLogError(() => {
-//       // console.clear()
-//       console.log('disposing', disposers.length)
-//       disposers.forEach(_.call)
+//       console.clear()
+//       // console.log('disposing', disposers.length())
+//       // disposers.dispose()
 //     }),
 //   )
 // }
