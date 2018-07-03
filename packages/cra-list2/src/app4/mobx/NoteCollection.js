@@ -90,7 +90,11 @@ export const Note = (function Note() {
           )
         },
         updateFromRemoteStore(props) {
-          if (_.eqProps('actorUpdates', this, props)) {
+          const localActorUpdates = getLocalActorUpdates(props)
+          if (
+            _.isNil(localActorUpdates) ||
+            _.eqProps('actorUpdates', this, props)
+          ) {
             console.log(
               'ignoring updateFromRemoteStore',
               this.actorUpdates,
@@ -98,8 +102,6 @@ export const Note = (function Note() {
             )
             return
           }
-
-          const localActorUpdates = getLocalActorUpdates(props)
 
           const mergeAllWithMax = _.reduce(_.mergeWith(_.max), {})
           const latestRemoteActorUpdates = _.compose(
