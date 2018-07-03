@@ -2,7 +2,6 @@ import {
   createObservableObject,
   mFlow,
   mReaction,
-  mTrace,
   mWhen,
 } from './utils'
 import {storage} from '../services/storage'
@@ -54,7 +53,7 @@ const lastServerTimestamp = StorageItem({
 
 function syncToFirestore(nc, cRef) {
   const update = mFlow(function*() {
-    const {locallyModifiedList} = sync
+    const {locallyModifiedList} = this
     console.log(
       `[ToFire] locallyModifiedList.length`,
       locallyModifiedList.length,
@@ -73,9 +72,10 @@ function syncToFirestore(nc, cRef) {
         `[ToFire] update firestore results`,
         results.length,
       )
-      sync.setLastModifiedAt(_.last(locallyModifiedList).modifiedAt)
+      this.setLastModifiedAt(_.last(locallyModifiedList).modifiedAt)
     }
   })
+
   const sync = createObservableObject({
     props: {
       lastModifiedAt: lastModifiedAt.load(),
@@ -91,15 +91,15 @@ function syncToFirestore(nc, cRef) {
       update: debounce(update, 5000),
     },
   })
-
+  sync.update()
   const iReactionDisposer = mReaction(
     () => sync.locallyModifiedList,
-    sync.update,
+    () => sync.update(),
     {
       name: 'syncToFirestore',
     },
   )
-  mTrace(iReactionDisposer)
+  // mTrace(iReactionDisposer)
   return iReactionDisposer
 }
 
@@ -137,11 +137,11 @@ function syncFromFirestore(nc, cRef) {
     .orderBy('serverTimestamp', 'asc')
   // withQuerySnapshot(await query.get())
   const disposer = query.onSnapshot(withQuerySnapshot)
-  if (module.hot) {
-    module.hot.dispose(() => {
-      disposer()
-    })
-  }
+  // if (module.hot) {
+  //   module.hot.dispose(() => {
+  //     disposer()
+  //   })
+  // }
   return disposer
 }
 
@@ -160,7 +160,13 @@ export function FireNoteCollection({fire, nc}) {
   mWhen(
     () => fire.auth.isSignedIn,
     () => {
-      mWhen(() => fire.auth.isSignedOut, startSync())
+      const disposer = startSync()
+      if (module.hot) {
+        module.hot.dispose(() => {
+          disposer()
+        })
+      }
+      mWhen(() => fire.auth.isSignedOut, disposer)
     },
   )
 }
