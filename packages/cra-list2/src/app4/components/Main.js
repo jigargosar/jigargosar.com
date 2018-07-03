@@ -23,6 +23,7 @@ import {
 } from './utils'
 import {_} from '../utils'
 import FocusChild from './mobx/FocusChild'
+import {localActorId, shortenAID} from '../services/ActorId'
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
@@ -39,7 +40,7 @@ const NoteInput = observer(function NoteInput({note}) {
 const NoteText = observer(function NoteText({note}) {
   return (
     <Text className={cn('pa1 flex-auto', {'o-50': note.deleted})}>
-      {note.displayText}
+      {`A:${shortenAID(localActorId)}: ${note.displayText}`}
     </Text>
   )
 })
@@ -130,11 +131,15 @@ const NoteList = mrInjectAll(function NoteList({view}) {
 const AppHeader = mrInjectAll(function AppHeader({fire}) {
   const {auth} = fire
   return (
-    <div className={'flex pv3 shadow-1 bg-light-blue'}>
+    <div className={'flex items-center pv3 shadow-1 bg-light-blue'}>
       <Title className={cn('flex-auto')}>Notes</Title>
+
+      <Text className={cn('flex-auto')}>
+        {`A:${shortenAID(localActorId)}`}
+      </Text>
+
       <div className={cn('flex items-center')}>
         {!auth.isAuthKnown && <Text>Loading...</Text>}
-
         {auth.isSignedOut && (
           <F>
             <Button onClick={auth.signInWithRedirect}>SignIn</Button>

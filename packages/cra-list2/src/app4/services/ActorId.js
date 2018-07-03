@@ -10,3 +10,7 @@ export const localActorId = (() => {
   }
   return storedLocalActorId
 })()
+
+export function shortenAID(aid) {
+  return _.take(4, aid)
+}
