@@ -2,6 +2,16 @@
   "name": "cra-list2",
   "version": "0.1.0",
   "private": true,
+  "prettier": {
+    "printWidth": 70,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": false,
+    "jsxBracketSameLine": false
+  },
   "dependencies": {
     "@firebase/app-types": "^0.3.2",
     "aproba": "^2.0.0",

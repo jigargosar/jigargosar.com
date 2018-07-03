@@ -32,7 +32,7 @@
     <inspection_tool class="ES6ModulesDependencies" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ES6PossiblyAsyncFunction" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ES6ShorthandObjectProperty" enabled="true" level="UNUSED ENTRY" enabled_by_default="true" />
-    <inspection_tool class="ES6UnusedImports" enabled="true" level="INFORMATION" enabled_by_default="true" />
+    <inspection_tool class="ES6UnusedImports" enabled="true" level="UNUSED ENTRY" enabled_by_default="true" />
     <inspection_tool class="EmptyCatchBlockJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="EmptyFinallyBlockJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="EmptyTryBlockJS" enabled="true" level="WARNING" enabled_by_default="true" />

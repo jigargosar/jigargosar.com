@@ -2,13 +2,13 @@
 
 import {
   createObservableObject,
+  Disposers,
   mAutoRun,
-  mFlow,
   mReaction,
   mTrace,
 } from './utils'
 import {storage} from '../services/storage'
-import {_, tryCatchLogError, validate} from '../utils'
+import {_, validate} from '../utils'
 import {
   createFirestoreTimestamp,
   firestoreServerTimestamp,
@@ -16,7 +16,6 @@ import {
 } from './Fire'
 import {localActorId} from '../services/ActorId'
 import debounce from 'lodash/debounce'
-import {nanoid} from '../model/util'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
@@ -89,38 +88,25 @@ function syncToFirestore(nc, cRef) {
       get locallyModifiedList() {
         return nc.getLocallyModifiedSince(this.lastModifiedAt)
       },
-      // get updateFn() {
-      //   return debounce(update, 5000)
-      // },
     },
     actions: {
       setLastModifiedAt(val) {
         this.lastModifiedAt = val
         lastModifiedAt.save(val)
       },
-      // update(cref) {
-      //   this.updateFn(cref)
-      // },
-      update: update,
+      update: debounce(update, 5000),
     },
+    name: 'syncToFirestore',
   })
 
-  sync.update(cRef)
-  const iReactionDisposer = mReaction(
-    () => [sync.locallyModifiedList],
-    () => sync.update(cRef),
-    {
-      name: 'syncToFirestore',
-      // equals: (a, b) => {
-      //   const equalsResult = _.equals(a, b)
-      //   debugger
-      //   return equalsResult
-      // },
+  return mAutoRun(
+    () => {
+      if (sync.locallyModifiedList.length > 0) {
+        sync.update(cRef)
+      }
     },
+    {name: 'syncToFirestore.update'},
   )
-  mTrace(iReactionDisposer)
-  // iReactionDisposer()
-  return iReactionDisposer
 }
 
 function syncFromFirestore(nc, cRef) {
@@ -156,39 +142,16 @@ function syncFromFirestore(nc, cRef) {
     .where('serverTimestamp', '>', lastServerTimestamp.load())
     .orderBy('serverTimestamp', 'asc')
   // withQuerySnapshot(await query.get())
-  const disposer = query.onSnapshot(withQuerySnapshot)
-  // if (module.hot) {
-  //   module.hot.dispose(
-  //     tryCatchLogError(() => {
-  //       disposer()
-  //     }),
-  //   )
-  // }
-  return disposer
-}
-
-function Disposers() {
-  const list = []
-  return {
-    push: (...args) => list.push(...args),
-    dispose: () => {
-      list.forEach(_.call)
-      list.splice(0, list.length)
-    },
-    length: () => list.length,
-  }
+  return query.onSnapshot(withQuerySnapshot)
 }
 
 export function startFireNoteCollectionSync({fire, nc}) {
   const disposers = Disposers()
-  const arDisposer = mAutoRun(
-    r => {
-      mTrace(r)
+  const syncDisposer = mAutoRun(
+    () => {
       disposers.dispose()
       if (fire.auth.isSignedIn) {
-        console.log('startSync')
-        // console.log('startSync')
-        // console.log('startSync')
+        console.log('startFireNoteCollectionSync')
         const cRef = fire.store.createUserCollectionRef(
           'bookmarkNotes',
         )
@@ -199,20 +162,10 @@ export function startFireNoteCollectionSync({fire, nc}) {
         )
       }
     },
-    {name: 'FireNoteCollection sync ar'},
+    {name: 'FireNoteCollection.startFireNoteCollectionSync'},
   )
   return () => {
     disposers.dispose()
-    arDisposer()
+    syncDisposer()
   }
 }
-
-// if (module.hot) {
-//   module.hot.dispose(
-//     tryCatchLogError(() => {
-//       console.clear()
-//       // console.log('disposing', disposers.length())
-//       // disposers.dispose()
-//     }),
-//   )
-// }

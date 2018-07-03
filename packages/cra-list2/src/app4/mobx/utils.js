@@ -94,3 +94,15 @@ if (module.hot) {
     data.devtoolsFormatters = formatters
   })
 }
+
+export function Disposers() {
+  const list = []
+  return {
+    push: (...args) => list.push(...args),
+    dispose: () => {
+      list.forEach(_.call)
+      list.splice(0, list.length)
+    },
+    length: () => list.length,
+  }
+}

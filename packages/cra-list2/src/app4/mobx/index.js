@@ -1,40 +1,37 @@
 import {storage} from '../services/storage'
-import {Fire} from './Fire'
-import {mReaction} from './utils'
-import {startFireNoteCollectionSync} from './FireNoteCollection'
+import {Disposers, mReaction} from './utils'
 import {NoteListView} from './NoteListView'
 import {NoteCollection} from './NoteCollection'
+import {Fire} from './Fire'
+import {tryCatchLogError} from '../utils'
+import {startFireNoteCollectionSync} from './FireNoteCollection'
 
-function createNotesCollection() {
-  const ncSnapshot = storage.get('ncSnapshot') || {}
-  return NoteCollection.create(ncSnapshot)
+const ncSnapshot = storage.get('ncSnapshot') || {}
+const nc = NoteCollection.create(ncSnapshot)
+const state = {
+  nc,
+  view: NoteListView({nc}),
+  fire: Fire(),
 }
 
-export function createState() {
-  const nc = createNotesCollection()
-  const state = {
-    nc,
-    view: NoteListView({nc}),
-    fire: Fire(),
-    isAuthKnown() {
-      return this.fire.auth.isAuthKnown
-    },
+const disposers = Disposers()
 
-    isSignedIn() {
-      return this.fire.auth.isSignedIn
-    },
-
-    isSignedOut() {
-      return this.fire.auth.isSignedOut
-    },
-  }
-
-  const disposer = startFireNoteCollectionSync(state)
-
+disposers.push(
   mReaction(
     () => [nc.snapshot],
     () => storage.set('ncSnapshot', nc.snapshot),
-  )
+  ),
+  startFireNoteCollectionSync(state),
+)
 
-  return {...state, disposer}
+export {state}
+
+if (module.hot) {
+  module.hot.dispose(
+    tryCatchLogError(() => {
+      console.clear()
+      console.log('disposing state')
+      disposers.dispose()
+    }),
+  )
 }

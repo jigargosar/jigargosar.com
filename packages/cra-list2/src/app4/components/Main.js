@@ -13,13 +13,13 @@ import {
 import {
   C,
   cn,
-  mrInjectAll,
+  F,
   isAnyHotKey,
   isHotKey,
+  mrInjectAll,
   observer,
   renderKeyedById,
   wrapPD,
-  F,
 } from './utils'
 import {_} from '../utils'
 import FocusChild from './mobx/FocusChild'
@@ -127,10 +127,12 @@ const NoteList = mrInjectAll(function NoteList({view}) {
   )
 })
 
-const AppHeader = mrInjectAll(function AppHeader({fire: {auth}}) {
+const AppHeader = mrInjectAll(function AppHeader({foo, fire}) {
+  const {auth} = fire
   return (
     <div className={'flex pv3 shadow-1 bg-light-blue'}>
       <Title className={cn('flex-auto')}>Notes</Title>
+      <Title className={cn('flex-auto')}>{`foo=${foo}`}</Title>
       <div className={cn('flex items-center')}>
         {!auth.isAuthKnown && <Text>Loading...</Text>}
 
@@ -153,7 +155,7 @@ const AppHeader = mrInjectAll(function AppHeader({fire: {auth}}) {
   )
 })
 
-const App = observer(function App() {
+const Main = observer(function App() {
   return (
     <RootContainer>
       <CenterLayout>
@@ -164,4 +166,4 @@ const App = observer(function App() {
   )
 })
 
-export default App
+export default Main
