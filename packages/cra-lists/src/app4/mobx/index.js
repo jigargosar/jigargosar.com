@@ -1,7 +1,5 @@
 import {storage} from '../services/storage'
-import {Fire} from './Fire'
 import {mReaction} from './utils'
-import {FireNoteCollection} from './FireNoteCollection'
 
 function createNotesCollection() {
   const ncSnapshot = storage.get('ncSnapshot') || {}
@@ -12,12 +10,20 @@ function createNoteListView(nc) {
   return require('./NoteListView').NoteListView({nc})
 }
 
+function createFireNoteCollection(state) {
+  return require('./FireNoteCollection').FireNoteCollection(state)
+}
+
+function createFire() {
+  return require('./Fire').Fire()
+}
+
 export function createState() {
   const nc = createNotesCollection()
   const state = {
     nc,
     view: createNoteListView(nc),
-    fire: Fire(),
+    fire: createFire(),
     isAuthKnown() {
       return this.fire.auth.isAuthKnown
     },
@@ -31,7 +37,7 @@ export function createState() {
     },
   }
 
-  FireNoteCollection(state)
+  createFireNoteCollection(state)
 
   mReaction(
     () => [nc.snapshot],

@@ -54,9 +54,9 @@ function extendObservableWithBoundActions(obs, actions) {
 export function createObservableObject({
   props = {},
   actions = {},
-  // name = 'ObservableObject',
+  name,
 } = {}) {
-  const oObj = oObject(props, {} /*, {name}*/)
+  const oObj = oObject(props, {}, {name})
   return extendObservableWithBoundActions(oObj, actions)
 }
 

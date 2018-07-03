@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {mRunInAction, oObject} from './mobx/utils'
-import {createObservableHistory} from './mobx/utils/StateHistory'
 import {_} from './utils'
 import {Provider} from 'mobx-react'
 import {initExtension} from './extension'
@@ -32,13 +31,11 @@ initExtension(appState).catch(console.error)
 
 if (module.hot) {
   window.s = appState
-  // createObservableHistory(appState)
-  console.debug(`createObservableHistory`, createObservableHistory)
 
   module.hot['accept'](
     ['./components/App', './mobx'],
     _.tryCatch(() => {
-      // console.clear()
+      console.clear()
       mRunInAction('Hot Update States', () =>
         Object.assign(appState, ...getState()),
       )

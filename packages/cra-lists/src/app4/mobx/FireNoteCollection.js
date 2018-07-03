@@ -57,36 +57,40 @@ const lastServerTimestamp = StorageItem({
   postLoad: createFirestoreTimestamp,
 })
 
-function syncToFirestore(nc, cRef) {
-  const update = mFlow(function*() {
-    const {locallyModifiedList} = this
-    console.log(
-      `[ToFire] locallyModifiedList.length`,
-      locallyModifiedList.length,
-    )
+function update(cRef) {
+  const {locallyModifiedList} = this
+  console.log(
+    `[ToFire] locallyModifiedList.length`,
+    locallyModifiedList.length,
+  )
 
-    if (!_.isEmpty(locallyModifiedList)) {
-      const pResults = locallyModifiedList.map(n =>
-        cRef.doc(n.id).set(
-          _.merge(n, {
-            serverTimestamp: firestoreServerTimestamp(),
-          }),
-        ),
-      )
-      const results = yield Promise.all(pResults)
+  if (!_.isEmpty(locallyModifiedList)) {
+    const pResults = locallyModifiedList.map(n =>
+      cRef.doc(n.id).set(
+        _.merge(n, {
+          serverTimestamp: firestoreServerTimestamp(),
+        }),
+      ),
+    )
+    Promise.all(pResults).then(results => {
       console.debug(
         `[ToFire] update firestore results`,
         results.length,
       )
       this.setLastModifiedAt(_.last(locallyModifiedList).modifiedAt)
-    }
-  })
+    })
+  }
+}
 
+function syncToFirestore(nc, cRef) {
   const sync = createObservableObject({
     props: {
       lastModifiedAt: lastModifiedAt.load(),
       get locallyModifiedList() {
         return nc.getLocallyModifiedSince(this.lastModifiedAt)
+      },
+      get updateFn() {
+        return debounce(update, 5000).bind(this)
       },
     },
     actions: {
@@ -94,15 +98,18 @@ function syncToFirestore(nc, cRef) {
         this.lastModifiedAt = val
         lastModifiedAt.save(val)
       },
-      update: debounce(update, 5000),
+      update(cref) {
+        this.updateFn(cref)
+      },
     },
   })
-  sync.update()
+
+  sync.update(cRef)
   const iReactionDisposer = mReaction(
     () => [sync.locallyModifiedList],
-    () => sync.update(),
+    () => sync.update(cRef),
     {
-      // name: 'syncToFirestore',
+      name: 'syncToFirestore',
       // equals: (a, b) => {
       //   const equalsResult = _.equals(a, b)
       //   debugger
@@ -178,6 +185,8 @@ export function FireNoteCollection({fire, nc}) {
       disposers.dispose()
       if (fire.auth.isSignedIn) {
         console.log('startSync')
+        // console.log('startSync')
+        // console.log('startSync')
         // console.log('startSync')
         const cRef = fire.store.createUserCollectionRef(
           'bookmarkNotes',
