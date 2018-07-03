@@ -4,6 +4,5 @@
     <file url="file://$PROJECT_DIR$/packages/cra-lists" libraries="{HTML}" />
     <file url="PROJECT" libraries="{HTML}" />
     <includedPredefinedLibrary name="Node.js Core" />
-    <excludedPredefinedLibrary name="hacker-blog/packages/ember-quickstart/node_modules" />
   </component>
 </project>
