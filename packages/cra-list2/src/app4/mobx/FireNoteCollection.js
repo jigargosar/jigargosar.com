@@ -4,8 +4,7 @@ import {
   createObservableObject,
   Disposers,
   mAutoRun,
-  mReaction,
-  mTrace,
+  mJSRejectFn,
 } from './utils'
 import {storage} from '../services/storage'
 import {_, validate} from '../utils'
@@ -71,30 +70,19 @@ function update(cRef) {
   )
   const lastModifiedAt = this.lastModifiedAt
 
-  function getLocalModifications(n) {
-    const localUpdates = _.path(['actorUpdates', localActorId], n)
-    let modifications = _.compose(
-      _.merge(_.__, {[`actorUpdates.${localActorId}`]: localUpdates}),
-      _.pick(_.__, n),
-      _.keys,
-      _.filter(modifiedAt => modifiedAt > lastModifiedAt),
-    )(localUpdates)
-    // console.log(`modifications`, modifications)
-    return modifications
-  }
-
   if (!_.isEmpty(locallyModifiedList)) {
     const pResults = locallyModifiedList.map(n => {
       const docRef = cRef.doc(n.id)
       if (n.createdAt > lastModifiedAt) {
-        const newData = mergeServerTimestamp(n)
+        const newData = _.compose(mergeServerTimestamp, mJSRejectFn)(
+          n,
+        )
         console.log(`newData`, newData)
         return docRef.set(newData)
       } else {
-        const updatedData = _.compose(
-          mergeServerTimestamp,
-          getLocalModifications,
-        )(n)
+        const updatedData = mergeServerTimestamp(
+          n.getLocalModificationsSince(lastModifiedAt),
+        )
         console.log(`updatedData`, updatedData)
         return docRef.update(updatedData)
       }
@@ -104,7 +92,9 @@ function update(cRef) {
         `[ToFire] update firestore results`,
         results.length,
       )
-      this.setLastModifiedAt(_.last(locallyModifiedList).modifiedAt)
+      this.setLastModifiedAt(
+        _.last(locallyModifiedList).lastLocallyModifiedAt,
+      )
     })
   }
 }

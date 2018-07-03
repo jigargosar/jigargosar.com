@@ -42,7 +42,28 @@ export const Note = (function Note() {
         get localActorUpdates() {
           return this.actorUpdates[localActorId]
         },
-        isModifiedSince(ts) {},
+        set localActorUpdates(updates) {
+          this.actorUpdates[localActorId] = updates
+        },
+
+        get lastLocallyModifiedAt() {
+          return _.compose(_.reduce(_.max, this.createdAt), _.values)(
+            this.localActorUpdates,
+          )
+        },
+        getLocalModificationsSince(timestamp) {
+          const modifications = _.compose(
+            _.merge(_.__, {
+              [`actorUpdates.${localActorId}`]: this
+                .localActorUpdates,
+            }),
+            _.pick(_.__, this),
+            _.keys,
+            _.filter(modifiedAt => modifiedAt > timestamp),
+          )(this.localActorUpdates)
+          // console.log(`modifications`, modifications)
+          return modifications
+        },
       },
       actions: {
         toggleDeleted() {
@@ -60,10 +81,9 @@ export const Note = (function Note() {
             return
           }
           Object.assign(this, props)
-          const modifiedAt = Date.now()
-          this.actorUpdates[localActorId] = _.merge(
-            this.actorUpdates[localActorId],
-            _.zipObj(keys, _.repeat(modifiedAt, keys.length)),
+          this.localActorUpdates = _.merge(
+            this.localActorUpdates,
+            _.zipObj(keys, _.repeat(Date.now(), keys.length)),
           )
         },
       },
@@ -107,16 +127,12 @@ export const NoteCollection = (function NotesCollection() {
         },
         getLocallyModifiedSince(timestamp) {
           const sortByModifiedAt = _.sortWith([
-            _.ascend(_.prop('modifiedAt')),
+            _.ascend(_.prop('lastLocallyModifiedAt')),
           ])
-
-          const modifiedSinceTimestampPred = n =>
-            n.modifiedAt > timestamp &&
-            _.equals(n.actorId, localActorId)
 
           return _.compose(
             sortByModifiedAt,
-            _.filter(modifiedSinceTimestampPred),
+            _.filter(n => n.lastLocallyModifiedAt > timestamp),
           )(this.valuesArray)
         },
       },

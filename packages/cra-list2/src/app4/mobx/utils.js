@@ -1,7 +1,7 @@
 /*eslint-disable*/
 
 import * as m from 'mobx'
-import {_, R} from '../utils'
+import {_, R, RA} from '../utils'
 import * as mst from 'mobx-state-tree'
 import {
   ArrayFormatter,
@@ -35,6 +35,7 @@ export const mFlow = m.flow
 export const mRunInAction = m.runInAction
 export const mTrace = m.trace
 export const mJS = m.toJS
+export const mJSRejectFn = _.compose(_.reject(RA.isFunction), m.toJS)
 export const mSpy = m.spy
 export const mIntercept = m.intercept
 export const mActionBound = m.action.bound
