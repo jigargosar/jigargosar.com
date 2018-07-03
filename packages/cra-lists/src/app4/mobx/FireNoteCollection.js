@@ -137,14 +137,10 @@ function syncFromFirestore(nc, cRef) {
     .where('serverTimestamp', '>', lastServerTimestamp.load())
     .orderBy('serverTimestamp', 'asc')
   // withQuerySnapshot(await query.get())
-  const disposer = query.onSnapshot(withQuerySnapshot)
-  if (module.hot) {
-    module.hot.dispose(() => {
-      disposer()
-    })
-  }
-  return disposer
+  return query.onSnapshot(withQuerySnapshot)
 }
+
+let disposer = _.F
 
 export function FireNoteCollection({fire, nc}) {
   function startSync() {
@@ -160,7 +156,6 @@ export function FireNoteCollection({fire, nc}) {
   console.log('startSync')
   // console.log('startSync')
 
-  let disposer = _.F
   mAutoRun(
     r => {
       mTrace(r)
@@ -171,4 +166,10 @@ export function FireNoteCollection({fire, nc}) {
     },
     {name: 'FireNoteCollection sync ar'},
   )
+}
+
+if (module.hot) {
+  module.hot.dispose(() => {
+    disposer()
+  })
 }
