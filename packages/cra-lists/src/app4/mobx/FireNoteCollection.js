@@ -4,7 +4,6 @@ import {
   mFlow,
   mReaction,
   mTrace,
-  mWhen,
 } from './utils'
 import {storage} from '../services/storage'
 import {_, validate} from '../utils'
@@ -107,7 +106,7 @@ function syncToFirestore(nc, cRef) {
 
 function syncFromFirestore(nc, cRef) {
   const withQuerySnapshot = qs => {
-    console.log('[FromFire] withQuerySnapshot called')
+    console.debug('[FromFire] withQuerySnapshot called')
 
     console.debug(`[FromFire] qs`, qs)
     const docChanges = qs.docChanges()
@@ -122,7 +121,7 @@ function syncFromFirestore(nc, cRef) {
       const remoteChanges = docChanges.filter(
         c => !_.equals(dcData(c).actorId, localActorId),
       )
-      console.debug(
+      console.log(
         `[FromFire] remoteChanges.length`,
         remoteChanges.length,
       )
@@ -158,16 +157,17 @@ export function FireNoteCollection({fire, nc}) {
       disposers.forEach(_.invoker(0, 'call'))
     }
   }
+  console.log('startSync')
+  // console.log('startSync')
 
+  let disposer = _.F
   mAutoRun(
     r => {
       mTrace(r)
-      mWhen(
-        () => fire.auth.isSignedIn,
-        () => {
-          mWhen(() => fire.auth.isSignedOut, startSync())
-        },
-      )
+      disposer()
+      if (fire.auth.isSignedIn) {
+        disposer = startSync()
+      }
     },
     {name: 'FireNoteCollection sync ar'},
   )
