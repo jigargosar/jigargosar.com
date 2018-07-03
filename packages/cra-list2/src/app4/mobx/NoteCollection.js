@@ -86,6 +86,7 @@ export const Note = (function Note() {
             _.zipObj(keys, _.repeat(Date.now(), keys.length)),
           )
         },
+        updateFromRemoteStore(props) {},
       },
       name: `Note@${id}`,
     })
@@ -152,11 +153,16 @@ export const NoteCollection = (function NotesCollection() {
         add(note) {
           this.put(note)
         },
-        upsertListFromExternalStore(notes) {
-          notes.forEach(this.upsertFromExternalStore)
+        upsertListFromRemoteStore(notes) {
+          notes.forEach(this.upsertFromRemoteStore)
         },
-        upsertFromExternalStore(props) {
-          this.put(Note.create(props))
+        upsertFromRemoteStore(props) {
+          const note = this.idLookup[props.id]
+          if (_.isNil(note)) {
+            this.put(Note.create(props))
+          } else {
+            note.updateFromRemoteStore(props)
+          }
         },
       },
       name: 'NoteCollection',
