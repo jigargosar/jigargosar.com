@@ -13,7 +13,6 @@ import {
   firestoreServerTimestamp,
   zeroFirestoreTimestamp,
 } from './Fire'
-import {localActorId} from '../services/ActorId'
 import debounce from 'lodash/debounce'
 
 /*eslint-enable*/
@@ -56,12 +55,6 @@ const lastServerTimestamp = StorageItem({
   postLoad: createFirestoreTimestamp,
 })
 
-function mergeServerTimestamp(n) {
-  return _.merge(n, {
-    serverTimestamp: firestoreServerTimestamp(),
-  })
-}
-
 function update(cRef) {
   const {locallyModifiedList} = this
   console.log(
@@ -74,17 +67,21 @@ function update(cRef) {
     const pResults = locallyModifiedList.map(n => {
       const docRef = cRef.doc(n.id)
       if (n.createdAt > lastModifiedAt) {
-        const newData = _.compose(mergeServerTimestamp, mJSRejectFn)(
-          n,
-        )
+        const newData = _.compose(
+          _.merge(_.__, {
+            serverTimestamp: firestoreServerTimestamp(),
+          }),
+          mJSRejectFn,
+        )(n)
         console.log(`newData`, newData)
         return docRef.set(newData)
       } else {
-        const updatedData = mergeServerTimestamp(
-          n.getLocalModificationsSince(lastModifiedAt),
-        )
+        const updatedData = _.concat([
+          'serverTimestamp',
+          firestoreServerTimestamp(),
+        ])(n.getLocalModificationsSince(lastModifiedAt))
         console.log(`updatedData`, updatedData)
-        return docRef.update(updatedData)
+        return docRef.update(...updatedData)
       }
     })
     Promise.all(pResults).then(results => {

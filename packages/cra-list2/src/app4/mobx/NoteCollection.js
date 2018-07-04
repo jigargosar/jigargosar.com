@@ -9,6 +9,7 @@ import {nanoid} from '../model/util'
 import Chance from 'chance'
 import {_, R, validate} from '../utils'
 import {localActorId} from '../services/ActorId'
+import {createFieldPath} from './Fire'
 
 const deletedProp = R.propOr(false, 'deleted')
 const rejectDeleted = R.reject(deletedProp)
@@ -56,15 +57,17 @@ export const Note = (function Note() {
         },
         getLocalModificationsSince(timestamp) {
           const modifications = _.compose(
-            _.merge(_.__, {
-              [`actorUpdates.${localActorId}`]: this
-                .localActorUpdates,
-            }),
+            _.concat([
+              createFieldPath(`actorUpdates.${localActorId}`),
+              this.localActorUpdates,
+            ]),
+            _.flatten,
+            _.toPairs,
             _.pick(_.__, this),
             _.keys,
             _.filter(modifiedAt => modifiedAt > timestamp),
           )(this.localActorUpdates)
-          // console.log(`modifications`, modifications)
+          console.debug(`modifications`, modifications)
           return modifications
         },
       },
@@ -127,8 +130,11 @@ export const Note = (function Note() {
             filteredRemoteActorUpdateKeys,
             props,
           )
-          console.log(`remoteProps`, remoteProps, props.actorUpdates)
-          debugger
+          console.log(
+            `Note.updateFromRemoteStore: remoteProps`,
+            remoteProps,
+            props.actorUpdates,
+          )
           Object.assign(this, remoteProps, {
             actorUpdates: props.actorUpdates,
           })

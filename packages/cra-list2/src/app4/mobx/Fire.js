@@ -21,6 +21,9 @@ export const createFirestoreTimestamp = ({seconds, nanoseconds}) => {
   return new firebase.firestore.Timestamp(seconds, nanoseconds)
 }
 
+export const createFieldPath = path =>
+  new firebase.firestore.FieldPath(...path.split('.'))
+
 export const zeroFirestoreTimestamp = new firebase.firestore.Timestamp(
   0,
   0,
