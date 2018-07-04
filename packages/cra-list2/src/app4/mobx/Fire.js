@@ -137,7 +137,7 @@ function createFireAuth(firebase) {
   const fireAuth = createObservableObject({
     props: {
       _user: currentUser || null,
-      _isAuthStateKnown: false,
+      _isAuthStateKnown: !_.isNil(currentUser),
       get uid() {
         const user = this._user
         ow(user, ow.object.label('user').hasKeys('uid'))
