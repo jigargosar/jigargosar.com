@@ -1,7 +1,8 @@
 /*eslint-disable*/
 import ow from 'ow'
 import * as mu from 'mobx-utils/lib/mobx-utils'
-import {createObservableObject, mAutoRun, oObject} from './utils'
+import {createObservableObject, oObject} from './utils'
+import {_} from '../utils'
 
 const firebase = require('firebase/app')
 require('firebase/auth')
@@ -71,13 +72,13 @@ export const Fire = function() {
 }
 
 function createFirestore(firebase, fire) {
-  const getPathLength = R.compose(
-    R.length,
-    R.reject(R.isEmpty),
-    R.split('/'),
+  const getPathLength = _.compose(
+    _.length,
+    _.reject(_.isEmpty),
+    _.split('/'),
   )
-  const isCollectionPath = R.compose(RA.isOdd, getPathLength)
-  const isDocumentPath = R.complement(isCollectionPath)
+  const isCollectionPath = _.compose(RA.isOdd, getPathLength)
+  const isDocumentPath = _.complement(isCollectionPath)
 
   const firestore = firebase.firestore()
 
@@ -133,29 +134,10 @@ function createFireAuth(firebase) {
   }
 
   const currentUser = firebase.auth().currentUser
-  const authMachine = nanostate(
-    currentUser ? 'signedIn' : 'unknown',
-    {
-      unknown: {
-        ON_USER_NOT_NIL: 'signedIn',
-        ON_USER_NIL: 'signedOut',
-      },
-      signedIn: {
-        ON_USER_NOT_NIL: 'signedIn',
-        ON_USER_NIL: 'signedOut',
-        ON_SIGNOUT: 'unknown',
-      },
-      signedOut: {ON_USER_NOT_NIL: 'signedIn', ON_SIGNIN: 'unknown'},
-    },
-  )
-
   const fireAuth = createObservableObject({
     props: {
       _user: currentUser || null,
-      _authState: authMachine.state,
-      get state() {
-        return this._authState
-      },
+      _isAuthStateKnown: false,
       get uid() {
         const user = this._user
         ow(user, ow.object.label('user').hasKeys('uid'))
@@ -168,13 +150,13 @@ function createFireAuth(firebase) {
         return user.displayName
       },
       get isSignedIn() {
-        return R.equals(this._authState, 'signedIn')
+        return this._isAuthStateKnown && !_.isNil(this._user)
       },
       get isSignedOut() {
-        return R.equals(this._authState, 'signedOut')
+        return this._isAuthStateKnown && _.isNil(this._user)
       },
       get isAuthKnown() {
-        return !R.equals(this._authState, 'unknown')
+        return this._isAuthStateKnown
       },
       signInWithRedirect,
       signOut,
@@ -183,6 +165,7 @@ function createFireAuth(firebase) {
     actions: {
       _onFirebaseAuthStateChanged(user) {
         this._user = user
+        this._isAuthStateKnown = true
       },
       _onAuthMachineStateEntered(authState) {
         this._authState = authState
@@ -190,22 +173,11 @@ function createFireAuth(firebase) {
     },
     name: 'FireAuth',
   })
-  // m.runInAction(() => (fireAuth._authState = authMachine.state))
-  authMachine.on('*', fireAuth._onAuthMachineStateEntered)
 
-  firebase.auth().onAuthStateChanged(user => {
-    fireAuth._onFirebaseAuthStateChanged(user)
+  firebase
+    .auth()
+    .onAuthStateChanged(fireAuth._onFirebaseAuthStateChanged)
 
-    authMachine.emit(
-      R.isNil(user) ? 'ON_USER_NIL' : 'ON_USER_NOT_NIL',
-    )
-  })
-  mAutoRun(
-    () => {
-      console.debug('fireAuth._authState', fireAuth._authState)
-    },
-    {name: 'fireAuth._authState'},
-  )
   return fireAuth
 }
 
