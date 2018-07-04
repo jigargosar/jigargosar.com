@@ -31,7 +31,9 @@ const isValidRouteName = _.curry(function isValidRouteName(
   routeName,
   routes,
 ) {
-  return _.compose(_.isNil, findRouteByName(routeName))(routes)
+  return _.compose(_.complement, _.isNil, findRouteByName(routeName))(
+    routes,
+  )
 })
 
 const defaultRoutes = [
