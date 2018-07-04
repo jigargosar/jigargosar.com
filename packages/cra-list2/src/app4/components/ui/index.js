@@ -40,10 +40,10 @@ export const ListItem = styled.div.attrs({
 })``
 
 export const Button = styled.button.attrs({
-  className: 'input-reset link mr2 blue inline-flex',
+  className: 'input-reset link mr2 blue inline-flex pointer',
 })`
   user-select: none;
 `
 export const Link = styled.a.attrs({
-  className: 'input-reset link mr2 blue inline-flex',
-})
+  className: 'input-reset link mr2 blue inline-flex pointer',
+})``

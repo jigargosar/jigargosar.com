@@ -5,6 +5,7 @@ import {NoteCollection} from './NoteCollection'
 import {Fire} from './Fire'
 import {tryCatchLogError} from '../utils'
 import {startFireNoteCollectionSync} from './FireNoteCollection'
+import {Router} from './Router'
 
 const ncSnapshot = storage.get('ncSnapshot') || {}
 const nc = NoteCollection.create(ncSnapshot)
@@ -12,6 +13,7 @@ const state = {
   nc,
   view: NoteListView({nc}),
   fire: Fire(),
+  router: Router(),
 }
 
 const disposers = Disposers()

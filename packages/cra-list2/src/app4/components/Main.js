@@ -24,6 +24,7 @@ import {
 import {_} from '../utils'
 import FocusChild from './mobx/FocusChild'
 import {localActorId, shortenAID} from '../services/ActorId'
+import {LinkTo} from './mobx/Router'
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
@@ -133,7 +134,9 @@ const AppHeader = mrInjectAll(function AppHeader({fire}) {
   const {auth} = fire
   return (
     <div className={'flex items-center pv3 shadow-1 bg-light-blue'}>
-      <Title className={cn('flex-auto')}>Notes</Title>
+      <LinkTo to={'root'}>
+        <Title className={cn('flex-auto')}>Notes</Title>
+      </LinkTo>
 
       <Text className={cn('flex-auto')}>
         {`A:${shortenAID(localActorId)}`}

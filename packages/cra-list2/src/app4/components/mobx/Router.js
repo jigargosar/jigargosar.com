@@ -9,9 +9,9 @@ export const LinkTo = mrInjectAll(function LinkTo({
   router,
   ...rest
 }) {
-  validate('SOA', [to, router, rest])
+  validate('SOO', [to, router, rest])
   return (
-    <Link onClick={() => router.goto(to)} {...rest}>
+    <Link onClick={() => router.goto({name: to})} {...rest}>
       {children}
     </Link>
   )
