@@ -79,7 +79,7 @@ function update(cRef) {
         const updatedData = _.concat([
           'serverTimestamp',
           firestoreServerTimestamp(),
-        ])(n.getLocalModificationsSince(lastModifiedAt))
+        ])(n.getLocalModificationsSinceAsArray(lastModifiedAt))
         console.log(`updatedData`, updatedData)
         return docRef.update(...updatedData)
       }

@@ -55,7 +55,7 @@ export const Note = (function Note() {
             this.localActorUpdates,
           )
         },
-        getLocalModificationsSince(timestamp) {
+        getLocalModificationsSinceAsArray(timestamp) {
           const modifications = _.compose(
             _.concat([
               createFieldPath(`actorUpdates.${localActorId}`),
