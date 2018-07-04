@@ -8,6 +8,8 @@ import {
 } from './utils'
 import {_, R, swapElementsAt} from '../utils'
 import {clampIdx, cycleIdx} from '../model/util'
+import queryString from 'query-string'
+import escapeStringRegexp from 'escape-string-regexp'
 
 const SELECT_MODE = 'SELECT_MODE'
 const EDIT_MODE = 'EDIT_MODE'
@@ -119,6 +121,12 @@ const noteTransformer = createTransformer(view =>
   ),
 )
 
+function getParsedQS() {
+  const search = global.window.location.search
+  const parsed = queryString.parse(search)
+  return parsed
+}
+
 export function NoteListView({nc}) {
   const view = createObservableObject({
     props: {
@@ -133,7 +141,22 @@ export function NoteListView({nc}) {
       get sidx() {
         return this.mode.sidx
       },
-      pred: R.allPass([]),
+      get pred() {
+        const parsedQS = getParsedQS()
+
+        console.log(`parsed`, parsedQS)
+        const urlPred = _.ifElse(
+          _.has('url'),
+          ({url}) => note =>
+            _.compose(
+              _.test(_.__, note.text),
+              str => new RegExp(str),
+              escapeStringRegexp,
+            )(url),
+          () => _.T,
+        )(parsedQS)
+        return R.allPass([urlPred])
+      },
       sortComparators: [R.ascend(R.prop('sortIdx'))],
       get noteDisplayList() {
         return R.compose(
