@@ -163,12 +163,12 @@ const AppHeader = mrInjectAll(function AppHeader({fire}) {
   )
 })
 
-const Main = observer(function App() {
+const Main = mrInjectAll(function App({pop}) {
   return (
     <RootContainer>
       <CenterLayout>
         <AppHeader />
-        <NoteList />
+        {pop.isRunningAsBrowserPopup ? 'POPUP' : <NoteList />}
       </CenterLayout>
     </RootContainer>
   )

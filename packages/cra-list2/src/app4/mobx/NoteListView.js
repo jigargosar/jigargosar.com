@@ -8,8 +8,8 @@ import {
 } from './utils'
 import {_, R, swapElementsAt} from '../utils'
 import {clampIdx, cycleIdx} from '../model/util'
-import queryString from 'query-string'
 import escapeStringRegexp from 'escape-string-regexp'
+import {getParsedQS} from '../services/Location'
 
 const SELECT_MODE = 'SELECT_MODE'
 const EDIT_MODE = 'EDIT_MODE'
@@ -120,12 +120,6 @@ const noteTransformer = createTransformer(view =>
     ),
   ),
 )
-
-function getParsedQS() {
-  const search = global.window.location.search
-  const parsed = queryString.parse(search)
-  return parsed
-}
 
 export function NoteListView({nc}) {
   const view = createObservableObject({

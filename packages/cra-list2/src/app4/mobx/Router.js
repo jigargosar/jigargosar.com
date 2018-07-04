@@ -25,7 +25,7 @@ const findRouteByPathname = _.curry(function findRouteByName(
 })
 
 const notFoundRouteName = 'notFound'
-const routeNameEqualsNotFound = _.equals(notFoundRouteName)
+// const routeNameEqualsNotFound = _.equals(notFoundRouteName)
 
 const isValidRouteName = _.curry(function isValidRouteName(
   routeName,
@@ -50,10 +50,11 @@ export function Router({routes = defaultRoutes} = {}) {
       currentRouteName:
         findRouteByPathname(history.location.pathname) || 'notFound',
       get currentPathname() {
-        if (routeNameEqualsNotFound(this.currentRouteName)) {
+        const route = findRouteByName(this.currentRouteName, routes)
+        if (_.isNil(route)) {
           return '/'
         }
-        return findRouteByName(this.currentRouteName, routes).pathname
+        return route.pathname
       },
     },
     actions: {
