@@ -44,3 +44,6 @@ export const Button = styled.button.attrs({
 })`
   user-select: none;
 `
+export const Link = styled.a.attrs({
+  className: 'input-reset link mr2 blue inline-flex',
+})
