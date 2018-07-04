@@ -6,8 +6,8 @@ import {
   mAutoRun,
   mJSRejectFn,
 } from './utils'
-import {storage} from '../services/storage'
-import {_, validate} from '../utils'
+import {StorageItem} from '../services/storage'
+import {_} from '../utils'
 import {
   createFirestoreTimestamp,
   firestoreServerTimestamp,
@@ -27,22 +27,6 @@ const dcListLastServerTimestampFrom = _.compose(
   dcData,
   _.last,
 )
-
-const StorageItem = ({name, getInitial, postLoad = _.identity}) => {
-  validate('SFF', [name, getInitial, postLoad])
-
-  const getItem = () => storage.get(name)
-  const setItem = val => storage.set(name, val)
-
-  if (_.isNil(getItem())) {
-    setItem(getInitial())
-  }
-
-  return {
-    save: setItem,
-    load: _.compose(postLoad, getItem),
-  }
-}
 
 const lastModifiedAt = StorageItem({
   name: 'bookmarkNotes.lastModifiedAt',

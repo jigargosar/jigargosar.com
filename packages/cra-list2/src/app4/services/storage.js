@@ -1,3 +1,5 @@
+import {_, validate} from '../utils'
+
 export const storage = Storage()
 
 function Storage() {
@@ -28,4 +30,23 @@ console.debug(`storage.keys()`, storage.keys())
 
 if (module.hot) {
   global.window.ls = storage
+}
+export const StorageItem = ({
+  name,
+  getInitial,
+  postLoad = _.identity,
+}) => {
+  validate('SFF', [name, getInitial, postLoad])
+
+  const getItem = () => storage.get(name)
+  const setItem = val => storage.set(name, val)
+
+  if (_.isNil(getItem())) {
+    setItem(getInitial())
+  }
+
+  return {
+    save: setItem,
+    load: _.compose(postLoad, getItem),
+  }
 }
