@@ -10,6 +10,14 @@ import {BrowserExtensionPopup} from './BrowserExtensionPopup'
 
 const ncSnapshot = storage.get('ncSnapshot') || {}
 const nc = NoteCollection.create(ncSnapshot)
+const disposers = Disposers()
+disposers.push(
+  mReaction(
+    () => [nc.snapshot],
+    () => storage.set('ncSnapshot', nc.snapshot),
+  ),
+)
+
 const state = {
   nc,
   view: NoteListView({nc}),
@@ -18,15 +26,7 @@ const state = {
   pop: BrowserExtensionPopup({nc}),
 }
 
-const disposers = Disposers()
-
-disposers.push(
-  mReaction(
-    () => [nc.snapshot],
-    () => storage.set('ncSnapshot', nc.snapshot),
-  ),
-  startFireNoteCollectionSync(state),
-)
+disposers.push(startFireNoteCollectionSync(state))
 
 export {state}
 

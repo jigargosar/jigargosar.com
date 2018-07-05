@@ -73,7 +73,7 @@ export function Router({routes = defaultRoutes} = {}) {
       () => [router.currentPathname],
       () => {
         if (!pathnameEquals(router.currentPathname)) {
-          history.pushState(router.currentPathname, mJS(router))
+          // history.pushState(router.currentPathname, mJS(router))
         }
       },
       {name: 'Router: update Location from currentRoute'},
