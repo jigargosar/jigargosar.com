@@ -6,7 +6,7 @@ import {
   oArray,
   oObject,
 } from './utils'
-import {_, R, swapElementsAt} from '../utils'
+import {_, swapElementsAt} from '../utils'
 import {clampIdx, cycleIdx} from '../model/util'
 import escapeStringRegexp from 'escape-string-regexp'
 import {getParsedQS} from '../services/Location'
@@ -33,7 +33,7 @@ const ViewMode = (() => {
           }
         },
         isMode(mode) {
-          return this._idx !== -1 && R.equals(this._type, mode)
+          return this._idx !== -1 && _.equals(this._type, mode)
         },
         get isEdit() {
           return this.isMode(EDIT_MODE)
@@ -83,13 +83,13 @@ const noteTransformer = createTransformer(view =>
     oObject(
       {
         get displayText() {
-          return R.when(R.isEmpty, R.always('<empty>'))(note.text)
+          return _.when(_.isEmpty, _.always('<empty>'))(note.text)
         },
         get isEditing() {
-          return view.mode.isEdit && R.equals(note.id, view.sid)
+          return view.mode.isEdit && _.equals(note.id, view.sid)
         },
         get isSelected() {
-          return view.mode.isSelect && R.equals(note.id, view.sid)
+          return view.mode.isSelect && _.equals(note.id, view.sid)
         },
         onToggleDeleteEvent() {
           note.toggleDeleted()
@@ -132,7 +132,7 @@ export function NoteListView({nc}) {
     props: {
       mode: ViewMode.create(),
       get sid() {
-        return R.pathOr(
+        return _.pathOr(
           null,
           ['noteDisplayList', this.sidx, 'id'],
           this,
@@ -155,15 +155,18 @@ export function NoteListView({nc}) {
             )(url),
           () => _.T,
         )(parsedQS)
-        return R.allPass([urlPred])
+        return _.allPass([urlPred])
       },
-      sortComparators: [R.ascend(R.prop('sortIdx'))],
+      sortComparators: [
+        _.ascend(_.prop('sortIdx')),
+        _.descend(_.prop('createdAt')),
+      ],
       get noteDisplayList() {
-        return R.compose(
+        return _.compose(
           oArray,
-          R.map(noteTransformer(view)),
-          R.sortWith(this.sortComparators),
-          R.filter(this.pred),
+          _.map(noteTransformer(view)),
+          _.sortWith(this.sortComparators),
+          _.filter(this.pred),
         )(nc.active)
       },
       findDisplayNoteById(id) {
