@@ -82,7 +82,10 @@ export const Note = (function Note() {
       },
       actions: {
         toggleDeleted() {
-          this._localActorUpdate({deleted: !this.deleted})
+          this.updateDeleted(!this.deleted)
+        },
+        updateDeleted(bool) {
+          this._localActorUpdate({deleted: bool})
         },
         updateText(text) {
           this._localActorUpdate({text})

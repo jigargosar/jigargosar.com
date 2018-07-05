@@ -29,8 +29,11 @@ export function BrowserExtensionPopup({nc}) {
     },
     actions: {
       ensureNote() {
-        if (_.isNil(this.note)) {
+        const note = this.note
+        if (_.isNil(note)) {
           nc.addNew({text: `${this.title} -- ${this.url}`})
+        } else {
+          note.updateDeleted(false)
         }
       },
     },
@@ -41,6 +44,7 @@ export function BrowserExtensionPopup({nc}) {
     () => {
       console.log(`pop.url`, pop.url)
       console.log(`note`, pop.note)
+      pop.ensureNote()
     },
     {
       name: 'onPopup',
