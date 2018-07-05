@@ -55,6 +55,15 @@ export const Note = (function Note() {
             this.localActorUpdates,
           )
         },
+        get modifiedAt() {
+          return _.compose(
+            _.reduce(_.max, this.createdAt),
+            _.tap(console.log),
+            _.flatten,
+            _.values,
+            _.map(_.values),
+          )(this.actorUpdates)
+        },
         getLocalModificationsSinceAsArray(timestamp) {
           const modifications = _.compose(
             _.concat([
@@ -188,12 +197,15 @@ export const NoteCollection = (function NotesCollection() {
             _.filter(n => n.lastLocallyModifiedAt > timestamp),
           )(this.valuesArray)
         },
+        get find() {
+          return _.find(_.__, this.valuesArray)
+        },
       },
       actions: {
-        newNote({sortIdx = 0} = {}) {
+        newNote({sortIdx = 0, text = ''} = {}) {
           return Note.create({
             id: nanoid(),
-            text: '',
+            text: text,
             deleted: false,
             sortIdx,
             createdAt: Date.now(),
@@ -204,6 +216,9 @@ export const NoteCollection = (function NotesCollection() {
         },
         add(note) {
           this.put(note)
+        },
+        addNew(props) {
+          this.add(this.newNote(props))
         },
         upsertListFromRemoteStore(notes) {
           notes.forEach(this.upsertFromRemoteStore)

@@ -15,7 +15,7 @@ const state = {
   view: NoteListView({nc}),
   fire: Fire(),
   router: Router(),
-  pop: BrowserExtensionPopup(),
+  pop: BrowserExtensionPopup({nc}),
 }
 
 const disposers = Disposers()

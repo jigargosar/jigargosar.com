@@ -114,6 +114,12 @@ const noteTransformer = createTransformer(view =>
         get actorId() {
           return note.actorId
         },
+        get createdAt() {
+          return note.createdAt
+        },
+        get modifiedAt() {
+          return note.modifiedAt
+        },
       },
       {},
       {name: 'DisplayNote'},

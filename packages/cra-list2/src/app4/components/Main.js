@@ -25,6 +25,7 @@ import {_} from '../utils'
 import FocusChild from './mobx/FocusChild'
 import {localActorId, shortenAID} from '../services/ActorId'
 import {LinkTo} from './mobx/Router'
+import TimeAgo from 'react-timeago'
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
@@ -60,6 +61,16 @@ const Note = observer(function Note({note, focusComponentRef}) {
       >
         <Text>{`sidx: ${note.sortIdx}`}</Text>
         <NoteContent note={note} />
+        <Text>
+          <TimeAgo date={note.createdAt} live={true} minPeriod={30} />
+        </Text>
+        <Text>
+          <TimeAgo
+            date={note.modifiedAt}
+            live={true}
+            minPeriod={30}
+          />
+        </Text>
       </ListItem>
     </FocusChild>
   )
@@ -168,7 +179,8 @@ const Main = mrInjectAll(function App({pop}) {
     <RootContainer>
       <CenterLayout>
         <AppHeader />
-        {pop.isRunningAsBrowserPopup ? 'POPUP' : <NoteList />}
+        {/*{pop.isRunningAsBrowserPopup ? 'POPUP' : <NoteList />}*/}
+        <NoteList />
       </CenterLayout>
     </RootContainer>
   )
