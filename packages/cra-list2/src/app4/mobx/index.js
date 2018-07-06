@@ -7,6 +7,7 @@ import {tryCatchLogError} from '../utils'
 import {startFireNoteCollectionSync} from './FireNoteCollection'
 import {Router} from './Router'
 import {BrowserExtensionPopup} from './BrowserExtensionPopup'
+import {Outliner} from './Outliner'
 
 const ncSnapshot = storage.get('ncSnapshot') || {}
 const nc = NoteCollection.create(ncSnapshot)
@@ -24,6 +25,7 @@ const state = {
   fire: Fire(),
   router: Router(),
   pop: BrowserExtensionPopup({nc}),
+  out: Outliner(),
 }
 
 disposers.push(startFireNoteCollectionSync(state))

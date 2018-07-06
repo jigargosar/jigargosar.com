@@ -2,36 +2,6 @@ import React from 'react'
 import {cn, F, mrInjectAll, renderKeyedById} from '../utils'
 import {Text} from '../ui'
 
-const out = {
-  root: {
-    id: '0',
-    text: 'Home',
-    lines: [
-      {
-        id: '1',
-        text: 'line 1',
-        lines: [],
-      },
-      {
-        id: '2',
-        text: 'line 2',
-        lines: [
-          {
-            id: '1',
-            text: 'line 2-1',
-            lines: [],
-          },
-          {
-            id: '2',
-            text: 'line 2-2',
-            lines: [],
-          },
-        ],
-      },
-    ],
-  },
-}
-
 function OutLines({lines}) {
   return renderKeyedById(Outline, 'line', lines)
 }
@@ -45,7 +15,7 @@ function Outline({line}) {
   )
 }
 
-const OutlinePage = mrInjectAll(function App() {
+const OutlinePage = mrInjectAll(function App({out}) {
   return (
     <F>
       <div className={cn('pa3 bg-blue white shadow-1')}>
