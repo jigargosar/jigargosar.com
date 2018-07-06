@@ -12,7 +12,8 @@ function render() {
   mRunInAction('Hot Update States', () => {
     // console.clear()
     Object.assign(appState, require('./mobx').state)
-    const App = require('./components/Main').default
+    // const App = require('./components/Main').default
+    const App = require('./components/OutlinerMain').default
     ReactDOM.render(
       <Provider appState={appState}>
         <App />
@@ -30,7 +31,7 @@ if (module.hot) {
   window.s = appState
 
   module.hot['accept'](
-    ['./components/Main', './mobx'],
+    ['./components/Main', './components/OutlinerMain', './mobx'],
     tryCatchLogError(render),
   )
 }
