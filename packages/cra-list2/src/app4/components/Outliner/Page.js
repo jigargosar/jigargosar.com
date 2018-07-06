@@ -4,7 +4,7 @@ import {cn, mrInjectAll} from '../utils'
 const OutlinePage = mrInjectAll(function App({out}) {
   return (
     <div className={cn('pa3 bg-blue white shadow-1')}>
-      Outliner {`${out}`}{' '}
+      {`Outliner: ${out}`}
     </div>
   )
 })
