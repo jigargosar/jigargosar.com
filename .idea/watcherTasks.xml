@@ -3,6 +3,7 @@
   <component name="ProjectTasksOptions">
     <enabled-global>
       <option value="prettier" />
+      <option value="elm-format" />
     </enabled-global>
   </component>
 </project>
