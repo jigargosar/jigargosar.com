@@ -32,11 +32,15 @@ const out = {
   },
 }
 
+function OutLines({lines}) {
+  return renderKeyedById(Outline, 'line', lines)
+}
+
 function Outline({line}) {
   return (
     <div className={cn('pa1')}>
       <Text>{line.text}</Text>
-      {renderKeyedById(Outline, 'line', line.lines)}
+      <OutLines lines={line.lines} />
     </div>
   )
 }
@@ -48,7 +52,7 @@ const OutlinePage = mrInjectAll(function App() {
         <Text>{`Outliner`}</Text>
       </div>
       <div className={cn('pa3')}>
-        <Outline line={out.root} />
+        <OutLines lines={out.root.lines} />
       </div>
     </F>
   )
