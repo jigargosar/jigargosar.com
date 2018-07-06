@@ -22,7 +22,7 @@ const OutlinePage = mrInjectAll(function App({out}) {
         <Text>{`Outliner`}</Text>
       </div>
       <div className={cn('pa3')}>
-        <OutLines lines={out.root.lines} />
+        <OutLines lines={out.lines} />
       </div>
     </F>
   )
