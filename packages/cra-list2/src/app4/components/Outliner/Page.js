@@ -8,9 +8,10 @@ const OutLines = observer(function OutLines({lines}) {
 
 const Outline = observer(function Outline({line}) {
   return (
-    <div className={cn('pa1')}>
-      <Text>{line.text}</Text>
+    <div className={cn('flex items-center')}>
+      {/*<Text>{line.text}</Text>*/}
       <input
+        className={cn('flex-auto pa1 ')}
         value={line.text}
         onChange={e => line.userUpdate({text: e.target.value})}
       />
