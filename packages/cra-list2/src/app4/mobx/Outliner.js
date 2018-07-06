@@ -1,6 +1,6 @@
-import {createObservableObject} from './utils'
+import {createObservableObject, mReaction} from './utils'
 import {nanoid} from '../model/util'
-import {storage, StorageItem} from '../services/storage'
+import {StorageItem} from '../services/storage'
 
 function Outline({id = nanoid(), text = 'line x', lines = []} = {}) {
   const line = createObservableObject({
@@ -19,24 +19,27 @@ function Outline({id = nanoid(), text = 'line x', lines = []} = {}) {
 const outlineSI = StorageItem({
   name: 'outliner-root',
   getInitial() {
-    return Outline({text: 'line1'})
+    return Outline({text: 'Home', lines: [{text: 'line1'}]})
   },
-  postLoad(root) {},
+  postLoad(root) {
+    return Outline(root)
+  },
 })
 
 export function Outliner() {
   const out = createObservableObject({
     props: {
-      root: Outline({
-        text: 'Home',
-        lines: [{text: 'line1'}],
-      }),
+      root: outlineSI.load(),
       get lines() {
         return this.root.lines
       },
     },
     actions: {},
     name: 'Outliner',
+  })
+
+  mReaction(() => out.root, () => outlineSI.save(out.root), {
+    name: 'save outliner-root',
   })
 
   return out
