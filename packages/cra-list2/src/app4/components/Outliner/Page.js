@@ -1,19 +1,23 @@
 import React from 'react'
-import {cn, F, mrInjectAll, renderKeyedById} from '../utils'
+import {cn, F, mrInjectAll, observer, renderKeyedById} from '../utils'
 import {Text} from '../ui'
 
-function OutLines({lines}) {
+const OutLines = observer(function OutLines({lines}) {
   return renderKeyedById(Outline, 'line', lines)
-}
+})
 
-function Outline({line}) {
+const Outline = observer(function Outline({line}) {
   return (
     <div className={cn('pa1')}>
       <Text>{line.text}</Text>
+      <input
+        value={line.text}
+        onChange={e => line.userUpdate({text: e.target.value})}
+      />
       <OutLines lines={line.lines} />
     </div>
   )
-}
+})
 
 const OutlinePage = mrInjectAll(function App({out}) {
   return (

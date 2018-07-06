@@ -1,15 +1,22 @@
 import {createObservableObject, mReaction} from './utils'
 import {nanoid} from '../model/util'
 import {StorageItem} from '../services/storage'
+import {_} from '../utils'
 
 function Outline({id = nanoid(), text = 'line x', lines = []} = {}) {
+  const userProps = ['text']
+  const pickUserProps = _.pick(userProps)
   const line = createObservableObject({
     props: {
       id,
       text,
       lines: lines.map(Outline),
     },
-    actions: {},
+    actions: {
+      userUpdate(props) {
+        Object.assign(this, pickUserProps(props))
+      },
+    },
     name: 'Outline',
   })
 
