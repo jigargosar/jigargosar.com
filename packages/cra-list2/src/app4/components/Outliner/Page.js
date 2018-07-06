@@ -15,7 +15,18 @@ const out = {
       {
         id: '2',
         text: 'line 2',
-        lines: [],
+        lines: [
+          {
+            id: '1',
+            text: 'line 2-1',
+            lines: [],
+          },
+          {
+            id: '2',
+            text: 'line 2-2',
+            lines: [],
+          },
+        ],
       },
     ],
   },
