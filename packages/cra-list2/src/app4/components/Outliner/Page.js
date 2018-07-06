@@ -1,6 +1,5 @@
 import React from 'react'
 import {cn, mrInjectAll} from '../utils'
-import {Section} from '../ui'
 
 const OutlinePage = mrInjectAll(function App({out}) {
   return (
