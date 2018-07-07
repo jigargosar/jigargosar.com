@@ -18,15 +18,17 @@ const StateObject = withStyles(theme => ({
     fontSize: theme.typography.pxToRem(13),
   },
 }))(
-  mrInjectAll(function StateObject({state, object, classes: c}) {
+  mrInjectAll(function StateObject({state, stateObject, classes: c}) {
     return (
       <F>
         <div className={cn('lh-copy')}>
-          Type: Object ({_.compose(_.length, _.keys)(object)})
+          Type: Object ({_.compose(_.length, _.keys)(
+            stateObject.props,
+          )})
         </div>
         <div className={cn('flex items-center')}>
           <Button
-            onClick={e => console.debug(e)}
+            onClick={e => stateObject.add()}
             className={cn('mr1 lh-copy link ph1')}
             // variant={'contained'}
             disableFocusRipple={true}
@@ -45,7 +47,7 @@ const StateObject = withStyles(theme => ({
             StateProperty,
             'property',
             _.head,
-            _.toPairs(object),
+            _.toPairs(stateObject.props),
           )}
         </div>
       </F>
@@ -54,7 +56,7 @@ const StateObject = withStyles(theme => ({
 )
 
 const State = mrInjectAll(function({state}) {
-  return <StateObject object={state.root} />
+  return <StateObject stateObject={state.root} />
 })
 
 const Main = mrInjectAll(function App() {
