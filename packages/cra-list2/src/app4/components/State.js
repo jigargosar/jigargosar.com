@@ -65,9 +65,9 @@ const ObjectCollectionEntry = mrInjectAll(
 const ObjectCollection = mrInjectAll(function ObjectCollection({
   state,
   stateObject,
-  property,
+  value,
 }) {
-  const obj = stateObject || property.value
+  const obj = stateObject || value
   return (
     <F>
       <RightAction onClick={e => obj.add()}>+</RightAction>
