@@ -109,12 +109,16 @@ function ValueObject({entries = [], parent} = {}) {
   return obs
 }
 
-function ValueString({string = 'string'} = {}) {
+function ValueString({string = 'string', parent} = {}) {
+  validate('O', [parent])
   const obs = createObservableObject({
     props: {
       string,
       get type() {
         return 'string'
+      },
+      get parent() {
+        return parent
       },
       get snapshot() {
         return _.pick(['type', 'string'], this)
