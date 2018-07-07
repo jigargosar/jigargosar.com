@@ -80,9 +80,6 @@ function ValueObject({entries = [], parent} = {}) {
       get type() {
         return 'object'
       },
-      get propCount() {
-        return this.entries.length
-      },
       get parent() {
         return parent
       },
