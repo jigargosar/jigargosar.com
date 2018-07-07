@@ -14,21 +14,17 @@ const RightAction = _.compose(
 const componentLookup = {
   string: StringValue,
   object: ObjectCollection,
-  array: ArrayCollection,
 }
 
-const StateValue = mrInjectAll(function StateValue({property}) {
-  const ValueComponent = componentLookup[property.value.type]
-  return <ValueComponent property={property} />
+const StateValue = mrInjectAll(function StateValue({value}) {
+  const ValueComponent = componentLookup[value.type]
+  return <ValueComponent value={value} />
 })
 
 const StateValueTypeSelect = mrInjectAll(
-  function StateValueTypeSelect({property}) {
+  function StateValueTypeSelect({value}) {
     return (
-      <select
-        value={property.value.type}
-        onChange={property.onTypeChange}
-      >
+      <select value={value.type} onChange={value.onTypeChange}>
         {_.map(
           type => (
             <option key={type} value={type}>
@@ -43,38 +39,33 @@ const StateValueTypeSelect = mrInjectAll(
 )
 
 const StringValue = mrInjectAll(function ObjectItemStringValue({
-  property,
+  value,
 }) {
   return (
     <input
       // className={cn('lh-copy ma1')}
-      value={property.value.value}
-      onChange={property.value.onValueChange}
+      value={value.value}
+      onChange={value.onValueChange}
       onFocus={e => e.target.setSelectionRange(0, 999)}
     />
   )
 })
 
-const ObjectKey = mrInjectAll(function ObjectKey({property}) {
+const ObjectKey = mrInjectAll(function ObjectKey({entry}) {
   return (
-    <input
-      // className={cn('lh-copy ma1')}
-      autoFocus
-      value={property.key}
-      onChange={property.onKeyChange}
-    />
+    <input autoFocus value={entry.key} onChange={entry.onKeyChange} />
   )
 })
 
 const ObjectCollectionEntry = mrInjectAll(
-  function ObjectCollectionEntry({property}) {
+  function ObjectCollectionEntry({entry}) {
     return (
       <div>
-        <RightAction onClick={property.onRemove}>x</RightAction>
-        <ObjectKey property={property} />
+        <RightAction onClick={entry.onRemove}>x</RightAction>
+        <ObjectKey entry={entry} />
         =
-        <StateValueTypeSelect property={property} />
-        <StateValue property={property} />
+        <StateValueTypeSelect value={entry.value} />
+        {/*<StateValue value={entry.value} />*/}
       </div>
     )
   },
@@ -84,56 +75,13 @@ const ObjectCollection = mrInjectAll(function StateObject({
   state,
   stateObject,
   property,
-  classes: c,
 }) {
   const obj = stateObject || property.value
   return (
     <F>
       <RightAction onClick={e => obj.add()}>+</RightAction>
       <div className={cn('pl3')}>
-        {renderKeyedById(
-          ObjectCollectionEntry,
-          'property',
-          obj.props,
-        )}
-      </div>
-    </F>
-  )
-})
-
-const ArrayCollectionEntry = mrInjectAll(
-  function ArrayCollectionEntry({state, property, classes: c}) {
-    return (
-      <F>
-        <RightAction onClick={e => property.value.add()}>
-          +
-        </RightAction>
-        <div className={cn('pl3')}>
-          {renderKeyedById(
-            ObjectCollectionEntry,
-            'property',
-            property.value.props,
-          )}
-        </div>
-      </F>
-    )
-  },
-)
-
-const ArrayCollection = mrInjectAll(function ArrayCollection({
-  state,
-  property,
-  classes: c,
-}) {
-  return (
-    <F>
-      <RightAction onClick={e => property.value.add()}>+</RightAction>
-      <div className={cn('pl3')}>
-        {renderKeyedById(
-          ObjectCollectionEntry,
-          'property',
-          property.value.props,
-        )}
+        {renderKeyedById(ObjectCollectionEntry, 'entry', obj.props)}
       </div>
     </F>
   )
@@ -146,7 +94,7 @@ const State = mrInjectAll(function({state}) {
       <div>
         {renderKeyedById(
           ObjectCollectionEntry,
-          'property',
+          'entry',
           state.root.props,
         )}
       </div>
