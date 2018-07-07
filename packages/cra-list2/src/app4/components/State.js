@@ -1,7 +1,6 @@
 import React from 'react'
 import {Button, CenterLayout, RootContainer, Text} from './ui'
 import {cn, F, mrInjectAll, renderKeyedById} from './utils'
-import {withStyles} from '@material-ui/core/styles'
 import {_} from '../utils'
 import * as Recompose from 'recompose'
 
@@ -11,13 +10,8 @@ const RightAction = _.compose(
   }),
 )(Button)
 
-const componentLookup = {
-  string: StringValue,
-  object: ObjectCollection,
-}
-
 const StateValue = mrInjectAll(function StateValue({value}) {
-  const ValueComponent = componentLookup[value.type]
+  const ValueComponent = getComponentForType(value.type)
   return <ValueComponent value={value} />
 })
 
@@ -38,12 +32,9 @@ const StateValueTypeSelect = mrInjectAll(
   },
 )
 
-const StringValue = mrInjectAll(function ObjectItemStringValue({
-  value,
-}) {
+const StringValue = mrInjectAll(function StringValue({value}) {
   return (
     <input
-      // className={cn('lh-copy ma1')}
       value={value.value}
       onChange={value.onValueChange}
       onFocus={e => e.target.setSelectionRange(0, 999)}
@@ -65,13 +56,13 @@ const ObjectCollectionEntry = mrInjectAll(
         <ObjectKey entry={entry} />
         =
         <StateValueTypeSelect value={entry.value} />
-        {/*<StateValue value={entry.value} />*/}
+        <StateValue value={entry.value} />
       </div>
     )
   },
 )
 
-const ObjectCollection = mrInjectAll(function StateObject({
+const ObjectCollection = mrInjectAll(function ObjectCollection({
   state,
   stateObject,
   property,
@@ -120,3 +111,11 @@ const Main = mrInjectAll(function App() {
 })
 
 export default Main
+
+function getComponentForType(type) {
+  const lookup = {
+    string: StringValue,
+    object: ObjectCollection,
+  }
+  return lookup[type]
+}
