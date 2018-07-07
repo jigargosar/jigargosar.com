@@ -1,4 +1,4 @@
-import {createObservableObject, mReaction} from './utils'
+import {createObservableObject, mJS, mReaction} from './utils'
 import {nanoid} from '../model/util'
 import {StorageItem} from '../services/storage'
 import {_, validate} from '../utils'
@@ -32,7 +32,7 @@ function Outline({id = nanoid(), text = 'line x', lines = []} = {}) {
             (acc, line) =>
               _.isNil(acc) ? line.findParentOfId(id) : _.reduced(acc),
             null,
-            lines,
+            this.lines,
           )
         } else {
           return this
@@ -41,11 +41,12 @@ function Outline({id = nanoid(), text = 'line x', lines = []} = {}) {
     },
     actions: {
       insertNewAfter(id) {
-        this.lines.splice(
-          _.indexOf(this.findChildById(id)),
-          0,
-          Outline(),
+        const insertAtIdx = _.findIndex(
+          _.propEq('id', id),
+          this.lines,
         )
+        console.log(`start`, insertAtIdx)
+        this.lines.splice(insertAtIdx, 0, Outline())
       },
 
       userUpdate(props) {
@@ -86,7 +87,7 @@ export function Outliner() {
     name: 'Outliner',
   })
 
-  mReaction(() => out.root, () => outlineSI.save(out.root), {
+  mReaction(() => mJS(out.root), () => outlineSI.save(out.root), {
     name: 'save outliner-root',
   })
 
