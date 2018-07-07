@@ -1,4 +1,9 @@
-import {createObservableObject, mJS, mReaction} from './utils'
+import {
+  createObservableObject,
+  extendObservableObject,
+  mJS,
+  mReaction,
+} from './utils'
 import {StorageItem} from '../services/storage'
 import {nanoid} from '../model/util'
 import {_, validate} from '../utils'
@@ -14,11 +19,11 @@ function ValueType({value = null, parent} = {}) {
     props: {
       value,
       parent,
-      get snapshot() {
-        return {
-          value: this.value.snapshot,
-        }
-      },
+      // get snapshot() {
+      //   return {
+      //     value: this.value.snapshot,
+      //   }
+      // },
     },
     actions: {
       onRemove() {
@@ -51,17 +56,11 @@ function ValueObjectEntry({
   parent,
 } = {}) {
   validate('O', [parent])
-  const valueTypeFactoryLookup = {
-    string: ValueString,
-    object: ValueObject,
-  }
 
-  const obs = createObservableObject({
+  const obs = extendObservableObject(ValueType({value, parent}), {
     props: {
       id,
       key,
-      value,
-      parent,
       get snapshot() {
         return {
           ..._.pick(['id', 'key'], this),
@@ -73,26 +72,9 @@ function ValueObjectEntry({
       onKeyChange(e) {
         this.key = e.target.value
       },
-      onRemove() {
-        this.parent.removeChild(this)
-      },
-      onTypeChange(e) {
-        const type = e.target.value
-        if (this.value.type !== type) {
-          this.value = valueTypeFactoryLookup[type]({parent})
-        }
-      },
-      setDefaults() {
-        const type = _.propOr('string', 'type', value)
-        this.value = valueTypeFactoryLookup[type]({
-          ...value,
-          parent: this,
-        })
-      },
     },
     name: 'ValueObjectEntry',
   })
-  obs.setDefaults()
   return obs
 }
 

@@ -63,6 +63,14 @@ export function createObservableObject({
   return extendObservableWithBoundActions(oObj, actions)
 }
 
+export function extendObservableObject(
+  obs,
+  {props = {}, actions = {}, name} = {},
+) {
+  const oObj = extendObservable(obs, props, {}, {name})
+  return extendObservableWithBoundActions(oObj, actions)
+}
+
 export const defineDelegatePropertyGetter = R.curry(
   (propertyName, src, target) =>
     Object.defineProperty(target, propertyName, {

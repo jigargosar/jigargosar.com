@@ -16,9 +16,12 @@ const StateValue = mrInjectAll(function StateValue({value}) {
 })
 
 const StateValueTypeSelect = mrInjectAll(
-  function StateValueTypeSelect({value}) {
+  function StateValueTypeSelect({valueType}) {
     return (
-      <select value={value.type} onChange={value.onTypeChange}>
+      <select
+        value={valueType.value.type}
+        onChange={valueType.onTypeChange}
+      >
         {_.map(
           type => (
             <option key={type} value={type}>
@@ -56,7 +59,7 @@ const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
         onChange={entry.onKeyChange}
       />
       =
-      <StateValueTypeSelect value={entry.value} />
+      <StateValueTypeSelect valueType={entry} />
       <StateValue value={entry.value} />
     </div>
   )
