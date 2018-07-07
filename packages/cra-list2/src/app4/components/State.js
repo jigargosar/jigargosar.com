@@ -21,11 +21,10 @@ const StateObject = withStyles(theme => ({
   mrInjectAll(function StateObject({state, object, classes: c}) {
     return (
       <F>
-        <div>Type: Object</div>
+        <div>
+          Type: Object ({_.compose(_.length, _.keys)(object)})
+        </div>
         <div className={cn('flex items-center')}>
-          <Typography className={cn('mr1 lh-copy')}>
-            propCount: {_.compose(_.length, _.keys)(object)}
-          </Typography>
           <Button
             className={cn('mr1 lh-copy')}
             // variant={'contained'}
