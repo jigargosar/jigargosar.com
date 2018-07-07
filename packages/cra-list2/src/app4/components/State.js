@@ -10,30 +10,32 @@ const RightActionButton = _.compose(
   }),
 )(Button)
 
-const StateValue = mrInjectAll(function StateValue({value}) {
-  const ValueComponent = getComponentForType(value.type)
-  return <ValueComponent value={value} />
+const EntryValue = mrInjectAll(function EntryValue({value}) {
+  const lookup = {
+    string: ValueString,
+    object: ValueObject,
+  }
+
+  const EntryValueComponent = lookup[value.type]
+  return <EntryValueComponent value={value} />
 })
 
-const StateValueTypeSelect = mrInjectAll(
-  function StateValueTypeSelect({valueType}) {
-    return (
-      <select
-        value={valueType.value.type}
-        onChange={valueType.onTypeChange}
-      >
-        {_.map(
-          type => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ),
-          ['object', 'string', 'array'],
-        )}
-      </select>
-    )
-  },
-)
+const EntryTypeSelect = mrInjectAll(function EntryTypeSelect({
+  entry,
+}) {
+  return (
+    <select value={entry.value.type} onChange={entry.onTypeChange}>
+      {_.map(
+        type => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ),
+        ['object', 'string', 'array'],
+      )}
+    </select>
+  )
+})
 
 const ValueString = mrInjectAll(function ValueString({value}) {
   return (
@@ -59,8 +61,8 @@ const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
         onChange={entry.onKeyChange}
       />
       =
-      <StateValueTypeSelect valueType={entry} />
-      <StateValue value={entry.value} />
+      <EntryTypeSelect entry={entry} />
+      <EntryValue value={entry.value} />
     </div>
   )
 })
@@ -111,11 +113,3 @@ const Main = mrInjectAll(function App() {
 })
 
 export default Main
-
-function getComponentForType(type) {
-  const lookup = {
-    string: ValueString,
-    object: ValueObject,
-  }
-  return lookup[type]
-}
