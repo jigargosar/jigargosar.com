@@ -1,12 +1,6 @@
 import React from 'react'
 import {CenterLayout, RootContainer, Text} from './ui'
-import {
-  cn,
-  F,
-  mrInjectAll,
-  renderKeyed,
-  renderKeyedById,
-} from './utils'
+import {cn, F, mrInjectAll, renderKeyed} from './utils'
 import {_} from '../utils'
 
 const StateProperty = mrInjectAll(function StateProperty({property}) {
@@ -15,19 +9,23 @@ const StateProperty = mrInjectAll(function StateProperty({property}) {
 
 const StateObject = mrInjectAll(function StateObject({object}) {
   return (
-    <div>
-      {renderKeyed(
-        StateProperty,
-        'property',
-        _.head,
-        _.toPairs(object),
-      )}
-    </div>
+    <F>
+      <div>Type: Object</div>
+      <div>propCount: {_.compose(_.length, _.keys)(object)}</div>
+      <div>
+        {renderKeyed(
+          StateProperty,
+          'property',
+          _.head,
+          _.toPairs(object),
+        )}
+      </div>
+    </F>
   )
 })
 
 const State = mrInjectAll(function({state}) {
-  return <StateObject object={state} />
+  return <StateObject object={state.root} />
 })
 
 const Main = mrInjectAll(function App() {
