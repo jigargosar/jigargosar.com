@@ -1,14 +1,41 @@
 import {createObservableObject, mJS, mReaction} from './utils'
 import {StorageItem} from '../services/storage'
+import {nanoid} from '../model/util'
 
-function StateObject({props = {}}) {
+function StateObjectProperty({
+  id = nanoid(),
+  key = 'keyName',
+  value = 'string value',
+} = {}) {
   return createObservableObject({
     props: {
-      props,
+      id,
+      key,
+      value,
+    },
+    actions: {
+      onKeyChange(e) {
+        this.key = e.target.value
+      },
+      onValueChange(e) {
+        this.value = e.target.value
+      },
+    },
+    name: 'StateObjectProperty',
+  })
+}
+
+function StateObject({props = []} = {}) {
+  return createObservableObject({
+    props: {
+      props: props.map(StateObjectProperty),
+      get propCount() {
+        return this.props.length
+      },
     },
     actions: {
       add() {
-        this.props['key'] = 'value'
+        this.props.unshift(StateObjectProperty())
       },
     },
     name: 'StateObject',

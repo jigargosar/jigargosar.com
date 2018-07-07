@@ -144,7 +144,7 @@ export function NoteListView({nc}) {
       get pred() {
         const parsedQS = getParsedQS()
 
-        console.log(`parsed`, parsedQS)
+        // console.log(`parsed`, parsedQS)
         const urlPred = _.ifElse(
           _.has('url'),
           ({url}) => note =>

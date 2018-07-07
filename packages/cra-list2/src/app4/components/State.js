@@ -1,7 +1,6 @@
 import React from 'react'
 import {CenterLayout, RootContainer, Text} from './ui'
-import {cn, F, mrInjectAll, renderKeyed} from './utils'
-import {_} from '../utils'
+import {cn, F, mrInjectAll, renderKeyedById} from './utils'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
 // import Typography from '@material-ui/core/Typography'
@@ -9,10 +8,13 @@ import {withStyles} from '@material-ui/core/styles'
 const StateProperty = mrInjectAll(function StateProperty({property}) {
   return (
     <div>
-      {`${property[0]} : ${property[1]}`}
-      <input value={property[0]} />
+      {`${property.key} : ${property.value}`}
+      <input value={property.key} onChange={property.onKeyChange} />
       :
-      <input value={property[1]} />
+      <input
+        value={property.value}
+        onChange={property.onValueChange}
+      />
     </div>
   )
 })
@@ -29,9 +31,7 @@ const StateObject = withStyles(theme => ({
     return (
       <F>
         <div className={cn('lh-copy')}>
-          Type: Object ({_.compose(_.length, _.keys)(
-            stateObject.props,
-          )})
+          Type: Object ({stateObject.propCount})
         </div>
         <div className={cn('flex items-center')}>
           <Button
@@ -50,11 +50,10 @@ const StateObject = withStyles(theme => ({
         </div>
 
         <div>
-          {renderKeyed(
+          {renderKeyedById(
             StateProperty,
             'property',
-            _.head,
-            _.toPairs(stateObject.props),
+            stateObject.props,
           )}
         </div>
       </F>

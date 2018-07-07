@@ -4,7 +4,7 @@ import {NoteListView} from './NoteListView'
 import {NoteCollection} from './NoteCollection'
 import {Fire} from './Fire'
 import {tryCatchLogError} from '../utils'
-import {startFireNoteCollectionSync} from './FireNoteCollection'
+// import {startFireNoteCollectionSync} from './FireNoteCollection'
 import {Router} from './Router'
 import {BrowserExtensionPopup} from './BrowserExtensionPopup'
 import {Outliner} from './Outliner'
@@ -30,7 +30,7 @@ const state = {
   state: State(),
 }
 
-disposers.push(startFireNoteCollectionSync(state))
+// disposers.push(startFireNoteCollectionSync(state))
 
 export {state}
 
