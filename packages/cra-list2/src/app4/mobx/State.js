@@ -7,6 +7,7 @@ function StateObjectProperty({
   id = nanoid(),
   key = 'keyName',
   value = 'string value',
+  type = 'string',
   parent,
 } = {}) {
   validate('O', [parent])
@@ -15,9 +16,10 @@ function StateObjectProperty({
       id,
       key,
       value,
+      type,
       parent,
       get snapshot() {
-        return _.pick(['id', 'key', 'value'], this)
+        return _.pick(['id', 'key', 'value', 'type'], this)
       },
     },
     actions: {
@@ -26,6 +28,9 @@ function StateObjectProperty({
       },
       onValueChange(e) {
         this.value = e.target.value
+      },
+      onTypeChange(e) {
+        this.type = e.target.value
       },
 
       onRemove() {

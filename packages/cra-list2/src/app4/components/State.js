@@ -3,7 +3,25 @@ import {CenterLayout, RootContainer, Text} from './ui'
 import {cn, F, mrInjectAll, renderKeyedById} from './utils'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
+import {_} from '../utils'
 // import Typography from '@material-ui/core/Typography'
+
+const StatePropertyTypeSelect = mrInjectAll(function SelectValueType({
+  property,
+}) {
+  return (
+    <select value={property.type} onChange={property.onTypeChange}>
+      {_.map(
+        type => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ),
+        ['object', 'string'],
+      )}
+    </select>
+  )
+})
 
 const StateProperty = mrInjectAll(function StateProperty({property}) {
   return (
@@ -15,10 +33,7 @@ const StateProperty = mrInjectAll(function StateProperty({property}) {
         onFocus={e => e.target.setSelectionRange(0, 999)}
       />
       =
-      <select>
-        <option>string</option>
-        <option>object</option>
-      </select>
+      <StatePropertyTypeSelect property={property} />
       <input
         value={property.value}
         onChange={property.onValueChange}
