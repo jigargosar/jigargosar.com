@@ -27,6 +27,9 @@ function StateObjectProperty({
       onRemove() {
         this.parent.removeChild(this)
       },
+      onTypeChange(){
+
+      }
     },
     name: 'StateObjectProperty',
   })

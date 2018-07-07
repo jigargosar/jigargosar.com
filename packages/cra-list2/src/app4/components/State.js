@@ -41,7 +41,10 @@ const StatePropertyKey = mrInjectAll(function StatePropertyKey({
 const StatePropertyTypeSelect = mrInjectAll(
   function StatePropertyTypeSelect({property}) {
     return (
-      <select value={property.type} onChange={property.onTypeChange}>
+      <select
+        value={property.value.type}
+        onChange={property.onTypeChange}
+      >
         {_.map(
           type => (
             <option key={type} value={type}>
