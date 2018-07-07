@@ -70,6 +70,9 @@ function ValueObjectEntry({
       onKeyChange(e) {
         this.key = e.target.value
       },
+      toggleCollapsed() {
+        this.collapsed = !this.collapsed
+      },
     },
     name: 'ValueObjectEntry',
   })
@@ -131,7 +134,11 @@ function ValueArrayEntry({
         }
       },
     },
-    actions: {},
+    actions: {
+      toggleCollapsed() {
+        this.collapsed = !this.collapsed
+      },
+    },
     name: 'ValueObjectEntry',
   })
   return obs

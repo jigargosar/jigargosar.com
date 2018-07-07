@@ -51,19 +51,33 @@ const ValueString = mrInjectAll(function ValueString({value}) {
 const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
   entry,
 }) {
+  const isCollection = _.contains(entry.value.type, [
+    'array',
+    'object',
+  ])
   return (
     <div>
       <RightActionButton onClick={entry.onRemove}>
         x
       </RightActionButton>
+      {isCollection && (
+        <Button onClick={entry.toggleCollapsed}>
+          {entry.collapsed ? 'v' : '>'}
+        </Button>
+      )}
       <input
         autoFocus
         value={entry.key}
         onChange={entry.onKeyChange}
       />
-      =
-      <EntryTypeSelect entry={entry} />
-      <Value value={entry.value} />
+      {isCollection &&
+        entry.collapsed && (
+          <F>
+            =
+            <EntryTypeSelect entry={entry} />
+            <Value value={entry.value} />
+          </F>
+        )}
     </div>
   )
 })
