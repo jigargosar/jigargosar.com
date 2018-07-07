@@ -55,7 +55,7 @@ function StateObjectProperty({
   return property
 }
 
-function ObjectValue({props, entries=[], parent} = {}) {
+function ObjectValue({entries = [], parent} = {}) {
   const obs = createObservableObject({
     props: {
       entries: [],
@@ -83,7 +83,7 @@ function ObjectValue({props, entries=[], parent} = {}) {
         this.entries.splice(this.entries.indexOf(child), 1)
       },
       setDefaults() {
-        this.entries = (props|| entries).map(entry =>
+        this.entries = entries.map(entry =>
           StateObjectProperty({...entry, parent: this}),
         )
       },
