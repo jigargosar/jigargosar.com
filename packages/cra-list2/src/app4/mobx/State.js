@@ -6,18 +6,21 @@ import {_, validate} from '../utils'
 function StateObjectProperty({
   id = nanoid(),
   key = 'keyName',
-  value = StateString({value: 'string value'}),
+  value,
   parent,
 } = {}) {
   validate('O', [parent])
-  return createObservableObject({
+  const property = createObservableObject({
     props: {
       id,
       key,
-      value: StateString({value: 'string value'}),
+      value: null,
       parent,
       get snapshot() {
-        return _.pick(['id', 'key', 'value'], this)
+        return {
+          ..._.pick(['id', 'key'], this),
+          value: this.value.snapshot,
+        }
       },
     },
     actions: {
@@ -27,15 +30,26 @@ function StateObjectProperty({
       onRemove() {
         this.parent.removeChild(this)
       },
-      onTypeChange(){
+      onTypeChange() {},
+      setDefaults() {
+        const valueTypeFactoryLookup = {
+          string: StateString,
+          object: StateObject,
+        }
 
-      }
+        this.value = valueTypeFactoryLookup[value.type]({
+          ...value,
+          parent: this,
+        })
+      },
     },
     name: 'StateObjectProperty',
   })
+  property.setDefaults()
+  return property
 }
 
-function StateObject({props = []} = {}) {
+function StateObject({value} = {}) {
   const stateObject = createObservableObject({
     props: {
       props: [],
@@ -48,7 +62,7 @@ function StateObject({props = []} = {}) {
       get snapshot() {
         return {
           type: this.type,
-          props: this.props.map(p => p.snapshot),
+          value: {props: this.props.map(p => p.snapshot)},
         }
       },
     },
@@ -59,19 +73,19 @@ function StateObject({props = []} = {}) {
       removeChild(child) {
         this.props.splice(this.props.indexOf(child), 1)
       },
-      setPropsFromSnapshot(props) {
-        this.props = props.map(p =>
+      setDefaults() {
+        this.props = value.props.map(p =>
           StateObjectProperty({...p, parent: this}),
         )
       },
     },
     name: 'StateObject',
   })
-  stateObject.setPropsFromSnapshot(props)
+  stateObject.setDefaults()
   return stateObject
 }
 
-function StateString({value} = {}) {
+function StateString({value = 'string value'} = {}) {
   const stateObject = createObservableObject({
     props: {
       value,
