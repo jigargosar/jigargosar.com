@@ -89,9 +89,13 @@ const StateObject = withStyles(theme => ({
   }) {
     const obj = stateObject || property.value
     return (
-      <F>
-        <div className={cn('lh-copy')}>
-          Type: Object ({obj.propCount})
+      <div className={cn('pl3')}>
+        {/*<div className={cn('lh-copy')}>*/}
+        {/*Type: Object ({obj.propCount})*/}
+        {/*</div>*/}
+
+        <div>
+          {renderKeyedById(StateProperty, 'property', obj.props)}
         </div>
         <div className={cn('flex items-center')}>
           <Button
@@ -108,11 +112,7 @@ const StateObject = withStyles(theme => ({
             add
           </Button>
         </div>
-
-        <div>
-          {renderKeyedById(StateProperty, 'property', obj.props)}
-        </div>
-      </F>
+      </div>
     )
   }),
 )
