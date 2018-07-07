@@ -50,6 +50,7 @@ function ValueObjectEntry({
   key = 'keyName',
   value = null,
   parent,
+  collapsed = false,
 } = {}) {
   validate('O', [parent])
 
@@ -57,9 +58,10 @@ function ValueObjectEntry({
     props: {
       id,
       key,
+      collapsed,
       get snapshot() {
         return {
-          ..._.pick(['id', 'key'], this),
+          ..._.pick(['id', 'key', 'collapsed'], this),
           value: this.value.snapshot,
         }
       },
@@ -110,15 +112,21 @@ function ValueObject({entries = [], parent} = {}) {
   return obs
 }
 
-function ValueArrayEntry({id = nanoid(), value = null, parent} = {}) {
+function ValueArrayEntry({
+  id = nanoid(),
+  value = null,
+  collapsed = false,
+  parent,
+} = {}) {
   validate('O', [parent])
 
   const obs = extendObservableObject(ValueType({value, parent}), {
     props: {
       id,
+      collapsed,
       get snapshot() {
         return {
-          ..._.pick(['id'], this),
+          ..._.pick(['id', 'collapsed'], this),
           value: this.value.snapshot,
         }
       },
