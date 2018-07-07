@@ -5,7 +5,7 @@ import {withStyles} from '@material-ui/core/styles'
 import {_} from '../utils'
 import * as Recompose from 'recompose'
 
-const BB = _.compose(
+const RightAction = _.compose(
   Recompose.defaultProps({
     className: cn('fr'),
   }),
@@ -73,7 +73,7 @@ const StatePropertyTypeSelect = mrInjectAll(
 const StateProperty = mrInjectAll(function StateProperty({property}) {
   return (
     <div>
-      <BB onClick={property.onRemove}>X</BB>
+      <RightAction onClick={property.onRemove}>x</RightAction>
       <StatePropertyKey property={property} />
       =
       <StatePropertyTypeSelect property={property} />
@@ -99,7 +99,7 @@ const StateObject = withStyles(theme => ({
     const obj = stateObject || property.value
     return (
       <F>
-        <BB onClick={e => obj.add()}>ADD</BB>
+        <RightAction onClick={e => obj.add()}>+</RightAction>
         <div className={cn('pl3')}>
           {renderKeyedById(StateProperty, 'property', obj.props)}
         </div>
@@ -111,9 +111,7 @@ const StateObject = withStyles(theme => ({
 const State = mrInjectAll(function({state}) {
   return (
     <F>
-      <BB className={cn('cf')} onClick={e => state.root.add()}>
-        Add field
-      </BB>
+      <Button onClick={e => state.root.add()}>Add field</Button>
       <div>
         {renderKeyedById(StateProperty, 'property', state.root.props)}
       </div>
