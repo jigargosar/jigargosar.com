@@ -6,6 +6,27 @@ import {withStyles} from '@material-ui/core/styles'
 import {_} from '../utils'
 // import Typography from '@material-ui/core/Typography'
 
+const StatePropertyValue = mrInjectAll(function StatePropertyValue({
+  property,
+}) {
+  return (
+    <input
+      autoFocus
+      value={property.key}
+      onChange={property.onKeyChange}
+      onFocus={e => e.target.setSelectionRange(0, 999)}
+    />
+  )
+})
+
+const StatePropertyKey = mrInjectAll(function StatePropertyValue({
+  property,
+}) {
+  return (
+    <input value={property.value} onChange={property.onValueChange} />
+  )
+})
+
 const StatePropertyTypeSelect = mrInjectAll(function SelectValueType({
   property,
 }) {
@@ -26,18 +47,10 @@ const StatePropertyTypeSelect = mrInjectAll(function SelectValueType({
 const StateProperty = mrInjectAll(function StateProperty({property}) {
   return (
     <div>
-      <input
-        autoFocus
-        value={property.key}
-        onChange={property.onKeyChange}
-        onFocus={e => e.target.setSelectionRange(0, 999)}
-      />
+      <StatePropertyKey property={property} />
       =
       <StatePropertyTypeSelect property={property} />
-      <input
-        value={property.value}
-        onChange={property.onValueChange}
-      />
+      <StatePropertyValue property={property} />
       <Button onClick={property.onRemove}>Delete</Button>
     </div>
   )
