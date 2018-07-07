@@ -35,9 +35,10 @@ function StateObjectProperty({
       onRemove() {
         this.parent.removeChild(this)
       },
-      onTypeChange(type) {
+      onTypeChange(e) {
+        const type = e.target.value
         if (this.value.type !== type) {
-          this.value = valueTypeFactoryLookup[type]()
+          this.value = valueTypeFactoryLookup[type]({parent})
         }
       },
       setDefaults() {
@@ -54,7 +55,7 @@ function StateObjectProperty({
   return property
 }
 
-function StateObject({props, parent} = {}) {
+function StateObject({props = [], parent} = {}) {
   const stateObject = createObservableObject({
     props: {
       props: [],
