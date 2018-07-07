@@ -4,6 +4,7 @@ import {cn, F, mrInjectAll, renderKeyedById} from './utils'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
 import {_} from '../utils'
+import * as Recompose from 'recompose'
 // import Typography from '@material-ui/core/Typography'
 
 const StatePropertyStringValue = mrInjectAll(
@@ -67,8 +68,14 @@ const StateProperty = mrInjectAll(function StateProperty({property}) {
       <StatePropertyKey property={property} />
       =
       <StatePropertyTypeSelect property={property} />
+      <Button
+        color={'secondary'}
+        size={'small'}
+        onClick={property.onRemove}
+      >
+        X
+      </Button>
       <StatePropertyValue property={property} />
-      <Button onClick={property.onRemove}>Delete</Button>
     </div>
   )
 })
@@ -89,36 +96,39 @@ const StateObject = withStyles(theme => ({
   }) {
     const obj = stateObject || property.value
     return (
-      <div className={cn('pl3')}>
-        {/*<div className={cn('lh-copy')}>*/}
-        {/*Type: Object ({obj.propCount})*/}
-        {/*</div>*/}
-
-        <div>
+      <F>
+        <div className={cn('pl3')}>
           {renderKeyedById(StateProperty, 'property', obj.props)}
         </div>
-        <div className={cn('flex items-center')}>
+        <div className={cn('flex items-center pl3')}>
           <Button
+            variant={'flat'}
             onClick={e => obj.add()}
-            className={cn('mr1 lh-copy link ph1')}
-            // variant={'contained'}
-            disableFocusRipple={true}
             color={'secondary'}
             size={'small'}
-            classes={{
-              sizeSmall: c.sizeSmall,
-            }}
           >
             add
           </Button>
         </div>
-      </div>
+      </F>
     )
   }),
 )
 
+const BB = _.compose(
+  Recompose.defaultProps({
+    color: 'secondary',
+    size: 'small',
+  }),
+)(Button)
+
 const State = mrInjectAll(function({state}) {
-  return <StateObject stateObject={state.root} />
+  return (
+    <F>
+      {renderKeyedById(StateProperty, 'property', state.root.props)}
+      <BB>ADD</BB>
+    </F>
+  )
 })
 
 const Main = mrInjectAll(function App() {
