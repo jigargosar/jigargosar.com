@@ -3,7 +3,7 @@ import {StorageItem} from '../services/storage'
 import {nanoid} from '../model/util'
 import {_, validate} from '../utils'
 
-function StateObjectProperty({
+function ValueObjectEntry({
   id = nanoid(),
   key = 'keyName',
   value = null,
@@ -11,11 +11,11 @@ function StateObjectProperty({
 } = {}) {
   validate('O', [parent])
   const valueTypeFactoryLookup = {
-    string: StringValue,
-    object: ObjectValue,
+    string: ValueString,
+    object: ValueObject,
   }
 
-  const property = createObservableObject({
+  const obs = createObservableObject({
     props: {
       id,
       key,
@@ -49,13 +49,13 @@ function StateObjectProperty({
         })
       },
     },
-    name: 'StateObjectProperty',
+    name: 'ValueObjectEntry',
   })
-  property.setDefaults()
-  return property
+  obs.setDefaults()
+  return obs
 }
 
-function ObjectValue({entries = [], parent} = {}) {
+function ValueObject({entries = [], parent} = {}) {
   const obs = createObservableObject({
     props: {
       entries: [],
@@ -77,24 +77,24 @@ function ObjectValue({entries = [], parent} = {}) {
     },
     actions: {
       add() {
-        this.entries.unshift(StateObjectProperty({parent: this}))
+        this.entries.unshift(ValueObjectEntry({parent: this}))
       },
       removeChild(child) {
         this.entries.splice(this.entries.indexOf(child), 1)
       },
       setDefaults() {
         this.entries = entries.map(entry =>
-          StateObjectProperty({...entry, parent: this}),
+          ValueObjectEntry({...entry, parent: this}),
         )
       },
     },
-    name: 'ObjectValue',
+    name: 'ValueObject',
   })
   obs.setDefaults()
   return obs
 }
 
-function StringValue({value = 'string value'} = {}) {
+function ValueString({value = 'string value'} = {}) {
   const obs = createObservableObject({
     props: {
       value,
@@ -110,7 +110,7 @@ function StringValue({value = 'string value'} = {}) {
         this.value = e.target.value
       },
     },
-    name: 'StringValue',
+    name: 'ValueString',
   })
   return obs
 }
@@ -118,10 +118,10 @@ function StringValue({value = 'string value'} = {}) {
 const stateSI = StorageItem({
   name: 'state',
   getInitial() {
-    return ObjectValue({})
+    return ValueObject({})
   },
   postLoad(state) {
-    return ObjectValue(state)
+    return ValueObject(state)
   },
 })
 
