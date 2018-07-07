@@ -6,7 +6,7 @@ import {_, validate} from '../utils'
 function StateObjectProperty({
   id = nanoid(),
   key = 'keyName',
-  value = {type: 'string'},
+  value = null,
   parent,
 } = {}) {
   validate('O', [parent])
@@ -41,7 +41,8 @@ function StateObjectProperty({
         }
       },
       setDefaults() {
-        this.value = valueTypeFactoryLookup[value.type]({
+        const type = _.propOr('string', 'type', value)
+        this.value = valueTypeFactoryLookup[type]({
           ...value,
           parent: this,
         })
