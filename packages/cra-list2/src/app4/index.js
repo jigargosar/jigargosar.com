@@ -10,7 +10,7 @@ const appState = oObject({}, {}, {name: 'appState'})
 
 function render() {
   mRunInAction('Hot Update States', () => {
-    // console.clear()
+    console.clear()
     Object.assign(appState, require('./mobx').state)
     // const App = require('./components/Main').default
     // const App = require('./components/OutlinerMain').default
@@ -32,7 +32,12 @@ if (module.hot) {
   window.s = appState
 
   module.hot['accept'](
-    ['./components/Main', './components/OutlinerMain', './mobx'],
+    [
+      './components/Main',
+      './components/OutlinerMain',
+      './mobx',
+      './components/State',
+    ],
     tryCatchLogError(render),
   )
 }
