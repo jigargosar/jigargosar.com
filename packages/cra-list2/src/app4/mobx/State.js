@@ -13,6 +13,7 @@ function ValueType({value = null, parent} = {}) {
   const valueTypeFactoryLookup = {
     string: ValueString,
     object: ValueObject,
+    array: ValueArray,
   }
 
   const obs = createObservableObject({
@@ -100,6 +101,61 @@ function ValueObject({entries = [], parent} = {}) {
       setDefaults() {
         this.entries = entries.map(entry =>
           ValueObjectEntry({...entry, parent: this}),
+        )
+      },
+    },
+    name: 'ValueObject',
+  })
+  obs.setDefaults()
+  return obs
+}
+
+function ValueArrayEntry({id = nanoid(), value = null, parent} = {}) {
+  validate('O', [parent])
+
+  const obs = extendObservableObject(ValueType({value, parent}), {
+    props: {
+      id,
+      get snapshot() {
+        return {
+          ..._.pick(['id'], this),
+          value: this.value.snapshot,
+        }
+      },
+    },
+    actions: {},
+    name: 'ValueObjectEntry',
+  })
+  return obs
+}
+
+function ValueArray({entries = [], parent} = {}) {
+  const obs = createObservableObject({
+    props: {
+      entries: [],
+      get type() {
+        return 'array'
+      },
+      get parent() {
+        return parent
+      },
+      get snapshot() {
+        return {
+          type: this.type,
+          entries: this.entries.map(p => p.snapshot),
+        }
+      },
+    },
+    actions: {
+      add() {
+        this.entries.unshift(ValueArrayEntry({parent: this}))
+      },
+      removeChild(child) {
+        this.entries.splice(this.entries.indexOf(child), 1)
+      },
+      setDefaults() {
+        this.entries = entries.map(entry =>
+          ValueArrayEntry({...entry, parent: this}),
         )
       },
     },

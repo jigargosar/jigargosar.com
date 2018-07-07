@@ -14,6 +14,7 @@ const Value = mrInjectAll(function Value({value}) {
   const lookup = {
     string: ValueString,
     object: ValueObject,
+    array: ValueArray,
   }
 
   const ValueComponent = lookup[value.type]
@@ -75,6 +76,33 @@ const ValueObject = mrInjectAll(function ValueObject({state, value}) {
       </RightActionButton>
       <div className={cn('pl3')}>
         {renderKeyedById(ValueObjectEntry, 'entry', value.entries)}
+      </div>
+    </F>
+  )
+})
+
+const ValueArrayEntry = mrInjectAll(function ValueArrayEntry({
+  entry,
+}) {
+  return (
+    <div>
+      <RightActionButton onClick={entry.onRemove}>
+        x
+      </RightActionButton>
+      <EntryTypeSelect entry={entry} />
+      <Value value={entry.value} />
+    </div>
+  )
+})
+
+const ValueArray = mrInjectAll(function ValueArray({state, value}) {
+  return (
+    <F>
+      <RightActionButton onClick={e => value.add()}>
+        +
+      </RightActionButton>
+      <div className={cn('pl3')}>
+        {renderKeyedById(ValueArrayEntry, 'entry', value.entries)}
       </div>
     </F>
   )
