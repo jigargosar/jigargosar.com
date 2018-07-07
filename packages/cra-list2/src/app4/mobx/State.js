@@ -11,7 +11,7 @@ function StateObjectProperty({
 } = {}) {
   validate('O', [parent])
   const valueTypeFactoryLookup = {
-    string: StateString,
+    string: StringValue,
     object: StateObject,
   }
 
@@ -94,8 +94,8 @@ function StateObject({props = [], parent} = {}) {
   return stateObject
 }
 
-function StateString({value = 'string value'} = {}) {
-  const stateObject = createObservableObject({
+function StringValue({value = 'string value'} = {}) {
+  const obs = createObservableObject({
     props: {
       value,
       get type() {
@@ -110,9 +110,9 @@ function StateString({value = 'string value'} = {}) {
         this.value = e.target.value
       },
     },
-    name: 'StateObject',
+    name: 'StringValue',
   })
-  return stateObject
+  return obs
 }
 
 const stateSI = StorageItem({
