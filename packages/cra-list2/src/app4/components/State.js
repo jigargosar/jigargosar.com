@@ -4,7 +4,7 @@ import {cn, F, mrInjectAll, renderKeyed} from './utils'
 import {_} from '../utils'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
+// import Typography from '@material-ui/core/Typography'
 
 const StateProperty = mrInjectAll(function StateProperty({property}) {
   return <div>{`${property[0]}`}</div>
@@ -21,12 +21,13 @@ const StateObject = withStyles(theme => ({
   mrInjectAll(function StateObject({state, object, classes: c}) {
     return (
       <F>
-        <div>
+        <div className={cn('lh-copy')}>
           Type: Object ({_.compose(_.length, _.keys)(object)})
         </div>
         <div className={cn('flex items-center')}>
           <Button
-            className={cn('mr1 lh-copy link')}
+            onClick={e => console.debug(e)}
+            className={cn('mr1 lh-copy link ph1')}
             // variant={'contained'}
             disableFocusRipple={true}
             color={'secondary'}
