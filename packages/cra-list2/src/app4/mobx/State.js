@@ -6,15 +6,20 @@ import {_, validate} from '../utils'
 function StateObjectProperty({
   id = nanoid(),
   key = 'keyName',
-  value,
+  value = {type: 'string'},
   parent,
 } = {}) {
   validate('O', [parent])
+  const valueTypeFactoryLookup = {
+    string: StateString,
+    object: StateObject,
+  }
+
   const property = createObservableObject({
     props: {
       id,
       key,
-      value: null,
+      value,
       parent,
       get snapshot() {
         return {
@@ -30,13 +35,12 @@ function StateObjectProperty({
       onRemove() {
         this.parent.removeChild(this)
       },
-      onTypeChange() {},
-      setDefaults() {
-        const valueTypeFactoryLookup = {
-          string: StateString,
-          object: StateObject,
+      onTypeChange(type) {
+        if (this.value.type !== type) {
+          this.value = valueTypeFactoryLookup[type]()
         }
-
+      },
+      setDefaults() {
         this.value = valueTypeFactoryLookup[value.type]({
           ...value,
           parent: this,
@@ -49,7 +53,7 @@ function StateObjectProperty({
   return property
 }
 
-function StateObject({value} = {}) {
+function StateObject({props} = {}) {
   const stateObject = createObservableObject({
     props: {
       props: [],
@@ -62,7 +66,7 @@ function StateObject({value} = {}) {
       get snapshot() {
         return {
           type: this.type,
-          value: {props: this.props.map(p => p.snapshot)},
+          props: this.props.map(p => p.snapshot),
         }
       },
     },
@@ -74,7 +78,7 @@ function StateObject({value} = {}) {
         this.props.splice(this.props.indexOf(child), 1)
       },
       setDefaults() {
-        this.props = value.props.map(p =>
+        this.props = props.map(p =>
           StateObjectProperty({...p, parent: this}),
         )
       },
