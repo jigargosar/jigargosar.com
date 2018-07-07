@@ -99,11 +99,9 @@ const StateObject = withStyles(theme => ({
     const obj = stateObject || property.value
     return (
       <F>
+        <BB onClick={e => obj.add()}>ADD</BB>
         <div className={cn('pl3')}>
           {renderKeyedById(StateProperty, 'property', obj.props)}
-        </div>
-        <div className={cn('flex items-center pl3')}>
-          <BB onClick={e => obj.add()}>ADD</BB>
         </div>
       </F>
     )
@@ -113,8 +111,8 @@ const StateObject = withStyles(theme => ({
 const State = mrInjectAll(function({state}) {
   return (
     <F>
+      <BB onClick={e => state.root.add()}>ADD</BB>
       {renderKeyedById(StateProperty, 'property', state.root.props)}
-      <BB>ADD</BB>
     </F>
   )
 })
