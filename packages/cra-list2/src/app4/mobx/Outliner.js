@@ -26,6 +26,9 @@ function Outline({id = nanoid(), text = 'line x', lines = []} = {}) {
       findChildById(id) {
         return _.find(_.propEq('id', id), lines)
       },
+      findIndexOfChildById(id) {
+        return _.findIndex(_.propEq('id', id), this.lines)
+      },
       findParentOfId(id) {
         if (_.isNil(this.findChildById(id))) {
           _.reduce(
@@ -51,6 +54,9 @@ function Outline({id = nanoid(), text = 'line x', lines = []} = {}) {
 
       userUpdate(props) {
         Object.assign(this, pickUserProps(props))
+      },
+      removeById(id) {
+        this.lines.splice(this.findIndexOfChildById(id), 1)
       },
     },
     name: 'Outline',
@@ -82,6 +88,12 @@ export function Outliner() {
         const parent = this.root.findParentOfId(line.id)
         validate('O', [parent])
         parent.insertNewAfter(line.id)
+      },
+      onBackspace(line) {
+        if (_.isEmpty(line.text)) {
+          const parent = this.root.findParentOfId(line.id)
+          parent.remove(line)
+        }
       },
     },
     name: 'Outliner',
