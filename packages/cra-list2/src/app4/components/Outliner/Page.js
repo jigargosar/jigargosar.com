@@ -23,9 +23,10 @@ const Outline = mrInjectAll(function Outline({line, out}) {
         value={line.text}
         onChange={e => line.userUpdate({text: e.target.value})}
         onKeyDown={e => {
-          _.cond([[isAnyHotKey(['Enter']), () => out.onEnter(line)]])(
-            e,
-          )
+          _.cond([
+            [isAnyHotKey(['Enter']), () => out.onEnter(line)],
+            [isAnyHotKey(['backspace']), () => out.onBackspace(line)],
+          ])(e)
         }}
       />
       <OutLines lines={line.lines} />

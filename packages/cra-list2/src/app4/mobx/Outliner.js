@@ -92,7 +92,7 @@ export function Outliner() {
       onBackspace(line) {
         if (_.isEmpty(line.text)) {
           const parent = this.root.findParentOfId(line.id)
-          parent.remove(line)
+          parent.removeById(line.id)
         }
       },
     },
