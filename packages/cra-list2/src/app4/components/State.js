@@ -64,15 +64,13 @@ const ObjectCollectionEntry = mrInjectAll(
 
 const ObjectCollection = mrInjectAll(function ObjectCollection({
   state,
-  stateObject,
   value,
 }) {
-  const obj = stateObject || value
   return (
     <F>
-      <RightAction onClick={e => obj.add()}>+</RightAction>
+      <RightAction onClick={e => value.add()}>+</RightAction>
       <div className={cn('pl3')}>
-        {renderKeyedById(ObjectCollectionEntry, 'entry', obj.props)}
+        {renderKeyedById(ObjectCollectionEntry, 'entry', value.props)}
       </div>
     </F>
   )
