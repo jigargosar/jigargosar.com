@@ -1,15 +1,13 @@
 import React from 'react'
-import {CenterLayout, RootContainer, Text} from './ui'
+import {Button, CenterLayout, RootContainer, Text} from './ui'
 import {cn, F, mrInjectAll, renderKeyedById} from './utils'
-import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
 import {_} from '../utils'
 import * as Recompose from 'recompose'
 
 const BB = _.compose(
   Recompose.defaultProps({
-    color: 'secondary',
-    size: 'small',
+    className: cn('fr'),
   }),
 )(Button)
 
@@ -19,6 +17,7 @@ const StatePropertyStringValue = mrInjectAll(
   function StatePropertyStringValue({property}) {
     return (
       <input
+        // className={cn('lh-copy ma1')}
         value={property.value.value}
         onChange={property.value.onValueChange}
         onFocus={e => e.target.setSelectionRange(0, 999)}
@@ -43,6 +42,7 @@ const StatePropertyKey = mrInjectAll(function StatePropertyKey({
 }) {
   return (
     <input
+      // className={cn('lh-copy ma1')}
       autoFocus
       value={property.key}
       onChange={property.onKeyChange}
@@ -73,10 +73,10 @@ const StatePropertyTypeSelect = mrInjectAll(
 const StateProperty = mrInjectAll(function StateProperty({property}) {
   return (
     <div>
+      <BB onClick={property.onRemove}>X</BB>
       <StatePropertyKey property={property} />
       =
       <StatePropertyTypeSelect property={property} />
-      <BB onClick={property.onRemove}>X</BB>
       <StatePropertyValue property={property} />
     </div>
   )
@@ -111,8 +111,12 @@ const StateObject = withStyles(theme => ({
 const State = mrInjectAll(function({state}) {
   return (
     <F>
-      <BB onClick={e => state.root.add()}>ADD</BB>
-      {renderKeyedById(StateProperty, 'property', state.root.props)}
+      <BB className={cn('cf')} onClick={e => state.root.add()}>
+        Add field
+      </BB>
+      <div>
+        {renderKeyedById(StateProperty, 'property', state.root.props)}
+      </div>
     </F>
   )
 })
