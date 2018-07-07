@@ -5,6 +5,14 @@ import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
 import {_} from '../utils'
 import * as Recompose from 'recompose'
+
+const BB = _.compose(
+  Recompose.defaultProps({
+    color: 'secondary',
+    size: 'small',
+  }),
+)(Button)
+
 // import Typography from '@material-ui/core/Typography'
 
 const StatePropertyStringValue = mrInjectAll(
@@ -68,13 +76,7 @@ const StateProperty = mrInjectAll(function StateProperty({property}) {
       <StatePropertyKey property={property} />
       =
       <StatePropertyTypeSelect property={property} />
-      <Button
-        color={'secondary'}
-        size={'small'}
-        onClick={property.onRemove}
-      >
-        X
-      </Button>
+      <BB onClick={property.onRemove}>X</BB>
       <StatePropertyValue property={property} />
     </div>
   )
@@ -101,26 +103,12 @@ const StateObject = withStyles(theme => ({
           {renderKeyedById(StateProperty, 'property', obj.props)}
         </div>
         <div className={cn('flex items-center pl3')}>
-          <Button
-            variant={'flat'}
-            onClick={e => obj.add()}
-            color={'secondary'}
-            size={'small'}
-          >
-            add
-          </Button>
+          <BB onClick={e => obj.add()}>ADD</BB>
         </div>
       </F>
     )
   }),
 )
-
-const BB = _.compose(
-  Recompose.defaultProps({
-    color: 'secondary',
-    size: 'small',
-  }),
-)(Button)
 
 const State = mrInjectAll(function({state}) {
   return (
