@@ -62,7 +62,7 @@ const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
       </RightActionButton>
       {isCollection && (
         <Button onClick={entry.toggleCollapsed}>
-          {entry.collapsed ? 'v' : '>'}
+          {entry.collapsed ? '>' : 'v'}
         </Button>
       )}
       <input
@@ -70,14 +70,14 @@ const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
         value={entry.key}
         onChange={entry.onKeyChange}
       />
-      {isCollection &&
-        entry.collapsed && (
+      {!isCollection ||
+        (!entry.collapsed && (
           <F>
             =
             <EntryTypeSelect entry={entry} />
             <Value value={entry.value} />
           </F>
-        )}
+        ))}
     </div>
   )
 })
@@ -98,13 +98,28 @@ const ValueObject = mrInjectAll(function ValueObject({state, value}) {
 const ValueArrayEntry = mrInjectAll(function ValueArrayEntry({
   entry,
 }) {
+  const isCollection = _.contains(entry.value.type, [
+    'array',
+    'object',
+  ])
+  console.log(`entry.collapsed`, entry.collapsed)
   return (
     <div>
       <RightActionButton onClick={entry.onRemove}>
         x
       </RightActionButton>
+      {isCollection && (
+        <Button onClick={entry.toggleCollapsed}>
+          {entry.collapsed ? '>' : 'v'}
+        </Button>
+      )}
       <EntryTypeSelect entry={entry} />
-      <Value value={entry.value} />
+      {!isCollection ||
+        (!entry.collapsed && (
+          <F>
+            <Value value={entry.value} />
+          </F>
+        ))}
     </div>
   )
 })
