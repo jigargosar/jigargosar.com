@@ -31,7 +31,7 @@ const StatePropertyValue = mrInjectAll(function StatePropertyValue({
 }) {
   const componentLookup = {
     string: StatePropertyStringValue,
-    object: StateObject,
+    object: StatePropertyObject,
   }
   const ValueComponent = componentLookup[property.value.type]
   return <ValueComponent property={property} />
@@ -82,7 +82,7 @@ const StateProperty = mrInjectAll(function StateProperty({property}) {
   )
 })
 
-const StateObject = withStyles(theme => ({
+const StatePropertyObject = withStyles(theme => ({
   sizeSmall: {
     padding: '0px 0px',
     minWidth: 0,
