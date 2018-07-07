@@ -10,14 +10,14 @@ const RightActionButton = _.compose(
   }),
 )(Button)
 
-const EntryValue = mrInjectAll(function EntryValue({value}) {
+const Value = mrInjectAll(function Value({value}) {
   const lookup = {
     string: ValueString,
     object: ValueObject,
   }
 
-  const EntryValueComponent = lookup[value.type]
-  return <EntryValueComponent value={value} />
+  const ValueComponent = lookup[value.type]
+  return <ValueComponent value={value} />
 })
 
 const EntryTypeSelect = mrInjectAll(function EntryTypeSelect({
@@ -40,7 +40,7 @@ const EntryTypeSelect = mrInjectAll(function EntryTypeSelect({
 const ValueString = mrInjectAll(function ValueString({value}) {
   return (
     <input
-      value={value.value}
+      value={value.string}
       onChange={value.onValueChange}
       onFocus={e => e.target.setSelectionRange(0, 999)}
     />
@@ -62,7 +62,7 @@ const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
       />
       =
       <EntryTypeSelect entry={entry} />
-      <EntryValue value={entry.value} />
+      <Value value={entry.value} />
     </div>
   )
 })

@@ -117,20 +117,20 @@ function ValueObject({entries = [], parent} = {}) {
   return obs
 }
 
-function ValueString({value = 'string value'} = {}) {
+function ValueString({string = 'string'} = {}) {
   const obs = createObservableObject({
     props: {
-      value,
+      string,
       get type() {
         return 'string'
       },
       get snapshot() {
-        return _.pick(['type', 'value'], this)
+        return _.pick(['type', 'string'], this)
       },
     },
     actions: {
       onValueChange(e) {
-        this.value = e.target.value
+        this.string = e.target.value
       },
     },
     name: 'ValueString',
