@@ -18,6 +18,7 @@ const StateProperty = mrInjectAll(function StateProperty({property}) {
         value={property.value}
         onChange={property.onValueChange}
       />
+      <Button onClick={property.onRemove}>Delete</Button>
     </div>
   )
 })

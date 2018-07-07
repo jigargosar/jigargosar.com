@@ -1,17 +1,24 @@
 import {createObservableObject, mJS, mReaction} from './utils'
 import {StorageItem} from '../services/storage'
 import {nanoid} from '../model/util'
+import {_, validate} from '../utils'
 
 function StateObjectProperty({
   id = nanoid(),
   key = 'keyName',
   value = 'string value',
+  parent,
 } = {}) {
+  validate('O', [parent])
   return createObservableObject({
     props: {
       id,
       key,
       value,
+      parent,
+      get snapshot() {
+        return _.pick(['id', 'key', 'value'], this)
+      },
     },
     actions: {
       onKeyChange(e) {
@@ -20,26 +27,43 @@ function StateObjectProperty({
       onValueChange(e) {
         this.value = e.target.value
       },
+
+      onRemove() {
+        this.parent.removeChild(this)
+      },
     },
     name: 'StateObjectProperty',
   })
 }
 
 function StateObject({props = []} = {}) {
-  return createObservableObject({
+  const stateObject = createObservableObject({
     props: {
-      props: props.map(StateObjectProperty),
+      props: [],
       get propCount() {
         return this.props.length
+      },
+      get snapshot() {
+        return {props: this.props.map(p => p.snapshot)}
       },
     },
     actions: {
       add() {
-        this.props.unshift(StateObjectProperty())
+        this.props.unshift(StateObjectProperty({parent: this}))
+      },
+      removeChild(child) {
+        this.props.splice(this.props.indexOf(child), 1)
+      },
+      setPropsFromSnapshot(props) {
+        this.props = props.map(p =>
+          StateObjectProperty({...p, parent: this}),
+        )
       },
     },
     name: 'StateObject',
   })
+  stateObject.setPropsFromSnapshot(props)
+  return stateObject
 }
 
 const stateSI = StorageItem({
@@ -61,9 +85,13 @@ export function State() {
     name: 'State',
   })
 
-  mReaction(() => mJS(out.root), () => stateSI.save(out.root), {
-    name: 'save state-root',
-  })
+  mReaction(
+    () => mJS(out.root),
+    () => stateSI.save(out.root.snapshot),
+    {
+      name: 'save state-root',
+    },
+  )
 
   return out
 }
