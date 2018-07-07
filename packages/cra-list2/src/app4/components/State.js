@@ -9,7 +9,11 @@ const StateProperty = mrInjectAll(function StateProperty({property}) {
   return (
     <div>
       <input value={property.key} onChange={property.onKeyChange} />
-      :
+      =
+      <select>
+        <option>string</option>
+        <option>object</option>
+      </select>
       <input
         value={property.value}
         onChange={property.onValueChange}
