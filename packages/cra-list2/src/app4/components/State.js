@@ -10,7 +10,6 @@ const StatePropertyStringValue = mrInjectAll(
   function StatePropertyStringValue({property}) {
     return (
       <input
-        autoFocus
         value={property.value.value}
         onChange={property.value.onValueChange}
         onFocus={e => e.target.setSelectionRange(0, 999)}
@@ -34,7 +33,11 @@ const StatePropertyKey = mrInjectAll(function StatePropertyKey({
   property,
 }) {
   return (
-    <input value={property.key} onChange={property.onKeyChange} />
+    <input
+      autoFocus
+      value={property.key}
+      onChange={property.onKeyChange}
+    />
   )
 })
 
