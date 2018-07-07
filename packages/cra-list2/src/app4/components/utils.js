@@ -32,6 +32,12 @@ export function renderKeyedById(Component, propName, idList) {
   ))(idList)
 }
 
+export function renderKeyed(Component, propName, getKey, idList) {
+  return R.map(value => (
+    <Component key={getKey(value)} {...{[propName]: value}} />
+  ))(idList)
+}
+
 export class C extends RC {
   render() {
     return this.r(this.props)
