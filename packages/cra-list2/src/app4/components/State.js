@@ -7,7 +7,7 @@ import {withStyles} from '@material-ui/core/styles'
 // import Typography from '@material-ui/core/Typography'
 
 const StateProperty = mrInjectAll(function StateProperty({property}) {
-  return <div>{`${property[0]}`}</div>
+  return <div>{`${property[0]} : ${property[1]}`}</div>
 })
 
 const StateObject = withStyles(theme => ({
