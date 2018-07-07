@@ -8,7 +8,6 @@ import {withStyles} from '@material-ui/core/styles'
 const StateProperty = mrInjectAll(function StateProperty({property}) {
   return (
     <div>
-      {`${property.key} : ${property.value}`}
       <input value={property.key} onChange={property.onKeyChange} />
       :
       <input
