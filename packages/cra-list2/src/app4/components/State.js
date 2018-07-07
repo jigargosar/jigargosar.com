@@ -55,6 +55,7 @@ const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
     'array',
     'object',
   ])
+  const shouldExpand = !isCollection || !entry.collapsed
   return (
     <div>
       <RightActionButton onClick={entry.onRemove}>
@@ -70,14 +71,13 @@ const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
         value={entry.key}
         onChange={entry.onKeyChange}
       />
-      {!isCollection ||
-        (!entry.collapsed && (
-          <F>
-            =
-            <EntryTypeSelect entry={entry} />
-            <Value value={entry.value} />
-          </F>
-        ))}
+      {shouldExpand && (
+        <F>
+          =
+          <EntryTypeSelect entry={entry} />
+          <Value value={entry.value} />
+        </F>
+      )}
     </div>
   )
 })
@@ -102,7 +102,7 @@ const ValueArrayEntry = mrInjectAll(function ValueArrayEntry({
     'array',
     'object',
   ])
-  console.log(`entry.collapsed`, entry.collapsed)
+  const shouldExpand = !isCollection || !entry.collapsed
   return (
     <div>
       <RightActionButton onClick={entry.onRemove}>
@@ -114,12 +114,11 @@ const ValueArrayEntry = mrInjectAll(function ValueArrayEntry({
         </Button>
       )}
       <EntryTypeSelect entry={entry} />
-      {!isCollection ||
-        (!entry.collapsed && (
-          <F>
-            <Value value={entry.value} />
-          </F>
-        ))}
+      {shouldExpand && (
+        <F>
+          <Value value={entry.value} />
+        </F>
+      )}
     </div>
   )
 })
