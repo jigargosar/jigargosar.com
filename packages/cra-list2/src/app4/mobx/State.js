@@ -3,6 +3,47 @@ import {StorageItem} from '../services/storage'
 import {nanoid} from '../model/util'
 import {_, validate} from '../utils'
 
+function ValueType({value = null, parent} = {}) {
+  validate('O', [parent])
+  const valueTypeFactoryLookup = {
+    string: ValueString,
+    object: ValueObject,
+  }
+
+  const obs = createObservableObject({
+    props: {
+      value,
+      parent,
+      get snapshot() {
+        return {
+          value: this.value.snapshot,
+        }
+      },
+    },
+    actions: {
+      onRemove() {
+        this.parent.removeChild(this)
+      },
+      onTypeChange(e) {
+        const type = e.target.value
+        if (this.value.type !== type) {
+          this.value = valueTypeFactoryLookup[type]({parent})
+        }
+      },
+      setDefaults() {
+        const type = _.propOr('string', 'type', value)
+        this.value = valueTypeFactoryLookup[type]({
+          ...value,
+          parent: this,
+        })
+      },
+    },
+    name: 'ValueType',
+  })
+  obs.setDefaults()
+  return obs
+}
+
 function ValueObjectEntry({
   id = nanoid(),
   key = 'keyName',
