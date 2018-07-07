@@ -11,47 +11,19 @@ const RightAction = _.compose(
   }),
 )(Button)
 
-// import Typography from '@material-ui/core/Typography'
+const componentLookup = {
+  string: StringValue,
+  object: ObjectCollection,
+  array: ArrayCollection,
+}
 
-const StatePropertyStringValue = mrInjectAll(
-  function StatePropertyStringValue({property}) {
-    return (
-      <input
-        // className={cn('lh-copy ma1')}
-        value={property.value.value}
-        onChange={property.value.onValueChange}
-        onFocus={e => e.target.setSelectionRange(0, 999)}
-      />
-    )
-  },
-)
-
-const StatePropertyValue = mrInjectAll(function StatePropertyValue({
-  property,
-}) {
-  const componentLookup = {
-    string: StatePropertyStringValue,
-    object: StatePropertyObject,
-  }
+const StateValue = mrInjectAll(function StateValue({property}) {
   const ValueComponent = componentLookup[property.value.type]
   return <ValueComponent property={property} />
 })
 
-const StatePropertyKey = mrInjectAll(function StatePropertyKey({
-  property,
-}) {
-  return (
-    <input
-      // className={cn('lh-copy ma1')}
-      autoFocus
-      value={property.key}
-      onChange={property.onKeyChange}
-    />
-  )
-})
-
-const StatePropertyTypeSelect = mrInjectAll(
-  function StatePropertyTypeSelect({property}) {
+const StateValueTypeSelect = mrInjectAll(
+  function StateValueTypeSelect({property}) {
     return (
       <select
         value={property.value.type}
@@ -63,57 +35,120 @@ const StatePropertyTypeSelect = mrInjectAll(
               {type}
             </option>
           ),
-          ['object', 'string'],
+          ['object', 'string', 'array'],
         )}
       </select>
     )
   },
 )
 
-const StateProperty = mrInjectAll(function StateProperty({property}) {
+const StringValue = mrInjectAll(function ObjectItemStringValue({
+  property,
+}) {
   return (
-    <div>
-      <RightAction onClick={property.onRemove}>x</RightAction>
-      <StatePropertyKey property={property} />
-      =
-      <StatePropertyTypeSelect property={property} />
-      <StatePropertyValue property={property} />
-    </div>
+    <input
+      // className={cn('lh-copy ma1')}
+      value={property.value.value}
+      onChange={property.value.onValueChange}
+      onFocus={e => e.target.setSelectionRange(0, 999)}
+    />
   )
 })
 
-const StatePropertyObject = withStyles(theme => ({
-  sizeSmall: {
-    padding: '0px 0px',
-    minWidth: 0,
-    minHeight: 0,
-    fontSize: theme.typography.pxToRem(13),
+const ObjectKey = mrInjectAll(function ObjectKey({property}) {
+  return (
+    <input
+      // className={cn('lh-copy ma1')}
+      autoFocus
+      value={property.key}
+      onChange={property.onKeyChange}
+    />
+  )
+})
+
+const ObjectCollectionEntry = mrInjectAll(
+  function ObjectCollectionEntry({property}) {
+    return (
+      <div>
+        <RightAction onClick={property.onRemove}>x</RightAction>
+        <ObjectKey property={property} />
+        =
+        <StateValueTypeSelect property={property} />
+        <StateValue property={property} />
+      </div>
+    )
   },
-}))(
-  mrInjectAll(function StateObject({
-    state,
-    stateObject,
-    property,
-    classes: c,
-  }) {
-    const obj = stateObject || property.value
+)
+
+const ObjectCollection = mrInjectAll(function StateObject({
+  state,
+  stateObject,
+  property,
+  classes: c,
+}) {
+  const obj = stateObject || property.value
+  return (
+    <F>
+      <RightAction onClick={e => obj.add()}>+</RightAction>
+      <div className={cn('pl3')}>
+        {renderKeyedById(
+          ObjectCollectionEntry,
+          'property',
+          obj.props,
+        )}
+      </div>
+    </F>
+  )
+})
+
+const ArrayCollectionEntry = mrInjectAll(
+  function ArrayCollectionEntry({state, property, classes: c}) {
     return (
       <F>
-        <RightAction onClick={e => obj.add()}>+</RightAction>
+        <RightAction onClick={e => property.value.add()}>
+          +
+        </RightAction>
         <div className={cn('pl3')}>
-          {renderKeyedById(StateProperty, 'property', obj.props)}
+          {renderKeyedById(
+            ObjectCollectionEntry,
+            'property',
+            property.value.props,
+          )}
         </div>
       </F>
     )
-  }),
+  },
 )
+
+const ArrayCollection = mrInjectAll(function ArrayCollection({
+  state,
+  property,
+  classes: c,
+}) {
+  return (
+    <F>
+      <RightAction onClick={e => property.value.add()}>+</RightAction>
+      <div className={cn('pl3')}>
+        {renderKeyedById(
+          ObjectCollectionEntry,
+          'property',
+          property.value.props,
+        )}
+      </div>
+    </F>
+  )
+})
 
 const State = mrInjectAll(function({state}) {
   return (
     <F>
       <Button onClick={e => state.root.add()}>Add field</Button>
       <div>
-        {renderKeyedById(StateProperty, 'property', state.root.props)}
+        {renderKeyedById(
+          ObjectCollectionEntry,
+          'property',
+          state.root.props,
+        )}
       </div>
     </F>
   )
