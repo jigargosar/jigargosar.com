@@ -54,7 +54,7 @@ function StateObjectProperty({
   return property
 }
 
-function StateObject({props} = {}) {
+function StateObject({props, parent} = {}) {
   const stateObject = createObservableObject({
     props: {
       props: [],
@@ -63,6 +63,9 @@ function StateObject({props} = {}) {
       },
       get propCount() {
         return this.props.length
+      },
+      get parent() {
+        return parent
       },
       get snapshot() {
         return {
