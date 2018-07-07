@@ -4,7 +4,7 @@ import {cn, F, mrInjectAll, renderKeyedById} from './utils'
 import {_} from '../utils'
 import * as Recompose from 'recompose'
 
-const RightAction = _.compose(
+const RightActionButton = _.compose(
   Recompose.defaultProps({
     className: cn('fr'),
   }),
@@ -32,7 +32,7 @@ const StateValueTypeSelect = mrInjectAll(
   },
 )
 
-const StringValue = mrInjectAll(function StringValue({value}) {
+const ValueString = mrInjectAll(function ValueString({value}) {
   return (
     <input
       value={value.value}
@@ -42,33 +42,34 @@ const StringValue = mrInjectAll(function StringValue({value}) {
   )
 })
 
-const ObjectCollectionEntry = mrInjectAll(
-  function ObjectCollectionEntry({entry}) {
-    return (
-      <div>
-        <RightAction onClick={entry.onRemove}>x</RightAction>
-        <input
-          autoFocus
-          value={entry.key}
-          onChange={entry.onKeyChange}
-        />
-        =
-        <StateValueTypeSelect value={entry.value} />
-        <StateValue value={entry.value} />
-      </div>
-    )
-  },
-)
-
-const ObjectCollection = mrInjectAll(function ObjectCollection({
-  state,
-  value,
+const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
+  entry,
 }) {
   return (
+    <div>
+      <RightActionButton onClick={entry.onRemove}>
+        x
+      </RightActionButton>
+      <input
+        autoFocus
+        value={entry.key}
+        onChange={entry.onKeyChange}
+      />
+      =
+      <StateValueTypeSelect value={entry.value} />
+      <StateValue value={entry.value} />
+    </div>
+  )
+})
+
+const ValueObject = mrInjectAll(function ValueObject({state, value}) {
+  return (
     <F>
-      <RightAction onClick={e => value.add()}>+</RightAction>
+      <RightActionButton onClick={e => value.add()}>
+        +
+      </RightActionButton>
       <div className={cn('pl3')}>
-        {renderKeyedById(ObjectCollectionEntry, 'entry', value.props)}
+        {renderKeyedById(ValueObjectEntry, 'entry', value.props)}
       </div>
     </F>
   )
@@ -79,11 +80,7 @@ const State = mrInjectAll(function({state}) {
     <F>
       <Button onClick={e => state.root.add()}>Add field</Button>
       <div>
-        {renderKeyedById(
-          ObjectCollectionEntry,
-          'entry',
-          state.root.props,
-        )}
+        {renderKeyedById(ValueObjectEntry, 'entry', state.root.props)}
       </div>
     </F>
   )
@@ -110,8 +107,8 @@ export default Main
 
 function getComponentForType(type) {
   const lookup = {
-    string: StringValue,
-    object: ObjectCollection,
+    string: ValueString,
+    object: ValueObject,
   }
   return lookup[type]
 }
