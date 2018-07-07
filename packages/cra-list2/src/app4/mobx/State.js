@@ -12,7 +12,7 @@ function StateObjectProperty({
   validate('O', [parent])
   const valueTypeFactoryLookup = {
     string: StringValue,
-    object: StateObject,
+    object: ObjectValue,
   }
 
   const property = createObservableObject({
@@ -55,15 +55,15 @@ function StateObjectProperty({
   return property
 }
 
-function StateObject({props = [], parent} = {}) {
-  const stateObject = createObservableObject({
+function ObjectValue({props, entries=[], parent} = {}) {
+  const obs = createObservableObject({
     props: {
-      props: [],
+      entries: [],
       get type() {
         return 'object'
       },
       get propCount() {
-        return this.props.length
+        return this.entries.length
       },
       get parent() {
         return parent
@@ -71,27 +71,27 @@ function StateObject({props = [], parent} = {}) {
       get snapshot() {
         return {
           type: this.type,
-          props: this.props.map(p => p.snapshot),
+          entries: this.entries.map(p => p.snapshot),
         }
       },
     },
     actions: {
       add() {
-        this.props.unshift(StateObjectProperty({parent: this}))
+        this.entries.unshift(StateObjectProperty({parent: this}))
       },
       removeChild(child) {
-        this.props.splice(this.props.indexOf(child), 1)
+        this.entries.splice(this.entries.indexOf(child), 1)
       },
       setDefaults() {
-        this.props = props.map(p =>
-          StateObjectProperty({...p, parent: this}),
+        this.entries = (props|| entries).map(entry =>
+          StateObjectProperty({...entry, parent: this}),
         )
       },
     },
-    name: 'StateObject',
+    name: 'ObjectValue',
   })
-  stateObject.setDefaults()
-  return stateObject
+  obs.setDefaults()
+  return obs
 }
 
 function StringValue({value = 'string value'} = {}) {
@@ -118,10 +118,10 @@ function StringValue({value = 'string value'} = {}) {
 const stateSI = StorageItem({
   name: 'state',
   getInitial() {
-    return StateObject({})
+    return ObjectValue({})
   },
   postLoad(state) {
-    return StateObject(state)
+    return ObjectValue(state)
   },
 })
 

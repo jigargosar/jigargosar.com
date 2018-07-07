@@ -69,7 +69,7 @@ const ValueObject = mrInjectAll(function ValueObject({state, value}) {
         +
       </RightActionButton>
       <div className={cn('pl3')}>
-        {renderKeyedById(ValueObjectEntry, 'entry', value.props)}
+        {renderKeyedById(ValueObjectEntry, 'entry', value.entries)}
       </div>
     </F>
   )
@@ -80,7 +80,11 @@ const State = mrInjectAll(function({state}) {
     <F>
       <Button onClick={e => state.root.add()}>Add field</Button>
       <div>
-        {renderKeyedById(ValueObjectEntry, 'entry', state.root.props)}
+        {renderKeyedById(
+          ValueObjectEntry,
+          'entry',
+          state.root.entries,
+        )}
       </div>
     </F>
   )

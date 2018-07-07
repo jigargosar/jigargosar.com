@@ -1,7 +1,7 @@
 import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
-import {_, R, RX} from '../utils'
+import {_, R, RX, validate} from '../utils'
 import {setDisplayName, wrapDisplayName} from 'recompose'
 
 export {F, RC, observer, Observer, isHotKey}
@@ -27,6 +27,7 @@ export function Debugger() {
 }
 
 export function renderKeyedById(Component, propName, idList) {
+  validate('FSA', [Component, propName, idList])
   return R.map(value => (
     <Component key={value.id} {...{[propName]: value}} />
   ))(idList)
