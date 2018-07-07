@@ -6,43 +6,54 @@ import {withStyles} from '@material-ui/core/styles'
 import {_} from '../utils'
 // import Typography from '@material-ui/core/Typography'
 
+const StatePropertyStringValue = mrInjectAll(
+  function StatePropertyStringValue({property}) {
+    return (
+      <input
+        autoFocus
+        value={property.value.value}
+        onChange={property.value.onValueChange}
+        onFocus={e => e.target.setSelectionRange(0, 999)}
+      />
+    )
+  },
+)
+
 const StatePropertyValue = mrInjectAll(function StatePropertyValue({
   property,
 }) {
-  return (
-    <input
-      autoFocus
-      value={property.key}
-      onChange={property.onKeyChange}
-      onFocus={e => e.target.setSelectionRange(0, 999)}
-    />
-  )
+  const componentLookup = {
+    string: StatePropertyStringValue,
+    object: StateObject,
+  }
+  const ValueComponent = componentLookup[property.value.type]
+  return <ValueComponent property={property} />
 })
 
-const StatePropertyKey = mrInjectAll(function StatePropertyValue({
+const StatePropertyKey = mrInjectAll(function StatePropertyKey({
   property,
 }) {
   return (
-    <input value={property.value} onChange={property.onValueChange} />
+    <input value={property.key} onChange={property.onKeyChange} />
   )
 })
 
-const StatePropertyTypeSelect = mrInjectAll(function SelectValueType({
-  property,
-}) {
-  return (
-    <select value={property.type} onChange={property.onTypeChange}>
-      {_.map(
-        type => (
-          <option key={type} value={type}>
-            {type}
-          </option>
-        ),
-        ['object', 'string'],
-      )}
-    </select>
-  )
-})
+const StatePropertyTypeSelect = mrInjectAll(
+  function StatePropertyTypeSelect({property}) {
+    return (
+      <select value={property.type} onChange={property.onTypeChange}>
+        {_.map(
+          type => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ),
+          ['object', 'string'],
+        )}
+      </select>
+    )
+  },
+)
 
 const StateProperty = mrInjectAll(function StateProperty({property}) {
   return (
@@ -64,15 +75,21 @@ const StateObject = withStyles(theme => ({
     fontSize: theme.typography.pxToRem(13),
   },
 }))(
-  mrInjectAll(function StateObject({state, stateObject, classes: c}) {
+  mrInjectAll(function StateObject({
+    state,
+    stateObject,
+    property,
+    classes: c,
+  }) {
+    const obj = stateObject || property.value
     return (
       <F>
         <div className={cn('lh-copy')}>
-          Type: Object ({stateObject.propCount})
+          Type: Object ({obj.propCount})
         </div>
         <div className={cn('flex items-center')}>
           <Button
-            onClick={e => stateObject.add()}
+            onClick={e => obj.add()}
             className={cn('mr1 lh-copy link ph1')}
             // variant={'contained'}
             disableFocusRipple={true}
@@ -87,11 +104,7 @@ const StateObject = withStyles(theme => ({
         </div>
 
         <div>
-          {renderKeyedById(
-            StateProperty,
-            'property',
-            stateObject.props,
-          )}
+          {renderKeyedById(StateProperty, 'property', obj.props)}
         </div>
       </F>
     )

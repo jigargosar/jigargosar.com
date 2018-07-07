@@ -6,8 +6,7 @@ import {_, validate} from '../utils'
 function StateObjectProperty({
   id = nanoid(),
   key = 'keyName',
-  value = 'string value',
-  type = 'string',
+  value = StateString({value: 'string value'}),
   parent,
 } = {}) {
   validate('O', [parent])
@@ -15,24 +14,16 @@ function StateObjectProperty({
     props: {
       id,
       key,
-      value,
-      type,
+      value: StateString({value: 'string value'}),
       parent,
       get snapshot() {
-        return _.pick(['id', 'key', 'value', 'type'], this)
+        return _.pick(['id', 'key', 'value'], this)
       },
     },
     actions: {
       onKeyChange(e) {
         this.key = e.target.value
       },
-      onValueChange(e) {
-        this.value = e.target.value
-      },
-      onTypeChange(e) {
-        this.type = e.target.value
-      },
-
       onRemove() {
         this.parent.removeChild(this)
       },
@@ -45,11 +36,17 @@ function StateObject({props = []} = {}) {
   const stateObject = createObservableObject({
     props: {
       props: [],
+      get type() {
+        return 'object'
+      },
       get propCount() {
         return this.props.length
       },
       get snapshot() {
-        return {props: this.props.map(p => p.snapshot)}
+        return {
+          type: this.type,
+          props: this.props.map(p => p.snapshot),
+        }
       },
     },
     actions: {
@@ -68,6 +65,27 @@ function StateObject({props = []} = {}) {
     name: 'StateObject',
   })
   stateObject.setPropsFromSnapshot(props)
+  return stateObject
+}
+
+function StateString({value} = {}) {
+  const stateObject = createObservableObject({
+    props: {
+      value,
+      get type() {
+        return 'string'
+      },
+      get snapshot() {
+        return _.pick(['type', 'value'], this)
+      },
+    },
+    actions: {
+      onValueChange(e) {
+        this.value = e.target.value
+      },
+    },
+    name: 'StateObject',
+  })
   return stateObject
 }
 
