@@ -26,8 +26,9 @@ const StateObject = withStyles(theme => ({
         </div>
         <div className={cn('flex items-center')}>
           <Button
-            className={cn('mr1 lh-copy')}
+            className={cn('mr1 lh-copy link')}
             // variant={'contained'}
+            disableFocusRipple={true}
             color={'secondary'}
             size={'small'}
             classes={{
