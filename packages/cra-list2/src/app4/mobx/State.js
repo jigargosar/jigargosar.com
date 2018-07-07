@@ -19,11 +19,6 @@ function ValueType({value = null, parent} = {}) {
     props: {
       value,
       parent,
-      // get snapshot() {
-      //   return {
-      //     value: this.value.snapshot,
-      //   }
-      // },
     },
     actions: {
       onRemove() {
