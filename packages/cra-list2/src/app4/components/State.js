@@ -42,18 +42,16 @@ const StringValue = mrInjectAll(function StringValue({value}) {
   )
 })
 
-const ObjectKey = mrInjectAll(function ObjectKey({entry}) {
-  return (
-    <input autoFocus value={entry.key} onChange={entry.onKeyChange} />
-  )
-})
-
 const ObjectCollectionEntry = mrInjectAll(
   function ObjectCollectionEntry({entry}) {
     return (
       <div>
         <RightAction onClick={entry.onRemove}>x</RightAction>
-        <ObjectKey entry={entry} />
+        <input
+          autoFocus
+          value={entry.key}
+          onChange={entry.onKeyChange}
+        />
         =
         <StateValueTypeSelect value={entry.value} />
         <StateValue value={entry.value} />
