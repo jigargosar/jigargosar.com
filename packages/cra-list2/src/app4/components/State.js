@@ -8,7 +8,12 @@ import {withStyles} from '@material-ui/core/styles'
 const StateProperty = mrInjectAll(function StateProperty({property}) {
   return (
     <div>
-      <input value={property.key} onChange={property.onKeyChange} />
+      <input
+        autoFocus
+        value={property.key}
+        onChange={property.onKeyChange}
+        onFocus={e => e.target.setSelectionRange(0, 999)}
+      />
       =
       <select>
         <option>string</option>
