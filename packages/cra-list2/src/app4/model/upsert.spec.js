@@ -30,7 +30,7 @@ describe('upsert', function() {
     // pending('it fails')
     // pending('it fails')
     const rc = _.compose(
-      upsert(addIdConfig, fooItem),
+      upsert(addIdConfig, [fooItem, fooItem]),
       upsert(addIdConfig, fooItem),
     )([])
     console.log(`rc`, rc)
