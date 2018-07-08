@@ -6,7 +6,7 @@ describe('upsert', function() {
     expect(upsert.displayName).toBe('upsert')
     expect(upsert.length).toBe(3)
   })
-  it.skip('should insert obj in empty arr', function() {
+  it('should insert obj in empty arr', function() {
     const rc = upsert({}, {name: 'foo'}, [])
     expect(rc).toEqual([{name: 'foo'}])
   })

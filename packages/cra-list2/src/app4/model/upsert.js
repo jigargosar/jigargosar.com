@@ -6,6 +6,7 @@ const upsert = _.curry(function upsert(
   collectionArray,
 ) {
   validate('OOA|OAA', [options, objOrArr, collectionArray])
+  return _.append(objOrArr, collectionArray)
 })
 
 upsert.displayName = 'upsert'
