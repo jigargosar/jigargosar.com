@@ -32,7 +32,6 @@ export function Collection({name = 'Collection'} = {}) {
   const obs = createObservableObject({
     props: {
       docs: [],
-      createCollectionDoc,
     },
     actions: {
       upsert(docsOrArray) {
