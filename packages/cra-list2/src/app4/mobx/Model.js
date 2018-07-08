@@ -22,7 +22,7 @@ function createCollectionDoc(
       createdAt,
       modifiedAt,
       ...rest,
-      collectionRef: collection,
+      collection,
     },
     name: `${collection.name} - Doc - ${id}`,
   })
