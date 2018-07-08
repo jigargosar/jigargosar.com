@@ -25,7 +25,6 @@ export function Collection({
   const obs = extendObservableObject(Model({name, ...rest}), {
     props: {docs},
     actions: {
-      setDefaults() {},
       replaceAllWithSnapshotDocs(snapshotDocs) {
         this.docs = upsert(
           {
@@ -38,6 +37,6 @@ export function Collection({
       },
     },
   })
-  obs.setDefaults()
+  obs.replaceAllWithSnapshotDocs(docs)
   return obs
 }
