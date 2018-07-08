@@ -17,7 +17,8 @@ const upsert = _.curry(function upsert(
         ? _.update(foundIdx, updated, ca)
         : _.append(updated, ca)
     }, collectionArray),
-    _.unless(_.is(Array), _.of),
+    _.flatten,
+    _.of,
   )(objOrArr)
 })
 
