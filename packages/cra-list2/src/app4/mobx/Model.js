@@ -28,7 +28,7 @@ export function Collection({
       replaceAllWithSnapshotDocs(snapshotDocs) {
         this.docs = upsert(
           {
-            mapBeforeUpsert: item => Model(item),
+            mapBeforeUpsert: Model,
             equals: _.eqProps('id'),
           },
           snapshotDocs,
