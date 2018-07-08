@@ -6,7 +6,7 @@ const upsert = _.curry(function upsert(
   collectionArray,
 ) {
   validate('OOA|OAA', [options, objOrArr, collectionArray])
-  const {mapBeforeUpsert = _.identity} = options
+  const {mapBeforeUpsert = _.identity, equals = _.equals} = options
   return _.compose(
     _.concat(collectionArray),
     _.map(mapBeforeUpsert),
