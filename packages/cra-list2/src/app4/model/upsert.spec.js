@@ -14,7 +14,7 @@ describe('upsert', function() {
   })
 
   const addIdConfig = {
-    mapBeforeUpsert: item => {
+    mapBeforeUpsert: (item, old) => {
       return _.merge(item, {id: 1})
     },
     equals: _.eqProps('id'),
@@ -28,10 +28,12 @@ describe('upsert', function() {
 
   it('should not add duplicates', function() {
     // pending('it fails')
+    // pending('it fails')
     const rc = _.compose(
       upsert(addIdConfig, fooItem),
       upsert(addIdConfig, fooItem),
     )([])
+    console.log(`rc`, rc)
     expect(rc).toEqual([{id: 1, name: 'foo'}])
   })
 })

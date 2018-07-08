@@ -10,10 +10,11 @@ const upsert = _.curry(function upsert(
 
   return _.compose(
     _.reduce((ca, item) => {
-      const updated = mapBeforeUpsert(item, _.find(equals(item), ca))
+      const found = _.find(equals(item), ca)
+      const updated = mapBeforeUpsert(item, found)
       const foundIdx = _.findIndex(equals(updated), ca)
       return foundIdx > -1
-        ? _.update(updated, foundIdx, ca)
+        ? _.update(foundIdx, updated, ca)
         : _.append(updated, ca)
     }, collectionArray),
     _.unless(_.is(Array), _.of),
