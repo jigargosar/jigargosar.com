@@ -1,5 +1,7 @@
 import {createObservableObject, extendObservableObject} from './utils'
 import {nanoid} from '../model/util'
+import {upsert} from '../model/upsert'
+import {_} from '../utils'
 
 function Model({
   id = nanoid(),
@@ -24,6 +26,16 @@ export function Collection({
     props: {docs},
     actions: {
       setDefaults() {},
+      replaceAllWithSnapshotDocs(snapshotDocs) {
+        this.docs = upsert(
+          {
+            mapBeforeUpsert: item => Model(item),
+            equals: _.eqProps('id'),
+          },
+          snapshotDocs,
+          this.docs,
+        )
+      },
     },
   })
   obs.setDefaults()
