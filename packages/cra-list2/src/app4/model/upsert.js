@@ -7,9 +7,15 @@ const upsert = _.curry(function upsert(
 ) {
   validate('OOA|OAA', [options, objOrArr, collectionArray])
   const {mapBeforeUpsert = _.identity, equals = _.equals} = options
+
   return _.compose(
-    _.concat(collectionArray),
-    _.map(mapBeforeUpsert),
+    _.reduce((ca, item) => {
+      const updated = mapBeforeUpsert(item, _.find(equals(item), ca))
+      const foundIdx = _.findIndex(equals(updated), ca)
+      return foundIdx > -1
+        ? _.update(updated, foundIdx, ca)
+        : _.append(updated, ca)
+    }, collectionArray),
     _.unless(_.is(Array), _.of),
   )(objOrArr)
 })
