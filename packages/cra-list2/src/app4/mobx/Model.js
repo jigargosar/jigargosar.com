@@ -8,19 +8,13 @@ import {upsert} from '../model/upsert'
 import {_} from '../utils'
 
 function createCollectionDoc(
-  {
-    id = nanoid(),
-    createdAt = Date.now(),
-    modifiedAt = Date.now(),
-    ...rest
-  },
+  {id = nanoid(), createdAt = Date.now(), ...rest},
   collection,
 ) {
   return oObject({
     props: {
       id,
       createdAt,
-      modifiedAt,
       ...rest,
       collection,
     },
