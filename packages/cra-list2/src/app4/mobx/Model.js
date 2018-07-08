@@ -7,27 +7,32 @@ import {nanoid} from '../model/util'
 import {upsert} from '../model/upsert'
 import {_} from '../utils'
 
+function createCollectionDoc(
+  {
+    id = nanoid(),
+    createdAt = Date.now(),
+    modifiedAt = Date.now(),
+    ...rest
+  },
+  collection,
+) {
+  return oObject({
+    props: {
+      id,
+      createdAt,
+      modifiedAt,
+      ...rest,
+      collectionRef: collection,
+    },
+    name: `${collection.name} - Doc - ${id}`,
+  })
+}
+
 export function Collection({name = 'Collection'} = {}) {
   const obs = createObservableObject({
     props: {
       docs: [],
-      createObservableDoc({
-        id = nanoid(),
-        createdAt = Date.now(),
-        modifiedAt = Date.now(),
-        ...rest
-      }) {
-        return oObject({
-          props: {
-            id,
-            createdAt,
-            modifiedAt,
-            ...rest,
-            collectionRef: this,
-          },
-          name: `${name} - Doc - ${id}`,
-        })
-      },
+      createCollectionDoc,
     },
     actions: {
       upsert(docsOrArray) {
@@ -38,7 +43,7 @@ export function Collection({name = 'Collection'} = {}) {
                 Object.assign(oldDoc, doc)
                 return oldDoc
               }
-              return this.createObservableDoc(doc)
+              return createCollectionDoc(doc, this)
             },
             equals: _.eqProps('id'),
           },
@@ -48,5 +53,6 @@ export function Collection({name = 'Collection'} = {}) {
       },
     },
   })
+
   return obs
 }
