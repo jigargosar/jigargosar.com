@@ -7,10 +7,10 @@ import {nanoid} from '../model/util'
 import {upsert} from '../model/upsert'
 import {_} from '../utils'
 
-export function Collection({name = 'Collection', docs = []} = {}) {
+export function Collection({name = 'Collection'} = {}) {
   const obs = createObservableObject({
     props: {
-      docs,
+      docs: [],
       createObservableDoc({
         id = nanoid(),
         createdAt = Date.now(),
@@ -18,7 +18,13 @@ export function Collection({name = 'Collection', docs = []} = {}) {
         ...rest
       }) {
         return oObject({
-          props: {id, createdAt, modifiedAt, ...rest},
+          props: {
+            id,
+            createdAt,
+            modifiedAt,
+            ...rest,
+            collectionRef: this,
+          },
           name: `${name} - Doc - ${id}`,
         })
       },
@@ -42,6 +48,5 @@ export function Collection({name = 'Collection', docs = []} = {}) {
       },
     },
   })
-  obs.upsert(docs)
   return obs
 }
