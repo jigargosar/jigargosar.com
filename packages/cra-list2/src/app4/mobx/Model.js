@@ -1,38 +1,30 @@
-import {createObservableObject} from './utils'
+import {createObservableObject, extendObservableObject} from './utils'
 import {nanoid} from '../model/util'
-import {_} from '../utils'
 
-function Model(defaults) {
+function Model({
+  id = nanoid(),
+  createdAt = Date.now(),
+  modifiedAt = Date.now(),
+  name = 'Model',
+} = {}) {
   const obs = createObservableObject({
-    props: {},
-    actions: {
-      setDefaults(defaults) {
-        Object.assign(
-          this,
-          _.mergeDeepRight(
-            {
-              id: nanoid(),
-              createdAt: Date.now(),
-              modifiedAt: Date.now(),
-            },
-            defaults,
-          ),
-        )
-      },
-    },
-    name: 'Model',
+    props: {id, createdAt, modifiedAt},
+    actions: {},
+    name: `${name}@${id}`,
   })
-  obs.setDefaults(defaults)
   return obs
 }
 
-export function Collection({docs = []} = {}) {
-  const obs = createObservableObject({
+export function Collection({
+  name = 'Collection',
+  docs = [],
+  ...rest
+} = {}) {
+  const obs = extendObservableObject(Model({name, ...rest}), {
     props: {docs},
     actions: {
       setDefaults() {},
     },
-    name: 'Collection',
   })
   obs.setDefaults()
   return obs
