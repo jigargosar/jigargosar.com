@@ -1,43 +1,61 @@
-import {createObservableObject, extendObservableObject} from './utils'
+import {
+  createObservableObject,
+  extendObservableObject,
+  oObject,
+} from './utils'
 import {nanoid} from '../model/util'
 import {upsert} from '../model/upsert'
 import {_} from '../utils'
 
-function Model({
-  id = nanoid(),
-  createdAt = Date.now(),
-  modifiedAt = Date.now(),
-  typeName = 'Model',
-} = {}) {
-  const obs = createObservableObject({
-    props: {id, createdAt, modifiedAt},
-    actions: {},
-    name: `${typeName}@${id}`,
-  })
-  return obs
-}
+// function Model({
+//   id = nanoid(),
+//   createdAt = Date.now(),
+//   modifiedAt = Date.now(),
+//   typeName = 'Model',
+// } = {}) {
+//   const obs = createObservableObject({
+//     props: {id, createdAt, modifiedAt},
+//     actions: {},
+//     name: `${typeName}@${id}`,
+//   })
+//   return obs
+// }
 
-export function Collection({
-  typeName = 'Collection',
-  docs = [],
-  types = [],
-  ...rest
-} = {}) {
-  const obs = extendObservableObject(Model({typeName, ...rest}), {
-    props: {docs},
+export function Collection({name = 'Collection', docs = []} = {}) {
+  const obs = createObservableObject({
+    props: {
+      docs,
+      createObservableDoc({
+        id = nanoid(),
+        createdAt = Date.now(),
+        modifiedAt = Date.now(),
+        ...rest
+      }) {
+        return oObject({
+          props: {id, createdAt, modifiedAt, ...rest},
+          name: `${name} - Doc - ${id}`,
+        })
+      },
+    },
     actions: {
-      replaceAllWithSnapshotDocs(snapshotDocs) {
+      upsert(docsOrArray) {
         this.docs = upsert(
           {
-            mapBeforeUpsert: Model,
+            mapBeforeUpsert: (doc, oldDoc) => {
+              if (oldDoc) {
+                Object.assign(oldDoc, doc)
+                return oldDoc
+              }
+              return this.createObservableDoc(doc)
+            },
             equals: _.eqProps('id'),
           },
-          snapshotDocs,
+          docsOrArray,
           this.docs,
         )
       },
     },
   })
-  obs.replaceAllWithSnapshotDocs(docs)
+  obs.upsert(docs)
   return obs
 }
