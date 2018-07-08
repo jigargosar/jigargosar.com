@@ -7,22 +7,23 @@ function Model({
   id = nanoid(),
   createdAt = Date.now(),
   modifiedAt = Date.now(),
-  name = 'Model',
+  typeName = 'Model',
 } = {}) {
   const obs = createObservableObject({
     props: {id, createdAt, modifiedAt},
     actions: {},
-    name: `${name}@${id}`,
+    name: `${typeName}@${id}`,
   })
   return obs
 }
 
 export function Collection({
-  name = 'Collection',
+  typeName = 'Collection',
   docs = [],
+  types = [],
   ...rest
 } = {}) {
-  const obs = extendObservableObject(Model({name, ...rest}), {
+  const obs = extendObservableObject(Model({typeName, ...rest}), {
     props: {docs},
     actions: {
       replaceAllWithSnapshotDocs(snapshotDocs) {
