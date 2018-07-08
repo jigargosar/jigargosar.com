@@ -1,4 +1,5 @@
 import {upsert} from './upsert'
+import {_} from '../utils'
 
 describe('upsert', function() {
   it('should not throw', function() {
@@ -12,13 +13,14 @@ describe('upsert', function() {
     expect(rc).toEqual([{name: 'foo'}])
   })
 
-  it.skip('should apply mapBeforeUpsert on obj', function() {
-    pending('it fails')
+  it('should apply mapBeforeUpsert on obj', function() {
+    // pending('it fails')
     expect.assertions(2)
     const rc = upsert(
       {
         mapBeforeUpsert: item => {
           expect(item).toEqual(fooItem)
+          return _.merge(item, {id: 1})
         },
       },
       fooItem,
