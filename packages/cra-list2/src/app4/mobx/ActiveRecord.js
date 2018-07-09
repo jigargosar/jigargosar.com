@@ -12,6 +12,7 @@ export function ActiveRecord({fieldNames, name}) {
     props: {
       fieldNames,
       name,
+      records: [],
     },
     actions: {
       createAndSave(values) {
@@ -19,11 +20,22 @@ export function ActiveRecord({fieldNames, name}) {
       },
       new: createNew,
       findAll() {
-        return _.map(fromJSON, adapter.loadAll())
+        return this.records
+      },
+      load() {
+        this.records = _.map(fromJSON, adapter.loadAll())
+      },
+      saveRecord(record) {
+        adapter.upsert(record.toJSON())
+        if (record.isNew) {
+          this.records.push(record)
+          record.isNew = false
+        }
       },
     },
     name: collectionName,
   })
+  activeRecord.load()
 
   return activeRecord
 
@@ -62,8 +74,7 @@ export function ActiveRecord({fieldNames, name}) {
       },
       actions: {
         save() {
-          adapter.upsert(this.toJSON())
-          this.isNew = false
+          activeRecord.saveRecord(this)
         },
       },
       name: json.id,
