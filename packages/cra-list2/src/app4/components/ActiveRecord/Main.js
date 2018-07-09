@@ -16,10 +16,22 @@ import {createObservableObject} from '../../mobx/little-mobx'
 const Notes = ActiveRecord({fieldNames: ['text'], name: 'Note'})
 
 const view = createObservableObject({
-  props: {},
-  actions: {},
+  props: {
+    mode: 'list',
+    selection: [],
+    modeProps: {},
+    get notesList() {
+      return Notes.findAll()
+    },
+  },
+  actions: {
+    onAdd() {
+      this.mode = 'add'
+    },
+  },
   name: 'view',
 })
+
 // const NoteInput = observer(function NoteInput({note}) {
 //   return (
 //     <input
@@ -142,9 +154,7 @@ const Note = mrInjectAll(function Note({note}) {
 const ListToolbar = mrInjectAll(function ListToolbar() {
   return (
     <Section className={cn('pl3')}>
-      <Button onClick={() => Notes.createAndSave({text: 'Note x'})}>
-        ADD
-      </Button>
+      <Button onClick={view.onAdd}>ADD</Button>
     </Section>
   )
 })
@@ -155,7 +165,7 @@ const NoteList = mrInjectAll(function NoteList() {
       {/*<NoteListShortcuts />*/}
       <ListToolbar />
       <Paper>
-        <List>{renderKeyedById(Note, 'note', Notes.findAll())}</List>
+        <List>{renderKeyedById(Note, 'note', view.notesList)}</List>
       </Paper>
     </div>
   )
