@@ -37,11 +37,16 @@ export const List = styled.div.attrs({
 })``
 
 export const ListItem = styled.div.attrs({
-  className: 'ph3 pv2',
-})``
+  className: 'ph3 pv2 bb bw1 b--black-05',
+})`
+  :last-child {
+    border-width: 0;
+  }
+`
 
 export const Button = styled.button.attrs({
-  className: 'input-reset link mr2 blue inline-flex pointer',
+  className:
+    'input-reset link mr2 blue inline-flex pointer b--light-silver',
 })`
   user-select: none;
 `
