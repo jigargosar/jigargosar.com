@@ -11,6 +11,8 @@ describe('ActiveRecord', function() {
       id: expect.any(String),
       createdAt: expect.any(Number),
       modifiedAt: expect.any(Number),
+      title: '',
+      body: '',
     })
   })
 })
