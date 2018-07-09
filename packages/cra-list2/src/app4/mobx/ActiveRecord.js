@@ -1,8 +1,7 @@
 import {createObservableObject} from './utils'
 import {nanoid} from '../model/util'
 import {_, validate} from '../utils'
-
-import pluralize from 'pluralize'
+import {storage} from '../services/storage'
 
 function createProps({defaultValues, fieldNames}) {
   validate('OA', [defaultValues, fieldNames])
@@ -39,8 +38,25 @@ function createRecord({defaultValues, fieldNames, name}) {
   })
 }
 
+function parseRecord({fieldNames, snapshot, name}) {
+  return createObservableObject({
+    props: {
+      ...snapshot,
+      toJSON() {
+        return _.pickAll(
+          ['id', 'createdAt', 'modifiedAt', ...fieldNames],
+          this,
+        )
+      },
+    },
+    actions: {},
+    name: `${name}@${snapshot.id}`,
+  })
+}
+
 export function ActiveRecord({fieldNames, name}) {
   validate('AS', [fieldNames, name])
+  const collectionName = `${name}Collection`
   const activeRecord = createObservableObject({
     props: {
       fieldNames,
@@ -51,10 +67,10 @@ export function ActiveRecord({fieldNames, name}) {
         return createRecord({defaultValues, fieldNames, name})
       },
       findAll() {
-        return []
+        return _.map(parseRecord, storage.get(collectionName) || [])
       },
     },
-    name: ` ActiveRecord${pluralize.plural(name)}`,
+    name: collectionName,
   })
   return activeRecord
 }
