@@ -6,6 +6,7 @@ import {storage} from '../services/storage'
 export function ActiveRecord({fieldNames, name}) {
   validate('AS', [fieldNames, name])
   const collectionName = `${name}Collection`
+
   const activeRecord = createObservableObject({
     props: {
       fieldNames,
@@ -14,17 +15,22 @@ export function ActiveRecord({fieldNames, name}) {
     actions: {
       new: createNew,
       findAll() {
-        return _.map(fromJSON, storage.get(collectionName) || [])
+        return loadAll()
       },
     },
     name: collectionName,
   })
+
+  function loadAll() {
+    return _.map(fromJSON, storage.get(collectionName) || [])
+  }
 
   function createNew(defaultValues = {}) {
     return fromJSON({
       id: `${name}@${nanoid()}`,
       createdAt: Date.now(),
       modifiedAt: Date.now(),
+      isNew: true,
       ...createProps(),
     })
 
@@ -40,10 +46,11 @@ export function ActiveRecord({fieldNames, name}) {
     }
   }
 
-  function fromJSON(snapshot) {
+  function fromJSON(json) {
     return createObservableObject({
       props: {
-        ...snapshot,
+        ...json,
+        isNew: _.defaultTo(false, json.isNew),
         toJSON() {
           return _.pickAll(
             ['id', 'createdAt', 'modifiedAt', ...fieldNames],
@@ -51,8 +58,10 @@ export function ActiveRecord({fieldNames, name}) {
           )
         },
       },
-      actions: {},
-      name: snapshot.id,
+      actions: {
+        save() {},
+      },
+      name: json.id,
     })
   }
 
