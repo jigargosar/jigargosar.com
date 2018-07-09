@@ -41,6 +41,11 @@ const view = (() => {
       },
       onTextChange(e) {
         this.modeProps.text = e.target.value
+        this.mode = 'list'
+        this.modeProps = {}
+      },
+      onTextBlur(e) {
+        beforeModeChange()
       },
     },
     name: 'view',
@@ -201,6 +206,7 @@ const AddEditNote = mrInjectAll(function Note() {
         value={view.modeProps.text}
         onChange={view.onTextChange}
         onFocus={e => e.target.setSelectionRange(0, 9999)}
+        onBlur={view.onTextBlur}
       />
     </ListItem>
   )
