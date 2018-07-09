@@ -209,7 +209,12 @@ const Note = mrInjectAll(function Note({note}) {
           <span className={cn('light-silver')}>Empty Text</span>
         )}
       </div>
-      <Button className={cn('child')}>X</Button>
+      <Button
+        onClick={() => note.setDeleted(true)}
+        className={cn('child')}
+      >
+        x
+      </Button>
     </ListItem>
   )
 })

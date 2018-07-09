@@ -112,6 +112,9 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
           this.modifiedAt = Date.now()
           activeRecord.saveRecord(this)
         },
+        setDeleted(deleted = true) {
+          this.update({deleted})
+        },
       },
       name: json.id,
     })
