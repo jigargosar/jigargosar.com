@@ -164,9 +164,7 @@ const NoteList = mrInjectAll(function NoteList() {
     <div>
       {/*<NoteListShortcuts />*/}
       <ListToolbar />
-      <Paper>
-        <List>{renderKeyedById(Note, 'note', view.notesList)}</List>
-      </Paper>
+      <List>{renderKeyedById(Note, 'note', view.notesList)}</List>
     </div>
   )
 })

@@ -27,12 +27,13 @@ export const Text = styled.span.attrs({
   className: 'mr2',
 })``
 
+const paperCN = 'bg-white shadow-1 ma0 ns-ma3'
 export const Paper = styled.div.attrs({
-  className: 'bg-white shadow-1 ma0 ns-ma3',
+  className: paperCN,
 })``
 
 export const List = styled.div.attrs({
-  className: 'pv0',
+  className: cn(paperCN, 'mh0 mh3-ns'),
 })``
 
 export const ListItem = styled.div.attrs({
