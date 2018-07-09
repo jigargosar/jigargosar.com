@@ -14,31 +14,18 @@ export function ActiveRecord({fieldNames, name}) {
     actions: {
       new: createNew,
       findAll() {
-        return _.map(parseRecord, storage.get(collectionName) || [])
+        return _.map(fromJSON, storage.get(collectionName) || [])
       },
     },
     name: collectionName,
   })
 
   function createNew(defaultValues = {}) {
-    const id = `${name}@${nanoid()}`
-    const props = createProps()
-
-    return createObservableObject({
-      props: {
-        id,
-        createdAt: Date.now(),
-        modifiedAt: Date.now(),
-        ...props,
-        toJSON() {
-          return _.pickAll(
-            ['id', 'createdAt', 'modifiedAt', ...fieldNames],
-            this,
-          )
-        },
-      },
-      actions: {},
-      name: id,
+    return fromJSON({
+      id: `${name}@${nanoid()}`,
+      createdAt: Date.now(),
+      modifiedAt: Date.now(),
+      ...createProps(),
     })
 
     function createProps() {
@@ -53,7 +40,7 @@ export function ActiveRecord({fieldNames, name}) {
     }
   }
 
-  function parseRecord({fieldNames, snapshot, name}) {
+  function fromJSON(snapshot) {
     return createObservableObject({
       props: {
         ...snapshot,
@@ -65,7 +52,7 @@ export function ActiveRecord({fieldNames, name}) {
         },
       },
       actions: {},
-      name: `${name}@${snapshot.id}`,
+      name: snapshot.id,
     })
   }
 
