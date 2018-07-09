@@ -1,7 +1,7 @@
 import React from 'react'
 import {validate} from '../../utils'
 import {Link} from '../ui'
-import {mrInjectAll} from '../utils'
+import {mrInjectAll} from '../little-mobx'
 
 export const LinkTo = mrInjectAll(function LinkTo({
   children,
