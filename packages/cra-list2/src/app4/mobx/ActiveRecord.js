@@ -23,6 +23,28 @@ function createProps({defaultValues, fieldNames}) {
   return props
 }
 
+function createRecord({defaultValues, fieldNames}) {
+  const id = nanoid()
+  const props = createProps({defaultValues, fieldNames})
+
+  return createObservableObject({
+    props: {
+      id,
+      createdAt: Date.now(),
+      modifiedAt: Date.now(),
+      ...props,
+      toJSON() {
+        return _.pickAll(
+          ['id', 'createdAt', 'modifiedAt', ...fieldNames],
+          this,
+        )
+      },
+    },
+    actions: {},
+    name: `${name}@${id}`,
+  })
+}
+
 export function ActiveRecord({fieldNames, name}) {
   validate('AS', [fieldNames, name])
   const activeRecord = createObservableObject({
@@ -32,28 +54,7 @@ export function ActiveRecord({fieldNames, name}) {
     },
     actions: {
       new(defaultValues = {}) {
-        const id = nanoid()
-
-        const props = createProps({defaultValues, fieldNames})
-
-        // console.log(`props`, props)
-
-        return createObservableObject({
-          props: {
-            id,
-            createdAt: Date.now(),
-            modifiedAt: Date.now(),
-            ...props,
-            toJSON() {
-              return _.pickAll(
-                ['id', 'createdAt', 'modifiedAt', ...fieldNames],
-                this,
-              )
-            },
-          },
-          actions: {},
-          name: `${name}@${id}`,
-        })
+        return createRecord({defaultValues, fieldNames})
       },
     },
     name: pluralize.plural(name),
