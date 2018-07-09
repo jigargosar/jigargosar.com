@@ -16,7 +16,16 @@ import {
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
 
-const Notes = ActiveRecord({fieldNames: ['text'], name: 'Note'})
+const Notes = ActiveRecord({
+  name: 'Note',
+  fieldNames: ['text', 'deleted'],
+  queries: {
+    active: {
+      filter: _.allPass([_.propSatisfies(_.not, 'deleted')]),
+      sortComparators: [_.descend(_.prop('createdAt'))],
+    },
+  },
+})
 
 const view = (() => {
   const view = createObservableObject({
@@ -25,7 +34,7 @@ const view = (() => {
       selection: [],
       modeProps: {},
       get notesList() {
-        return Notes.findAll()
+        return Notes.active
       },
     },
     actions: {
@@ -58,7 +67,7 @@ const view = (() => {
     const {note, text} = view.modeProps
     const modeEq = _.equals(view.mode)
     if (modeEq('add')) {
-      Notes.createAndSave({text})
+      Notes.createAndSave({text, deleted: false})
     }
     if (modeEq('edit')) {
       note.update({text})

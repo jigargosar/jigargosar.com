@@ -1,43 +1,76 @@
-import {createObservableObject} from './little-mobx'
+import {
+  createObservableObject,
+  extendObservableObject,
+} from './little-mobx'
 import {nanoid} from '../model/util'
 import {_, validate} from '../utils'
 import {storage} from '../services/storage'
 
-export function ActiveRecord({fieldNames, name}) {
+export function ActiveRecord({fieldNames, name, queries = {}}) {
   validate('AS', [fieldNames, name])
   const collectionName = `${name}Collection`
   const adapter = LocalStorageAdapter({name: collectionName})
 
-  const activeRecord = createObservableObject({
-    props: {
-      fieldNames,
-      name,
-      records: [],
-      saveRecord(record) {
-        adapter.upsert(record.toJSON())
-        if (record.isNew) {
-          this.records.push(record)
-          record.isNew = false
-        }
+  const activeRecord = extendObservableObject(
+    createObservableObject({
+      props: {
+        fieldNames,
+        name,
+        records: [],
+        saveRecord(record) {
+          adapter.upsert(record.toJSON())
+          if (record.isNew) {
+            this.records.push(record)
+            record.isNew = false
+          }
+        },
       },
-    },
-    actions: {
-      createAndSave(values) {
-        this.saveRecord(this.new(values))
+      actions: {
+        createAndSave(values) {
+          this.saveRecord(this.new(values))
+        },
+        new: createNew,
+        findAll({filter = _.identity, sortComparators = []} = {}) {
+          return _.compose(
+            _.sortWith(sortComparators),
+            _.filter(filter),
+          )(this.records)
+        },
+        load() {
+          this.records = _.map(fromJSON, adapter.loadAll())
+        },
       },
-      new: createNew,
-      findAll() {
-        return this.records
-      },
-      load() {
-        this.records = _.map(fromJSON, adapter.loadAll())
-      },
-    },
-    name: collectionName,
-  })
-  activeRecord.load()
+      name: collectionName,
+    }),
+    {props: createQueries()},
+  )
 
+  activeRecord.load()
   return activeRecord
+
+  function createQueries() {
+    // const active = 'active'
+    // return {
+    //   get [active]() {
+    //     return this.findAll({
+    //       filter: _.allPass([_.propSatisfies(_.not, 'deleted')]),
+    //       sortComparators: [_.descend(_.prop('createdAt'))],
+    //     })
+    //   },
+    // }
+
+    return _.reduce(
+      (obj, [key, options]) =>
+        Object.defineProperty(obj, key, {
+          get() {
+            return activeRecord.findAll(options)
+          },
+          enumerable: true,
+        }),
+      {},
+      _.toPairs(queries),
+    )
+  }
 
   function createNew(values = {}) {
     return fromJSON({
