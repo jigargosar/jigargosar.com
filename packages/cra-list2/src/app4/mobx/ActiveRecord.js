@@ -21,6 +21,8 @@ export function ActiveRecord({fieldNames, name}) {
     name: collectionName,
   })
 
+  return activeRecord
+
   function createNew(defaultValues = {}) {
     return fromJSON({
       id: `${name}@${nanoid()}`,
@@ -86,11 +88,9 @@ export function ActiveRecord({fieldNames, name}) {
         )
       }
     }
-
-    function loadAll() {
-      return _.map(fromJSON, storage.get(collectionName) || [])
-    }
   }
 
-  return activeRecord
+  function loadAll() {
+    return _.map(fromJSON, storage.get(collectionName) || [])
+  }
 }
