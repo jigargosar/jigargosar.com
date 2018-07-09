@@ -39,13 +39,13 @@ const view = (() => {
         this.mode = 'edit'
         this.modeProps = {text: note.text, note}
       },
-      onTextChange(e) {
-        this.modeProps.text = e.target.value
+      onTextBlur(e) {
+        beforeModeChange()
         this.mode = 'list'
         this.modeProps = {}
       },
-      onTextBlur(e) {
-        beforeModeChange()
+      onTextChange(e) {
+        this.modeProps.text = e.target.value
       },
     },
     name: 'view',
