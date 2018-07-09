@@ -5,7 +5,7 @@ import {
 } from './utils'
 import {nanoid} from '../model/util'
 import {upsert} from '../model/upsert'
-import {_} from '../utils'
+import {_, validate} from '../utils'
 
 function createCollectionDoc(
   {id = nanoid(), createdAt = Date.now(), ...rest},
@@ -22,7 +22,7 @@ function createCollectionDoc(
   })
 }
 
-export function Collection({name = 'Collection'} = {}) {
+export function Collection() {
   const obs = createObservableObject({
     props: {
       docs: [],
