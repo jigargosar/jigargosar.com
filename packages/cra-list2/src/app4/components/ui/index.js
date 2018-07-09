@@ -42,6 +42,7 @@ export const ListItem = styled.div.attrs({
   :last-child {
     border-width: 0;
   }
+  min-height: 42px;
 `
 
 export const Button = styled.button.attrs({

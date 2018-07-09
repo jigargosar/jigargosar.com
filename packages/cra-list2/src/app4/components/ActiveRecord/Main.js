@@ -190,7 +190,10 @@ const Note = mrInjectAll(function Note({note}) {
     return <AddEditNote />
   }
   return (
-    <ListItem onClick={() => view.onEditNote(note)}>
+    <ListItem
+      onDoubleClick={() => view.onEditNote(note)}
+      className={cn('pointer flex items-center')}
+    >
       {note.text || (
         <span className={cn('light-silver')}>Empty Text</span>
       )}
@@ -201,13 +204,16 @@ const Note = mrInjectAll(function Note({note}) {
 const AddEditNote = mrInjectAll(function Note() {
   return (
     <ListItem>
-      <input
-        autoFocus
-        value={view.modeProps.text}
-        onChange={view.onTextChange}
-        onFocus={e => e.target.setSelectionRange(0, 9999)}
-        onBlur={view.onTextBlur}
-      />
+      <div className={cn('flex')}>
+        <input
+          className={cn('flex-auto')}
+          autoFocus
+          value={view.modeProps.text}
+          onChange={view.onTextChange}
+          onFocus={e => e.target.setSelectionRange(0, 9999)}
+          onBlur={view.onTextBlur}
+        />
+      </div>
     </ListItem>
   )
 })
