@@ -11,7 +11,7 @@ import {
 import {cn, mrInjectAll, renderKeyedById} from '../little-mobx'
 import {ActiveRecord} from '../../mobx/ActiveRecord'
 
-const Notes = ActiveRecord({fieldNames: [], name: 'Note'})
+const Notes = ActiveRecord({fieldNames: ['text'], name: 'Note'})
 
 // const NoteInput = observer(function NoteInput({note}) {
 //   return (
@@ -135,7 +135,7 @@ const Note = mrInjectAll(function Note({note}) {
 const ListToolbar = mrInjectAll(function ListToolbar() {
   return (
     <Section className={cn('pl3')}>
-      <Button onClick={() => Notes.createAndSave({title: 'Post x'})}>
+      <Button onClick={() => Notes.createAndSave({text: 'Note x'})}>
         ADD
       </Button>
     </Section>
