@@ -197,8 +197,10 @@ const AddEditNote = mrInjectAll(function Note() {
   return (
     <ListItem>
       <input
+        autoFocus
         value={view.modeProps.text}
         onChange={view.onTextChange}
+        onFocus={e => e.target.setSelectionRange(0, 9999)}
       />
     </ListItem>
   )
