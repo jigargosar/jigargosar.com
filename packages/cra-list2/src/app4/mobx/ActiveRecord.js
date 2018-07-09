@@ -21,10 +21,6 @@ export function ActiveRecord({fieldNames, name}) {
     name: collectionName,
   })
 
-  function loadAll() {
-    return _.map(fromJSON, storage.get(collectionName) || [])
-  }
-
   function createNew(defaultValues = {}) {
     return fromJSON({
       id: `${name}@${nanoid()}`,
@@ -59,10 +55,41 @@ export function ActiveRecord({fieldNames, name}) {
         },
       },
       actions: {
-        save() {},
+        save() {
+          upsert(this)
+          this.isNew = false
+        },
       },
       name: json.id,
     })
+
+    function upsert(record) {
+      const updated = (() => {
+        const all = loadAll()
+        if (record.isNew) {
+          return _.append(record, all)
+        } else {
+          const updater = _.when(
+            _.propEq('id', this.id),
+            _.always(this),
+          )
+          return _.map(updater, all)
+        }
+      })()
+
+      saveAll(updated)
+
+      function saveAll(all) {
+        return storage.set(
+          _.map(r => r.toJSON(), all),
+          collectionName,
+        )
+      }
+    }
+
+    function loadAll() {
+      return _.map(fromJSON, storage.get(collectionName) || [])
+    }
   }
 
   return activeRecord
