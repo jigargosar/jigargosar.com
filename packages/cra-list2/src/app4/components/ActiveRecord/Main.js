@@ -3,6 +3,7 @@ import {
   Button,
   CenterLayout,
   List,
+  ListItem,
   Paper,
   RootContainer,
   Section,
@@ -129,7 +130,7 @@ const Notes = ActiveRecord({fieldNames: ['text'], name: 'Note'})
 //
 
 const Note = mrInjectAll(function Note({note}) {
-  return <div>HW</div>
+  return <ListItem>{note.text}</ListItem>
 })
 
 const ListToolbar = mrInjectAll(function ListToolbar() {
