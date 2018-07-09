@@ -25,8 +25,18 @@ const view = createObservableObject({
     },
   },
   actions: {
+    beforeAdd() {
+      if (this.mode === 'add') {
+        Notes.createAndSave({text: this.modeProps.text})
+      }
+    },
     onAdd() {
+      this.beforeAdd()
       this.mode = 'add'
+      this.modeProps = {text: ''}
+    },
+    onTextChange(e) {
+      this.modeProps.text = e.target.value
     },
   },
   name: 'view',
@@ -148,7 +158,24 @@ const view = createObservableObject({
 //
 
 const Note = mrInjectAll(function Note({note}) {
-  return <ListItem>{note.text}</ListItem>
+  return (
+    <ListItem>
+      {note.text || (
+        <span className={cn('light-silver')}>Empty Text</span>
+      )}
+    </ListItem>
+  )
+})
+
+const AddNote = mrInjectAll(function Note() {
+  return (
+    <ListItem>
+      <input
+        value={view.modeProps.text}
+        onChange={view.onTextChange}
+      />
+    </ListItem>
+  )
 })
 
 const ListToolbar = mrInjectAll(function ListToolbar() {
@@ -164,7 +191,10 @@ const NoteList = mrInjectAll(function NoteList() {
     <div>
       {/*<NoteListShortcuts />*/}
       <ListToolbar />
-      <List>{renderKeyedById(Note, 'note', view.notesList)}</List>
+      <List>
+        {view.mode === 'add' && <AddNote />}
+        {renderKeyedById(Note, 'note', view.notesList)}
+      </List>
     </div>
   )
 })
