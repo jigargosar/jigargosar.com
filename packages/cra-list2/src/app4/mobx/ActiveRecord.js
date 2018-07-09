@@ -58,7 +58,6 @@ export function ActiveRecord({fields, name}) {
       new() {
         const id = nanoid()
         const props = fieldsToProps(fields)
-        console.log('props', props)
         return createObservableObject({
           props: {
             id,
