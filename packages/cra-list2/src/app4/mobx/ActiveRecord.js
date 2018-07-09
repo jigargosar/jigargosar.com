@@ -10,54 +10,63 @@ import a from 'nanoassert'
 
 import pluralize from 'pluralize'
 
-const FieldTypeToDefaultValueLookup = {
-  string: '',
-  text: '',
-  bool: false,
-}
-const FieldTypes = _.keys(FieldTypeToDefaultValueLookup)
+// const FieldTypeToDefaultValueLookup = {
+//   string: '',
+//   text: '',
+//   bool: false,
+// }
+// const FieldTypes = _.keys(FieldTypeToDefaultValueLookup)
+//
+// function typeNameToValue(type) {
+//   validate('S', [type])
+//   a(_.contains(type, FieldTypes))
+//   return FieldTypeToDefaultValueLookup[type]
+// }
+//
+// function fieldToProp(field) {
+//   validate('S', [field])
+//   const [name, type] = _.split(':', field)
+//   validate('SS', [name, type])
+//   return {[name]: typeNameToValue(type)}
+// }
+//
+// function fieldsToProps(fields) {
+//   validate('A', [fields])
+//   return _.compose(_.mergeAll, _.map(fieldToProp))(fields)
+// }
+//
+// function fieldToName(field) {
+//   validate('S', [field])
+//   const [name, type] = _.split(':', field)
+//   validate('SS', [name, type])
+//   return name
+// }
+//
+// function fieldsToNames(fields) {
+//   validate('A', [fields])
+//   return _.map(fieldToName, fields)
+// }
 
-function typeNameToValue(type) {
-  validate('S', [type])
-  a(_.contains(type, FieldTypes))
-  return FieldTypeToDefaultValueLookup[type]
-}
-
-function fieldToProp(field) {
-  validate('S', [field])
-  const [name, type] = _.split(':', field)
-  validate('SS', [name, type])
-  return {[name]: typeNameToValue(type)}
-}
-
-function fieldsToProps(fields) {
-  validate('A', [fields])
-  return _.compose(_.mergeAll, _.map(fieldToProp))(fields)
-}
-
-function fieldToName(field) {
-  validate('S', [field])
-  const [name, type] = _.split(':', field)
-  validate('SS', [name, type])
-  return name
-}
-
-function fieldsToNames(fields) {
-  validate('A', [fields])
-  return _.map(fieldToName, fields)
-}
-
-export function ActiveRecord({fields, name}) {
-  validate('AS', [fields, name])
+export function ActiveRecord({fieldNames, name}) {
+  validate('AS', [fieldNames, name])
   const activeRecord = createObservableObject({
     props: {
-      fields,
+      fieldNames,
       name,
     },
     actions: {
-      new() {
+      new(defaultValues = {}) {
         const id = nanoid()
-        const props = fieldsToProps(fields)
+
+        const props = _.compose(
+          _.mergeAll,
+          _.map(propName => ({
+            [propName]: _.defaultTo(null, defaultValues[propName]),
+          })),
+        )(fieldNames)
+
+        // console.log(`props`, props)
+
         return createObservableObject({
           props: {
             id,
@@ -65,13 +74,8 @@ export function ActiveRecord({fields, name}) {
             modifiedAt: Date.now(),
             ...props,
             toJSON() {
-              return _.pick(
-                [
-                  'id',
-                  'createdAt',
-                  'modifiedAt',
-                  ...fieldsToNames(fields),
-                ],
+              return _.pickAll(
+                ['id', 'createdAt', 'modifiedAt', ...fieldNames],
                 this,
               )
             },
