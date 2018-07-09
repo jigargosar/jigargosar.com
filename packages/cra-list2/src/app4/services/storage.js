@@ -26,7 +26,7 @@ function Storage() {
   }
 }
 
-console.debug(`storage.keys()`, storage.keys())
+// console.debug(`storage.keys()`, storage.keys())
 
 if (module.hot) {
   global.window.ls = storage
