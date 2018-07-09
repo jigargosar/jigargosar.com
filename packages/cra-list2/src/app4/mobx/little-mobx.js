@@ -57,7 +57,7 @@ const extendObservableWithBoundActions = _.curry(
 )
 
 const extendObservableWithComputed = _.curry(
-  function extendObservableWithBoundActions(computed, obs) {
+  function extendObservableWithComputed(computed, obs) {
     return extendObservable(
       obs,
       computed,

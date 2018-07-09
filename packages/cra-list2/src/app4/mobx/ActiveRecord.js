@@ -13,6 +13,14 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
       fieldNames,
       name,
       records: [],
+      findAll({filter = _.identity, sortComparators = []} = {}) {
+        return _.compose(
+          _.sortWith(sortComparators),
+          _.filter(filter),
+        )(this.records)
+      },
+    },
+    actions: {
       saveRecord(record) {
         adapter.upsert(record.toJSON())
         if (record.isNew) {
@@ -20,18 +28,10 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
           record.isNew = false
         }
       },
-    },
-    actions: {
       createAndSave(values) {
         this.saveRecord(this.new(values))
       },
       new: createNew,
-      findAll({filter = _.identity, sortComparators = []} = {}) {
-        return _.compose(
-          _.sortWith(sortComparators),
-          _.filter(filter),
-        )(this.records)
-      },
       load() {
         this.records = _.map(fromJSON, adapter.loadAll())
       },
