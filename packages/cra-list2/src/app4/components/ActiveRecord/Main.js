@@ -1,5 +1,13 @@
 import React from 'react'
-import {CenterLayout, List, Paper, RootContainer, Title} from '../ui'
+import {
+  Button,
+  CenterLayout,
+  List,
+  Paper,
+  RootContainer,
+  Section,
+  Title,
+} from '../ui'
 import {cn, mrInjectAll, renderKeyedById} from '../little-mobx'
 import {ActiveRecord} from '../../mobx/ActiveRecord'
 
@@ -124,11 +132,21 @@ const Note = mrInjectAll(function Note({note}) {
   return <div>HW</div>
 })
 
+const ListToolbar = mrInjectAll(function ListToolbar() {
+  return (
+    <Section className={cn('pl3')}>
+      <Button onClick={() => Notes.createAndSave({title: 'Post x'})}>
+        ADD
+      </Button>
+    </Section>
+  )
+})
+
 const NoteList = mrInjectAll(function NoteList() {
   return (
     <div>
       {/*<NoteListShortcuts />*/}
-      {/*<ListToolbar />*/}
+      <ListToolbar />
       <Paper>
         <List>{renderKeyedById(Note, 'note', Notes.findAll())}</List>
       </Paper>

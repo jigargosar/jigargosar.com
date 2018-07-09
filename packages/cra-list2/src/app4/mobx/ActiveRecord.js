@@ -14,6 +14,9 @@ export function ActiveRecord({fieldNames, name}) {
       name,
     },
     actions: {
+      createAndSave(values) {
+        this.new(values).save()
+      },
       new: createNew,
       findAll() {
         return _.map(fromJSON, adapter.loadAll())
@@ -24,7 +27,7 @@ export function ActiveRecord({fieldNames, name}) {
 
   return activeRecord
 
-  function createNew(defaultValues = {}) {
+  function createNew(values = {}) {
     return fromJSON({
       id: `${name}@${nanoid()}`,
       createdAt: Date.now(),
@@ -37,7 +40,7 @@ export function ActiveRecord({fieldNames, name}) {
       const props = _.compose(
         _.mergeAll,
         _.map(propName => ({
-          [propName]: _.defaultTo(null, defaultValues[propName]),
+          [propName]: _.defaultTo(null, values[propName]),
         })),
       )(fieldNames)
       validate('O', [props])
@@ -70,11 +73,12 @@ export function ActiveRecord({fieldNames, name}) {
 
 function LocalStorageAdapter({name}) {
   function upsert(record) {
-    validate('S', record.id)
+    validate('S', [record.id])
+
     const updatedList = (() => {
       const all = loadAll()
       const idx = _.findIndex(_.eqProps('id', record), all)
-      const update = idx > -1 ? _.append : _.update(idx)
+      const update = idx > -1 ? _.update(idx) : _.append
       return update(record, all)
     })()
     storage.set(name, updatedList)
