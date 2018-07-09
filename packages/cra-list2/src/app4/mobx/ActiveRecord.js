@@ -6,6 +6,7 @@ import {storage} from '../services/storage'
 export function ActiveRecord({fieldNames, name}) {
   validate('AS', [fieldNames, name])
   const collectionName = `${name}Collection`
+  const adapter = LocalStorageAdapter({name: collectionName})
 
   const activeRecord = createObservableObject({
     props: {
@@ -15,7 +16,7 @@ export function ActiveRecord({fieldNames, name}) {
     actions: {
       new: createNew,
       findAll() {
-        return loadAll()
+        return _.map(fromJSON, adapter.loadAll())
       },
     },
     name: collectionName,
@@ -58,58 +59,29 @@ export function ActiveRecord({fieldNames, name}) {
       },
       actions: {
         save() {
-          upsert(this)
+          adapter.upsert(this.toJSON())
           this.isNew = false
         },
       },
       name: json.id,
     })
   }
-  function upsert(record) {
-    const updated = (() => {
-      const all = loadAll()
-      if (record.isNew) {
-        return _.append(record, all)
-      } else {
-        const updater = _.when(
-          _.propEq('id', this.id),
-          _.always(this),
-        )
-        return _.map(updater, all)
-      }
-    })()
-
-    saveAll(updated)
-
-    function saveAll(all) {
-      return storage.set(_.map(r => r.toJSON(), all), collectionName)
-    }
-  }
-
-  function loadAll() {
-    return _.map(fromJSON, storage.get(collectionName) || [])
-  }
 }
 
-function LocalStorageAdapter({name: collectionName}) {
+function LocalStorageAdapter({name}) {
   function upsert(record) {
-    const updated = (() => {
+    validate('S', record.id)
+    const updatedList = (() => {
       const all = loadAll()
-      if (record.isNew) {
-        return _.append(record, all)
-      } else {
-        const updater = _.when(
-          _.propEq('id', this.id),
-          _.always(this),
-        )
-        return _.map(updater, all)
-      }
+      const idx = _.findIndex(_.eqProps('id', record), all)
+      const update = idx > -1 ? _.append : _.update(idx)
+      return update(record, all)
     })()
-    storage.set(updated, collectionName)
+    storage.set(name, updatedList)
   }
 
   function loadAll() {
-    return storage.get(collectionName) || []
+    return storage.get(name) || []
   }
   return {loadAll, upsert}
 }
