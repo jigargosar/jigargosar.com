@@ -46,21 +46,38 @@ export const t = mst.types
 export const tModel = mst.types.model
 export const tMap = mst.types.map
 
-function extendObservableWithBoundActions(obs, actions) {
-  return extendObservable(
-    obs,
-    actions,
-    _.map(_.always(mActionBound), actions),
-  )
-}
+const extendObservableWithBoundActions = _.curry(
+  function extendObservableWithBoundActions(actions, obs) {
+    return extendObservable(
+      obs,
+      actions,
+      _.map(_.always(mActionBound), actions),
+    )
+  },
+)
+
+const extendObservableWithComputed = _.curry(
+  function extendObservableWithBoundActions(computed, obs) {
+    return extendObservable(
+      obs,
+      computed,
+      _.map(_.always(mComputed), computed),
+    )
+  },
+)
 
 export function createObservableObject({
+  observableObject = {},
   props = {},
   actions = {},
+  computed = {},
   name,
 } = {}) {
-  const oObj = oObject(props, {}, {name})
-  return extendObservableWithBoundActions(oObj, actions)
+  const oObj = extendObservable(observableObject, props, {}, {name})
+  return _.compose(
+    extendObservableWithBoundActions(actions),
+    extendObservableWithComputed(computed),
+  )(oObj)
 }
 
 export function extendObservableObject(
@@ -68,10 +85,10 @@ export function extendObservableObject(
   {props = {}, actions = {}, name} = {},
 ) {
   const oObj = extendObservable(obs, props, {}, {name})
-  return extendObservableWithBoundActions(oObj, actions)
+  return extendObservableWithBoundActions(actions, oObj)
 }
 
-export const defineDelegatePropertyGetter = R.curry(
+export const defineDelegatePropertyGetter = _.curry(
   (propertyName, src, target) =>
     Object.defineProperty(target, propertyName, {
       get() {
