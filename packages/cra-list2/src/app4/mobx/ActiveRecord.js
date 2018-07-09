@@ -8,7 +8,7 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
   const collectionName = `${name}Collection`
   const adapter = LocalStorageAdapter({name: collectionName})
 
-  const aro = {
+  const options = {
     props: {
       fieldNames,
       name,
@@ -32,6 +32,26 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
         this.saveRecord(this.new(values))
       },
       new: createNew,
+      upsert(values) {
+        const keys = _.filter(
+          _.contains(_.__, fieldNames),
+          _.keys(values),
+        )
+        const pickKeys = _.pick(keys)
+        const updates = pickKeys(values)
+
+        const record = this.findAll({filter: _.eqProps('id', values)})
+        if (record) {
+          if (_.equals(updates, pickKeys(record))) {
+            return
+          }
+          Object.assign(record, updates)
+          record.modifiedAt = Date.now()
+          this.saveRecord(record)
+        } else {
+          this.createAndSave(updates)
+        }
+      },
       load() {
         this.records = _.map(fromJSON, adapter.loadAll())
       },
@@ -45,7 +65,7 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
         computed: createQueries(observableObject),
       }),
     createObservableObject,
-  )(aro)
+  )(options)
 
   activeRecord.load()
   return activeRecord
@@ -99,18 +119,7 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
       },
       actions: {
         update(values) {
-          const keys = _.filter(
-            _.contains(_.__, fieldNames),
-            _.keys(values),
-          )
-          const pickKeys = _.pick(keys)
-          const updates = pickKeys(values)
-          if (_.equals(updates, pickKeys(this))) {
-            return
-          }
-          Object.assign(this, updates)
-          this.modifiedAt = Date.now()
-          activeRecord.saveRecord(this)
+          activeRecord.upsert(values)
         },
         setDeleted(deleted = true) {
           this.update({deleted})
