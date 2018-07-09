@@ -13,10 +13,17 @@ export function ActiveRecord({fieldNames, name}) {
       fieldNames,
       name,
       records: [],
+      saveRecord(record) {
+        adapter.upsert(record.toJSON())
+        if (record.isNew) {
+          this.records.push(record)
+          record.isNew = false
+        }
+      },
     },
     actions: {
       createAndSave(values) {
-        this.new(values).save()
+        this.saveRecord(this.new(values))
       },
       new: createNew,
       findAll() {
@@ -24,13 +31,6 @@ export function ActiveRecord({fieldNames, name}) {
       },
       load() {
         this.records = _.map(fromJSON, adapter.loadAll())
-      },
-      saveRecord(record) {
-        adapter.upsert(record.toJSON())
-        if (record.isNew) {
-          this.records.push(record)
-          record.isNew = false
-        }
       },
     },
     name: collectionName,
@@ -73,7 +73,15 @@ export function ActiveRecord({fieldNames, name}) {
         },
       },
       actions: {
-        save() {
+        update(values) {
+          const keys = _.difference(fieldNames, _.keys(values))
+          const pickKeys = _.pick(keys)
+          const updates = pickKeys(values)
+          if (_.equals(updates, pickKeys(this))) {
+            return
+          }
+          Object.assign(this, updates)
+          this.modifiedAt = Date.now()
           activeRecord.saveRecord(this)
         },
       },

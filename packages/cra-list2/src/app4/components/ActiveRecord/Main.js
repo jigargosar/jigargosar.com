@@ -4,7 +4,6 @@ import {
   CenterLayout,
   List,
   ListItem,
-  Paper,
   RootContainer,
   Section,
   Title,
@@ -23,17 +22,29 @@ const view = createObservableObject({
     get notesList() {
       return Notes.findAll()
     },
-  },
-  actions: {
-    beforeAdd() {
+    beforeModeChange() {
+      const {note, text} = this.modeProps
       if (this.mode === 'add') {
-        Notes.createAndSave({text: this.modeProps.text})
+        Notes.createAndSave({text})
+      }
+      if (this.mode === 'edit') {
+        note.update({text})
       }
     },
+    isEditingNote(note) {
+      return note === this.modeProps.note
+    },
+  },
+  actions: {
     onAdd() {
-      this.beforeAdd()
+      this.beforeModeChange()
       this.mode = 'add'
       this.modeProps = {text: ''}
+    },
+    onEditNote(note) {
+      this.beforeModeChange()
+      this.mode = 'edit'
+      this.modeProps = {text: note.text, note}
     },
     onTextChange(e) {
       this.modeProps.text = e.target.value
@@ -158,8 +169,11 @@ const view = createObservableObject({
 //
 
 const Note = mrInjectAll(function Note({note}) {
+  if (view.isEditingNote(note)) {
+    return <AddEditNote />
+  }
   return (
-    <ListItem>
+    <ListItem onClick={() => view.onEditNote(note)}>
       {note.text || (
         <span className={cn('light-silver')}>Empty Text</span>
       )}
@@ -167,7 +181,7 @@ const Note = mrInjectAll(function Note({note}) {
   )
 })
 
-const AddNote = mrInjectAll(function Note() {
+const AddEditNote = mrInjectAll(function Note() {
   return (
     <ListItem>
       <input
@@ -192,7 +206,7 @@ const NoteList = mrInjectAll(function NoteList() {
       {/*<NoteListShortcuts />*/}
       <ListToolbar />
       <List>
-        {view.mode === 'add' && <AddNote />}
+        {view.mode === 'add' && <AddEditNote />}
         {renderKeyedById(Note, 'note', view.notesList)}
       </List>
     </div>
