@@ -1,12 +1,6 @@
-import {
-  createObservableObject,
-  extendObservableObject,
-  oObject,
-} from './utils'
+import {createObservableObject} from './utils'
 import {nanoid} from '../model/util'
-import {upsert} from '../model/upsert'
 import {_, validate} from '../utils'
-import a from 'nanoassert'
 
 import pluralize from 'pluralize'
 
@@ -23,7 +17,7 @@ function createProps({defaultValues, fieldNames}) {
   return props
 }
 
-function createRecord({defaultValues, fieldNames}) {
+function createRecord({defaultValues, fieldNames, name}) {
   const id = nanoid()
   const props = createProps({defaultValues, fieldNames})
 
@@ -54,10 +48,13 @@ export function ActiveRecord({fieldNames, name}) {
     },
     actions: {
       new(defaultValues = {}) {
-        return createRecord({defaultValues, fieldNames})
+        return createRecord({defaultValues, fieldNames, name})
+      },
+      findAll() {
+        return []
       },
     },
-    name: pluralize.plural(name),
+    name: ` ActiveRecord${pluralize.plural(name)}`,
   })
   return activeRecord
 }

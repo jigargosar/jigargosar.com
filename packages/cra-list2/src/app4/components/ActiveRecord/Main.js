@@ -1,6 +1,9 @@
 import React from 'react'
-import {CenterLayout, RootContainer, Title} from '../ui'
-import {cn, mrInjectAll} from '../little-mobx'
+import {CenterLayout, List, Paper, RootContainer, Title} from '../ui'
+import {cn, mrInjectAll, renderKeyedById} from '../little-mobx'
+import {ActiveRecord} from '../../mobx/ActiveRecord'
+
+const Notes = ActiveRecord({fieldNames: [], name: 'Note'})
 
 // const NoteInput = observer(function NoteInput({note}) {
 //   return (
@@ -116,21 +119,36 @@ import {cn, mrInjectAll} from '../little-mobx'
 //   )
 // })
 //
-const AppHeader = mrInjectAll(function AppHeader({fire}) {
-  const {auth} = fire
+
+const Note = mrInjectAll(function Note({note}) {
+  return <div>HW</div>
+})
+
+const NoteList = mrInjectAll(function NoteList() {
   return (
-    <div className={'flex items-center pv3 shadow-1 bg-light-blue'}>
-      <Title className={cn('flex-auto')}>Notes</Title>
+    <div>
+      {/*<NoteListShortcuts />*/}
+      {/*<ListToolbar />*/}
+      <Paper>
+        <List>{renderKeyedById(Note, 'note', Notes.findAll())}</List>
+      </Paper>
     </div>
   )
 })
 
-const Main = mrInjectAll(function App({pop}) {
+const AppHeader = mrInjectAll(function AppHeader() {
+  return (
+    <div className={'flex items-center pv3 shadow-1 bg-light-blue'}>
+      <Title className={cn('flex-auto')}>Active Record Notes</Title>
+    </div>
+  )
+})
+
+const Main = mrInjectAll(function App() {
   return (
     <RootContainer>
       <CenterLayout>
         <AppHeader />
-        {/*{pop.isRunningAsBrowserPopup ? 'POPUP' : <NoteList />}*/}
         <NoteList />
       </CenterLayout>
     </RootContainer>

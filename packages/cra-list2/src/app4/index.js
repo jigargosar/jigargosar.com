@@ -14,7 +14,8 @@ function render() {
     Object.assign(appState, require('./mobx').state)
     // const App = require('./components/Main').default
     // const App = require('./components/OutlinerMain').default
-    const App = require('./components/State').default
+    // const App = require('./components/State').default
+    const App = require('./components/ActiveRecord/Main').default
     ReactDOM.render(
       <Provider appState={appState}>
         <App />
@@ -35,6 +36,7 @@ if (module.hot) {
     [
       './components/Main',
       './components/OutlinerMain',
+      './components/ActiveRecord/Main',
       './mobx',
       './components/State',
     ],
