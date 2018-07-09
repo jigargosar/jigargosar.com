@@ -1,4 +1,4 @@
-import {createObservableObject} from './utils'
+import {createObservableObject} from './little-mobx'
 import {nanoid} from '../model/util'
 import {_, validate} from '../utils'
 import {storage} from '../services/storage'

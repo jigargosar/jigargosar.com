@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import ow from 'ow'
 import * as mu from 'mobx-utils/lib/mobx-utils'
-import {createObservableObject, oObject} from './utils'
+import {createObservableObject, oObject} from './little-mobx'
 import {_} from '../utils'
 
 const firebase = require('firebase/app')

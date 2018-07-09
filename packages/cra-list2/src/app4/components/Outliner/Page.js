@@ -6,7 +6,7 @@ import {
   mrInjectAll,
   observer,
   renderKeyedById,
-} from '../little-mobx'
+} from '../utils'
 import {Text} from '../ui'
 import {_} from '../../utils'
 

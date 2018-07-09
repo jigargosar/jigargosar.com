@@ -3,7 +3,7 @@ import {
   extendObservableObject,
   mJS,
   mReaction,
-} from './utils'
+} from './little-mobx'
 import {StorageItem} from '../services/storage'
 import {nanoid} from '../model/util'
 import {_, validate} from '../utils'

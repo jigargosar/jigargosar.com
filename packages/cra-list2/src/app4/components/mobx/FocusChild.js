@@ -2,7 +2,7 @@ import {observer} from 'mobx-react'
 import React from 'react'
 import PropTypes from 'prop-types'
 import {_} from '../../utils'
-import {mAutoRun} from '../../mobx/utils'
+import {mAutoRun} from '../../mobx/little-mobx'
 import ReactDOM from 'react-dom'
 
 class FocusChild extends React.Component {

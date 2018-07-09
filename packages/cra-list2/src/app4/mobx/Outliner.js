@@ -1,4 +1,4 @@
-import {createObservableObject, mJS, mReaction} from './utils'
+import {createObservableObject, mJS, mReaction} from './little-mobx'
 import {nanoid} from '../model/util'
 import {StorageItem} from '../services/storage'
 import {_, validate} from '../utils'

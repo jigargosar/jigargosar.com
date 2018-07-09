@@ -20,7 +20,7 @@ import {
   observer,
   renderKeyedById,
   wrapPD,
-} from './little-mobx'
+} from './utils'
 import {_} from '../utils'
 import FocusChild from './mobx/FocusChild'
 import {localActorId, shortenAID} from '../services/ActorId'

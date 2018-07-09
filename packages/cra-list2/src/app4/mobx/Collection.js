@@ -2,7 +2,7 @@ import {
   createObservableObject,
   extendObservableObject,
   oObject,
-} from './utils'
+} from './little-mobx'
 import {nanoid} from '../model/util'
 import {upsert} from '../model/upsert'
 import {_, validate} from '../utils'

@@ -4,7 +4,7 @@ import {
   mJS,
   mSet,
   mValues,
-} from './utils'
+} from './little-mobx'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
 import {_, R, validate} from '../utils'

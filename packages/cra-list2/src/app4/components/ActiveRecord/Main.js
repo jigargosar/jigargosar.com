@@ -9,11 +9,17 @@ import {
   Section,
   Title,
 } from '../ui'
-import {cn, mrInjectAll, renderKeyedById} from '../little-mobx'
+import {cn, mrInjectAll, renderKeyedById} from '../utils'
 import {ActiveRecord} from '../../mobx/ActiveRecord'
+import {createObservableObject} from '../../mobx/little-mobx'
 
 const Notes = ActiveRecord({fieldNames: ['text'], name: 'Note'})
 
+const view = createObservableObject({
+  props: {},
+  actions: {},
+  name: 'view',
+})
 // const NoteInput = observer(function NoteInput({note}) {
 //   return (
 //     <input

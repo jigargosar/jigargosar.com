@@ -5,7 +5,7 @@ import {
   Disposers,
   mAutoRun,
   mJSRejectFn,
-} from './utils'
+} from './little-mobx'
 import {StorageItem} from '../services/storage'
 import {_} from '../utils'
 import {

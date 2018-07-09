@@ -5,7 +5,7 @@ import {
   mReaction,
   oArray,
   oObject,
-} from './utils'
+} from './little-mobx'
 import {_, swapElementsAt} from '../utils'
 import {clampIdx, cycleIdx} from '../model/util'
 import escapeStringRegexp from 'escape-string-regexp'

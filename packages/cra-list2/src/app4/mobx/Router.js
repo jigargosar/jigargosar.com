@@ -1,4 +1,8 @@
-import {createObservableObject, Disposers, mReaction} from './utils'
+import {
+  createObservableObject,
+  Disposers,
+  mReaction,
+} from './little-mobx'
 import {_, validate} from '../utils'
 
 import {createBrowserHistory} from 'history'

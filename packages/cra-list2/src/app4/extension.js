@@ -1,5 +1,5 @@
 import {_} from './utils'
-import {mWhen} from './mobx/utils'
+import {mWhen} from './mobx/little-mobx'
 
 function getLocationHash() {
   return global.window.location.hash

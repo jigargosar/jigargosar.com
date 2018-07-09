@@ -1,5 +1,5 @@
 import {storage} from '../services/storage'
-import {Disposers, mReaction} from './utils'
+import {Disposers, mReaction} from './little-mobx'
 import {NoteListView} from './NoteListView'
 import {NoteCollection} from './NoteCollection'
 import {Fire} from './Fire'

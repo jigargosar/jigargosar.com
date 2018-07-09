@@ -1,4 +1,4 @@
-import {mJS, mReaction, oArray} from '../utils'
+import {mJS, mReaction, oArray} from '../little-mobx'
 
 export function createObservableHistory(obs) {
   const historyList = oArray([mJS(obs)], {name: 'historyList'})

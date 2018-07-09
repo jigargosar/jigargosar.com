@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button, CenterLayout, RootContainer, Text} from './ui'
-import {cn, F, mrInjectAll, renderKeyedById} from './little-mobx'
+import {cn, F, mrInjectAll, renderKeyedById} from './utils'
 import {_} from '../utils'
 import * as Recompose from 'recompose'
 

@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 // import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
-import {mRunInAction, oObject} from './mobx/utils'
+import {mRunInAction, oObject} from './mobx/little-mobx'
 import {tryCatchLogError} from './utils'
 import {Provider} from 'mobx-react'
 
