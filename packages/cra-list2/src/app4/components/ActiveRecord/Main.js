@@ -192,7 +192,7 @@ const Note = mrInjectAll(function Note({note}) {
   return (
     <ListItem
       onDoubleClick={() => view.onEditNote(note)}
-      className={cn('pointer flex items-center hide-child')}
+      className={cn('pointer flex items-center hide-child lh-copy')}
       p={'pv2 pl3'}
     >
       <div className={cn('flex-auto mr2')}>
@@ -210,7 +210,7 @@ const AddEditNote = mrInjectAll(function Note() {
     <ListItem>
       <div className={cn('flex')}>
         <input
-          className={cn('flex-auto')}
+          className={cn('bw0 flex-auto ma0 pa1 lh-copy blue')}
           autoFocus
           value={view.modeProps.text}
           onChange={view.onTextChange}
