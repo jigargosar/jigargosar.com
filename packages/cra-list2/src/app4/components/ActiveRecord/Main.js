@@ -10,48 +10,60 @@ import {
 } from '../ui'
 import {cn, mrInjectAll, renderKeyedById} from '../utils'
 import {ActiveRecord} from '../../mobx/ActiveRecord'
-import {createObservableObject} from '../../mobx/little-mobx'
+import {
+  createObservableObject,
+  mAutoRun,
+} from '../../mobx/little-mobx'
+import {_} from '../../utils'
 
 const Notes = ActiveRecord({fieldNames: ['text'], name: 'Note'})
 
-const view = createObservableObject({
-  props: {
-    mode: 'list',
-    selection: [],
-    modeProps: {},
-    get notesList() {
-      return Notes.findAll()
+const view = (() => {
+  const view = createObservableObject({
+    props: {
+      mode: 'list',
+      selection: [],
+      modeProps: {},
+      get notesList() {
+        return Notes.findAll()
+      },
     },
-    beforeModeChange() {
-      const {note, text} = this.modeProps
-      if (this.mode === 'add') {
-        Notes.createAndSave({text})
-      }
-      if (this.mode === 'edit') {
-        note.update({text})
-      }
+    actions: {
+      onAdd() {
+        beforeModeChange()
+        this.mode = 'add'
+        this.modeProps = {text: ''}
+      },
+      onEditNote(note) {
+        beforeModeChange()
+        this.mode = 'edit'
+        this.modeProps = {text: note.text, note}
+      },
+      onTextChange(e) {
+        this.modeProps.text = e.target.value
+      },
     },
-    isEditingNote(note) {
-      return note === this.modeProps.note
-    },
-  },
-  actions: {
-    onAdd() {
-      this.beforeModeChange()
-      this.mode = 'add'
-      this.modeProps = {text: ''}
-    },
-    onEditNote(note) {
-      this.beforeModeChange()
-      this.mode = 'edit'
-      this.modeProps = {text: note.text, note}
-    },
-    onTextChange(e) {
-      this.modeProps.text = e.target.value
-    },
-  },
-  name: 'view',
-})
+    name: 'view',
+  })
+  mAutoRun(() => {}, {name: 'view state persistance'})
+
+  return view
+
+  function beforeModeChange() {
+    const {note, text} = view.modeProps
+    const modeEq = _.equals(view.mode)
+    if (modeEq('add')) {
+      Notes.createAndSave({text})
+    }
+    if (modeEq('edit')) {
+      note.update({text})
+    }
+  }
+})()
+
+function isEditingNote(note) {
+  return note === view.modeProps.note
+}
 
 // const NoteInput = observer(function NoteInput({note}) {
 //   return (
@@ -169,7 +181,7 @@ const view = createObservableObject({
 //
 
 const Note = mrInjectAll(function Note({note}) {
-  if (view.isEditingNote(note)) {
+  if (isEditingNote(note)) {
     return <AddEditNote />
   }
   return (
