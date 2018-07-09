@@ -37,7 +37,7 @@ export const List = styled.div.attrs({
 })``
 
 export const ListItem = styled.div.attrs({
-  className: 'ph3 pv2 bb bw1 b--black-05',
+  className: ({p = 'ph3 pv2'}) => cn('bb bw1 b--black-05', p),
 })`
   :last-child {
     border-width: 0;

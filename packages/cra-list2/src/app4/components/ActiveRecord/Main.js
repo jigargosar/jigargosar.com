@@ -192,11 +192,15 @@ const Note = mrInjectAll(function Note({note}) {
   return (
     <ListItem
       onDoubleClick={() => view.onEditNote(note)}
-      className={cn('pointer flex items-center')}
+      className={cn('pointer flex items-center hide-child')}
+      p={'pv2 pl3'}
     >
-      {note.text || (
-        <span className={cn('light-silver')}>Empty Text</span>
-      )}
+      <div className={cn('flex-auto mr2')}>
+        {note.text || (
+          <span className={cn('light-silver')}>Empty Text</span>
+        )}
+      </div>
+      <Button className={cn('child')}>X</Button>
     </ListItem>
   )
 })
