@@ -74,7 +74,10 @@ export function ActiveRecord({fieldNames, name}) {
       },
       actions: {
         update(values) {
-          const keys = _.difference(fieldNames, _.keys(values))
+          const keys = _.filter(
+            _.contains(_.__, fieldNames),
+            _.keys(values),
+          )
           const pickKeys = _.pick(keys)
           const updates = pickKeys(values)
           if (_.equals(updates, pickKeys(this))) {
