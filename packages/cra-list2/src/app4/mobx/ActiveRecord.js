@@ -10,6 +10,19 @@ import a from 'nanoassert'
 
 import pluralize from 'pluralize'
 
+function createProps({defaultValues, fieldNames}) {
+  validate('OA', [defaultValues, fieldNames])
+
+  const props = _.compose(
+    _.mergeAll,
+    _.map(propName => ({
+      [propName]: _.defaultTo(null, defaultValues[propName]),
+    })),
+  )(fieldNames)
+  validate('O', [props])
+  return props
+}
+
 export function ActiveRecord({fieldNames, name}) {
   validate('AS', [fieldNames, name])
   const activeRecord = createObservableObject({
@@ -21,14 +34,7 @@ export function ActiveRecord({fieldNames, name}) {
       new(defaultValues = {}) {
         const id = nanoid()
 
-        const props = _.compose(
-          _.mergeAll,
-          _.map(propName => ({
-            [propName]: _.defaultTo(null, defaultValues[propName]),
-          })),
-        )(fieldNames)
-
-        validate('O', [props])
+        const props = createProps({defaultValues, fieldNames})
 
         // console.log(`props`, props)
 
