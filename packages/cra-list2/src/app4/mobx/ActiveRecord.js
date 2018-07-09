@@ -14,15 +14,14 @@ export function ActiveRecord({fieldNames, name}) {
     actions: {
       new: createNew,
       findAll() {
-        _.map(parseRecord, storage.get(collectionName) || [])
-        return []
+        return _.map(parseRecord, storage.get(collectionName) || [])
       },
     },
     name: collectionName,
   })
 
   function createNew(defaultValues = {}) {
-    const id = nanoid()
+    const id = `${name}@${nanoid()}`
     const props = createProps()
 
     return createObservableObject({
@@ -39,7 +38,7 @@ export function ActiveRecord({fieldNames, name}) {
         },
       },
       actions: {},
-      name: `${name}@${id}`,
+      name: id,
     })
 
     function createProps() {
