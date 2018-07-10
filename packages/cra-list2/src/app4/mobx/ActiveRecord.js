@@ -44,10 +44,8 @@ export function ActiveRecord({
           record.isNew = false
         }
       },
-      upsert(options) {
-        const values = _.omit(['id'], options)
-        const record = this.findById(values.id)
-
+      upsert({id, ...values}) {
+        const record = this.findById(id)
         if (record) {
           const updates = _.compose(
             _.partial(removeDuplicateUpdates, [record]),
@@ -115,7 +113,7 @@ export function ActiveRecord({
   function removeDuplicateUpdates(record, updates) {
     return _.compose(
       _.pick(_.__, updates),
-      _.filter(_.eqProps(_.__, record, updates)),
+      _.reject(_.eqProps(_.__, record, updates)),
       _.keys,
     )(updates)
   }

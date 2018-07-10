@@ -100,6 +100,9 @@ const view = (() => {
       },
     },
     actions: {
+      onDelete(note) {
+        Notes.upsert({id: note.id, deleted: true})
+      },
       onAdd() {
         view.mode.onBeforeChange()
         this.mode = AddEditMode()
@@ -163,7 +166,7 @@ const Note = mrInjectAll(function Note({note}) {
           +
         </Button>
         <Button
-          onClick={() => note.setDeleted(true)}
+          onClick={() => view.onDelete(note)}
           className={cn('child')}
         >
           x
