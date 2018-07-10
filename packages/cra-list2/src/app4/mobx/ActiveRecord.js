@@ -30,6 +30,9 @@ export function ActiveRecord({
       },
       findById(id) {
         validate('S|Z', [id])
+        if (_.isNil(id)) {
+          return null
+        }
         return this.find({filter: _.propEq('id', id)})
       },
     },
