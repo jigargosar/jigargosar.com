@@ -79,7 +79,8 @@ const view = (() => {
     props: {
       mode: ListMode(),
       get notesList() {
-        return Notes.active
+        // return Notes.active
+        return this.findActiveNotesWithParentId(null)
       },
       modeNameEq(name) {
         return _.equals(this.mode.name, name)
