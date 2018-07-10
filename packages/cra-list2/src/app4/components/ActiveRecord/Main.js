@@ -321,9 +321,9 @@ const ListToolbar = mrInjectAll(function ListToolbar() {
 })
 
 const NoteList = mrInjectAll(function NoteList() {
-  const childNotes = view.notesList
+  const list = view.notesList
   const showEditNote = view.isAddModeForParentId(null)
-  const showList = !_.isEmpty(childNotes) || showEditNote
+  const showList = !_.isEmpty(list) || showEditNote
   return (
     <div>
       {/*<NoteListShortcuts />*/}
@@ -331,7 +331,7 @@ const NoteList = mrInjectAll(function NoteList() {
       {showList && (
         <List>
           {showEditNote && <AddEditNote />}
-          {renderKeyedById(Note, 'note', childNotes)}
+          {renderKeyedById(Note, 'note', list)}
         </List>
       )}
     </div>
