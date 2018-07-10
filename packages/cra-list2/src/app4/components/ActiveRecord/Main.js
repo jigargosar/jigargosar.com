@@ -125,7 +125,7 @@ const NoteTree = mrInjectAll(function NoteList({view}) {
       <ChildNotes
         m={'mh0 mh3-ns'}
         showAddNote={view.isAddModeForParentId(null)}
-        childNotes={view.notesList}
+        childNotes={view.noteList}
       />
     </F>
   )

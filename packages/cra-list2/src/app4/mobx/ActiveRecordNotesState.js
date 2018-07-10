@@ -96,7 +96,7 @@ function View() {
           return displayNote
         })
       },
-      get notesList() {
+      get noteList() {
         return _.map(
           this.displayNoteTransformer,
           this.findActiveNotesWithParentId(null),
