@@ -86,7 +86,9 @@ const view = (() => {
       },
       findActiveNotesWithParentId(parentId) {
         return Notes.findAll(
-          getActiveQuery({filters: [_.propEq('parentId', parentId)]}),
+          getActiveQuery({
+            filters: [_.propEq('parentId', parentId)],
+          }),
         )
       },
       isAddModeForParentId(parentId) {
@@ -95,12 +97,11 @@ const view = (() => {
           _.equals(this.mode.parentId, parentId)
         )
       },
-
-      get isAddMode() {
-        return this.modeNameEq('add')
-      },
       isNoteCollapsed(note) {
         return _.defaultTo(false, note.collapsed)
+      },
+      get isAddMode() {
+        return this.modeNameEq('add')
       },
     },
     actions: {
@@ -153,8 +154,8 @@ function isEditingNote(note) {
 }
 
 const Note = mrInjectAll(function Note({note}) {
-  console.log(`note`, note)
-  console.log('note.collapsed', note.collapsed)
+  // console.log(`note`, note)
+  // console.log('note.collapsed', note.collapsed)
   if (isEditingNote(note)) {
     return <AddEditNote />
   }
