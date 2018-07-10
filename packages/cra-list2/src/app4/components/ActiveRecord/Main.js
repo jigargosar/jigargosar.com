@@ -184,7 +184,7 @@ const view = (() => {
 })()
 
 function isEditingNote(note) {
-  return _.equals(note.id, view.mode.id)
+  return view.modeNameEq('edit') && _.equals(note.id, view.mode.id)
 }
 
 function getChildNotes(note) {
