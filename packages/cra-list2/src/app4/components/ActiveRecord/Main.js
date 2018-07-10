@@ -11,9 +11,9 @@ import {
 import {cn, isAnyHotKey, mrInjectAll, renderKeyedById} from '../utils'
 import {ActiveRecord} from '../../mobx/ActiveRecord'
 import {
+  attachDelegatingPropertyGetters,
   createObservableObject,
   createTransformer,
-  defineDelegatePropertyGetter,
   mAutoRun,
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
@@ -75,17 +75,6 @@ function ListMode() {
   })
 }
 
-function attachDelegatingPropertyGetters(
-  note,
-  displayNote,
-  propertyNames,
-) {
-  _.forEach(
-    defineDelegatePropertyGetter(_.__, note, displayNote),
-    propertyNames,
-  )
-}
-
 const view = (() => {
   const view = createObservableObject({
     props: {
@@ -101,7 +90,6 @@ const view = (() => {
               get hasChildren() {
                 return !_.isEmpty(this.childNotes)
               },
-
               get shouldDisplayChildren() {
                 return this.hasChildren && !note.collapsed
               },

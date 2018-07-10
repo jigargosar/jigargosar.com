@@ -136,3 +136,14 @@ export function Disposers() {
     length: () => list.length,
   }
 }
+
+export function attachDelegatingPropertyGetters(
+  note,
+  displayNote,
+  propertyNames,
+) {
+  _.forEach(
+    defineDelegatePropertyGetter(_.__, note, displayNote),
+    propertyNames,
+  )
+}
