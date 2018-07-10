@@ -16,14 +16,21 @@ import {
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
 
+function getActiveQuery({filters = []} = {}) {
+  return {
+    filter: _.allPass([
+      _.propSatisfies(_.not, 'deleted'),
+      ...filters,
+    ]),
+    sortComparators: [_.descend(_.prop('createdAt'))],
+  }
+}
+
 const Notes = ActiveRecord({
   name: 'Note',
   fieldNames: ['text', 'deleted', 'parentId'],
   queries: {
-    active: {
-      filter: _.allPass([_.propSatisfies(_.not, 'deleted')]),
-      sortComparators: [_.descend(_.prop('createdAt'))],
-    },
+    active: getActiveQuery(),
   },
 })
 
@@ -72,6 +79,11 @@ const view = (() => {
       },
       get modeNameEq() {
         return _.equals(this.mode.name)
+      },
+      children(note) {
+        return Notes.findAll(
+          getActiveQuery({filters: [_.propEq('parentId', note.id)]}),
+        )
       },
     },
     actions: {
@@ -240,6 +252,7 @@ const Note = mrInjectAll(function Note({note}) {
   if (isEditingNote(note)) {
     return <AddEditNote />
   }
+  const children = view.children(note)
   return (
     <ListItem
       onDoubleClick={() => view.onEditNote(note)}
@@ -265,9 +278,9 @@ const Note = mrInjectAll(function Note({note}) {
           x
         </Button>
       </div>
-      <List>
-        <ListItem>{'child1'}</ListItem>
-      </List>
+      {!_.isEmpty(children) && (
+        <List>{renderKeyedById(Note, 'note', children)}</List>
+      )}
     </ListItem>
   )
 })
