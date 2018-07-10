@@ -1,7 +1,7 @@
 /*eslint-disable*/
 
 import * as m from 'mobx'
-import {_, R, RA} from '../utils'
+import {_, RA} from '../utils'
 import * as mst from 'mobx-state-tree'
 import {
   ArrayFormatter,
@@ -18,6 +18,7 @@ export {createTransformer, createViewModel} from 'mobx-utils'
 m.configure({computedRequiresReaction: true, enforceActions: true})
 
 export const oObject = m.observable.object
+export const oRef = m.observable.ref
 export const oObject3 = _.curryN(3, m.observable.object)
 export const extendObservable = m.extendObservable
 export const extendObservable2 = _.curryN(2, m.extendObservable)
