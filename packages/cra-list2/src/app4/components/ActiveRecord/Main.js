@@ -75,6 +75,17 @@ function ListMode() {
   })
 }
 
+function attachDelegatingPropertyGetters(
+  note,
+  displayNote,
+  propertyNames,
+) {
+  _.forEach(
+    defineDelegatePropertyGetter(_.__, note, displayNote),
+    propertyNames,
+  )
+}
+
 const view = (() => {
   const view = createObservableObject({
     props: {
@@ -92,14 +103,19 @@ const view = (() => {
               },
 
               get shouldDisplayChildren() {
-                return this.hasChildren && !this.collapsed
+                return this.hasChildren && !note.collapsed
+              },
+
+              get isEditing() {
+                view.isEditingNote(note)
               },
             },
             actions: {},
             name: `DisplayNote@${note.id}`,
           })
-          _.forEach(
-            defineDelegatePropertyGetter(_.__, note, displayNote),
+          attachDelegatingPropertyGetters(
+            note,
+            displayNote,
             Notes.allFieldNames,
           )
           return displayNote
@@ -136,6 +152,11 @@ const view = (() => {
       },
       get isAddMode() {
         return this.modeNameEq('add')
+      },
+      isEditingNote(note) {
+        return (
+          this.modeNameEq('edit') && _.equals(note.id, view.mode.id)
+        )
       },
     },
     actions: {
@@ -184,7 +205,7 @@ const view = (() => {
 })()
 
 function isEditingNote(note) {
-  return view.modeNameEq('edit') && _.equals(note.id, view.mode.id)
+  return view.isEditingNote(note)
 }
 
 function getChildNotes(note) {
