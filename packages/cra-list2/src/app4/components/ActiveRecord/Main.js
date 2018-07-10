@@ -109,7 +109,7 @@ const NoteLineEdit = mrInjectAll(function NoteLineEdit({view}) {
 const ListToolbar = mrInjectAll(function ListToolbar({view}) {
   return (
     <Section className={cn('pl3')}>
-      <Button onClick={view.onAdd}>ADD</Button>
+      <Button onClick={() => view.onAddChild(null)}>ADD</Button>
     </Section>
   )
 })

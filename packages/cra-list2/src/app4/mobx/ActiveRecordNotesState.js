@@ -56,7 +56,7 @@ function ListMode() {
   })
 }
 
-const view = (() => {
+function View() {
   const view = createObservableObject({
     props: {
       mode: ListMode(),
@@ -148,8 +148,9 @@ const view = (() => {
         this.mode = AddEditMode()
       },
       onAddChild(note) {
+        const parentId = _.propOr(null, 'id', note)
         view.mode.onBeforeChange()
-        this.mode = AddEditMode({parentId: note.id})
+        this.mode = AddEditMode({parentId})
       },
       onEditNote(note) {
         view.mode.onBeforeChange()
@@ -178,6 +179,6 @@ const view = (() => {
   })
 
   return view
-})()
+}
 
-export const state = {view}
+export const state = {view: View()}
