@@ -187,6 +187,7 @@ const AddEditNote = mrInjectAll(function Note() {
         onBlur={view.onTextBlur}
         onKeyDown={_.cond([
           [isAnyHotKey(['enter']), view.onEnter],
+          [isAnyHotKey(['escape']), view.onEnter],
           // [isAnyHotKey['enter'], _.F],
         ])}
       />
