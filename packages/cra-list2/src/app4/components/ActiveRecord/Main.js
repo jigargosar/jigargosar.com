@@ -30,7 +30,9 @@ const Notes = ActiveRecord({
   name: 'Note',
   fieldNames: ['text', 'deleted', 'parentId'],
   queries: {
-    active: getActiveQuery(),
+    active: getActiveQuery({
+      filters: [_.propSatisfies(_.isNil, 'parentId')],
+    }),
   },
 })
 
