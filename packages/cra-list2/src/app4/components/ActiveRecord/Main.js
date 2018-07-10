@@ -16,7 +16,7 @@ import {
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
 
-const a = require('nanoassert')
+// import a from 'nanoassert'
 
 function getActiveQuery({filters = []} = {}) {
   return {
@@ -31,6 +31,7 @@ function getActiveQuery({filters = []} = {}) {
 const Notes = ActiveRecord({
   name: 'Note',
   fieldNames: ['text', 'deleted', 'parentId'],
+  volatileFieldNames: ['collapsed'],
   queries: {
     active: getActiveQuery({
       filters: [_.propSatisfies(_.isNil, 'parentId')],

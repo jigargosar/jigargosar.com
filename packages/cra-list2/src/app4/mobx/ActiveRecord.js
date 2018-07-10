@@ -3,8 +3,13 @@ import {nanoid} from '../model/util'
 import {_, validate} from '../utils'
 import {storage} from '../services/storage'
 
-export function ActiveRecord({fieldNames, name, queries = {}}) {
-  validate('AS', [fieldNames, name])
+export function ActiveRecord({
+  fieldNames,
+  volatileFieldNames = [],
+  name,
+  queries = {},
+}) {
+  validate('AAS', [fieldNames, volatileFieldNames, name])
   const collectionName = `${name}Collection`
   const adapter = LocalStorageAdapter({name: collectionName})
 
@@ -35,20 +40,36 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
           record.isNew = false
         }
       },
-      createAndSave(values) {
-        this.saveRecord(this.new(values))
-      },
-      new: createNew,
-      upsert(values) {
-        const keys = _.filter(
-          _.contains(_.__, fieldNames),
-          _.keys(values),
-        )
-        const pickKeys = _.pick(keys)
-        const updates = pickKeys(values)
-
+      upsert2(values) {
         const record = this.findById(values.id)
+
         if (record) {
+          const updates = _.compose(
+            _.partial(removeDuplicateUpdates, [record]),
+            removeInvalidUpdateKeys,
+          )(values)
+
+          Object.assign(record, updates)
+          if (hasPersistenceFields(updates)) {
+            record.modifiedAt = Date.now()
+            this.saveRecord(record)
+          }
+        } else {
+          this.saveRecord(createNew(values))
+        }
+      },
+      upsert(values) {
+        const record = this.findById(values.id)
+
+        if (record) {
+          const pickKeys = _.pick(
+            _.filter(
+              _.contains(_.__, _.concat(fieldNames)),
+              _.keys(values),
+            ),
+          )
+          const updates = pickKeys(values)
+
           if (_.equals(updates, pickKeys(record))) {
             return
           }
@@ -56,7 +77,7 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
           record.modifiedAt = Date.now()
           this.saveRecord(record)
         } else {
-          this.createAndSave(updates)
+          this.saveRecord(createNew(values))
         }
       },
       load() {
@@ -65,6 +86,27 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
     },
     name: collectionName,
   }
+
+  function hasPersistenceFields(updates) {
+    const nonVolatileFieldNames = _.difference(
+      _.keys(updates),
+      volatileFieldNames,
+    )
+    return _.any(_.contains(_.__, fieldNames))(nonVolatileFieldNames)
+  }
+
+  function removeInvalidUpdateKeys(values) {
+    return _.pick(fieldNames, values)
+  }
+
+  function removeDuplicateUpdates(record, updates) {
+    return _.compose(
+      _.pick(_.__, updates),
+      _.filter(_.eqProps(_.__, record, updates)),
+      _.keys,
+    )(updates)
+  }
+
   const activeRecord = _.compose(
     observableObject =>
       createObservableObject({
@@ -91,7 +133,7 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
     )
   }
 
-  function createNew(values = {}) {
+  function createNew(defaults = {}) {
     return fromJSON({
       id: `${name}@${nanoid()}`,
       createdAt: Date.now(),
@@ -104,7 +146,7 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
       const props = _.compose(
         _.mergeAll,
         _.map(propName => ({
-          [propName]: _.defaultTo(null, values[propName]),
+          [propName]: _.defaultTo(null, defaults[propName]),
         })),
       )(fieldNames)
       validate('O', [props])
