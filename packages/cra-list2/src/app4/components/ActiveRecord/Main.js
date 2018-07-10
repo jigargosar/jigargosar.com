@@ -148,6 +148,7 @@ const Note = mrInjectAll(function Note({note}) {
   }
   const childNotes = view.findActiveNotesWithParentId(note.id)
   const hasChildNotes = !_.isEmpty(childNotes)
+  const isCollapsed = _.defaultTo(false, note.collapsed)
 
   return (
     <ListItem
@@ -176,7 +177,9 @@ const Note = mrInjectAll(function Note({note}) {
       </div>
       {hasChildNotes && (
         <div className={cn('flex items-start mt2')}>
-          <Button className={cn('code')}>{`>`}</Button>
+          <Button className={cn('code')}>
+            {isCollapsed ? `>` : `v`}
+          </Button>
           <List m={'mr3'} className={cn('flex-auto')}>
             {renderKeyedById(Note, 'note', childNotes)}
           </List>
