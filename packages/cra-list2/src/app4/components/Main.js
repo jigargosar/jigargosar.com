@@ -5,7 +5,7 @@ import {
   List,
   ListItem,
   Paper,
-  RootContainer,
+  TypographyDefaults,
   Section,
   Text,
   Title,
@@ -176,13 +176,13 @@ const AppHeader = mrInjectAll(function AppHeader({fire}) {
 
 const Main = mrInjectAll(function App({pop}) {
   return (
-    <RootContainer>
+    <TypographyDefaults>
       <CenterLayout>
         <AppHeader />
         {/*{pop.isRunningAsBrowserPopup ? 'POPUP' : <NoteList />}*/}
         <NoteList />
       </CenterLayout>
-    </RootContainer>
+    </TypographyDefaults>
   )
 })
 

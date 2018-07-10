@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, CenterLayout, RootContainer, Text} from './ui'
+import {Button, CenterLayout, TypographyDefaults, Text} from './ui'
 import {cn, F, mrInjectAll, renderKeyedById} from './utils'
 import {_} from '../utils'
 import * as Recompose from 'recompose'
@@ -153,7 +153,7 @@ const State = mrInjectAll(function({state}) {
 
 const Main = mrInjectAll(function App() {
   return (
-    <RootContainer>
+    <TypographyDefaults>
       <CenterLayout>
         <F>
           <div className={cn('pa3 bg-blue white shadow-1')}>
@@ -164,7 +164,7 @@ const Main = mrInjectAll(function App() {
           </div>
         </F>
       </CenterLayout>
-    </RootContainer>
+    </TypographyDefaults>
   )
 })
 

@@ -1,15 +1,15 @@
 import React from 'react'
-import {CenterLayout, RootContainer} from './ui'
+import {CenterLayout, TypographyDefaults} from './ui'
 import {mrInjectAll} from './utils'
 import OutlinePage from './Outliner/Page'
 
 const Main = mrInjectAll(function App({pop}) {
   return (
-    <RootContainer>
+    <TypographyDefaults>
       <CenterLayout>
         <OutlinePage />
       </CenterLayout>
-    </RootContainer>
+    </TypographyDefaults>
   )
 })
 

@@ -4,7 +4,6 @@ import {
   CenterLayout,
   List,
   ListItem,
-  RootContainer,
   Section,
   Title,
 } from '../ui'
@@ -25,6 +24,7 @@ import {
 import {_} from '../../utils'
 import FocusTrap from 'focus-trap-react'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
+import {RootContainer} from '../mobx/RootContainer'
 
 function getActiveQuery({filters = []} = {}) {
   return {
@@ -321,16 +321,14 @@ const NoteList = mrInjectAll(function NoteList() {
 const Main = mrInjectAll(function Main() {
   return (
     <RootContainer className={cn('mb4')}>
-      <FocusTrap focusTrapOptions={{escapeDeactivates: false}}>
-        <AppHeaderBar>
-          <Title className={cn('flex-auto')}>
-            {`Active Record Notes: mode:${view.mode.name}`}
-          </Title>
-        </AppHeaderBar>
-        <CenterLayout>
-          <NoteList />
-        </CenterLayout>
-      </FocusTrap>
+      <AppHeaderBar>
+        <Title className={cn('flex-auto')}>
+          {`Active Record Notes: mode:${view.mode.name}`}
+        </Title>
+      </AppHeaderBar>
+      <CenterLayout>
+        <NoteList />
+      </CenterLayout>
     </RootContainer>
   )
 })

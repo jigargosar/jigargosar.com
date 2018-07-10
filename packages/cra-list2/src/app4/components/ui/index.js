@@ -11,7 +11,7 @@ export const CenterLayout = styled.div.attrs({
   className: 'center mw7',
 })``
 
-export const RootContainer = styled.div.attrs({
+export const TypographyDefaults = styled.div.attrs({
   className: 'sans-serif f5 lh-solid',
 })``
 
