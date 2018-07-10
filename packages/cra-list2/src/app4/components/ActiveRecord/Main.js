@@ -152,14 +152,10 @@ const Note = mrInjectAll(function Note({note}) {
 
   return (
     <ListItem
-      onDoubleClick={e => {
-        e.stopPropagation()
-        view.onEditNote(note)
-      }}
-      className={cn('pointer flex flex-column hide-child lh-copy')}
+      className={cn('pointer flex flex-column lh-copy')}
       p={'pv2 pl3'}
     >
-      <div className={cn('flex-auto flex items-center')}>
+      <div className={cn('flex-auto flex items-center hide-child ')}>
         <Button
           className={cn('code', {'o-1': !hasChildNotes})}
           disabled={!hasChildNotes}
@@ -167,11 +163,23 @@ const Note = mrInjectAll(function Note({note}) {
           <div>{isCollapsed ? `>` : `v`}</div>
         </Button>
 
-        <div className={cn('flex-auto mr2')}>
+        <div
+          onDoubleClick={e => {
+            // e.stopPropagation()
+            // view.onEditNote(note)
+          }}
+          className={cn('flex-auto mr2')}
+        >
           {note.text || (
             <span className={cn('light-silver')}>Empty Text</span>
           )}
         </div>
+        <Button
+          onClick={() => view.onEditNote(note)}
+          className={cn('child')}
+        >
+          e
+        </Button>
         <Button
           onClick={() => view.onAddChild(note)}
           className={cn('child')}
