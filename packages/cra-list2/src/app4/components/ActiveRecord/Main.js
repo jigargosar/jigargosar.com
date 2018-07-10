@@ -157,6 +157,10 @@ const Note = mrInjectAll(function Note({note}) {
       p={'pv2 pl3'}
     >
       <div className={cn('flex-auto flex items-center')}>
+        <Button className={cn('code', {'o-0': !hasChildNotes})}>
+          {isCollapsed ? `>` : `v`}
+        </Button>
+
         <div className={cn('flex-auto mr2')}>
           {note.text || (
             <span className={cn('light-silver')}>Empty Text</span>
@@ -177,9 +181,6 @@ const Note = mrInjectAll(function Note({note}) {
       </div>
       {hasChildNotes && (
         <div className={cn('flex items-start mt2')}>
-          <Button className={cn('code')}>
-            {isCollapsed ? `>` : `v`}
-          </Button>
           <List m={'mr3'} className={cn('flex-auto')}>
             {renderKeyedById(Note, 'note', childNotes)}
           </List>
