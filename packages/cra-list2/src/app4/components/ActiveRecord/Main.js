@@ -207,17 +207,15 @@ const ChildNotes = mrInjectAll(
   /**
    * @return {null}
    */
-  function ChildNotes({childNotes, showAddNote}) {
+  function ChildNotes({childNotes, showAddNote, m = 'mr3 mt2'}) {
     if (!showAddNote && _.isEmpty(childNotes)) {
       return null
     }
     return (
-      <div className={cn('flex items-start mt2')}>
-        <List m={'mr3'} className={cn('flex-auto')}>
-          {showAddNote && <AddEditNote />}
-          {renderKeyedById(Note, 'note', childNotes)}
-        </List>
-      </div>
+      <List m={m} className={cn('flex-auto')}>
+        {showAddNote && <AddEditNote />}
+        {renderKeyedById(Note, 'note', childNotes)}
+      </List>
     )
   },
 )
@@ -307,15 +305,14 @@ const ListToolbar = mrInjectAll(function ListToolbar() {
 })
 
 const NoteList = mrInjectAll(function NoteList() {
-  const list = view.notesList
-  const showAddNote = view.isAddModeForParentId(null)
-  // const showAddNote = view.isAddMode
-  const showList = !_.isEmpty(list) || showAddNote
   return (
     <div>
-      {/*<NoteListShortcuts />*/}
       <ListToolbar />
-      <ChildNotes showAddNote={showAddNote} childNotes={list} />
+      <ChildNotes
+        m={'mh0 mh3-ns'}
+        showAddNote={view.isAddModeForParentId(null)}
+        childNotes={view.notesList}
+      />
     </div>
   )
 })
@@ -337,6 +334,7 @@ const Main = mrInjectAll(function App() {
         <CenterLayout>
           <AppHeader />
           <NoteList />
+          <div className={cn('ma3')} />
         </CenterLayout>
       </FocusTrap>
     </RootContainer>
