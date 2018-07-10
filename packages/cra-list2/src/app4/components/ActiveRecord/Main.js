@@ -190,11 +190,11 @@ function isNoteCollapsed(note) {
 }
 
 function getChildNotes(note) {
+  // return   note.childNotes
   return view.findActiveNotesWithParentId(note.id)
 }
 
 const ChildNotes = mrInjectAll(function ChildNotes({note}) {
-  // const childNotes = note.childNotes
   const childNotes = getChildNotes(note)
   return (
     <div className={cn('flex items-start mt2')}>
