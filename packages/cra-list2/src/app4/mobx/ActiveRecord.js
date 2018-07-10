@@ -40,7 +40,7 @@ export function ActiveRecord({
           record.isNew = false
         }
       },
-      upsert2(values) {
+      upsert(values) {
         const record = this.findById(values.id)
 
         if (record) {
@@ -58,7 +58,7 @@ export function ActiveRecord({
           this.saveRecord(createNew(values))
         }
       },
-      upsert(values) {
+      upsert__(values) {
         const record = this.findById(values.id)
 
         if (record) {
@@ -175,9 +175,6 @@ export function ActiveRecord({
         },
       },
       actions: {
-        update(values) {
-          activeRecord.upsert(values)
-        },
         setDeleted(deleted = true) {
           this.update({id: this.id, deleted})
         },
