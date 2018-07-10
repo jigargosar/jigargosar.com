@@ -188,10 +188,13 @@ const view = (() => {
         this.mode.onTextChange(e)
       },
       onTextBlur() {
-        // this.save()
+        this.save()
       },
       onEnter() {
         this.save()
+      },
+      onEscape() {
+        this.mode = ListMode()
       },
       save() {
         view.mode.onBeforeChange()
