@@ -11,7 +11,11 @@ const appState = oObject({}, {}, {name: 'appState'})
 function render() {
   mRunInAction('Hot Update States', () => {
     console.clear()
-    Object.assign(appState, require('./mobx').state)
+    // Object.assign(appState, require('./mobx').state)
+    Object.assign(
+      appState,
+      require('./mobx/ActiveRecordNotesState').state,
+    )
     // const App = require('./components/Main').default
     // const App = require('./components/OutlinerMain').default
     // const App = require('./components/State').default
