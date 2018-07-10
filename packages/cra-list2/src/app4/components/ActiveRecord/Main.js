@@ -223,10 +223,6 @@ const ChildNotes = mrInjectAll(
 )
 
 const Note = mrInjectAll(function Note({note}) {
-  if (note.isEditing) {
-    return <AddEditNote />
-  }
-
   function renderFoo() {
     return (
       <div className={cn('flex-auto flex items-center hide-child ')}>
@@ -268,9 +264,12 @@ const Note = mrInjectAll(function Note({note}) {
 
 const AddEditModeInput = mrInjectAll(function AddEditModeInput() {
   return (
-    <FocusTrap
+    <div
       className={cn('flex flex-auto')}
-      focusTrapOptions={{escapeDeactivates: false}}
+      // focusTrapOptions={{
+      //   escapeDeactivates: false,
+      //   clickOutsideDeactivates: true,
+      // }}
     >
       <input
         className={cn(
@@ -286,7 +285,7 @@ const AddEditModeInput = mrInjectAll(function AddEditModeInput() {
           [isAnyHotKey(['escape']), wrapPD(view.onEnter)],
         ])}
       />
-    </FocusTrap>
+    </div>
   )
 })
 
