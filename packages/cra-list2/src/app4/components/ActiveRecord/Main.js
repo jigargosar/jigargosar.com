@@ -30,7 +30,7 @@ const ChildNotes = mrInjectAll(
     }
     return (
       <List m={m} className={cn('flex-auto')}>
-        {showAddNote && <NoteLineEdit />}
+        {showAddNote && <NoteLineEditMode />}
         {renderKeyedById(Note, 'note', childNotes)}
       </List>
     )
@@ -67,7 +67,7 @@ const Note = mrInjectAll(function Note({note}) {
       className={cn('pointer flex flex-column lh-copy')}
       p={'pv2 pl3'}
     >
-      {note.isEditing ? <NoteLineEdit /> : <NoteLine note={note} />}
+      {note.isEditing ? <NoteLineEditMode /> : <NoteLine note={note} />}
       <ChildNotes
         showAddNote={note.isAddingChild}
         childNotes={note.shouldDisplayChildren ? note.childNotes : []}
@@ -76,7 +76,7 @@ const Note = mrInjectAll(function Note({note}) {
   )
 })
 
-const NoteLineEdit = mrInjectAll(function NoteLineEdit({view}) {
+const NoteLineEditMode = mrInjectAll(function NoteLineEdit({view}) {
   return (
     <ListItem className={cn('flex')}>
       <FocusTrap
