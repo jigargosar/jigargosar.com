@@ -29,7 +29,13 @@ const Notes = ActiveRecord({
 
 function AddEditMode({id = null, text = ''} = {}) {
   return createObservableObject({
-    props: {id, text},
+    props: {
+      id,
+      text,
+      get name() {
+        return _.isNil(id) ? 'add' : 'edit'
+      },
+    },
     actions: {
       onTextChange(e) {
         this.text = e.target.value
@@ -44,7 +50,11 @@ function AddEditMode({id = null, text = ''} = {}) {
 
 function ListMode() {
   return createObservableObject({
-    props: {},
+    props: {
+      get name() {
+        return 'list'
+      },
+    },
     actions: {
       onBeforeChange() {},
     },
@@ -58,6 +68,9 @@ const view = (() => {
       mode: ListMode(),
       get notesList() {
         return Notes.active
+      },
+      get modeNameEq() {
+        return _.equals(this.mode.name)
       },
     },
     actions: {
@@ -276,7 +289,7 @@ const NoteList = mrInjectAll(function NoteList() {
       {/*<NoteListShortcuts />*/}
       <ListToolbar />
       <List>
-        {view.mode === 'add' && <AddEditNote />}
+        {view.modeNameEq('add') && <AddEditNote />}
         {renderKeyedById(Note, 'note', view.notesList)}
       </List>
     </div>
