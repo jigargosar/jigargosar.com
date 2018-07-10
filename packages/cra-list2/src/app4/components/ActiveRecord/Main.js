@@ -15,6 +15,7 @@ import {
   mAutoRun,
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
+import FocusTrap from 'focus-trap-react'
 
 // import a from 'nanoassert'
 
@@ -207,21 +208,23 @@ const Note = mrInjectAll(function Note({note}) {
 const AddEditNote = mrInjectAll(function Note() {
   return (
     <ListItem className={cn('flex')}>
-      <input
-        className={cn(
-          'input-reset bw1 b--solid flex-auto ma0 pa1 lh-copy light-blue hover-blue outline-0',
-        )}
-        autoFocus
-        value={view.mode.text}
-        onChange={view.onTextChange}
-        onFocus={e => e.target.setSelectionRange(0, 9999)}
-        onBlur={view.onTextBlur}
-        onKeyDown={_.cond([
-          [isAnyHotKey(['enter']), view.onEnter],
-          [isAnyHotKey(['escape']), view.onEnter],
-          // [isAnyHotKey['enter'], _.F],
-        ])}
-      />
+      <FocusTrap className={cn('flex flex-auto')}>
+        <input
+          className={cn(
+            'input-reset bw1 b--solid flex-auto ma0 pa1 lh-copy light-blue hover-blue outline-0',
+          )}
+          autoFocus
+          value={view.mode.text}
+          onChange={view.onTextChange}
+          onFocus={e => e.target.setSelectionRange(0, 9999)}
+          onBlur={view.onTextBlur}
+          onKeyDown={_.cond([
+            [isAnyHotKey(['enter']), view.onEnter],
+            [isAnyHotKey(['escape']), view.onEnter],
+            // [isAnyHotKey['enter'], _.F],
+          ])}
+        />
+      </FocusTrap>
     </ListItem>
   )
 })

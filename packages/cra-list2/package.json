@@ -28,6 +28,7 @@
     "faker": "^4.1.0",
     "firebase": "^5.2.0",
     "fluture": "^8.0.2",
+    "focus-trap-react": "^3.1.2",
     "found": "^0.3.11",
     "gun": "^0.9.9993",
     "history": "^4.7.2",
