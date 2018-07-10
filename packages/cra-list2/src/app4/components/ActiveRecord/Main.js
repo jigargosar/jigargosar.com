@@ -197,22 +197,24 @@ const view = (() => {
   return view
 })()
 
-const ChildNotes = mrInjectAll(function ChildNotes({
-  childNotes,
-  showAddNote,
-}) {
-  if (!showAddNote && _.isEmpty(childNotes)) {
-    return null
-  }
-  return (
-    <div className={cn('flex items-start mt2')}>
-      <List m={'mr3'} className={cn('flex-auto')}>
-        {showAddNote && <AddEditNote />}
-        {renderKeyedById(Note, 'note', childNotes)}
-      </List>
-    </div>
-  )
-})
+const ChildNotes = mrInjectAll(
+  /**
+   * @return {null}
+   */
+  function ChildNotes({childNotes, showAddNote}) {
+    if (!showAddNote && _.isEmpty(childNotes)) {
+      return null
+    }
+    return (
+      <div className={cn('flex items-start mt2')}>
+        <List m={'mr3'} className={cn('flex-auto')}>
+          {showAddNote && <AddEditNote />}
+          {renderKeyedById(Note, 'note', childNotes)}
+        </List>
+      </div>
+    )
+  },
+)
 
 const Note = mrInjectAll(function Note({note}) {
   if (note.isEditing) {
