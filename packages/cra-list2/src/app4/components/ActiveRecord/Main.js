@@ -66,11 +66,8 @@ const view = (() => {
   function beforeModeChange() {
     const {note, text} = view.modeProps
     const modeEq = _.equals(view.mode)
-    if (modeEq('add')) {
-      Notes.createAndSave({text, deleted: false})
-    }
-    if (modeEq('edit')) {
-      note.update({text})
+    if (modeEq('add') || modeEq('edit')) {
+      Notes.upsert({id: note.id, text})
     }
   }
 })()
