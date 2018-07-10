@@ -27,12 +27,35 @@ const Notes = ActiveRecord({
   },
 })
 
+function AddEditMode({id = null, text = ''} = {}) {
+  return createObservableObject({
+    props: {id, text},
+    actions: {
+      onTextChange(e) {
+        this.text = e.target.value
+      },
+      onBeforeChange() {
+        Notes.upsert(_.pick(['id', 'text'], this))
+      },
+    },
+    name: 'AddEditMode',
+  })
+}
+
+function ListMode() {
+  return createObservableObject({
+    props: {},
+    actions: {
+      onBeforeChange() {},
+    },
+    name: 'ListMode',
+  })
+}
+
 const view = (() => {
   const view = createObservableObject({
     props: {
-      mode: 'list',
-      selection: [],
-      modeProps: {},
+      mode: ListMode(),
       get notesList() {
         return Notes.active
       },
@@ -40,27 +63,24 @@ const view = (() => {
     actions: {
       onAdd() {
         beforeModeChange()
-        this.mode = 'add'
-        this.modeProps = {text: ''}
+        this.mode = AddEditMode()
       },
       onEditNote(note) {
         beforeModeChange()
-        this.mode = 'edit'
-        this.modeProps = {text: note.text, id: note.id}
+        this.mode = AddEditMode({text: note.text, id: note.id})
+      },
+      onTextChange(e) {
+        this.mode.onTextChange(e)
       },
       onTextBlur() {
         this.save()
-      },
-      onTextChange(e) {
-        this.modeProps.text = e.target.value
       },
       onEnter() {
         this.save()
       },
       save() {
         beforeModeChange()
-        this.mode = 'list'
-        this.modeProps = {}
+        this.mode = ListMode()
       },
     },
     name: 'view',
@@ -70,16 +90,17 @@ const view = (() => {
   return view
 
   function beforeModeChange() {
-    const {id, text} = view.modeProps
-    const modeEq = _.equals(view.mode)
-    if (modeEq('add') || modeEq('edit')) {
-      Notes.upsert({id, text})
-    }
+    // const {id, text} = view.modeProps
+    // const modeEq = _.equals(view.mode)
+    // if (modeEq('add') || modeEq('edit')) {
+    //   Notes.upsert({id, text})
+    // }
+    view.mode.onBeforeChange()
   }
 })()
 
 function isEditingNote(note) {
-  return _.equals(note.id, view.modeProps.id)
+  return _.equals(note.id, view.mode.id)
 }
 
 // const NoteInput = observer(function NoteInput({note}) {
@@ -228,7 +249,7 @@ const AddEditNote = mrInjectAll(function Note() {
       <input
         className={cn('bw0 flex-auto ma0 pa1 lh-copy blue')}
         autoFocus
-        value={view.modeProps.text}
+        value={view.mode.text}
         onChange={view.onTextChange}
         onFocus={e => e.target.setSelectionRange(0, 9999)}
         onBlur={view.onTextBlur}
