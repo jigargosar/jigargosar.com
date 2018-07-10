@@ -8,7 +8,7 @@ import {
   Section,
   Title,
 } from '../ui'
-import {cn, mrInjectAll, renderKeyedById} from '../utils'
+import {cn, isAnyHotKey, mrInjectAll, renderKeyedById} from '../utils'
 import {ActiveRecord} from '../../mobx/ActiveRecord'
 import {
   createObservableObject,
@@ -48,13 +48,19 @@ const view = (() => {
         this.mode = 'edit'
         this.modeProps = {text: note.text, id: note.id}
       },
-      onTextBlur(e) {
-        beforeModeChange()
-        this.mode = 'list'
-        this.modeProps = {}
+      onTextBlur() {
+        this.save()
       },
       onTextChange(e) {
         this.modeProps.text = e.target.value
+      },
+      onEnter() {
+        this.save()
+      },
+      save() {
+        beforeModeChange()
+        this.mode = 'list'
+        this.modeProps = {}
       },
     },
     name: 'view',
@@ -226,6 +232,10 @@ const AddEditNote = mrInjectAll(function Note() {
         onChange={view.onTextChange}
         onFocus={e => e.target.setSelectionRange(0, 9999)}
         onBlur={view.onTextBlur}
+        onKeyDown={_.cond([
+          [isAnyHotKey(['enter']), view.onEnter],
+          // [isAnyHotKey['enter'], _.F],
+        ])}
       />
     </ListItem>
   )
