@@ -87,6 +87,12 @@ const view = (() => {
           getActiveQuery({filters: [_.propEq('parentId', note.id)]}),
         )
       },
+      isAddModeForParentId(parentId) {
+        return (
+          this.modeNameEq('add') &&
+          _.equals(this.mode.parentId, parentId)
+        )
+      },
     },
     actions: {
       onAdd() {
@@ -315,16 +321,19 @@ const ListToolbar = mrInjectAll(function ListToolbar() {
 })
 
 const NoteList = mrInjectAll(function NoteList() {
+  const childNotes = view.notesList
+  const showEditNote = view.isAddModeForParentId(null)
+  const showList = !_.isEmpty(childNotes) || showEditNote
   return (
     <div>
       {/*<NoteListShortcuts />*/}
       <ListToolbar />
-      <List>
-        {view.modeNameEq('add') && (
-          /*_.isNil(view.mode.parentId) &&*/ <AddEditNote />
-        )}
-        {renderKeyedById(Note, 'note', view.notesList)}
-      </List>
+      {showList && (
+        <List>
+          {showEditNote && <AddEditNote />}
+          {renderKeyedById(Note, 'note', childNotes)}
+        </List>
+      )}
     </div>
   )
 })
