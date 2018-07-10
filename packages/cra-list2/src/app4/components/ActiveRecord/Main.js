@@ -82,9 +82,9 @@ const view = (() => {
       get modeNameEq() {
         return _.equals(this.mode.name)
       },
-      children(note) {
+      findActiveNotesWithParentId(parentId) {
         return Notes.findAll(
-          getActiveQuery({filters: [_.propEq('parentId', note.id)]}),
+          getActiveQuery({filters: [_.propEq('parentId', parentId)]}),
         )
       },
       isAddModeForParentId(parentId) {
@@ -260,7 +260,7 @@ const Note = mrInjectAll(function Note({note}) {
   if (isEditingNote(note)) {
     return <AddEditNote />
   }
-  const children = view.children(note)
+  const children = view.findActiveNotesWithParentId(note.id)
   return (
     <ListItem
       onDoubleClick={() => view.onEditNote(note)}
