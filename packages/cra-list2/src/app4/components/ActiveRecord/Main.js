@@ -157,20 +157,13 @@ const Note = mrInjectAll(function Note({note}) {
       p={'pv2 pl3'}
     >
       <div className={cn('flex-auto flex items-center hide-child ')}>
-        <Button
-          className={cn('code', {'o-1': !hasChildNotes})}
-          disabled={!hasChildNotes}
-        >
-          <div>{isCollapsed ? `>` : `v`}</div>
+        <Button className={cn('code bw0')} disabled={!hasChildNotes}>
+          <div className={cn({'light-silver': !hasChildNotes})}>
+            {isCollapsed ? `>` : `v`}
+          </div>
         </Button>
 
-        <div
-          onDoubleClick={e => {
-            // e.stopPropagation()
-            // view.onEditNote(note)
-          }}
-          className={cn('flex-auto mr2')}
-        >
+        <div className={cn('flex-auto mr2')}>
           {note.text || (
             <span className={cn('light-silver')}>Empty Text</span>
           )}
