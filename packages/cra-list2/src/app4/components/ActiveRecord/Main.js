@@ -18,7 +18,7 @@ import {_} from '../../utils'
 
 const Notes = ActiveRecord({
   name: 'Note',
-  fieldNames: ['text', 'deleted'],
+  fieldNames: ['text', 'deleted', 'parentId'],
   queries: {
     active: {
       filter: _.allPass([_.propSatisfies(_.not, 'deleted')]),
