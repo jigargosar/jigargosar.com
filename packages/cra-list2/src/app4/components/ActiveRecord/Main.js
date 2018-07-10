@@ -220,11 +220,9 @@ const Note = mrInjectAll(function Note({note}) {
   if (note.isEditing) {
     return <AddEditNote />
   }
-  return (
-    <ListItem
-      className={cn('pointer flex flex-column lh-copy')}
-      p={'pv2 pl3'}
-    >
+
+  function renderFoo() {
+    return (
       <div className={cn('flex-auto flex items-center hide-child ')}>
         <Button
           className={cn('code bw0')}
@@ -245,6 +243,15 @@ const Note = mrInjectAll(function Note({note}) {
           <Button onClick={() => view.onDelete(note)}>x</Button>
         </div>
       </div>
+    )
+  }
+
+  return (
+    <ListItem
+      className={cn('pointer flex flex-column lh-copy')}
+      p={'pv2 pl3'}
+    >
+      {note.isEditing ? <AddEditNote /> : renderFoo()}
       <ChildNotes
         showAddNote={note.isAddingChild}
         childNotes={note.shouldDisplayChildren ? note.childNotes : []}
@@ -253,28 +260,34 @@ const Note = mrInjectAll(function Note({note}) {
   )
 })
 
+const AddEditModeInput = mrInjectAll(function AddEditModeInput() {
+  return (
+    <FocusTrap
+      className={cn('flex flex-auto')}
+      focusTrapOptions={{escapeDeactivates: false}}
+    >
+      <input
+        className={cn(
+          'input-reset bw1 b--solid flex-auto ma0 pa1 lh-copy light-blue hover-blue outline-0',
+        )}
+        autoFocus
+        value={view.mode.text}
+        onChange={view.onTextChange}
+        onFocus={e => e.target.setSelectionRange(0, 9999)}
+        onBlur={view.onTextBlur}
+        onKeyDown={_.cond([
+          [isAnyHotKey(['enter']), view.onEnter],
+          [isAnyHotKey(['escape']), view.onEnter],
+        ])}
+      />
+    </FocusTrap>
+  )
+})
+
 const AddEditNote = mrInjectAll(function Note() {
   return (
     <ListItem className={cn('flex')}>
-      <FocusTrap
-        className={cn('flex flex-auto')}
-        focusTrapOptions={{escapeDeactivates: false}}
-      >
-        <input
-          className={cn(
-            'input-reset bw1 b--solid flex-auto ma0 pa1 lh-copy light-blue hover-blue outline-0',
-          )}
-          autoFocus
-          value={view.mode.text}
-          onChange={view.onTextChange}
-          onFocus={e => e.target.setSelectionRange(0, 9999)}
-          onBlur={view.onTextBlur}
-          onKeyDown={_.cond([
-            [isAnyHotKey(['enter']), view.onEnter],
-            [isAnyHotKey(['escape']), view.onEnter],
-          ])}
-        />
-      </FocusTrap>
+      <AddEditModeInput />
     </ListItem>
   )
 })
@@ -289,8 +302,8 @@ const ListToolbar = mrInjectAll(function ListToolbar() {
 
 const NoteList = mrInjectAll(function NoteList() {
   const list = view.notesList
-  // const showAddNote = view.isAddModeForParentId(null)
-  const showAddNote = view.isAddMode
+  const showAddNote = view.isAddModeForParentId(null)
+  // const showAddNote = view.isAddMode
   const showList = !_.isEmpty(list) || showAddNote
   return (
     <div>
