@@ -138,7 +138,7 @@ const view = (() => {
       onToggleNoteCollapsed(note) {
         Notes.upsert({
           id: note.id,
-          collapsed: !isNoteCollapsed(note),
+          collapsed: !note.collapsed,
         })
       },
       onDelete(note) {
@@ -183,10 +183,6 @@ function isEditingNote(note) {
   return _.equals(note.id, view.mode.id)
 }
 
-function isNoteCollapsed(note) {
-  return _.defaultTo(false, note.collapsed)
-}
-
 function getChildNotes(note) {
   // return   note.childNotes
   return view.findActiveNotesWithParentId(note.id)
@@ -208,7 +204,7 @@ function isLeafNote(note) {
 }
 
 function shouldHideChildNotes(note) {
-  return isLeafNote(note) || isNoteCollapsed(note)
+  return isLeafNote(note) || note.collapsed
 }
 
 const Note = mrInjectAll(function Note({note}) {
