@@ -300,7 +300,8 @@ const NoteList = mrInjectAll(function NoteList() {
       {/*<NoteListShortcuts />*/}
       <ListToolbar />
       <List>
-        {view.modeNameEq('add') && <AddEditNote />}
+        {view.modeNameEq('add') &&
+          _.isNil(view.mode.parentId) && <AddEditNote />}
         {renderKeyedById(Note, 'note', view.notesList)}
       </List>
     </div>
