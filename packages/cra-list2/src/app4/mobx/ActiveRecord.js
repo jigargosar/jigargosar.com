@@ -19,6 +19,10 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
           _.filter(filter),
         )(this.records)
       },
+
+      find({filter = _.identity} = {}) {
+        return _.head(this.findAll({filter}))
+      },
     },
     actions: {
       saveRecord(record) {
@@ -40,7 +44,7 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
         const pickKeys = _.pick(keys)
         const updates = pickKeys(values)
 
-        const record = this.findAll({filter: _.eqProps('id', values)})
+        const record = this.find({filter: _.eqProps('id', values)})
         if (record) {
           if (_.equals(updates, pickKeys(record))) {
             return
