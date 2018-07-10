@@ -30,7 +30,7 @@ function getActiveQuery({filters = []} = {}) {
 
 const Notes = ActiveRecord({
   name: 'Note',
-  fieldNames: ['text', 'deleted', 'parentId'],
+  fieldNames: ['text', 'deleted', 'parentId', 'collapsed'],
   volatileFieldNames: ['collapsed'],
   queries: {
     active: getActiveQuery({
@@ -146,7 +146,9 @@ const Note = mrInjectAll(function Note({note}) {
   if (isEditingNote(note)) {
     return <AddEditNote />
   }
-  const children = view.findActiveNotesWithParentId(note.id)
+  const childNotes = view.findActiveNotesWithParentId(note.id)
+  const hasChildNotes = !_.isEmpty(childNotes)
+
   return (
     <ListItem
       onDoubleClick={() => view.onEditNote(note)}
@@ -172,8 +174,13 @@ const Note = mrInjectAll(function Note({note}) {
           x
         </Button>
       </div>
-      {!_.isEmpty(children) && (
-        <List>{renderKeyedById(Note, 'note', children)}</List>
+      {hasChildNotes && (
+        <div className={cn('flex items-start mt2')}>
+          <Button className={cn('code')}>{`>`}</Button>
+          <List m={'mr3'} className={cn('flex-auto')}>
+            {renderKeyedById(Note, 'note', childNotes)}
+          </List>
+        </div>
       )}
     </ListItem>
   )

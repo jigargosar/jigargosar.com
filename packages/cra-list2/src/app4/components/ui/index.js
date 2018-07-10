@@ -33,7 +33,7 @@ export const Paper = styled.div.attrs({
 })``
 
 export const List = styled.div.attrs({
-  className: cn(paperCN, 'mh0 mh3-ns'),
+  className: ({m = 'mh0 mh3-ns'}) => cn(paperCN, m),
 })``
 
 export const ListItem = styled.div.attrs({
