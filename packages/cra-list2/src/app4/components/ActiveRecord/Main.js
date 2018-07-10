@@ -101,6 +101,9 @@ const view = (() => {
       },
     },
     actions: {
+      onToggleNoteCollapsed(note) {
+        Notes.upsert({id: note.id, collapsed: !isNoteCollapsed(note)})
+      },
       onDelete(note) {
         Notes.upsert({id: note.id, deleted: true})
       },
@@ -143,13 +146,17 @@ function isEditingNote(note) {
   return _.equals(note.id, view.mode.id)
 }
 
+function isNoteCollapsed(note) {
+  return _.defaultTo(false, note.collapsed)
+}
+
 const Note = mrInjectAll(function Note({note}) {
   if (isEditingNote(note)) {
     return <AddEditNote />
   }
   const childNotes = view.findActiveNotesWithParentId(note.id)
   const hasChildNotes = !_.isEmpty(childNotes)
-  const isCollapsed = _.defaultTo(false, note.collapsed)
+  const isCollapsed = isNoteCollapsed(note)
 
   return (
     <ListItem
@@ -157,10 +164,12 @@ const Note = mrInjectAll(function Note({note}) {
       p={'pv2 pl3'}
     >
       <div className={cn('flex-auto flex items-center hide-child ')}>
-        <Button className={cn('code bw0')} disabled={!hasChildNotes}>
-          <div className={cn({'light-silver': !hasChildNotes})}>
-            {isCollapsed ? `>` : `v`}
-          </div>
+        <Button
+          className={cn('code bw0')}
+          disabled={!hasChildNotes}
+          onClick={() => view.onToggleNoteCollapsed(note)}
+        >
+          {isCollapsed ? `>` : `v`}
         </Button>
 
         <div className={cn('flex-auto mr2')}>
