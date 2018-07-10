@@ -27,11 +27,12 @@ const Notes = ActiveRecord({
   },
 })
 
-function AddEditMode({id = null, text = ''} = {}) {
+function AddEditMode({id = null, text = '', parentId = null} = {}) {
   return createObservableObject({
     props: {
       id,
       text,
+      parentId,
       get name() {
         return _.isNil(id) ? 'add' : 'edit'
       },
@@ -41,7 +42,7 @@ function AddEditMode({id = null, text = ''} = {}) {
         this.text = e.target.value
       },
       onBeforeChange() {
-        Notes.upsert(_.pick(['id', 'text'], this))
+        Notes.upsert(_.pick(['id', 'text', 'parentId'], this))
       },
     },
     name: 'AddEditMode',
@@ -77,6 +78,10 @@ const view = (() => {
       onAdd() {
         beforeModeChange()
         this.mode = AddEditMode()
+      },
+      onAddChild(note) {
+        beforeModeChange()
+        this.mode = AddEditMode({parentId: note.id})
       },
       onEditNote(note) {
         beforeModeChange()
