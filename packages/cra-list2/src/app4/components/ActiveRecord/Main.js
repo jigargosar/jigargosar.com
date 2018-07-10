@@ -18,6 +18,7 @@ import {
 import {ActiveRecord} from '../../mobx/ActiveRecord'
 import {
   createObservableObject,
+  createTransformer,
   mAutoRun,
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
@@ -84,9 +85,17 @@ const view = (() => {
   const view = createObservableObject({
     props: {
       mode: ListMode(),
+      get displayNoteTransformer() {
+        return createTransformer(note => {
+          return note
+        })
+      },
       get notesList() {
         // return Notes.active
-        return this.findActiveNotesWithParentId(null)
+        return _.map(
+          this.displayNoteTransformer,
+          this.findActiveNotesWithParentId(null),
+        )
       },
       modeNameEq(name) {
         return _.equals(this.mode.name, name)
