@@ -20,22 +20,6 @@ import FocusTrap from 'focus-trap-react'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {RootContainer} from '../mobx/RootContainer'
 
-const ChildNotes = mrInjectAll(function ChildNotes({
-  childNotes,
-  showAddNote,
-  m = 'mr3 mt2',
-}) {
-  if (!showAddNote && _.isEmpty(childNotes)) {
-    return <F />
-  }
-  return (
-    <List m={m} className={cn('flex-auto')}>
-      {showAddNote && <NoteLineEditMode />}
-      {renderKeyedById(Note, 'note', childNotes)}
-    </List>
-  )
-})
-
 const NoteLineListMode = mrInjectAll(function NoteLine({note, view}) {
   return (
     <div className={cn('flex-auto flex items-center hide-child ')}>
@@ -88,6 +72,22 @@ const NoteLineEditMode = mrInjectAll(function NoteLineEdit({view}) {
         />
       </FocusTrap>
     </ListItem>
+  )
+})
+
+const ChildNotes = mrInjectAll(function ChildNotes({
+  childNotes,
+  showAddNote,
+  m = 'mr3 mt2',
+}) {
+  if (!showAddNote && _.isEmpty(childNotes)) {
+    return <F />
+  }
+  return (
+    <List m={m} className={cn('flex-auto')}>
+      {showAddNote && <NoteLineEditMode />}
+      {renderKeyedById(Note, 'note', childNotes)}
+    </List>
   )
 })
 
