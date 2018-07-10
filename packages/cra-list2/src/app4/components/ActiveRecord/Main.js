@@ -8,7 +8,13 @@ import {
   Section,
   Title,
 } from '../ui'
-import {cn, isAnyHotKey, mrInjectAll, renderKeyedById} from '../utils'
+import {
+  cn,
+  isAnyHotKey,
+  mrInjectAll,
+  renderKeyedById,
+  wrapPD,
+} from '../utils'
 import {ActiveRecord} from '../../mobx/ActiveRecord'
 import {
   attachDelegatingPropertyGetters,
@@ -276,8 +282,8 @@ const AddEditModeInput = mrInjectAll(function AddEditModeInput() {
         onFocus={e => e.target.setSelectionRange(0, 9999)}
         onBlur={view.onTextBlur}
         onKeyDown={_.cond([
-          [isAnyHotKey(['enter']), view.onEnter],
-          [isAnyHotKey(['escape']), view.onEnter],
+          [isAnyHotKey(['enter']), wrapPD(view.onEnter)],
+          [isAnyHotKey(['escape']), wrapPD(view.onEnter)],
         ])}
       />
     </FocusTrap>
