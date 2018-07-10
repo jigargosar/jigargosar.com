@@ -264,12 +264,13 @@ const Note = mrInjectAll(function Note({note}) {
 
 const AddEditModeInput = mrInjectAll(function AddEditModeInput() {
   return (
-    <div
+    <FocusTrap
       className={cn('flex flex-auto')}
-      // focusTrapOptions={{
-      //   escapeDeactivates: false,
-      //   clickOutsideDeactivates: true,
-      // }}
+      active={false}
+      focusTrapOptions={{
+        escapeDeactivates: false,
+        clickOutsideDeactivates: true,
+      }}
     >
       <input
         className={cn(
@@ -285,7 +286,7 @@ const AddEditModeInput = mrInjectAll(function AddEditModeInput() {
           [isAnyHotKey(['escape']), wrapPD(view.onEnter)],
         ])}
       />
-    </div>
+    </FocusTrap>
   )
 })
 
