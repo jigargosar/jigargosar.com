@@ -29,6 +29,7 @@ export function ActiveRecord({
         return _.head(this.findAll({filter}))
       },
       findById(id) {
+        validate('S|Z', [id])
         return this.find({filter: _.propEq('id', id)})
       },
     },
@@ -40,7 +41,8 @@ export function ActiveRecord({
           record.isNew = false
         }
       },
-      upsert(values) {
+      upsert(options) {
+        const values = _.omit(['id'], options)
         const record = this.findById(values.id)
 
         if (record) {
