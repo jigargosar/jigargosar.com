@@ -9,6 +9,7 @@ import {
 } from '../ui'
 import {
   cn,
+  F,
   isAnyHotKey,
   mrInjectAll,
   renderKeyedById,
@@ -307,14 +308,14 @@ const ListToolbar = mrInjectAll(function ListToolbar() {
 
 const NoteList = mrInjectAll(function NoteList() {
   return (
-    <div>
+    <F>
       <ListToolbar />
       <ChildNotes
         m={'mh0 mh3-ns'}
         showAddNote={view.isAddModeForParentId(null)}
         childNotes={view.notesList}
       />
-    </div>
+    </F>
   )
 })
 
