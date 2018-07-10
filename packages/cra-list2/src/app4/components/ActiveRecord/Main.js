@@ -106,7 +106,7 @@ const NoteLineEdit = mrInjectAll(function NoteLineEdit({view}) {
   )
 })
 
-const ListToolbar = mrInjectAll(function ListToolbar({view}) {
+const TreeToolbar = mrInjectAll(function ListToolbar({view}) {
   return (
     <Section className={cn('pl3')}>
       <Button onClick={() => view.onAddChild(null)}>ADD</Button>
@@ -114,10 +114,10 @@ const ListToolbar = mrInjectAll(function ListToolbar({view}) {
   )
 })
 
-const NoteList = mrInjectAll(function NoteList({view}) {
+const NoteTree = mrInjectAll(function NoteList({view}) {
   return (
     <F>
-      <ListToolbar />
+      <TreeToolbar />
       <ChildNotes
         m={'mh0 mh3-ns'}
         showAddNote={view.isAddModeForParentId(null)}
@@ -136,7 +136,7 @@ const Main = mrInjectAll(function Main({view}) {
         </Title>
       </AppHeaderBar>
       <CenterLayout>
-        <NoteList />
+        <NoteTree />
       </CenterLayout>
     </RootContainer>
   )
