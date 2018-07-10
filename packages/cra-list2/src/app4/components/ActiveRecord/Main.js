@@ -286,7 +286,7 @@ const AddEditModeInput = mrInjectAll(function AddEditModeInput() {
         onBlur={view.onTextBlur}
         onKeyDown={_.cond([
           [isAnyHotKey(['enter']), wrapPD(view.onEnter)],
-          [isAnyHotKey(['escape']), wrapPD(view.onEnter)],
+          [isAnyHotKey(['escape']), wrapPD(view.onEscape)],
         ])}
       />
     </FocusTrap>
