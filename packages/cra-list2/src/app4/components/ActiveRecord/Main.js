@@ -8,17 +8,12 @@ import {
   Section,
   Title,
 } from '../ui'
-import {
-  cn,
-  isAnyHotKey,
-  mrInjectAll,
-  observer,
-  renderKeyedById,
-} from '../utils'
+import {cn, isAnyHotKey, mrInjectAll, renderKeyedById} from '../utils'
 import {ActiveRecord} from '../../mobx/ActiveRecord'
 import {
   createObservableObject,
   createTransformer,
+  defineDelegatePropertyGetter,
   mAutoRun,
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
@@ -36,9 +31,10 @@ function getActiveQuery({filters = []} = {}) {
   }
 }
 
+const fieldNames = ['text', 'deleted', 'parentId', 'collapsed']
 const Notes = ActiveRecord({
   name: 'Note',
-  fieldNames: ['text', 'deleted', 'parentId', 'collapsed'],
+  fieldNames,
   // volatileFieldNames: ['collapsed'],
   queries: {
     active: getActiveQuery({
@@ -86,12 +82,28 @@ const view = (() => {
     props: {
       mode: ListMode(),
       get displayNoteTransformer() {
+        const view = this
         return createTransformer(note => {
-          return note
+          const dn = createObservableObject({
+            props: {
+              get childNotes() {
+                return view.findActiveNotesWithParentId(note.id)
+              },
+              get isCollapsed() {
+                return _.defaultTo(false, note.collapsed)
+              },
+            },
+            actions: {},
+            name: `DisplayNote@${note.id}`,
+          })
+          _.forEach(
+            defineDelegatePropertyGetter(_.__, note, dn),
+            Notes.allFieldNames,
+          )
+          return dn
         })
       },
       get notesList() {
-        // return Notes.active
         return _.map(
           this.displayNoteTransformer,
           this.findActiveNotesWithParentId(null),
@@ -100,8 +112,14 @@ const view = (() => {
       modeNameEq(name) {
         return _.equals(this.mode.name, name)
       },
+      findAll(options) {
+        return _.map(
+          this.displayNoteTransformer,
+          Notes.findAll(options),
+        )
+      },
       findActiveNotesWithParentId(parentId) {
-        return Notes.findAll(
+        return this.findAll(
           getActiveQuery({
             filters: [_.propEq('parentId', parentId)],
           }),
@@ -169,15 +187,30 @@ function isEditingNote(note) {
   return _.equals(note.id, view.mode.id)
 }
 
-const Note = observer(function Note({note}) {
-  // console.log(`note`, note)
-  // console.log('note.collapsed', note.collapsed)
+const ChildNotes = mrInjectAll(function ChildNotes({note}) {
+  // const childNotes = note.childNotes
+  const childNotes = view.findActiveNotesWithParentId(note.id)
+  return (
+    <div className={cn('flex items-start mt2')}>
+      <List m={'mr3'} className={cn('flex-auto')}>
+        {renderKeyedById(Note, 'note', childNotes)}
+      </List>
+    </div>
+  )
+})
+
+function isLeafNote(note) {
+  return _.isEmpty(note.childNotes)
+}
+
+function shouldHideChildNotes(note) {
+  return isLeafNote(note) || note.collapsed
+}
+
+const Note = mrInjectAll(function Note({note}) {
   if (isEditingNote(note)) {
     return <AddEditNote />
   }
-  const childNotes = view.findActiveNotesWithParentId(note.id)
-  const hasChildNotes = !_.isEmpty(childNotes)
-  const showChildNotes = hasChildNotes && !note.collapsed
   return (
     <ListItem
       className={cn('pointer flex flex-column lh-copy')}
@@ -186,7 +219,7 @@ const Note = observer(function Note({note}) {
       <div className={cn('flex-auto flex items-center hide-child ')}>
         <Button
           className={cn('code bw0')}
-          disabled={!hasChildNotes}
+          disabled={!!isLeafNote(note)}
           onClick={() => view.onToggleNoteCollapsed(note)}
         >
           {note.collapsed ? `>` : `v`}
@@ -203,13 +236,7 @@ const Note = observer(function Note({note}) {
           <Button onClick={() => view.onDelete(note)}>x</Button>
         </div>
       </div>
-      {showChildNotes && (
-        <div className={cn('flex items-start mt2')}>
-          <List m={'mr3'} className={cn('flex-auto')}>
-            {renderKeyedById(Note, 'note', childNotes)}
-          </List>
-        </div>
-      )}
+      {!shouldHideChildNotes(note) && <ChildNotes note={note} />}
     </ListItem>
   )
 })

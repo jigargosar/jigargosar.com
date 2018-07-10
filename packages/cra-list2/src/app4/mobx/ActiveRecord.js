@@ -18,6 +18,9 @@ export function ActiveRecord({
       fieldNames,
       name,
       records: [],
+      get allFieldNames() {
+        return _.concat(fieldNames, ['id', 'createdAt', 'modifiedAt'])
+      },
       findAll({filter = _.identity, sortComparators = []} = {}) {
         return _.compose(
           _.sortWith(sortComparators),
