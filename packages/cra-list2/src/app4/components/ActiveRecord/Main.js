@@ -113,10 +113,11 @@ const view = (() => {
         return _.equals(this.mode.name, name)
       },
       findAll(options) {
-        return _.map(
-          this.displayNoteTransformer,
-          Notes.findAll(options),
-        )
+        // return _.map(
+        //   this.displayNoteTransformer,
+        //   Notes.findAll(options),
+        // )
+        return Notes.findAll(options)
       },
       findActiveNotesWithParentId(parentId) {
         return this.findAll(
@@ -131,9 +132,6 @@ const view = (() => {
           _.equals(this.mode.parentId, parentId)
         )
       },
-      isNoteCollapsed(note) {
-        return _.defaultTo(false, note.collapsed)
-      },
       get isAddMode() {
         return this.modeNameEq('add')
       },
@@ -142,7 +140,7 @@ const view = (() => {
       onToggleNoteCollapsed(note) {
         Notes.upsert({
           id: note.id,
-          collapsed: !this.isNoteCollapsed(note),
+          collapsed: !isNoteCollapsed(note),
         })
       },
       onDelete(note) {
@@ -187,9 +185,17 @@ function isEditingNote(note) {
   return _.equals(note.id, view.mode.id)
 }
 
+function isNoteCollapsed(note) {
+  return _.defaultTo(false, note.collapsed)
+}
+
+function getChildNotes(note) {
+  return view.findActiveNotesWithParentId(note.id)
+}
+
 const ChildNotes = mrInjectAll(function ChildNotes({note}) {
   // const childNotes = note.childNotes
-  const childNotes = view.findActiveNotesWithParentId(note.id)
+  const childNotes = getChildNotes(note)
   return (
     <div className={cn('flex items-start mt2')}>
       <List m={'mr3'} className={cn('flex-auto')}>
@@ -200,11 +206,11 @@ const ChildNotes = mrInjectAll(function ChildNotes({note}) {
 })
 
 function isLeafNote(note) {
-  return _.isEmpty(note.childNotes)
+  return _.isEmpty(getChildNotes(note))
 }
 
 function shouldHideChildNotes(note) {
-  return isLeafNote(note) || note.collapsed
+  return isLeafNote(note) || isNoteCollapsed(note)
 }
 
 const Note = mrInjectAll(function Note({note}) {
