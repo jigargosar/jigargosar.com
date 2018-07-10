@@ -19,8 +19,6 @@ import {
 import {_} from '../../utils'
 import FocusTrap from 'focus-trap-react'
 
-// import a from 'nanoassert'
-
 function getActiveQuery({filters = []} = {}) {
   return {
     filter: _.allPass([
@@ -37,9 +35,9 @@ const Notes = ActiveRecord({
   fieldNames,
   // volatileFieldNames: ['collapsed'],
   queries: {
-    active: getActiveQuery({
-      filters: [_.propSatisfies(_.isNil, 'parentId')],
-    }),
+    // active: getActiveQuery({
+    //   filters: [_.propSatisfies(_.isNil, 'parentId')],
+    // }),
   },
 })
 
