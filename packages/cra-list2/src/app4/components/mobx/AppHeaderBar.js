@@ -8,7 +8,7 @@ export const AppHeaderBar = observer(function AppHeaderBar({
 }) {
   return (
     <div className={'shadow-1 bg-light-blue'}>
-      <CenterLayout className={cn('flex pv3')}>
+      <CenterLayout className={cn('flex pv2 pv3-ns')}>
         {children}
       </CenterLayout>
     </div>

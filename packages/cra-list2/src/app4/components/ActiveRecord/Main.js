@@ -320,7 +320,7 @@ const NoteList = mrInjectAll(function NoteList() {
 
 const Main = mrInjectAll(function Main() {
   return (
-    <RootContainer>
+    <RootContainer className={cn('mb4')}>
       <FocusTrap focusTrapOptions={{escapeDeactivates: false}}>
         <AppHeaderBar>
           <Title className={cn('flex-auto')}>
@@ -329,7 +329,6 @@ const Main = mrInjectAll(function Main() {
         </AppHeaderBar>
         <CenterLayout>
           <NoteList />
-          <div className={cn('ma3')} />
         </CenterLayout>
       </FocusTrap>
     </RootContainer>
