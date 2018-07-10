@@ -218,45 +218,44 @@ const ChildNotes = mrInjectAll(
     }
     return (
       <List m={m} className={cn('flex-auto')}>
-        {showAddNote && <AddEditNote />}
+        {showAddNote && <NoteLineEdit />}
         {renderKeyedById(Note, 'note', childNotes)}
       </List>
     )
   },
 )
 
-const Note = mrInjectAll(function Note({note}) {
-  function renderFoo() {
-    return (
-      <div className={cn('flex-auto flex items-center hide-child ')}>
-        <Button
-          className={cn('code bw0')}
-          disabled={note.isCollapseButtonDisabled}
-          onClick={() => view.onToggleNoteCollapsed(note)}
-        >
-          {note.collapsed ? `>` : `v`}
-        </Button>
+const NoteLine = mrInjectAll(function NoteLine({note}) {
+  return (
+    <div className={cn('flex-auto flex items-center hide-child ')}>
+      <Button
+        className={cn('code bw0')}
+        disabled={note.isCollapseButtonDisabled}
+        onClick={() => view.onToggleNoteCollapsed(note)}
+      >
+        {note.collapsed ? `>` : `v`}
+      </Button>
 
-        <div className={cn('flex-auto mr2')}>
-          {note.text || (
-            <span className={cn('light-silver')}>Empty Text</span>
-          )}
-        </div>
-        <div className={cn('child2')}>
-          <Button onClick={() => view.onEditNote(note)}>e</Button>
-          <Button onClick={() => view.onAddChild(note)}>+</Button>
-          <Button onClick={() => view.onDelete(note)}>x</Button>
-        </div>
+      <div className={cn('flex-auto mr2')}>
+        {note.text || (
+          <span className={cn('light-silver')}>Empty Text</span>
+        )}
       </div>
-    )
-  }
-
+      <div className={cn('child2')}>
+        <Button onClick={() => view.onEditNote(note)}>e</Button>
+        <Button onClick={() => view.onAddChild(note)}>+</Button>
+        <Button onClick={() => view.onDelete(note)}>x</Button>
+      </div>
+    </div>
+  )
+})
+const Note = mrInjectAll(function Note({note}) {
   return (
     <ListItem
       className={cn('pointer flex flex-column lh-copy')}
       p={'pv2 pl3'}
     >
-      {note.isEditing ? <AddEditNote /> : renderFoo()}
+      {note.isEditing ? <NoteLineEdit /> : <NoteLine note={note} />}
       <ChildNotes
         showAddNote={note.isAddingChild}
         childNotes={note.shouldDisplayChildren ? note.childNotes : []}
@@ -293,7 +292,7 @@ const AddEditModeInput = mrInjectAll(function AddEditModeInput() {
   )
 })
 
-const AddEditNote = mrInjectAll(function Note() {
+const NoteLineEdit = mrInjectAll(function Note() {
   return (
     <ListItem className={cn('flex')}>
       <AddEditModeInput />
