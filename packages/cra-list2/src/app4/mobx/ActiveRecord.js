@@ -23,6 +23,9 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
       find({filter = _.identity} = {}) {
         return _.head(this.findAll({filter}))
       },
+      findById(id) {
+        return this.find({filter: _.propEq('id', id)})
+      },
     },
     actions: {
       saveRecord(record) {
@@ -44,7 +47,7 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
         const pickKeys = _.pick(keys)
         const updates = pickKeys(values)
 
-        const record = this.find({filter: _.eqProps('id', values)})
+        const record = this.findById(values.id)
         if (record) {
           if (_.equals(updates, pickKeys(record))) {
             return
@@ -126,7 +129,7 @@ export function ActiveRecord({fieldNames, name, queries = {}}) {
           activeRecord.upsert(values)
         },
         setDeleted(deleted = true) {
-          this.update({deleted})
+          this.update({id: this.id, deleted})
         },
       },
       name: json.id,

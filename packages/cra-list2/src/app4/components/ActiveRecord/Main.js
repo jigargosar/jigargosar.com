@@ -46,7 +46,7 @@ const view = (() => {
       onEditNote(note) {
         beforeModeChange()
         this.mode = 'edit'
-        this.modeProps = {text: note.text, note}
+        this.modeProps = {text: note.text, id: note.id}
       },
       onTextBlur(e) {
         beforeModeChange()
@@ -64,10 +64,10 @@ const view = (() => {
   return view
 
   function beforeModeChange() {
-    const {note, text} = view.modeProps
+    const {id, text} = view.modeProps
     const modeEq = _.equals(view.mode)
     if (modeEq('add') || modeEq('edit')) {
-      Notes.upsert({id: note.id, text})
+      Notes.upsert({id, text})
     }
   }
 })()
