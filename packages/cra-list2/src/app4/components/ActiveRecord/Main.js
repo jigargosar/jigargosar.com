@@ -82,23 +82,27 @@ const view = (() => {
       get displayNoteTransformer() {
         const view = this
         return createTransformer(note => {
-          const dn = createObservableObject({
+          const displayNote = createObservableObject({
             props: {
               get childNotes() {
                 return view.findActiveNotesWithParentId(note.id)
               },
-              get isCollapsed() {
-                return _.defaultTo(false, note.collapsed)
+              get hasChildren() {
+                return !_.isEmpty(this.childNotes)
+              },
+
+              get shouldDisplayChildren() {
+                return this.hasChildren && !this.collapsed
               },
             },
             actions: {},
             name: `DisplayNote@${note.id}`,
           })
           _.forEach(
-            defineDelegatePropertyGetter(_.__, note, dn),
+            defineDelegatePropertyGetter(_.__, note, displayNote),
             Notes.allFieldNames,
           )
-          return dn
+          return displayNote
         })
       },
       get notesList() {
@@ -111,11 +115,11 @@ const view = (() => {
         return _.equals(this.mode.name, name)
       },
       findAll(options) {
-        // return _.map(
-        //   this.displayNoteTransformer,
-        //   Notes.findAll(options),
-        // )
-        return Notes.findAll(options)
+        return _.map(
+          this.displayNoteTransformer,
+          Notes.findAll(options),
+        )
+        // return Notes.findAll(options)
       },
       findActiveNotesWithParentId(parentId) {
         return this.findAll(
