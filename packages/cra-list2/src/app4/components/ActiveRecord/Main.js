@@ -73,7 +73,7 @@ const view = (() => {
 })()
 
 function isEditingNote(note) {
-  return note === view.modeProps.note
+  return _.equals(note.id, view.modeProps.id)
 }
 
 // const NoteInput = observer(function NoteInput({note}) {
