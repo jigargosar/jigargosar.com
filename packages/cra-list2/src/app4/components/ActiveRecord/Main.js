@@ -96,6 +96,13 @@ const view = (() => {
               get isEditing() {
                 view.isEditingNote(note)
               },
+              get isAddingChild() {
+                view.isAddModeForParentId(note.id)
+              },
+
+              get isCollapseButtonDisabled() {
+                return !this.hasChildren
+              },
             },
             actions: {},
             name: `DisplayNote@${note.id}`,
@@ -122,7 +129,6 @@ const view = (() => {
           this.displayNoteTransformer,
           Notes.findAll(options),
         )
-        // return Notes.findAll(options)
       },
       findActiveNotesWithParentId(parentId) {
         return this.findAll(
@@ -191,17 +197,8 @@ const view = (() => {
   return view
 })()
 
-function isEditingNote(note) {
-  return view.isEditingNote(note)
-}
-
-function getChildNotes(note) {
-  // return   note.childNotes
-  return view.findActiveNotesWithParentId(note.id)
-}
-
 const ChildNotes = mrInjectAll(function ChildNotes({note}) {
-  const childNotes = getChildNotes(note)
+  const childNotes = note.childNotes
   return (
     <div className={cn('flex items-start mt2')}>
       <List m={'mr3'} className={cn('flex-auto')}>
@@ -211,16 +208,8 @@ const ChildNotes = mrInjectAll(function ChildNotes({note}) {
   )
 })
 
-function isLeafNote(note) {
-  return _.isEmpty(getChildNotes(note))
-}
-
-function shouldHideChildNotes(note) {
-  return isLeafNote(note) || note.collapsed
-}
-
 const Note = mrInjectAll(function Note({note}) {
-  if (isEditingNote(note)) {
+  if (note.isEditing) {
     return <AddEditNote />
   }
   return (
@@ -231,7 +220,7 @@ const Note = mrInjectAll(function Note({note}) {
       <div className={cn('flex-auto flex items-center hide-child ')}>
         <Button
           className={cn('code bw0')}
-          disabled={!!isLeafNote(note)}
+          disabled={note.isCollapseButtonDisabled}
           onClick={() => view.onToggleNoteCollapsed(note)}
         >
           {note.collapsed ? `>` : `v`}
@@ -248,7 +237,7 @@ const Note = mrInjectAll(function Note({note}) {
           <Button onClick={() => view.onDelete(note)}>x</Button>
         </div>
       </div>
-      {!shouldHideChildNotes(note) && <ChildNotes note={note} />}
+      {note.shouldDisplayChildren && <ChildNotes note={note} />}
     </ListItem>
   )
 })
