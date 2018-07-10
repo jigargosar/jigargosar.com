@@ -19,7 +19,6 @@ import {ActiveRecord} from '../../mobx/ActiveRecord'
 import {
   createObservableObject,
   mAutoRun,
-  mTrace,
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
 import FocusTrap from 'focus-trap-react'

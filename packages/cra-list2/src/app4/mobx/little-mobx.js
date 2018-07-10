@@ -39,6 +39,7 @@ export const mJS = m.toJS
 export const mJSRejectFn = _.compose(_.reject(RA.isFunction), m.toJS)
 export const mSpy = m.spy
 export const mIntercept = m.intercept
+export const mObserve = m.observe
 export const mActionBound = m.action.bound
 export const mAction = m.action
 export const mComputed = m.computed
