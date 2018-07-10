@@ -94,10 +94,10 @@ const view = (() => {
                 return this.hasChildren && !note.collapsed
               },
               get isEditing() {
-                view.isEditingNote(note)
+                return view.isEditingNote(note)
               },
               get isAddingChild() {
-                view.isAddModeForParentId(note.id)
+                return view.isAddModeForParentId(note.id)
               },
 
               get isCollapseButtonDisabled() {
@@ -197,11 +197,17 @@ const view = (() => {
   return view
 })()
 
-const ChildNotes = mrInjectAll(function ChildNotes({note}) {
-  const childNotes = note.childNotes
+const ChildNotes = mrInjectAll(function ChildNotes({
+  childNotes,
+  showAddNote,
+}) {
+  if (!showAddNote && _.isEmpty(childNotes)) {
+    return null
+  }
   return (
     <div className={cn('flex items-start mt2')}>
       <List m={'mr3'} className={cn('flex-auto')}>
+        {showAddNote && <AddEditNote />}
         {renderKeyedById(Note, 'note', childNotes)}
       </List>
     </div>
@@ -237,7 +243,10 @@ const Note = mrInjectAll(function Note({note}) {
           <Button onClick={() => view.onDelete(note)}>x</Button>
         </div>
       </div>
-      {note.shouldDisplayChildren && <ChildNotes note={note} />}
+      <ChildNotes
+        showAddNote={note.isAddingChild}
+        childNotes={note.shouldDisplayChildren ? note.childNotes : []}
+      />
     </ListItem>
   )
 })
@@ -261,7 +270,6 @@ const AddEditNote = mrInjectAll(function Note() {
           onKeyDown={_.cond([
             [isAnyHotKey(['enter']), view.onEnter],
             [isAnyHotKey(['escape']), view.onEnter],
-            // [isAnyHotKey['enter'], _.F],
           ])}
         />
       </FocusTrap>
@@ -279,16 +287,16 @@ const ListToolbar = mrInjectAll(function ListToolbar() {
 
 const NoteList = mrInjectAll(function NoteList() {
   const list = view.notesList
-  // const showEditNote = view.isAddModeForParentId(null)
-  const showEditNote = view.isAddMode
-  const showList = !_.isEmpty(list) || showEditNote
+  // const showAddNote = view.isAddModeForParentId(null)
+  const showAddNote = view.isAddMode
+  const showList = !_.isEmpty(list) || showAddNote
   return (
     <div>
       {/*<NoteListShortcuts />*/}
       <ListToolbar />
       {showList && (
         <List>
-          {showEditNote && <AddEditNote />}
+          {showAddNote && <AddEditNote />}
           {renderKeyedById(Note, 'note', list)}
         </List>
       )}
