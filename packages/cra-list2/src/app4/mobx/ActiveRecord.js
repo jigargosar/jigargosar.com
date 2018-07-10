@@ -1,4 +1,4 @@
-import {createObservableObject} from './little-mobx'
+import {createObservableObject, mAutoRun} from './little-mobx'
 import {nanoid} from '../model/util'
 import {_, validate} from '../utils'
 import {storage} from '../services/storage'
@@ -35,10 +35,13 @@ export function ActiveRecord({
         }
         return this.find({filter: _.propEq('id', id)})
       },
+      get snapshot() {
+        return _.map(r => r.snapshot, this.records)
+      },
     },
     actions: {
       saveRecord(record) {
-        adapter.upsert(record.toJSON())
+        // adapter.upsert(record.snapshot)
         if (record.isNew) {
           this.records.push(record)
           record.isNew = false
@@ -90,6 +93,26 @@ export function ActiveRecord({
     name: collectionName,
   }
 
+  const activeRecord = _.compose(
+    observableObject =>
+      createObservableObject({
+        observableObject,
+        computed: createQueries(observableObject),
+      }),
+    createObservableObject,
+  )(options)
+
+  activeRecord.load()
+
+  mAutoRun(
+    () => {
+      adapter.saveAll(activeRecord.snapshot)
+    },
+    {name: 'save ActiveRecord'},
+  )
+
+  return activeRecord
+
   function hasPersistenceFields(updates) {
     const nonVolatileFieldNames = _.difference(
       _.keys(updates),
@@ -117,18 +140,6 @@ export function ActiveRecord({
       _.keys,
     )(updates)
   }
-
-  const activeRecord = _.compose(
-    observableObject =>
-      createObservableObject({
-        observableObject,
-        computed: createQueries(observableObject),
-      }),
-    createObservableObject,
-  )(options)
-
-  activeRecord.load()
-  return activeRecord
 
   function createQueries(activeRecord) {
     return _.reduce(
@@ -166,12 +177,14 @@ export function ActiveRecord({
   }
 
   function fromJSON(json) {
-    return createObservableObject({
+    const obs = createObservableObject({
       props: {
         ...json,
         isNew: _.defaultTo(false, json.isNew),
-        toJSON() {
-          return _.pickAll(
+      },
+      computed: {
+        get snapshot() {
+          return _.pick(
             ['id', 'createdAt', 'modifiedAt', ...fieldNames],
             this,
           )
@@ -184,24 +197,30 @@ export function ActiveRecord({
       },
       name: json.id,
     })
+    return obs
   }
 }
 
 function LocalStorageAdapter({name}) {
+  function loadAll() {
+    return storage.get(name) || []
+  }
+
+  function saveAll(list) {
+    validate('A', [list])
+    storage.set(name, list)
+  }
   function upsert(record) {
     validate('S', [record.id])
-
+    debugger
     const updatedList = (() => {
       const all = loadAll()
       const idx = _.findIndex(_.eqProps('id', record), all)
       const update = idx > -1 ? _.update(idx) : _.append
       return update(record, all)
     })()
-    storage.set(name, updatedList)
-  }
 
-  function loadAll() {
-    return storage.get(name) || []
+    saveAll(updatedList)
   }
-  return {loadAll, upsert}
+  return {loadAll, upsert, saveAll}
 }
