@@ -247,6 +247,12 @@ const Note = mrInjectAll(function Note({note}) {
         )}
       </div>
       <Button
+        onClick={() => view.onAddChild(note)}
+        className={cn('child')}
+      >
+        +
+      </Button>
+      <Button
         onClick={() => note.setDeleted(true)}
         className={cn('child')}
       >
