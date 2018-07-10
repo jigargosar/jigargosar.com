@@ -309,12 +309,7 @@ const NoteList = mrInjectAll(function NoteList() {
     <div>
       {/*<NoteListShortcuts />*/}
       <ListToolbar />
-      {showList && (
-        <List>
-          {showAddNote && <AddEditNote />}
-          {renderKeyedById(Note, 'note', list)}
-        </List>
-      )}
+      <ChildNotes showAddNote={showAddNote} childNotes={list} />
     </div>
   )
 })
