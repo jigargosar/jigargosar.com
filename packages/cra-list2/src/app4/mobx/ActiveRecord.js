@@ -96,7 +96,15 @@ export function ActiveRecord({
   }
 
   function removeInvalidUpdateKeys(values) {
-    return _.pick(fieldNames, values)
+    const validValues = _.pick(fieldNames, values)
+    console.assert(
+      _.equals(values, validValues),
+      `Invalid values=`,
+      _.omit(fieldNames, values),
+      'values=',
+      values,
+    )
+    return validValues
   }
 
   function removeDuplicateUpdates(record, updates) {
