@@ -24,6 +24,7 @@ import {
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
 import FocusTrap from 'focus-trap-react'
+import {AppHeaderBar} from '../mobx/AppHeaderBar'
 
 function getActiveQuery({filters = []} = {}) {
   return {
@@ -317,22 +318,16 @@ const NoteList = mrInjectAll(function NoteList() {
   )
 })
 
-const AppHeader = mrInjectAll(function AppHeader() {
-  return (
-    <div className={'flex items-center pv3 shadow-1 bg-light-blue'}>
-      <Title
-        className={cn('flex-auto')}
-      >{`Active Record Notes: mode:${view.mode.name}`}</Title>
-    </div>
-  )
-})
-
-const Main = mrInjectAll(function App() {
+const Main = mrInjectAll(function Main() {
   return (
     <RootContainer>
       <FocusTrap focusTrapOptions={{escapeDeactivates: false}}>
+        <AppHeaderBar>
+          <Title className={cn('flex-auto')}>
+            {`Active Record Notes: mode:${view.mode.name}`}
+          </Title>
+        </AppHeaderBar>
         <CenterLayout>
-          <AppHeader />
           <NoteList />
           <div className={cn('ma3')} />
         </CenterLayout>
