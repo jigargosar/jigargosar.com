@@ -110,6 +110,61 @@ const Note = mrInjectAll(function Note({note}) {
   )
 })
 
+const NoteTree = mrInjectAll(function NoteList({view}) {
+  return (
+    <F>
+      <TreeToolbar />
+      <ChildNotes
+        m={'mh0 mh3-ns'}
+        showAddNote={view.isAddModeForParentId(null)}
+        childNotes={view.noteList}
+      />
+    </F>
+  )
+})
+
+const OutlineChildNotes = mrInjectAll(function ChildNotes({
+  childNotes,
+  m = 'mr3 mt2',
+}) {
+  if (_.isEmpty(childNotes)) {
+    return <F />
+  }
+  return (
+    <List m={m} className={cn('flex-auto')}>
+      {renderKeyedById(NoteOutline, 'note', childNotes)}
+    </List>
+  )
+})
+
+const NoteOutline = mrInjectAll(function NoteOutline({note, view}) {
+  return (
+    <ListItem
+      className={cn('pointer flex flex-column lh-copy')}
+      p={'pv2 pl3'}
+    >
+      <div className={cn('flex')}>
+        <input
+          className={cn(
+            'input-reset bw1 b--solid flex-auto ma0 pa1 lh-copy light-blue hover-blue outline-0',
+          )}
+          value={note.text}
+          onChange={note.onTextChange}
+          onFocus={e => e.target.setSelectionRange(0, 9999)}
+          onBlur={note.onTextBlur}
+          onKeyDown={_.cond([
+            [isAnyHotKey(['enter']), wrapPD(view.onEnter)],
+            [isAnyHotKey(['escape']), wrapPD(view.onEscape)],
+          ])}
+        />
+      </div>
+      <OutlineChildNotes
+        childNotes={note.shouldDisplayChildren ? note.childNotes : []}
+      />
+    </ListItem>
+  )
+})
+
 const TreeToolbar = mrInjectAll(function ListToolbar({view}) {
   return (
     <Section className={cn('pl3')}>
@@ -118,13 +173,12 @@ const TreeToolbar = mrInjectAll(function ListToolbar({view}) {
   )
 })
 
-const NoteTree = mrInjectAll(function NoteList({view}) {
+const NoteOutlineTree = mrInjectAll(function NoteList({view}) {
   return (
     <F>
       <TreeToolbar />
-      <ChildNotes
+      <OutlineChildNotes
         m={'mh0 mh3-ns'}
-        showAddNote={view.isAddModeForParentId(null)}
         childNotes={view.noteList}
       />
     </F>
@@ -140,6 +194,7 @@ const Main = mrInjectAll(function Main({view}) {
         </Title>
       </AppHeaderBar>
       <CenterLayout>
+        <NoteOutlineTree />
         <NoteTree />
       </CenterLayout>
     </RootContainer>
