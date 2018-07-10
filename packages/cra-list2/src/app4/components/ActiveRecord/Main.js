@@ -153,6 +153,8 @@ function isEditingNote(note) {
 }
 
 const Note = mrInjectAll(function Note({note}) {
+  console.log(`note`, note)
+  console.log('note.collapsed', note.collapsed)
   if (isEditingNote(note)) {
     return <AddEditNote />
   }
