@@ -243,26 +243,31 @@ const Note = mrInjectAll(function Note({note}) {
   return (
     <ListItem
       onDoubleClick={() => view.onEditNote(note)}
-      className={cn('pointer flex items-center hide-child lh-copy')}
+      className={cn('pointer flex flex-column hide-child lh-copy')}
       p={'pv2 pl3'}
     >
-      <div className={cn('flex-auto mr2')}>
-        {note.text || (
-          <span className={cn('light-silver')}>Empty Text</span>
-        )}
+      <div className={cn('flex-auto flex items-center')}>
+        <div className={cn('flex-auto mr2')}>
+          {note.text || (
+            <span className={cn('light-silver')}>Empty Text</span>
+          )}
+        </div>
+        <Button
+          onClick={() => view.onAddChild(note)}
+          className={cn('child')}
+        >
+          +
+        </Button>
+        <Button
+          onClick={() => note.setDeleted(true)}
+          className={cn('child')}
+        >
+          x
+        </Button>
       </div>
-      <Button
-        onClick={() => view.onAddChild(note)}
-        className={cn('child')}
-      >
-        +
-      </Button>
-      <Button
-        onClick={() => note.setDeleted(true)}
-        className={cn('child')}
-      >
-        x
-      </Button>
+      <List>
+        <ListItem>{'child1'}</ListItem>
+      </List>
     </ListItem>
   )
 })
