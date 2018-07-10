@@ -32,7 +32,7 @@ function getActiveQuery({filters = []} = {}) {
 const Notes = ActiveRecord({
   name: 'Note',
   fieldNames: ['text', 'deleted', 'parentId', 'collapsed'],
-  volatileFieldNames: ['collapsed'],
+  // volatileFieldNames: ['collapsed'],
   queries: {
     active: getActiveQuery({
       filters: [_.propSatisfies(_.isNil, 'parentId')],
@@ -99,10 +99,16 @@ const view = (() => {
       get isAddMode() {
         return this.modeNameEq('add')
       },
+      isNoteCollapsed(note) {
+        return _.defaultTo(false, note.collapsed)
+      },
     },
     actions: {
       onToggleNoteCollapsed(note) {
-        Notes.upsert({id: note.id, collapsed: !isNoteCollapsed(note)})
+        Notes.upsert({
+          id: note.id,
+          collapsed: !this.isNoteCollapsed(note),
+        })
       },
       onDelete(note) {
         Notes.upsert({id: note.id, deleted: true})
@@ -146,17 +152,14 @@ function isEditingNote(note) {
   return _.equals(note.id, view.mode.id)
 }
 
-function isNoteCollapsed(note) {
-  return _.defaultTo(false, note.collapsed)
-}
-
 const Note = mrInjectAll(function Note({note}) {
   if (isEditingNote(note)) {
     return <AddEditNote />
   }
   const childNotes = view.findActiveNotesWithParentId(note.id)
   const hasChildNotes = !_.isEmpty(childNotes)
-  const isCollapsed = isNoteCollapsed(note)
+  const isCollapsed = view.isNoteCollapsed(note)
+  const showChildNotes = hasChildNotes && !isCollapsed
 
   return (
     <ListItem
@@ -183,7 +186,7 @@ const Note = mrInjectAll(function Note({note}) {
           <Button onClick={() => view.onDelete(note)}>x</Button>
         </div>
       </div>
-      {hasChildNotes && (
+      {showChildNotes && (
         <div className={cn('flex items-start mt2')}>
           <List m={'mr3'} className={cn('flex-auto')}>
             {renderKeyedById(Note, 'note', childNotes)}
