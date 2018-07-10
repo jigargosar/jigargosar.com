@@ -8,11 +8,18 @@ import {
   Section,
   Title,
 } from '../ui'
-import {cn, isAnyHotKey, mrInjectAll, renderKeyedById} from '../utils'
+import {
+  cn,
+  isAnyHotKey,
+  mrInjectAll,
+  observer,
+  renderKeyedById,
+} from '../utils'
 import {ActiveRecord} from '../../mobx/ActiveRecord'
 import {
   createObservableObject,
   mAutoRun,
+  mTrace,
 } from '../../mobx/little-mobx'
 import {_} from '../../utils'
 import FocusTrap from 'focus-trap-react'
@@ -154,7 +161,7 @@ function isEditingNote(note) {
   return _.equals(note.id, view.mode.id)
 }
 
-const Note = mrInjectAll(function Note({note}) {
+const Note = observer(function Note({note}) {
   // console.log(`note`, note)
   // console.log('note.collapsed', note.collapsed)
   if (isEditingNote(note)) {
@@ -162,9 +169,7 @@ const Note = mrInjectAll(function Note({note}) {
   }
   const childNotes = view.findActiveNotesWithParentId(note.id)
   const hasChildNotes = !_.isEmpty(childNotes)
-  const isCollapsed = view.isNoteCollapsed(note)
-  const showChildNotes = hasChildNotes && !isCollapsed
-
+  const showChildNotes = hasChildNotes && !note.collapsed
   return (
     <ListItem
       className={cn('pointer flex flex-column lh-copy')}
@@ -176,7 +181,7 @@ const Note = mrInjectAll(function Note({note}) {
           disabled={!hasChildNotes}
           onClick={() => view.onToggleNoteCollapsed(note)}
         >
-          {isCollapsed ? `>` : `v`}
+          {note.collapsed ? `>` : `v`}
         </Button>
 
         <div className={cn('flex-auto mr2')}>
