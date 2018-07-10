@@ -20,24 +20,23 @@ import FocusTrap from 'focus-trap-react'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {RootContainer} from '../mobx/RootContainer'
 
-const ChildNotes = mrInjectAll(
-  /**
-   * @return {null}
-   */
-  function ChildNotes({childNotes, showAddNote, m = 'mr3 mt2'}) {
-    if (!showAddNote && _.isEmpty(childNotes)) {
-      return null
-    }
-    return (
-      <List m={m} className={cn('flex-auto')}>
-        {showAddNote && <NoteLineEditMode />}
-        {renderKeyedById(Note, 'note', childNotes)}
-      </List>
-    )
-  },
-)
+const ChildNotes = mrInjectAll(function ChildNotes({
+  childNotes,
+  showAddNote,
+  m = 'mr3 mt2',
+}) {
+  if (!showAddNote && _.isEmpty(childNotes)) {
+    return <F />
+  }
+  return (
+    <List m={m} className={cn('flex-auto')}>
+      {showAddNote && <NoteLineEditMode />}
+      {renderKeyedById(Note, 'note', childNotes)}
+    </List>
+  )
+})
 
-const NoteLine = mrInjectAll(function NoteLine({note, view}) {
+const NoteLineListMode = mrInjectAll(function NoteLine({note, view}) {
   return (
     <div className={cn('flex-auto flex items-center hide-child ')}>
       <Button
@@ -59,20 +58,6 @@ const NoteLine = mrInjectAll(function NoteLine({note, view}) {
         <Button onClick={() => view.onDelete(note)}>x</Button>
       </div>
     </div>
-  )
-})
-const Note = mrInjectAll(function Note({note}) {
-  return (
-    <ListItem
-      className={cn('pointer flex flex-column lh-copy')}
-      p={'pv2 pl3'}
-    >
-      {note.isEditing ? <NoteLineEditMode /> : <NoteLine note={note} />}
-      <ChildNotes
-        showAddNote={note.isAddingChild}
-        childNotes={note.shouldDisplayChildren ? note.childNotes : []}
-      />
-    </ListItem>
   )
 })
 
@@ -102,6 +87,25 @@ const NoteLineEditMode = mrInjectAll(function NoteLineEdit({view}) {
           ])}
         />
       </FocusTrap>
+    </ListItem>
+  )
+})
+
+const Note = mrInjectAll(function Note({note}) {
+  return (
+    <ListItem
+      className={cn('pointer flex flex-column lh-copy')}
+      p={'pv2 pl3'}
+    >
+      {note.isEditing ? (
+        <NoteLineEditMode />
+      ) : (
+        <NoteLineListMode note={note} />
+      )}
+      <ChildNotes
+        showAddNote={note.isAddingChild}
+        childNotes={note.shouldDisplayChildren ? note.childNotes : []}
+      />
     </ListItem>
   )
 })
