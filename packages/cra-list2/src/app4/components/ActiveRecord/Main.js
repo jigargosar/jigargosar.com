@@ -93,7 +93,6 @@ const view = (() => {
               get shouldDisplayChildren() {
                 return this.hasChildren && !note.collapsed
               },
-
               get isEditing() {
                 view.isEditingNote(note)
               },
