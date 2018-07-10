@@ -175,24 +175,11 @@ const Note = mrInjectAll(function Note({note}) {
             <span className={cn('light-silver')}>Empty Text</span>
           )}
         </div>
-        <Button
-          onClick={() => view.onEditNote(note)}
-          className={cn('child')}
-        >
-          e
-        </Button>
-        <Button
-          onClick={() => view.onAddChild(note)}
-          className={cn('child')}
-        >
-          +
-        </Button>
-        <Button
-          onClick={() => view.onDelete(note)}
-          className={cn('child')}
-        >
-          x
-        </Button>
+        <div className={cn('child2')}>
+          <Button onClick={() => view.onEditNote(note)}>e</Button>
+          <Button onClick={() => view.onAddChild(note)}>+</Button>
+          <Button onClick={() => view.onDelete(note)}>x</Button>
+        </div>
       </div>
       {hasChildNotes && (
         <div className={cn('flex items-start mt2')}>
@@ -208,7 +195,10 @@ const Note = mrInjectAll(function Note({note}) {
 const AddEditNote = mrInjectAll(function Note() {
   return (
     <ListItem className={cn('flex')}>
-      <FocusTrap className={cn('flex flex-auto')}>
+      <FocusTrap
+        className={cn('flex flex-auto')}
+        focusTrapOptions={{escapeDeactivates: false}}
+      >
         <input
           className={cn(
             'input-reset bw1 b--solid flex-auto ma0 pa1 lh-copy light-blue hover-blue outline-0',
@@ -269,10 +259,12 @@ const AppHeader = mrInjectAll(function AppHeader() {
 const Main = mrInjectAll(function App() {
   return (
     <RootContainer>
-      <CenterLayout>
-        <AppHeader />
-        <NoteList />
-      </CenterLayout>
+      <FocusTrap focusTrapOptions={{escapeDeactivates: false}}>
+        <CenterLayout>
+          <AppHeader />
+          <NoteList />
+        </CenterLayout>
+      </FocusTrap>
     </RootContainer>
   )
 })
