@@ -122,7 +122,11 @@ function View() {
         )
       },
     },
-    actions: {},
+    actions: {
+      clearZoom() {
+        this.zoomedNote = null
+      },
+    },
     name: 'view',
   })
 
