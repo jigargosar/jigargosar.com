@@ -24,7 +24,7 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
       >
         <div
           className={cn(
-            'code bw0 outline-0 pr1 h-100 f4',
+            'code bw0 outline-0 pr2 h-100 f4',
             note.isCollapseButtonDisabled
               ? 'o-0'
               : 'child pointer blue',
@@ -36,10 +36,14 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
           {note.collapsed ? `+` : `-`}
         </div>
 
-        <svg style={{width: 18, height: 18}} viewBox="0 0 18 18">
-          <circle cx="9" cy="9" r="9" fill={'#e0e0e0'} />
-          <circle cx="9" cy="9" r="3" fill={'#666666'} />
-        </svg>
+        <div className={cn('flex')} style={{marginTop: 2}}>
+          <svg style={{width: 18, height: 18}} viewBox="0 0 18 18">
+            {note.collapsed && (
+              <circle cx="9" cy="9" r="9" fill={'#e0e0e0'} />
+            )}
+            <circle cx="9" cy="9" r="3" fill={'#666666'} />
+          </svg>
+        </div>
 
         <input
           className={cn(
