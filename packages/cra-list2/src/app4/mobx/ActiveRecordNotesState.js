@@ -145,9 +145,6 @@ function View() {
           Notes.findAll(options),
         )
       },
-      getParentOfDisplayNote(dn) {
-        return _.head(this.findAll({filter: _.eqProps('id', dn)}))
-      },
       findActiveNotesWithParentId(parentId) {
         return this.findAll(
           getActiveQuery({
