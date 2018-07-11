@@ -12,6 +12,13 @@ if (module.hot) {
   Object.assign(window, require('ramda'))
 }
 
+export const isNotNil = _.complement(_.isNil)
+
+export const dotPath = _.curry(function dotPath(stringPath, obj) {
+  validate('SO', [stringPath, obj])
+  return _.path(stringPath.split('.'), obj)
+})
+
 function _swapElementsAt(x, y, a) {
   // const [ax, ay] = [a[x], a[y]]
   // a[x] = ay
