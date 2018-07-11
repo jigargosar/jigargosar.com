@@ -70,6 +70,11 @@ function View() {
                   ? this.parent.nextSibling
                   : sibling
               },
+              get next() {
+                return this.hasChildren
+                  ? _.head(this.childNotes)
+                  : this.nextSibling
+              },
             },
             actions: {
               update(values) {
