@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 // import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {mRunInAction, oObject} from './mobx/little-mobx'
-import {tryCatchLogError} from './utils'
+import {tryCatchLogError} from './little-ramda'
 import {Provider} from 'mobx-react'
 
 const appState = oObject({}, {}, {name: 'appState'})

@@ -7,7 +7,7 @@ import {
   mJSRejectFn,
 } from './little-mobx'
 import {StorageItem} from '../services/storage'
-import {_} from '../utils'
+import {_} from '../little-ramda'
 import {
   createFirestoreTimestamp,
   firestoreServerTimestamp,

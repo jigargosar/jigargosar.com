@@ -1,6 +1,6 @@
 import {createObservableObject, mWhen} from './little-mobx'
 import {getParsedQS} from '../services/Location'
-import {_} from '../utils'
+import {_} from '../little-ramda'
 import escapeStringRegexp from 'escape-string-regexp'
 
 const hasUrl = _.has('url')

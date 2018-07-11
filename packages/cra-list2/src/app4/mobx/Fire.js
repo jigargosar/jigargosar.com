@@ -2,7 +2,7 @@
 import ow from 'ow'
 import * as mu from 'mobx-utils/lib/mobx-utils'
 import {createObservableObject, oObject} from './little-mobx'
-import {_} from '../utils'
+import {_} from '../little-ramda'
 
 const firebase = require('firebase/app')
 require('firebase/auth')

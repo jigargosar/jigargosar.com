@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button, CenterLayout, TypographyDefaults, Text} from './ui'
 import {cn, F, mrInjectAll, renderKeyedById} from './utils'
-import {_} from '../utils'
+import {_} from '../little-ramda'
 import * as Recompose from 'recompose'
 
 const RightActionButton = _.compose(

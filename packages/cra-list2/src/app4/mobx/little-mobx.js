@@ -1,7 +1,7 @@
 /*eslint-disable*/
 
 import * as m from 'mobx'
-import {_, RA} from '../utils'
+import {_, RA} from '../little-ramda'
 import * as mst from 'mobx-state-tree'
 import {
   ArrayFormatter,

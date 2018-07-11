@@ -8,7 +8,7 @@ import {
   renderKeyedById,
 } from '../utils'
 import {Text} from '../ui'
-import {_} from '../../utils'
+import {_} from '../../little-ramda'
 
 const OutLines = observer(function OutLines({lines}) {
   return renderKeyedById(Outline, 'line', lines)

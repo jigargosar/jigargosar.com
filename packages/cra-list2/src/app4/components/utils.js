@@ -1,7 +1,7 @@
 import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
-import {_, R, RX, validate} from '../utils'
+import {_, R, RX, validate} from '../little-ramda'
 import {setDisplayName, wrapDisplayName} from 'recompose'
 
 export {F, RC, observer, Observer, isHotKey}

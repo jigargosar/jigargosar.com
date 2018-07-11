@@ -1,7 +1,7 @@
 import {createObservableObject, mJS, mReaction} from './little-mobx'
 import {nanoid} from '../model/util'
 import {StorageItem} from '../services/storage'
-import {_, validate} from '../utils'
+import {_, validate} from '../little-ramda'
 
 function Outline({id = nanoid(), text = 'line x', lines = []} = {}) {
   const userProps = ['text']

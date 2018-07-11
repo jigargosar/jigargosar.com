@@ -1,5 +1,5 @@
 import {upsert} from './upsert'
-import {_} from '../utils'
+import {_} from '../little-ramda'
 
 describe('upsert', function() {
   it('should not throw', function() {

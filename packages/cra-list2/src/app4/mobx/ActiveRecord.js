@@ -1,6 +1,6 @@
 import {createObservableObject, mAutoRun} from './little-mobx'
 import {nanoid} from '../model/util'
-import {_, validate} from '../utils'
+import {_, validate} from '../little-ramda'
 import {storage} from '../services/storage'
 
 export function ActiveRecord({

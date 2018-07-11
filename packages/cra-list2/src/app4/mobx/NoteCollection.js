@@ -7,7 +7,7 @@ import {
 } from './little-mobx'
 import {nanoid} from '../model/util'
 import Chance from 'chance'
-import {_, R, validate} from '../utils'
+import {_, R, validate} from '../little-ramda'
 import {localActorId} from '../services/ActorId'
 import {createFieldPath} from './Fire'
 

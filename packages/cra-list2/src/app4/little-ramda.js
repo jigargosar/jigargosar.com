@@ -46,6 +46,15 @@ export function tryCatchLogError(trier) {
   return _.tryCatch(trier, console.error)
 }
 
+export const tapDebug = _.tap(x => {
+  console.log(x)
+  debugger
+})
+
+export const tapLog = _.tap(x => {
+  console.log(x)
+})
+
 export const vProp = R.curry(_prop)
 export const vOmit = R.curry(_omit)
 export const vPick = R.curry(_pick)

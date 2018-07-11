@@ -4,7 +4,8 @@ import {
   createObservableObject,
   createTransformer,
 } from './little-mobx'
-import {_} from '../utils'
+import {_} from '../little-ramda'
+import {isAnyHotKey, wrapPD} from '../components/utils'
 
 function getActiveQuery({filters = []} = {}) {
   return {
@@ -52,6 +53,19 @@ function View() {
               },
               onTextFocus(e) {
                 e.target.setSelectionRange(0, 0)
+              },
+              onTextKeydown(e) {
+                _.cond([
+                  [isAnyHotKey(['enter']), wrapPD(this.onTextEnter)],
+                  [
+                    isAnyHotKey(['escape']),
+                    wrapPD(this.onTextEscape),
+                  ],
+                  [
+                    isAnyHotKey(['down']),
+                    wrapPD(this.onTextArrowDown),
+                  ],
+                ])(e)
               },
               onTextBlur(e) {},
               onTextEnter() {},

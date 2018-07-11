@@ -1,4 +1,4 @@
-import {_, validate} from '../utils'
+import {_, validate} from '../little-ramda'
 
 export const storage = Storage()
 

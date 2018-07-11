@@ -21,7 +21,7 @@ import {
   renderKeyedById,
   wrapPD,
 } from './utils'
-import {_} from '../utils'
+import {_} from '../little-ramda'
 import FocusChild from './mobx/FocusChild'
 import {localActorId, shortenAID} from '../services/ActorId'
 import {LinkTo} from './mobx/Router'

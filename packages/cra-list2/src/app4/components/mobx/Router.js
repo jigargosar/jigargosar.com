@@ -1,5 +1,5 @@
 import React from 'react'
-import {validate} from '../../utils'
+import {validate} from '../../little-ramda'
 import {Link} from '../ui'
 import {mrInjectAll} from '../utils'
 

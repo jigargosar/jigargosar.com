@@ -3,7 +3,7 @@ import {
   Disposers,
   mReaction,
 } from './little-mobx'
-import {_, validate} from '../utils'
+import {_, validate} from '../little-ramda'
 
 import {createBrowserHistory} from 'history'
 

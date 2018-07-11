@@ -6,7 +6,7 @@ import {
 } from './little-mobx'
 import {StorageItem} from '../services/storage'
 import {nanoid} from '../model/util'
-import {_, validate} from '../utils'
+import {_, validate} from '../little-ramda'
 
 function ValueType({value = null, parent} = {}) {
   validate('O', [parent])

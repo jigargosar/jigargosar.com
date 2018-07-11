@@ -1,5 +1,5 @@
 import nanoid from 'nanoid'
-import {_} from '../utils'
+import {_} from '../little-ramda'
 
 export {nanoid}
 

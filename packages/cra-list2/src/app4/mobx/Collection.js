@@ -5,7 +5,7 @@ import {
 } from './little-mobx'
 import {nanoid} from '../model/util'
 import {upsert} from '../model/upsert'
-import {_, validate} from '../utils'
+import {_, validate} from '../little-ramda'
 
 function createCollectionDoc(
   {id = nanoid(), createdAt = Date.now(), ...rest},

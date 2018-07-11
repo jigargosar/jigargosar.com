@@ -1,4 +1,4 @@
-import {_} from './utils'
+import {_} from './little-ramda'
 import {mWhen} from './mobx/little-mobx'
 
 function getLocationHash() {

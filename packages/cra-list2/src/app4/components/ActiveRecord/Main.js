@@ -1,14 +1,7 @@
 import React from 'react'
 import {Button, CenterLayout, List, ListItem, Title} from '../ui'
-import {
-  cn,
-  F,
-  isAnyHotKey,
-  mrInjectAll,
-  renderKeyedById,
-  wrapPD,
-} from '../utils'
-import {_} from '../../utils'
+import {cn, F, mrInjectAll, renderKeyedById} from '../utils'
+import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {RootContainer} from '../mobx/RootContainer'
 
@@ -44,10 +37,7 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
           onChange={note.onTextChange}
           onFocus={note.onTextFocus}
           onBlur={note.onTextBlur}
-          onKeyDown={_.cond([
-            [isAnyHotKey(['enter']), wrapPD(note.onTextEnter)],
-            [isAnyHotKey(['escape']), wrapPD(note.onTextEscape)],
-          ])}
+          onKeyDown={note.onTextKeydown}
         />
       </div>
       <OutlineChildren
