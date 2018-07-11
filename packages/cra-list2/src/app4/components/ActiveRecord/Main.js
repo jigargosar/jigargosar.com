@@ -16,18 +16,22 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
       <div
         className={cn(
           'flex-auto',
-          'flex',
+          'flex items-center',
           'bw1 bb b--black-05',
           'debug_',
         )}
       >
-        <Button
-          className={cn('code bw0')}
-          disabled={note.isCollapseButtonDisabled}
+        <div
+          className={cn(
+            'code bw0 outline-0 pr1',
+            note.isCollapseButtonDisabled ? 'o-0' : 'pointer blue',
+          )}
+          style={{userSelect: 'none'}}
           onClick={note.onToggleExpand}
+          tabIndex={-1}
         >
-          {note.collapsed ? `>` : `v`}
-        </Button>
+          {note.collapsed ? `+` : `-`}
+        </div>
 
         <input
           className={cn(
