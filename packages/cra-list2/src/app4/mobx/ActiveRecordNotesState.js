@@ -57,7 +57,7 @@ function View() {
               update(values) {
                 Notes.upsert({id: note.id, ...values})
               },
-              onDelete(note) {
+              onDelete() {
                 this.update({deleted: true})
               },
               onTextChange(e) {
@@ -77,13 +77,11 @@ function View() {
                   [isAnyHotKey(['enter']), wrapPD(nop)],
                   [isAnyHotKey(['escape']), wrapPD(nop)],
                   [isAnyHotKey(['down']), wrapPD(nop)],
-                  [
-                    isAnyHotKey(['mod+.']),
-                    wrapPD(() => {
-                      view.zoomedNote = this
-                    }),
-                  ],
+                  [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
                 ])(e)
+              },
+              onZoomIn() {
+                view.zoomIntoDisplayNote(this)
               },
             },
             name: `DisplayNote@${note.id}`,
@@ -125,6 +123,9 @@ function View() {
     actions: {
       clearZoom() {
         this.zoomedNote = null
+      },
+      zoomIntoDisplayNote(dn) {
+        this.zoomedNote = dn
       },
     },
     name: 'view',

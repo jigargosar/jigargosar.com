@@ -36,7 +36,11 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
           {note.collapsed ? `+` : `-`}
         </div>
 
-        <div className={cn('flex')} style={{marginTop: 2}}>
+        <div
+          className={cn('flex')}
+          style={{marginTop: 2}}
+          onClick={note.onZoomIn}
+        >
           <svg style={{width: 18, height: 18}} viewBox="0 0 18 18">
             {note.collapsed && (
               <circle cx="9" cy="9" r="9" fill={'#e0e0e0'} />
