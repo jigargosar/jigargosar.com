@@ -95,11 +95,13 @@ const ZoomedNoteHeader = mrInjectAll(function ZoomedNoteHeader({
       <div className={cn('gray ma3')} onClick={view.clearZoom}>
         {`Home`}
       </div>
-      <input
-        className={cn('outline-0 bw0 f2 ma3 mt0')}
-        value={note.text}
-        onChange={note.onTextChange}
-      />
+      <div className={cn('ma3 mt0')}>
+        <input
+          className={cn('outline-0 bw0 f2 w-100')}
+          value={note.text}
+          onChange={note.onTextChange}
+        />
+      </div>
     </F>
   )
 })
