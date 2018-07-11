@@ -19,6 +19,14 @@ export const dotPath = _.curry(function dotPath(stringPath, obj) {
   return _.path(stringPath.split('.'), obj)
 })
 
+export const dotPathOr = _.curry(function dotPathOr(
+  val,
+  stringPath,
+  obj,
+) {
+  return _.defaultTo(val, dotPath(stringPath, obj))
+})
+
 export const mapIndexed = _.addIndex(_.map)
 
 export const forEachIndexed = _.addIndex(_.forEach)

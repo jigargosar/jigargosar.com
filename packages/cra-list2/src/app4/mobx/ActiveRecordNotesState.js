@@ -52,6 +52,24 @@ function View() {
                   onKeyDown: this.onTextKeyDown,
                 }
               },
+              get parent() {
+                return view.getParentOfDisplayNote(this)
+              },
+              get siblings() {
+                return _.isNil(this.parentId)
+                  ? view.rootNoteList
+                  : // : dotPathOr([], 'parent.childNotes', this)
+                    dotPath('parent.childNotes', this)
+              },
+              get index() {
+                return _.compose(_.indexOf(this), this.siblings)(this)
+              },
+              get nextSibling() {
+                const sibling = this.siblings[this.index + 1]
+                return _.isNil(sibling)
+                  ? this.parent.nextSibling
+                  : sibling
+              },
             },
             actions: {
               update(values) {
@@ -88,6 +106,7 @@ function View() {
               onZoomIn() {
                 view.zoomIntoDisplayNote(this)
               },
+
               onDownArrowKey() {},
             },
             name: `DisplayNote@${note.id}`,
@@ -117,6 +136,9 @@ function View() {
           this.displayNoteTransformer,
           Notes.findAll(options),
         )
+      },
+      getParentOfDisplayNote(dn) {
+        return _.head(this.findAll({filter: _.eqProps('id', dn)}))
       },
       findActiveNotesWithParentId(parentId) {
         return this.findAll(
