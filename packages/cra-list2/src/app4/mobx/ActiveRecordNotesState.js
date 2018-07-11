@@ -47,7 +47,7 @@ function View() {
                 return {
                   onChange: this.onTextChange,
                   onFocus: this.onTextFocus,
-                  onBlur: this.onTextBlur,
+                  onBlur: nop,
                   onKeyDown: this.onTextKeyDown,
                 }
               },
@@ -76,6 +76,7 @@ function View() {
                   [isAnyHotKey(['enter']), wrapPD(nop)],
                   [isAnyHotKey(['escape']), wrapPD(nop)],
                   [isAnyHotKey(['down']), wrapPD(nop)],
+                  [isAnyHotKey(['mod+.']), wrapPD(console.log)],
                 ])(e)
               },
             },

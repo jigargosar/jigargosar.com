@@ -1,7 +1,7 @@
 import React from 'react'
 import {CenterLayout, List, ListItem, Title} from '../ui'
 import {cn, F, mrInjectAll, renderKeyedById} from '../utils'
-import {_} from '../../little-ramda'
+import {_, nop} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {RootContainer} from '../mobx/RootContainer'
 
@@ -84,14 +84,22 @@ const OutlineChildren = mrInjectAll(function ChildNotes({
 
 const OutlineRoot = mrInjectAll(function NoteList({view}) {
   return (
-    <F>
+    <div
+      className={cn('bg-white mh0 mh3-ns mb3 mv3-ns shadow-1-ns pv2')}
+    >
+      <div className={cn('gray ma3')}>Home > Reference</div>
+      <input
+        className={cn('outline-0 bw0 f2 ma3 mt0')}
+        value={'Projects'}
+        onChange={nop}
+      />
       <OutlineChildren
-        m={'mh0 mh3-ns mv3'}
+        m={''}
         className={cn('bn bw0')}
-        shadow={'shadow-1'}
+        shadow={''}
         childNotes={view.noteList}
       />
-    </F>
+    </div>
   )
 })
 
