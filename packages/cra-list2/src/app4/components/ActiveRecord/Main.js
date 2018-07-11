@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, CenterLayout, List, ListItem, Title} from '../ui'
+import {CenterLayout, List, ListItem, Title} from '../ui'
 import {cn, F, mrInjectAll, renderKeyedById} from '../utils'
 import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
@@ -18,13 +18,16 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
           'flex-auto',
           'flex items-center',
           'bw1 bb b--black-05',
+          'hide-child',
           'debug_',
         )}
       >
         <div
           className={cn(
-            'code bw0 outline-0 pr1',
-            note.isCollapseButtonDisabled ? 'o-0' : 'pointer blue',
+            'code bw0 outline-0 pr1 h-100 f4',
+            note.isCollapseButtonDisabled
+              ? 'o-0'
+              : 'child pointer blue',
           )}
           style={{userSelect: 'none'}}
           onClick={note.onToggleExpand}
@@ -32,6 +35,11 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
         >
           {note.collapsed ? `+` : `-`}
         </div>
+
+        <svg style={{width: 18, height: 18}} viewBox="0 0 18 18">
+          <circle cx="9" cy="9" r="9" fill={'#e0e0e0'} />
+          <circle cx="9" cy="9" r="3" fill={'#666666'} />
+        </svg>
 
         <input
           className={cn(
