@@ -53,11 +53,20 @@ function View() {
               },
             },
             actions: {
+              update(values) {
+                Notes.upsert({id: note.id, ...values})
+              },
               onDelete(note) {
-                Notes.upsert({id: note.id, deleted: true})
+                this.update({deleted: true})
               },
               onTextChange(e) {
-                Notes.upsert({id: note.id, text: e.target.value})
+                this.update({text: e.target.value})
+              },
+              onToggleExpand() {
+                if (!this.hasChildren) {
+                  return
+                }
+                this.update({collapsed: !note.collapsed})
               },
               onTextFocus(e) {
                 e.target.setSelectionRange(0, 0)
@@ -68,15 +77,6 @@ function View() {
                   [isAnyHotKey(['escape']), wrapPD(nop)],
                   [isAnyHotKey(['down']), wrapPD(nop)],
                 ])(e)
-              },
-              onToggleExpand() {
-                if (!this.hasChildren) {
-                  return
-                }
-                Notes.upsert({
-                  id: note.id,
-                  collapsed: !note.collapsed,
-                })
               },
             },
             name: `DisplayNote@${note.id}`,
