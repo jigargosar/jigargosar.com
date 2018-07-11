@@ -31,7 +31,7 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
         <Button
           className={cn('code bw0')}
           disabled={note.isCollapseButtonDisabled}
-          onClick={() => view.onToggleNoteCollapsed(note)}
+          onClick={note.onToggleExpand}
         >
           {note.collapsed ? `>` : `v`}
         </Button>

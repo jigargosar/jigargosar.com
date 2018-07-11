@@ -47,6 +47,17 @@ function View() {
               onDelete(note) {
                 Notes.upsert({id: note.id, deleted: true})
               },
+              onTextChange(e) {
+                Notes.upsert({id: note.id, text: e.target.value})
+              },
+              onEnter() {},
+              onEscape() {},
+              onToggleExpand() {
+                Notes.upsert({
+                  id: note.id,
+                  collapsed: !note.collapsed,
+                })
+              },
             },
             name: `DisplayNote@${note.id}`,
           })
@@ -64,9 +75,6 @@ function View() {
           this.findActiveNotesWithParentId(null),
         )
       },
-      modeNameEq(name) {
-        return _.equals(this.mode.name, name)
-      },
       findAll(options) {
         return _.map(
           this.displayNoteTransformer,
@@ -81,22 +89,7 @@ function View() {
         )
       },
     },
-    actions: {
-      onToggleNoteCollapsed(note) {
-        Notes.upsert({
-          id: note.id,
-          collapsed: !note.collapsed,
-        })
-      },
-      onTextBlur() {
-        this.save()
-      },
-      onEnter() {
-        this.save()
-      },
-      onEscape() {},
-      save() {},
-    },
+    actions: {},
     name: 'view',
   })
 
