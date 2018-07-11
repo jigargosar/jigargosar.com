@@ -4,7 +4,7 @@ import {
   createObservableObject,
   createTransformer,
 } from './little-mobx'
-import {_, nop} from '../little-ramda'
+import {_, dotPath, nop} from '../little-ramda'
 import {isAnyHotKey, wrapPD} from '../components/utils'
 
 function getActiveQuery({filters = []} = {}) {
@@ -26,6 +26,7 @@ const Notes = ActiveRecord({
 function View() {
   const view = createObservableObject({
     props: {
+      zoomInNote: null,
       get displayNoteTransformer() {
         const view = this
         return createTransformer(note => {
@@ -76,7 +77,12 @@ function View() {
                   [isAnyHotKey(['enter']), wrapPD(nop)],
                   [isAnyHotKey(['escape']), wrapPD(nop)],
                   [isAnyHotKey(['down']), wrapPD(nop)],
-                  [isAnyHotKey(['mod+.']), wrapPD(console.log)],
+                  [
+                    isAnyHotKey(['mod+.']),
+                    wrapPD(() => {
+                      view.zoomInNote = this
+                    }),
+                  ],
                 ])(e)
               },
             },
@@ -91,6 +97,12 @@ function View() {
         })
       },
       get noteList() {
+        return this.zoomedNoteList || this.rootNoteList
+      },
+      get zoomedNoteList() {
+        return dotPath('zoomInNote.childNotes', this)
+      },
+      get rootNoteList() {
         return _.map(
           this.displayNoteTransformer,
           this.findActiveNotesWithParentId(null),
