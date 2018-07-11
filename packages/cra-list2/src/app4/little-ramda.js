@@ -48,9 +48,20 @@ export const tapDebug = _.tap(x => {
   debugger
 })
 
-export const tapLog = _.tap(x => {
-  console.log(x)
-})
+export function tapLogWith(...msgs) {
+  return _.tap((...args) => console.log(...msgs, ...args))
+}
+
+export const tapLog = tapLogWith('tapLog')
+
+export function wrapTapLog(fn) {
+  const fnName = _.defaultTo('wrapTapLog fn', fn.name)
+  return _.compose(
+    tapLogWith(fnName, 'out'),
+    fn,
+    tapLogWith(fnName, 'in'),
+  )
+}
 
 export const vProp = _.curry(function vProp(propName, obj) {
   assert(_.hasIn(propName, obj))
