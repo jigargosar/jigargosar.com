@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 // import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {mRunInAction, oObject} from './mobx/little-mobx'
-import {tryCatchLog, vProp, wrapTapLog} from './little-ramda'
+import {tryCatchLog} from './little-ramda'
 import {Provider} from 'mobx-react'
 
 const appState = oObject({}, {}, {name: 'appState'})
@@ -11,7 +11,6 @@ const appState = oObject({}, {}, {name: 'appState'})
 function render() {
   mRunInAction('Hot Update States', () => {
     console.clear()
-    wrapTapLog(vProp)('foo', {foo: 1})
 
     // Object.assign(appState, require('./mobx').state)
     Object.assign(

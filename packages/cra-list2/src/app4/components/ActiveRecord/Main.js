@@ -34,10 +34,7 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
             'flex-auto ma0 pa1 input-reset bw0 lh-copy outline-0',
           )}
           value={note.text}
-          onChange={note.onTextChange}
-          onFocus={note.onTextFocus}
-          onBlur={note.onTextBlur}
-          onKeyDown={note.onTextKeydown}
+          {...note.textInputHandlers}
         />
       </div>
       <OutlineChildren

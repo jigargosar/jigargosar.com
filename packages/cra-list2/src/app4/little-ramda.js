@@ -78,3 +78,5 @@ export const vPick = _.curry(function vPick(props, obj) {
   assert(RA.isArray(props))
   return _.pick(props, obj)
 })
+
+export function nop() {}

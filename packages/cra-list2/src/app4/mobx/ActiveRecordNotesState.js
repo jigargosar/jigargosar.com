@@ -4,7 +4,7 @@ import {
   createObservableObject,
   createTransformer,
 } from './little-mobx'
-import {_} from '../little-ramda'
+import {_, nop} from '../little-ramda'
 import {isAnyHotKey, wrapPD} from '../components/utils'
 
 function getActiveQuery({filters = []} = {}) {
@@ -43,6 +43,14 @@ function View() {
               get isCollapseButtonDisabled() {
                 return !this.hasChildren
               },
+              get textInputHandlers() {
+                return {
+                  onChange: this.onTextChange,
+                  onFocus: this.onTextFocus,
+                  onBlur: this.onTextBlur,
+                  onKeyDown: this.onTextKeyDown,
+                }
+              },
             },
             actions: {
               onDelete(note) {
@@ -54,23 +62,17 @@ function View() {
               onTextFocus(e) {
                 e.target.setSelectionRange(0, 0)
               },
-              onTextKeydown(e) {
+              onTextKeyDown(e) {
                 _.cond([
-                  [isAnyHotKey(['enter']), wrapPD(this.onTextEnter)],
-                  [
-                    isAnyHotKey(['escape']),
-                    wrapPD(this.onTextEscape),
-                  ],
-                  [
-                    isAnyHotKey(['down']),
-                    wrapPD(this.onTextArrowDown),
-                  ],
+                  [isAnyHotKey(['enter']), wrapPD(nop)],
+                  [isAnyHotKey(['escape']), wrapPD(nop)],
+                  [isAnyHotKey(['down']), wrapPD(nop)],
                 ])(e)
               },
-              onTextBlur(e) {},
-              onTextEnter() {},
-              onTextEscape() {},
               onToggleExpand() {
+                if (!this.hasChildren) {
+                  return
+                }
                 Notes.upsert({
                   id: note.id,
                   collapsed: !note.collapsed,
