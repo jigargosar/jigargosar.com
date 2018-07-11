@@ -22,44 +22,9 @@ const Notes = ActiveRecord({
   fieldNames,
 })
 
-function AddEditMode({id = null, text = '', parentId = null} = {}) {
-  return createObservableObject({
-    props: {
-      id,
-      text,
-      parentId,
-      get name() {
-        return _.isNil(id) ? 'add' : 'edit'
-      },
-    },
-    actions: {
-      onTextChange(e) {
-        this.text = e.target.value
-      },
-      onBeforeChange() {
-        Notes.upsert(_.pick(['id', 'text', 'parentId'], this))
-      },
-    },
-    name: 'AddEditMode',
-  })
-}
-
-function ListMode() {
-  return createObservableObject({
-    props: {
-      name: 'list',
-    },
-    actions: {
-      onBeforeChange() {},
-    },
-    name: 'ListMode',
-  })
-}
-
 function View() {
   const view = createObservableObject({
     props: {
-      mode: ListMode(),
       get displayNoteTransformer() {
         const view = this
         return createTransformer(note => {
@@ -74,18 +39,15 @@ function View() {
               get shouldDisplayChildren() {
                 return this.hasChildren && !note.collapsed
               },
-              get isEditing() {
-                return view.isEditingNote(note)
-              },
-              get isAddingChild() {
-                return view.isAddModeForParentId(note.id)
-              },
-
               get isCollapseButtonDisabled() {
                 return !this.hasChildren
               },
             },
-            actions: {},
+            actions: {
+              onDelete(note) {
+                Notes.upsert({id: note.id, deleted: true})
+              },
+            },
             name: `DisplayNote@${note.id}`,
           })
           attachDelegatingPropertyGetters(
@@ -118,20 +80,6 @@ function View() {
           }),
         )
       },
-      isAddModeForParentId(parentId) {
-        return (
-          this.modeNameEq('add') &&
-          _.equals(this.mode.parentId, parentId)
-        )
-      },
-      get isAddMode() {
-        return this.modeNameEq('add')
-      },
-      isEditingNote(note) {
-        return (
-          this.modeNameEq('edit') && _.equals(note.id, view.mode.id)
-        )
-      },
     },
     actions: {
       onToggleNoteCollapsed(note) {
@@ -140,40 +88,14 @@ function View() {
           collapsed: !note.collapsed,
         })
       },
-      onDelete(note) {
-        Notes.upsert({id: note.id, deleted: true})
-      },
-      onAdd() {
-        view.mode.onBeforeChange()
-        this.mode = AddEditMode()
-      },
-      onAddChild(note) {
-        const parentId = _.propOr(null, 'id', note)
-        view.mode.onBeforeChange()
-        this.mode = AddEditMode({parentId})
-      },
-      onEditNote(note) {
-        view.mode.onBeforeChange()
-        this.mode = AddEditMode(
-          _.pick(['id', 'text', 'parentId'], note),
-        )
-      },
-      onTextChange(e) {
-        this.mode.onTextChange(e)
-      },
       onTextBlur() {
         this.save()
       },
       onEnter() {
         this.save()
       },
-      onEscape() {
-        this.mode = ListMode()
-      },
-      save() {
-        view.mode.onBeforeChange()
-        this.mode = ListMode()
-      },
+      onEscape() {},
+      save() {},
     },
     name: 'view',
   })
