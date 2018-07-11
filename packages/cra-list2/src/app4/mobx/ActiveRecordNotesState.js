@@ -50,8 +50,12 @@ function View() {
               onTextChange(e) {
                 Notes.upsert({id: note.id, text: e.target.value})
               },
-              onEnter() {},
-              onEscape() {},
+              onTextFocus(e) {
+                e.target.setSelectionRange(0, 0)
+              },
+              onTextBlur(e) {},
+              onTextEnter() {},
+              onTextEscape() {},
               onToggleExpand() {
                 Notes.upsert({
                   id: note.id,

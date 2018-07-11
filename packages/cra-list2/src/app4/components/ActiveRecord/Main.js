@@ -42,11 +42,11 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
           )}
           value={note.text}
           onChange={note.onTextChange}
-          onFocus={e => e.target.setSelectionRange(0, 0)}
+          onFocus={note.onTextFocus}
           onBlur={note.onTextBlur}
           onKeyDown={_.cond([
-            [isAnyHotKey(['enter']), wrapPD(note.onEnter)],
-            [isAnyHotKey(['escape']), wrapPD(note.onEscape)],
+            [isAnyHotKey(['enter']), wrapPD(note.onTextEnter)],
+            [isAnyHotKey(['escape']), wrapPD(note.onTextEscape)],
           ])}
         />
       </div>
