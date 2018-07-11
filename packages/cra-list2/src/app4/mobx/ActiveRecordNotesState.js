@@ -76,7 +76,10 @@ function View() {
                 _.cond([
                   [isAnyHotKey(['enter']), wrapPD(nop)],
                   [isAnyHotKey(['escape']), wrapPD(nop)],
-                  [isAnyHotKey(['down']), wrapPD(nop)],
+                  [
+                    isAnyHotKey(['down']),
+                    wrapPD(this.onDownArrowKey),
+                  ],
                   [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
                   [isAnyHotKey(['tab']), wrapPD(nop)],
                   [isAnyHotKey(['shift+tab']), wrapPD(nop)],
@@ -85,6 +88,7 @@ function View() {
               onZoomIn() {
                 view.zoomIntoDisplayNote(this)
               },
+              onDownArrowKey() {},
             },
             name: `DisplayNote@${note.id}`,
           })
