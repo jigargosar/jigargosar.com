@@ -123,34 +123,37 @@ const NoteTree = mrInjectAll(function NoteList({view}) {
   )
 })
 
-const OutlineChildNotes = mrInjectAll(function ChildNotes({
-  childNotes,
-  m = 'mr3 mt2',
-}) {
-  if (_.isEmpty(childNotes)) {
-    return <F />
-  }
-  return (
-    <List m={m} className={cn('flex-auto')}>
-      {renderKeyedById(NoteOutline, 'note', childNotes)}
-    </List>
-  )
-})
-
 const NoteOutline = mrInjectAll(function NoteOutline({note, view}) {
   return (
     <ListItem
-      className={cn('pointer flex flex-column lh-copy')}
-      p={'pv2 pl3'}
+      className={cn('flex flex-column lh-copy')}
+      // p={'pv2 pl3'}
+      p={'pl3'}
+      b={''}
     >
-      <div className={cn('flex')}>
+      <div
+        className={cn(
+          'flex-auto',
+          'flex',
+          'bw1 bb b--black-05',
+          'debug_',
+        )}
+      >
+        <Button
+          className={cn('code bw0')}
+          disabled={note.isCollapseButtonDisabled}
+          onClick={() => view.onToggleNoteCollapsed(note)}
+        >
+          {note.collapsed ? `>` : `v`}
+        </Button>
+
         <input
           className={cn(
-            'input-reset bw1 b--solid flex-auto ma0 pa1 lh-copy light-blue hover-blue outline-0',
+            'flex-auto ma0 pa1 input-reset bw0 lh-copy outline-0',
           )}
           value={note.text}
           onChange={note.onTextChange}
-          onFocus={e => e.target.setSelectionRange(0, 9999)}
+          onFocus={e => e.target.setSelectionRange(0, 0)}
           onBlur={note.onTextBlur}
           onKeyDown={_.cond([
             [isAnyHotKey(['enter']), wrapPD(view.onEnter)],
@@ -162,6 +165,21 @@ const NoteOutline = mrInjectAll(function NoteOutline({note, view}) {
         childNotes={note.shouldDisplayChildren ? note.childNotes : []}
       />
     </ListItem>
+  )
+})
+
+const OutlineChildNotes = mrInjectAll(function ChildNotes({
+  childNotes,
+  m = 'mr3_ mt2_',
+  shadow = '',
+}) {
+  if (_.isEmpty(childNotes)) {
+    return <F />
+  }
+  return (
+    <List m={m} shadow={shadow} className={cn('flex-auto')}>
+      {renderKeyedById(NoteOutline, 'note', childNotes)}
+    </List>
   )
 })
 
@@ -179,6 +197,7 @@ const NoteOutlineTree = mrInjectAll(function NoteList({view}) {
       <TreeToolbar />
       <OutlineChildNotes
         m={'mh0 mh3-ns'}
+        shadow={'shadow-1'}
         childNotes={view.noteList}
       />
     </F>

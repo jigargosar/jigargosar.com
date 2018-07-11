@@ -33,16 +33,18 @@ export const Paper = styled.div.attrs({
 })``
 
 export const List = styled.div.attrs({
-  className: ({m = 'mh0 mh3-ns'}) => cn(paperCN, m),
+  className: ({m = 'mh0 mh3-ns', shadow = 'shadow-1'}) =>
+    cn('bg-white ', m, shadow),
 })``
 
 export const ListItem = styled.div.attrs({
-  className: ({p = 'ph3 pv2'}) => cn('bb bw1 b--black-05', p),
+  className: ({p = 'ph3 pv2', b = 'bb bw1 b--black-05'}) =>
+    cn(b, p, 'debug_'),
 })`
   :last-child {
     border-width: 0;
   }
-  min-height: 42px;
+  //min-height: 42px;
 `
 
 export const Button = styled.button.attrs({
