@@ -55,6 +55,7 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
         </div>
 
         <input
+          ref={note.onTextInputRef}
           className={cn(
             'flex-auto ma0 pa1 input-reset lh-copy outline-0',
             // 'bw0',

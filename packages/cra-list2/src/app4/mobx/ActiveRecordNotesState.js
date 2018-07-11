@@ -4,8 +4,16 @@ import {
   createObservableObject,
   createTransformer,
 } from './little-mobx'
-import {_, dotPath, nop} from '../little-ramda'
+import {
+  _,
+  dotPath,
+  dotPathOr,
+  isIndexOutOfBounds,
+  isNotNil,
+  nop,
+} from '../little-ramda'
 import {isAnyHotKey, wrapPD} from '../components/utils'
+import ReactDOM from 'react-dom'
 
 function getActiveQuery({filters = []} = {}) {
   return {
@@ -27,11 +35,15 @@ function View() {
   const view = createObservableObject({
     props: {
       zoomedNote: null,
+      get zoomedNoteId() {
+        return dotPathOr(null, 'zoomedNote', this)
+      },
       get displayNoteTransformer() {
         const view = this
         return createTransformer(note => {
           const displayNote = createObservableObject({
             props: {
+              textInputRef: null,
               get childNotes() {
                 return view.findActiveNotesWithParentId(note.id)
               },
@@ -52,8 +64,21 @@ function View() {
                   onKeyDown: this.onTextKeyDown,
                 }
               },
+              focusTextInput() {
+                const inputEl = ReactDOM.findDOMNode(
+                  this.textInputRef,
+                )
+                if (inputEl) {
+                  inputEl.focus()
+                } else {
+                  debugger
+                }
+              },
             },
             actions: {
+              onTextInputRef(ref) {
+                this.textInputRef = ref
+              },
               update(values) {
                 Notes.upsert({id: note.id, ...values})
               },
@@ -88,8 +113,9 @@ function View() {
               onZoomIn() {
                 view.zoomIntoDisplayNote(this)
               },
-
-              onDownArrowKey() {},
+              onDownArrowKey() {
+                view.focusNextDisplayNote(this)
+              },
             },
             name: `DisplayNote@${note.id}`,
           })
@@ -128,6 +154,42 @@ function View() {
             filters: [_.propEq('parentId', parentId)],
           }),
         )
+      },
+      getSiblingsOFDisplayNote(dn) {
+        if (dn.parentId === this.zoomedNoteId) {
+          return this.noteList
+        } else {
+          const results = this.findAll({
+            filter: _.propEq('id', dn.parentId),
+          })
+          const parentDisplayNote = _.head(results)
+          console.assert(isNotNil(parentDisplayNote))
+          return parentDisplayNote.childNotes
+        }
+      },
+      getIndexOfDisplayNote(dn) {
+        const siblingsOFDisplayNote = this.getSiblingsOFDisplayNote(
+          dn,
+        )
+        const dnIdx = _.findIndex(
+          _.eqProps('id', dn),
+          siblingsOFDisplayNote,
+        )
+        console.assert(
+          !isIndexOutOfBounds(dnIdx, siblingsOFDisplayNote),
+        )
+        return dnIdx
+      },
+      focusNextDisplayNote(dn) {
+        const nextIndex = this.getIndexOfDisplayNote(dn) + 1
+        const siblingsOFDisplayNote = this.getSiblingsOFDisplayNote(
+          dn,
+        )
+        if (isIndexOutOfBounds(nextIndex, siblingsOFDisplayNote)) {
+          debugger
+        } else {
+          siblingsOFDisplayNote[nextIndex].focusTextInput()
+        }
       },
     },
     actions: {
