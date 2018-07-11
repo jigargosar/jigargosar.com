@@ -39,7 +39,7 @@ export const isIndexOutOfBounds = _.curry(function isIndexOutOfBounds(
   return idx < 0 || idx >= list.length
 })
 
-export function tryCatchLogError(trier) {
+export function tryCatchLog(trier) {
   return _.tryCatch(trier, console.error)
 }
 

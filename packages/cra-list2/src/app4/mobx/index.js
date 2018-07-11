@@ -3,7 +3,7 @@ import {Disposers, mReaction} from './little-mobx'
 import {NoteListView} from './NoteListView'
 import {NoteCollection} from './NoteCollection'
 import {Fire} from './Fire'
-import {tryCatchLogError} from '../little-ramda'
+import {tryCatchLog} from '../little-ramda'
 // import {startFireNoteCollectionSync} from './FireNoteCollection'
 import {Router} from './Router'
 import {BrowserExtensionPopup} from './BrowserExtensionPopup'
@@ -36,7 +36,7 @@ export {state}
 
 if (module.hot) {
   module.hot.dispose(
-    tryCatchLogError(() => {
+    tryCatchLog(() => {
       console.clear()
       console.log('disposing state')
       disposers.dispose()
