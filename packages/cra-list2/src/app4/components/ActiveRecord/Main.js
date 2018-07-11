@@ -1,7 +1,7 @@
 import React from 'react'
 import {CenterLayout, List, ListItem, Title} from '../ui'
 import {cn, F, mrInjectAll, renderKeyedById} from '../utils'
-import {_, nop} from '../../little-ramda'
+import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {RootContainer} from '../mobx/RootContainer'
 
@@ -82,17 +82,27 @@ const OutlineChildren = mrInjectAll(function ChildNotes({
   )
 })
 
+const ZoomedNoteHeader = mrInjectAll(function ZoomedNoteHeader({
+  view,
+}) {
+  const note = view.zoomedNote
+  return (
+    <F>
+      <div className={cn('gray ma3')}>Home > Reference</div>
+      <input
+        className={cn('outline-0 bw0 f2 ma3 mt0')}
+        value={note.text}
+        onChange={note.onTextChange}
+      />
+    </F>
+  )
+})
 const OutlineRoot = mrInjectAll(function NoteList({view}) {
   return (
     <div
       className={cn('bg-white mh0 mh3-ns mb3 mv3-ns shadow-1-ns pv2')}
     >
-      <div className={cn('gray ma3')}>Home > Reference</div>
-      <input
-        className={cn('outline-0 bw0 f2 ma3 mt0')}
-        value={'Projects'}
-        onChange={nop}
-      />
+      {view.zoomedNote && <ZoomedNoteHeader />}
       <OutlineChildren
         m={''}
         className={cn('bn bw0')}

@@ -26,7 +26,7 @@ const Notes = ActiveRecord({
 function View() {
   const view = createObservableObject({
     props: {
-      zoomInNote: null,
+      zoomedNote: null,
       get displayNoteTransformer() {
         const view = this
         return createTransformer(note => {
@@ -80,7 +80,7 @@ function View() {
                   [
                     isAnyHotKey(['mod+.']),
                     wrapPD(() => {
-                      view.zoomInNote = this
+                      view.zoomedNote = this
                     }),
                   ],
                 ])(e)
@@ -100,7 +100,7 @@ function View() {
         return this.zoomedNoteList || this.rootNoteList
       },
       get zoomedNoteList() {
-        return dotPath('zoomInNote.childNotes', this)
+        return dotPath('zoomedNote.childNotes', this)
       },
       get rootNoteList() {
         return _.map(
