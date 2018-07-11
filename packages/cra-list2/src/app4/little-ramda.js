@@ -20,37 +20,24 @@ export const dotPath = _.curry(function dotPath(stringPath, obj) {
 })
 
 export const mapIndexed = _.addIndex(_.map)
+
 export const forEachIndexed = _.addIndex(_.forEach)
 
-function _swapElementsAt(x, y, a) {
-  // const [ax, ay] = [a[x], a[y]]
-  // a[x] = ay
-  // a[y] = ax
+export const swapElementsAt = _.curry(function swapElementsAt(
+  x,
+  y,
+  a,
+) {
   return _.compose(_.update(y, a[x]), _.update(x, a[y]))(a)
-}
+})
 
-export const swapElementsAt = _.curry(_swapElementsAt)
-
-function _isInvalidListIdx(idx, list) {
+export const isIndexOutOfBounds = _.curry(function isIndexOutOfBounds(
+  idx,
+  list,
+) {
+  validate('NA', [idx, list])
   return idx < 0 || idx >= list.length
-}
-
-export const isInvalidListIdx = _.curry(_isInvalidListIdx)
-
-function _prop(propName, obj) {
-  assert(R.hasIn(propName, obj))
-  return R.prop(propName, obj)
-}
-
-function _omit(props, obj) {
-  assert(RA.isArray(props))
-  return R.omit(props, obj)
-}
-
-function _pick(props, obj) {
-  assert(RA.isArray(props))
-  return R.pick(props, obj)
-}
+})
 
 export function tryCatchLogError(trier) {
   return _.tryCatch(trier, console.error)
@@ -65,6 +52,17 @@ export const tapLog = _.tap(x => {
   console.log(x)
 })
 
-export const vProp = R.curry(_prop)
-export const vOmit = R.curry(_omit)
-export const vPick = R.curry(_pick)
+export const vProp = _.curry(function vProp(propName, obj) {
+  assert(_.hasIn(propName, obj))
+  return _.prop(propName, obj)
+})
+
+export const vOmit = _.curry(function vOmit(props, obj) {
+  assert(RA.isArray(props))
+  return _.omit(props, obj)
+})
+
+export const vPick = _.curry(function vPick(props, obj) {
+  assert(RA.isArray(props))
+  return _.pick(props, obj)
+})
