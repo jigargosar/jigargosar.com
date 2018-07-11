@@ -20,6 +20,7 @@ export const dotPath = _.curry(function dotPath(stringPath, obj) {
 })
 
 export const mapIndexed = _.addIndex(_.map)
+export const forEachIndexed = _.addIndex(_.forEach)
 
 function _swapElementsAt(x, y, a) {
   // const [ax, ay] = [a[x], a[y]]
