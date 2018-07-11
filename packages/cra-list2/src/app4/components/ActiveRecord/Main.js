@@ -10,21 +10,21 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
     <ListItem
       className={cn('flex flex-column lh-copy')}
       // p={'pv2 pl3'}
-      p={'pl3'}
+      p={''}
       b={''}
     >
       <div
         className={cn(
           'flex-auto',
           'flex items-center',
-          'bw1 bb b--black-05',
+          // 'bw1 bb b--black-05',
           'hide-child',
           'debug_',
         )}
       >
         <div
           className={cn(
-            'code bw0 outline-0 pr2 h-100 f4',
+            'code bw0 outline-0 pl2 pr1 h-100 f4',
             note.isCollapseButtonDisabled
               ? 'o-0'
               : 'child pointer blue',
@@ -47,7 +47,9 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
 
         <input
           className={cn(
-            'flex-auto ma0 pa1 input-reset bw0 lh-copy outline-0',
+            'flex-auto ma0 pa1 input-reset lh-copy outline-0',
+            // 'bw0',
+            'bn bw1 bb b--black-05',
           )}
           value={note.text}
           {...note.textInputHandlers}
@@ -62,14 +64,19 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
 
 const OutlineChildren = mrInjectAll(function ChildNotes({
   childNotes,
-  m = 'mr3_ mt2_',
+  m = 'ml4 mr3_ mt2_',
   shadow = '',
+  className,
 }) {
   if (_.isEmpty(childNotes)) {
     return <F />
   }
   return (
-    <List m={m} shadow={shadow} className={cn('flex-auto')}>
+    <List
+      m={m}
+      shadow={shadow}
+      className={cn('flex-auto', 'bw1 bl b--light-gray', className)}
+    >
       {renderKeyedById(Outline, 'note', childNotes)}
     </List>
   )
@@ -80,6 +87,7 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
     <F>
       <OutlineChildren
         m={'mh0 mh3-ns mv3'}
+        className={cn('bn bw0')}
         shadow={'shadow-1'}
         childNotes={view.noteList}
       />
