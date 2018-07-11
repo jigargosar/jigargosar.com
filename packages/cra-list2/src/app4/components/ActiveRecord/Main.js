@@ -1,9 +1,14 @@
 import React from 'react'
-import {CenterLayout, List, ListItem, Title} from '../ui'
+import {
+  CenterLayout,
+  List,
+  ListItem,
+  Title,
+  TypographyDefaults,
+} from '../ui'
 import {cn, F, mrInjectAll, renderKeyedById} from '../utils'
 import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
-import {RootContainer} from '../mobx/RootContainer'
 
 const Outline = mrInjectAll(function NoteOutline({note, view}) {
   return (
@@ -100,6 +105,11 @@ const ZoomedNoteHeader = mrInjectAll(function ZoomedNoteHeader({
           className={cn('outline-0 bw0 f2 w-100')}
           value={note.text}
           onChange={note.onTextChange}
+          // onFocus={e => {
+          //   console.log(`'onFocus'`, 'onFocus')
+          //   const target = e.target
+          //   setImmediate(() => target.setSelectionRange(0, 0))
+          // }}
         />
       </div>
     </F>
@@ -123,7 +133,7 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
 
 const Main = mrInjectAll(function Main() {
   return (
-    <RootContainer className={cn('mb4')}>
+    <TypographyDefaults className={cn('mb4')}>
       <AppHeaderBar>
         <Title className={cn('flex-auto')}>
           {`Active Record Outliner`}
@@ -132,7 +142,7 @@ const Main = mrInjectAll(function Main() {
       <CenterLayout>
         <OutlineRoot />
       </CenterLayout>
-    </RootContainer>
+    </TypographyDefaults>
   )
 })
 

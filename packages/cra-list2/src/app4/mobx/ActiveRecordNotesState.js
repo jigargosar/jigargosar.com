@@ -78,6 +78,8 @@ function View() {
                   [isAnyHotKey(['escape']), wrapPD(nop)],
                   [isAnyHotKey(['down']), wrapPD(nop)],
                   [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
+                  [isAnyHotKey(['tab']), wrapPD(nop)],
+                  [isAnyHotKey(['shift+tab']), wrapPD(nop)],
                 ])(e)
               },
               onZoomIn() {
