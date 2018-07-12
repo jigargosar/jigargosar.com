@@ -7,7 +7,6 @@ import {
   nop,
   validate,
 } from '../../little-ramda'
-import {nanoid} from '../../model/util'
 import {
   attachDelegatingPropertyGetters,
   createObservableObject,
@@ -25,6 +24,7 @@ import {getActiveQuery, Notes} from './NotesActiveRecord'
 const nCache = {}
 
 function createDisplayNoteTransformer(view) {
+  let counter = 0
   console.log('createDisplayNoteTransformer for', view)
   validate('O', [view])
   const transformer = note => {
@@ -34,7 +34,8 @@ function createDisplayNoteTransformer(view) {
     } else {
       nCache[note.id] = note
     }
-    const _debugName = `DisplayNote@${note.id}@${nanoid()}`
+    counter += 1
+    const _debugName = `DN-${counter}--${note.id}`
     const displayNote = createObservableObject({
       props: {
         _debugName,
