@@ -217,8 +217,7 @@ function createDisplayNoteTransformer(view) {
     return displayNote
   }
   return createTransformer(transformer, (dn, n) => {
-    console.log(`dn,n`, dn._debugName, n._debugName)
-    console.log(`dn,n`, dn, n)
+    console.log(`destroying`, dn._debugName, n)
   })
 }
 
@@ -289,10 +288,12 @@ function View() {
       },
       prependNewChildNote(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsert({
+        const dn = this.upsert({
           parentId: note.id,
           sortIdx: sortIdx - 1,
-        }).tryFocusTextInput()
+        })
+        dn.tryFocusTextInput()
+        this.findById(dn.id).tryFocusTextInput()
       },
       appendSibling(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
@@ -302,6 +303,7 @@ function View() {
         })
         console.log(`dn.id`, dn._debugName)
         dn.tryFocusTextInput()
+        this.findById(dn.id).tryFocusTextInput()
       },
       clearZoom() {
         this.zoomedNote = null
