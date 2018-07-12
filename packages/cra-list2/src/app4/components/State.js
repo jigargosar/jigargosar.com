@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, CenterLayout, TypographyDefaults, Text} from './ui'
+import {Btn, CenterLayout, TypographyDefaults, Text} from './ui'
 import {cn, F, mrInjectAll, renderKeyedById} from './utils'
 import {_} from '../little-ramda'
 import * as Recompose from 'recompose'
@@ -8,7 +8,7 @@ const RightActionButton = _.compose(
   Recompose.defaultProps({
     className: cn('fr'),
   }),
-)(Button)
+)(Btn)
 
 const Value = mrInjectAll(function Value({value}) {
   const lookup = {
@@ -62,9 +62,9 @@ const ValueObjectEntry = mrInjectAll(function ValueObjectEntry({
         x
       </RightActionButton>
       {isCollection && (
-        <Button onClick={entry.toggleCollapsed}>
+        <Btn onClick={entry.toggleCollapsed}>
           {entry.collapsed ? '>' : 'v'}
-        </Button>
+        </Btn>
       )}
       <input
         autoFocus
@@ -109,9 +109,9 @@ const ValueArrayEntry = mrInjectAll(function ValueArrayEntry({
         x
       </RightActionButton>
       {isCollection && (
-        <Button onClick={entry.toggleCollapsed}>
+        <Btn onClick={entry.toggleCollapsed}>
           {entry.collapsed ? '>' : 'v'}
-        </Button>
+        </Btn>
       )}
       <EntryTypeSelect entry={entry} />
       {shouldExpand && (
@@ -139,7 +139,7 @@ const ValueArray = mrInjectAll(function ValueArray({state, value}) {
 const State = mrInjectAll(function({state}) {
   return (
     <F>
-      <Button onClick={e => state.root.add()}>Add field</Button>
+      <Btn onClick={e => state.root.add()}>Add field</Btn>
       <div>
         {renderKeyedById(
           ValueObjectEntry,

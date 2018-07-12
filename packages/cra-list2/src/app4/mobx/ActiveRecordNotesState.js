@@ -93,6 +93,9 @@ function View() {
               },
             },
             actions: {
+              onAddChild() {
+                view.upsert({parentId: note.id})
+              },
               onTextInputRef(ref) {
                 this.textInputRef = ref
               },

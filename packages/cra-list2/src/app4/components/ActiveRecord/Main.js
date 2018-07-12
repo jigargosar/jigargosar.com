@@ -1,7 +1,8 @@
 import React from 'react'
 import {
+  Btn,
   CenterLayout,
-  Link,
+  Lnk,
   List,
   ListItem,
   Title,
@@ -68,7 +69,7 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
             // 'bw0',
             'bn bw1 bb b--black-05',
           )}
-          value={note.text}
+          value={note.text || ''}
           {...note.textInputHandlers}
         />
       </div>
@@ -105,14 +106,14 @@ OutlineChildren.propTypes = {
 
 const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
   return (
-    <Link
+    <Lnk
       color={'gray'}
       m={''}
       className={cn('pa2')}
       onClick={note.onZoomIn}
     >
       {`${note.navLinkText}`}
-    </Link>
+    </Lnk>
   )
 })
 
@@ -139,6 +140,9 @@ const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
           // }}
         />
       </div>
+      <div className={cn('ma3')}>
+        <Btn onClick={note.onAddChild}>add</Btn>
+      </div>
     </F>
   )
 })
@@ -149,6 +153,7 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
       className={cn('bg-white mh0 mh3-ns mb3 mv3-ns shadow-1-ns pv2')}
     >
       <CurrentRootHeader />
+
       <OutlineChildren
         m={''}
         className={cn('bn bw0')}

@@ -2,6 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {cx as cn} from 'ramda-extension'
+import {PropTypes} from '../utils'
 
 /*eslint-enable*/
 
@@ -47,7 +48,7 @@ export const ListItem = styled.div.attrs({
   //min-height: 42px;
 `
 
-export const Button = styled.button.attrs({
+export const Btn = styled.button.attrs({
   className: ({disabled}) =>
     cn('button-reset link mr2 inline-flex b--light-silver', {
       'pointer blue': !disabled,
@@ -56,7 +57,12 @@ export const Button = styled.button.attrs({
 })`
   user-select: none;
 `
-export const Link = styled.a.attrs({
+
+Btn.propTypes = {
+  onClick: PropTypes.func,
+}
+
+export const Lnk = styled.a.attrs({
   className: ({color = 'blue', m = 'mr2'}) =>
     cn('input-reset link inline-flex pointer', color),
 })``

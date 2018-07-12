@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Button,
+  Btn,
   CenterLayout,
   List,
   ListItem,
@@ -79,7 +79,7 @@ const Note = observer(function Note({note, focusComponentRef}) {
 const ListToolbar = mrInjectAll(function ListToolbar({view}) {
   return (
     <Section className={cn('pl3')}>
-      <Button onClick={view.onAddNewNoteEvent}>ADD</Button>
+      <Btn onClick={view.onAddNewNoteEvent}>ADD</Btn>
     </Section>
   )
 })
@@ -157,16 +157,14 @@ const AppHeader = mrInjectAll(function AppHeader({fire}) {
         {!auth.isAuthKnown && <Text>Loading...</Text>}
         {auth.isSignedOut && (
           <F>
-            <Button onClick={auth.signInWithRedirect}>SignIn</Button>
-            <Button onClick={auth.signInWithPopup}>
-              SignInWithPopup
-            </Button>
+            <Btn onClick={auth.signInWithRedirect}>SignIn</Btn>
+            <Btn onClick={auth.signInWithPopup}>SignInWithPopup</Btn>
           </F>
         )}
         {auth.isSignedIn && (
           <F>
             <Text>{auth.displayName}</Text>
-            <Button onClick={auth.signOut}>SignOut</Button>
+            <Btn onClick={auth.signOut}>SignOut</Btn>
           </F>
         )}
       </div>

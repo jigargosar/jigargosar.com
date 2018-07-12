@@ -1,6 +1,6 @@
 import React from 'react'
 import {validate} from '../../little-ramda'
-import {Link} from '../ui'
+import {Lnk} from '../ui'
 import {mrInjectAll} from '../utils'
 
 export const LinkTo = mrInjectAll(function LinkTo({
@@ -11,8 +11,8 @@ export const LinkTo = mrInjectAll(function LinkTo({
 }) {
   validate('SOO', [to, router, rest])
   return (
-    <Link onClick={() => router.goto({name: to})} {...rest}>
+    <Lnk onClick={() => router.goto({name: to})} {...rest}>
       {children}
-    </Link>
+    </Lnk>
   )
 })
