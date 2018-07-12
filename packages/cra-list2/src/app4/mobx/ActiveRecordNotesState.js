@@ -182,8 +182,8 @@ function View() {
       },
       getNextSiblingOfDisplayNote(dn) {
         const nextIndex = this.getIndexOfDisplayNote(dn) + 1
-        const siblingsOFDisplayNote = this.getSiblingsOFDisplayNote(
-          dn,
+        const siblingsOFDisplayNote = this.getSiblingsWithParentId(
+          dn.parentId,
         )
         if (isIndexOutOfBounds(nextIndex, siblingsOFDisplayNote)) {
           return null
@@ -191,6 +191,7 @@ function View() {
           return siblingsOFDisplayNote[nextIndex]
         }
       },
+      getParentOfDisplayNote(dn) {},
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
