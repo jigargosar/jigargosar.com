@@ -16,10 +16,7 @@ import {
 import {
   elFocus,
   elSetSelectionRange,
-  findDOMNode,
-  focusRef,
   isAnyHotKey,
-  setSelectionRangeRef,
   tryCatchLogFindDOMNode,
   wrapPD,
 } from '../components/utils'
