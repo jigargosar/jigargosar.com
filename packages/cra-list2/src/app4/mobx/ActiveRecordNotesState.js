@@ -258,7 +258,7 @@ function View() {
         const sortIdx = _.defaultTo(0, note.sortIdx)
         const dn = this.upsert({
           parentId: note.parentId,
-          sortIdx: sortIdx + 1,
+          sortIdx: sortIdx,
         })
         console.log(
           `dn.id`,
