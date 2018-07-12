@@ -126,7 +126,7 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
         m={''}
         className={cn('bn bw0')}
         shadow={''}
-        childNotes={view.noteList}
+        childNotes={view.currentRoot.childNotes}
       />
     </div>
   )
