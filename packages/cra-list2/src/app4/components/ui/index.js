@@ -57,5 +57,6 @@ export const Button = styled.button.attrs({
   user-select: none;
 `
 export const Link = styled.a.attrs({
-  className: 'input-reset link mr2 blue inline-flex pointer',
+  className: ({color = 'blue', m = 'mr2'}) =>
+    cn('input-reset link inline-flex pointer', color),
 })``

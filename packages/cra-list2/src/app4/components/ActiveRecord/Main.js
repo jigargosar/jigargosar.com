@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   CenterLayout,
+  Link,
   List,
   ListItem,
   Title,
@@ -104,9 +105,14 @@ OutlineChildren.propTypes = {
 
 const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
   return (
-    <div className={cn('gray ma3')} onClick={note.onZoomIn}>
-      {`${note.navLinkText} >`}
-    </div>
+    <Link
+      color={'gray'}
+      m={''}
+      className={cn('pa2')}
+      onClick={note.onZoomIn}
+    >
+      {`${note.navLinkText}`}
+    </Link>
   )
 })
 
@@ -116,8 +122,9 @@ const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
   const note = view.currentRoot
   return (
     <F>
-      <div>
+      <div className={cn('ma2')}>
         <NoteNavLink note={view.rootNote} />
+        <span>{`>`}</span>
       </div>
       <div className={cn('ma3 mt0')}>
         <input
