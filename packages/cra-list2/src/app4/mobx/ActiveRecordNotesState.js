@@ -48,7 +48,7 @@ function createDisplayNoteTransformer(view) {
     const displayNote = createObservableObject({
       props: {
         textInputRef: null,
-        get parentDN() {
+        get parentNote() {
           return view.findById(note.parentId)
         },
         get navLinkText() {
@@ -256,7 +256,7 @@ function View() {
           if (isNotNil(nextSibling)) {
             nextSibling.focusTextInput()
           } else {
-            const parentDN = dn.parentDN
+            const parentDN = dn.parentNote
             if (parentDN) {
               const nextSibling = this.getNextSiblingOfDisplayNote(
                 parentDN,
