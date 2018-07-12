@@ -20,7 +20,8 @@ function render() {
     // Object.assign(appState, require('./mobx').state)
     Object.assign(
       appState,
-      require('./mobx/ActiveRecordNotesState').state,
+      require('./mobx/NotesActiveRecord/ActiveRecordNotesState')
+        .state,
     )
     // const App = require('./components/Main').default
     // const App = require('./components/OutlinerMain').default
@@ -49,6 +50,7 @@ if (module.hot) {
       './components/ActiveRecord/Main',
       './mobx',
       './components/State',
+      './mobx/NotesActiveRecord/ActiveRecordNotesState',
     ],
     tryCatchLog(render),
   )

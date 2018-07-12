@@ -53,3 +53,16 @@ export function getOrUpsertRootNote() {
     }),
   )
 }
+
+export function getActiveQuery({filters = []} = {}) {
+  return {
+    filter: _.allPass([
+      _.propSatisfies(_.not, 'deleted'),
+      ...filters,
+    ]),
+    sortComparators: [
+      _.ascend(_.prop('sortIdx')),
+      _.ascend(_.prop('createdAt')),
+    ],
+  }
+}
