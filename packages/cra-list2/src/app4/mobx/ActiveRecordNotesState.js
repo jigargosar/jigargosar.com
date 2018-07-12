@@ -36,12 +36,12 @@ function View() {
   const view = createObservableObject({
     props: {
       rootNote: null,
+      zoomedNote: null,
       get currentRoot() {
         const note = this.zoomedNote || this.rootNote
         validate('O', [note])
         return note
       },
-      zoomedNote: null,
       get zoomedNoteId() {
         return dotPathOr(null, 'zoomedNote', this)
       },
@@ -236,13 +236,15 @@ function View() {
       },
       findOrCreateRootNote() {
         const foundRoot = _.head(
-          this.findAll({filter: _.propEq('id', null)}),
+          this.findAll({filter: _.propEq('parentId', null)}),
         )
         this.rootNote = _.isNil(foundRoot) ? this.upsert() : foundRoot
       },
     },
     name: 'view',
   })
+
+  view.findOrCreateRootNote()
 
   return view
 }

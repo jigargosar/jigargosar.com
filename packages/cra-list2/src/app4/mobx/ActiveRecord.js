@@ -51,7 +51,7 @@ export function ActiveRecord({
         }
         return record
       },
-      upsert({id, ...values}) {
+      upsert({id, ...values} = {}) {
         const record = this.findById(id)
         if (record) {
           const updates = _.compose(
