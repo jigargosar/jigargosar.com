@@ -8,7 +8,6 @@ import {
   _,
   constant,
   dotPath,
-  idEq,
   isIndexOutOfBounds,
   isNilOrEmpty,
   isNotNil,
@@ -197,6 +196,9 @@ function View() {
           Notes.findAll(options),
         )
       },
+      findById(id) {
+        return this.displayNoteTransformer(Notes.findById(id))
+      },
       findActiveNotesWithParentId(parentId) {
         return this.findAll(
           getActiveQuery({
@@ -241,8 +243,7 @@ function View() {
         }
       },
       getParentOfDisplayNote(dn) {
-        const id = dn.parentId
-        return _.head(this.findAll({filter: idEq(id)}))
+        return this.findById(dn.parentId)
       },
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
