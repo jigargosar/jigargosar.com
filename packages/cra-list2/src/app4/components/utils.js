@@ -1,10 +1,11 @@
 import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
-import {_, R, RX, validate} from '../little-ramda'
+import {_, R, RX, tryCatchLog, validate} from '../little-ramda'
 import {setDisplayName, wrapDisplayName} from 'recompose'
 
 import PropTypes from 'prop-types'
+import ReactDOM from 'react-dom'
 
 export {F, RC, observer, Observer, isHotKey}
 export const cn = RX.cx
@@ -95,3 +96,7 @@ export const mrInjectAll = _.compose(
   })),
   observer,
 )
+
+export const focusRef = tryCatchLog(ref => {
+  ReactDOM.findDOMNode(ref).focus()
+})

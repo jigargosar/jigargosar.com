@@ -15,8 +15,7 @@ import {
   nop,
   validate,
 } from '../little-ramda'
-import {isAnyHotKey, wrapPD} from '../components/utils'
-import ReactDOM from 'react-dom'
+import {focusRef, isAnyHotKey, wrapPD} from '../components/utils'
 
 function getActiveQuery({filters = []} = {}) {
   return {
@@ -24,11 +23,20 @@ function getActiveQuery({filters = []} = {}) {
       _.propSatisfies(_.not, 'deleted'),
       ...filters,
     ]),
-    sortComparators: [_.descend(_.prop('createdAt'))],
+    sortComparators: [
+      _.ascend(_.prop('sortIdx')),
+      _.ascend(_.prop('createdAt')),
+    ],
   }
 }
 
-const fieldNames = ['text', 'deleted', 'parentId', 'collapsed']
+const fieldNames = [
+  'text',
+  'deleted',
+  'parentId',
+  'collapsed',
+  'sortIdx',
+]
 const Notes = ActiveRecord({
   name: 'Note',
   fieldNames,
@@ -87,14 +95,10 @@ function View() {
                 })
               },
               focusTextInput() {
-                const inputEl = ReactDOM.findDOMNode(
-                  this.textInputRef,
-                )
-                if (inputEl) {
-                  inputEl.focus()
-                } else {
+                if (!this.textInputRef) {
                   debugger
                 }
+                focusRef(this.textInputRef)
               },
             },
             actions: {
@@ -261,10 +265,18 @@ function View() {
       },
       appendSibling(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsert({
+        const dn = this.upsert({
           parentId: note.parentId,
           sortIdx: sortIdx + 1,
-        }).tryFocusTextInput()
+        })
+        console.log(
+          `dn.id`,
+          dn.id,
+          dn.parentId,
+          note.id,
+          note.parentId,
+        )
+        dn.tryFocusTextInput()
       },
     },
     actions: {
