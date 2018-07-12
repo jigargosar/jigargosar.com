@@ -97,6 +97,11 @@ export const mrInjectAll = _.compose(
   observer,
 )
 
-export const focusRef = tryCatchLog(ref => {
-  ReactDOM.findDOMNode(ref).focus()
-})
+export const findDOMNode = ReactDOM.findDOMNode
+
+export function elFocus(el) {
+  validate('O', [el])
+  el.focus()
+}
+
+export const focusRef = tryCatchLog(_.compose(elFocus, findDOMNode))
