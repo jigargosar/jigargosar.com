@@ -72,6 +72,7 @@ const Outline = mrInjectAll(function NoteOutline({note, view}) {
           value={note.text || ''}
           {...note.textInputHandlers}
         />
+        <div className={cn('mr2')}>{note.sortIdx}</div>
       </div>
       <OutlineChildren
         childNotes={note.shouldDisplayChildren ? note.childNotes : []}
