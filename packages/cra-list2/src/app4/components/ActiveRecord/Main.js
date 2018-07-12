@@ -17,6 +17,7 @@ import {
 } from '../utils'
 import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
+import {mTrace} from '../../mobx/little-mobx'
 
 const Outline = mrInjectAll(function NoteOutline({note, view}) {
   return (
@@ -125,7 +126,7 @@ const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
   return (
     <F>
       <div className={cn('ma2')}>
-        <NoteNavLink note={view.rootNote} />
+        <NoteNavLink note={note} />
         <span>{`>`}</span>
       </div>
       <div className={cn('ma3 mt0')}>
@@ -160,7 +161,7 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
         m={''}
         className={cn('bn bw0')}
         shadow={''}
-        childNotes={view.currentRoot.childNotes}
+        childNotes={view.currentNotesList}
       />
     </div>
   )

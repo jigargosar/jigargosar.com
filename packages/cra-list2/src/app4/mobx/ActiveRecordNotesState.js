@@ -211,7 +211,7 @@ function View() {
       zoomedNote: null,
       displayNoteTransformer: null,
       get currentRoot() {
-        const note = this.rootNote
+        const note = this.rootNote || this.zoomedNote
         validate('O', [note])
         return note
       },
