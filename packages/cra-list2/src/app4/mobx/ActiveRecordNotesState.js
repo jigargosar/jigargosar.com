@@ -6,9 +6,11 @@ import {
 } from './little-mobx'
 import {
   _,
+  constant,
   dotPath,
   dotPathOr,
   isIndexOutOfBounds,
+  isNilOrEmpty,
   isNotNil,
   nop,
   validate,
@@ -51,6 +53,11 @@ function View() {
           const displayNote = createObservableObject({
             props: {
               textInputRef: null,
+              get navLinkText() {
+                return _.when(isNilOrEmpty, constant('(empty)'))(
+                  this.text,
+                )
+              },
               get childNotes() {
                 return view.findActiveNotesWithParentId(note.id)
               },

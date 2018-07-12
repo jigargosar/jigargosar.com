@@ -88,3 +88,13 @@ export const vPick = _.curry(function vPick(props, obj) {
 })
 
 export function nop() {}
+
+export function isNilOrEmpty(nilOrStrOrArr) {
+  validate('Z|A|S', [nilOrStrOrArr])
+  // return _.isNil(nilOrStrOrArr) || _.isEmpty(nilOrStrOrArr)
+  return _.anyPass([_.isNil, _.isEmpty])(nilOrStrOrArr)
+}
+
+export function constant(val) {
+  return _.always(val)
+}

@@ -102,14 +102,22 @@ OutlineChildren.propTypes = {
   childNotes: PropTypes.array.isRequired,
 }
 
+const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
+  return (
+    <div className={cn('gray ma3')} onClick={note.onZoomIn}>
+      {`${note.navLinkText} >`}
+    </div>
+  )
+})
+
 const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
   view,
 }) {
   const note = view.currentRoot
   return (
     <F>
-      <div className={cn('gray ma3')} onClick={view.clearZoom}>
-        {`${view.rootNote.text || 'Home'} >`}
+      <div>
+        <NoteNavLink note={view.rootNote} />
       </div>
       <div className={cn('ma3 mt0')}>
         <input
