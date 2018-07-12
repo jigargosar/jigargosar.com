@@ -63,6 +63,8 @@ export function ActiveRecord({
           if (hasPersistenceFields(updates)) {
             record.modifiedAt = Date.now()
             return this.saveRecord(record)
+          } else {
+            return record
           }
         } else {
           return this.saveRecord(createNew(values))

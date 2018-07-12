@@ -98,3 +98,7 @@ export function isNilOrEmpty(nilOrStrOrArr) {
 export function constant(val) {
   return _.always(val)
 }
+
+export const idEq = _.curry(function idEq(id, obj) {
+  return _.propEq('id', id, obj)
+})

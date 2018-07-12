@@ -8,7 +8,7 @@ import {
   _,
   constant,
   dotPath,
-  dotPathOr,
+  idEq,
   isIndexOutOfBounds,
   isNilOrEmpty,
   isNotNil,
@@ -44,6 +44,8 @@ const Notes = ActiveRecord({
 
 function createDisplayNoteTransformer(view) {
   return createTransformer(note => {
+    validate('O', [note])
+
     const displayNote = createObservableObject({
       props: {
         textInputRef: null,
@@ -159,8 +161,11 @@ function View() {
         validate('O', [note])
         return note
       },
-      get zoomedNoteId() {
-        return dotPathOr(null, 'zoomedNote', this)
+      get currentRootId() {
+        return this.currentRoot.id
+      },
+      get currentNotesList() {
+        return this.currentRoot.childNotes
       },
       get _dnt() {
         return createDisplayNoteTransformer(this)
@@ -199,12 +204,12 @@ function View() {
           }),
         )
       },
-      getSiblingsWithParentId(parentId) {
-        if (parentId === this.zoomedNoteId) {
-          return this.noteList
+      getSiblingsOfDisplayNote(dn) {
+        if (dn === this.currentRoot) {
+          return this.currentNotesList
         } else {
           const results = this.findAll({
-            filter: _.propEq('id', parentId),
+            filter: _.propEq('id', dn.parentId),
           })
           const parentDisplayNote = _.head(results)
           console.assert(isNotNil(parentDisplayNote))
@@ -212,8 +217,8 @@ function View() {
         }
       },
       getIndexOfDisplayNote(dn) {
-        const siblingsOFDisplayNote = this.getSiblingsWithParentId(
-          dn.parentId,
+        const siblingsOFDisplayNote = this.getSiblingsOfDisplayNote(
+          dn,
         )
         const dnIdx = _.findIndex(
           _.eqProps('id', dn),
@@ -226,8 +231,8 @@ function View() {
       },
       getNextSiblingOfDisplayNote(dn) {
         const nextIndex = this.getIndexOfDisplayNote(dn) + 1
-        const siblingsOFDisplayNote = this.getSiblingsWithParentId(
-          dn.parentId,
+        const siblingsOFDisplayNote = this.getSiblingsOfDisplayNote(
+          dn,
         )
         if (isIndexOutOfBounds(nextIndex, siblingsOFDisplayNote)) {
           return null
@@ -236,9 +241,8 @@ function View() {
         }
       },
       getParentOfDisplayNote(dn) {
-        return _.head(
-          this.findAll({filter: _.propEq('id', dn.parentId)}),
-        )
+        const id = dn.parentId
+        return _.head(this.findAll({filter: idEq(id)}))
       },
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
