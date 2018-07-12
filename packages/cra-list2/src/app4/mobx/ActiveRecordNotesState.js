@@ -7,7 +7,6 @@ import {
 import {
   _,
   constant,
-  dotPath,
   isIndexOutOfBounds,
   isNilOrEmpty,
   isNotNil,
@@ -183,15 +182,6 @@ function View() {
           }
           return displayNote
         }
-      },
-      get noteList() {
-        return this.zoomedNoteList || this.rootNoteList
-      },
-      get zoomedNoteList() {
-        return dotPath('zoomedNote.childNotes', this)
-      },
-      get rootNoteList() {
-        return this.findAllWithParentId(null)
       },
       findAll(options) {
         return _.map(
