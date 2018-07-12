@@ -42,6 +42,111 @@ const Notes = ActiveRecord({
   fieldNames,
 })
 
+function createDisplayNoteTransformer(view) {
+  return createTransformer(note => {
+    const displayNote = createObservableObject({
+      props: {
+        textInputRef: null,
+        get navLinkText() {
+          return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
+        },
+        get childNotes() {
+          return view.findActiveNotesWithParentId(note.id)
+        },
+        get hasChildren() {
+          return !_.isEmpty(this.childNotes)
+        },
+        get shouldDisplayChildren() {
+          return this.hasChildren && !note.collapsed
+        },
+        get firstChildNote() {
+          return _.head(this.childNotes)
+        },
+        get isCollapseButtonDisabled() {
+          return !this.hasChildren
+        },
+        get textInputHandlers() {
+          return {
+            onChange: this.onTextChange,
+            onFocus: this.onTextFocus,
+            onBlur: nop,
+            onKeyDown: this.onTextKeyDown,
+          }
+        },
+        tryFocusTextInput() {
+          requestAnimationFrame(() => {
+            this.focusTextInput()
+          })
+        },
+        focusTextInput() {
+          if (!this.textInputRef) {
+            debugger
+          }
+          focusRef(this.textInputRef)
+        },
+      },
+      actions: {
+        onAddChild() {
+          view.prependNewChildNote(note)
+        },
+        onAppendSibling() {
+          view.appendSibling(note)
+        },
+        onTextInputRef(ref) {
+          this.textInputRef = ref
+        },
+        update(values) {
+          Notes.upsert({id: note.id, ...values})
+        },
+        onDelete() {
+          this.update({deleted: true})
+        },
+        onTextChange(e) {
+          this.update({text: e.target.value})
+        },
+        onToggleExpand() {
+          if (!this.hasChildren) {
+            return
+          }
+          this.update({collapsed: !note.collapsed})
+        },
+        onTextFocus(e) {
+          e.target.setSelectionRange(0, 0)
+        },
+        onTextKeyDown(e) {
+          _.cond([
+            [isAnyHotKey(['enter']), wrapPD(this.onAppendSibling)],
+            [isAnyHotKey(['escape']), wrapPD(nop)],
+            [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
+            [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
+            [isAnyHotKey(['tab']), wrapPD(nop)],
+            [isAnyHotKey(['shift+tab']), wrapPD(nop)],
+            [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
+          ])(e)
+        },
+        onZoomIn() {
+          view.zoomIntoDisplayNote(this)
+        },
+        onDownArrowKey() {
+          view.focusNextDisplayNote(this)
+        },
+        onBackspaceKeyDown(e) {
+          if (_.isEmpty(e.target.value)) {
+            this.onDelete()
+          }
+        },
+      },
+      name: `DisplayNote@${note.id}`,
+    })
+    attachDelegatingPropertyGetters(
+      note,
+      displayNote,
+      Notes.allFieldNames,
+    )
+    return displayNote
+  })
+}
+
 function View() {
   const view = createObservableObject({
     props: {
@@ -56,120 +161,7 @@ function View() {
         return dotPathOr(null, 'zoomedNote', this)
       },
       get displayNoteTransformer() {
-        const view = this
-        return createTransformer(note => {
-          const displayNote = createObservableObject({
-            props: {
-              textInputRef: null,
-              get navLinkText() {
-                return _.when(isNilOrEmpty, constant('(empty)'))(
-                  this.text,
-                )
-              },
-              get childNotes() {
-                return view.findActiveNotesWithParentId(note.id)
-              },
-              get hasChildren() {
-                return !_.isEmpty(this.childNotes)
-              },
-              get shouldDisplayChildren() {
-                return this.hasChildren && !note.collapsed
-              },
-              get firstChildNote() {
-                return _.head(this.childNotes)
-              },
-              get isCollapseButtonDisabled() {
-                return !this.hasChildren
-              },
-              get textInputHandlers() {
-                return {
-                  onChange: this.onTextChange,
-                  onFocus: this.onTextFocus,
-                  onBlur: nop,
-                  onKeyDown: this.onTextKeyDown,
-                }
-              },
-              tryFocusTextInput() {
-                requestAnimationFrame(() => {
-                  this.focusTextInput()
-                })
-              },
-              focusTextInput() {
-                if (!this.textInputRef) {
-                  debugger
-                }
-                focusRef(this.textInputRef)
-              },
-            },
-            actions: {
-              onAddChild() {
-                view.prependNewChildNote(note)
-              },
-              onAppendSibling() {
-                view.appendSibling(note)
-              },
-              onTextInputRef(ref) {
-                this.textInputRef = ref
-              },
-              update(values) {
-                Notes.upsert({id: note.id, ...values})
-              },
-              onDelete() {
-                this.update({deleted: true})
-              },
-              onTextChange(e) {
-                this.update({text: e.target.value})
-              },
-              onToggleExpand() {
-                if (!this.hasChildren) {
-                  return
-                }
-                this.update({collapsed: !note.collapsed})
-              },
-              onTextFocus(e) {
-                e.target.setSelectionRange(0, 0)
-              },
-              onTextKeyDown(e) {
-                _.cond([
-                  [
-                    isAnyHotKey(['enter']),
-                    wrapPD(this.onAppendSibling),
-                  ],
-                  [isAnyHotKey(['escape']), wrapPD(nop)],
-                  [
-                    isAnyHotKey(['down']),
-                    wrapPD(this.onDownArrowKey),
-                  ],
-                  [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
-                  [isAnyHotKey(['tab']), wrapPD(nop)],
-                  [isAnyHotKey(['shift+tab']), wrapPD(nop)],
-                  [
-                    isAnyHotKey(['backspace']),
-                    this.onBackspaceKeyDown,
-                  ],
-                ])(e)
-              },
-              onZoomIn() {
-                view.zoomIntoDisplayNote(this)
-              },
-              onDownArrowKey() {
-                view.focusNextDisplayNote(this)
-              },
-              onBackspaceKeyDown(e) {
-                if (_.isEmpty(e.target.value)) {
-                  this.onDelete()
-                }
-              },
-            },
-            name: `DisplayNote@${note.id}`,
-          })
-          attachDelegatingPropertyGetters(
-            note,
-            displayNote,
-            Notes.allFieldNames,
-          )
-          return displayNote
-        })
+        return createDisplayNoteTransformer(this)
       },
       get noteList() {
         return this.zoomedNoteList || this.rootNoteList

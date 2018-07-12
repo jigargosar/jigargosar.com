@@ -3,14 +3,19 @@ import ReactDOM from 'react-dom'
 // import './index.css'
 import registerServiceWorker from '../registerServiceWorker'
 import {mRunInAction, oObject} from './mobx/little-mobx'
-import {tryCatchLog} from './little-ramda'
+import {dotPath, isNotNil, tryCatchLog} from './little-ramda'
 import {Provider} from 'mobx-react'
 
 const appState = oObject({}, {}, {name: 'appState'})
 
 function render() {
   mRunInAction('Hot Update States', () => {
-    console.clear()
+    if (isNotNil(dotPath('hot.data')(module))) {
+      console.clear()
+      console.log('Clearing Console on Hot Reload')
+    } else {
+      console.log('App Reloaded')
+    }
 
     // Object.assign(appState, require('./mobx').state)
     Object.assign(

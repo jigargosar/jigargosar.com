@@ -20,6 +20,7 @@
     "aproba": "^2.0.0",
     "auth0-js": "^9.6.1",
     "ava": "^0.25.0",
+    "baobab": "^2.5.2",
     "chance": "^1.0.16",
     "classnames": "^2.2.6",
     "console-feed": "^2.8.1",
