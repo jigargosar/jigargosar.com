@@ -67,28 +67,6 @@ export function ActiveRecord({
           this.saveRecord(createNew(values))
         }
       },
-      upsert__(values) {
-        const record = this.findById(values.id)
-
-        if (record) {
-          const pickKeys = _.pick(
-            _.filter(
-              _.contains(_.__, _.concat(fieldNames)),
-              _.keys(values),
-            ),
-          )
-          const updates = pickKeys(values)
-
-          if (_.equals(updates, pickKeys(record))) {
-            return
-          }
-          Object.assign(record, updates)
-          record.modifiedAt = Date.now()
-          this.saveRecord(record)
-        } else {
-          this.saveRecord(createNew(values))
-        }
-      },
       load() {
         this.records = _.map(fromJSON, adapter.loadAll())
       },
