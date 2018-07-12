@@ -118,16 +118,21 @@ const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
   )
 })
 
+const ZoomNoteNav = mrInjectAll(function ZoomNoteNav({view}) {
+  return (
+    <div className={cn('ma2')}>
+      <NoteNavLink note={view.rootNote} />
+      <span>{`>`}</span>
+    </div>
+  )
+})
 const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
   view,
 }) {
   const headerNote = view.currentRoot
   return (
     <F>
-      <div className={cn('ma2')}>
-        <NoteNavLink note={view.rootNote} />
-        <span>{`>`}</span>
-      </div>
+      <ZoomNoteNav />
       <div className={cn('ma3 mt0')}>
         <input
           ref={headerNote.onTextInputRef}
