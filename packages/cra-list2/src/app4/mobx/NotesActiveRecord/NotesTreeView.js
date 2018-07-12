@@ -9,8 +9,8 @@ import {
   getOrUpsertRootNote,
 } from './NotesActiveRecord'
 
-const treeNoteTransformer = createTransformer(note => {
-  return createObservableObject({
+const treeNoteTransformer = createTransformer(note =>
+  createObservableObject({
     props: {
       get note() {
         return note
@@ -30,8 +30,8 @@ const treeNoteTransformer = createTransformer(note => {
     },
     actions: {},
     name: 'TreeNoteNode',
-  })
-})
+  }),
+)
 
 function NotesTreeView() {
   return createObservableObject({
