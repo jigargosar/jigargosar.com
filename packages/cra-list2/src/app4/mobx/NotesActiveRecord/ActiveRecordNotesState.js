@@ -46,6 +46,13 @@ function createDisplayNoteTransformer(view) {
           }
           return view.findById(note.parentId)
         },
+        get lastLeafNote() {
+          if (this.shouldDisplayChildren && this.lastChildNote) {
+            return this.lastChildNote.lastLeafNote
+          } else {
+            return this
+          }
+        },
         get navLinkText() {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
@@ -82,6 +89,9 @@ function createDisplayNoteTransformer(view) {
         },
         get firstChildNote() {
           return _.head(this.childNotes)
+        },
+        get lastChildNote() {
+          return _.last(this.childNotes)
         },
         get isCollapseButtonDisabled() {
           return !this.hasChildren
@@ -257,7 +267,16 @@ function View() {
       focusPreviousDisplayNote(dn) {
         const prevSibling = dn.prevSiblingNote
         if (isNotNil(prevSibling)) {
-          prevSibling.focusTextInput()
+          const lastLeafNote = prevSibling.lastLeafNote
+          if (isNotNil(lastLeafNote)) {
+            lastLeafNote.focusTextInput()
+          }
+
+          // prevSibling.focusTextInput()
+        } else {
+          if (dn.parentNote) {
+            dn.parentNote.focusTextInput()
+          }
         }
       },
       upsert(values) {
