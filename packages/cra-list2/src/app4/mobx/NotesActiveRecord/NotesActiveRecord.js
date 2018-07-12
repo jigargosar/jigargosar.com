@@ -35,23 +35,20 @@ export function findParentNoteOrNull(note) {
   if (_.isNil(note.parentId)) {
     return null
   }
-  return NotesActiveRecord.findById({
+  return Notes.findById({
     filter: _.propEq('id', note.parentId),
   })
 }
 
 export function findAllChildrenOfNote(note) {
-  return NotesActiveRecord.findAll({
+  return Notes.findAll({
     filter: _.propEq('parentId', note.id),
   })
 }
 
 export function getOrUpsertRootNote() {
-  return _.compose(
-    _.when(_.isNil, () => NotesActiveRecord.upsert()),
-    _.head,
-  )(
-    NotesActiveRecord.findAll({
+  return _.compose(_.when(_.isNil, () => Notes.upsert()), _.head)(
+    Notes.findAll({
       filter: _.propEq('parentId', null),
     }),
   )
