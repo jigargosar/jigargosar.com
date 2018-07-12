@@ -119,6 +119,7 @@ function createDisplayNoteTransformer(view) {
         },
         onTextInputRef(ref) {
           this.textInputRef = ref
+          view.onDisplayNoteTextInputRef(ref, this)
         },
         update(values) {
           // Notes.upsert({id: note.id, ...values})
@@ -197,6 +198,7 @@ function View() {
       rootNote: null,
       zoomedNote: null,
       displayNoteTransformer: null,
+      shouldFocusOnRefCache: {},
       get currentRoot() {
         const note = this.zoomedNote || this.rootNote
         validate('O', [note])
@@ -228,6 +230,12 @@ function View() {
       },
     },
     actions: {
+      onDisplayNoteTextInputRef(ref, dn) {
+        if (ref && this.shouldFocusOnRefCache[dn.id]) {
+          dn.focusTextInput()
+          delete this.shouldFocusOnRefCache[dn.id]
+        }
+      },
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
@@ -255,16 +263,21 @@ function View() {
       upsert(values) {
         return Notes.upsert(values)
       },
+      upsertAndFocus(values) {
+        const note = this.upsert(values)
+        this.shouldFocusOnRefCache[note.id] = true
+        return note
+      },
       prependNewChildNote(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsert({
+        this.upsertAndFocus({
           parentId: note.id,
           sortIdx: sortIdx - 1,
         })
       },
       appendSibling(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsert({
+        this.upsertAndFocus({
           parentId: note.parentId,
           sortIdx: sortIdx,
         })
