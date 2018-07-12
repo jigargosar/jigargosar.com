@@ -130,7 +130,7 @@ function View() {
                   [isAnyHotKey(['shift+tab']), wrapPD(nop)],
                   [
                     isAnyHotKey(['backspace']),
-                    wrapPD(this.onBackspaceKeyDown),
+                    this.onBackspaceKeyDown,
                   ],
                 ])(e)
               },
