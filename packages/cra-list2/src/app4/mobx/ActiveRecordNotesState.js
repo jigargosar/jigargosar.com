@@ -191,7 +191,11 @@ function View() {
           return siblingsOFDisplayNote[nextIndex]
         }
       },
-      getParentOfDisplayNote(dn) {},
+      getParentOfDisplayNote(dn) {
+        return _.head(
+          this.findAll({filter: _.propEq('id', dn.parentId)}),
+        )
+      },
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
@@ -200,7 +204,10 @@ function View() {
           if (isNotNil(nextSibling)) {
             nextSibling.focusTextInput()
           } else {
-            debugger
+            const parentDN = this.getParentOfDisplayNote(dn)
+            if (parentDN) {
+              this.focusNextDisplayNote(parentDN)
+            }
           }
         }
       },
