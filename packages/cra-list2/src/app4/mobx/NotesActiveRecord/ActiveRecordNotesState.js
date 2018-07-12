@@ -135,6 +135,10 @@ function createDisplayNoteTransformer(view) {
           // Notes.upsert({id: note.id, ...values})
           view.upsert({id: note.id, ...values})
         },
+        updateAndFocus(values) {
+          // Notes.upsert({id: note.id, ...values})
+          view.upsertAndFocus({id: note.id, ...values})
+        },
         onDelete() {
           this.update({deleted: true})
         },
@@ -145,7 +149,7 @@ function createDisplayNoteTransformer(view) {
           if (!this.hasChildren) {
             return
           }
-          this.update({collapsed: !note.collapsed})
+          this.updateAndFocus({collapsed: !note.collapsed})
         },
         onTextFocus(e) {
           e.target.setSelectionRange(0, 0)
@@ -277,6 +281,7 @@ function View() {
           }
         }
       },
+      indentDisplayNote() {},
       upsert(values) {
         const {id} = values
         const newNote = Notes.upsert(values)
@@ -290,7 +295,11 @@ function View() {
       },
       upsertAndFocus(values) {
         const note = this.upsert(values)
-        this.shouldFocusOnRefCache[note.id] = true
+        if (_.isNil(values.id)) {
+          this.shouldFocusOnRefCache[note.id] = true
+        } else {
+          this.findById(values.id).focusTextInput()
+        }
         return note
       },
       prependNewChildNote(note) {
