@@ -32,12 +32,11 @@ export function ActiveRecord({
         return _.head(this.findAll({filter}))
       },
       findById(id) {
-        validate('S|Z', [id])
-        if (_.isNil(id)) {
-          return null
-        }
-        // validate('S', [id])
-
+        // validate('S|Z', [id])
+        // if (_.isNil(id)) {
+        //   return null
+        // }
+        validate('S', [id])
         return this.find({filter: _.propEq('id', id)})
       },
       get snapshot() {
@@ -54,7 +53,7 @@ export function ActiveRecord({
         return record
       },
       upsert({id, ...values} = {}) {
-        const record = this.findById(id)
+        const record = _.isNil(id) ? null : this.findById(id)
         if (record) {
           const updates = _.compose(
             _.partial(removeDuplicateUpdates, [record]),

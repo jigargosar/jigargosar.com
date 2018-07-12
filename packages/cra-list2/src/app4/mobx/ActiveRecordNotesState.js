@@ -95,14 +95,14 @@ function createDisplayNoteTransformer(view) {
             onKeyDown: this.onTextKeyDown,
           }
         },
-        tryFocusTextInput() {
-          requestAnimationFrame(() => {
-            this.focusTextInput()
-          })
-        },
+        // tryFocusTextInput() {
+        //   requestAnimationFrame(() => {
+        //     this.focusTextInput()
+        //   })
+        // },
         focusTextInput() {
           if (!this.textInputRef) {
-            // debugger
+            debugger
           }
           focusRef(this.textInputRef)
         },
