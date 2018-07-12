@@ -206,7 +206,12 @@ function View() {
           } else {
             const parentDN = this.getParentOfDisplayNote(dn)
             if (parentDN) {
-              this.focusNextDisplayNote(parentDN)
+              const nextSibling = this.getNextSiblingOfDisplayNote(
+                parentDN,
+              )
+              if (isNotNil(nextSibling)) {
+                nextSibling.focusTextInput()
+              }
             }
           }
         }
