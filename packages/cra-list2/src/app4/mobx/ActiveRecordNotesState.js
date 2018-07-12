@@ -178,7 +178,7 @@ function View() {
         return dnIdx
       },
       focusNextDisplayNote(dn) {
-        this.focusNextSiblingOfDisplayNote(this)
+        this.focusNextSiblingOfDisplayNote(dn)
       },
       focusNextSiblingOfDisplayNote(dn) {
         const nextIndex = this.getIndexOfDisplayNote(dn) + 1
