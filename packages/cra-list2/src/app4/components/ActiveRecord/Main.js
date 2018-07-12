@@ -6,7 +6,13 @@ import {
   Title,
   TypographyDefaults,
 } from '../ui'
-import {cn, F, mrInjectAll, renderKeyedById} from '../utils'
+import {
+  cn,
+  F,
+  mrInjectAll,
+  PropTypes,
+  renderKeyedById,
+} from '../utils'
 import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 
@@ -92,6 +98,10 @@ const OutlineChildren = mrInjectAll(function ChildNotes({
   )
 })
 
+OutlineChildren.propTypes = {
+  childNotes: PropTypes.array.isRequired,
+}
+
 const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
   view,
 }) {
@@ -116,6 +126,7 @@ const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
     </F>
   )
 })
+
 const OutlineRoot = mrInjectAll(function NoteList({view}) {
   return (
     <div

@@ -4,8 +4,12 @@ import isHotKey from 'is-hotkey'
 import {_, R, RX, validate} from '../little-ramda'
 import {setDisplayName, wrapDisplayName} from 'recompose'
 
+import PropTypes from 'prop-types'
+
 export {F, RC, observer, Observer, isHotKey}
 export const cn = RX.cx
+
+export {PropTypes}
 
 export const isAnyHotKey = R.compose(
   R.anyPass,
