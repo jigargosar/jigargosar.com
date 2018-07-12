@@ -146,9 +146,11 @@ const CurrentRootHeader = mrInjectAll(function CurrentRootHeader({
           // }}
         />
       </div>
-      <div className={cn('ma3')}>
-        <Btn onClick={headerNote.onAddChild}>add</Btn>
-      </div>
+      {!headerNote.hasChildren && (
+        <div className={cn('ma3')}>
+          <Btn onClick={headerNote.onAddChild}>add</Btn>
+        </div>
+      )}
     </F>
   )
 })
