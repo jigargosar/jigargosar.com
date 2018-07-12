@@ -180,6 +180,17 @@ function View() {
         )
         return dnIdx
       },
+      getNextSiblingOfDisplayNote(dn) {
+        const nextIndex = this.getIndexOfDisplayNote(dn) + 1
+        const siblingsOFDisplayNote = this.getSiblingsOFDisplayNote(
+          dn,
+        )
+        if (isIndexOutOfBounds(nextIndex, siblingsOFDisplayNote)) {
+          return null
+        } else {
+          return siblingsOFDisplayNote[nextIndex]
+        }
+      },
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
@@ -190,17 +201,6 @@ function View() {
           } else {
             debugger
           }
-        }
-      },
-      getNextSiblingOfDisplayNote(dn) {
-        const nextIndex = this.getIndexOfDisplayNote(dn) + 1
-        const siblingsOFDisplayNote = this.getSiblingsOFDisplayNote(
-          dn,
-        )
-        if (isIndexOutOfBounds(nextIndex, siblingsOFDisplayNote)) {
-          return null
-        } else {
-          return siblingsOFDisplayNote[nextIndex]
         }
       },
     },
