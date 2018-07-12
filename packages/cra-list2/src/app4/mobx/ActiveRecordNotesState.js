@@ -81,6 +81,13 @@ function createDisplayNoteTransformer(view) {
           }
           return this.siblingNotes[nextIdx]
         },
+        get prevSiblingNote() {
+          const prevId = this.index - 1
+          if (isIndexOutOfBounds(prevId, this.siblingNotes)) {
+            return null
+          }
+          return this.siblingNotes[prevId]
+        },
         get hasChildren() {
           return !_.isEmpty(this.childNotes)
         },
@@ -148,6 +155,7 @@ function createDisplayNoteTransformer(view) {
           _.cond([
             [isAnyHotKey(['enter']), wrapPD(this.onAppendSibling)],
             [isAnyHotKey(['escape']), wrapPD(nop)],
+            [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
             [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
             [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
             [isAnyHotKey(['tab']), wrapPD(nop)],
@@ -160,6 +168,9 @@ function createDisplayNoteTransformer(view) {
         },
         onDownArrowKey() {
           view.focusNextDisplayNote(this)
+        },
+        onUpArrowKey() {
+          view.focusPreviousDisplayNote(this)
         },
         onBackspaceKeyDown(e) {
           if (_.isEmpty(e.target.value)) {
@@ -242,6 +253,12 @@ function View() {
               }
             }
           }
+        }
+      },
+      focusPreviousDisplayNote(dn) {
+        const prevSibling = dn.prevSiblingNote
+        if (isNotNil(prevSibling)) {
+          prevSibling.focusTextInput()
         }
       },
       upsert(values) {
