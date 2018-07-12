@@ -271,8 +271,6 @@ function View() {
           if (isNotNil(lastLeafNote)) {
             lastLeafNote.focusTextInput()
           }
-
-          // prevSibling.focusTextInput()
         } else {
           if (dn.parentNote) {
             dn.parentNote.focusTextInput()
