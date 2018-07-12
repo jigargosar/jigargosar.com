@@ -102,6 +102,20 @@ export const findDOMNode = ReactDOM.findDOMNode
 export function elFocus(el) {
   validate('O', [el])
   el.focus()
+  return el
 }
+export const elSetSelectionRange = _.curry(
+  function elSetSelectionRange({start, end, direction}, el) {
+    validate('O', [el])
+    el.setSelectionRange(start, end, direction)
+    return el
+  },
+)
 
 export const focusRef = tryCatchLog(_.compose(elFocus, findDOMNode))
+
+export const setSelectionRangeRef = options =>
+  tryCatchLog(_.compose(elSetSelectionRange(options), findDOMNode))
+
+export const tryCatchLogFindDOMNode = fn =>
+  tryCatchLog(_.compose(fn, findDOMNode))

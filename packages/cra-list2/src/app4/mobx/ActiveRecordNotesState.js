@@ -13,7 +13,16 @@ import {
   nop,
   validate,
 } from '../little-ramda'
-import {focusRef, isAnyHotKey, wrapPD} from '../components/utils'
+import {
+  elFocus,
+  elSetSelectionRange,
+  findDOMNode,
+  focusRef,
+  isAnyHotKey,
+  setSelectionRangeRef,
+  tryCatchLogFindDOMNode,
+  wrapPD,
+} from '../components/utils'
 import {nanoid} from '../model/util'
 
 function getActiveQuery({filters = []} = {}) {
@@ -95,16 +104,19 @@ function createDisplayNoteTransformer(view) {
             onKeyDown: this.onTextKeyDown,
           }
         },
-        // tryFocusTextInput() {
-        //   requestAnimationFrame(() => {
-        //     this.focusTextInput()
-        //   })
-        // },
+        tryFocusTextInput() {
+          requestAnimationFrame(this.focusTextInput.bind(this))
+        },
         focusTextInput() {
           if (!this.textInputRef) {
             debugger
           }
-          focusRef(this.textInputRef)
+          tryCatchLogFindDOMNode(
+            _.compose(
+              elSetSelectionRange({start: 0, end: 0}),
+              elFocus,
+            ),
+          )(this.textInputRef)
         },
       },
       actions: {
@@ -265,6 +277,12 @@ function View() {
           this.findAll({filter: _.propEq('parentId', null)}),
         )
         this.rootNote = _.isNil(foundRoot) ? this.upsert() : foundRoot
+        const dnToFocus = _.when(
+          _.isNil,
+          constant(this.currentRoot),
+          this.currentRoot.firstChildNote,
+        )
+        dnToFocus.tryFocusTextInput()
       },
     },
     name: 'view',
