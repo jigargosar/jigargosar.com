@@ -223,6 +223,9 @@ function View() {
           }
         }
       },
+      upsert(values) {
+        return this.displayNoteTransformer(Notes.upsert(values))
+      },
     },
     actions: {
       clearZoom() {
@@ -235,9 +238,7 @@ function View() {
         const foundRoot = _.head(
           this.findAll({filter: _.propEq('id', null)}),
         )
-        this.rootNote = _.isNil(foundRoot)
-          ? Notes.upsert()
-          : foundRoot
+        this.rootNote = _.isNil(foundRoot) ? this.upsert() : foundRoot
       },
     },
     name: 'view',
