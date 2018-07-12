@@ -48,6 +48,9 @@ function createDisplayNoteTransformer(view) {
     const displayNote = createObservableObject({
       props: {
         textInputRef: null,
+        get parentDN() {
+          return view.findById(note.parentId)
+        },
         get navLinkText() {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
@@ -242,9 +245,6 @@ function View() {
           return siblingsOFDisplayNote[nextIndex]
         }
       },
-      getParentOfDisplayNote(dn) {
-        return this.findById(dn.parentId)
-      },
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
@@ -253,7 +253,7 @@ function View() {
           if (isNotNil(nextSibling)) {
             nextSibling.focusTextInput()
           } else {
-            const parentDN = this.getParentOfDisplayNote(dn)
+            const parentDN = dn.parentDN
             if (parentDN) {
               const nextSibling = this.getNextSiblingOfDisplayNote(
                 parentDN,
