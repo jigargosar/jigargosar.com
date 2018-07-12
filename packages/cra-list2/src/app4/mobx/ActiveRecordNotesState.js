@@ -284,26 +284,28 @@ function View() {
         }
       },
       upsert(values) {
-        return this.displayNoteTransformer(Notes.upsert(values))
+        return Notes.upsert(values)
       },
       prependNewChildNote(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        const dn = this.upsert({
+        const newNote = this.upsert({
           parentId: note.id,
           sortIdx: sortIdx - 1,
         })
+        console.log(`prependNewChildNote`, newNote._debugName)
+        const dn = this.findById(newNote.id)
+        console.log(`prependNewChildNote`, dn._debugName)
         dn.tryFocusTextInput()
-        this.findById(dn.id).tryFocusTextInput()
       },
       appendSibling(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        const dn = this.upsert({
+        const newNote = this.upsert({
           parentId: note.parentId,
           sortIdx: sortIdx,
         })
-        console.log(`dn.id`, dn._debugName)
-        dn.tryFocusTextInput()
-        this.findById(dn.id).tryFocusTextInput()
+        console.log(`appendSibling`, newNote._debugName)
+        newNote.tryFocusTextInput()
+        this.findById(newNote.id).tryFocusTextInput()
       },
       clearZoom() {
         this.zoomedNote = null
@@ -311,26 +313,29 @@ function View() {
       zoomIntoDisplayNote(dn) {
         this.zoomedNote = dn
       },
-      init(view) {
-        view.displayNoteTransformer = createDisplayNoteTransformer(
+      init() {
+        this.displayNoteTransformer = createDisplayNoteTransformer(
           view,
         )
-        const foundRoot = _.head(
-          view.findAll({filter: _.propEq('parentId', null)}),
+
+        this.rootNote = _.compose(
+          _.when(_.isNil, () => this.findById(this.upsert().id)),
+          _.head,
+        )(this.findAll({filter: _.propEq('parentId', null)}))
+
+        console.assert(isNotNil(this.currentRoot))
+
+        const dnToFocus = _.when(_.isNil, constant(this.currentRoot))(
+          this.currentRoot.firstChildNote,
         )
-        view.rootNote = _.isNil(foundRoot) ? view.upsert() : foundRoot
-        const dnToFocus = _.when(
-          _.isNil,
-          constant(view.currentRoot),
-          view.currentRoot.firstChildNote,
-        )
+
         dnToFocus.tryFocusTextInput()
       },
     },
     name: 'view',
   })
 
-  view.init(view)
+  view.init()
 
   return view
 }
