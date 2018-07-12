@@ -126,13 +126,12 @@ const ZoomNoteNav = mrInjectAll(function ZoomNoteNav({view}) {
     </div>
   )
 })
-const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
+const CurrentRootHeader = mrInjectAll(function CurrentRootHeader({
   view,
 }) {
   const headerNote = view.currentRoot
   return (
     <F>
-      <ZoomNoteNav />
       <div className={cn('ma3 mt0')}>
         <input
           ref={headerNote.onTextInputRef}
@@ -159,6 +158,7 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
     <div
       className={cn('bg-white mh0 mh3-ns mb3 mv3-ns shadow-1-ns pv2')}
     >
+      <ZoomNoteNav />
       <CurrentRootHeader />
 
       <OutlineChildren
