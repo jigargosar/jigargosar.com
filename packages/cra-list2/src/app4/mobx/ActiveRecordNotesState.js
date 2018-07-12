@@ -128,6 +128,10 @@ function View() {
                   [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
                   [isAnyHotKey(['tab']), wrapPD(nop)],
                   [isAnyHotKey(['shift+tab']), wrapPD(nop)],
+                  [
+                    isAnyHotKey(['backspace']),
+                    wrapPD(this.onBackspaceKeyDown),
+                  ],
                 ])(e)
               },
               onZoomIn() {
@@ -135,6 +139,11 @@ function View() {
               },
               onDownArrowKey() {
                 view.focusNextDisplayNote(this)
+              },
+              onBackspaceKeyDown(e) {
+                if (_.isEmpty(e.target.value)) {
+                  this.onDelete()
+                }
               },
             },
             name: `DisplayNote@${note.id}`,
