@@ -292,7 +292,6 @@ function View() {
           parentId: note.id,
           sortIdx: sortIdx - 1,
         })
-        console.log(`prependNewChildNote`, newNote._debugName)
         const dn = this.findById(newNote.id)
         console.log(`prependNewChildNote`, dn._debugName)
         dn.tryFocusTextInput()
@@ -303,9 +302,9 @@ function View() {
           parentId: note.parentId,
           sortIdx: sortIdx,
         })
-        console.log(`appendSibling`, newNote._debugName)
-        newNote.tryFocusTextInput()
-        this.findById(newNote.id).tryFocusTextInput()
+        const dn = this.findById(newNote.id)
+        console.log(`appendSibling`, dn._debugName)
+        dn.tryFocusTextInput()
       },
       clearZoom() {
         this.zoomedNote = null
