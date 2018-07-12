@@ -48,11 +48,18 @@ const Notes = ActiveRecord({
   fieldNames,
 })
 
+const nCache = {}
+
 function createDisplayNoteTransformer(view) {
+  console.log('createDisplayNoteTransformer for', view)
   validate('O', [view])
   const transformer = note => {
     validate('O', [note])
-
+    if (nCache[note.id]) {
+      debugger
+    } else {
+      nCache[note.id] = note
+    }
     const _debugName = `DisplayNote@${note.id}@${nanoid()}`
     const displayNote = createObservableObject({
       props: {
@@ -131,7 +138,8 @@ function createDisplayNoteTransformer(view) {
         },
         focusTextInput() {
           if (!this.textInputRef) {
-            debugger
+            // debugger
+            return
           }
           tryCatchLogFindDOMNode(
             _.compose(
