@@ -183,8 +183,9 @@ function View() {
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
+        } else {
+          this.focusNextSiblingOfDisplayNote(dn)
         }
-        this.focusNextSiblingOfDisplayNote(dn)
       },
       focusNextSiblingOfDisplayNote(dn) {
         const nextIndex = this.getIndexOfDisplayNote(dn) + 1
