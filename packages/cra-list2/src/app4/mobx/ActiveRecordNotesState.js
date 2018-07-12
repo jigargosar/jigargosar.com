@@ -155,12 +155,12 @@ function View() {
           }),
         )
       },
-      getSiblingsOFDisplayNote(dn) {
-        if (dn.parentId === this.zoomedNoteId) {
+      getSiblingsWithParentId(parentId) {
+        if (parentId === this.zoomedNoteId) {
           return this.noteList
         } else {
           const results = this.findAll({
-            filter: _.propEq('id', dn.parentId),
+            filter: _.propEq('id', parentId),
           })
           const parentDisplayNote = _.head(results)
           console.assert(isNotNil(parentDisplayNote))
@@ -168,8 +168,8 @@ function View() {
         }
       },
       getIndexOfDisplayNote(dn) {
-        const siblingsOFDisplayNote = this.getSiblingsOFDisplayNote(
-          dn,
+        const siblingsOFDisplayNote = this.getSiblingsWithParentId(
+          dn.parentId,
         )
         const dnIdx = _.findIndex(
           _.eqProps('id', dn),
@@ -184,18 +184,23 @@ function View() {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
         } else {
-          this.focusNextSiblingOfDisplayNote(dn)
+          const nextSibling = this.getNextSiblingOfDisplayNote(dn)
+          if (isNotNil(nextSibling)) {
+            nextSibling.focusTextInput()
+          } else {
+            debugger
+          }
         }
       },
-      focusNextSiblingOfDisplayNote(dn) {
+      getNextSiblingOfDisplayNote(dn) {
         const nextIndex = this.getIndexOfDisplayNote(dn) + 1
         const siblingsOFDisplayNote = this.getSiblingsOFDisplayNote(
           dn,
         )
         if (isIndexOutOfBounds(nextIndex, siblingsOFDisplayNote)) {
-          debugger
+          return null
         } else {
-          siblingsOFDisplayNote[nextIndex].focusTextInput()
+          return siblingsOFDisplayNote[nextIndex]
         }
       },
     },
