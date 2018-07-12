@@ -36,6 +36,8 @@ export function ActiveRecord({
         if (_.isNil(id)) {
           return null
         }
+        // validate('S', [id])
+
         return this.find({filter: _.propEq('id', id)})
       },
       get snapshot() {
@@ -160,11 +162,13 @@ export function ActiveRecord({
     }
   }
 
-  function fromJSON(json) {
+  function fromJSON(jsSnap) {
+    const _debugName = `ARO@${jsSnap.id}@${nanoid()}`
     const obs = createObservableObject({
       props: {
-        ...json,
-        isNew: _.defaultTo(false, json.isNew),
+        ...jsSnap,
+        isNew: _.defaultTo(false, jsSnap.isNew),
+        _debugName,
       },
       computed: {
         get snapshot() {
@@ -174,12 +178,8 @@ export function ActiveRecord({
           )
         },
       },
-      actions: {
-        setDeleted(deleted = true) {
-          this.update({id: this.id, deleted})
-        },
-      },
-      name: json.id,
+      actions: {},
+      name: jsSnap.id,
     })
     return obs
   }

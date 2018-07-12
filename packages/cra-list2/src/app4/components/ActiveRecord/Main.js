@@ -132,7 +132,7 @@ const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
         <input
           placeholder={'Title'}
           className={cn('outline-0 bw0 f2 w-100')}
-          value={note.text}
+          value={note.text || ''}
           onChange={note.onTextChange}
           // onFocus={e => {
           //   console.log(`'onFocus'`, 'onFocus')

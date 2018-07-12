@@ -14,6 +14,7 @@ import {
   validate,
 } from '../little-ramda'
 import {focusRef, isAnyHotKey, wrapPD} from '../components/utils'
+import {nanoid} from '../model/util'
 
 function getActiveQuery({filters = []} = {}) {
   return {
@@ -41,11 +42,14 @@ const Notes = ActiveRecord({
 })
 
 function createDisplayNoteTransformer(view) {
-  return createTransformer(note => {
+  validate('O', [view])
+  const transformer = note => {
     validate('O', [note])
 
+    const _debugName = `DisplayNote@${note.id}@${nanoid()}`
     const displayNote = createObservableObject({
       props: {
+        _debugName,
         textInputRef: null,
         get parentNote() {
           return view.findById(note.parentId)
@@ -55,6 +59,21 @@ function createDisplayNoteTransformer(view) {
         },
         get childNotes() {
           return view.findAllWithParentId(note.id)
+        },
+        get siblingNotes() {
+          return this.parentNote.childNotes
+        },
+        get index() {
+          const idx = _.indexOf(this, this.siblingNotes)
+          console.assert(idx !== -1)
+          return idx
+        },
+        get nextSiblingNote() {
+          const nextIdx = this.index + 1
+          if (isIndexOutOfBounds(nextIdx, this.siblingNotes)) {
+            return null
+          }
+          return this.siblingNotes[nextIdx]
         },
         get hasChildren() {
           return !_.isEmpty(this.childNotes)
@@ -139,7 +158,7 @@ function createDisplayNoteTransformer(view) {
           }
         },
       },
-      name: `DisplayNote@${note.id}`,
+      name: _debugName,
     })
     attachDelegatingPropertyGetters(
       note,
@@ -147,18 +166,21 @@ function createDisplayNoteTransformer(view) {
       Notes.allFieldNames,
     )
     return displayNote
+  }
+  return createTransformer(transformer, (dn, n) => {
+    console.log(`dn,n`, dn._debugName, n._debugName)
+    console.log(`dn,n`, dn, n)
   })
 }
 
 function View() {
-  const dnMap = {}
-
   const view = createObservableObject({
     props: {
       rootNote: null,
       zoomedNote: null,
+      displayNoteTransformer: null,
       get currentRoot() {
-        const note = this.zoomedNote || this.rootNote
+        const note = this.rootNote
         validate('O', [note])
         return note
       },
@@ -167,21 +189,6 @@ function View() {
       },
       get currentNotesList() {
         return this.currentRoot.childNotes
-      },
-      get _dnt() {
-        return createDisplayNoteTransformer(this)
-      },
-      get displayNoteTransformer() {
-        return note => {
-          const displayNote = this._dnt(note)
-          const cachedDN = dnMap[note.id]
-          if (_.isNil(cachedDN)) {
-            dnMap[note.id] = displayNote
-          } else {
-            console.assert(displayNote === cachedDN)
-          }
-          return displayNote
-        }
       },
       findAll(options) {
         return _.map(
@@ -199,58 +206,17 @@ function View() {
           }),
         )
       },
-      getSiblingsOfDisplayNote(dn) {
-        if (dn === this.currentRoot) {
-          debugger
-          // return this.currentNotesList
-        } else if (dn.id === this.currentRootId) {
-          return []
-        } else {
-          const results = this.findAll({
-            filter: _.propEq('id', dn.parentId),
-          })
-          const parentDisplayNote = _.head(results)
-          console.assert(isNotNil(parentDisplayNote))
-          return parentDisplayNote.childNotes
-        }
-      },
-      getIndexOfDisplayNote(dn) {
-        const siblingsOFDisplayNote = this.getSiblingsOfDisplayNote(
-          dn,
-        )
-        const dnIdx = _.findIndex(
-          _.eqProps('id', dn),
-          siblingsOFDisplayNote,
-        )
-        console.assert(
-          !isIndexOutOfBounds(dnIdx, siblingsOFDisplayNote),
-        )
-        return dnIdx
-      },
-      getNextSiblingOfDisplayNote(dn) {
-        const nextIndex = this.getIndexOfDisplayNote(dn) + 1
-        const siblingsOFDisplayNote = this.getSiblingsOfDisplayNote(
-          dn,
-        )
-        if (isIndexOutOfBounds(nextIndex, siblingsOFDisplayNote)) {
-          return null
-        } else {
-          return siblingsOFDisplayNote[nextIndex]
-        }
-      },
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
         } else {
-          const nextSibling = this.getNextSiblingOfDisplayNote(dn)
+          const nextSibling = dn.nextSiblingNote
           if (isNotNil(nextSibling)) {
             nextSibling.focusTextInput()
           } else {
             const parentDN = dn.parentNote
             if (parentDN) {
-              const nextSibling = this.getNextSiblingOfDisplayNote(
-                parentDN,
-              )
+              const nextSibling = parentDN.nextSiblingNote
               if (isNotNil(nextSibling)) {
                 nextSibling.focusTextInput()
               }
@@ -291,7 +257,10 @@ function View() {
       zoomIntoDisplayNote(dn) {
         this.zoomedNote = dn
       },
-      findOrCreateRootNote() {
+      init() {
+        this.displayNoteTransformer = createDisplayNoteTransformer(
+          this,
+        )
         const foundRoot = _.head(
           this.findAll({filter: _.propEq('parentId', null)}),
         )
@@ -301,7 +270,7 @@ function View() {
     name: 'view',
   })
 
-  view.findOrCreateRootNote()
+  view.init()
 
   return view
 }
