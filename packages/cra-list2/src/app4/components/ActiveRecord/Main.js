@@ -2,9 +2,9 @@ import React from 'react'
 import {
   Btn,
   CenterLayout,
-  Lnk,
   List,
   ListItem,
+  Lnk,
   Title,
   TypographyDefaults,
 } from '../ui'
@@ -17,7 +17,6 @@ import {
 } from '../utils'
 import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
-import {mTrace} from '../../mobx/little-mobx'
 
 const Outline = mrInjectAll(function NoteOutline({note, view}) {
   return (
@@ -122,20 +121,20 @@ const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
 const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
   view,
 }) {
-  const note = view.currentRoot
+  const headerNote = view.currentRoot
   return (
     <F>
       <div className={cn('ma2')}>
-        <NoteNavLink note={note} />
+        <NoteNavLink note={view.rootNote} />
         <span>{`>`}</span>
       </div>
       <div className={cn('ma3 mt0')}>
         <input
-          ref={note.onTextInputRef}
+          ref={headerNote.onTextInputRef}
           placeholder={'Title'}
           className={cn('outline-0 bw0 f2 w-100')}
-          value={note.text || ''}
-          onChange={note.onTextChange}
+          value={headerNote.text || ''}
+          onChange={headerNote.onTextChange}
           // onFocus={e => {
           //   console.log(`'onFocus'`, 'onFocus')
           //   const target = e.target
@@ -144,7 +143,7 @@ const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
         />
       </div>
       <div className={cn('ma3')}>
-        <Btn onClick={note.onAddChild}>add</Btn>
+        <Btn onClick={headerNote.onAddChild}>add</Btn>
       </div>
     </F>
   )

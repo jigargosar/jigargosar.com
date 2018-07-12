@@ -3,6 +3,7 @@ import {
   attachDelegatingPropertyGetters,
   createObservableObject,
   createTransformer,
+  mTrace,
 } from './little-mobx'
 import {
   _,
@@ -211,7 +212,8 @@ function View() {
       zoomedNote: null,
       displayNoteTransformer: null,
       get currentRoot() {
-        const note = this.rootNote || this.zoomedNote
+        mTrace()
+        const note = this.zoomedNote || this.rootNote
         validate('O', [note])
         return note
       },
