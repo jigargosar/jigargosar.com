@@ -49,6 +49,7 @@ export function ActiveRecord({
           this.records.push(record)
           record.isNew = false
         }
+        return record
       },
       upsert({id, ...values}) {
         const record = this.findById(id)
@@ -61,10 +62,10 @@ export function ActiveRecord({
           Object.assign(record, updates)
           if (hasPersistenceFields(updates)) {
             record.modifiedAt = Date.now()
-            this.saveRecord(record)
+            return this.saveRecord(record)
           }
         } else {
-          this.saveRecord(createNew(values))
+          return this.saveRecord(createNew(values))
         }
       },
       load() {

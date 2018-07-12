@@ -11,6 +11,7 @@ import {
   isIndexOutOfBounds,
   isNotNil,
   nop,
+  validate,
 } from '../little-ramda'
 import {isAnyHotKey, wrapPD} from '../components/utils'
 import ReactDOM from 'react-dom'
@@ -34,6 +35,12 @@ const Notes = ActiveRecord({
 function View() {
   const view = createObservableObject({
     props: {
+      rootNote: null,
+      get currentRoot() {
+        const note = this.zoomedNote || this.rootNote
+        validate('O', [note])
+        return note
+      },
       zoomedNote: null,
       get zoomedNoteId() {
         return dotPathOr(null, 'zoomedNote', this)
@@ -223,6 +230,14 @@ function View() {
       },
       zoomIntoDisplayNote(dn) {
         this.zoomedNote = dn
+      },
+      findOrCreateRootNote() {
+        const foundRoot = _.head(
+          this.findAll({filter: _.propEq('id', null)}),
+        )
+        this.rootNote = _.isNil(foundRoot)
+          ? Notes.upsert()
+          : foundRoot
       },
     },
     name: 'view',
