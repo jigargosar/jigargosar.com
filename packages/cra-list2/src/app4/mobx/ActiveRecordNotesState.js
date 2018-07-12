@@ -4,6 +4,7 @@ import {
   createObservableObject,
   createTransformer,
   mTrace,
+  mWhen,
 } from './little-mobx'
 import {
   _,
@@ -59,6 +60,9 @@ function createDisplayNoteTransformer(view) {
         _debugName,
         textInputRef: null,
         get parentNote() {
+          if (_.isNil(note.parentId)) {
+            return null
+          }
           return view.findById(note.parentId)
         },
         get navLinkText() {
@@ -110,7 +114,19 @@ function createDisplayNoteTransformer(view) {
           }
         },
         tryFocusTextInput() {
-          requestAnimationFrame(this.focusTextInput.bind(this))
+          // setTimeout(() => {
+          //   requestAnimationFrame(() => this.focusTextInput())
+          // }, 0)
+          mWhen(
+            () => isNotNil(this.textInputRef),
+            () => {
+              console.log(
+                `when tryFocusTextInput success`,
+                this.textInputRef,
+              )
+              this.focusTextInput()
+            },
+          )
         },
         focusTextInput() {
           if (!this.textInputRef) {
@@ -279,13 +295,7 @@ function View() {
           parentId: note.parentId,
           sortIdx: sortIdx,
         })
-        console.log(
-          `dn.id`,
-          dn.id,
-          dn.parentId,
-          note.id,
-          note.parentId,
-        )
+        console.log(`dn.id`, dn._debugName)
         dn.tryFocusTextInput()
       },
     },
