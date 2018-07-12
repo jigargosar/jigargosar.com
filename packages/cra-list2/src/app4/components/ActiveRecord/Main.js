@@ -37,7 +37,7 @@ const OutlineNote = mrInjectAll(function OutlineNote({note}) {
       >
         <div
           className={cn(
-            'code bw0 outline-0 pl2 pr1 h-100 f4',
+            'code lh-solid bw0 outline-0 pl2 pr1 h-100 f4',
             note.isCollapseButtonDisabled
               ? 'o-0'
               : 'child pointer blue',
@@ -50,7 +50,7 @@ const OutlineNote = mrInjectAll(function OutlineNote({note}) {
         </div>
 
         <div
-          className={cn('flex')}
+          className={cn('flex mr1')}
           style={{marginTop: 2}}
           onClick={note.onZoomIn}
         >
@@ -65,7 +65,7 @@ const OutlineNote = mrInjectAll(function OutlineNote({note}) {
         <input
           ref={note.onTextInputRef}
           className={cn(
-            'flex-auto ma0 pa1 input-reset lh-copy outline-0',
+            'flex-auto ma0 pa0 input-reset lh-copy outline-0',
             // 'bw0',
             'bn bw1 bb b--black-05',
           )}
