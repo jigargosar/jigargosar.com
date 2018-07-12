@@ -1,4 +1,4 @@
-import {createObservableObject, mAutoRun} from './little-mobx'
+import {createObservableObject, mAutoRun, oArray} from './little-mobx'
 import {nanoid} from '../model/util'
 import {_, validate} from '../little-ramda'
 import {storage} from '../services/storage'
@@ -17,7 +17,7 @@ export function ActiveRecord({
     props: {
       fieldNames,
       name,
-      records: [],
+      records: oArray([], {deep: false}),
       get allFieldNames() {
         return _.concat(fieldNames, ['id', 'createdAt', 'modifiedAt'])
       },

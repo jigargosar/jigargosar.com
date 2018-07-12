@@ -55,7 +55,7 @@ function createDisplayNoteTransformer(view) {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
         get childNotes() {
-          return view.findActiveNotesWithParentId(note.id)
+          return view.findAllWithParentId(note.id)
         },
         get hasChildren() {
           return !_.isEmpty(this.childNotes)
@@ -191,7 +191,7 @@ function View() {
         return dotPath('zoomedNote.childNotes', this)
       },
       get rootNoteList() {
-        return this.findActiveNotesWithParentId(null)
+        return this.findAllWithParentId(null)
       },
       findAll(options) {
         return _.map(
@@ -202,7 +202,7 @@ function View() {
       findById(id) {
         return this.displayNoteTransformer(Notes.findById(id))
       },
-      findActiveNotesWithParentId(parentId) {
+      findAllWithParentId(parentId) {
         return this.findAll(
           getActiveQuery({
             filters: [_.propEq('parentId', parentId)],
@@ -211,7 +211,10 @@ function View() {
       },
       getSiblingsOfDisplayNote(dn) {
         if (dn === this.currentRoot) {
-          return this.currentNotesList
+          debugger
+          // return this.currentNotesList
+        } else if (dn.id === this.currentRootId) {
+          return []
         } else {
           const results = this.findAll({
             filter: _.propEq('id', dn.parentId),
