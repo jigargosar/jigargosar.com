@@ -151,7 +151,8 @@ function createDisplayNoteTransformer(view) {
           this.textInputRef = ref
         },
         update(values) {
-          Notes.upsert({id: note.id, ...values})
+          // Notes.upsert({id: note.id, ...values})
+          view.upsert({id: note.id, ...values})
         },
         onDelete() {
           this.update({deleted: true})
