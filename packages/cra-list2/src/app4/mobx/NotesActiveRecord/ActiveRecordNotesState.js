@@ -261,7 +261,15 @@ function View() {
         }
       },
       upsert(values) {
-        return Notes.upsert(values)
+        const {id} = values
+        const newNote = Notes.upsert(values)
+        if (_.isNil(id) && isNotNil(newNote.parentId)) {
+          const parent = this.findById(newNote.parentId)
+          parent.childNotes.forEach(({id}, sortIdx) => {
+            Notes.upsert({id, sortIdx})
+          })
+        }
+        return newNote
       },
       upsertAndFocus(values) {
         const note = this.upsert(values)

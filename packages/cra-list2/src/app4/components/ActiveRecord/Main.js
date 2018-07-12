@@ -18,7 +18,7 @@ import {
 import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 
-const Outline = mrInjectAll(function NoteOutline({note, view}) {
+const OutlineNote = mrInjectAll(function OutlineNote({note}) {
   return (
     <ListItem
       className={cn('flex flex-column lh-copy')}
@@ -96,7 +96,7 @@ const OutlineChildren = mrInjectAll(function ChildNotes({
       shadow={shadow}
       className={cn('flex-auto', 'bw1 bl b--light-gray', className)}
     >
-      {renderKeyedById(Outline, 'note', childNotes)}
+      {renderKeyedById(OutlineNote, 'note', childNotes)}
     </List>
   )
 })
@@ -118,7 +118,7 @@ const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
   )
 })
 
-const ZoomNoteNav = mrInjectAll(function ZoomNoteNav({view}) {
+const OutlineNoteNav = mrInjectAll(function ZoomNoteNav({view}) {
   return (
     <div className={cn('ma2')}>
       <NoteNavLink note={view.rootNote} />
@@ -158,7 +158,7 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
     <div
       className={cn('bg-white mh0 mh3-ns mb3 mv3-ns shadow-1-ns pv2')}
     >
-      <ZoomNoteNav />
+      <OutlineNoteNav />
       <CurrentRootHeader />
 
       <OutlineChildren
