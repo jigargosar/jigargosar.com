@@ -4,7 +4,6 @@ import {
   createObservableObject,
   createTransformer,
   mTrace,
-  mWhen,
 } from './little-mobx'
 import {
   _,
@@ -117,18 +116,18 @@ function createDisplayNoteTransformer(view) {
       actions: {
         tryFocusTextInput() {
           // setTimeout(() => {
-          //   requestAnimationFrame(() => this.focusTextInput())
+          requestAnimationFrame(() => this.focusTextInput())
           // }, 0)
-          mWhen(
-            () => isNotNil(this.textInputRef),
-            () => {
-              console.log(
-                `when tryFocusTextInput success`,
-                this.textInputRef,
-              )
-              this.focusTextInput()
-            },
-          )
+          // mWhen(
+          //   () => isNotNil(this.textInputRef),
+          //   () => {
+          //     console.log(
+          //       `when tryFocusTextInput success`,
+          //       this.textInputRef,
+          //     )
+          //     this.focusTextInput()
+          //   },
+          // )
         },
         focusTextInput() {
           if (!this.textInputRef) {
