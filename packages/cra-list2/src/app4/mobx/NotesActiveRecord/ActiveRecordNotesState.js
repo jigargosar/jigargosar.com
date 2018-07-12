@@ -321,6 +321,13 @@ function View() {
       },
       zoomIntoDisplayNote(dn) {
         this.zoomedNote = dn
+        this.focusOnZoomIn()
+      },
+      focusOnZoomIn() {
+        const dnToFocus = _.when(_.isNil, constant(this.currentRoot))(
+          this.currentRoot.firstChildNote,
+        )
+        dnToFocus.tryFocusTextInput()
       },
       init() {
         this.displayNoteTransformer = createDisplayNoteTransformer(
@@ -334,11 +341,7 @@ function View() {
 
         console.assert(isNotNil(this.currentRoot))
 
-        const dnToFocus = _.when(_.isNil, constant(this.currentRoot))(
-          this.currentRoot.firstChildNote,
-        )
-
-        dnToFocus.tryFocusTextInput()
+        this.focusOnZoomIn()
       },
     },
     name: 'view',
