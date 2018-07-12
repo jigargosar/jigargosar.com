@@ -137,7 +137,7 @@ function createDisplayNoteTransformer(view) {
         },
         updateAndFocus(values) {
           // Notes.upsert({id: note.id, ...values})
-          view.upsertAndFocus({id: note.id, ...values})
+          view.upsertAndQueueFocus({id: note.id, ...values})
         },
         onDelete() {
           this.update({deleted: true})
@@ -161,6 +161,7 @@ function createDisplayNoteTransformer(view) {
             [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
             [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
             [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
+            [isAnyHotKey(['mod+,']), wrapPD(this.onZoomOut)],
             [isAnyHotKey(['tab']), wrapPD(nop)],
             [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
             [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
@@ -168,6 +169,9 @@ function createDisplayNoteTransformer(view) {
         },
         onZoomIn() {
           view.zoomIntoDisplayNote(this)
+        },
+        onZoomOut() {
+          view.zoomOutFromDisplayNote(this)
         },
         onDownArrowKey() {
           view.focusNextDisplayNote(this)
@@ -212,7 +216,7 @@ function View() {
       rootNote: null,
       zoomedNote: null,
       displayNoteTransformer: null,
-      shouldFocusOnRefCache: {},
+      shouldFocusOnRefQueue: [],
       get currentRoot() {
         const note = this.zoomedNote || this.rootNote
         validate('O', [note])
@@ -245,9 +249,12 @@ function View() {
     },
     actions: {
       onDisplayNoteTextInputRef(ref, dn) {
-        if (ref && this.shouldFocusOnRefCache[dn.id]) {
+        if (ref && _.contains(dn.id, this.shouldFocusOnRefQueue)) {
           dn.focusTextInput()
-          delete this.shouldFocusOnRefCache[dn.id]
+          this.shouldFocusOnRefQueue = _.without(
+            [dn.id],
+            this.shouldFocusOnRefQueue,
+          )
         }
       },
       focusNextDisplayNote(dn) {
@@ -293,10 +300,13 @@ function View() {
         }
         return newNote
       },
-      upsertAndFocus(values) {
+      queueFocusOnRefChange({id}) {
+        this.shouldFocusOnRefQueue[id] = true
+      },
+      upsertAndQueueFocus(values) {
         const note = this.upsert(values)
         if (_.isNil(values.id)) {
-          this.shouldFocusOnRefCache[note.id] = true
+          this.queueFocusOnRefChange(note)
         } else {
           this.findById(values.id).focusTextInput()
         }
@@ -304,14 +314,14 @@ function View() {
       },
       prependNewChildNote(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsertAndFocus({
+        this.upsertAndQueueFocus({
           parentId: note.id,
           sortIdx: sortIdx - 1,
         })
       },
       appendSibling(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsertAndFocus({
+        this.upsertAndQueueFocus({
           parentId: note.parentId,
           sortIdx: sortIdx,
         })
@@ -321,13 +331,19 @@ function View() {
       },
       zoomIntoDisplayNote(dn) {
         this.zoomedNote = dn
-        this.focusOnZoomIn()
+        this.focusOnZoomChange()
       },
-      focusOnZoomIn() {
+      zoomOutFromDisplayNote(dn) {
+        this.clearZoom()
+        this.focusOnZoomChange()
+        this.queueFocusOnRefChange(dn)
+      },
+      focusOnZoomChange() {
         const dnToFocus = _.when(_.isNil, constant(this.currentRoot))(
           this.currentRoot.firstChildNote,
         )
-        dnToFocus.tryFocusTextInput()
+        // dnToFocus.tryFocusTextInput()
+        this.queueFocusOnRefChange(dnToFocus)
       },
       init() {
         this.displayNoteTransformer = createDisplayNoteTransformer(
@@ -341,7 +357,7 @@ function View() {
 
         console.assert(isNotNil(this.currentRoot))
 
-        this.focusOnZoomIn()
+        this.focusOnZoomChange()
       },
     },
     name: 'view',
