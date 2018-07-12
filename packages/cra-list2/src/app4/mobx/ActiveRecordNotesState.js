@@ -113,6 +113,8 @@ function createDisplayNoteTransformer(view) {
             onKeyDown: this.onTextKeyDown,
           }
         },
+      },
+      actions: {
         tryFocusTextInput() {
           // setTimeout(() => {
           //   requestAnimationFrame(() => this.focusTextInput())
@@ -139,8 +141,6 @@ function createDisplayNoteTransformer(view) {
             ),
           )(this.textInputRef)
         },
-      },
-      actions: {
         onAddChild() {
           view.prependNewChildNote(note)
         },
@@ -245,9 +245,11 @@ function View() {
           Notes.findAll(options),
         )
       },
+
       findById(id) {
         return this.displayNoteTransformer(Notes.findById(id))
       },
+
       findAllWithParentId(parentId) {
         return this.findAll(
           getActiveQuery({
@@ -255,6 +257,8 @@ function View() {
           }),
         )
       },
+    },
+    actions: {
       focusNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
@@ -298,8 +302,6 @@ function View() {
         console.log(`dn.id`, dn._debugName)
         dn.tryFocusTextInput()
       },
-    },
-    actions: {
       clearZoom() {
         this.zoomedNote = null
       },
