@@ -256,23 +256,17 @@ function View() {
       },
       prependNewChildNote(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        const newNote = this.upsert({
+        this.upsert({
           parentId: note.id,
           sortIdx: sortIdx - 1,
         })
-        const dn = this.findById(newNote.id)
-        console.log(`prependNewChildNote`, dn._debugName)
-        dn.tryFocusTextInput()
       },
       appendSibling(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        const newNote = this.upsert({
+        this.upsert({
           parentId: note.parentId,
           sortIdx: sortIdx,
         })
-        const dn = this.findById(newNote.id)
-        console.log(`appendSibling`, dn._debugName)
-        dn.tryFocusTextInput()
       },
       clearZoom() {
         this.zoomedNote = null
