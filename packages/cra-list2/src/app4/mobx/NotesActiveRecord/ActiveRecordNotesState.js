@@ -170,7 +170,8 @@ function createDisplayNoteTransformer(view) {
         onZoomIn() {
           view.zoomIntoDisplayNote(this)
         },
-        onZoomOut() {
+        onZoomOut(e) {
+          e.preventDefault()
           view.zoomOutFromDisplayNote(this)
         },
         onDownArrowKey() {
@@ -301,7 +302,7 @@ function View() {
         return newNote
       },
       queueFocusOnRefChange({id}) {
-        this.shouldFocusOnRefQueue[id] = true
+        this.shouldFocusOnRefQueue.push(id)
       },
       upsertAndQueueFocus(values) {
         const note = this.upsert(values)

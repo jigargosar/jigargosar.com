@@ -111,7 +111,7 @@ const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
       color={'gray'}
       m={''}
       className={cn('pa2')}
-      onClick={note.onZoomIn}
+      onClick={note.onZoomOut}
     >
       {`${note.navLinkText}`}
     </Lnk>
