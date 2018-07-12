@@ -92,7 +92,7 @@ const OutlineChildren = mrInjectAll(function ChildNotes({
   )
 })
 
-const ZoomedNoteHeader = mrInjectAll(function ZoomedNoteHeader({
+const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
   view,
 }) {
   const note = view.currentRoot
@@ -121,7 +121,7 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
     <div
       className={cn('bg-white mh0 mh3-ns mb3 mv3-ns shadow-1-ns pv2')}
     >
-      <ZoomedNoteHeader />
+      <CurrentRootHeader />
       <OutlineChildren
         m={''}
         className={cn('bn bw0')}
