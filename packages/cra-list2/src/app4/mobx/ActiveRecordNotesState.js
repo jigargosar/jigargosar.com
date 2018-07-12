@@ -246,7 +246,7 @@ function View() {
             nextSibling.focusTextInput()
           } else {
             const parentDN = dn.parentNote
-            if (parentDN) {
+            if (parentDN && parentDN.parentId) {
               const nextSibling = parentDN.nextSiblingNote
               if (isNotNil(nextSibling)) {
                 nextSibling.focusTextInput()
