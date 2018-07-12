@@ -53,6 +53,9 @@ function View() {
               get shouldDisplayChildren() {
                 return this.hasChildren && !note.collapsed
               },
+              get firstChildNote() {
+                return _.head(this.childNotes)
+              },
               get isCollapseButtonDisabled() {
                 return !this.hasChildren
               },
@@ -178,6 +181,9 @@ function View() {
         return dnIdx
       },
       focusNextDisplayNote(dn) {
+        if (dn.shouldDisplayChildren) {
+          dn.firstChildNote.focusTextInput()
+        }
         this.focusNextSiblingOfDisplayNote(dn)
       },
       focusNextSiblingOfDisplayNote(dn) {
