@@ -309,18 +309,18 @@ function View() {
       zoomIntoDisplayNote(dn) {
         this.zoomedNote = dn
       },
-      init() {
-        this.displayNoteTransformer = createDisplayNoteTransformer(
-          this,
+      init(view) {
+        view.displayNoteTransformer = createDisplayNoteTransformer(
+          view,
         )
         const foundRoot = _.head(
-          this.findAll({filter: _.propEq('parentId', null)}),
+          view.findAll({filter: _.propEq('parentId', null)}),
         )
-        this.rootNote = _.isNil(foundRoot) ? this.upsert() : foundRoot
+        view.rootNote = _.isNil(foundRoot) ? view.upsert() : foundRoot
         const dnToFocus = _.when(
           _.isNil,
-          constant(this.currentRoot),
-          this.currentRoot.firstChildNote,
+          constant(view.currentRoot),
+          view.currentRoot.firstChildNote,
         )
         dnToFocus.tryFocusTextInput()
       },
@@ -328,7 +328,7 @@ function View() {
     name: 'view',
   })
 
-  view.init()
+  view.init(view)
 
   return view
 }
