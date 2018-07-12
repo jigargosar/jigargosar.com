@@ -80,7 +80,7 @@ function createDisplayNoteTransformer(view) {
         },
         focusTextInput() {
           if (!this.textInputRef) {
-            debugger
+            // debugger
           }
           focusRef(this.textInputRef)
         },
@@ -148,6 +148,8 @@ function createDisplayNoteTransformer(view) {
 }
 
 function View() {
+  const dnMap = {}
+
   const view = createObservableObject({
     props: {
       rootNote: null,
@@ -160,8 +162,20 @@ function View() {
       get zoomedNoteId() {
         return dotPathOr(null, 'zoomedNote', this)
       },
-      get displayNoteTransformer() {
+      get _dnt() {
         return createDisplayNoteTransformer(this)
+      },
+      get displayNoteTransformer() {
+        return note => {
+          const displayNote = this._dnt(note)
+          const cachedDN = dnMap[note.id]
+          if (_.isNil(cachedDN)) {
+            dnMap[note.id] = displayNote
+          } else {
+            console.assert(displayNote === cachedDN)
+          }
+          return displayNote
+        }
       },
       get noteList() {
         return this.zoomedNoteList || this.rootNoteList
@@ -170,10 +184,7 @@ function View() {
         return dotPath('zoomedNote.childNotes', this)
       },
       get rootNoteList() {
-        return _.map(
-          this.displayNoteTransformer,
-          this.findActiveNotesWithParentId(null),
-        )
+        return this.findActiveNotesWithParentId(null)
       },
       findAll(options) {
         return _.map(
@@ -253,7 +264,11 @@ function View() {
         return this.displayNoteTransformer(Notes.upsert(values))
       },
       prependNewChildNote(note) {
-        this.upsert({parentId: note.id}).tryFocusTextInput()
+        const sortIdx = _.defaultTo(0, note.sortIdx)
+        this.upsert({
+          parentId: note.id,
+          sortIdx: sortIdx - 2,
+        }).tryFocusTextInput()
       },
       appendSibling(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
