@@ -188,7 +188,7 @@ function createDisplayNoteTransformer(view) {
     return displayNote
   }
   return createTransformer(transformer, (dn, n) => {
-    console.log(`destroying`, dn._debugName, n)
+    console.debug(`destroying`, dn._debugName, n)
   })
 }
 
