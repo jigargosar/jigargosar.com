@@ -114,7 +114,7 @@ function View() {
                 view.zoomIntoDisplayNote(this)
               },
               onDownArrowKey() {
-                view.focusNextSiblingOfDisplayNote(this)
+                view.focusNextDisplayNote(this)
               },
             },
             name: `DisplayNote@${note.id}`,
@@ -176,6 +176,9 @@ function View() {
           !isIndexOutOfBounds(dnIdx, siblingsOFDisplayNote),
         )
         return dnIdx
+      },
+      focusNextDisplayNote(dn) {
+        this.focusNextSiblingOfDisplayNote(this)
       },
       focusNextSiblingOfDisplayNote(dn) {
         const nextIndex = this.getIndexOfDisplayNote(dn) + 1
