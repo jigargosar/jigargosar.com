@@ -109,7 +109,7 @@ const CurrentRootHeader = mrInjectAll(function ZoomedNoteHeader({
   return (
     <F>
       <div className={cn('gray ma3')} onClick={view.clearZoom}>
-        {`Home`}
+        {`${view.rootNote.text || 'Home'} >`}
       </div>
       <div className={cn('ma3 mt0')}>
         <input
