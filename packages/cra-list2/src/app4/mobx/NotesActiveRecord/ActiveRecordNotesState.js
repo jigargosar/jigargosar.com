@@ -25,7 +25,7 @@ const nCache = {}
 
 function createDisplayNoteTransformer(view) {
   let counter = 0
-  console.log('createDisplayNoteTransformer for', view)
+  console.debug('createDisplayNoteTransformer for', view)
   validate('O', [view])
   const transformer = note => {
     validate('O', [note])
