@@ -81,6 +81,11 @@ function View() {
                   onKeyDown: this.onTextKeyDown,
                 }
               },
+              tryFocusTextInput() {
+                requestAnimationFrame(() => {
+                  this.focusTextInput()
+                })
+              },
               focusTextInput() {
                 const inputEl = ReactDOM.findDOMNode(
                   this.textInputRef,
@@ -94,7 +99,10 @@ function View() {
             },
             actions: {
               onAddChild() {
-                view.upsert({parentId: note.id})
+                view.prependNewChildNote(note)
+              },
+              onAppendSibling() {
+                view.appendSibling(note)
               },
               onTextInputRef(ref) {
                 this.textInputRef = ref
@@ -119,7 +127,10 @@ function View() {
               },
               onTextKeyDown(e) {
                 _.cond([
-                  [isAnyHotKey(['enter']), wrapPD(nop)],
+                  [
+                    isAnyHotKey(['enter']),
+                    wrapPD(this.onAppendSibling),
+                  ],
                   [isAnyHotKey(['escape']), wrapPD(nop)],
                   [
                     isAnyHotKey(['down']),
@@ -244,6 +255,16 @@ function View() {
       },
       upsert(values) {
         return this.displayNoteTransformer(Notes.upsert(values))
+      },
+      prependNewChildNote(note) {
+        this.upsert({parentId: note.id}).tryFocusTextInput()
+      },
+      appendSibling(note) {
+        const sortIdx = _.defaultTo(0, note.sortIdx)
+        this.upsert({
+          parentId: note.parentId,
+          sortIdx: sortIdx + 1,
+        }).tryFocusTextInput()
       },
     },
     actions: {
