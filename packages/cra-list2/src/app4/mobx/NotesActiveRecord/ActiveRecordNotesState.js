@@ -226,7 +226,7 @@ function createDisplayNoteTransformer(view) {
         },
         onNavLinkClicked(e) {
           e.preventDefault()
-          view.zoomOutFromDisplayNote(this)
+          view.zoomOutTillDisplayNote(this)
         },
         onDownArrowKey() {
           this.navigateToNextDisplayNote()
@@ -279,12 +279,12 @@ function createDisplayNoteTransformer(view) {
 }
 
 function maybeFocusDisplayNoteTextInput(maybeDisplayNoteToFocus) {
-  console.log(
-    `maybeDisplayNoteToFocus.text`,
-    S.maybe_(() => '!!Not Found!!')(_.prop('text'))(
-      maybeDisplayNoteToFocus,
-    ),
-  )
+  // console.log(
+  //   `maybeDisplayNoteToFocus.text`,
+  //   S.maybe_(() => '!!Not Found!!')(_.prop('text'))(
+  //     maybeDisplayNoteToFocus,
+  //   ),
+  // )
   S.map(fdn => fdn.focusTextInput())(maybeDisplayNoteToFocus)
 }
 
@@ -394,6 +394,12 @@ function View() {
         this.maybeZoomedNote = this.currentRoot.maybeParentNote
         this.focusOnZoomChange()
         this.queueFocusOnRefChange(dn)
+      },
+      zoomOutTillDisplayNote(dn) {
+        this.maybeZoomedNote = S.Just(dn)
+        // this.focusOnZoomChange()
+        // this.queueFocusOnRefChange(dn)
+        dn.tryFocusTextInput()
       },
       focusOnZoomChange() {
         const dnToFocus = _.when(_.isNil, constant(this.currentRoot))(
