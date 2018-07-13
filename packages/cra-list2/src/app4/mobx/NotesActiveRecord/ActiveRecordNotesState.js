@@ -134,14 +134,28 @@ function createDisplayNoteTransformer(view) {
         },
       },
       actions: {
-        insertChildAt(idx) {
+        insertChild({id, ...values}) {
+          validate('Z', [id])
           view.upsertAndSetFocused({
-            parentId: note.id,
-            sortIdx: idx,
+            ...values,
+            parentId: this.id,
+          })
+        },
+        insertSibling({id, ...values}) {
+          validate('Z', [id])
+          view.upsertAndSetFocused({
+            ...values,
+            parentId: this.parentId,
           })
         },
         onAddChild() {
-          this.insertChildAt(-1)
+          this.insertChild({sortIdx: -1})
+        },
+        appendSibling() {
+          this.insertSibling({sortIdx: this.sortIdxOrZero})
+        },
+        prependSibling() {
+          this.insertSibling({sortIdx: this.sortIdxOrZero - 1})
         },
         onEnterKeyDown(e) {
           const [start /*, end*/] = [
@@ -154,19 +168,6 @@ function createDisplayNoteTransformer(view) {
             this.appendSibling()
           }
         },
-        appendSibling() {
-          view.upsertAndSetFocused({
-            parentId: note.parentId,
-            sortIdx: this.sortIdxOrZero,
-          })
-        },
-        prependSibling() {
-          view.upsertAndSetFocused({
-            parentId: note.parentId,
-            sortIdx: this.sortIdxOrZero - 1,
-          })
-        },
-
         onBackspaceKeyDown(e) {
           if (_.isEmpty(e.target.value)) {
             this.navigateToPreviousDisplayNote()
