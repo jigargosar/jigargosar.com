@@ -1,6 +1,7 @@
 import {
   _,
   constant,
+  dotPath,
   idEq,
   isIndexOutOfBounds,
   isNilOrEmpty,
@@ -93,7 +94,10 @@ function createDisplayNoteTransformer(view) {
             const children = parent.childNotes
             const childIdx = _.findIndex(idEq(child.id), children)
             console.assert(childIdx !== -1)
-            return S.at(childIdx + offset)(children)
+            const nextIdx = childIdx + offset
+            return isIndexOutOfBounds(nextIdx)(children)
+              ? S.Nothing
+              : S.Just(children[nextIdx])
           }
 
           return S.chain(maybeChildAtOffsetFrom(this, num))(
@@ -344,16 +348,25 @@ function View() {
         // })(dn.maybeFirstVisibleChildNote)
       },
       navigateToPreviousDisplayNote(dn) {
-        // _.compose(_.identity)(dn.maybePreviousSiblingNote)
+        const maybeFDN = _.compose(
+          S.map(prevSibling => prevSibling.lastLeafNote),
+        )(dn.maybePreviousSiblingNote)
+
+        // console.log(
+        //   `maybeFDN.text`,
+        //   S.maybe_(() => '!!Not Found!!')(_.prop('text'))(maybeFDN),
+        // )
+
+        console.log(
+          `dn.maybePreviousSiblingNote.value`,
+          dotPath('maybePreviousSiblingNote.value.text')(dn),
+        )
+
         const prevSibling = dn.prevSiblingNote
         if (isNotNil(prevSibling)) {
           prevSibling.lastLeafNote.focusTextInput()
         } else if (dn.parentNote) {
-          if (dn.parentNote.id === this.currentRoot.id) {
-            this.currentRoot.focusTextInput()
-          } else {
-            dn.parentNote.focusTextInput()
-          }
+          dn.parentNote.focusTextInput()
         }
       },
       indentDisplayNote() {},
