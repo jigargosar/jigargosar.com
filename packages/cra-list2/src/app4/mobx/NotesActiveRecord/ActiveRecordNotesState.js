@@ -272,9 +272,11 @@ function createDisplayNoteTransformer(view) {
             e.preventDefault()
             e.stopPropagation()
           } else {
-            S.map(gid =>
-              view.updateAndSetFocused({parentId: gid}, this),
-            )(this.maybeGrandParentId)
+            S.map(gid => {
+              e.preventDefault()
+              e.stopPropagation()
+              return view.updateAndSetFocused({parentId: gid}, this)
+            })(this.maybeGrandParentId)
           }
         },
         onTabKeyDown(e) {
