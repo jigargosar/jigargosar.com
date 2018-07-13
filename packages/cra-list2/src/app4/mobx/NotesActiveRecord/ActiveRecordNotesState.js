@@ -153,10 +153,6 @@ function createDisplayNoteTransformer(view) {
           // Notes.upsert({id: note.id, ...values})
           return view.upsert({id: note.id, ...values})
         },
-        updateAndSetFocused(values) {
-          // Notes.upsert({id: note.id, ...values})
-          view.upsertAndSetFocused({id: note.id, ...values})
-        },
         onDelete() {
           this.update({deleted: true})
         },
@@ -167,7 +163,7 @@ function createDisplayNoteTransformer(view) {
           if (!this.hasChildren) {
             return
           }
-          this.updateAndSetFocused({collapsed: !note.collapsed})
+          view.updateAndSetFocused({collapsed: !note.collapsed}, this)
         },
         onExpandKeyDown() {
           if (!this.hasChildren) {
@@ -345,6 +341,18 @@ function View() {
       },
       upsertAndSetFocused(values) {
         const note = this.upsert(values)
+        this.setFocusedDisplayNote(note)
+        return note
+      },
+      update(values, dn) {
+        const note = this.upsert({...values, id: dn.id})
+        if (note.parentId !== dn.parentId) {
+          this.sortChildrenWithParentId(dn.parentId)
+        }
+        return note
+      },
+      updateAndSetFocused(values, dn) {
+        const note = this.update(values, dn)
         this.setFocusedDisplayNote(note)
         return note
       },
