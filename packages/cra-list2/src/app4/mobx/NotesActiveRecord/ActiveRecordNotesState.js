@@ -344,15 +344,12 @@ function View() {
           sortIdx: sortIdx,
         })
       },
-      clearZoom() {
-        this.zoomedNote = null
-      },
       zoomIntoDisplayNote(dn) {
         this.zoomedNote = dn
         this.focusOnZoomChange()
       },
       zoomOutFromDisplayNote(dn) {
-        this.clearZoom()
+        this.zoomedNote = this.currentRoot.parentNote
         this.focusOnZoomChange()
         this.queueFocusOnRefChange(dn)
       },
