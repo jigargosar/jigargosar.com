@@ -175,7 +175,7 @@ function createDisplayNoteTransformer(view) {
           }
         },
         update(values) {
-          return view.upsert({id: note.id, ...values})
+          return view.update(values, this)
         },
         onDelete() {
           this.update({deleted: true})
@@ -281,11 +281,14 @@ function createDisplayNoteTransformer(view) {
           }
         },
         onTabKeyDown(e) {
-          S.map(id => {
+          S.map(prevSibling => {
             e.preventDefault()
             e.stopPropagation()
-            return this.update({parentId: id})
-          })(this.maybePreviousSiblingNoteId)
+            return this.update({
+              parentId: prevSibling.id,
+              sortIdx: prevSibling.childNotes.length,
+            })
+          })(this.maybePreviousSiblingNote)
         },
       },
       name: _debugName,
@@ -375,7 +378,7 @@ function View() {
       upsert(values = {}) {
         const {id, parentId} = values
         const upsertedNote = Notes.upsert(values)
-        if (_.isNil(id) || isNotNil(parentId)) {
+        if (_.isNil(id)) {
           this.sortChildrenWithParentId(upsertedNote.parentId)
         }
         return upsertedNote
@@ -386,11 +389,12 @@ function View() {
         return note
       },
       update(values, dn) {
-        const note = this.upsert({...values, id: dn.id})
-        if (note.parentId !== dn.parentId) {
+        const updatedNote = this.upsert({...values, id: dn.id})
+        if (updatedNote.parentId !== dn.parentId) {
           this.sortChildrenWithParentId(dn.parentId)
+          this.sortChildrenWithParentId(updatedNote.parentId)
         }
-        return note
+        return updatedNote
       },
       updateAndSetFocused(values, dn) {
         validate('OO', [values, dn])
