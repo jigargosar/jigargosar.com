@@ -336,12 +336,13 @@ function View() {
     },
     actions: {
       maybeSetFocusedDisplayNote(maybeDN) {
-        const maybeId = S.pipe([
+        const nullableId = S.pipe([
           S.map(dn => dn.id),
           S.maybeToNullable,
         ])(maybeDN)
-
-        this.setFocusedNoteId(maybeId)
+        if (isNotNil(nullableId)) {
+          this.setFocusedNoteId(nullableId)
+        }
       },
       setFocusedNoteId(id) {
         validate('S', [id])
