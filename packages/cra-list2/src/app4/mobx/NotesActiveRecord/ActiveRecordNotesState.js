@@ -243,9 +243,6 @@ function View() {
         validate('O', [note])
         return note
       },
-      get currentRootId() {
-        return this.currentRoot.id
-      },
       get currentNotesList() {
         return this.currentRoot.childNotes
       },
