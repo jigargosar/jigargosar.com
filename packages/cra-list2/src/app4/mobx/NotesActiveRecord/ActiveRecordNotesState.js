@@ -317,12 +317,12 @@ function View() {
           maybeOrElse(() => dn.maybeNextSiblingNote),
         )(dn.maybeFirstVisibleChildNote)
 
-        console.log(
-          `maybeFDN.text`,
-          S.maybe_(() => '!!Not Found!!')(dn => dn.text)(maybeFDN),
-        )
-
         S.map(fdn => fdn.focusTextInput())(maybeFDN)
+
+        // console.log(
+        //   `maybeFDN.text`,
+        //   S.maybe_(() => '!!Not Found!!')(dn => dn.text)(maybeFDN),
+        // )
 
         // S.maybe_(() => {
         //   const nextSibling = dn.nextSiblingNote
@@ -344,14 +344,17 @@ function View() {
         // })(dn.maybeFirstVisibleChildNote)
       },
       navigateToPreviousDisplayNote(dn) {
+        // _.compose(_.identity)(dn.maybePreviousSiblingNote)
         const prevSibling = dn.prevSiblingNote
         if (isNotNil(prevSibling)) {
           const lastLeafNote = prevSibling.lastLeafNote
           if (isNotNil(lastLeafNote)) {
             lastLeafNote.focusTextInput()
           }
-        } else {
-          if (dn.parentNote) {
+        } else if (dn.parentNote) {
+          if (dn.parentNote.id === this.currentRoot.id) {
+            this.currentRoot.focusTextInput()
+          } else {
             dn.parentNote.focusTextInput()
           }
         }
