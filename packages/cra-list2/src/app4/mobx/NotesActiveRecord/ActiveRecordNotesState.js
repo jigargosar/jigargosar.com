@@ -347,10 +347,7 @@ function View() {
         // _.compose(_.identity)(dn.maybePreviousSiblingNote)
         const prevSibling = dn.prevSiblingNote
         if (isNotNil(prevSibling)) {
-          const lastLeafNote = prevSibling.lastLeafNote
-          if (isNotNil(lastLeafNote)) {
-            lastLeafNote.focusTextInput()
-          }
+          prevSibling.lastLeafNote.focusTextInput()
         } else if (dn.parentNote) {
           if (dn.parentNote.id === this.currentRoot.id) {
             this.currentRoot.focusTextInput()
