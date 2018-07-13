@@ -5,10 +5,7 @@ import {NoteCollection} from './NoteCollection'
 import {Fire} from './Fire'
 import {tryCatchLog} from '../little-ramda'
 // import {startFireNoteCollectionSync} from './FireNoteCollection'
-import {Router} from './Router'
 import {BrowserExtensionPopup} from './BrowserExtensionPopup'
-import {Outliner} from './Outliner'
-import {State} from './State'
 
 const ncSnapshot = storage.get('ncSnapshot') || {}
 const nc = NoteCollection.create(ncSnapshot)
@@ -24,10 +21,7 @@ const state = {
   nc,
   view: NoteListView({nc}),
   fire: Fire(),
-  router: Router(),
   pop: BrowserExtensionPopup({nc}),
-  out: Outliner(),
-  state: State(),
 }
 
 // disposers.push(startFireNoteCollectionSync(state))
