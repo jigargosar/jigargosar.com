@@ -266,7 +266,6 @@ function View() {
       maybeZoomedNote: S.Nothing,
       maybeFocusedNoteId: S.Nothing,
       displayNoteTransformer: null,
-      // shouldFocusOnRefQueue: [],
       get currentRoot() {
         const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
         validate('O', [note])
