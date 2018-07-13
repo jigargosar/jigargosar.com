@@ -20,13 +20,14 @@ import {
   wrapPD,
 } from '../../components/utils'
 import {getActiveQuery, Notes} from './NotesActiveRecord'
+import {nanoid} from '../../model/util'
 
 function createDisplayNoteTransformer(view) {
   console.debug('createDisplayNoteTransformer for', view)
   validate('O', [view])
   const transformer = note => {
     validate('O', [note])
-    const _debugName = `DN-${counter}--${note.id}`
+    const _debugName = `DN-${nanoid(4)}-${note.id}`
     const displayNote = createObservableObject({
       props: {
         _debugName,
@@ -160,13 +161,13 @@ function createDisplayNoteTransformer(view) {
           if (!this.hasChildren) {
             return
           }
-          this.updateAndQueueFocus({collapsed: false})
+          this.update({collapsed: false})
         },
         onCollapseKeyDown() {
           if (!this.hasChildren) {
             return
           }
-          this.updateAndQueueFocus({collapsed: true})
+          this.update({collapsed: true})
         },
         onTextFocus(e) {
           e.target.setSelectionRange(0, 0)
