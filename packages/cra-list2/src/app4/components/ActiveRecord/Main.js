@@ -65,7 +65,6 @@ const OutlineNote = mrInjectAll(function OutlineNote({note}) {
 
         <FocusChild shouldFocus={note.shouldFocus}>
           <input
-            ref={note.onTextInputRef}
             className={cn(
               'flex-auto ma0 pa0 input-reset lh-copy outline-0',
               // 'bw0',
@@ -77,9 +76,7 @@ const OutlineNote = mrInjectAll(function OutlineNote({note}) {
         </FocusChild>
         <div className={cn('mr2')}>{note.sortIdx}</div>
       </div>
-      <OutlineChildren
-        childNotes={note.hasVisibleChildren ? note.childNotes : []}
-      />
+      <OutlineChildren childNotes={note.visibleChildNotes} />
     </ListItem>
   )
 })
