@@ -264,7 +264,7 @@ function View() {
     props: {
       rootNote: null,
       maybeZoomedNote: S.Nothing,
-      maybeFocusedNoteId: S.Nothing,
+      maybeFocusedNoteId: null,
       displayNoteTransformer: null,
       get currentRoot() {
         const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
@@ -302,16 +302,19 @@ function View() {
         )
       },
       shouldFocusDisplayNoteTextInput(dn) {
-        return maybeOr('')(this.maybeFocusedNoteId) === dn.id
+        return this.maybeFocusedNoteId === dn.id
       },
     },
     actions: {
       maybeSetFocusedDisplayNote(maybeDN) {
-        this.maybeFocusedNoteId = S.map(dn => dn.id)(maybeDN)
+        const maybeFocusedNoteId = S.map(dn => dn.id)(maybeDN)
+        this.maybeFocusedNoteId = S.maybeToNullable(
+          maybeFocusedNoteId,
+        )
       },
       setFocusedDisplayNote(dn) {
         validate('OS', [dn, dn.id])
-        this.maybeFocusedNoteId = S.Just(dn.id)
+        this.nullableFocusedNoteId = dn.id
       },
       indentDisplayNote() {},
       upsert(values = {}) {
