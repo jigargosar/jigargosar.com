@@ -177,14 +177,8 @@ function createDisplayNoteTransformer(view) {
             [isAnyHotKey(['tab']), wrapPD(nop)],
             [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
             [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
-            [
-              isAnyHotKey(['mod+left']),
-              wrapPD(this.onCollapseKeyDown),
-            ],
-            [
-              isAnyHotKey(['mod+right']),
-              wrapPD(this.onExpandKeyDown),
-            ],
+            [isAnyHotKey(['mod+up']), wrapPD(this.onCollapseKeyDown)],
+            [isAnyHotKey(['mod+down']), wrapPD(this.onExpandKeyDown)],
           ])(e)
         },
         onZoomIn() {
