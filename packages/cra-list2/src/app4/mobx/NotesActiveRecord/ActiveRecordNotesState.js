@@ -326,19 +326,22 @@ function View() {
         this.nullableFocusedNoteId = dn.id
       },
       indentDisplayNote() {},
+      sortChildrenWithParentId(parentId) {
+        if (_.isNil(parentId)) {
+          return
+        }
+        const parent = this.findById(parentId)
+        parent.childNotes.forEach(({id}, sortIdx) => {
+          Notes.upsert({id, sortIdx})
+        })
+      },
       upsert(values = {}) {
         const {id, parentId} = values
-        const newNote = Notes.upsert(values)
-        if (
-          (_.isNil(id) || isNotNil(parentId)) &&
-          isNotNil(newNote.parentId)
-        ) {
-          const parent = this.findById(newNote.parentId)
-          parent.childNotes.forEach(({id}, sortIdx) => {
-            Notes.upsert({id, sortIdx})
-          })
+        const upsertedNote = Notes.upsert(values)
+        if (_.isNil(id) || isNotNil(parentId)) {
+          this.sortChildrenWithParentId(upsertedNote.parentId)
         }
-        return newNote
+        return upsertedNote
       },
       upsertAndSetFocused(values) {
         const note = this.upsert(values)
