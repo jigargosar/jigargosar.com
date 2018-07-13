@@ -21,12 +21,14 @@ import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {getActiveQuery, Notes} from './NotesActiveRecord'
 import {nanoid} from '../../model/util'
 import S from 'sanctuary'
-
+let count = 0
 function createDisplayNoteTransformer(view) {
   console.debug('createDisplayNoteTransformer for', view)
   validate('O', [view])
   const transformer = note => {
     validate('O', [note])
+    count += 1
+    console.debug('creating DisplayNote', count)
     const _debugName = `DN-${nanoid(4)}-${note.id.slice(0, 9)}`
     const displayNote = createObservableObject({
       props: {
