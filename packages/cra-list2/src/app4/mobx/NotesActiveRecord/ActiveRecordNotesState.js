@@ -121,11 +121,12 @@ function createDisplayNoteTransformer(view) {
             ),
           )(this.textInputRef)
         },
+        onTextInputRef(ref) {
+          this.textInputRef = ref
+          view.onDisplayNoteTextInputRef(ref, this)
+        },
         onAddChild() {
           view.prependNewChildNote(note)
-        },
-        onAppendSibling() {
-          view.appendSibling(note)
         },
         onEnterKeyDown(e) {
           const [start /*, end*/] = [
@@ -139,20 +140,10 @@ function createDisplayNoteTransformer(view) {
           }
         },
         onBackspaceKeyDown(e) {
-          // const [start, end] = [
-          //   e.target.selectionStart,
-          //   e.target.selectionEnd,
-          // ]
-
           if (_.isEmpty(e.target.value)) {
             view.focusPreviousDisplayNote(this)
             this.onDelete()
-          } else {
           }
-        },
-        onTextInputRef(ref) {
-          this.textInputRef = ref
-          view.onDisplayNoteTextInputRef(ref, this)
         },
         update(values) {
           // Notes.upsert({id: note.id, ...values})
@@ -376,7 +367,6 @@ function View() {
         const dnToFocus = _.when(_.isNil, constant(this.currentRoot))(
           this.currentRoot.firstChildNote,
         )
-        // dnToFocus.tryFocusTextInput()
         this.queueFocusOnRefChange(dnToFocus)
       },
       init() {
