@@ -300,6 +300,9 @@ function View() {
         validate('O', [note])
         return note
       },
+      get currentAncestors() {
+        return this.currentRoot.ancestors
+      },
       get currentNotesList() {
         return this.currentRoot.childNotes
       },
