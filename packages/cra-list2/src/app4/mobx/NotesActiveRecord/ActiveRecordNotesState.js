@@ -152,7 +152,7 @@ function createDisplayNoteTransformer(view) {
           return view.update(values, this)
         },
         updateAndSetFocused(values) {
-          return view.update(values, this)
+          return view.updateAndSetFocused(values, this)
         },
         onAddChild() {
           this.insertChild({sortIdx: -1})
