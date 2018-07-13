@@ -49,12 +49,12 @@ function createDisplayNoteTransformer(view) {
         get maybeParentNote() {
           return S.map(id => view.findById(id))(this.maybeParentId)
         },
-        get lastLeafNote() {
-          if (this.shouldDisplayChildren && this.lastChildNote) {
-            return this.lastChildNote.lastLeafNote
-          } else {
-            return this
-          }
+        get lastVisibleLeafNoteOrSelf() {
+          return S.pipe([
+            S.last,
+            S.map(last => last.lastVisibleLeafNoteOrSelf),
+            maybeOr(this),
+          ])(this.visibleChildNotes)
         },
         get navLinkText() {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
@@ -101,9 +101,6 @@ function createDisplayNoteTransformer(view) {
         },
         get firstChildNote() {
           return _.head(this.childNotes)
-        },
-        get lastChildNote() {
-          return _.last(this.childNotes)
         },
         get isCollapseButtonDisabled() {
           return !this.hasChildren
@@ -310,7 +307,10 @@ function View() {
       navigateToPreviousDisplayNote(dn) {
         const maybeFDN = _.compose(
           maybeOrElse(() => dn.maybeParentNote),
-          S.map(prevSiblingNote => prevSiblingNote.lastLeafNote),
+          S.map(
+            prevSiblingNote =>
+              prevSiblingNote.lastVisibleLeafNoteOrSelf,
+          ),
         )(dn.maybePreviousSiblingNote)
 
         maybeFocusDisplayNoteTextInput(maybeFDN)
