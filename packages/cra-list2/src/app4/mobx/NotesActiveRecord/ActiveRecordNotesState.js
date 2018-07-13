@@ -1,7 +1,6 @@
 import {
   _,
   constant,
-  dotPath,
   idEq,
   isIndexOutOfBounds,
   isNilOrEmpty,
@@ -267,6 +266,16 @@ function createDisplayNoteTransformer(view) {
   })
 }
 
+function maybeFocusDisplayNoteTextInput(maybeDisplayNoteToFocus) {
+  console.log(
+    `maybeDisplayNoteToFocus.text`,
+    S.maybe_(() => '!!Not Found!!')(_.prop('text'))(
+      maybeDisplayNoteToFocus,
+    ),
+  )
+  S.map(fdn => fdn.focusTextInput())(maybeDisplayNoteToFocus)
+}
+
 function View() {
   const view = createObservableObject({
     props: {
@@ -321,7 +330,7 @@ function View() {
           maybeOrElse(() => dn.maybeNextSiblingNote),
         )(dn.maybeFirstVisibleChildNote)
 
-        S.map(fdn => fdn.focusTextInput())(maybeFDN)
+        maybeFocusDisplayNoteTextInput(maybeFDN)
 
         // console.log(
         //   `maybeFDN.text`,
@@ -349,25 +358,23 @@ function View() {
       },
       navigateToPreviousDisplayNote(dn) {
         const maybeFDN = _.compose(
+          maybeOrElse(() => dn.maybeParentNote),
           S.map(prevSibling => prevSibling.lastLeafNote),
         )(dn.maybePreviousSiblingNote)
 
+        maybeFocusDisplayNoteTextInput(maybeFDN)
+
         // console.log(
-        //   `maybeFDN.text`,
-        //   S.maybe_(() => '!!Not Found!!')(_.prop('text'))(maybeFDN),
+        //   `dn.maybePreviousSiblingNote.value`,
+        //   dotPath('maybePreviousSiblingNote.value.text')(dn),
         // )
 
-        console.log(
-          `dn.maybePreviousSiblingNote.value`,
-          dotPath('maybePreviousSiblingNote.value.text')(dn),
-        )
-
-        const prevSibling = dn.prevSiblingNote
-        if (isNotNil(prevSibling)) {
-          prevSibling.lastLeafNote.focusTextInput()
-        } else if (dn.parentNote) {
-          dn.parentNote.focusTextInput()
-        }
+        // const prevSibling = dn.prevSiblingNote
+        // if (isNotNil(prevSibling)) {
+        //   prevSibling.lastLeafNote.focusTextInput()
+        // } else if (dn.parentNote) {
+        //   dn.parentNote.focusTextInput()
+        // }
       },
       indentDisplayNote() {},
       upsert(values) {
