@@ -44,16 +44,6 @@ function createDisplayNoteTransformer(view) {
         get navLinkText() {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
-        get maybeGrandParentId() {
-          return S.chain(parent => parent.maybeParentId)(
-            this.maybeParentNote,
-          )
-        },
-        get maybeGrandParent() {
-          return S.chain(parent => parent.maybeParentNote)(
-            this.maybeParentNote,
-          )
-        },
         get parentAncestors() {
           return S.pipe([
             S.map(parentNote => [
