@@ -302,7 +302,7 @@ function View() {
         )
       },
       shouldFocusDisplayNoteTextInput(dn) {
-        return S.equals(S.Just(dn.id))(this.maybeFocusedNoteId)
+        return maybeOr('')(this.maybeFocusedNoteId) === dn.id
       },
     },
     actions: {
