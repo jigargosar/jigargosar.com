@@ -361,7 +361,7 @@ function View() {
         })
       },
       zoomIntoDisplayNote(dn) {
-        this.maybeZoomedNote = S.Maybe.of(dn)
+        this.maybeZoomedNote = S.Just(dn)
         this.focusOnZoomChange()
       },
       zoomOutFromDisplayNote(dn) {
