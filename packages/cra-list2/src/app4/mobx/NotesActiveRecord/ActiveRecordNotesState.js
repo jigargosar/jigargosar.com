@@ -44,6 +44,24 @@ function createDisplayNoteTransformer(view) {
         get navLinkText() {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
+        get parentAncestors() {
+          return S.pipe([
+            S.map(parentNote => [
+              ...parentNote.parentAncestors,
+              this,
+            ]),
+            maybeOr([]),
+          ])(this.maybeParentNote)
+        },
+        get ancestors_() {
+          return [...this.parentAncestors, this]
+        },
+        get ancestors() {
+          return S.pipe([
+            S.map(parentNote => [...parentNote.ancestors, this]),
+            maybeOr([]),
+          ])(this.maybeParentNote)
+        },
         get maybeParentId() {
           return S.toMaybe(note.parentId)
         },
@@ -203,6 +221,10 @@ function createDisplayNoteTransformer(view) {
           view.zoomIntoDisplayNote(this)
         },
         onZoomOut(e) {
+          e.preventDefault()
+          view.zoomOutFromDisplayNote(this)
+        },
+        onNavLinkClicked(e) {
           e.preventDefault()
           view.zoomOutFromDisplayNote(this)
         },

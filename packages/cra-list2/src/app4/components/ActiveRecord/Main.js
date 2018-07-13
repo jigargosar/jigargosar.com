@@ -15,7 +15,7 @@ import {
   PropTypes,
   renderKeyedById,
 } from '../utils'
-import {_} from '../../little-ramda'
+import {_, S} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 
 const OutlineNote = mrInjectAll(function OutlineNote({note}) {
@@ -107,22 +107,31 @@ OutlineChildren.propTypes = {
 
 const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
   return (
-    <Lnk
-      color={'gray'}
-      m={''}
-      className={cn('pa2')}
-      onClick={note.onZoomOut}
-    >
-      {`${note.navLinkText}`}
-    </Lnk>
+    <F>
+      <Lnk
+        color={'gray'}
+        m={''}
+        className={cn('pa2')}
+        onClick={note.onNavLinkClicked}
+      >
+        {`${note.navLinkText}`}
+      </Lnk>
+      <span>{`>`}</span>
+    </F>
   )
 })
 
 const OutlineNoteNav = mrInjectAll(function ZoomNoteNav({view}) {
+  const ancestors = view.currentRoot.ancestors
+  // console.log(
+  //   `headerNote.ancestors`,
+  //   S.map(S.prop('text'))(ancestors),
+  // )
+
   return (
     <div className={cn('ma2')}>
       <NoteNavLink note={view.rootNote} />
-      <span>{`>`}</span>
+      {renderKeyedById(NoteNavLink, 'note', ancestors)}
     </div>
   )
 })
