@@ -179,7 +179,7 @@ function createDisplayNoteTransformer(view) {
         },
         onTextKeyDown(e) {
           _.cond([
-            [isAnyHotKey(['enter']), wrapPD(this.onEnterKeyDown)],
+            [isAnyHotKey(['enter']), this.onEnterKeyDown],
             [isAnyHotKey(['escape']), wrapPD(nop)],
             [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
             [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
