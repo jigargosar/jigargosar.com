@@ -59,19 +59,18 @@ function createDisplayNoteTransformer(view) {
           console.assert(idx !== -1)
           return idx
         },
-        get nextSiblingNote() {
-          const nextIdx = this.index + 1
+        siblingWithOffset(num) {
+          const nextIdx = this.index + num
           if (isIndexOutOfBounds(nextIdx, this.siblingNotes)) {
             return null
           }
           return this.siblingNotes[nextIdx]
         },
+        get nextSiblingNote() {
+          return this.siblingWithOffset(1)
+        },
         get prevSiblingNote() {
-          const prevId = this.index - 1
-          if (isIndexOutOfBounds(prevId, this.siblingNotes)) {
-            return null
-          }
-          return this.siblingNotes[prevId]
+          return this.siblingWithOffset(-1)
         },
         get hasChildren() {
           return !_.isEmpty(this.childNotes)
