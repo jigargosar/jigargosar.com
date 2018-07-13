@@ -148,6 +148,12 @@ function createDisplayNoteTransformer(view) {
             parentId: this.parentId,
           })
         },
+        update(values) {
+          return view.update(values, this)
+        },
+        updateAndSetFocused(values) {
+          return view.update(values, this)
+        },
         onAddChild() {
           this.insertChild({sortIdx: -1})
         },
@@ -174,9 +180,6 @@ function createDisplayNoteTransformer(view) {
             this.onDelete()
           }
         },
-        update(values) {
-          return view.update(values, this)
-        },
         onDelete() {
           this.update({deleted: true})
         },
@@ -187,7 +190,7 @@ function createDisplayNoteTransformer(view) {
           if (!this.hasChildren) {
             return
           }
-          view.updateAndSetFocused({collapsed: !note.collapsed}, this)
+          this.updateAndSetFocused({collapsed: !note.collapsed})
         },
         onExpandKeyDown() {
           if (!this.hasChildren) {
@@ -270,13 +273,10 @@ function createDisplayNoteTransformer(view) {
             S.map(parent => {
               e.preventDefault()
               e.stopPropagation()
-              return view.updateAndSetFocused(
-                {
-                  parentId: parent.parentId,
-                  sortIdx: parent.sortIdxOrZero,
-                },
-                this,
-              )
+              return this.updateAndSetFocused({
+                parentId: parent.parentId,
+                sortIdx: parent.sortIdxOrZero,
+              })
             })(this.maybeParentNote)
           }
         },
@@ -284,7 +284,7 @@ function createDisplayNoteTransformer(view) {
           S.map(prevSibling => {
             e.preventDefault()
             e.stopPropagation()
-            return this.update({
+            return this.updateAndSetFocused({
               parentId: prevSibling.id,
               sortIdx: prevSibling.childNotes.length,
             })
@@ -388,12 +388,11 @@ function View() {
         this.setFocusedNoteId(note.id)
         return note
       },
-      update(values, dn) {
-        const oldParentId = dn.parentId
-        const updatedNote = this.upsert({...values, id: dn.id})
-        if (values.parentId && values.parentId !== oldParentId) {
+      update(values, {id, parentId}) {
+        const updatedNote = this.upsert({...values, id})
+        if (values.parentId !== parentId) {
           this.sortChildrenWithParentId(values.parentId)
-          this.sortChildrenWithParentId(oldParentId)
+          this.sortChildrenWithParentId(parentId)
         }
         return updatedNote
       },
