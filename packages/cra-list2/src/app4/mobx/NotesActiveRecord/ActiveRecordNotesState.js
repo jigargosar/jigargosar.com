@@ -4,6 +4,7 @@ import {
   idEq,
   isIndexOutOfBounds,
   isNilOrEmpty,
+  isNotEmpty,
   isNotNil,
   maybeHead,
   maybeOr,
@@ -37,11 +38,8 @@ function createDisplayNoteTransformer(view) {
       props: {
         _debugName,
         textInputRef: null,
-        get parentNote() {
-          if (_.isNil(note.parentId)) {
-            return null
-          }
-          return view.findById(note.parentId)
+        get navLinkText() {
+          return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
         get maybeParentId() {
           return S.toMaybe(note.parentId)
@@ -56,14 +54,17 @@ function createDisplayNoteTransformer(view) {
             maybeOr(this),
           ])(this.visibleChildNotes)
         },
-        get navLinkText() {
-          return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
-        },
         get childNotes() {
           return view.findAllWithParentId(note.id)
         },
+        get hasChildren() {
+          return isNotEmpty(this.childNotes)
+        },
         get visibleChildNotes() {
           return note.collapsed ? [] : this.childNotes
+        },
+        get hasVisibleChildren() {
+          return isNotEmpty(this.visibleChildNotes)
         },
         maybeSiblingAtOffset(num) {
           const maybeChildAtOffsetFrom = (
@@ -89,12 +90,6 @@ function createDisplayNoteTransformer(view) {
         },
         get maybePreviousSiblingNote() {
           return this.maybeSiblingAtOffset(-1)
-        },
-        get hasChildren() {
-          return !_.isEmpty(this.childNotes)
-        },
-        get shouldDisplayChildren() {
-          return this.hasChildren && !note.collapsed
         },
         get maybeFirstVisibleChildNote() {
           return maybeHead(this.visibleChildNotes)

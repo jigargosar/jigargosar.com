@@ -111,3 +111,5 @@ export const maybeOrElse = _.when(S.isNothing)
 export function maybeOr(defaultValue) {
   return S.maybe(defaultValue)(S.I)
 }
+
+export const isNotEmpty = _.complement(_.isEmpty)
