@@ -207,10 +207,33 @@ function createDisplayNoteTransformer(view) {
           view.zoomOutFromDisplayNote(this)
         },
         onDownArrowKey() {
-          view.navigateToNextDisplayNote(this)
+          this.navigateToNextDisplayNote()
         },
         onUpArrowKey() {
-          view.navigateToPreviousDisplayNote(this)
+          this.navigateToPreviousDisplayNote()
+        },
+        navigateToNextDisplayNote() {
+          const maybeFDN = _.compose(
+            maybeOrElse(() =>
+              S.chain(parentNote => parentNote.maybeNextSiblingNote)(
+                this.maybeParentNote,
+              ),
+            ),
+            maybeOrElse(() => this.maybeNextSiblingNote),
+          )(this.maybeFirstVisibleChildNote)
+
+          maybeFocusDisplayNoteTextInput(maybeFDN)
+        },
+        navigateToPreviousDisplayNote() {
+          const maybeFDN = _.compose(
+            maybeOrElse(() => this.maybeParentNote),
+            S.map(
+              prevSiblingNote =>
+                prevSiblingNote.lastVisibleLeafNoteOrSelf,
+            ),
+          )(this.maybePreviousSiblingNote)
+
+          maybeFocusDisplayNoteTextInput(maybeFDN)
         },
         onShiftTabKeyDown(e) {
           if (this.parentId === view.currentRoot.id) {
@@ -266,6 +289,12 @@ function View() {
       },
 
       findById(id) {
+        if (this.rootNote.id === id) {
+          return this.rootNote
+        }
+        if (this.currentRoot.id === id) {
+          return this.currentRoot
+        }
         return this.displayNoteTransformer(Notes.findById(id))
       },
 
@@ -286,29 +315,6 @@ function View() {
             this.shouldFocusOnRefQueue,
           )
         }
-      },
-      navigateToNextDisplayNote(dn) {
-        const maybeFDN = _.compose(
-          maybeOrElse(() =>
-            S.chain(parentNote => parentNote.maybeNextSiblingNote)(
-              dn.maybeParentNote,
-            ),
-          ),
-          maybeOrElse(() => dn.maybeNextSiblingNote),
-        )(dn.maybeFirstVisibleChildNote)
-
-        maybeFocusDisplayNoteTextInput(maybeFDN)
-      },
-      navigateToPreviousDisplayNote(dn) {
-        const maybeFDN = _.compose(
-          maybeOrElse(() => dn.maybeParentNote),
-          S.map(
-            prevSiblingNote =>
-              prevSiblingNote.lastVisibleLeafNoteOrSelf,
-          ),
-        )(dn.maybePreviousSiblingNote)
-
-        maybeFocusDisplayNoteTextInput(maybeFDN)
       },
       indentDisplayNote() {},
       upsert(values) {
