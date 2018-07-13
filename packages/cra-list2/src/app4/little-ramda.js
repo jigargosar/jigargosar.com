@@ -107,3 +107,7 @@ export const idEq = _.curry(function idEq(id, obj) {
 export const maybeHead = S.head
 
 export const maybeOrElse = _.when(S.isNothing)
+// export const maybeOr = S.maybe(this.rootNote)(S.I)(this.maybeZoomedNote)
+export function maybeOr(defaultValue) {
+  return S.maybe(defaultValue)(S.I)
+}

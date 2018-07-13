@@ -6,6 +6,7 @@ import {
   isNilOrEmpty,
   isNotNil,
   maybeHead,
+  maybeOr,
   maybeOrElse,
   nop,
   validate,
@@ -254,11 +255,11 @@ function View() {
   const view = createObservableObject({
     props: {
       rootNote: null,
-      zoomedNote: null,
+      maybeZoomedNote: S.Nothing,
       displayNoteTransformer: null,
       shouldFocusOnRefQueue: [],
       get currentRoot() {
-        const note = this.zoomedNote || this.rootNote
+        const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
         validate('O', [note])
         return note
       },
@@ -360,11 +361,11 @@ function View() {
         })
       },
       zoomIntoDisplayNote(dn) {
-        this.zoomedNote = dn
+        this.maybeZoomedNote = S.Maybe.of(dn)
         this.focusOnZoomChange()
       },
       zoomOutFromDisplayNote(dn) {
-        this.zoomedNote = this.currentRoot.parentNote
+        this.maybeZoomedNote = this.currentRoot.maybeParentNote
         this.focusOnZoomChange()
         this.queueFocusOnRefChange(dn)
       },
