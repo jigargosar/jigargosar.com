@@ -397,9 +397,6 @@ function View() {
       },
       zoomOutTillDisplayNote(dn) {
         this.maybeZoomedNote = S.Just(dn)
-        // this.focusOnZoomChange()
-        // this.queueFocusOnRefChange(dn)
-        dn.tryFocusTextInput()
       },
       focusOnZoomChange() {
         const dnToFocus = _.when(_.isNil, constant(this.currentRoot))(
