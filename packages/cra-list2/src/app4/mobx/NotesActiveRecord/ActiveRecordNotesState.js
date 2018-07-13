@@ -135,7 +135,7 @@ function createDisplayNoteTransformer(view) {
           // Notes.upsert({id: note.id, ...values})
           view.upsert({id: note.id, ...values})
         },
-        updateAndFocus(values) {
+        updateAndQueueFocus(values) {
           // Notes.upsert({id: note.id, ...values})
           view.upsertAndQueueFocus({id: note.id, ...values})
         },
@@ -149,19 +149,19 @@ function createDisplayNoteTransformer(view) {
           if (!this.hasChildren) {
             return
           }
-          this.updateAndFocus({collapsed: !note.collapsed})
+          this.updateAndQueueFocus({collapsed: !note.collapsed})
         },
         onExpandKeyDown() {
           if (!this.hasChildren) {
             return
           }
-          this.updateAndFocus({collapsed: false})
+          this.updateAndQueueFocus({collapsed: false})
         },
         onCollapseKeyDown() {
           if (!this.hasChildren) {
             return
           }
-          this.updateAndFocus({collapsed: true})
+          this.updateAndQueueFocus({collapsed: true})
         },
         onTextFocus(e) {
           e.target.setSelectionRange(0, 0)
@@ -177,8 +177,14 @@ function createDisplayNoteTransformer(view) {
             [isAnyHotKey(['tab']), wrapPD(nop)],
             [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
             [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
-            [isAnyHotKey(['mod+left']), wrapPD(this.onCollapseKeyDown)],
-            [isAnyHotKey(['mod+right']), wrapPD(this.onExpandKeyDown)],
+            [
+              isAnyHotKey(['mod+left']),
+              wrapPD(this.onCollapseKeyDown),
+            ],
+            [
+              isAnyHotKey(['mod+right']),
+              wrapPD(this.onExpandKeyDown),
+            ],
           ])(e)
         },
         onZoomIn() {
