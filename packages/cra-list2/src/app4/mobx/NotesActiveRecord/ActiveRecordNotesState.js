@@ -153,7 +153,7 @@ function createDisplayNoteTransformer(view) {
           // Notes.upsert({id: note.id, ...values})
           return view.upsert({id: note.id, ...values})
         },
-        updateAndQueueFocus(values) {
+        updateAndSetFocused(values) {
           // Notes.upsert({id: note.id, ...values})
           view.upsertAndSetFocused({id: note.id, ...values})
         },
@@ -167,7 +167,7 @@ function createDisplayNoteTransformer(view) {
           if (!this.hasChildren) {
             return
           }
-          this.updateAndQueueFocus({collapsed: !note.collapsed})
+          this.updateAndSetFocused({collapsed: !note.collapsed})
         },
         onExpandKeyDown() {
           if (!this.hasChildren) {
