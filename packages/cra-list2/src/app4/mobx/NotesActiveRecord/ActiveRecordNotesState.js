@@ -38,6 +38,9 @@ function createDisplayNoteTransformer(view) {
       props: {
         _debugName,
         textInputRef: null,
+        get isCollapseButtonDisabled() {
+          return !this.hasChildren
+        },
         get navLinkText() {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
@@ -96,9 +99,6 @@ function createDisplayNoteTransformer(view) {
         },
         get firstChildNote() {
           return _.head(this.childNotes)
-        },
-        get isCollapseButtonDisabled() {
-          return !this.hasChildren
         },
         get textInputHandlers() {
           return {
