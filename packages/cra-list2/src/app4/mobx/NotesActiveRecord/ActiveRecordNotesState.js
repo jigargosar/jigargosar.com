@@ -326,9 +326,6 @@ function View() {
         }
         return newNote
       },
-      queueFocusOnRefChange({id}) {
-        // this.shouldFocusOnRefQueue.push(id)
-      },
       upsertAndQueueFocus(values) {
         const note = this.upsert(values)
         this.setFocusedDisplayNote(note)
@@ -357,22 +354,12 @@ function View() {
       },
       zoomIntoDisplayNote(dn) {
         this.maybeZoomedNote = S.Just(dn)
-        this.focusOnZoomChange()
       },
       zoomOutFromDisplayNote(dn) {
         this.maybeZoomedNote = this.currentRoot.maybeParentNote
-        this.focusOnZoomChange()
-        this.queueFocusOnRefChange(dn)
       },
       zoomOutTillDisplayNote(dn) {
         this.maybeZoomedNote = S.Just(dn)
-        this.focusOnZoomChange()
-      },
-      focusOnZoomChange() {
-        const dnToFocus = _.when(_.isNil, constant(this.currentRoot))(
-          this.currentRoot.firstChildNote,
-        )
-        this.queueFocusOnRefChange(dnToFocus)
       },
       init() {
         this.displayNoteTransformer = createDisplayNoteTransformer(
@@ -385,8 +372,6 @@ function View() {
         )(this.findAll({filter: _.propEq('parentId', null)}))
 
         console.assert(isNotNil(this.currentRoot))
-
-        this.focusOnZoomChange()
       },
     },
     name: 'view',
