@@ -21,7 +21,9 @@ import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {getActiveQuery, Notes} from './NotesActiveRecord'
 import {nanoid} from '../../model/util'
 import S from 'sanctuary'
+
 let count = 0
+
 function createDisplayNoteTransformer(view) {
   console.debug('createDisplayNoteTransformer for', view)
   validate('O', [view])
@@ -127,10 +129,19 @@ function createDisplayNoteTransformer(view) {
             onKeyDown: this.onTextKeyDown,
           }
         },
+        get sortIdxOrZero() {
+          return _.defaultTo(0, this.sortIdx)
+        },
       },
       actions: {
+        insertChildAt(idx) {
+          view.upsertAndSetFocused({
+            parentId: note.id,
+            sortIdx: idx,
+          })
+        },
         onAddChild() {
-          view.prependNewChildNote(note)
+          this.insertChildAt(-1)
         },
         onEnterKeyDown(e) {
           const [start /*, end*/] = [
@@ -138,11 +149,24 @@ function createDisplayNoteTransformer(view) {
             e.target.selectionEnd,
           ]
           if (start === 0) {
-            view.prependSibling(note)
+            this.prependSibling()
           } else {
-            view.appendSibling(note)
+            this.appendSibling()
           }
         },
+        appendSibling() {
+          view.upsertAndSetFocused({
+            parentId: note.parentId,
+            sortIdx: this.sortIdxOrZero,
+          })
+        },
+        prependSibling() {
+          view.upsertAndSetFocused({
+            parentId: note.parentId,
+            sortIdx: this.sortIdxOrZero - 1,
+          })
+        },
+
         onBackspaceKeyDown(e) {
           if (_.isEmpty(e.target.value)) {
             this.navigateToPreviousDisplayNote()
@@ -150,7 +174,6 @@ function createDisplayNoteTransformer(view) {
           }
         },
         update(values) {
-          // Notes.upsert({id: note.id, ...values})
           return view.upsert({id: note.id, ...values})
         },
         onDelete() {
@@ -357,27 +380,6 @@ function View() {
         const note = this.update(values, dn)
         this.setFocusedNoteId(note.id)
         return note
-      },
-      prependNewChildNote(note) {
-        const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsertAndSetFocused({
-          parentId: note.id,
-          sortIdx: sortIdx - 1,
-        })
-      },
-      appendSibling(note) {
-        const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsertAndSetFocused({
-          parentId: note.parentId,
-          sortIdx: sortIdx,
-        })
-      },
-      prependSibling(note) {
-        const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsertAndSetFocused({
-          parentId: note.parentId,
-          sortIdx: sortIdx - 1,
-        })
       },
       zoomIntoDisplayNote(dn) {
         this.maybeZoomedNote = S.Just(dn)
