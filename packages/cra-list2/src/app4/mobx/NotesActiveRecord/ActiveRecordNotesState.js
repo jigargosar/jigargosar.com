@@ -64,27 +64,6 @@ function createDisplayNoteTransformer(view) {
         get visibleChildNotes() {
           return note.collapsed ? [] : this.childNotes
         },
-        get siblingNotes() {
-          return this.parentNote.childNotes
-        },
-        get index() {
-          const idx = _.indexOf(this, this.siblingNotes)
-          console.assert(idx !== -1)
-          return idx
-        },
-        siblingWithOffset(num) {
-          const nextIdx = this.index + num
-          if (isIndexOutOfBounds(nextIdx, this.siblingNotes)) {
-            return null
-          }
-          return this.siblingNotes[nextIdx]
-        },
-        get nextSiblingNote() {
-          return this.siblingWithOffset(1)
-        },
-        get prevSiblingNote() {
-          return this.siblingWithOffset(-1)
-        },
         maybeSiblingAtOffset(num) {
           const maybeChildAtOffsetFrom = (
             child,
@@ -241,12 +220,7 @@ function createDisplayNoteTransformer(view) {
           view.navigateToPreviousDisplayNote(this)
         },
         onShiftTabKeyDown(e) {
-          console.log(
-            `this.parent === view.currentRoot`,
-            this.parentNote,
-            view.currentRoot,
-          )
-          if (this.parentNote.id === view.currentRoot.id) {
+          if (this.parentId === view.currentRoot.id) {
           } else {
             e.preventDefault()
           }
