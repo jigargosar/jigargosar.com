@@ -21,20 +21,11 @@ import {
 } from '../../components/utils'
 import {getActiveQuery, Notes} from './NotesActiveRecord'
 
-const nCache = {}
-
 function createDisplayNoteTransformer(view) {
-  let counter = 0
   console.debug('createDisplayNoteTransformer for', view)
   validate('O', [view])
   const transformer = note => {
     validate('O', [note])
-    if (nCache[note.id]) {
-      // debugger
-    } else {
-      nCache[note.id] = note
-    }
-    counter += 1
     const _debugName = `DN-${counter}--${note.id}`
     const displayNote = createObservableObject({
       props: {
