@@ -127,6 +127,9 @@ function createDisplayNoteTransformer(view) {
         onAppendSibling() {
           view.appendSibling(note)
         },
+        onEnterKeyDown() {
+          view.appendSibling(note)
+        },
         onTextInputRef(ref) {
           this.textInputRef = ref
           view.onDisplayNoteTextInputRef(ref, this)
@@ -168,7 +171,7 @@ function createDisplayNoteTransformer(view) {
         },
         onTextKeyDown(e) {
           _.cond([
-            [isAnyHotKey(['enter']), wrapPD(this.onAppendSibling)],
+            [isAnyHotKey(['enter']), wrapPD(this.onEnterKeyDown)],
             [isAnyHotKey(['escape']), wrapPD(nop)],
             [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
             [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
