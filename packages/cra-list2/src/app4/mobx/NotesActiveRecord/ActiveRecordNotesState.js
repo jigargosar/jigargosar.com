@@ -132,7 +132,7 @@ function createDisplayNoteTransformer(view) {
         },
         onBackspaceKeyDown(e) {
           if (_.isEmpty(e.target.value)) {
-            view.focusPreviousDisplayNote(this)
+            view.navigateToPreviousDisplayNote(this)
             this.onDelete()
           }
         },
@@ -194,10 +194,10 @@ function createDisplayNoteTransformer(view) {
           view.zoomOutFromDisplayNote(this)
         },
         onDownArrowKey() {
-          view.focusNextDisplayNote(this)
+          view.navigateToNextDisplayNote(this)
         },
         onUpArrowKey() {
-          view.focusPreviousDisplayNote(this)
+          view.navigateToPreviousDisplayNote(this)
         },
         onShiftTabKeyDown(e) {
           console.log(
@@ -269,7 +269,7 @@ function View() {
           )
         }
       },
-      focusNextDisplayNote(dn) {
+      navigateToNextDisplayNote(dn) {
         if (dn.shouldDisplayChildren) {
           dn.firstChildNote.focusTextInput()
         } else {
@@ -287,7 +287,7 @@ function View() {
           }
         }
       },
-      focusPreviousDisplayNote(dn) {
+      navigateToPreviousDisplayNote(dn) {
         const prevSibling = dn.prevSiblingNote
         if (isNotNil(prevSibling)) {
           const lastLeafNote = prevSibling.lastLeafNote
