@@ -27,7 +27,7 @@ function createDisplayNoteTransformer(view) {
   validate('O', [view])
   const transformer = note => {
     validate('O', [note])
-    const _debugName = `DN-${nanoid(4)}-${note.id}`
+    const _debugName = `DN-${nanoid(4)}-${note.id.slice(0, 9)}`
     const displayNote = createObservableObject({
       props: {
         _debugName,
