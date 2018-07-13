@@ -104,6 +104,8 @@ export const idEq = _.curry(function idEq(id, obj) {
   return _.propEq('id', id, obj)
 })
 
+export const eqIds = _.eqProps('id')
+
 export const maybeHead = S.head
 
 export const maybeOrElse = _.when(S.isNothing)

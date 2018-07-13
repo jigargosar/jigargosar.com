@@ -17,6 +17,7 @@ import {
 } from '../utils'
 import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
+import FocusChild from '../mobx/FocusChild'
 
 const OutlineNote = mrInjectAll(function OutlineNote({note}) {
   return (
@@ -62,16 +63,18 @@ const OutlineNote = mrInjectAll(function OutlineNote({note}) {
           </svg>
         </div>
 
-        <input
-          ref={note.onTextInputRef}
-          className={cn(
-            'flex-auto ma0 pa0 input-reset lh-copy outline-0',
-            // 'bw0',
-            'bn bw1 bb b--black-05',
-          )}
-          value={note.text || ''}
-          {...note.textInputHandlers}
-        />
+        <FocusChild shouldFocus={note.shouldFocus}>
+          <input
+            ref={note.onTextInputRef}
+            className={cn(
+              'flex-auto ma0 pa0 input-reset lh-copy outline-0',
+              // 'bw0',
+              'bn bw1 bb b--black-05',
+            )}
+            value={note.text || ''}
+            {...note.textInputHandlers}
+          />
+        </FocusChild>
         <div className={cn('mr2')}>{note.sortIdx}</div>
       </div>
       <OutlineChildren

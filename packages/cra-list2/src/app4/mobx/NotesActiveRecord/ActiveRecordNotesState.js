@@ -38,6 +38,9 @@ function createDisplayNoteTransformer(view) {
       props: {
         _debugName,
         textInputRef: null,
+        get shouldFocus() {
+          return view.shouldFocusDisplayNoteTextInput(this)
+        },
         get isCollapseButtonDisabled() {
           return !this.hasChildren
         },
@@ -293,6 +296,7 @@ function View() {
     props: {
       rootNote: null,
       maybeZoomedNote: S.Nothing,
+      maybeFocusedNoteId: S.Nothing,
       displayNoteTransformer: null,
       shouldFocusOnRefQueue: [],
       get currentRoot() {
@@ -329,6 +333,9 @@ function View() {
             filters: [_.propEq('parentId', parentId)],
           }),
         )
+      },
+      shouldFocusDisplayNoteTextInput(dn) {
+        return S.equals(S.Just(dn.id))(this.maybeFocusedNoteId)
       },
     },
     actions: {
