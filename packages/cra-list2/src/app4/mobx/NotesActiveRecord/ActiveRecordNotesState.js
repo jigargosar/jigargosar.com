@@ -127,8 +127,16 @@ function createDisplayNoteTransformer(view) {
         onAppendSibling() {
           view.appendSibling(note)
         },
-        onEnterKeyDown() {
-          view.appendSibling(note)
+        onEnterKeyDown(e) {
+          const [start, end] = [
+            e.target.selectionStart,
+            e.target.selectionEnd,
+          ]
+          if (start === 0) {
+            view.prependSibling(note)
+          } else {
+            view.appendSibling(note)
+          }
         },
         onTextInputRef(ref) {
           this.textInputRef = ref
@@ -339,6 +347,13 @@ function View() {
         this.upsertAndQueueFocus({
           parentId: note.parentId,
           sortIdx: sortIdx,
+        })
+      },
+      prependSibling(note) {
+        const sortIdx = _.defaultTo(0, note.sortIdx)
+        this.upsertAndQueueFocus({
+          parentId: note.parentId,
+          sortIdx: sortIdx - 1,
         })
       },
       zoomIntoDisplayNote(dn) {
