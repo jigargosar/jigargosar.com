@@ -246,8 +246,9 @@ function createDisplayNoteTransformer(view) {
             ),
             maybeOrElse(() => this.maybeNextSiblingNote),
           )(this.maybeFirstVisibleChildNote)
+          view.setFocusedDisplayNote(maybeFDN)
 
-          maybeFocusDisplayNoteTextInput(maybeFDN)
+          // maybeFocusDisplayNoteTextInput(maybeFDN)
         },
         navigateToPreviousDisplayNote() {
           const maybeFDN = _.compose(
@@ -257,8 +258,9 @@ function createDisplayNoteTransformer(view) {
                 prevSiblingNote.lastVisibleLeafNoteOrSelf,
             ),
           )(this.maybePreviousSiblingNote)
+          view.setFocusedDisplayNote(maybeFDN)
 
-          maybeFocusDisplayNoteTextInput(maybeFDN)
+          // maybeFocusDisplayNoteTextInput(maybeFDN)
         },
         onShiftTabKeyDown(e) {
           if (this.parentId === view.currentRoot.id) {
@@ -279,16 +281,6 @@ function createDisplayNoteTransformer(view) {
   return createTransformer(transformer, (dn, n) => {
     console.debug(`destroying`, dn._debugName, n)
   })
-}
-
-function maybeFocusDisplayNoteTextInput(maybeDisplayNoteToFocus) {
-  // console.log(
-  //   `maybeDisplayNoteToFocus.text`,
-  //   S.maybe_(() => '!!Not Found!!')(_.prop('text'))(
-  //     maybeDisplayNoteToFocus,
-  //   ),
-  // )
-  S.map(fdn => fdn.focusTextInput())(maybeDisplayNoteToFocus)
 }
 
 function View() {
@@ -339,6 +331,9 @@ function View() {
       },
     },
     actions: {
+      setFocusedDisplayNote(dn) {
+        this.maybeFocusedNoteId = S.map(dn => dn.id)(dn)
+      },
       onDisplayNoteTextInputRef(ref, dn) {
         if (ref && _.contains(dn.id, this.shouldFocusOnRefQueue)) {
           dn.focusTextInput()
