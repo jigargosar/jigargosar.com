@@ -269,7 +269,7 @@ function View() {
     props: {
       rootNote: null,
       maybeZoomedNote: S.Nothing,
-      maybeFocusedNoteId: null,
+      nullableFocusedNoteId: null,
       displayNoteTransformer: null,
       get currentRoot() {
         const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
@@ -307,19 +307,21 @@ function View() {
         )
       },
       shouldFocusDisplayNoteTextInput(dn) {
-        return this.maybeFocusedNoteId === dn.id
+        return this.nullableFocusedNoteId === dn.id
       },
     },
     actions: {
       maybeSetFocusedDisplayNote(maybeDN) {
-        const maybeFocusedNoteId = S.map(dn => dn.id)(maybeDN)
-        this.maybeFocusedNoteId = S.maybeToNullable(
-          maybeFocusedNoteId,
-        )
+        const maybeId = S.pipe([
+          S.map(dn => dn.id),
+          S.maybeToNullable,
+        ])(maybeDN)
+
+        this.setFocusedNoteId(maybeId)
       },
-      setFocusedDisplayNote(dn) {
-        validate('OS', [dn, dn.id])
-        this.nullableFocusedNoteId = dn.id
+      setFocusedNoteId(id) {
+        validate('S', [id])
+        this.nullableFocusedNoteId = id
       },
       indentDisplayNote() {},
       sortChildrenWithParentId(parentId) {
@@ -341,7 +343,7 @@ function View() {
       },
       upsertAndSetFocused(values) {
         const note = this.upsert(values)
-        this.setFocusedDisplayNote(note)
+        this.setFocusedNoteId(note.id)
         return note
       },
       update(values, dn) {
@@ -353,7 +355,7 @@ function View() {
       },
       updateAndSetFocused(values, dn) {
         const note = this.update(values, dn)
-        this.setFocusedDisplayNote(note)
+        this.setFocusedNoteId(note.id)
         return note
       },
       prependNewChildNote(note) {
