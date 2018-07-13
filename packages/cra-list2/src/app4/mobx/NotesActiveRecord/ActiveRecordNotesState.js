@@ -17,13 +17,7 @@ import {
   createObservableObject,
   createTransformer,
 } from '../little-mobx'
-import {
-  elFocus,
-  elSetSelectionRange,
-  isAnyHotKey,
-  tryCatchLogFindDOMNode,
-  wrapPD,
-} from '../../components/utils'
+import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {getActiveQuery, Notes} from './NotesActiveRecord'
 import {nanoid} from '../../model/util'
 import S from 'sanctuary'
@@ -37,7 +31,6 @@ function createDisplayNoteTransformer(view) {
     const displayNote = createObservableObject({
       props: {
         _debugName,
-        textInputRef: null,
         get shouldFocus() {
           return view.shouldFocusDisplayNoteTextInput(this)
         },
@@ -131,25 +124,6 @@ function createDisplayNoteTransformer(view) {
         },
       },
       actions: {
-        tryFocusTextInput() {
-          requestAnimationFrame(() => this.focusTextInput())
-        },
-        focusTextInput() {
-          if (!this.textInputRef) {
-            // debugger
-            return
-          }
-          tryCatchLogFindDOMNode(
-            _.compose(
-              elSetSelectionRange({start: 0, end: 0}),
-              elFocus,
-            ),
-          )(this.textInputRef)
-        },
-        onTextInputRef(ref) {
-          this.textInputRef = ref
-          view.onDisplayNoteTextInputRef(ref, this)
-        },
         onAddChild() {
           view.prependNewChildNote(note)
         },
@@ -166,7 +140,7 @@ function createDisplayNoteTransformer(view) {
         },
         onBackspaceKeyDown(e) {
           if (_.isEmpty(e.target.value)) {
-            view.navigateToPreviousDisplayNote(this)
+            this.navigateToPreviousDisplayNote()
             this.onDelete()
           }
         },
@@ -246,7 +220,7 @@ function createDisplayNoteTransformer(view) {
             ),
             maybeOrElse(() => this.maybeNextSiblingNote),
           )(this.maybeFirstVisibleChildNote)
-          view.setFocusedDisplayNote(maybeFDN)
+          view.maybeSetFocusedDisplayNote(maybeFDN)
 
           // maybeFocusDisplayNoteTextInput(maybeFDN)
         },
@@ -258,7 +232,7 @@ function createDisplayNoteTransformer(view) {
                 prevSiblingNote.lastVisibleLeafNoteOrSelf,
             ),
           )(this.maybePreviousSiblingNote)
-          view.setFocusedDisplayNote(maybeFDN)
+          view.maybeSetFocusedDisplayNote(maybeFDN)
 
           // maybeFocusDisplayNoteTextInput(maybeFDN)
         },
@@ -290,7 +264,7 @@ function View() {
       maybeZoomedNote: S.Nothing,
       maybeFocusedNoteId: S.Nothing,
       displayNoteTransformer: null,
-      shouldFocusOnRefQueue: [],
+      // shouldFocusOnRefQueue: [],
       get currentRoot() {
         const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
         validate('O', [note])
@@ -310,10 +284,10 @@ function View() {
       },
 
       findById(id) {
-        if (this.rootNote.id === id) {
+        if (this.rootNote && this.rootNote.id === id) {
           return this.rootNote
         }
-        if (this.currentRoot.id === id) {
+        if (this.currentRoot && this.currentRoot.id === id) {
           return this.currentRoot
         }
         return this.displayNoteTransformer(Notes.findById(id))
@@ -331,20 +305,15 @@ function View() {
       },
     },
     actions: {
-      setFocusedDisplayNote(dn) {
-        this.maybeFocusedNoteId = S.map(dn => dn.id)(dn)
+      maybeSetFocusedDisplayNote(maybeDN) {
+        this.maybeFocusedNoteId = S.map(dn => dn.id)(maybeDN)
       },
-      onDisplayNoteTextInputRef(ref, dn) {
-        if (ref && _.contains(dn.id, this.shouldFocusOnRefQueue)) {
-          dn.focusTextInput()
-          this.shouldFocusOnRefQueue = _.without(
-            [dn.id],
-            this.shouldFocusOnRefQueue,
-          )
-        }
+      setFocusedDisplayNote(dn) {
+        validate('OS', [dn, dn.id])
+        this.maybeFocusedNoteId = S.Just(dn.id)
       },
       indentDisplayNote() {},
-      upsert(values) {
+      upsert(values = {}) {
         const {id} = values
         const newNote = Notes.upsert(values)
         if (_.isNil(id) && isNotNil(newNote.parentId)) {
@@ -356,15 +325,11 @@ function View() {
         return newNote
       },
       queueFocusOnRefChange({id}) {
-        this.shouldFocusOnRefQueue.push(id)
+        // this.shouldFocusOnRefQueue.push(id)
       },
       upsertAndQueueFocus(values) {
         const note = this.upsert(values)
-        if (_.isNil(values.id)) {
-          this.queueFocusOnRefChange(note)
-        } else {
-          this.findById(values.id).focusTextInput()
-        }
+        this.setFocusedDisplayNote(note)
         return note
       },
       prependNewChildNote(note) {
