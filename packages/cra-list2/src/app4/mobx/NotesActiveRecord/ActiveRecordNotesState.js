@@ -128,7 +128,7 @@ function createDisplayNoteTransformer(view) {
           view.appendSibling(note)
         },
         onEnterKeyDown(e) {
-          const [start, end] = [
+          const [start /*, end*/] = [
             e.target.selectionStart,
             e.target.selectionEnd,
           ]
@@ -136,6 +136,18 @@ function createDisplayNoteTransformer(view) {
             view.prependSibling(note)
           } else {
             view.appendSibling(note)
+          }
+        },
+        onBackspaceKeyDown(e) {
+          // const [start, end] = [
+          //   e.target.selectionStart,
+          //   e.target.selectionEnd,
+          // ]
+
+          if (_.isEmpty(e.target.value)) {
+            view.focusPreviousDisplayNote(this)
+            this.onDelete()
+          } else {
           }
         },
         onTextInputRef(ref) {
@@ -204,11 +216,6 @@ function createDisplayNoteTransformer(view) {
         },
         onUpArrowKey() {
           view.focusPreviousDisplayNote(this)
-        },
-        onBackspaceKeyDown(e) {
-          if (_.isEmpty(e.target.value)) {
-            this.onDelete()
-          }
         },
         onShiftTabKeyDown(e) {
           console.log(
