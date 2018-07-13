@@ -110,6 +110,9 @@ function createDisplayNoteTransformer(view) {
         get maybePreviousSiblingNote() {
           return this.maybeSiblingAtOffset(-1)
         },
+        get maybePreviousSiblingNoteId() {
+          return S.map(n => n.id)(this.maybeSiblingAtOffset(-1))
+        },
         get maybeFirstVisibleChildNote() {
           return maybeHead(this.visibleChildNotes)
         },
@@ -148,11 +151,11 @@ function createDisplayNoteTransformer(view) {
         },
         update(values) {
           // Notes.upsert({id: note.id, ...values})
-          view.upsert({id: note.id, ...values})
+          return view.upsert({id: note.id, ...values})
         },
         updateAndQueueFocus(values) {
           // Notes.upsert({id: note.id, ...values})
-          view.upsertAndQueueFocus({id: note.id, ...values})
+          view.upsertAndSetFocused({id: note.id, ...values})
         },
         onDelete() {
           this.update({deleted: true})
@@ -189,7 +192,7 @@ function createDisplayNoteTransformer(view) {
             [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
             [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
             [isAnyHotKey(['mod+,']), wrapPD(this.onZoomOut)],
-            [isAnyHotKey(['tab']), wrapPD(nop)],
+            [isAnyHotKey(['tab']), this.onTabKeyDown],
             [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
             [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
             [isAnyHotKey(['mod+up']), wrapPD(this.onCollapseKeyDown)],
@@ -243,6 +246,12 @@ function createDisplayNoteTransformer(view) {
           } else {
             e.preventDefault()
           }
+        },
+        onTabKeyDown(e) {
+          S.map(id => {
+            e.preventDefault()
+            return this.update({parentId: id})
+          })(this.maybePreviousSiblingNoteId)
         },
       },
       name: _debugName,
@@ -318,9 +327,12 @@ function View() {
       },
       indentDisplayNote() {},
       upsert(values = {}) {
-        const {id} = values
+        const {id, parentId} = values
         const newNote = Notes.upsert(values)
-        if (_.isNil(id) && isNotNil(newNote.parentId)) {
+        if (
+          (_.isNil(id) || isNotNil(parentId)) &&
+          isNotNil(newNote.parentId)
+        ) {
           const parent = this.findById(newNote.parentId)
           parent.childNotes.forEach(({id}, sortIdx) => {
             Notes.upsert({id, sortIdx})
@@ -328,28 +340,28 @@ function View() {
         }
         return newNote
       },
-      upsertAndQueueFocus(values) {
+      upsertAndSetFocused(values) {
         const note = this.upsert(values)
         this.setFocusedDisplayNote(note)
         return note
       },
       prependNewChildNote(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsertAndQueueFocus({
+        this.upsertAndSetFocused({
           parentId: note.id,
           sortIdx: sortIdx - 1,
         })
       },
       appendSibling(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsertAndQueueFocus({
+        this.upsertAndSetFocused({
           parentId: note.parentId,
           sortIdx: sortIdx,
         })
       },
       prependSibling(note) {
         const sortIdx = _.defaultTo(0, note.sortIdx)
-        this.upsertAndQueueFocus({
+        this.upsertAndSetFocused({
           parentId: note.parentId,
           sortIdx: sortIdx - 1,
         })
