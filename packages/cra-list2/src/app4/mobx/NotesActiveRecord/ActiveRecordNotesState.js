@@ -376,7 +376,7 @@ function View() {
         })
       },
       upsert(values = {}) {
-        const {id, parentId} = values
+        const {id} = values
         const upsertedNote = Notes.upsert(values)
         if (_.isNil(id)) {
           this.sortChildrenWithParentId(upsertedNote.parentId)
@@ -389,10 +389,11 @@ function View() {
         return note
       },
       update(values, dn) {
+        const oldParentId = dn.parentId
         const updatedNote = this.upsert({...values, id: dn.id})
-        if (updatedNote.parentId !== dn.parentId) {
-          this.sortChildrenWithParentId(dn.parentId)
-          this.sortChildrenWithParentId(updatedNote.parentId)
+        if (values.parentId && values.parentId !== oldParentId) {
+          this.sortChildrenWithParentId(values.parentId)
+          this.sortChildrenWithParentId(oldParentId)
         }
         return updatedNote
       },
