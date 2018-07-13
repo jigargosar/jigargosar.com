@@ -49,6 +49,11 @@ function createDisplayNoteTransformer(view) {
             this.maybeParentNote,
           )
         },
+        get maybeGrandParent() {
+          return S.chain(parent => parent.maybeParentNote)(
+            this.maybeParentNote,
+          )
+        },
         get parentAncestors() {
           return S.pipe([
             S.map(parentNote => [
@@ -272,11 +277,17 @@ function createDisplayNoteTransformer(view) {
             e.preventDefault()
             e.stopPropagation()
           } else {
-            S.map(gid => {
+            S.map(parent => {
               e.preventDefault()
               e.stopPropagation()
-              return view.updateAndSetFocused({parentId: gid}, this)
-            })(this.maybeGrandParentId)
+              return view.updateAndSetFocused(
+                {
+                  parentId: parent.parentId,
+                  sortIdx: parent.sortIdxOrZero,
+                },
+                this,
+              )
+            })(this.maybeParentNote)
           }
         },
         onTabKeyDown(e) {
