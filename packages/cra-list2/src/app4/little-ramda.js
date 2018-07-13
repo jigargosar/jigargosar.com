@@ -3,10 +3,11 @@ import * as RX from 'ramda-extension'
 import validate from './vendor/aproba'
 import * as RA from 'ramda-adjunct'
 import assert from 'assert'
+import S from 'sanctuary'
 
 const _ = R
 
-export {_, R, RX, RA, validate}
+export {_, R, RX, RA, validate, S}
 
 if (module.hot) {
   Object.assign(window, require('ramda'))
@@ -102,3 +103,7 @@ export function constant(val) {
 export const idEq = _.curry(function idEq(id, obj) {
   return _.propEq('id', id, obj)
 })
+
+export const maybeHead = S.head
+
+export const maybeOrElse = _.when(S.isNothing)

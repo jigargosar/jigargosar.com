@@ -1,9 +1,12 @@
 import {
   _,
   constant,
+  idEq,
   isIndexOutOfBounds,
   isNilOrEmpty,
   isNotNil,
+  maybeHead,
+  maybeOrElse,
   nop,
   validate,
 } from '../../little-ramda'
@@ -21,6 +24,7 @@ import {
 } from '../../components/utils'
 import {getActiveQuery, Notes} from './NotesActiveRecord'
 import {nanoid} from '../../model/util'
+import S from 'sanctuary'
 
 function createDisplayNoteTransformer(view) {
   console.debug('createDisplayNoteTransformer for', view)
@@ -38,6 +42,12 @@ function createDisplayNoteTransformer(view) {
           }
           return view.findById(note.parentId)
         },
+        get maybeParentId() {
+          return S.toMaybe(note.parentId)
+        },
+        get maybeParentNote() {
+          return S.map(id => view.findById(id))(this.maybeParentId)
+        },
         get lastLeafNote() {
           if (this.shouldDisplayChildren && this.lastChildNote) {
             return this.lastChildNote.lastLeafNote
@@ -50,6 +60,9 @@ function createDisplayNoteTransformer(view) {
         },
         get childNotes() {
           return view.findAllWithParentId(note.id)
+        },
+        get visibleChildNotes() {
+          return note.collapsed ? [] : this.childNotes
         },
         get siblingNotes() {
           return this.parentNote.childNotes
@@ -72,11 +85,36 @@ function createDisplayNoteTransformer(view) {
         get prevSiblingNote() {
           return this.siblingWithOffset(-1)
         },
+        maybeSiblingAtOffset(num) {
+          const maybeChildAtOffsetFrom = (
+            child,
+            offset,
+          ) => parent => {
+            const children = parent.childNotes
+            const childIdx = _.findIndex(idEq(child.id), children)
+            console.assert(childIdx !== -1)
+            return S.at(childIdx + offset)(children)
+          }
+
+          return S.chain(maybeChildAtOffsetFrom(this, num))(
+            this.maybeParentNote,
+          )
+          // return S.at(this.index + num)(this.siblingNotes)
+        },
+        get maybeNextSiblingNote() {
+          return this.maybeSiblingAtOffset(1)
+        },
+        get maybePreviousSiblingNote() {
+          return this.maybeSiblingAtOffset(-1)
+        },
         get hasChildren() {
           return !_.isEmpty(this.childNotes)
         },
         get shouldDisplayChildren() {
           return this.hasChildren && !note.collapsed
+        },
+        get maybeFirstVisibleChildNote() {
+          return maybeHead(this.visibleChildNotes)
         },
         get firstChildNote() {
           return _.head(this.childNotes)
@@ -270,22 +308,40 @@ function View() {
         }
       },
       navigateToNextDisplayNote(dn) {
-        if (dn.shouldDisplayChildren) {
-          dn.firstChildNote.focusTextInput()
-        } else {
-          const nextSibling = dn.nextSiblingNote
-          if (isNotNil(nextSibling)) {
-            nextSibling.focusTextInput()
-          } else {
-            const parentDN = dn.parentNote
-            if (parentDN && parentDN.parentId) {
-              const nextSibling = parentDN.nextSiblingNote
-              if (isNotNil(nextSibling)) {
-                nextSibling.focusTextInput()
-              }
-            }
-          }
-        }
+        const maybeFDN = _.compose(
+          maybeOrElse(() =>
+            S.chain(_.prop('maybeNextSiblingNote'))(
+              dn.maybeParentNote,
+            ),
+          ),
+          maybeOrElse(() => dn.maybeNextSiblingNote),
+        )(dn.maybeFirstVisibleChildNote)
+
+        console.log(
+          `maybeFDN.text`,
+          S.maybe_(() => '!!Not Found!!')(dn => dn.text)(maybeFDN),
+        )
+
+        S.map(fdn => fdn.focusTextInput())(maybeFDN)
+
+        // S.maybe_(() => {
+        //   const nextSibling = dn.nextSiblingNote
+        //   if (isNotNil(nextSibling)) {
+        //     nextSibling.focusTextInput()
+        //   } else {
+        //     const parentDN = dn.parentNote
+        //     if (parentDN && parentDN.parentId) {
+        //       const nextSibling = parentDN.nextSiblingNote
+        //       if (isNotNil(nextSibling)) {
+        //         nextSibling.focusTextInput()
+        //       }
+        //     }
+        //   }
+        //   return null
+        // })(dn => {
+        //   dn.focusTextInput()
+        //   return null
+        // })(dn.maybeFirstVisibleChildNote)
       },
       navigateToPreviousDisplayNote(dn) {
         const prevSibling = dn.prevSiblingNote
