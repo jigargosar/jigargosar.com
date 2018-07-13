@@ -44,6 +44,11 @@ function createDisplayNoteTransformer(view) {
         get navLinkText() {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
+        get maybeGrandParentId() {
+          return S.chain(parent => parent.maybeParentId)(
+            this.maybeParentNote,
+          )
+        },
         get parentAncestors() {
           return S.pipe([
             S.map(parentNote => [
@@ -262,14 +267,20 @@ function createDisplayNoteTransformer(view) {
           // maybeFocusDisplayNoteTextInput(maybeFDN)
         },
         onShiftTabKeyDown(e) {
-          if (this.parentId === view.currentRoot.id) {
-          } else {
+          const isAtLeftEdge = this.parentId === view.currentRoot.id
+          if (isAtLeftEdge) {
             e.preventDefault()
+            e.stopPropagation()
+          } else {
+            S.map(gid =>
+              view.updateAndSetFocused({parentId: gid}, this),
+            )(this.maybeGrandParentId)
           }
         },
         onTabKeyDown(e) {
           S.map(id => {
             e.preventDefault()
+            e.stopPropagation()
             return this.update({parentId: id})
           })(this.maybePreviousSiblingNoteId)
         },
@@ -379,6 +390,8 @@ function View() {
         return note
       },
       updateAndSetFocused(values, dn) {
+        validate('OO', [values, dn])
+
         const note = this.update(values, dn)
         this.setFocusedNoteId(note.id)
         return note
