@@ -40,18 +40,6 @@ function createDisplayNoteTransformer(view) {
         get navLinkText() {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
-        get parentAncestors() {
-          return S.pipe([
-            S.map(parentNote => [
-              ...parentNote.parentAncestors,
-              this,
-            ]),
-            maybeOr([]),
-          ])(this.maybeParentNote)
-        },
-        get ancestors_() {
-          return [...this.parentAncestors, this]
-        },
         get ancestors() {
           return S.pipe([
             S.map(parentNote => [...parentNote.ancestors, this]),
@@ -107,9 +95,6 @@ function createDisplayNoteTransformer(view) {
         },
         get maybePreviousSiblingNote() {
           return this.maybeSiblingAtOffset(-1)
-        },
-        get maybePreviousSiblingNoteId() {
-          return S.map(n => n.id)(this.maybeSiblingAtOffset(-1))
         },
         get maybeFirstVisibleChildNote() {
           return S.head(this.visibleChildNotes)
