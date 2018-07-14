@@ -136,18 +136,19 @@ const CurrentRootHeader = mrInjectAll(function CurrentRootHeader({
   return (
     <F>
       <div className={cn('ma3 mt0')}>
-        <input
-          ref={headerNote.onTextInputRef}
-          placeholder={'Title'}
-          className={cn('outline-0 bw0 f2 w-100')}
-          value={headerNote.text || ''}
-          onChange={headerNote.onTextChange}
-          // onFocus={e => {
-          //   console.log(`'onFocus'`, 'onFocus')
-          //   const target = e.target
-          //   setImmediate(() => target.setSelectionRange(0, 0))
-          // }}
-        />
+        <FocusChild shouldFocus={headerNote.shouldFocus}>
+          <input
+            placeholder={'Title'}
+            className={cn('outline-0 bw0 f2 w-100')}
+            value={headerNote.text || ''}
+            onChange={headerNote.onTextChange}
+            // onFocus={e => {
+            //   console.log(`'onFocus'`, 'onFocus')
+            //   const target = e.target
+            //   setImmediate(() => target.setSelectionRange(0, 0))
+            // }}
+          />
+        </FocusChild>
       </div>
       {!headerNote.hasChildren && (
         <div className={cn('ma3')}>
