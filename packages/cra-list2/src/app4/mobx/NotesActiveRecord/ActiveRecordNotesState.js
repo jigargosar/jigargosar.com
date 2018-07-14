@@ -128,8 +128,6 @@ function createDisplayNoteTransformer(view) {
         get sortIdxOrZero() {
           return _.defaultTo(0, this.sortIdx)
         },
-      },
-      actions: {
         insertChild({id, ...values}) {
           validate('Z', [id])
           view.upsertAndSetFocused({
@@ -144,6 +142,14 @@ function createDisplayNoteTransformer(view) {
             parentId: this.parentId,
           })
         },
+        appendSibling() {
+          this.insertSibling({sortIdx: this.sortIdxOrZero})
+        },
+        prependSibling() {
+          this.insertSibling({sortIdx: this.sortIdxOrZero - 1})
+        },
+      },
+      actions: {
         update(values) {
           return view.update(values, this)
         },
@@ -152,12 +158,6 @@ function createDisplayNoteTransformer(view) {
         },
         onAddChild() {
           this.insertChild({sortIdx: -1})
-        },
-        appendSibling() {
-          this.insertSibling({sortIdx: this.sortIdxOrZero})
-        },
-        prependSibling() {
-          this.insertSibling({sortIdx: this.sortIdxOrZero - 1})
         },
         onEnterKeyDown(e) {
           const [start /*, end*/] = [
