@@ -398,10 +398,10 @@ function View() {
         )
       },
       shouldFocusDisplayNoteTextInput(dn) {
-        return (
-          this.nullableFocusedNoteId === dn.id ||
-          dn.hasHiddenChildrenWithId(this.nullableFocusedNoteId)
-        )
+        return _.isNil(this.nullableFocusedNoteId)
+          ? dn.isCurrentRoot
+          : this.nullableFocusedNoteId === dn.id ||
+              dn.hasHiddenChildrenWithId(this.nullableFocusedNoteId)
       },
     },
     actions: {
