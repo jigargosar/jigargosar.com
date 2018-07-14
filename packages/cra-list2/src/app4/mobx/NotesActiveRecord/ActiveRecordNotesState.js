@@ -458,6 +458,7 @@ function View() {
       },
       zoomIntoDisplayNote(dn) {
         this.maybeZoomedNote = S.Just(dn)
+        this.maybeSetFocusedDisplayNote(dn.maybeFirstChildNote)
       },
       zoomOutOneLevel() {
         this.maybeZoomedNote = this.currentRoot.maybeParentNote
