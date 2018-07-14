@@ -61,14 +61,15 @@ function createDisplayNoteTransformer(view) {
           return S.toMaybe(note.parentId)
         },
         get maybeParentNote() {
-          const maybeParent = maybeFindParentOfNote(note)
-          return S.map(displayNoteTransformer)(maybeParent)
+          // const maybeParent = maybeFindParentOfNote(note)
+          return S.map(displayNoteTransformer)(this._maybeParentNote)
         },
         get childNotes() {
           return _.compose(
             _.map(displayNoteTransformer),
-            findAllActiveChildrenOfNote,
-          )(note)
+            // findAllActiveChildrenOfNote,
+            // )(note)
+          )(this._childNotes)
         },
         get lastVisibleLeafNoteOrSelf() {
           return S.pipe([
