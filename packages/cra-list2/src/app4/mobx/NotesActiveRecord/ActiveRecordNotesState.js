@@ -231,15 +231,17 @@ function createDisplayNoteTransformer(view) {
         navigateToNextDisplayNote() {
           const maybeFDN = _.compose(
             maybeOrElse(() =>
-              S.chain(parentNote => parentNote.maybeNextSiblingNote)(
-                this.maybeParentNote,
-              ),
+              S.pipe([
+                S.reverse,
+                _.reduce((result, a) => {
+                  return maybeOrElse(() => a.maybeNextSiblingNote)(
+                    result,
+                  )
+                }, S.Nothing),
+              ])(this.ancestors),
             ),
-            maybeOrElse(() => this.maybeNextSiblingNote),
           )(this.maybeFirstVisibleChildNote)
           view.maybeSetFocusedDisplayNote(maybeFDN)
-
-          // maybeFocusDisplayNoteTextInput(maybeFDN)
         },
         navigateToPreviousDisplayNote() {
           const maybeFDN = _.compose(

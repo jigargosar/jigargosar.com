@@ -61,7 +61,13 @@ export function tapLogWith(msg) {
   return _.tap(args => console.warn(msg, args))
 }
 
+export function tapShowWith(msg) {
+  return _.tap(args => console.warn(msg, S.show(args)))
+}
+
 export const tapLog = tapLogWith('tapLog')
+
+export const tapShow = tapLogWith('tapShow')
 
 export function wrapTapLog(fn) {
   const fnName = _.defaultTo('wrapTapLog fn', fn.name)
@@ -108,8 +114,9 @@ export const eqIds = _.eqProps('id')
 
 export const maybeHead = S.head
 
+// maybeOrElse :: (_ -> b) -> Maybe a -> Maybe b
 export const maybeOrElse = _.when(S.isNothing)
-// export const maybeOr = S.maybe(this.rootNote)(S.I)(this.maybeZoomedNote)
+
 export function maybeOr(defaultValue) {
   return S.maybe(defaultValue)(S.I)
 }
