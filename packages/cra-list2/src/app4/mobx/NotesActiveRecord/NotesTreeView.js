@@ -36,13 +36,13 @@ const treeNoteTransformer = createTransformer(note =>
 function NotesTreeView() {
   return createObservableObject({
     props: {
-      rootNote: null,
+      rootDisplayNote: null,
     },
     actions: {
       initRoot() {
-        this.rootNote = getOrUpsertRootNote()
+        this.rootDisplayNote = getOrUpsertRootNote()
 
-        console.assert(isNotNil(this.rootNote))
+        console.assert(isNotNil(this.rootDisplayNote))
       },
     },
     name: 'NotesTreeView',

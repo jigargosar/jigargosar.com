@@ -124,7 +124,7 @@ const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
 const OutlineNoteNav = mrInjectAll(function ZoomNoteNav({view}) {
   return (
     <div className={cn('ma2')}>
-      <NoteNavLink note={view.rootNote} />
+      <NoteNavLink note={view.rootDisplayNote} />
       {renderKeyedById(NoteNavLink, 'note', view.currentAncestors)}
     </div>
   )
@@ -132,7 +132,7 @@ const OutlineNoteNav = mrInjectAll(function ZoomNoteNav({view}) {
 const CurrentRootHeader = mrInjectAll(function CurrentRootHeader({
   view,
 }) {
-  const headerNote = view.currentRoot
+  const headerNote = view.currentRootDisplayNote
   return (
     <F>
       <div className={cn('ma3 mt0')}>

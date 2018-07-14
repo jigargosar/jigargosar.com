@@ -76,7 +76,7 @@ function createDisplayNoteTransformer(view) {
           return isNotEmpty(this.childNotes)
         },
         get isCurrentRoot() {
-          return view.currentRoot.id === this.id
+          return view.currentRootDisplayNote.id === this.id
         },
         get isExpanded() {
           return !this.isCollapsed
@@ -288,7 +288,8 @@ function createDisplayNoteTransformer(view) {
           // maybeFocusDisplayNoteTextInput(maybeFDN)
         },
         onShiftTabKeyDown(e) {
-          const isAtLeftEdge = this.parentId === view.currentRoot.id
+          const isAtLeftEdge =
+            this.parentId === view.currentRootDisplayNote.id
           if (isAtLeftEdge) {
             e.preventDefault()
             e.stopPropagation()
@@ -370,27 +371,32 @@ function createDisplayNoteTransformer(view) {
 function View() {
   const view = createObservableObject({
     props: {
-      rootNote: null,
-      maybeZoomedNote: S.Nothing,
+      rootDisplayNote: null,
+      maybeZoomedDisplayNote: S.Nothing,
       nullableFocusedNoteId: null,
       displayNoteTransformer: null,
-      get currentRoot() {
-        const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
+      get currentRootDisplayNote() {
+        const note = maybeOr(this.rootDisplayNote)(
+          this.maybeZoomedDisplayNote,
+        )
         validate('O', [note])
         return note
       },
       get currentAncestors() {
-        return this.currentRoot.ancestors
+        return this.currentRootDisplayNote.ancestors
       },
       get currentNotesList() {
-        return this.currentRoot.childNotes
+        return this.currentRootDisplayNote.childNotes
       },
       findById(id) {
-        if (this.rootNote && this.rootNote.id === id) {
-          return this.rootNote
+        if (this.rootDisplayNote && this.rootDisplayNote.id === id) {
+          return this.rootDisplayNote
         }
-        if (this.currentRoot && this.currentRoot.id === id) {
-          return this.currentRoot
+        if (
+          this.currentRootDisplayNote &&
+          this.currentRootDisplayNote.id === id
+        ) {
+          return this.currentRootDisplayNote
         }
         return this.displayNoteTransformer(Notes.findById(id))
       },
@@ -454,24 +460,24 @@ function View() {
         return note
       },
       zoomIntoDisplayNote(dn) {
-        this.maybeZoomedNote = S.Just(dn)
+        this.maybeZoomedDisplayNote = S.Just(dn)
         this.maybeSetFocusedDisplayNote(dn.maybeFirstChildNote)
       },
       zoomOutOneLevel() {
-        this.maybeZoomedNote = this.currentRoot.maybeParentNote
+        this.maybeZoomedDisplayNote = this.currentRootDisplayNote.maybeParentNote
       },
       zoomOutTillDisplayNote(dn) {
-        this.maybeZoomedNote = S.Just(dn)
+        this.maybeZoomedDisplayNote = S.Just(dn)
       },
       init() {
         this.displayNoteTransformer = createDisplayNoteTransformer(
           this,
         )
 
-        this.rootNote = this.displayNoteTransformer(
+        this.rootDisplayNote = this.displayNoteTransformer(
           getOrUpsertRootNote(),
         )
-        console.assert(isNotNil(this.currentRoot))
+        console.assert(isNotNil(this.currentRootDisplayNote))
       },
     },
     name: 'view',
