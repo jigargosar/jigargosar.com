@@ -16,6 +16,8 @@ import {
   attachDelegatingPropertyGetters,
   createObservableObject,
   createTransformer,
+  mAutoRun,
+  mJS,
 } from '../little-mobx'
 import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
@@ -470,23 +472,30 @@ function View() {
       zoomOutTillDisplayNote(dn) {
         this.maybeZoomedDisplayNote = S.Just(dn)
       },
-      init() {
-        this.displayNoteTransformer = createDisplayNoteTransformer(
-          this,
-        )
-
-        this.rootDisplayNote = this.displayNoteTransformer(
-          getOrUpsertRootNote(),
-        )
-        console.assert(isNotNil(this.currentRootDisplayNote))
+      init(displayNoteTransformer) {
+        this.displayNoteTransformer = displayNoteTransformer
+        this.rootNote = getOrUpsertRootNote()
+        this.setRootDisplayNote(displayNoteTransformer(this.rootNote))
+      },
+      setRootDisplayNote(rootDisplayNote) {
+        this.rootDisplayNote = rootDisplayNote
       },
     },
     name: 'view',
   })
 
   const displayNoteTransformer = createDisplayNoteTransformer(view)
+  view.init(displayNoteTransformer)
 
-  view.init()
+  mAutoRun(
+    () => {
+      console.assert(isNotNil(view.rootNote))
+      view.setRootDisplayNote(displayNoteTransformer(view.rootNote))
+    },
+    {name: 'Transform Display Notes'},
+  )
+
+  console.assert(isNotNil(view.currentRootDisplayNote))
 
   return view
 }
