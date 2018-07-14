@@ -239,7 +239,7 @@ function createDisplayNoteTransformer(view) {
         },
         onZoomOut(e) {
           e.preventDefault()
-          view.zoomOutFromDisplayNote(this)
+          view.zoomOutOneLevel()
         },
         onNavLinkClicked(e) {
           e.preventDefault()
@@ -459,7 +459,7 @@ function View() {
       zoomIntoDisplayNote(dn) {
         this.maybeZoomedNote = S.Just(dn)
       },
-      zoomOutFromDisplayNote(dn) {
+      zoomOutOneLevel() {
         this.maybeZoomedNote = this.currentRoot.maybeParentNote
       },
       zoomOutTillDisplayNote(dn) {
