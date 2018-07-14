@@ -76,18 +76,18 @@ const OutlineNote = mrInjectAll(function OutlineNote({note}) {
         </FocusChild>
         <div className={cn('mr2')}>{note.sortIdx}</div>
       </div>
-      <OutlineChildren childNotes={note.visibleChildNotes} />
+      <OutlineChildren childDisplayNotes={note.visibleChildNotes} />
     </ListItem>
   )
 })
 
 const OutlineChildren = mrInjectAll(function ChildNotes({
-  childNotes,
+  childDisplayNotes,
   m = 'ml4 mr3_ mt2_',
   shadow = '',
   className,
 }) {
-  if (_.isEmpty(childNotes)) {
+  if (_.isEmpty(childDisplayNotes)) {
     return <F />
   }
   return (
@@ -96,13 +96,13 @@ const OutlineChildren = mrInjectAll(function ChildNotes({
       shadow={shadow}
       className={cn('flex-auto', 'bw1 bl b--light-gray', className)}
     >
-      {renderKeyedById(OutlineNote, 'note', childNotes)}
+      {renderKeyedById(OutlineNote, 'note', childDisplayNotes)}
     </List>
   )
 })
 
 OutlineChildren.propTypes = {
-  childNotes: PropTypes.array.isRequired,
+  childDisplayNotes: PropTypes.array.isRequired,
 }
 
 const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
@@ -171,7 +171,7 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
         m={''}
         className={cn('bn bw0')}
         shadow={''}
-        childNotes={view.currentNotesList}
+        childDisplayNotes={view.currentNotesList}
       />
     </div>
   )
