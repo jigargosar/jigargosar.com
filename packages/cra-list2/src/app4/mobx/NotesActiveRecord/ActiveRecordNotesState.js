@@ -471,7 +471,7 @@ function View() {
       },
       init() {
         this.displayNoteTransformer = createDisplayNoteTransformer(
-          view,
+          this,
         )
 
         this.rootNote = this.displayNoteTransformer(
