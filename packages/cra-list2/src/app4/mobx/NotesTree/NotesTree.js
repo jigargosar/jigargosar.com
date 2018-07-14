@@ -9,3 +9,11 @@ function createNote({
   validate('SOS', [id, maybeParentId, text])
   return {id, text, maybeParentId}
 }
+
+function createNoteTree() {
+  const root = createNote()
+  return {
+    rootId: root.id,
+    idLookup: {[root.id]: root},
+  }
+}
