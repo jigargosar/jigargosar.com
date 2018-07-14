@@ -65,10 +65,16 @@ function createDisplayNoteTransformer(view) {
         get hasChildren() {
           return isNotEmpty(this.childNotes)
         },
+        get isCurrentRoot() {
+          return view.currentRoot.id === this.id
+        },
+        get isExpanded() {
+          return !note.collapsed
+        },
         get visibleChildNotes() {
-          return note.collapsed && view.currentRoot.id !== this.id
-            ? []
-            : this.childNotes
+          return this.isExpanded || this.isCurrentRoot
+            ? this.childNotes
+            : []
         },
         get hasVisibleChildren() {
           return isNotEmpty(this.visibleChildNotes)
