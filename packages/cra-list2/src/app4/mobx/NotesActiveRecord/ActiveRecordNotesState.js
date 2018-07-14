@@ -473,7 +473,7 @@ function View() {
       },
       zoomOutOneLevel() {
         const maybeId = S.toMaybe(this.currentRootNote.parentId)
-        this.maybeZoomedNote = S.map(Notes.maybeFindById)(maybeId)
+        this.maybeZoomedNote = Notes.findByMaybeId(maybeId)
       },
       zoomOutTillDisplayNote({id}) {
         this.maybeZoomedNote = Notes.maybeFindById(id)

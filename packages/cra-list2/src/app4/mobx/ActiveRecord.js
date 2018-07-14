@@ -2,6 +2,7 @@ import {createObservableObject, mAutoRun} from './little-mobx'
 import {nanoid} from '../model/util'
 import {_, S, validate} from '../little-ramda'
 import {storage} from '../services/storage'
+import {Notes} from './NotesActiveRecord/NotesActiveRecord'
 
 export function ActiveRecord({
   fieldNames,
@@ -40,6 +41,9 @@ export function ActiveRecord({
       },
       maybeFindById(id) {
         return S.toMaybe(this.findById(id))
+      },
+      findByMaybeId(maybeId) {
+        return S.map(Notes.maybeFindById)(maybeId)
       },
       get snapshot() {
         return _.map(r => r.snapshot, this.records)
