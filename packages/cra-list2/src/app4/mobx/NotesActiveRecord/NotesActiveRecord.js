@@ -41,7 +41,7 @@ export function findAllChildrenOfNote(note) {
 }
 
 export function getOrUpsertRootNote() {
-  return _.compose(_.when(_.isNil, () => Notes.upsert()), _.head)(
+  return _.when(_.isNil)(Notes.upsert)(
     Notes.findFirst({
       filter: _.propEq('parentId', null),
     }),

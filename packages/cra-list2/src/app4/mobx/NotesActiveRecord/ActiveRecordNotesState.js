@@ -18,7 +18,11 @@ import {
   createTransformer,
 } from '../little-mobx'
 import {isAnyHotKey, wrapPD} from '../../components/utils'
-import {getActiveQuery, Notes} from './NotesActiveRecord'
+import {
+  getActiveQuery,
+  getOrUpsertRootNote,
+  Notes,
+} from './NotesActiveRecord'
 import {nanoid} from '../../model/util'
 import S from 'sanctuary'
 
@@ -470,11 +474,9 @@ function View() {
           view,
         )
 
-        this.rootNote = _.compose(
-          _.when(_.isNil, () => this.findById(this.upsert().id)),
-          _.head,
-        )(this.findAll({filter: _.propEq('parentId', null)}))
-
+        this.rootNote = this.displayNoteTransformer(
+          getOrUpsertRootNote(),
+        )
         console.assert(isNotNil(this.currentRoot))
       },
     },
