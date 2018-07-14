@@ -68,14 +68,14 @@ function createDisplayNoteTransformer(view) {
             maybeOr(this),
           ])(this.visibleChildNotes)
         },
-        get childDisplayNotes() {
+        get childNotes() {
           return _.compose(
             _.map(displayNoteTransformer),
             findAllActiveChildrenOfNote,
           )(note)
         },
         get hasChildren() {
-          return isNotEmpty(this.childDisplayNotes)
+          return isNotEmpty(this.childNotes)
         },
         get isCurrentRoot() {
           return view.currentRootDisplayNote.id === this.id
@@ -88,7 +88,7 @@ function createDisplayNoteTransformer(view) {
         },
         get visibleChildNotes() {
           return this.isExpanded || this.isCurrentRoot
-            ? this.childDisplayNotes
+            ? this.childNotes
             : []
         },
         get hasVisibleChildren() {
@@ -99,7 +99,7 @@ function createDisplayNoteTransformer(view) {
             child,
             offset,
           ) => parent => {
-            const children = parent.childDisplayNotes
+            const children = parent.childNotes
             const childIdx = _.findIndex(idEq(child.id), children)
             console.assert(childIdx !== -1)
             const nextIdx = childIdx + offset
@@ -123,7 +123,7 @@ function createDisplayNoteTransformer(view) {
           return S.head(this.visibleChildNotes)
         },
         get maybeFirstChildNote() {
-          return S.head(this.childDisplayNotes)
+          return S.head(this.childNotes)
         },
         get textInputHandlers() {
           return this.isCurrentRoot
@@ -155,11 +155,11 @@ function createDisplayNoteTransformer(view) {
             : _.compose(
                 isNotNil,
                 _.find(cn => cn.hasDecedentsWithId(id)),
-              )(this.childDisplayNotes)
+              )(this.childNotes)
         },
         hasChildWithId(id) {
           return _.compose(isNotNil, _.find(idEq(id)))(
-            this.childDisplayNotes,
+            this.childNotes,
           )
         },
         hasHiddenChildrenWithId(id) {
@@ -312,7 +312,7 @@ function createDisplayNoteTransformer(view) {
             e.stopPropagation()
             return this.updateAndSetFocused({
               parentId: prevSibling.id,
-              sortIdx: prevSibling.childDisplayNotes.length,
+              sortIdx: prevSibling.childNotes.length,
             })
           })(this.maybePreviousSiblingNote)
         },
@@ -395,7 +395,7 @@ function View() {
         return this.currentRootDisplayNote.ancestors
       },
       get currentNotesList() {
-        return this.currentRootDisplayNote.childDisplayNotes
+        return this.currentRootDisplayNote.childNotes
       },
       findById(id) {
         if (this.rootDisplayNote && this.rootDisplayNote.id === id) {
@@ -436,7 +436,7 @@ function View() {
           return
         }
         const parent = this.findById(parentId)
-        parent.childDisplayNotes.forEach(({id}, sortIdx) => {
+        parent.childNotes.forEach(({id}, sortIdx) => {
           Notes.upsert({id, sortIdx})
         })
       },
