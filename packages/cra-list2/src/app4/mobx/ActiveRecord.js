@@ -71,7 +71,10 @@ export function ActiveRecord({
         }
       },
       load() {
-        this.records = _.map(fromJSONSnapshot, adapter.loadAll())
+        this.records = _.map(
+          fromPreProcessedSnapshot,
+          adapter.loadAll(),
+        )
       },
     },
     name: _debugName,
@@ -140,7 +143,7 @@ export function ActiveRecord({
   }
 
   function createNew(defaults = {}) {
-    return fromJSONSnapshot({
+    return fromPreProcessedSnapshot({
       id: `${name}@${nanoid()}`,
       createdAt: Date.now(),
       modifiedAt: Date.now(),
@@ -162,29 +165,32 @@ export function ActiveRecord({
 
   function fromPreProcessedSnapshot(snap) {
     return S.pipe([preProcessSnapshot, fromJSONSnapshot])(snap)
-  }
 
-  function fromJSONSnapshot(snap) {
-    validate('O', [snap])
-    const _debugName = `ARO-${nanoid(4)}-${snap.id.slice(0, 9)}`
-    const obs = createObservableObject({
-      props: {
-        ...snap,
-        isNew: _.defaultTo(false, snap.isNew),
-        _debugName,
-      },
-      computed: {
-        get snapshot() {
-          return _.pick(
-            ['id', 'createdAt', 'modifiedAt', ...fieldNames],
-            this,
-          )
+    function fromJSONSnapshot(snap) {
+      validate('O', [snap])
+      const _debugName = `ARO-${nanoid(4)}-${snap.id.slice(0, 9)}`
+      const obs = createObservableObject({
+        props: {
+          ...snap,
+          isNew: _.defaultTo(false, snap.isNew),
+          _debugName,
         },
-      },
-      actions: {},
-      name: snap.id,
-    })
-    return obs
+        computed: {
+          get activeRecord() {
+            return activeRecord
+          },
+          get snapshot() {
+            return _.pick(
+              ['id', 'createdAt', 'modifiedAt', ...fieldNames],
+              this,
+            )
+          },
+        },
+        actions: {},
+        name: snap.id,
+      })
+      return obs
+    }
   }
 }
 
