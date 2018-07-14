@@ -17,7 +17,6 @@ import {
   createObservableObject,
   createTransformer,
   mAutoRun,
-  mJS,
 } from '../little-mobx'
 import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
@@ -244,7 +243,7 @@ function createDisplayNoteTransformer(view) {
           e.target.setSelectionRange(0, 0)
         },
         onZoomIn() {
-          view.zoomIntoDisplayNote(this)
+          view.zoomIntoNote(note)
         },
         onZoomOut(e) {
           e.preventDefault()
@@ -374,10 +373,16 @@ function View() {
   const view = createObservableObject({
     props: {
       rootNote: null,
+      maybeZoomedNote: S.Nothing,
       rootDisplayNote: null,
       maybeZoomedDisplayNote: S.Nothing,
       nullableFocusedNoteId: null,
       displayNoteTransformer: null,
+      get currentRootNote() {
+        const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
+        validate('O', [note])
+        return note
+      },
       get currentRootDisplayNote() {
         const note = maybeOr(this.rootDisplayNote)(
           this.maybeZoomedDisplayNote,
@@ -462,15 +467,16 @@ function View() {
         this.setFocusedNoteId(note.id)
         return note
       },
-      zoomIntoDisplayNote(dn) {
-        this.maybeZoomedDisplayNote = S.Just(dn)
-        this.maybeSetFocusedDisplayNote(dn.maybeFirstChildNote)
+      zoomIntoNote({id}) {
+        this.maybeZoomedNote = Notes.maybeFindById(id)
+        this.setFocusedNoteId(id)
       },
       zoomOutOneLevel() {
-        this.maybeZoomedDisplayNote = this.currentRootDisplayNote.maybeParentNote
+        const maybeId = S.toMaybe(this.currentRootNote.parentId)
+        this.maybeZoomedNote = S.map(Notes.maybeFindById)(maybeId)
       },
-      zoomOutTillDisplayNote(dn) {
-        this.maybeZoomedDisplayNote = S.Just(dn)
+      zoomOutTillDisplayNote({id}) {
+        this.maybeZoomedNote = Notes.maybeFindById(id)
       },
       init(displayNoteTransformer) {
         this.displayNoteTransformer = displayNoteTransformer
@@ -479,6 +485,9 @@ function View() {
       },
       setRootDisplayNote(rootDisplayNote) {
         this.rootDisplayNote = rootDisplayNote
+      },
+      setMaybeZoomedDisplayNote(maybeZoomedDisplayNote) {
+        this.maybeZoomedDisplayNote = maybeZoomedDisplayNote
       },
     },
     name: 'view',
@@ -491,6 +500,9 @@ function View() {
     () => {
       console.assert(isNotNil(view.rootNote))
       view.setRootDisplayNote(displayNoteTransformer(view.rootNote))
+      view.setMaybeZoomedDisplayNote(
+        S.map(displayNoteTransformer)(view.maybeZoomedNote),
+      )
     },
     {name: 'Transform Display Notes'},
   )

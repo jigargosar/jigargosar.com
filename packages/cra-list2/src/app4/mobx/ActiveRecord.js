@@ -1,6 +1,6 @@
 import {createObservableObject, mAutoRun} from './little-mobx'
 import {nanoid} from '../model/util'
-import {_, validate} from '../little-ramda'
+import {_, S, validate} from '../little-ramda'
 import {storage} from '../services/storage'
 
 export function ActiveRecord({
@@ -37,6 +37,9 @@ export function ActiveRecord({
       findById(id) {
         validate('S', [id])
         return this.findFirst({filter: _.propEq('id', id)})
+      },
+      maybeFindById(id) {
+        return S.toMaybe(this.findById(id))
       },
       get snapshot() {
         return _.map(r => r.snapshot, this.records)
