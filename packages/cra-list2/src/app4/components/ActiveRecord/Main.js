@@ -70,7 +70,7 @@ const OutlineNote = mrInjectAll(function OutlineNote({note}) {
               // 'bw0',
               'bn bw1 bb b--black-05',
             )}
-            value={note.text || ''}
+            value={note.textInputValue}
             {...note.textInputHandlers}
           />
         </FocusChild>
@@ -140,8 +140,8 @@ const CurrentRootHeader = mrInjectAll(function CurrentRootHeader({
           <input
             placeholder={'Title'}
             className={cn('outline-0 bw0 f2 w-100')}
-            value={headerNote.text || ''}
-            onChange={headerNote.onTextChange}
+            value={headerNote.textInputValue}
+            {...headerNote.textInputHandlers}
             // onFocus={e => {
             //   console.log(`'onFocus'`, 'onFocus')
             //   const target = e.target

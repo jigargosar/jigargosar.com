@@ -31,6 +31,9 @@ function createDisplayNoteTransformer(view) {
     const displayNote = createObservableObject({
       props: {
         _debugName,
+        get textInputValue() {
+          return _.defaultTo('', this.text)
+        },
         get shouldFocus() {
           return view.shouldFocusDisplayNoteTextInput(this)
         },
@@ -114,11 +117,21 @@ function createDisplayNoteTransformer(view) {
           return S.head(this.childNotes)
         },
         get textInputHandlers() {
+          return this.isCurrentRoot
+            ? this.currentRootTextInputHandlers
+            : this.nonRootTextInputHandlers
+        },
+        get nonRootTextInputHandlers() {
           return {
             onChange: this.onTextChange,
             onFocus: this.onTextFocus,
-            onBlur: nop,
             onKeyDown: this.onTextKeyDown,
+          }
+        },
+        get currentRootTextInputHandlers() {
+          return {
+            onChange: this.onTextChange,
+            onKeyDown: this.onCurrentRootTextKeyDown,
           }
         },
         get sortIdxOrZero() {
@@ -312,6 +325,21 @@ function createDisplayNoteTransformer(view) {
           0,
           {leading: true, trailing: false},
         ),
+        onCurrentRootTextKeyDown(e) {
+          _.cond([
+            // [isAnyHotKey(['enter']), this.onEnterKeyDown],
+            // [isAnyHotKey(['escape']), wrapPD(nop)],
+            // [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
+            [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
+            // [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
+            [isAnyHotKey(['mod+,']), wrapPD(this.onZoomOut)],
+            // [isAnyHotKey(['tab']), this.onTabKeyDown],
+            // [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
+            // [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
+            // [isAnyHotKey(['mod+up']), this.onCollapseKeyDown],
+            // [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
+          ])(e)
+        },
       },
       name: _debugName,
     })
