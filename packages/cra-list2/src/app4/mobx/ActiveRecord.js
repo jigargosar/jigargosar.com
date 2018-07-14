@@ -29,12 +29,12 @@ export function ActiveRecord({
         )(this.records)
       },
 
-      find({filter = _.identity} = {}) {
+      findFirst({filter = _.identity} = {}) {
         return _.head(this.findAll({filter}))
       },
       findById(id) {
         validate('S', [id])
-        return this.find({filter: _.propEq('id', id)})
+        return this.findFirst({filter: _.propEq('id', id)})
       },
       get snapshot() {
         return _.map(r => r.snapshot, this.records)
