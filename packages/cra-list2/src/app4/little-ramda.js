@@ -4,10 +4,12 @@ import validate from './vendor/aproba'
 import * as RA from 'ramda-adjunct'
 import assert from 'assert'
 import S from 'sanctuary'
+import debounce from 'lodash/debounce'
+import throttle from 'lodash/throttle'
 
 const _ = R
 
-export {_, R, RX, RA, validate, S}
+export {_, R, RX, RA, validate, S, debounce, throttle}
 
 if (module.hot) {
   Object.assign(window, require('ramda'))

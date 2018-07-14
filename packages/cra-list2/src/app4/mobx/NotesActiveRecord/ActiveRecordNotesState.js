@@ -9,6 +9,7 @@ import {
   maybeOr,
   maybeOrElse,
   nop,
+  throttle,
   validate,
 } from '../../little-ramda'
 import {
@@ -281,21 +282,25 @@ function createDisplayNoteTransformer(view) {
             })
           })(this.maybePreviousSiblingNote)
         },
-        onTextKeyDown(e) {
-          _.cond([
-            [isAnyHotKey(['enter']), this.onEnterKeyDown],
-            [isAnyHotKey(['escape']), wrapPD(nop)],
-            [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
-            [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
-            [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
-            [isAnyHotKey(['mod+,']), wrapPD(this.onZoomOut)],
-            [isAnyHotKey(['tab']), this.onTabKeyDown],
-            [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
-            [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
-            [isAnyHotKey(['mod+up']), this.onCollapseKeyDown],
-            [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
-          ])(e)
-        },
+        onTextKeyDown: throttle(
+          function(e) {
+            _.cond([
+              [isAnyHotKey(['enter']), this.onEnterKeyDown],
+              [isAnyHotKey(['escape']), wrapPD(nop)],
+              [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
+              [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
+              [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
+              [isAnyHotKey(['mod+,']), wrapPD(this.onZoomOut)],
+              [isAnyHotKey(['tab']), this.onTabKeyDown],
+              [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
+              [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
+              [isAnyHotKey(['mod+up']), this.onCollapseKeyDown],
+              [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
+            ])(e)
+          },
+          200,
+          {leading: true, trailing: false},
+        ),
       },
       name: _debugName,
     })
