@@ -22,6 +22,7 @@ import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
   findAllActiveChildrenOfNote,
   getOrUpsertRootNote,
+  maybeFindParentNoteOf,
   Notes,
 } from './NotesActiveRecord'
 import {nanoid} from '../../model/util'
@@ -472,8 +473,9 @@ function View() {
         this.setFocusedNoteId(id)
       },
       zoomOutOneLevel() {
-        const maybeId = S.toMaybe(this.currentRootNote.parentId)
-        this.maybeZoomedNote = Notes.findByMaybeId(maybeId)
+        this.maybeZoomedNote = maybeFindParentNoteOf(
+          this.currentRootNote,
+        )
       },
       zoomOutTillDisplayNote({id}) {
         this.maybeZoomedNote = Notes.maybeFindById(id)

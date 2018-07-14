@@ -1,5 +1,6 @@
 import {ActiveRecord} from '../ActiveRecord'
 import {_, mergeWithDefaults} from '../../little-ramda'
+import S from 'sanctuary'
 
 const fieldNames = [
   'text',
@@ -53,4 +54,9 @@ export function findAllActiveNotesWithParentId(parentId) {
 
 export function findAllActiveChildrenOfNote(note) {
   return findAllActiveNotesWithParentId(note.id)
+}
+
+export function maybeFindParentNoteOf(note) {
+  const maybeId = S.toMaybe(note.parentId)
+  return Notes.findByMaybeId(maybeId)
 }
