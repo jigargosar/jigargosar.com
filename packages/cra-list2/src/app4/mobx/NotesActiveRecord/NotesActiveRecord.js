@@ -50,13 +50,22 @@ export function getOrUpsertRootNote() {
 
 export function getActiveQuery({filters = []} = {}) {
   return {
-    filter: _.allPass([
-      _.propSatisfies(_.not, 'deleted'),
-      ...filters,
-    ]),
+    filter: _.allPass([_.propEq('deleted', false), ...filters]),
     sortComparators: [
       _.ascend(_.prop('sortIdx')),
       _.ascend(_.prop('createdAt')),
     ],
   }
+}
+
+export function findAllActiveNotesWithParentId(parentId) {
+  return Notes.findAll(
+    getActiveQuery({
+      filters: [_.propEq('parentId', parentId)],
+    }),
+  )
+}
+
+export function findAllActiveChildrenOfNote(note) {
+  return findAllActiveNotesWithParentId(note.id)
 }

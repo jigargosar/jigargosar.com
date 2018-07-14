@@ -19,7 +19,7 @@ import {
 } from '../little-mobx'
 import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
-  getActiveQuery,
+  findAllActiveChildrenOfNote,
   getOrUpsertRootNote,
   Notes,
 } from './NotesActiveRecord'
@@ -29,7 +29,7 @@ import S from 'sanctuary'
 function createDisplayNoteTransformer(view) {
   console.debug('createDisplayNoteTransformer for', view)
   validate('O', [view])
-  const transformer = note => {
+  const transformerFn = note => {
     validate('O', [note])
     const _debugName = `DN-${nanoid(4)}-${note.id.slice(0, 9)}`
     const displayNote = createObservableObject({
@@ -67,7 +67,11 @@ function createDisplayNoteTransformer(view) {
           ])(this.visibleChildNotes)
         },
         get childNotes() {
-          return view.findAllWithParentId(note.id)
+          // return view.findAllWithParentId(note.id)
+          return _.compose(
+            _.map(displayNoteTransformer),
+            findAllActiveChildrenOfNote,
+          )(note)
         },
         get hasChildren() {
           return isNotEmpty(this.childNotes)
@@ -354,9 +358,13 @@ function createDisplayNoteTransformer(view) {
     )
     return displayNote
   }
-  return createTransformer(transformer, (dn, n) => {
-    console.debug(`destroying`, dn._debugName, n)
-  })
+  const displayNoteTransformer = createTransformer(
+    transformerFn,
+    (dn, n) => {
+      console.debug(`destroying`, dn._debugName, n)
+    },
+  )
+  return displayNoteTransformer
 }
 
 function View() {
@@ -394,13 +402,6 @@ function View() {
         return this.displayNoteTransformer(Notes.findById(id))
       },
 
-      findAllWithParentId(parentId) {
-        return this.findAll(
-          getActiveQuery({
-            filters: [_.propEq('parentId', parentId)],
-          }),
-        )
-      },
       shouldFocusDisplayNoteTextInput(dn) {
         return _.isNil(this.nullableFocusedNoteId)
           ? dn.isCurrentRoot
