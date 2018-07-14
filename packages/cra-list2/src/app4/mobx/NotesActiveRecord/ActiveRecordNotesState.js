@@ -69,7 +69,10 @@ function createDisplayNoteTransformer(view) {
           return view.currentRoot.id === this.id
         },
         get isExpanded() {
-          return !note.collapsed
+          return !this.isCollapsed
+        },
+        get isCollapsed() {
+          return note.collapsed
         },
         get visibleChildNotes() {
           return this.isExpanded || this.isCurrentRoot
@@ -198,7 +201,7 @@ function createDisplayNoteTransformer(view) {
           if (!this.hasChildren) {
             return
           }
-          this.updateAndSetFocused({collapsed: !note.collapsed})
+          this.updateAndSetFocused({collapsed: !this.isCollapsed})
         },
         onExpandKeyDown() {
           if (this.hasChildren) {
