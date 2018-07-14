@@ -10,10 +10,8 @@ function createNote({
   return {id, text, maybeParentId}
 }
 
-function createNoteTree() {
-  const root = createNote()
+function createNoteCollection() {
   return {
-    rootId: root.id,
-    idLookup: {[root.id]: root},
+    idLookup: {},
   }
 }
