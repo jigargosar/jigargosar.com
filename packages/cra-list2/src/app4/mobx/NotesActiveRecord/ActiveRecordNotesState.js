@@ -67,7 +67,6 @@ function createDisplayNoteTransformer(view) {
           ])(this.visibleChildNotes)
         },
         get childNotes() {
-          // return view.findAllWithParentId(note.id)
           return _.compose(
             _.map(displayNoteTransformer),
             findAllActiveChildrenOfNote,
