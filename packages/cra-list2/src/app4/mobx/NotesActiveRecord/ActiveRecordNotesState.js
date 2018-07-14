@@ -371,6 +371,7 @@ function createDisplayNoteTransformer(view) {
 function View() {
   const view = createObservableObject({
     props: {
+      rootNote: null,
       rootDisplayNote: null,
       maybeZoomedDisplayNote: S.Nothing,
       nullableFocusedNoteId: null,
@@ -482,6 +483,8 @@ function View() {
     },
     name: 'view',
   })
+
+  const displayNoteTransformer = createDisplayNoteTransformer(view)
 
   view.init()
 
