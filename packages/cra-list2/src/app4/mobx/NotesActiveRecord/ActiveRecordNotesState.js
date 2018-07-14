@@ -384,13 +384,6 @@ function View() {
       get currentNotesList() {
         return this.currentRoot.childNotes
       },
-      findAll(options) {
-        return _.map(
-          this.displayNoteTransformer,
-          Notes.findAll(options),
-        )
-      },
-
       findById(id) {
         if (this.rootNote && this.rootNote.id === id) {
           return this.rootNote
