@@ -1,5 +1,5 @@
 import {ActiveRecord} from '../ActiveRecord'
-import {_} from '../../little-ramda'
+import {_, mergeWithDefaults} from '../../little-ramda'
 
 const fieldNames = [
   'text',
@@ -12,7 +12,7 @@ const fieldNames = [
 const NotesActiveRecord = ActiveRecord({
   name: 'Note',
   fieldNames,
-  preProcessSnapshot: _.mergeWith(_.defaultTo)({
+  preProcessSnapshot: mergeWithDefaults({
     text: '',
     deleted: false,
     parentId: null,
