@@ -294,7 +294,7 @@ function createDisplayNoteTransformer(view) {
               [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
             ])(e)
           },
-          200,
+          0,
           {leading: true, trailing: false},
         ),
       },
