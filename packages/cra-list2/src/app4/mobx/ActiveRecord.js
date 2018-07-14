@@ -14,8 +14,10 @@ export function ActiveRecord({
   const collectionName = `${name}Collection`
   const adapter = LocalStorageAdapter({name: collectionName})
 
+  const _debugName = `${name}ActiveRecord`
   const options = {
     props: {
+      _debugName,
       fieldNames,
       name,
       records: [],
@@ -72,7 +74,7 @@ export function ActiveRecord({
         this.records = _.map(fromJSONSnapshot, adapter.loadAll())
       },
     },
-    name: collectionName,
+    name: _debugName,
   }
 
   const activeRecord = _.compose(
