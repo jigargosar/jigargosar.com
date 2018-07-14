@@ -61,7 +61,15 @@ function createDisplayNoteTransformer(view) {
           return S.toMaybe(note.parentId)
         },
         get maybeParentNote() {
-          return S.map(id => view.findById(id))(this.maybeParentId)
+          return S.map(displayNoteTransformer)(
+            maybeFindParentOfNote(note),
+          )
+        },
+        get childNotes() {
+          return _.compose(
+            _.map(displayNoteTransformer),
+            findAllActiveChildrenOfNote,
+          )(note)
         },
         get lastVisibleLeafNoteOrSelf() {
           return S.pipe([
@@ -69,12 +77,6 @@ function createDisplayNoteTransformer(view) {
             S.map(last => last.lastVisibleLeafNoteOrSelf),
             maybeOr(this),
           ])(this.visibleChildNotes)
-        },
-        get childNotes() {
-          return _.compose(
-            _.map(displayNoteTransformer),
-            findAllActiveChildrenOfNote,
-          )(note)
         },
         get hasChildren() {
           return isNotEmpty(this.childNotes)
