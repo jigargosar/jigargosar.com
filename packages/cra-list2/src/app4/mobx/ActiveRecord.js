@@ -1,6 +1,6 @@
 import {createObservableObject, mAutoRun, oArray} from './little-mobx'
 import {nanoid} from '../model/util'
-import {_, validate} from '../little-ramda'
+import {_, S, validate} from '../little-ramda'
 import {storage} from '../services/storage'
 
 export function ActiveRecord({
@@ -18,7 +18,7 @@ export function ActiveRecord({
     props: {
       fieldNames,
       name,
-      records: oArray([], {deep: false}),
+      records: [],
       get allFieldNames() {
         return _.concat(fieldNames, ['id', 'createdAt', 'modifiedAt'])
       },
@@ -69,7 +69,7 @@ export function ActiveRecord({
         }
       },
       load() {
-        this.records = _.map(fromJSON, adapter.loadAll())
+        this.records = _.map(fromJSONSnapshot, adapter.loadAll())
       },
     },
     name: collectionName,
@@ -138,7 +138,7 @@ export function ActiveRecord({
   }
 
   function createNew(defaults = {}) {
-    return fromJSON({
+    return fromJSONSnapshot({
       id: `${name}@${nanoid()}`,
       createdAt: Date.now(),
       modifiedAt: Date.now(),
@@ -158,12 +158,17 @@ export function ActiveRecord({
     }
   }
 
-  function fromJSON(jsSnap) {
-    const _debugName = `ARO@${jsSnap.id}@${nanoid()}`
+  function fromPreProcessedSnapshot(snap) {
+    return S.pipe([preProcessSnapshot, fromJSONSnapshot])(snap)
+  }
+
+  function fromJSONSnapshot(snap) {
+    validate('O', [snap])
+    const _debugName = `ARO-${nanoid(4)}-${snap.id.slice(0, 9)}`
     const obs = createObservableObject({
       props: {
-        ...jsSnap,
-        isNew: _.defaultTo(false, jsSnap.isNew),
+        ...snap,
+        isNew: _.defaultTo(false, snap.isNew),
         _debugName,
       },
       computed: {
@@ -175,7 +180,7 @@ export function ActiveRecord({
         },
       },
       actions: {},
-      name: jsSnap.id,
+      name: snap.id,
     })
     return obs
   }
