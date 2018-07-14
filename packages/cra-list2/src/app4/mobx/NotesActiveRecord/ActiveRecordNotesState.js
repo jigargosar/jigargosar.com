@@ -418,7 +418,6 @@ function View() {
         validate('S', [id])
         this.nullableFocusedNoteId = id
       },
-      indentDisplayNote() {},
       sortChildrenWithParentId(parentId) {
         if (_.isNil(parentId)) {
           return
