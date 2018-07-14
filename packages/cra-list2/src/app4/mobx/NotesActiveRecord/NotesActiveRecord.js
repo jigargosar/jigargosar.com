@@ -1,19 +1,6 @@
 import {ActiveRecord} from '../ActiveRecord'
 import {_} from '../../little-ramda'
 
-// function getActiveQuery({filters = []} = {}) {
-//   return {
-//     filter: _.allPass([
-//       _.propSatisfies(_.not, 'deleted'),
-//       ...filters,
-//     ]),
-//     sortComparators: [
-//       _.ascend(_.prop('sortIdx')),
-//       _.ascend(_.prop('createdAt')),
-//     ],
-//   }
-// }
-
 const fieldNames = [
   'text',
   'deleted',
