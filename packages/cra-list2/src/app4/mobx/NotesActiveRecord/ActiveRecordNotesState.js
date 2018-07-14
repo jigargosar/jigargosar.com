@@ -115,6 +115,25 @@ function createDisplayNoteTransformer(view) {
         get sortIdxOrZero() {
           return _.defaultTo(0, this.sortIdx)
         },
+        get hasHiddenChildren() {
+          return this.hasChildren && !this.hasVisibleChildren
+        },
+        hasDecedentsWithId(id) {
+          return this.hasChildWithId(id)
+            ? true
+            : _.compose(
+                isNotNil,
+                _.find(cn => cn.hasDecedentsWithId(id)),
+              )(this.childNotes)
+        },
+        hasChildWithId(id) {
+          return _.compose(isNotNil, _.find(idEq(id)))(
+            this.childNotes,
+          )
+        },
+        hasHiddenChildrenWithId(id) {
+          return this.hasHiddenChildren && this.hasDecedentsWithId(id)
+        },
         insertChild({id, ...values}) {
           validate('Z', [id])
           view.upsertAndSetFocused({
@@ -342,7 +361,10 @@ function View() {
         )
       },
       shouldFocusDisplayNoteTextInput(dn) {
-        return this.nullableFocusedNoteId === dn.id
+        return (
+          this.nullableFocusedNoteId === dn.id ||
+          dn.hasHiddenChildrenWithId(this.nullableFocusedNoteId)
+        )
       },
     },
     actions: {
