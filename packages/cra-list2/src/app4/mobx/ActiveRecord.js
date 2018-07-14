@@ -42,7 +42,7 @@ export function ActiveRecord({
         return S.toMaybe(this.findById(id))
       },
       findByMaybeId(maybeId) {
-        return S.map(mid => this.maybeFindById(mid))(maybeId)
+        return S.chain(mid => this.maybeFindById(mid))(maybeId)
       },
       get snapshot() {
         return _.map(r => r.snapshot, this.records)

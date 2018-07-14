@@ -61,9 +61,8 @@ function createDisplayNoteTransformer(view) {
           return S.toMaybe(note.parentId)
         },
         get maybeParentNote() {
-          return S.map(displayNoteTransformer)(
-            maybeFindParentOfNote(note),
-          )
+          const maybeParent = maybeFindParentOfNote(note)
+          return S.map(displayNoteTransformer)(maybeParent)
         },
         get childNotes() {
           return _.compose(
