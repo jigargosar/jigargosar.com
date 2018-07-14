@@ -6,7 +6,6 @@ import {
   isNilOrEmpty,
   isNotEmpty,
   isNotNil,
-  maybeHead,
   maybeOr,
   maybeOrElse,
   nop,
@@ -112,10 +111,10 @@ function createDisplayNoteTransformer(view) {
           return S.map(n => n.id)(this.maybeSiblingAtOffset(-1))
         },
         get maybeFirstVisibleChildNote() {
-          return maybeHead(this.visibleChildNotes)
+          return S.head(this.visibleChildNotes)
         },
-        get firstChildNote() {
-          return _.head(this.childNotes)
+        get maybeFirstChildNote() {
+          return S.head(this.childNotes)
         },
         get textInputHandlers() {
           return {
@@ -189,34 +188,22 @@ function createDisplayNoteTransformer(view) {
           this.updateAndSetFocused({collapsed: !note.collapsed})
         },
         onExpandKeyDown() {
-          if (!this.hasChildren) {
-            return
+          if (this.hasChildren) {
+            this.update({collapsed: false})
+            this.navigateToFirstChildNote()
+          } else {
+            this.navigateToNextDisplayNote()
           }
-          this.update({collapsed: false})
         },
         onCollapseKeyDown() {
-          if (!this.hasChildren) {
-            return
+          if (this.hasVisibleChildren) {
+            this.update({collapsed: true})
+          } else {
+            this.navigateToParent()
           }
-          this.update({collapsed: true})
         },
         onTextFocus(e) {
           e.target.setSelectionRange(0, 0)
-        },
-        onTextKeyDown(e) {
-          _.cond([
-            [isAnyHotKey(['enter']), this.onEnterKeyDown],
-            [isAnyHotKey(['escape']), wrapPD(nop)],
-            [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
-            [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
-            [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
-            [isAnyHotKey(['mod+,']), wrapPD(this.onZoomOut)],
-            [isAnyHotKey(['tab']), this.onTabKeyDown],
-            [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
-            [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
-            [isAnyHotKey(['mod+up']), wrapPD(this.onCollapseKeyDown)],
-            [isAnyHotKey(['mod+down']), wrapPD(this.onExpandKeyDown)],
-          ])(e)
         },
         onZoomIn() {
           view.zoomIntoDisplayNote(this)
@@ -234,6 +221,12 @@ function createDisplayNoteTransformer(view) {
         },
         onUpArrowKey() {
           this.navigateToPreviousDisplayNote()
+        },
+        navigateToParent() {
+          view.maybeSetFocusedDisplayNote(this.maybeParentNote)
+        },
+        navigateToFirstChildNote() {
+          view.maybeSetFocusedDisplayNote(this.maybeFirstChildNote)
         },
         navigateToNextDisplayNote() {
           const maybeFDN = _.compose(
@@ -285,6 +278,21 @@ function createDisplayNoteTransformer(view) {
               sortIdx: prevSibling.childNotes.length,
             })
           })(this.maybePreviousSiblingNote)
+        },
+        onTextKeyDown(e) {
+          _.cond([
+            [isAnyHotKey(['enter']), this.onEnterKeyDown],
+            [isAnyHotKey(['escape']), wrapPD(nop)],
+            [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
+            [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
+            [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
+            [isAnyHotKey(['mod+,']), wrapPD(this.onZoomOut)],
+            [isAnyHotKey(['tab']), this.onTabKeyDown],
+            [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
+            [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
+            [isAnyHotKey(['mod+up']), this.onCollapseKeyDown],
+            [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
+          ])(e)
         },
       },
       name: _debugName,
