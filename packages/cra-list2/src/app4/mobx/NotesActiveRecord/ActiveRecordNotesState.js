@@ -37,8 +37,6 @@ function createDisplayNoteTransformer(view) {
     const displayNote = createObservableObject({
       props: {
         _debugName,
-        _childNotes: [],
-        _maybeParentNote: S.Nothing,
         get textInputValue() {
           return _.defaultTo('', this.text)
         },
@@ -59,17 +57,6 @@ function createDisplayNoteTransformer(view) {
         },
         get maybeParentId() {
           return S.toMaybe(note.parentId)
-        },
-        get maybeParentNote() {
-          // const maybeParent = maybeFindParentOfNote(note)
-          return S.map(displayNoteTransformer)(this._maybeParentNote)
-        },
-        get childNotes() {
-          return _.compose(
-            _.map(displayNoteTransformer),
-            // findAllActiveChildrenOfNote,
-            // )(note)
-          )(this._childNotes)
         },
         get lastVisibleLeafNoteOrSelf() {
           return S.pipe([
@@ -188,6 +175,18 @@ function createDisplayNoteTransformer(view) {
         },
         prependSibling() {
           this.insertSibling({sortIdx: this.sortIdxOrZero - 1})
+        },
+        get _childNotes() {
+          return findAllActiveChildrenOfNote(note)
+        },
+        get _maybeParentNote() {
+          return maybeFindParentOfNote(note)
+        },
+        get childNotes() {
+          return S.map(displayNoteTransformer)(this._childNotes)
+        },
+        get maybeParentNote() {
+          return S.map(displayNoteTransformer)(this._maybeParentNote)
         },
       },
       actions: {
@@ -354,9 +353,12 @@ function createDisplayNoteTransformer(view) {
             // [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
           ])(e)
         },
-        setParentAndChildren({maybeParentNote, childNotes}) {
-          this._maybeParentNote = maybeParentNote
-          this._childNotes = childNotes
+        setParentAndChildrenDisplayNotes(
+          maybeParentNote,
+          childNotes,
+        ) {
+          this.maybeParentNote = maybeParentNote
+          this.childNotes = childNotes
         },
       },
       name: _debugName,
@@ -365,15 +367,6 @@ function createDisplayNoteTransformer(view) {
       note,
       displayNote,
       Notes.allFieldNames,
-    )
-    mAutoRun(
-      () => {
-        displayNote.setParentAndChildren({
-          maybeParentNote: maybeFindParentOfNote(note),
-          childNotes: findAllActiveChildrenOfNote(note),
-        })
-      },
-      {name: 'Set Child Notes And Parent'},
     )
     console.log('DN: NEW', note.text, _debugName)
     return displayNote
