@@ -56,7 +56,7 @@ export function findAllActiveChildrenOfNote(note) {
   return findAllActiveNotesWithParentId(note.id)
 }
 
-export function maybeFindParentNoteOf(note) {
+export function maybeFindParentOfNote(note) {
   const maybeId = S.toMaybe(note.parentId)
   return Notes.findByMaybeId(maybeId)
 }

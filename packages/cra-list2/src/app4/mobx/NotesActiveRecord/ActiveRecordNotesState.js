@@ -22,7 +22,7 @@ import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
   findAllActiveChildrenOfNote,
   getOrUpsertRootNote,
-  maybeFindParentNoteOf,
+  maybeFindParentOfNote,
   Notes,
 } from './NotesActiveRecord'
 import {nanoid} from '../../model/util'
@@ -37,6 +37,8 @@ function createDisplayNoteTransformer(view) {
     const displayNote = createObservableObject({
       props: {
         _debugName,
+        _childNotes: [],
+        _maybeParentNote: S.Nothing,
         get textInputValue() {
           return _.defaultTo('', this.text)
         },
@@ -350,6 +352,10 @@ function createDisplayNoteTransformer(view) {
             // [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
           ])(e)
         },
+        setParentAndChildren({maybeParentNote, childNotes}) {
+          this._maybeParentNote = maybeParentNote
+          this._childNotes = childNotes
+        },
       },
       name: _debugName,
     })
@@ -357,6 +363,15 @@ function createDisplayNoteTransformer(view) {
       note,
       displayNote,
       Notes.allFieldNames,
+    )
+    mAutoRun(
+      () => {
+        displayNote.setParentAndChildren({
+          maybeParentNote: maybeFindParentOfNote(note),
+          childNotes: findAllActiveChildrenOfNote(note),
+        })
+      },
+      {name: 'Set Child Notes And Parent'},
     )
     console.log('DN: NEW', note.text, _debugName)
     return displayNote
@@ -473,7 +488,7 @@ function View() {
         this.setFocusedNoteId(id)
       },
       zoomOutOneLevel() {
-        this.maybeZoomedNote = maybeFindParentNoteOf(
+        this.maybeZoomedNote = maybeFindParentOfNote(
           this.currentRootNote,
         )
       },
