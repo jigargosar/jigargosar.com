@@ -355,12 +355,13 @@ function createDisplayNoteTransformer(view) {
       displayNote,
       Notes.allFieldNames,
     )
+    console.log('DN: NEW', note.text, _debugName)
     return displayNote
   }
   const displayNoteTransformer = createTransformer(
     transformerFn,
     (dn, n) => {
-      console.debug(`destroying`, dn._debugName, n)
+      console.log(`DN: DEL`, n.text, dn._debugName, n)
     },
   )
   return displayNoteTransformer
