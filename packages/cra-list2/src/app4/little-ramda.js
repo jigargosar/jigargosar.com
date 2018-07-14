@@ -71,7 +71,7 @@ export const tapLog = tapLogWith('tapLog')
 
 export const tapShow = tapLogWith('tapShow')
 
-export function wrapTapLog(fn) {
+export function wrapLog(fn) {
   const fnName = _.defaultTo('wrapTapLog fn', fn.name)
   return _.curryN(_.length(fn), (...args) => {
     console.warn(`${fnName}`, 'in', args)

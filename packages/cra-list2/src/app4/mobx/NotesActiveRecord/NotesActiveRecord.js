@@ -12,7 +12,13 @@ const fieldNames = [
 const NotesActiveRecord = ActiveRecord({
   name: 'Note',
   fieldNames,
-  preProcessSnapshot: _.identity,
+  preProcessSnapshot: _.mergeWith(_.defaultTo)({
+    text: '',
+    deleted: false,
+    parentId: null,
+    collapsed: false,
+    sortIdx: -1,
+  }),
 })
 
 const Notes = NotesActiveRecord
