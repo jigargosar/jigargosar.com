@@ -164,7 +164,7 @@ export function ActiveRecord({
   }
 
   function fromPreProcessedSnapshot(snap) {
-    return S.pipe([preProcessSnapshot, fromJSONSnapshot])(snap)
+    return _.compose(fromJSONSnapshot, preProcessSnapshot)(snap)
 
     function fromJSONSnapshot(snap) {
       validate('O', [snap])
