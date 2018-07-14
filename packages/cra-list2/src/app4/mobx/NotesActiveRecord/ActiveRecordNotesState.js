@@ -15,8 +15,8 @@ import {
 import {
   attachDelegatingPropertyGetters,
   createObservableObject,
-  createTransformer,
   mAutoRun,
+  mTrace,
 } from '../little-mobx'
 import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
@@ -368,16 +368,19 @@ function createDisplayNoteTransformer(view) {
       displayNote,
       Notes.allFieldNames,
     )
-    console.log('DN: NEW', note.text, _debugName)
+    // console.log('DN: NEW', note.text, _debugName)
     return displayNote
   }
-  const displayNoteTransformer = createTransformer(
-    transformerFn,
-    (dn, n) => {
-      console.log(`DN: DEL`, n.text, dn._debugName, n)
-    },
-  )
-  return displayNoteTransformer
+
+  const displayNoteTransformer = transformerFn
+  // const displayNoteTransformer = createTransformer(
+  //   transformerFn,
+  //   (dn, n) => {
+  //     console.log(`DN: DEL`, n.text, dn._debugName, n)
+  //   },
+  // )
+  // return displayNoteTransformer
+  return transformerFn
 }
 
 function View() {
@@ -509,7 +512,8 @@ function View() {
   view.init(displayNoteTransformer)
 
   mAutoRun(
-    () => {
+    r => {
+      mTrace(r)
       console.assert(isNotNil(view.rootNote))
       view.setRootDisplayNote(displayNoteTransformer(view.rootNote))
       view.setMaybeZoomedDisplayNote(
