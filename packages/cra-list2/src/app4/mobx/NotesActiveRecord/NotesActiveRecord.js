@@ -12,6 +12,7 @@ const fieldNames = [
 const NotesActiveRecord = ActiveRecord({
   name: 'Note',
   fieldNames,
+  preProcessSnapshot: _.identity,
 })
 
 const Notes = NotesActiveRecord

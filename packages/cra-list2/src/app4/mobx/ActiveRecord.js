@@ -8,6 +8,7 @@ export function ActiveRecord({
   volatileFieldNames = [],
   name,
   queries = {},
+  preProcessSnapshot = _.identity,
 }) {
   validate('AAS', [fieldNames, volatileFieldNames, name])
   const collectionName = `${name}Collection`
@@ -32,10 +33,6 @@ export function ActiveRecord({
         return _.head(this.findAll({filter}))
       },
       findById(id) {
-        // validate('S|Z', [id])
-        // if (_.isNil(id)) {
-        //   return null
-        // }
         validate('S', [id])
         return this.find({filter: _.propEq('id', id)})
       },
@@ -193,6 +190,7 @@ function LocalStorageAdapter({name}) {
     validate('A', [list])
     storage.set(name, list)
   }
+
   function upsert(record) {
     validate('S', [record.id])
     debugger
@@ -205,5 +203,6 @@ function LocalStorageAdapter({name}) {
 
     saveAll(updatedList)
   }
+
   return {loadAll, upsert, saveAll}
 }
