@@ -66,7 +66,9 @@ function createDisplayNoteTransformer(view) {
           return isNotEmpty(this.childNotes)
         },
         get visibleChildNotes() {
-          return note.collapsed ? [] : this.childNotes
+          return note.collapsed && view.currentRoot.id !== this.id
+            ? []
+            : this.childNotes
         },
         get hasVisibleChildren() {
           return isNotEmpty(this.visibleChildNotes)
