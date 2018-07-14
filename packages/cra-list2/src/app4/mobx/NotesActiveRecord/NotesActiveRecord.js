@@ -17,7 +17,7 @@ const NotesActiveRecord = ActiveRecord({
     deleted: false,
     parentId: null,
     collapsed: false,
-    sortIdx: -1,
+    sortIdx: 0,
   }),
 })
 
