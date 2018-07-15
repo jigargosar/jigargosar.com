@@ -395,10 +395,7 @@ function View() {
         return note
       },
       get currentRootDisplayNote() {
-        const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
-        const displayNote = this.displayNoteTransformer(note)
-        validate('O', [displayNote])
-        return displayNote
+        return this.displayNoteTransformer(this.currentRootNote)
       },
       get currentAncestors() {
         return this.currentRootDisplayNote.ancestors
