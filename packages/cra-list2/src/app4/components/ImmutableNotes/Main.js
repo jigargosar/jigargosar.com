@@ -28,25 +28,11 @@ class NoteTextInput extends React.Component {
 
   render() {
     return (
-      <div
-        className={cn(
-          'flex-auto',
-          'flex items-center',
-          'pv2',
-          'bb bw1 b--light-gray',
-        )}
-      >
-        <div className={cn('f6 gray mr3')}>
-          {getDebugId(this.note)}
-        </div>
-        <div className={cn('flex-auto', 'flex')}>
-          <input
-            className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
-            value={getText(this.note)}
-            onChange={onNoteTextChangeEvent(this.note)}
-          />
-        </div>
-      </div>
+      <input
+        className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
+        value={getText(this.note)}
+        onChange={onNoteTextChangeEvent(this.note)}
+      />
     )
   }
 }
@@ -63,8 +49,19 @@ class NoteTextLine extends React.Component {
     return (
       <div className={cn('code flex items-center')}>
         <div className={cn('mr3')}>-</div>
-
-        <NoteTextInput note={note} />
+        <div
+          className={cn(
+            'flex-auto',
+            'flex items-center',
+            'pv2',
+            'bb bw1 b--light-gray',
+          )}
+        >
+          <div className={cn('f6 gray mr3')}>{getDebugId(note)}</div>
+          <div className={cn('flex-auto', 'flex')}>
+            <NoteTextInput note={note} />
+          </div>
+        </div>
       </div>
     )
   }
