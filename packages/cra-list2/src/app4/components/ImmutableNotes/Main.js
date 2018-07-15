@@ -19,6 +19,10 @@ function getChildren({children}) {
   return children
 }
 
+function getText({text}) {
+  return text
+}
+
 class NoteTree extends React.Component {
   state = {
     root: _.compose(
@@ -29,7 +33,7 @@ class NoteTree extends React.Component {
   renderChild = (child, idx) => {
     return (
       <F key={idx}>
-        <div>{child.text}</div>
+        <div>{getText(child)}</div>
       </F>
     )
   }
@@ -46,7 +50,7 @@ class NoteTree extends React.Component {
     const {root} = this.state
     return (
       <div className={cn('ma3')}>
-        <div>{root.text}</div>
+        <div>{getText(root)}</div>
         {this.renderChildren(root)}
       </div>
     )
