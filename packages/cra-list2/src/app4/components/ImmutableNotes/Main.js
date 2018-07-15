@@ -4,9 +4,11 @@ import {F} from '../utils'
 import {cn, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_, mapIndexed} from '../../little-ramda'
+import Baobab from 'baobab'
+import {nanoid} from '../../model/util'
 
 function createNote({text = ''}) {
-  return {text, children: []}
+  return {id: `Note-${nanoid()}`, text, children: []}
 }
 
 function appendChild(child) {
@@ -38,11 +40,14 @@ const appendTwoChildren = _.compose(
   ),
 )
 
+const root = _.compose(appendTwoChildren)(
+  createNote({text: 'Tree Root'}),
+)
+
 class NoteTree extends React.Component {
   state = {
-    root: _.compose(appendTwoChildren)(
-      createNote({text: 'Tree Root'}),
-    ),
+    root: root,
+    tree: new Baobab(root),
   }
   renderText = note => {
     return (
