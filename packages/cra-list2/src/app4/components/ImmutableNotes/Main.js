@@ -21,6 +21,12 @@ function appendChild(child) {
   }
 }
 
+function appendNewNote(noteProps) {
+  return function(note) {
+    return appendChild(createNote(noteProps))(note)
+  }
+}
+
 // function getChildren({children}) {
 //   return children
 // }
@@ -67,14 +73,14 @@ function selectChildren(note) {
 const appendTwoChildren = _.compose(
   appendChild(
     _.compose(
-      appendChild(createNote({text: 'fourth grand child'})),
-      appendChild(createNote({text: 'third grand child'})),
+      appendNewNote({text: 'fourth grand child'}),
+      appendNewNote({text: 'third grand child'}),
     )(createNote({text: 'second child'})),
   ),
   appendChild(
     _.compose(
-      appendChild(createNote({text: 'second grand child'})),
-      appendChild(createNote({text: 'first grand child'})),
+      appendNewNote({text: 'second grand child'}),
+      appendNewNote({text: 'first grand child'}),
     )(createNote({text: 'first child'})),
   ),
 )
