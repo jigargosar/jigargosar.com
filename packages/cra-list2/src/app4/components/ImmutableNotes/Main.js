@@ -6,6 +6,7 @@ import {_} from '../../little-ramda'
 import Baobab, {Cursor} from 'baobab'
 import {nanoid} from '../../model/util'
 import {StorageItem} from '../../services/storage'
+import * as PropTypes from 'prop-types'
 
 if (module.hot) {
   window.Baobab = Baobab
@@ -23,7 +24,7 @@ function appendChild(child) {
 
 function appendChildren(children) {
   return function(note) {
-    return _.reduced((note, child) => appendChild(child)(note))(
+    return _.reduce((note, child) => appendChild(child)(note))(note)(
       children,
     )
   }
@@ -101,6 +102,12 @@ const appendTwoChildren = (() => {
 
 const initialRoot = appendTwoChildren(createNote({text: 'Tree Root'}))
 
+function NoteDebugId(props) {
+  return <div className={cn('f6 gray mr3')}>{props.debugId}</div>
+}
+
+NoteDebugId.propTypes = {debugId: PropTypes.any}
+
 class NoteTextInput extends React.Component {
   get note() {
     return this.props.note
@@ -120,9 +127,7 @@ class NoteTextInput extends React.Component {
           'bb bw1 b--light-gray',
         )}
       >
-        <div className={cn('f6 gray mr3')}>
-          {getDebugId(this.note)}
-        </div>
+        <NoteDebugId debugId={getDebugId(this.note)} />
         <div className={cn('flex-auto', 'flex')}>
           <input
             className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
