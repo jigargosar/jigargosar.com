@@ -15,7 +15,6 @@ import {
   PropTypes,
   renderKeyedById,
 } from '../utils'
-import {_} from '../../little-ramda'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import FocusChild from '../mobx/FocusChild'
 
@@ -76,33 +75,37 @@ const OutlineNote = mrInjectAll(function OutlineNote({note}) {
         </FocusChild>
         <div className={cn('mr2')}>{note.sortIdx}</div>
       </div>
-      <OutlineChildren childNotes={note.visibleChildNotes} />
+      {/*<OutlineChildren childNotes={note.visibleChildNotes} />*/}
+      <OutlineChildren note={note} />
     </ListItem>
   )
 })
 
 const OutlineChildren = mrInjectAll(function ChildNotes({
-  childNotes,
+  // childNotes,
+  note,
   m = 'ml4 mr3_ mt2_',
   shadow = '',
   className,
 }) {
-  if (_.isEmpty(childNotes)) {
+  if (note.hasVisibleChildren) {
+    return (
+      <List
+        m={m}
+        shadow={shadow}
+        className={cn('flex-auto', 'bw1 bl b--light-gray', className)}
+      >
+        {renderKeyedById(OutlineNote, 'note', note.visibleChildNotes)}
+      </List>
+    )
+  } else {
     return <F />
   }
-  return (
-    <List
-      m={m}
-      shadow={shadow}
-      className={cn('flex-auto', 'bw1 bl b--light-gray', className)}
-    >
-      {renderKeyedById(OutlineNote, 'note', childNotes)}
-    </List>
-  )
 })
 
 OutlineChildren.propTypes = {
-  childNotes: PropTypes.array.isRequired,
+  // childNotes: PropTypes.array.isRequired,
+  note: PropTypes.object.isRequired,
 }
 
 const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
@@ -171,7 +174,8 @@ const OutlineRoot = mrInjectAll(function NoteList({view}) {
         m={''}
         className={cn('bn bw0')}
         shadow={''}
-        childNotes={view.currentNotesList}
+        // childNotes={view.currentNotesList}
+        note={view.currentRootDisplayNote}
       />
     </div>
   )

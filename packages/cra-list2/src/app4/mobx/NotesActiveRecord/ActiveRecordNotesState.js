@@ -9,7 +9,6 @@ import {
   maybeOr,
   maybeOrElse,
   nop,
-  throttle,
   validate,
 } from '../../little-ramda'
 import {
@@ -40,7 +39,7 @@ function createDisplayNoteTransformer(view) {
       props: {
         _debugName,
         get textInputValue() {
-          return _.defaultTo('', this.text)
+          return note.text
         },
         get shouldFocus() {
           return view.shouldFocusDisplayNoteTextInput(this)
@@ -206,10 +205,24 @@ function createDisplayNoteTransformer(view) {
           }
         },
         onBackspaceKeyDown(e) {
-          if (_.isEmpty(e.target.value)) {
-            this.navigateToPreviousDisplayNote()
-            this.onDelete()
+          const [start, end] = [
+            e.target.selectionStart,
+            e.target.selectionEnd,
+          ]
+          if (start === 0 && end === 0) {
+            S.map(prev => {
+              this.onDelete()
+              prev.updateAndSetFocused({
+                text: `${prev.text}${this.text}`,
+              })
+              return ''
+            })(this.maybePreviousSiblingNote)
           }
+
+          // if (_.isEmpty(e.target.value)) {
+          //   this.navigateToPreviousDisplayNote()
+          //   this.onDelete()
+          // }
         },
         onDelete() {
           this.update({deleted: true})
@@ -314,25 +327,21 @@ function createDisplayNoteTransformer(view) {
             })
           })(this.maybePreviousSiblingNote)
         },
-        onTextKeyDown: throttle(
-          function(e) {
-            _.cond([
-              [isAnyHotKey(['enter']), this.onEnterKeyDown],
-              [isAnyHotKey(['escape']), wrapPD(nop)],
-              [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
-              [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
-              [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
-              [isAnyHotKey(['mod+,']), wrapPD(this.onZoomOut)],
-              [isAnyHotKey(['tab']), this.onTabKeyDown],
-              [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
-              [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
-              [isAnyHotKey(['mod+up']), this.onCollapseKeyDown],
-              [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
-            ])(e)
-          },
-          0,
-          {leading: true, trailing: false},
-        ),
+        onTextKeyDown(e) {
+          _.cond([
+            [isAnyHotKey(['enter']), this.onEnterKeyDown],
+            [isAnyHotKey(['escape']), wrapPD(nop)],
+            [isAnyHotKey(['up']), wrapPD(this.onUpArrowKey)],
+            [isAnyHotKey(['down']), wrapPD(this.onDownArrowKey)],
+            [isAnyHotKey(['mod+.']), wrapPD(this.onZoomIn)],
+            [isAnyHotKey(['mod+,']), wrapPD(this.onZoomOut)],
+            [isAnyHotKey(['tab']), this.onTabKeyDown],
+            [isAnyHotKey(['shift+tab']), this.onShiftTabKeyDown],
+            [isAnyHotKey(['backspace']), this.onBackspaceKeyDown],
+            [isAnyHotKey(['mod+up']), this.onCollapseKeyDown],
+            [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
+          ])(e)
+        },
         onCurrentRootTextKeyDown(e) {
           _.cond([
             // [isAnyHotKey(['enter']), this.onEnterKeyDown],
