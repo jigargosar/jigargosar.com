@@ -71,38 +71,26 @@ class NoteTextLine extends React.Component {
 }
 
 class NoteTree extends React.Component {
-  state = state
+  renderChild = (noteCursor, idx) => (
+    <F key={idx}>
+      {<NoteTextLine note={noteCursor} />}
+      {this.renderChildren(noteCursor)}
+    </F>
+  )
 
-  renderChild = (noteCursor, idx) => {
-    return (
-      <F key={idx}>
-        {<NoteTextLine note={noteCursor} />}
-        {this.renderChildren(noteCursor)}
-      </F>
-    )
-  }
+  renderChildren = noteCursor => (
+    <div className={cn('ml3')}>
+      {_.map(this.renderChild)(selectChildren(noteCursor))}
+    </div>
+  )
 
-  renderChildren = noteCursor => {
-    return (
-      <div className={cn('ml3')}>
-        {_.map(this.renderChild)(selectChildren(noteCursor))}
+  render = () => (
+    <F>
+      <div className={cn('ma3 pa3 shadow-1 bg-white')}>
+        {this.renderChild(state.tree, 0)}
       </div>
-    )
-  }
-
-  render() {
-    return (
-      <F>
-        <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-          {this.renderChild(this.tree, 0)}
-        </div>
-      </F>
-    )
-  }
-
-  get tree() {
-    return this.state.tree
-  }
+    </F>
+  )
 }
 
 const Main = mrInjectAll(function Main() {
