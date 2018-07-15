@@ -37,35 +37,25 @@ class NoteTextInput extends React.Component {
     )
   }
 }
-
-class NoteTextLine extends React.Component {
-  // componentDidMount() {
-  //   const {note} = this.props
-  //   const textCursor = note.select('text')
-  //   textCursor.on('update', () => this.forceUpdate())
-  // }
-
-  render() {
-    const {note} = this.props
-    return (
-      <div className={cn('code flex items-center')}>
-        <div className={cn('mr3')}>-</div>
-        <div
-          className={cn(
-            'flex-auto',
-            'flex items-center',
-            'pv2',
-            'bb bw1 b--light-gray',
-          )}
-        >
-          <div className={cn('f6 gray mr3')}>{getDebugId(note)}</div>
-          <div className={cn('flex-auto', 'flex')}>
-            <NoteTextInput note={note} />
-          </div>
+function NoteTextLine({note}) {
+  return (
+    <div className={cn('code flex items-center')}>
+      <div className={cn('mr3')}>-</div>
+      <div
+        className={cn(
+          'flex-auto',
+          'flex items-center',
+          'pv2',
+          'bb bw1 b--light-gray',
+        )}
+      >
+        <div className={cn('f6 gray mr3')}>{getDebugId(note)}</div>
+        <div className={cn('flex-auto', 'flex')}>
+          <NoteTextInput note={note} />
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 function NoteChild({note}) {
