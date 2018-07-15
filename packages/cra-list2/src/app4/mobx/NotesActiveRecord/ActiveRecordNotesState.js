@@ -29,6 +29,14 @@ import {
 import {nanoid} from '../../model/util'
 import S from 'sanctuary'
 
+const childNotesTransformer = createTransformer(note => {
+  return findAllActiveChildrenOfNote(note)
+})
+
+const parentNoteTransformer = createTransformer(note => {
+  return maybeFindParentOfNote(note)
+})
+
 function createDisplayNoteTransformer(view) {
   console.debug('createDisplayNoteTransformer for', view)
   validate('O', [view])
@@ -178,10 +186,10 @@ function createDisplayNoteTransformer(view) {
           this.insertSibling({sortIdx: this.sortIdxOrZero - 1})
         },
         get _childNotes() {
-          return findAllActiveChildrenOfNote(note)
+          return childNotesTransformer(note)
         },
         get _maybeParentNote() {
-          return maybeFindParentOfNote(note)
+          return parentNoteTransformer(note)
         },
         get childNotes() {
           return S.map(displayNoteTransformer)(this._childNotes)
@@ -353,13 +361,6 @@ function createDisplayNoteTransformer(view) {
             // [isAnyHotKey(['mod+up']), this.onCollapseKeyDown],
             // [isAnyHotKey(['mod+down']), this.onExpandKeyDown],
           ])(e)
-        },
-        setParentAndChildrenDisplayNotes(
-          maybeParentNote,
-          childNotes,
-        ) {
-          this.maybeParentNote = maybeParentNote
-          this.childNotes = childNotes
         },
       },
       name: _debugName,
