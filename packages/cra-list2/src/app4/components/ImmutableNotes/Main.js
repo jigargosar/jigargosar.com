@@ -90,19 +90,6 @@ function NoteChildren({note}) {
 }
 
 class NoteTree extends React.Component {
-  renderChild = (noteCursor, idx) => (
-    <F key={idx}>
-      {<NoteTextLine note={noteCursor} />}
-      {this.renderChildren(noteCursor)}
-    </F>
-  )
-
-  renderChildren = noteCursor => (
-    <div className={cn('ml3')}>
-      {_.map(this.renderChild)(selectChildren(noteCursor))}
-    </div>
-  )
-
   render = () => (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
