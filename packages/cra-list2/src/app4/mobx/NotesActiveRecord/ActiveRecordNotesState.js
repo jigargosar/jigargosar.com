@@ -413,12 +413,17 @@ function View() {
           this.lookupAllActiveNotesWithParentId(dn.id),
         )
       },
-      maybeLookupParentDisplayNote(note) {
+      maybeLookupParentDisplayNote(dn) {
         return _.compose(
           S.map(this.displayNoteTransformer),
           S.toMaybe,
-          _.prop(note.parentId),
+          _.prop(dn.parentId),
         )(this.notesIdLookup)
+      },
+      maybeLookupParentOfNote(note) {
+        return _.compose(S.toMaybe, _.prop(note.parentId))(
+          this.notesIdLookup,
+        )
       },
       lookupAllActiveNotesWithParentId(parentId) {
         return this.parentIdToActiveChildrenLookup[parentId] || []
@@ -491,7 +496,7 @@ function View() {
         this.setFocusedNoteId(id)
       },
       zoomOutOneLevel() {
-        this.maybeZoomedNote = maybeFindParentOfNote(
+        this.maybeZoomedNote = this.maybeLookupParentOfNote(
           this.currentRootNote,
         )
       },
