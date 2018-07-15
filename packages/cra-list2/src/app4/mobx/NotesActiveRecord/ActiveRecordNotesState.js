@@ -382,11 +382,22 @@ function View() {
       notesIdLookup: {},
       parentIdToActiveChildrenLookup: {},
       rootNote: null,
+      // rootDisplayNote: null,
+      get rootDisplayNote() {
+        return this.displayNoteTransformer(this.rootNote)
+      },
       maybeZoomedNote: S.Nothing,
-      rootDisplayNote: null,
-      maybeZoomedDisplayNote: S.Nothing,
+      // maybeZoomedDisplayNote: S.Nothing,
+      get maybeZoomedDisplayNote() {
+        return S.map(this.displayNoteTransformer)(
+          view.maybeZoomedNote,
+        )
+      },
       nullableFocusedNoteId: null,
-      displayNoteTransformer: null,
+      // displayNoteTransformer: null,
+      get displayNoteTransformer() {
+        return createDisplayNoteTransformer(this)
+      },
       get currentRootNote() {
         const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
         validate('O', [note])
@@ -497,16 +508,8 @@ function View() {
       zoomOutTillDisplayNote({id}) {
         this.maybeZoomedNote = Notes.maybeFindById(id)
       },
-      init(displayNoteTransformer) {
-        this.displayNoteTransformer = displayNoteTransformer
+      getOrCreateRootNote() {
         this.rootNote = getOrUpsertRootNote()
-        this.setRootDisplayNote(displayNoteTransformer(this.rootNote))
-      },
-      setRootDisplayNote(rootDisplayNote) {
-        this.rootDisplayNote = rootDisplayNote
-      },
-      setMaybeZoomedDisplayNote(maybeZoomedDisplayNote) {
-        this.maybeZoomedDisplayNote = maybeZoomedDisplayNote
       },
       updateNotesIdLookup(notes) {
         _.forEach(n => {
@@ -558,20 +561,7 @@ function View() {
     name: 'view',
   })
 
-  const displayNoteTransformer = createDisplayNoteTransformer(view)
-  view.init(displayNoteTransformer)
-
-  mAutoRun(
-    r => {
-      // mTrace(r)
-      console.assert(isNotNil(view.rootNote))
-      view.setRootDisplayNote(displayNoteTransformer(view.rootNote))
-      view.setMaybeZoomedDisplayNote(
-        S.map(displayNoteTransformer)(view.maybeZoomedNote),
-      )
-    },
-    {name: 'Transform Display Notes'},
-  )
+  view.getOrCreateRootNote()
 
   mAutoRun(
     r => {
