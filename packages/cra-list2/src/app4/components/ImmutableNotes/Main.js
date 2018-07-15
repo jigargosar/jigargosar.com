@@ -2,9 +2,13 @@ import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, F, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
-import {_, mapIndexed} from '../../little-ramda'
-import Baobab from 'baobab'
+import {_} from '../../little-ramda'
+import Baobab, {Cursor} from 'baobab'
 import {nanoid} from '../../model/util'
+
+if (module.hot) {
+  window.Baobab = Baobab
+}
 
 function createNote({text = ''}) {
   return {id: `Note-${nanoid()}`, text, children: []}
@@ -16,11 +20,18 @@ function appendChild(child) {
   }
 }
 
-function getChildren({children}) {
-  return children
+// function getChildren({children}) {
+//   return children
+// }
+
+function normalizeCursor(note) {
+  return note instanceof Baobab || note instanceof Cursor
+    ? note.get()
+    : note
 }
 
-function getText({text}) {
+function getText(note) {
+  const {text} = normalizeCursor(note)
   return text
 }
 
@@ -28,15 +39,16 @@ function getText({text}) {
 //   return `${getDebugId(note)} - ${getText(note)}`
 // }
 
-function getDebugId({id}) {
+function getDebugId(note) {
+  const {id} = normalizeCursor(note)
   const start = 5
   return id.slice(start, start + 3)
 }
 
-// function getChildrenCursor(note) {
-//   return note.select('children')
-// }
-//
+function selectChildren(note) {
+  return note.select('children')
+}
+
 // function getTextCursor(note) {
 //   return note.select('text')
 // }
@@ -66,6 +78,7 @@ class NoteTree extends React.Component {
     tree: new Baobab(root),
   }
   renderText = note => {
+    // const note = noteCursor.get()
     return (
       <div className={cn('code flex items-center')}>
         <div className={cn('mr3')}>-</div>
@@ -85,19 +98,19 @@ class NoteTree extends React.Component {
     )
   }
 
-  renderChild = (note, idx) => {
+  renderChild = (noteCursor, idx) => {
     return (
       <F key={idx}>
-        {this.renderText(note)}
-        {this.renderChildren(note)}
+        {this.renderText(noteCursor)}
+        {this.renderChildren(noteCursor)}
       </F>
     )
   }
 
-  renderChildren = note => {
+  renderChildren = noteCursor => {
     return (
       <div className={cn('ml3')}>
-        {mapIndexed(this.renderChild)(getChildren(note))}
+        {_.map(this.renderChild)(selectChildren(noteCursor))}
       </div>
     )
   }
@@ -106,7 +119,7 @@ class NoteTree extends React.Component {
     return (
       <F>
         <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-          {this.renderChild(this.tree.get(), 0)}
+          {this.renderChild(this.tree, 0)}
         </div>
       </F>
     )
