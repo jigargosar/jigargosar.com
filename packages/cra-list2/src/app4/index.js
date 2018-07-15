@@ -21,13 +21,18 @@ function render() {
     }
 
     // Object.assign(appState, require('./mobx').state)
+    // Object.assign(
+    //   appState,
+    //   require('./mobx/NotesActiveRecord/ActiveRecordNotesState')
+    //     .state,
+    // )
     Object.assign(
       appState,
-      require('./mobx/NotesActiveRecord/ActiveRecordNotesState')
-        .state,
+      require('./ImmutableState/ImmutableNoteTree').state,
     )
     // const App = require('./components/Main').default
-    const App = require('./components/ActiveRecord/Main').default
+    // const App = require('./components/ActiveRecord/Main').default
+    const App = require('./components/ImmutableNotes/Main').default
     ReactDOM.render(
       <Provider appState={appState}>
         <App />
@@ -46,6 +51,8 @@ if (module.hot) {
 
   module.hot['accept'](
     [
+      './components/ImmutableNotes/Main',
+      './ImmutableState/ImmutableNoteTree',
       './components/Main',
       './components/ActiveRecord/Main',
       './mobx',
