@@ -23,7 +23,6 @@ import {
 } from '../little-mobx'
 import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
-  findAllActiveChildrenOfNote,
   findAllActiveNotes,
   getOrUpsertRootNote,
   maybeFindParentOfNote,
@@ -411,7 +410,7 @@ function View() {
       },
       lookupChildDisplayNotes(dn) {
         return _.map(this.displayNoteTransformer)(
-          this.parentIdToActiveChildrenLookup[dn.id] || [],
+          this.lookupAllActiveNotesWithParentId(dn.id),
         )
       },
       maybeLookupParentDisplayNote(note) {
@@ -420,9 +419,6 @@ function View() {
           S.toMaybe,
           _.prop(note.parentId),
         )(this.notesIdLookup)
-      },
-      findAllActiveChildrenOfNote(note) {
-        return findAllActiveChildrenOfNote(note)
       },
       lookupAllActiveNotesWithParentId(parentId) {
         return this.parentIdToActiveChildrenLookup[parentId] || []
