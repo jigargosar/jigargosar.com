@@ -382,7 +382,7 @@ function View() {
       maybeZoomedNote: S.Nothing,
       get maybeZoomedDisplayNote() {
         return S.map(this.displayNoteTransformer)(
-          view.maybeZoomedNote,
+          this.maybeZoomedNote,
         )
       },
       nullableFocusedNoteId: null,
