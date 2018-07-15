@@ -25,6 +25,14 @@ function getText({text}) {
   return text
 }
 
+function getChildrenCursor(note) {
+  return note.select('children').get()
+}
+
+function getTextCursor(note) {
+  return note.select('text').get()
+}
+
 const appendTwoChildren = _.compose(
   appendChild(
     _.compose(
