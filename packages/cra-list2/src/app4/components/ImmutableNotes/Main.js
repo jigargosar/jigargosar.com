@@ -45,7 +45,12 @@ class NoteTree extends React.Component {
     ),
   }
   renderText = note => {
-    return <div>{getText(note)}</div>
+    return (
+      <div>
+        <div className={cn('fl mr3')}>-</div>
+        <div className={cn('mv2')}>{getText(note)}</div>
+      </div>
+    )
   }
 
   renderChild = (note, idx) => {
@@ -68,10 +73,7 @@ class NoteTree extends React.Component {
   render() {
     const {root} = this.state
     return (
-      <div className={cn('ma3')}>
-        {this.renderText(root)}
-        {this.renderChildren(root)}
-      </div>
+      <div className={cn('ma3')}>{this.renderChild(root, 0)}</div>
     )
   }
 }
