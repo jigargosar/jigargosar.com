@@ -52,10 +52,9 @@ function createDisplayNoteTransformer(view) {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
         get ancestors() {
-          return [
-            ...S.maybe([])(p => p.ancestors)(this.maybeParentNote),
-            this,
-          ]
+          return S.maybe([])(p => [...p.ancestors, p])(
+            this.maybeParentNote,
+          )
         },
         get maybeParentId() {
           return S.toMaybe(note.parentId)
