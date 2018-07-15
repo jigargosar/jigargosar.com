@@ -29,14 +29,6 @@ import {
 import {nanoid} from '../../model/util'
 import S from 'sanctuary'
 
-const childNotesTransformer = createTransformer(note => {
-  return findAllActiveChildrenOfNote(note)
-})
-
-const parentNoteTransformer = createTransformer(note => {
-  return maybeFindParentOfNote(note)
-})
-
 function createDisplayNoteTransformer(view) {
   console.debug('createDisplayNoteTransformer for', view)
   validate('O', [view])
@@ -185,17 +177,15 @@ function createDisplayNoteTransformer(view) {
         prependSibling() {
           this.insertSibling({sortIdx: this.sortIdxOrZero - 1})
         },
-        get _childNotes() {
-          return childNotesTransformer(note)
-        },
-        get _maybeParentNote() {
-          return parentNoteTransformer(note)
-        },
         get childNotes() {
-          return S.map(displayNoteTransformer)(this._childNotes)
+          return S.map(displayNoteTransformer)(
+            view.findAllActiveChildrenOfNote(note),
+          )
         },
         get maybeParentNote() {
-          return S.map(displayNoteTransformer)(this._maybeParentNote)
+          return S.map(displayNoteTransformer)(
+            view.maybeFindParentOfNote(note),
+          )
         },
       },
       actions: {
@@ -409,6 +399,12 @@ function View() {
       },
       get currentNotesList() {
         return this.currentRootDisplayNote.childNotes
+      },
+      findAllActiveChildrenOfNote(note) {
+        return findAllActiveChildrenOfNote(note)
+      },
+      maybeFindParentOfNote(note) {
+        return maybeFindParentOfNote(note)
       },
       findById(id) {
         if (this.rootDisplayNote && this.rootDisplayNote.id === id) {
