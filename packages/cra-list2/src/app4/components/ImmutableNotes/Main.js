@@ -3,8 +3,12 @@ import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 
+function createNote({text = ''}) {
+  return {text}
+}
+
 class NoteTree extends React.Component {
-  state = {root: {text: 'Root'}}
+  state = {root: createNote({text: 'Tree Root'})}
 
   render() {
     const {root} = this.state
