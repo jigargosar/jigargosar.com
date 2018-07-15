@@ -24,6 +24,15 @@ function getText({text}) {
   return text
 }
 
+// function getDisplayText(note) {
+//   return `${getDebugId(note)} - ${getText(note)}`
+// }
+
+function getDebugId({id}) {
+  const start = 5
+  return id.slice(start, start + 3)
+}
+
 // function getChildrenCursor(note) {
 //   return note.select('children')
 // }
@@ -53,14 +62,25 @@ const root = _.compose(appendTwoChildren)(
 
 class NoteTree extends React.Component {
   state = {
-    root: root,
+    root,
     tree: new Baobab(root),
   }
   renderText = note => {
     return (
-      <div>
-        <div className={cn('fl mr3')}>-</div>
-        <div className={cn('mv2')}>{getText(note)}</div>
+      <div className={cn('code flex items-center')}>
+        <div className={cn('mr3')}>-</div>
+
+        <div
+          className={cn(
+            'flex-auto',
+            'flex items-center',
+            'pv2',
+            'bb bw1 b--light-gray',
+          )}
+        >
+          <div className={cn('f6 gray mr3')}>{getDebugId(note)}</div>
+          {getText(note)}
+        </div>
       </div>
     )
   }
@@ -83,10 +103,9 @@ class NoteTree extends React.Component {
   }
 
   render() {
-    const {root} = this.state
     return (
       <F>
-        <div className={cn('ma3')}>
+        <div className={cn('ma3 pa3 shadow-1 bg-white')}>
           {this.renderChild(this.tree.get(), 0)}
         </div>
       </F>
