@@ -2,13 +2,24 @@ import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
+import {_} from '../../little-ramda'
 
 function createNote({text = ''}) {
-  return {text}
+  return {text, children: []}
+}
+
+function addChild(child) {
+  return function(note) {
+    return _.assoc('children')(_.append(child, note.children))(note)
+  }
 }
 
 class NoteTree extends React.Component {
-  state = {root: createNote({text: 'Tree Root'})}
+  state = {
+    root: addChild(createNote({text: 'first child'}))(
+      createNote({text: 'Tree Root'}),
+    ),
+  }
 
   render() {
     const {root} = this.state
