@@ -544,6 +544,15 @@ function View() {
           children.forEach((n, idx) => {
             this.parentIdToActiveChildrenLookup[pid][idx] = n
           })
+          const newLength = children.length
+          const oldLength = this.parentIdToActiveChildrenLookup[pid]
+            .length
+          if (newLength < oldLength) {
+            this.parentIdToActiveChildrenLookup[pid].splice(
+              newLength - 1,
+              oldLength - newLength,
+            )
+          }
         })(childrenLookup)
       },
     },
@@ -583,14 +592,20 @@ function View() {
       // )
       const computed = mComputed(
         // () => view.notesIdLookup['Note@a3mNtpYzQojp6oLDHA5Tq'],
-        () => view.parentIdToActiveChildrenLookup[null],
+        () =>
+          view.parentIdToActiveChildrenLookup[
+            'Note@a3mNtpYzQojp6oLDHA5Tq'
+          ],
         {
           name:
             "dynamic computed view.notesIdLookup['Note@a3mNtpYzQojp6oLDHA5Tq']",
         },
       )
 
-      console.log(`view.notesIdLookup`, computed.get())
+      console.log(
+        `view.parentIdToActiveChildrenLookup['Note@a3mNtpYzQojp6oLDHA5Tq']`,
+        computed.get(),
+      )
     },
     {name: 'Notes ID lookup log'},
   )
