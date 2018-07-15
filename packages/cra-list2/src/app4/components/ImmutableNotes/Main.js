@@ -27,6 +27,14 @@ function appendNewNote(noteProps) {
   }
 }
 
+function appendNewNotes(notePropsList) {
+  return function(note) {
+    const newNotes = _.map(createNote)(notePropsList)
+    const reducer = (note, child) => appendChild(child)(note)
+    return _.reduce(reducer)(note)(newNotes)
+  }
+}
+
 // function getChildren({children}) {
 //   return children
 // }
@@ -72,10 +80,10 @@ function selectChildren(note) {
 
 const appendTwoChildren = _.compose(
   appendChild(
-    _.compose(
-      appendNewNote({text: 'fourth grand child'}),
-      appendNewNote({text: 'third grand child'}),
-    )(createNote({text: 'second child'})),
+    appendNewNotes([
+      {text: 'fourth grand child'},
+      {text: 'third grand child'},
+    ])(createNote({text: 'second child'})),
   ),
   appendChild(
     _.compose(
@@ -145,7 +153,8 @@ const storedState = StorageItem({
 
 class NoteTree extends React.Component {
   state = {
-    tree: new Baobab(storedState.load(), {asynchronous: false}),
+    // tree: new Baobab(storedState.load(), {asynchronous: false}),
+    tree: new Baobab(initialRoot, {asynchronous: false}),
   }
   componentDidMount() {
     this.state.tree.on('update', () => {
