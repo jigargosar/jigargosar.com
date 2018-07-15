@@ -419,9 +419,6 @@ function View() {
           this.maybeLookupNoteById(parentId),
         )
       },
-      maybeLookupParentNote({parentId}) {
-        return this.maybeLookupNoteById(parentId)
-      },
       maybeLookupNoteById(id) {
         return _.compose(S.toMaybe, _.prop(id))(this.notesIdLookup)
       },
@@ -490,8 +487,8 @@ function View() {
         this.setFocusedNoteId(id)
       },
       zoomOutOneLevel() {
-        this.maybeZoomedNote = this.maybeLookupParentNote(
-          this.currentRootNote,
+        this.maybeZoomedNote = this.maybeLookupNoteById(
+          this.currentRootNote.parentId,
         )
       },
       zoomOutTillDisplayNote({id}) {
