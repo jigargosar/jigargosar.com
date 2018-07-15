@@ -373,8 +373,6 @@ function createDisplayNoteTransformer(view) {
     return displayNote
   }
 
-  // const displayNoteTransformer = transformerFn
-  // return transformerFn
   const displayNoteTransformer = createTransformer(
     transformerFn,
     (dn, n) => {
