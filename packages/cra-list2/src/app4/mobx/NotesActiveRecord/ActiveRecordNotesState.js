@@ -52,10 +52,10 @@ function createDisplayNoteTransformer(view) {
           return _.when(isNilOrEmpty, constant('(empty)'))(this.text)
         },
         get ancestors() {
-          return S.pipe([
-            S.map(parentNote => [...parentNote.ancestors, this]),
-            maybeOr([]),
-          ])(this.maybeParentNote)
+          return [
+            ...S.maybe([])(p => p.ancestors)(this.maybeParentNote),
+            this,
+          ]
         },
         get maybeParentId() {
           return S.toMaybe(note.parentId)
@@ -376,7 +376,15 @@ function View() {
       notesIdLookup: {},
       parentIdToActiveChildrenLookup: {},
       rootNote: getOrUpsertRootNote(),
+      get rootDisplayNote() {
+        return this.displayNoteTransformer(this.rootNote)
+      },
       maybeZoomedNote: S.Nothing,
+      get maybeZoomedDisplayNote() {
+        return S.map(this.displayNoteTransformer)(
+          this.maybeZoomedNote,
+        )
+      },
       nullableFocusedNoteId: null,
       get displayNoteTransformer() {
         return createDisplayNoteTransformer(this)

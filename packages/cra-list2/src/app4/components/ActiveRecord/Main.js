@@ -124,7 +124,7 @@ const NoteNavLink = mrInjectAll(function NoteNavLink({note}) {
 const OutlineNoteNav = mrInjectAll(function ZoomNoteNav({view}) {
   return (
     <div className={cn('ma2')}>
-      <NoteNavLink note={view.rootDisplayNote} />
+      {/*<NoteNavLink note={view.rootDisplayNote} />*/}
       {renderKeyedById(NoteNavLink, 'note', view.currentAncestors)}
     </div>
   )
