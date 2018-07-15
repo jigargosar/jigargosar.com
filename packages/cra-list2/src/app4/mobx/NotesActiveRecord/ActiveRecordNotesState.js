@@ -395,15 +395,6 @@ function View() {
       get allActiveNotes() {
         return Notes.findAll(getActiveQuery())
       },
-      get activeChildrenLookup() {
-        const activeChildrenLookup = _.groupBy(_.prop('parentId'))(
-          Notes.findAll(getActiveQuery()),
-        )
-        return activeChildrenLookup
-      },
-      get activeRootNotes() {
-        return this.activeChildrenLookup[null]
-      },
       get firstActiveRootNote() {
         return this.activeChildrenLookup[null][0]
       },
@@ -596,11 +587,6 @@ function View() {
   mAutoRun(
     r => {
       mTrace(r)
-      // console.log(`childrenLookup`, view.activeChildrenLookup[null])
-      // console.log(
-      //   `view.firstActiveRootNote`,
-      //   view.firstActiveRootNote,
-      // )
       const computed = mComputed(
         // () => view.notesIdLookup['Note@a3mNtpYzQojp6oLDHA5Tq'],
         () =>
