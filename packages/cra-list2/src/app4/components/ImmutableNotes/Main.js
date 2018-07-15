@@ -95,13 +95,15 @@ class NoteTextLine extends React.Component {
           )}
         >
           <div className={cn('f6 gray mr3')}>{getDebugId(note)}</div>
-          {/*{getText(note)}*/}
-          <input
-            value={getText(note)}
-            onChange={e => {
-              note.set('text', e.target.value)
-            }}
-          />
+          <div className={cn('flex-auto', 'flex')}>
+            <input
+              className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
+              value={getText(note)}
+              onChange={e => {
+                note.set('text', e.target.value)
+              }}
+            />
+          </div>
         </div>
       </div>
     )
