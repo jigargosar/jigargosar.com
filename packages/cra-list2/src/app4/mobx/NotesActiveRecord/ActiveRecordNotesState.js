@@ -16,7 +16,9 @@ import {
   attachDelegatingPropertyGetters,
   createObservableObject,
   createTransformer,
+  Disposers,
   mAutoRun,
+  mTrace,
   oArray,
 } from '../little-mobx'
 import {isAnyHotKey, wrapPD} from '../../components/utils'
@@ -555,15 +557,23 @@ function View() {
 
   view.getOrCreateRootNote()
 
-  mAutoRun(
-    r => {
-      // mTrace(r)
-      const notes = findAllActiveNotes()
-      view.updateNotesIdLookup(notes)
-      view.updateParentIdToActiveChildrenLookup(notes)
-    },
-    {name: 'create Notes ID lookup'},
+  const disposers = Disposers()
+  disposers.push(
+    mAutoRun(
+      r => {
+        mTrace(r)
+        const notes = findAllActiveNotes()
+        view.updateNotesIdLookup(notes)
+        view.updateParentIdToActiveChildrenLookup(notes)
+      },
+      {name: `[${nanoid(3)}] update lookup tables`},
+    ),
   )
+
+  if (module.hot) {
+    module.hot.dispose(() => disposers.dispose())
+  }
+
   // mAutoRun(
   //   r => {
   //     mTrace(r)
