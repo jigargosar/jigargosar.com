@@ -1,7 +1,6 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {F} from '../utils'
-import {cn, mrInjectAll} from '../utils'
+import {cn, F, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_, mapIndexed} from '../../little-ramda'
 import Baobab from 'baobab'
@@ -25,13 +24,13 @@ function getText({text}) {
   return text
 }
 
-function getChildrenCursor(note) {
-  return note.select('children').get()
-}
-
-function getTextCursor(note) {
-  return note.select('text').get()
-}
+// function getChildrenCursor(note) {
+//   return note.select('children')
+// }
+//
+// function getTextCursor(note) {
+//   return note.select('text')
+// }
 
 const appendTwoChildren = _.compose(
   appendChild(
@@ -86,8 +85,16 @@ class NoteTree extends React.Component {
   render() {
     const {root} = this.state
     return (
-      <div className={cn('ma3')}>{this.renderChild(root, 0)}</div>
+      <F>
+        <div className={cn('ma3')}>
+          {this.renderChild(this.tree.get(), 0)}
+        </div>
+      </F>
     )
+  }
+
+  get tree() {
+    return this.state.tree
   }
 }
 
