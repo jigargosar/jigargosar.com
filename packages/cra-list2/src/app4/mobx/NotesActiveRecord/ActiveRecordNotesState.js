@@ -422,19 +422,6 @@ function View() {
       maybeFindParentOfNote(note) {
         return maybeFindParentOfNote(note)
       },
-      findById(id) {
-        if (this.rootDisplayNote && this.rootDisplayNote.id === id) {
-          return this.rootDisplayNote
-        }
-        if (
-          this.currentRootDisplayNote &&
-          this.currentRootDisplayNote.id === id
-        ) {
-          return this.currentRootDisplayNote
-        }
-        return this.displayNoteTransformer(Notes.findById(id))
-      },
-
       shouldFocusDisplayNoteTextInput(dn) {
         return _.isNil(this.nullableFocusedNoteId)
           ? dn.isCurrentRoot
