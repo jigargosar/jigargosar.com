@@ -17,11 +17,14 @@ import {
   createObservableObject,
   createTransformer,
   mAutoRun,
+  mComputed,
   mTrace,
+  oArray,
 } from '../little-mobx'
 import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
   findAllActiveChildrenOfNote,
+  getActiveQuery,
   getOrUpsertRootNote,
   maybeFindParentOfNote,
   Notes,
@@ -367,7 +370,7 @@ function createDisplayNoteTransformer(view) {
   const displayNoteTransformer = createTransformer(
     transformerFn,
     (dn, n) => {
-      console.log(`DN: DEL`, n.text, dn._debugName, n)
+      console.debug(`DN: DEL`, n.text, dn._debugName, n)
     },
   )
   return displayNoteTransformer
@@ -376,6 +379,8 @@ function createDisplayNoteTransformer(view) {
 function View() {
   const view = createObservableObject({
     props: {
+      notesIdLookup: {},
+      parentIdToActiveChildrenLookup: {},
       rootNote: null,
       maybeZoomedNote: S.Nothing,
       rootDisplayNote: null,
@@ -386,6 +391,21 @@ function View() {
         const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
         validate('O', [note])
         return note
+      },
+      get allActiveNotes() {
+        return Notes.findAll(getActiveQuery())
+      },
+      get activeChildrenLookup() {
+        const activeChildrenLookup = _.groupBy(_.prop('parentId'))(
+          Notes.findAll(getActiveQuery()),
+        )
+        return activeChildrenLookup
+      },
+      get activeRootNotes() {
+        return this.activeChildrenLookup[null]
+      },
+      get firstActiveRootNote() {
+        return this.activeChildrenLookup[null][0]
       },
       get currentRootDisplayNote() {
         const note = maybeOr(this.rootDisplayNote)(
@@ -500,6 +520,32 @@ function View() {
       setMaybeZoomedDisplayNote(maybeZoomedDisplayNote) {
         this.maybeZoomedDisplayNote = maybeZoomedDisplayNote
       },
+      updateNotesIdLookup(notes) {
+        _.forEach(n => {
+          this.notesIdLookup[n.id] = n
+        })(notes)
+        const oldKeys = _.keys(this.notesIdLookup)
+        const newKeys = _.map(_.prop('id'))(notes)
+        const keysToDelete = _.difference(oldKeys, newKeys)
+
+        console.log(`keysToDelete`, keysToDelete)
+        _.forEach(id => {
+          delete this.notesIdLookup[id]
+        })(keysToDelete)
+      },
+
+      updateParentIdToActiveChildrenLookup(notes) {
+        const childrenLookup = _.groupBy(_.prop('parentId'))(notes)
+
+        _.forEachObjIndexed((children, pid) => {
+          if (!this.parentIdToActiveChildrenLookup[pid]) {
+            this.parentIdToActiveChildrenLookup[pid] = oArray([])
+          }
+          children.forEach((n, idx) => {
+            this.parentIdToActiveChildrenLookup[pid][idx] = n
+          })
+        })(childrenLookup)
+      },
     },
     name: 'view',
   })
@@ -509,7 +555,7 @@ function View() {
 
   mAutoRun(
     r => {
-      mTrace(r)
+      // mTrace(r)
       console.assert(isNotNil(view.rootNote))
       view.setRootDisplayNote(displayNoteTransformer(view.rootNote))
       view.setMaybeZoomedDisplayNote(
@@ -517,6 +563,36 @@ function View() {
       )
     },
     {name: 'Transform Display Notes'},
+  )
+
+  mAutoRun(
+    r => {
+      // mTrace(r)
+      view.updateNotesIdLookup(view.allActiveNotes)
+      view.updateParentIdToActiveChildrenLookup(view.allActiveNotes)
+    },
+    {name: 'create Notes ID lookup'},
+  )
+  mAutoRun(
+    r => {
+      mTrace(r)
+      // console.log(`childrenLookup`, view.activeChildrenLookup[null])
+      // console.log(
+      //   `view.firstActiveRootNote`,
+      //   view.firstActiveRootNote,
+      // )
+      const computed = mComputed(
+        // () => view.notesIdLookup['Note@a3mNtpYzQojp6oLDHA5Tq'],
+        () => view.parentIdToActiveChildrenLookup[null],
+        {
+          name:
+            "dynamic computed view.notesIdLookup['Note@a3mNtpYzQojp6oLDHA5Tq']",
+        },
+      )
+
+      console.log(`view.notesIdLookup`, computed.get())
+    },
+    {name: 'Notes ID lookup log'},
   )
 
   console.assert(isNotNil(view.currentRootDisplayNote))
