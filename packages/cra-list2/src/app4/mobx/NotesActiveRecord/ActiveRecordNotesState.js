@@ -496,9 +496,9 @@ function View() {
         )
       },
       zoomOutTillDisplayNote({id}) {
-        this.maybeZoomedNote = Notes.maybeFindById(id)
+        this.maybeZoomedNote = this.maybeLookupNoteById(id)
       },
-      getOrCreateRootNote() {
+      initRootNote() {
         this.rootNote = getOrUpsertRootNote()
       },
       updateNotesIdLookup(notes) {
@@ -551,7 +551,7 @@ function View() {
     name: 'view',
   })
 
-  view.getOrCreateRootNote()
+  view.initRootNote()
 
   const disposers = Disposers()
   disposers.push(
