@@ -3,104 +3,21 @@ import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, F, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_} from '../../little-ramda'
-import Baobab, {Cursor} from 'baobab'
-import {nanoid} from '../../model/util'
+import Baobab from 'baobab'
 import {StorageItem} from '../../services/storage'
 import * as PropTypes from 'prop-types'
+import {
+  getDebugId,
+  getText,
+  getTextCursor,
+  initialRoot,
+  onNoteTextChangeEvent,
+  selectChildren,
+} from '../../ImmutableState/ImmutableNote'
 
 if (module.hot) {
   window.Baobab = Baobab
 }
-
-function createNote({text = ''}) {
-  return {id: `Note-${nanoid()}`, text, children: []}
-}
-
-function appendChild(child) {
-  return function(note) {
-    return _.assoc('children')(_.append(child, note.children))(note)
-  }
-}
-
-function appendChildren(children) {
-  return function(note) {
-    return _.reduce((note, child) => appendChild(child)(note))(note)(
-      children,
-    )
-  }
-}
-
-function appendNewNote(noteProps) {
-  return function(note) {
-    return appendChild(createNote(noteProps))(note)
-  }
-}
-
-function appendNewNotes(notePropsList) {
-  return function(note) {
-    return _.reduce((note, noteProps) =>
-      appendNewNote(noteProps)(note),
-    )(note)(notePropsList)
-  }
-}
-
-// function getChildren({children}) {
-//   return children
-// }
-
-function getWhenCursor(note) {
-  return note instanceof Baobab || note instanceof Cursor
-    ? note.get()
-    : note
-}
-
-function getText(note) {
-  const {text} = getWhenCursor(note)
-  return text
-}
-
-function setText(text, noteCursor) {
-  return noteCursor.set('text', text)
-}
-
-function onNoteTextChangeEvent(noteCursor) {
-  return function(e) {
-    return setText(e.target.value, noteCursor)
-  }
-}
-
-// function getDisplayText(note) {
-//   return `${getDebugId(note)} - ${getText(note)}`
-// }
-
-function getDebugId(note) {
-  const {id} = getWhenCursor(note)
-  const start = 5
-  return id.slice(start, start + 3)
-}
-
-function selectChildren(note) {
-  return note.select('children')
-}
-
-function getTextCursor(note) {
-  return note.select('text')
-}
-
-const appendTwoChildren = (() => {
-  const secondChild = appendNewNotes([
-    {text: 'fourth grand child'},
-    {text: 'third grand child'},
-  ])(createNote({text: 'second child'}))
-
-  const firstChild = appendNewNotes([
-    {text: 'second grand child'},
-    {text: 'first grand child'},
-  ])(createNote({text: 'first child'}))
-  return appendChildren([firstChild, secondChild])
-})()
-
-const initialRoot = appendTwoChildren(createNote({text: 'Tree Root'}))
 
 function NoteDebugId(props) {
   return <div className={cn('f6 gray mr3')}>{props.debugId}</div>
