@@ -6,6 +6,7 @@ import {_} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
   getDebugId,
+  getNoteId,
   getText,
   getTextCursor,
   onNoteTextChangeEvent,
@@ -67,6 +68,27 @@ class NoteTextLine extends React.Component {
   }
 }
 
+function NoteChild({note}) {
+  return (
+    <F>
+      {<NoteTextLine note={note} />}
+      <NoteChildren note={note} />
+    </F>
+  )
+}
+
+function NoteChildren({note}) {
+  return (
+    <div className={cn('ml3')}>
+      {_.map(note => (
+        <F key={getNoteId(note)}>
+          <NoteChild note={note} />
+        </F>
+      ))(selectChildren(note))}
+    </div>
+  )
+}
+
 class NoteTree extends React.Component {
   renderChild = (noteCursor, idx) => (
     <F key={idx}>
@@ -84,7 +106,7 @@ class NoteTree extends React.Component {
   render = () => (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        {this.renderChild(state.tree, 0)}
+        <NoteChild note={state.tree} />
       </div>
     </F>
   )

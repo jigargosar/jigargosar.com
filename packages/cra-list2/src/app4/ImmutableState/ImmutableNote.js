@@ -69,6 +69,11 @@ export function getDebugId(note) {
   return id.slice(start, start + 3)
 }
 
+export function getNoteId(note) {
+  const {id} = getWhenCursor(note)
+  return id
+}
+
 export function selectChildren(note) {
   return note.select('children')
 }
