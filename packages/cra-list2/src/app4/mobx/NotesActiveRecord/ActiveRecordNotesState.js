@@ -15,6 +15,7 @@ import {
 import {
   attachDelegatingPropertyGetters,
   createObservableObject,
+  createTransformer,
   mAutoRun,
   mTrace,
 } from '../little-mobx'
@@ -372,15 +373,15 @@ function createDisplayNoteTransformer(view) {
     return displayNote
   }
 
-  const displayNoteTransformer = transformerFn
-  // const displayNoteTransformer = createTransformer(
-  //   transformerFn,
-  //   (dn, n) => {
-  //     console.log(`DN: DEL`, n.text, dn._debugName, n)
-  //   },
-  // )
-  // return displayNoteTransformer
-  return transformerFn
+  // const displayNoteTransformer = transformerFn
+  // return transformerFn
+  const displayNoteTransformer = createTransformer(
+    transformerFn,
+    (dn, n) => {
+      console.log(`DN: DEL`, n.text, dn._debugName, n)
+    },
+  )
+  return displayNoteTransformer
 }
 
 function View() {
