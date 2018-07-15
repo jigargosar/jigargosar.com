@@ -76,9 +76,8 @@ const initialRoot = _.compose(appendTwoChildren)(
 class NoteTextLine extends React.Component {
   componentDidMount() {
     const {note} = this.props
-    note.select('text').on('update', () => {
-      this.forceUpdate()
-    })
+    const textCursor = note.select('text')
+    textCursor.on('update', () => this.forceUpdate())
   }
 
   render() {
