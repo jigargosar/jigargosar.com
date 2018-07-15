@@ -5,7 +5,6 @@ import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_} from '../../little-ramda'
 import Baobab from 'baobab'
 import {StorageItem} from '../../services/storage'
-import * as PropTypes from 'prop-types'
 import {
   getDebugId,
   getText,
@@ -18,12 +17,6 @@ import {
 if (module.hot) {
   window.Baobab = Baobab
 }
-
-function NoteDebugId(props) {
-  return <div className={cn('f6 gray mr3')}>{props.debugId}</div>
-}
-
-NoteDebugId.propTypes = {debugId: PropTypes.any}
 
 class NoteTextInput extends React.Component {
   get note() {
@@ -44,7 +37,9 @@ class NoteTextInput extends React.Component {
           'bb bw1 b--light-gray',
         )}
       >
-        <NoteDebugId debugId={getDebugId(this.note)} />
+        <div className={cn('f6 gray mr3')}>
+          {getDebugId(this.note)}
+        </div>
         <div className={cn('flex-auto', 'flex')}>
           <input
             className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
