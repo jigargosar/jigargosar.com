@@ -395,9 +395,6 @@ function View() {
       get allActiveNotes() {
         return Notes.findAll(getActiveQuery())
       },
-      get firstActiveRootNote() {
-        return this.activeChildrenLookup[null][0]
-      },
       get currentRootDisplayNote() {
         const note = maybeOr(this.rootDisplayNote)(
           this.maybeZoomedDisplayNote,
