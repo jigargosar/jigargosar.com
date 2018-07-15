@@ -416,6 +416,9 @@ function View() {
       findAllActiveChildrenOfNote(note) {
         return findAllActiveChildrenOfNote(note)
       },
+      lookupAllActiveNotesWithParentId(parentId) {
+        return this.parentIdToActiveChildrenLookup[parentId] || []
+      },
       maybeFindParentOfNote(note) {
         return maybeFindParentOfNote(note)
       },
@@ -457,8 +460,10 @@ function View() {
         if (_.isNil(parentId)) {
           return
         }
-        const parent = this.findById(parentId)
-        parent.childNotes.forEach(({id}, sortIdx) => {
+        const childNotes = this.lookupAllActiveNotesWithParentId(
+          parentId,
+        )
+        childNotes.forEach(({id}, sortIdx) => {
           Notes.upsert({id, sortIdx})
         })
       },
