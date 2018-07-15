@@ -38,9 +38,9 @@ function appendNewNote(noteProps) {
 
 function appendNewNotes(notePropsList) {
   return function(note) {
-    const newNotes = _.map(createNote)(notePropsList)
-    const reducer = (note, child) => appendChild(child)(note)
-    return _.reduce(reducer)(note)(newNotes)
+    return _.reduce((note, noteProps) =>
+      appendNewNote(noteProps)(note),
+    )(note)(notePropsList)
   }
 }
 
