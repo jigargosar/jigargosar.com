@@ -21,6 +21,14 @@ function appendChild(child) {
   }
 }
 
+function appendChildren(children) {
+  return function(note) {
+    return _.reduced((note, child) => appendChild(child)(note))(
+      children,
+    )
+  }
+}
+
 function appendNewNote(noteProps) {
   return function(note) {
     return appendChild(createNote(noteProps))(note)
@@ -74,38 +82,35 @@ function selectChildren(note) {
   return note.select('children')
 }
 
-// function getTextCursor(note) {
-//   return note.select('text')
-// }
+function getTextCursor(note) {
+  return note.select('text')
+}
 
-const appendTwoChildren = _.compose(
-  appendChild(
-    appendNewNotes([
-      {text: 'fourth grand child'},
-      {text: 'third grand child'},
-    ])(createNote({text: 'second child'})),
-  ),
-  appendChild(
-    _.compose(
-      appendNewNote({text: 'second grand child'}),
-      appendNewNote({text: 'first grand child'}),
-    )(createNote({text: 'first child'})),
-  ),
-)
+const appendTwoChildren = (() => {
+  const secondChild = appendNewNotes([
+    {text: 'fourth grand child'},
+    {text: 'third grand child'},
+  ])(createNote({text: 'second child'}))
 
-const initialRoot = _.compose(appendTwoChildren)(
-  createNote({text: 'Tree Root'}),
-)
+  const firstChild = appendNewNotes([
+    {text: 'second grand child'},
+    {text: 'first grand child'},
+  ])(createNote({text: 'first child'}))
+  return appendChildren([firstChild, secondChild])
+})()
+
+const initialRoot = appendTwoChildren(createNote({text: 'Tree Root'}))
 
 class NoteTextInput extends React.Component {
+  get note() {
+    return this.props.note
+  }
   componentDidMount() {
-    const {note} = this.props
-    const textCursor = note.select('text')
+    const textCursor = getTextCursor(this.note)
     textCursor.on('update', () => this.forceUpdate())
   }
 
   render() {
-    const {note} = this.props
     return (
       <div
         className={cn(
@@ -115,12 +120,14 @@ class NoteTextInput extends React.Component {
           'bb bw1 b--light-gray',
         )}
       >
-        <div className={cn('f6 gray mr3')}>{getDebugId(note)}</div>
+        <div className={cn('f6 gray mr3')}>
+          {getDebugId(this.note)}
+        </div>
         <div className={cn('flex-auto', 'flex')}>
           <input
             className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
-            value={getText(note)}
-            onChange={onNoteTextChangeEvent(note)}
+            value={getText(this.note)}
+            onChange={onNoteTextChangeEvent(this.note)}
           />
         </div>
       </div>
