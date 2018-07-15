@@ -528,14 +528,16 @@ function View() {
         const newKeys = _.map(_.prop('id'))(notes)
         const keysToDelete = _.difference(oldKeys, newKeys)
 
-        console.log(`keysToDelete`, keysToDelete)
+        // console.log(`keysToDelete`, keysToDelete)
         _.forEach(id => {
           delete this.notesIdLookup[id]
         })(keysToDelete)
       },
 
       updateParentIdToActiveChildrenLookup(notes) {
-        const childrenLookup = _.groupBy(_.prop('parentId'))(notes)
+        const childrenLookup = _.groupBy(
+          _.propOr('null', 'parentId'),
+        )(notes)
 
         _.forEachObjIndexed((children, pid) => {
           if (!this.parentIdToActiveChildrenLookup[pid]) {
@@ -554,6 +556,15 @@ function View() {
             )
           }
         })(childrenLookup)
+
+        const oldKeys = _.keys(this.parentIdToActiveChildrenLookup)
+        const newKeys = _.keys(childrenLookup)
+        const keysToDelete = _.difference(oldKeys, newKeys)
+        // console.log(`keysToDelete`, keysToDelete)
+
+        _.forEach(id => {
+          delete this.parentIdToActiveChildrenLookup[id]
+        })(keysToDelete)
       },
     },
     name: 'view',
