@@ -70,7 +70,7 @@ function createDisplayNoteTransformer(view) {
           return isNotEmpty(this.childNotes)
         },
         get isCurrentRoot() {
-          return view.currentRootDisplayNote.id === this.id
+          return view.isCurrentRootNote(this)
         },
         get isExpanded() {
           return !this.isCollapsed
@@ -392,6 +392,12 @@ function View() {
         const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
         validate('O', [note])
         return note
+      },
+      get currentRootNoteId() {
+        return this.currentRootNote.id
+      },
+      isCurrentRootNote({id}) {
+        return this.currentRootNoteId === id
       },
       get currentRootDisplayNote() {
         return this.displayNoteTransformer(this.currentRootNote)
