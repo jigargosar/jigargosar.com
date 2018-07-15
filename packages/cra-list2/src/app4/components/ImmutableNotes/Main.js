@@ -23,17 +23,36 @@ function getText({text}) {
   return text
 }
 
+const appendTwoChildren = _.compose(
+  appendChild(
+    _.compose(
+      appendChild(createNote({text: 'fourth grand child'})),
+      appendChild(createNote({text: 'third grand child'})),
+    )(createNote({text: 'second child'})),
+  ),
+  appendChild(
+    _.compose(
+      appendChild(createNote({text: 'second grand child'})),
+      appendChild(createNote({text: 'first grand child'})),
+    )(createNote({text: 'first child'})),
+  ),
+)
+
 class NoteTree extends React.Component {
   state = {
-    root: _.compose(
-      appendChild(createNote({text: 'second child'})),
-      appendChild(createNote({text: 'first child'})),
-    )(createNote({text: 'Tree Root'})),
+    root: _.compose(appendTwoChildren)(
+      createNote({text: 'Tree Root'}),
+    ),
   }
-  renderChild = (child, idx) => {
+  renderText = note => {
+    return <div>{getText(note)}</div>
+  }
+
+  renderChild = (note, idx) => {
     return (
       <F key={idx}>
-        <div>{getText(child)}</div>
+        {this.renderText(note)}
+        {this.renderChildren(note)}
       </F>
     )
   }
@@ -50,7 +69,7 @@ class NoteTree extends React.Component {
     const {root} = this.state
     return (
       <div className={cn('ma3')}>
-        <div>{getText(root)}</div>
+        {this.renderText(root)}
         {this.renderChildren(root)}
       </div>
     )
