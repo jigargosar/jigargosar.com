@@ -407,25 +407,24 @@ function View() {
       get currentNotesList() {
         return this.currentRootDisplayNote.childNotes
       },
-      lookupChildDisplayNotes(dn) {
-        return _.map(this.displayNoteTransformer)(
-          this.lookupAllActiveNotesWithParentId(dn.id),
-        )
-      },
-      maybeLookupParentDisplayNote(dn) {
-        return _.compose(
-          S.map(this.displayNoteTransformer),
-          S.toMaybe,
-          _.prop(dn.parentId),
-        )(this.notesIdLookup)
-      },
-      maybeLookupParentOfNote(note) {
-        return _.compose(S.toMaybe, _.prop(note.parentId))(
-          this.notesIdLookup,
-        )
-      },
       lookupAllActiveNotesWithParentId(parentId) {
         return this.parentIdToActiveChildrenLookup[parentId] || []
+      },
+      lookupChildDisplayNotes({id}) {
+        return _.map(this.displayNoteTransformer)(
+          this.lookupAllActiveNotesWithParentId(id),
+        )
+      },
+      maybeLookupParentDisplayNote({parentId}) {
+        return S.map(this.displayNoteTransformer)(
+          this.maybeLookupNoteById(parentId),
+        )
+      },
+      maybeLookupParentNote({parentId}) {
+        return this.maybeLookupNoteById(parentId)
+      },
+      maybeLookupNoteById(id) {
+        return _.compose(S.toMaybe, _.prop(id))(this.notesIdLookup)
       },
       shouldFocusDisplayNoteTextInput(dn) {
         return _.isNil(this.nullableFocusedNoteId)
@@ -488,11 +487,11 @@ function View() {
         return note
       },
       zoomIntoNote({id}) {
-        this.maybeZoomedNote = Notes.maybeFindById(id)
+        this.maybeZoomedNote = this.maybeLookupNoteById(id)
         this.setFocusedNoteId(id)
       },
       zoomOutOneLevel() {
-        this.maybeZoomedNote = this.maybeLookupParentOfNote(
+        this.maybeZoomedNote = this.maybeLookupParentNote(
           this.currentRootNote,
         )
       },
