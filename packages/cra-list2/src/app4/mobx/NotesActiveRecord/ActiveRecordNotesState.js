@@ -24,7 +24,7 @@ import {
 import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
   findAllActiveChildrenOfNote,
-  getActiveQuery,
+  findAllActiveNotes,
   getOrUpsertRootNote,
   maybeFindParentOfNote,
   Notes,
@@ -393,7 +393,7 @@ function View() {
         return note
       },
       get allActiveNotes() {
-        return Notes.findAll(getActiveQuery())
+        return findAllActiveNotes()
       },
       get currentRootDisplayNote() {
         const note = maybeOr(this.rootDisplayNote)(
