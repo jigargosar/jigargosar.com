@@ -36,6 +36,16 @@ function getText(note) {
   return text
 }
 
+function setText(text, noteCursor) {
+  return noteCursor.set('text', text)
+}
+
+function onNoteTextChangeEvent(noteCursor) {
+  return function(e) {
+    return setText(e.target.value, noteCursor)
+  }
+}
+
 // function getDisplayText(note) {
 //   return `${getDebugId(note)} - ${getText(note)}`
 // }
@@ -73,7 +83,7 @@ const initialRoot = _.compose(appendTwoChildren)(
   createNote({text: 'Tree Root'}),
 )
 
-class NoteTextLine extends React.Component {
+class NoteTextInput extends React.Component {
   componentDidMount() {
     const {note} = this.props
     const textCursor = note.select('text')
@@ -83,28 +93,41 @@ class NoteTextLine extends React.Component {
   render() {
     const {note} = this.props
     return (
+      <div
+        className={cn(
+          'flex-auto',
+          'flex items-center',
+          'pv2',
+          'bb bw1 b--light-gray',
+        )}
+      >
+        <div className={cn('f6 gray mr3')}>{getDebugId(note)}</div>
+        <div className={cn('flex-auto', 'flex')}>
+          <input
+            className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
+            value={getText(note)}
+            onChange={onNoteTextChangeEvent(note)}
+          />
+        </div>
+      </div>
+    )
+  }
+}
+
+class NoteTextLine extends React.Component {
+  // componentDidMount() {
+  //   const {note} = this.props
+  //   const textCursor = note.select('text')
+  //   textCursor.on('update', () => this.forceUpdate())
+  // }
+
+  render() {
+    const {note} = this.props
+    return (
       <div className={cn('code flex items-center')}>
         <div className={cn('mr3')}>-</div>
 
-        <div
-          className={cn(
-            'flex-auto',
-            'flex items-center',
-            'pv2',
-            'bb bw1 b--light-gray',
-          )}
-        >
-          <div className={cn('f6 gray mr3')}>{getDebugId(note)}</div>
-          <div className={cn('flex-auto', 'flex')}>
-            <input
-              className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
-              value={getText(note)}
-              onChange={e => {
-                note.set('text', e.target.value)
-              }}
-            />
-          </div>
-        </div>
+        <NoteTextInput note={note} />
       </div>
     )
   }
