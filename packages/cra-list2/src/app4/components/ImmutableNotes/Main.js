@@ -4,15 +4,14 @@ import {cn, F, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_} from '../../little-ramda'
 import Baobab from 'baobab'
-import {StorageItem} from '../../services/storage'
 import {
   getDebugId,
   getText,
   getTextCursor,
-  initialRoot,
   onNoteTextChangeEvent,
   selectChildren,
 } from '../../ImmutableState/ImmutableNote'
+import {state} from '../../ImmutableState/ImmutableNoteTree'
 
 if (module.hot) {
   window.Baobab = Baobab
@@ -70,21 +69,9 @@ class NoteTextLine extends React.Component {
     )
   }
 }
-const storedState = StorageItem({
-  name: 'NoteTreeState',
-  getInitial: () => initialRoot,
-})
 
 class NoteTree extends React.Component {
-  state = {
-    // tree: new Baobab(storedState.load(), {asynchronous: false}),
-    tree: new Baobab(initialRoot, {asynchronous: false}),
-  }
-  componentDidMount() {
-    this.state.tree.on('update', () => {
-      storedState.save(this.tree.serialize())
-    })
-  }
+  state = state
 
   renderChild = (noteCursor, idx) => {
     return (
