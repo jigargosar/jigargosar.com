@@ -24,14 +24,14 @@ function appendChild(child) {
 //   return children
 // }
 
-function normalizeCursor(note) {
+function getWhenCursor(note) {
   return note instanceof Baobab || note instanceof Cursor
     ? note.get()
     : note
 }
 
 function getText(note) {
-  const {text} = normalizeCursor(note)
+  const {text} = getWhenCursor(note)
   return text
 }
 
@@ -40,7 +40,7 @@ function getText(note) {
 // }
 
 function getDebugId(note) {
-  const {id} = normalizeCursor(note)
+  const {id} = getWhenCursor(note)
   const start = 5
   return id.slice(start, start + 3)
 }
