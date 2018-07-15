@@ -376,15 +376,7 @@ function View() {
       notesIdLookup: {},
       parentIdToActiveChildrenLookup: {},
       rootNote: getOrUpsertRootNote(),
-      get rootDisplayNote() {
-        return this.displayNoteTransformer(this.rootNote)
-      },
       maybeZoomedNote: S.Nothing,
-      get maybeZoomedDisplayNote() {
-        return S.map(this.displayNoteTransformer)(
-          this.maybeZoomedNote,
-        )
-      },
       nullableFocusedNoteId: null,
       get displayNoteTransformer() {
         return createDisplayNoteTransformer(this)
