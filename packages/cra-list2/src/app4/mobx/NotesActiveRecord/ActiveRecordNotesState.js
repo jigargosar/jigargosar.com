@@ -181,14 +181,10 @@ function createDisplayNoteTransformer(view) {
           this.insertSibling({sortIdx: this.sortIdxOrZero - 1})
         },
         get childNotes() {
-          return S.map(displayNoteTransformer)(
-            view.findAllActiveChildrenOfNote(note),
-          )
+          return view.lookupChildDisplayNotes(this)
         },
         get maybeParentNote() {
-          return S.map(displayNoteTransformer)(
-            view.maybeFindParentOfNote(note),
-          )
+          return view.maybeLookupParentDisplayNote(this)
         },
       },
       actions: {
@@ -412,6 +408,18 @@ function View() {
       },
       get currentNotesList() {
         return this.currentRootDisplayNote.childNotes
+      },
+      lookupChildDisplayNotes(dn) {
+        return _.map(this.displayNoteTransformer)(
+          this.parentIdToActiveChildrenLookup[dn.id] || [],
+        )
+      },
+      maybeLookupParentDisplayNote(note) {
+        return _.compose(
+          S.map(this.displayNoteTransformer),
+          S.toMaybe,
+          _.prop(note.parentId),
+        )(this.notesIdLookup)
       },
       findAllActiveChildrenOfNote(note) {
         return findAllActiveChildrenOfNote(note)
