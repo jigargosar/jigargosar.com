@@ -75,7 +75,12 @@ const root = _.compose(appendTwoChildren)(
 class NoteTree extends React.Component {
   state = {
     root,
-    tree: new Baobab(root),
+    tree: new Baobab(root, {asynchronous: false}),
+  }
+  componentDidMount() {
+    this.state.tree.on('update', () => {
+      this.forceUpdate()
+    })
   }
   renderText = note => {
     // const note = noteCursor.get()
@@ -92,7 +97,13 @@ class NoteTree extends React.Component {
           )}
         >
           <div className={cn('f6 gray mr3')}>{getDebugId(note)}</div>
-          {getText(note)}
+          {/*{getText(note)}*/}
+          <input
+            value={getText(note)}
+            onChange={e => {
+              note.set('text', e.target.value)
+            }}
+          />
         </div>
       </div>
     )
