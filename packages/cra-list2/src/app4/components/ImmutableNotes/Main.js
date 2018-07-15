@@ -5,6 +5,7 @@ import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_} from '../../little-ramda'
 import Baobab, {Cursor} from 'baobab'
 import {nanoid} from '../../model/util'
+import {StorageItem} from '../../services/storage'
 
 if (module.hot) {
   window.Baobab = Baobab
@@ -68,22 +69,20 @@ const appendTwoChildren = _.compose(
   ),
 )
 
-const root = _.compose(appendTwoChildren)(
+const initialRoot = _.compose(appendTwoChildren)(
   createNote({text: 'Tree Root'}),
 )
 
-class NoteTree extends React.Component {
-  state = {
-    root,
-    tree: new Baobab(root, {asynchronous: false}),
-  }
+class NoteTextLine extends React.Component {
   componentDidMount() {
-    this.state.tree.on('update', () => {
+    const {note} = this.props
+    note.on('update', () => {
       this.forceUpdate()
     })
   }
-  renderText = note => {
-    // const note = noteCursor.get()
+
+  render() {
+    const {note} = this.props
     return (
       <div className={cn('code flex items-center')}>
         <div className={cn('mr3')}>-</div>
@@ -108,11 +107,26 @@ class NoteTree extends React.Component {
       </div>
     )
   }
+}
+const storedState = StorageItem({
+  name: 'NoteTreeState',
+  getInitial: () => initialRoot,
+})
+
+class NoteTree extends React.Component {
+  state = {
+    tree: new Baobab(storedState.load(), {asynchronous: false}),
+  }
+  componentDidMount() {
+    this.state.tree.on('update', () => {
+      storedState.save(this.tree.serialize())
+    })
+  }
 
   renderChild = (noteCursor, idx) => {
     return (
       <F key={idx}>
-        {this.renderText(noteCursor)}
+        {<NoteTextLine note={noteCursor} />}
         {this.renderChildren(noteCursor)}
       </F>
     )
