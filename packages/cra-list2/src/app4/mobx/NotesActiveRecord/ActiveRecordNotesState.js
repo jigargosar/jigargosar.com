@@ -25,7 +25,6 @@ import {isAnyHotKey, wrapPD} from '../../components/utils'
 import {
   findAllActiveNotes,
   getOrUpsertRootNote,
-  maybeFindParentOfNote,
   Notes,
 } from './NotesActiveRecord'
 import {nanoid} from '../../model/util'
@@ -427,9 +426,6 @@ function View() {
       },
       lookupAllActiveNotesWithParentId(parentId) {
         return this.parentIdToActiveChildrenLookup[parentId] || []
-      },
-      maybeFindParentOfNote(note) {
-        return maybeFindParentOfNote(note)
       },
       shouldFocusDisplayNoteTextInput(dn) {
         return _.isNil(this.nullableFocusedNoteId)
