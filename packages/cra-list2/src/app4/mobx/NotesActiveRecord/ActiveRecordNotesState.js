@@ -375,7 +375,7 @@ function View() {
     props: {
       notesIdLookup: {},
       parentIdToActiveChildrenLookup: {},
-      rootNote: null,
+      rootNote: getOrUpsertRootNote(),
       get rootDisplayNote() {
         return this.displayNoteTransformer(this.rootNote)
       },
@@ -498,9 +498,6 @@ function View() {
       zoomOutTillDisplayNote({id}) {
         this.maybeZoomedNote = this.maybeLookupNoteById(id)
       },
-      initRootNote() {
-        this.rootNote = getOrUpsertRootNote()
-      },
       updateNotesIdLookup(notes) {
         _.forEach(n => {
           this.notesIdLookup[n.id] = n
@@ -550,8 +547,6 @@ function View() {
     },
     name: 'view',
   })
-
-  view.initRootNote()
 
   const disposers = Disposers()
   disposers.push(

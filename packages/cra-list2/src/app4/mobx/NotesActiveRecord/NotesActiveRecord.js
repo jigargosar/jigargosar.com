@@ -1,6 +1,7 @@
 import {ActiveRecord} from '../ActiveRecord'
 import {_, mergeWithDefaults} from '../../little-ramda'
 import S from 'sanctuary'
+import {mAction} from '../little-mobx'
 
 const fieldNames = [
   'text',
@@ -26,14 +27,16 @@ const Notes = NotesActiveRecord
 
 export {Notes, NotesActiveRecord}
 
-export function getOrUpsertRootNote() {
-  return _.when(_.isNil)(Notes.upsert)(
-    Notes.findFirst({
-      filter: _.propEq('parentId', null),
-    }),
-  )
-}
-
+export const getOrUpsertRootNote = mAction(
+  'getOrUpsertRootNote',
+  function getOrUpsertRootNote() {
+    return _.when(_.isNil)(Notes.upsert)(
+      Notes.findFirst({
+        filter: _.propEq('parentId', null),
+      }),
+    )
+  },
+)
 export function getActiveQuery({filters = []} = {}) {
   return {
     filter: _.allPass([_.propEq('deleted', false), ...filters]),
