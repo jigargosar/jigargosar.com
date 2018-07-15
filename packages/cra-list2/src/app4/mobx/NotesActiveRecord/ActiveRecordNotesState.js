@@ -524,7 +524,9 @@ function View() {
           _.propOr('null', 'parentId'),
         )(notes)
 
-        _.forEachObjIndexed((children, pid) => {
+        _.forEach(n => {
+          const [children, pid] = [childrenLookup[n.id] || [], n.id]
+
           if (!this.parentIdToActiveChildrenLookup[pid]) {
             this.parentIdToActiveChildrenLookup[pid] = oArray([])
           }
@@ -540,7 +542,7 @@ function View() {
               oldLength - newLength,
             )
           }
-        })(childrenLookup)
+        })(notes)
 
         const oldKeys = _.keys(this.parentIdToActiveChildrenLookup)
         const newKeys = _.keys(childrenLookup)
