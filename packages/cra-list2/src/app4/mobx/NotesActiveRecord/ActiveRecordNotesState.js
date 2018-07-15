@@ -17,8 +17,6 @@ import {
   createObservableObject,
   createTransformer,
   mAutoRun,
-  mComputed,
-  mTrace,
   oArray,
 } from '../little-mobx'
 import {isAnyHotKey, wrapPD} from '../../components/utils'
@@ -382,19 +380,16 @@ function View() {
       notesIdLookup: {},
       parentIdToActiveChildrenLookup: {},
       rootNote: null,
-      // rootDisplayNote: null,
       get rootDisplayNote() {
         return this.displayNoteTransformer(this.rootNote)
       },
       maybeZoomedNote: S.Nothing,
-      // maybeZoomedDisplayNote: S.Nothing,
       get maybeZoomedDisplayNote() {
         return S.map(this.displayNoteTransformer)(
           view.maybeZoomedNote,
         )
       },
       nullableFocusedNoteId: null,
-      // displayNoteTransformer: null,
       get displayNoteTransformer() {
         return createDisplayNoteTransformer(this)
       },
@@ -402,9 +397,6 @@ function View() {
         const note = maybeOr(this.rootNote)(this.maybeZoomedNote)
         validate('O', [note])
         return note
-      },
-      get allActiveNotes() {
-        return findAllActiveNotes()
       },
       get currentRootDisplayNote() {
         const note = maybeOr(this.rootDisplayNote)(
@@ -566,33 +558,34 @@ function View() {
   mAutoRun(
     r => {
       // mTrace(r)
-      view.updateNotesIdLookup(view.allActiveNotes)
-      view.updateParentIdToActiveChildrenLookup(view.allActiveNotes)
+      const notes = findAllActiveNotes()
+      view.updateNotesIdLookup(notes)
+      view.updateParentIdToActiveChildrenLookup(notes)
     },
     {name: 'create Notes ID lookup'},
   )
-  mAutoRun(
-    r => {
-      mTrace(r)
-      const computed = mComputed(
-        // () => view.notesIdLookup['Note@a3mNtpYzQojp6oLDHA5Tq'],
-        () =>
-          view.parentIdToActiveChildrenLookup[
-            'Note@a3mNtpYzQojp6oLDHA5Tq'
-          ],
-        {
-          name:
-            "dynamic computed view.notesIdLookup['Note@a3mNtpYzQojp6oLDHA5Tq']",
-        },
-      )
-
-      console.log(
-        `view.parentIdToActiveChildrenLookup['Note@a3mNtpYzQojp6oLDHA5Tq']`,
-        computed.get(),
-      )
-    },
-    {name: 'Notes ID lookup log'},
-  )
+  // mAutoRun(
+  //   r => {
+  //     mTrace(r)
+  //     const computed = mComputed(
+  //       // () => view.notesIdLookup['Note@a3mNtpYzQojp6oLDHA5Tq'],
+  //       () =>
+  //         view.parentIdToActiveChildrenLookup[
+  //           'Note@a3mNtpYzQojp6oLDHA5Tq'
+  //         ],
+  //       {
+  //         name:
+  //           "dynamic computed view.notesIdLookup['Note@a3mNtpYzQojp6oLDHA5Tq']",
+  //       },
+  //     )
+  //
+  //     console.log(
+  //       `view.parentIdToActiveChildrenLookup['Note@a3mNtpYzQojp6oLDHA5Tq']`,
+  //       computed.get(),
+  //     )
+  //   },
+  //   {name: 'Notes ID lookup log'},
+  // )
 
   console.assert(isNotNil(view.currentRootDisplayNote))
 
