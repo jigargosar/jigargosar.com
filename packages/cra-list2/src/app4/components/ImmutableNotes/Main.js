@@ -1,5 +1,6 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
+import {F} from '../utils'
 import {cn, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_, mapIndexed} from '../../little-ramda'
@@ -26,7 +27,11 @@ class NoteTree extends React.Component {
     )(createNote({text: 'Tree Root'})),
   }
   renderChild = (child, idx) => {
-    return <div key={idx}>{child.text}</div>
+    return (
+      <F key={idx}>
+        <div>{child.text}</div>
+      </F>
+    )
   }
 
   renderChildren = note => {
