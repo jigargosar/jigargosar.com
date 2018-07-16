@@ -21,7 +21,10 @@ import {
   selectText,
   whenCursorGet,
 } from '../../ImmutableState/ImmutableNote'
-import {state} from '../../ImmutableState/ImmutableNoteTree'
+import {
+  getRootNoteCursor,
+  state,
+} from '../../ImmutableState/ImmutableNoteTree'
 import {
   cursorIsRoot,
   maybeDownIfExists,
@@ -184,17 +187,17 @@ class NoteChildren extends React.Component {
   }
 }
 
-const rootNoteCursor = state.tree.select()
-
 class NoteTree extends React.Component {
+  note = getRootNoteCursor(state)
+
   componentDidMount() {
-    focusNote(rootNoteCursor)
+    focusNote(this.note)
   }
 
   render = () => (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild note={rootNoteCursor} />
+        <NoteChild note={this.note} />
       </div>
     </F>
   )

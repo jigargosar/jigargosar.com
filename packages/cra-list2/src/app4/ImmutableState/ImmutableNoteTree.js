@@ -10,10 +10,17 @@ const storedState = StorageItem({
 // const initialTree = initialRoot
 const initialTree = storedState.load()
 
+const baobabTree = new Baobab(initialTree, {asynchronous: false})
+
 export const state = {
-  tree: new Baobab(initialTree, {asynchronous: false}),
+  tree: baobabTree,
+  rootNoteCursor: baobabTree.select(),
 }
 
 state.tree.on('update', () => {
   storedState.save(state.tree.serialize())
 })
+
+export function getRootNoteCursor({rootNoteCursor}) {
+  return rootNoteCursor
+}
