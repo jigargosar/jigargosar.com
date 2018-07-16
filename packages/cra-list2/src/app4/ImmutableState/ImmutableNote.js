@@ -2,7 +2,7 @@ import {_} from '../little-ramda'
 import Baobab, {Cursor} from 'baobab'
 import nanoid from 'nanoid'
 
-export function createNote({text = ''}) {
+export function createNote({text = ''} = {}) {
   return {id: `Note-${nanoid()}`, text, children: []}
 }
 
@@ -57,6 +57,12 @@ export function onNoteTextChangeEvent(noteCursor) {
   return function(e) {
     return setText(e.target.value, noteCursor)
   }
+}
+
+export function appendNewSiblingNote(noteCursor) {
+  noteCursor
+    .up()
+    .splice([_.last(noteCursor.path) + 1, 0, createNote()])
 }
 
 export function getDisplayText(note) {

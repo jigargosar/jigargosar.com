@@ -1,10 +1,11 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {cn, F, mrInjectAll} from '../utils'
+import {cn, F, isAnyHotKey, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
+  appendNewSiblingNote,
   getDebugId,
   getNoteId,
   getText,
@@ -33,6 +34,16 @@ class NoteTextInput extends React.Component {
         className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
         value={getText(this.note)}
         onChange={onNoteTextChangeEvent(this.note)}
+        onKeyDown={e =>
+          _.cond([
+            [
+              isAnyHotKey(['enter']),
+              () => {
+                return appendNewSiblingNote(this.note)
+              },
+            ],
+          ])(e)
+        }
       />
     )
   }
@@ -66,17 +77,21 @@ function NoteChild({note}) {
     </F>
   )
 }
-
-function NoteChildren({note}) {
-  return (
-    <div className={cn('ml3')}>
-      {_.map(note => (
-        <F key={getNoteId(note)}>
-          <NoteChild note={note} />
-        </F>
-      ))(selectChildren(note))}
-    </div>
-  )
+class NoteChildren extends React.Component {
+  get note() {
+    return this.props.note
+  }
+  render() {
+    return (
+      <div className={cn('ml3')}>
+        {_.map(childNote => (
+          <F key={getNoteId(childNote)}>
+            <NoteChild note={childNote} />
+          </F>
+        ))(selectChildren(this.note))}
+      </div>
+    )
+  }
 }
 
 class NoteTree extends React.Component {
