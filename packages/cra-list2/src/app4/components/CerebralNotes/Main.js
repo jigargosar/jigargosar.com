@@ -19,12 +19,8 @@ function joinPath(path) {
   return _.join('.')(path)
 }
 
-const computedNoteText = Compute(
-  props`notePath`,
-  (nullablePath, get) => {
-    const path = nullablePath ? nullablePath : ['rootNote']
-    return get(state`${joinPath(path)}.text`)
-  },
+const computedNoteText = Compute(props`notePath`, (path, get) =>
+  get(state`${joinPath(path)}.text`),
 )
 // const computedNoteChildren = Compute(
 //   props`notePath`,
@@ -33,14 +29,6 @@ const computedNoteText = Compute(
 //     return get(state`${joinPath(path)}.children`)
 //   },
 // )
-
-const computedNoteChildrenLength = Compute(
-  props`notePath`,
-  (nullablePath, get) => {
-    const path = nullablePath ? nullablePath : ['rootNote']
-    return get(state`${joinPath(path)}.children`).length
-  },
-)
 
 const computedNoteChildrenPaths = Compute(
   props`notePath`,
