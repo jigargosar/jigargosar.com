@@ -156,7 +156,9 @@ function NoteTextLine({note}) {
           'bb bw1 b--light-gray',
         )}
       >
-        <div className={cn('f6 gray mr3 dn')}>{getDebugId(note)}</div>
+        <div className={cn('f6 gray mr3', 'dn')}>
+          {getDebugId(note)}
+        </div>
         <div className={cn('flex-auto', 'flex')}>
           <NoteTextInput note={note} />
         </div>
