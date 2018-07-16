@@ -27,13 +27,16 @@ function focusNewNote(newNote) {
   })
 }
 
+function cursorForceUpdate(textCursor, component) {
+  textCursor.on('update', () => component.forceUpdate())
+}
+
 class NoteTextInput extends React.Component {
   get note() {
     return this.props.note
   }
   componentDidMount() {
-    const textCursor = getTextCursor(this.note)
-    textCursor.on('update', () => this.forceUpdate())
+    cursorForceUpdate(getTextCursor(this.note), this)
   }
 
   render() {
@@ -86,8 +89,7 @@ function NoteChild({note}) {
 }
 class NoteChildren extends React.Component {
   componentDidMount() {
-    const childrenCursor = getChildrenCursor(this.note)
-    childrenCursor.on('update', () => this.forceUpdate())
+    cursorForceUpdate(getChildrenCursor(this.note), this)
   }
 
   get note() {
