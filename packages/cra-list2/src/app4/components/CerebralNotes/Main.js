@@ -108,14 +108,14 @@ function NoteChildren({note}) {
   // }
 }
 
-const NoteChild = connect({}, function NoteChild({notePath}) {
+function NoteChild({notePath}) {
   return (
     <F>
       <NoteTextLine notePath={notePath} />
       <NoteChildren notePath={notePath} />
     </F>
   )
-})
+}
 
 const NoteTree = connect({}, function NoteTree() {
   return (
