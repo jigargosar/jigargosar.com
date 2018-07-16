@@ -24,7 +24,7 @@ if (module.hot) {
   window.Baobab = Baobab
 }
 
-function focusNewNote(newNote) {
+function focusNote(newNote) {
   requestAnimationFrame(() => {
     const noteEl = document.getElementById(getNoteId(newNote))
     noteEl.focus()
@@ -94,10 +94,10 @@ class NoteTextInput extends React.Component {
     _.cond([
       [
         isKey('enter'),
-        () => focusNewNote(appendNewSiblingNote(note)),
+        () => focusNote(appendNewSiblingNote(note)),
       ],
       [isKey('down'), () => maybeFocusNote(maybeNextNote(note))],
-      [isKey('up'), () => focusNewNote(note.left())],
+      [isKey('up'), () => focusNote(note.left())],
     ])(e)
   }
 }
