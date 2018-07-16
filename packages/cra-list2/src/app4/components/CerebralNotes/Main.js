@@ -12,15 +12,28 @@ import {
   signal,
   state,
 } from './utils'
-import {validate} from '../../little-ramda'
+import {_, mapIndexed, validate} from '../../little-ramda'
+import {nanoid} from '../../model/util'
 
-const computedNoteText = Compute(props`notePath`, (path, get) => {
-  debugger
-  if (!path) {
-    return get(state`rootNote.text`)
-  }
-  return get(state`${path}.text`)
-})
+function joinPath(path) {
+  return _.join('.')(path)
+}
+
+const computedNoteText = Compute(
+  props`notePath`,
+  (nullablePath, get) => {
+    const path = nullablePath ? nullablePath : ['rootNote']
+    return get(state`${joinPath(path)}.text`)
+  },
+)
+const computedNoteChildren = Compute(
+  props`notePath`,
+  (nullablePath, get) => {
+    const path = nullablePath ? nullablePath : ['rootNote']
+    const dotPath = _.join('.')(path)
+    return get(state`${joinPath(path)}.children`)
+  },
+)
 
 const NoteTextInput = connect(
   {
@@ -80,7 +93,7 @@ const NoteTextInput = connect(
 //   },
 // )
 
-function NoteTextLine() {
+function NoteTextLine({notePath}) {
   return (
     <div className={cn('code flex items-center')}>
       <div className={cn('mr3')}>
@@ -98,29 +111,33 @@ function NoteTextLine() {
         {/*{getDebugId(note)}*/}
         {/*</div>*/}
         <div className={cn('flex-auto', 'flex')}>
-          <NoteTextInput />
+          <NoteTextInput notePath={notePath} />
         </div>
       </div>
     </div>
   )
 }
 
-function NoteChildren({note}) {
-  // if (doesNoteHaveVisibleChildren(note)) {
-  //   return (
-  //     <div className={cn('ml3')}>
-  //       {_.map(childNote => (
-  //         <F key={getNoteId(childNote)}>
-  //           <NoteChild note={childNote} />
-  //         </F>
-  //       ))(selectChildren(note))}
-  //     </div>
-  //   )
-  // } else {
-  return null
-  // }
-}
-
+const NoteChildren = connect(
+  {children: computedNoteChildren},
+  function NoteChildren({children, notePath}) {
+    // if (doesNoteHaveVisibleChildren(note)) {
+    return (
+      <div className={cn('ml3')}>
+        {mapIndexed((child, idx) => (
+          <F key={child.id}>
+            <NoteChild
+              notePath={_.concat(notePath, ['children', idx])}
+            />
+          </F>
+        ))(children)}
+      </div>
+    )
+    // } else {
+    //   return null
+    // }
+  },
+)
 function NoteChild({notePath}) {
   return (
     <F>
@@ -134,11 +151,15 @@ const NoteTree = connect({}, function NoteTree() {
   return (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild />
+        <NoteChild notePath={['rootNote']} />
       </div>
     </F>
   )
 })
+
+function createNewNote({text}) {
+  return {id: nanoid(), text: text, children: []}
+}
 
 function createAppController() {
   function getDevTools() {
@@ -154,19 +175,21 @@ function createAppController() {
   const app = Module({
     // Define module state, namespaced by module path
     state: {
-      rootNote: {text: 'Root Note Title', children: []},
+      rootNote: createNewNote({text: 'Root Note Title'}),
       currentRootNotePath: ['rootNote'],
     },
     signals: {
       setText: ({state, props, ...other}) => {
         console.debug('other', other)
-        state.set(`${props.notePath}.text`, props.text)
+        state.set(`${joinPath(props.notePath)}.text`, props.text)
       },
       prependNewChild: ({state, props}) => {
-        state.unshift(`${props.notePath}.children`, {
-          text: 'new child',
-          children: [],
-        })
+        state.unshift(
+          `${joinPath(props.notePath)}.children`,
+          createNewNote({
+            text: 'new child',
+          }),
+        )
       },
     },
     modules: {},
