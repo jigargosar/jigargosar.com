@@ -120,12 +120,14 @@ export function selectText(noteCursor) {
   return noteCursor.select('text')
 }
 
+const ifRootThenNothingElse = _.ifElse(cursorIsRoot)(alwaysNothing)
+
 function maybeNextSiblingNote(note) {
-  return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeRight)(note)
+  return ifRootThenNothingElse(maybeRight)(note)
 }
 
 function maybePreviousSiblingNote(note) {
-  return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeLeft)(note)
+  return ifRootThenNothingElse(maybeLeft)(note)
 }
 
 function maybeParentNote(note) {
