@@ -6,13 +6,12 @@ import {_, maybeOrElse, S} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
   appendNewSiblingNote,
-  getChildrenCursor,
   getDebugId,
   getNoteId,
   getText,
-  getTextCursor,
   onNoteTextChangeEvent,
   selectChildren,
+  selectText,
 } from '../../ImmutableState/ImmutableNote'
 import {state} from '../../ImmutableState/ImmutableNoteTree'
 import {
@@ -75,7 +74,7 @@ class NoteTextInput extends React.Component {
   }
 
   componentDidMount() {
-    cursorForceUpdate(getTextCursor(this.note), this)
+    cursorForceUpdate(selectText(this.note), this)
   }
 
   render() {
@@ -135,7 +134,7 @@ function NoteChild({note}) {
 
 class NoteChildren extends React.Component {
   componentDidMount() {
-    cursorForceUpdate(getChildrenCursor(this.note), this)
+    cursorForceUpdate(selectChildren(this.note), this)
   }
 
   get note() {

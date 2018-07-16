@@ -34,23 +34,20 @@ export function appendNewNotes(notePropsList) {
   }
 }
 
-export function getChildren({children}) {
-  return children
-}
-
-export function getWhenCursor(note) {
+export function whenCursorGet(note) {
   return note instanceof Baobab || note instanceof Cursor
     ? note.get()
     : note
 }
 
 export function getText(note) {
-  const {text} = getWhenCursor(note)
+  const {text} = whenCursorGet(note)
   return text
 }
 
 export function setText(text, noteCursor) {
-  return noteCursor.set('text', text)
+  noteCursor.set('text', text)
+  return noteCursor
 }
 
 export function onNoteTextChangeEvent(noteCursor) {
@@ -65,34 +62,26 @@ export function appendNewSiblingNote(noteCursor) {
   return newNote
 }
 
-export function getDisplayText(note) {
-  return `${getDebugId(note)} - ${getText(note)}`
-}
-
 export function getDebugId(note) {
-  const {id} = getWhenCursor(note)
+  const {id} = whenCursorGet(note)
   const start = 5
   return id.slice(start, start + 3)
 }
 
 export function getNoteId(note) {
-  const {id} = getWhenCursor(note)
+  const {id} = whenCursorGet(note)
   return id
 }
 
-export function selectChildren(note) {
-  return note.select('children')
+export function selectChildren(noteCursor) {
+  return noteCursor.select('children')
 }
 
-export function getTextCursor(note) {
-  return note.select('text')
+export function selectText(noteCursor) {
+  return noteCursor.select('text')
 }
 
-export function getChildrenCursor(note) {
-  return note.select('children')
-}
-
-export const appendTwoChildren = (() => {
+const appendTwoChildren = (() => {
   const secondChild = appendNewNotes([
     {text: 'fourth grand child'},
     {text: 'third grand child'},
@@ -104,6 +93,7 @@ export const appendTwoChildren = (() => {
   ])(createNote({text: 'first child'}))
   return appendNotes([firstChild, secondChild])
 })()
+
 export const initialRoot = appendTwoChildren(
   createNote({text: 'Tree Root'}),
 )
