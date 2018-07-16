@@ -10,7 +10,49 @@ import {
 } from '../components/ImmutableNotes/functional-baobab'
 import S from 'sanctuary'
 
-export function createNote({text = ''} = {}) {
+export const initialNoteTree = (() => {
+  const appendTwoChildren = (() => {
+    const secondChild = appendNewNotes([
+      {text: 'fourth grand child'},
+      {text: 'third grand child'},
+    ])(createNote({text: 'second child'}))
+
+    const firstChild = appendNewNotes([
+      {text: 'second grand child'},
+      {text: 'first grand child'},
+    ])(createNote({text: 'first child'}))
+    return appendNotes([firstChild, secondChild])
+  })()
+
+  return appendTwoChildren(createNote({text: 'Tree Root'}))
+
+  function appendNote(child) {
+    return function(note) {
+      return _.assoc('children')(_.append(child, note.children))(note)
+    }
+  }
+  function appendNotes(children) {
+    return function(note) {
+      return _.reduce((note, child) => appendNote(child)(note))(note)(
+        children,
+      )
+    }
+  }
+  function appendNewNote(noteProps) {
+    return function(note) {
+      return appendNote(createNote(noteProps))(note)
+    }
+  }
+  function appendNewNotes(notePropsList) {
+    return function(note) {
+      return _.reduce((note, noteProps) =>
+        appendNewNote(noteProps)(note),
+      )(note)(notePropsList)
+    }
+  }
+})()
+
+function createNote({text = ''} = {}) {
   return {
     id: `Note-${nanoid()}`,
     text,
@@ -18,7 +60,6 @@ export function createNote({text = ''} = {}) {
     collapsed: false,
   }
 }
-
 export function preProcessNote({
   id = `Note-${nanoid()}`,
   text,
@@ -82,15 +123,19 @@ export function selectText(noteCursor) {
 function maybeNextSiblingNote(note) {
   return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeRight)(note)
 }
+
 function maybePreviousSiblingNote(note) {
   return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeLeft)(note)
 }
+
 function maybeParentNote(note) {
   return _.compose(S.chain(maybeUp), maybeUp)(note)
 }
+
 function maybeFirstChildNote(note) {
   return maybeDownIfExists(note.select('children'))
 }
+
 const maybeNextNote = n =>
   maybeOrElse(() => S.chain(maybeNextNote)(maybeParentNote(n)))(
     maybeNextSiblingNote(n),
@@ -101,59 +146,21 @@ export function maybeFirstVisibleChildOrNextNote(note) {
     maybeFirstChildNote(note),
   )
 }
-function lastVisibleLeafNoteOrSelf(note) {
-  return _.compose(
-    maybeOr(note),
-    S.map(lastVisibleLeafNoteOrSelf),
-    S.last,
-    getChildren,
-  )(note)
-}
+
 export function maybePreviousNote(note) {
   return _.compose(
     maybeOrElse(() => maybeParentNote(note)),
     S.map(lastVisibleLeafNoteOrSelf),
   )(maybePreviousSiblingNote(note))
+
+  function lastVisibleLeafNoteOrSelf(note) {
+    return _.compose(
+      maybeOr(note),
+      S.map(lastVisibleLeafNoteOrSelf),
+      S.last,
+      getChildren,
+    )(note)
+  }
 }
 
-export const initialNoteTree = (() => {
-  const appendTwoChildren = (() => {
-    const secondChild = appendNewNotes([
-      {text: 'fourth grand child'},
-      {text: 'third grand child'},
-    ])(createNote({text: 'second child'}))
-
-    const firstChild = appendNewNotes([
-      {text: 'second grand child'},
-      {text: 'first grand child'},
-    ])(createNote({text: 'first child'}))
-    return appendNotes([firstChild, secondChild])
-  })()
-
-  return appendTwoChildren(createNote({text: 'Tree Root'}))
-
-  function appendNote(child) {
-    return function(note) {
-      return _.assoc('children')(_.append(child, note.children))(note)
-    }
-  }
-  function appendNotes(children) {
-    return function(note) {
-      return _.reduce((note, child) => appendNote(child)(note))(note)(
-        children,
-      )
-    }
-  }
-  function appendNewNote(noteProps) {
-    return function(note) {
-      return appendNote(createNote(noteProps))(note)
-    }
-  }
-  function appendNewNotes(notePropsList) {
-    return function(note) {
-      return _.reduce((note, noteProps) =>
-        appendNewNote(noteProps)(note),
-      )(note)(notePropsList)
-    }
-  }
-})()
+export function deleteNote(note) {}

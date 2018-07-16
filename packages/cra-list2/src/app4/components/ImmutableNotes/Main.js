@@ -7,6 +7,7 @@ import {_, validate} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
   appendNewSiblingNote,
+  deleteNote,
   getDebugId,
   getNoteId,
   getText,
@@ -46,13 +47,33 @@ function cursorForceUpdate(textCursor, component) {
   textCursor.on('update', () => component.forceUpdate())
 }
 
+function getInputSelectionRangeFromEvent(e) {
+  return {start: e.target.selectionStart, end: e.target.selectionEnd}
+}
+
+function isSelectionRangeAtZero(selectionRange) {
+  return selectionRange.start === 0 && selectionRange.end === 0
+}
+
+function focusPreviousNote(note) {
+  return maybeFocusNote(maybePreviousNote(note))
+}
+
 const onNoteInputKeyDown = note =>
   withKeyEvent(
     whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
+    whenKey('backspace')(e => {
+      const selectionRange = getInputSelectionRangeFromEvent(e)
+      const selectionAtStart = isSelectionRangeAtZero(selectionRange)
+      if (selectionAtStart) {
+        focusPreviousNote(note)
+        deleteNote(note)
+      }
+    }),
     whenKey('down')(() =>
       maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),
     ),
-    whenKey('up')(() => maybeFocusNote(maybePreviousNote(note))),
+    whenKey('up')(() => focusPreviousNote(note)),
   )
 
 function onNoteTextChangeEvent(note) {
