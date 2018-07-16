@@ -32,21 +32,21 @@ const NoteTextInput = connect(
   {
     setText: signal`setText`,
     prependNewChild: signal`prependNewChild`,
-    value: state`${props`notePath`}.text`,
+    value: state`noteLookup.${props`id`}.text`,
   },
-  function({setText, value, prependNewChild}, {notePath}) {
+  function({setText, value, prependNewChild}, {id}) {
     validate('FS', [setText, value])
 
     return {
       onChange: e =>
         setText({
           text: e.target.value,
-          notePath,
+          id,
         }),
       value,
       onKeyDown: withKeyEvent(
         // whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
-        whenKey('enter')(() => prependNewChild({notePath})),
+        whenKey('enter')(() => prependNewChild({id})),
         // whenKey('backspace')(onBackspaceKeyDown),
         // whenKey('tab')(wrapPD(indentNote)),
         // whenKey('shift+tab')(wrapPD(unIndentNote)),
@@ -72,7 +72,7 @@ const NoteTextInput = connect(
   },
 )
 
-function NoteTextLine({notePath}) {
+function NoteTextLine({id}) {
   return (
     <div className={cn('code flex items-center')}>
       <div className={cn('mr3')}>
@@ -90,7 +90,7 @@ function NoteTextLine({notePath}) {
         {/*{getDebugId(note)}*/}
         {/*</div>*/}
         <div className={cn('flex-auto', 'flex')}>
-          <NoteTextInput notePath={notePath} />
+          <NoteTextInput id={id} />
         </div>
       </div>
     </div>
@@ -98,17 +98,17 @@ function NoteTextLine({notePath}) {
 }
 
 const NoteChildren = connect(
-  {childPaths: computedNoteChildrenPaths},
-  function NoteChildren({childPaths}) {
+  {childrenIds: state`childrenLookup.${props`id`}`},
+  function NoteChildren({childrenIds}) {
     // if (doesNoteHaveVisibleChildren(note)) {
     debugger
     return (
       <div className={cn('ml3')}>
-        {mapIndexed(notePath => (
-          <F key={notePath}>
-            <NoteChild notePath={notePath} />
+        {_.map(id => (
+          <F key={id}>
+            <NoteChild id={id} />
           </F>
-        ))(childPaths)}
+        ))(childrenIds)}
       </div>
     )
     // } else {
@@ -116,25 +116,26 @@ const NoteChildren = connect(
     // }
   },
 )
-function NoteChild({notePath}) {
+function NoteChild({id}) {
   return (
     <F>
-      <NoteTextLine notePath={notePath} />
-      <NoteChildren notePath={notePath} />
+      <NoteTextLine id={id} />
+      <NoteChildren id={id} />
     </F>
   )
 }
 
-function NoteTree() {
+const NoteTree = connect({id: state`rootNoteId`}, function NoteTree({
+  id,
+}) {
   return (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild notePath={'rootNote'} />
+        <NoteChild id={id} />
       </div>
     </F>
   )
-}
-
+})
 function createNewNote({text}) {
   return {id: nanoid(), text: text}
 }
@@ -167,8 +168,9 @@ function createAppController() {
         const newNote = createNewNote({
           text: nanoid(3),
         })
-        state.unshift(`childrenLookup.${props.id}`, newNote)
-        state.set(`noteLookup.${props.id}`, newNote)
+        state.unshift(`childrenLookup.${props.id}`, newNote.id)
+        state.set(`childrenLookup.${newNote.id}`, [])
+        state.set(`noteLookup.${newNote.id}`, newNote)
       },
     },
     modules: {},
