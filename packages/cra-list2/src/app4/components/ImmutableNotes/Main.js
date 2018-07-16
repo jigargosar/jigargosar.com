@@ -73,7 +73,7 @@ const onNoteInputKeyDown = note => {
   )
 
   function navigateToPreviousNote(e) {
-    return S.map(S.map(focusNoteWithSelectionFromEvent(e)))(
+    return S.map(focusNoteWithSelectionFromEvent(e))(
       maybeGetPreviousNote(note),
     )
   }
@@ -133,7 +133,7 @@ class NoteTextInput extends React.Component {
     return (
       <input
         id={getNoteId(note)}
-        className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
+        className={cn('flex-auto', 'ma0 pv2 bw0 outline-0')}
         value={getNoteText(note)}
         onChange={onNoteTextChangeEvent(note)}
         onKeyDown={onNoteInputKeyDown(note)}
@@ -150,7 +150,6 @@ function NoteTextLine({note}) {
         className={cn(
           'flex-auto',
           'flex items-center',
-          'pv2',
           'bb bw1 b--light-gray',
         )}
       >
