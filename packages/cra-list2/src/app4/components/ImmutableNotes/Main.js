@@ -22,6 +22,7 @@ import {
   appendSiblingNote,
   collapseNote,
   deleteAndGetMaybePreviousNote,
+  doesNoteHaveVisibleChildren,
   expandNote,
   getDebugId,
   getNoteId,
@@ -210,15 +211,20 @@ class NoteChildren extends React.Component {
   }
 
   render() {
-    return (
-      <div className={cn('ml3')}>
-        {_.map(childNote => (
-          <F key={getNoteId(childNote)}>
-            <NoteChild note={childNote} />
-          </F>
-        ))(selectChildren(this.props.note))}
-      </div>
-    )
+    const note = this.props.note
+    if (doesNoteHaveVisibleChildren(note)) {
+      return (
+        <div className={cn('ml3')}>
+          {_.map(childNote => (
+            <F key={getNoteId(childNote)}>
+              <NoteChild note={childNote} />
+            </F>
+          ))(selectChildren(note))}
+        </div>
+      )
+    } else {
+      return null
+    }
   }
 }
 

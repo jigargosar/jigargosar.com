@@ -165,16 +165,22 @@ function maybeFirstChildNote(note) {
   return maybeDownIfExists(selectChildren(note))
 }
 
+function maybeFirstVisibleChildNote(note) {
+  return doesNoteHaveVisibleChildren(note)
+    ? maybeDownIfExists(selectChildren(note))
+    : S.Nothing
+}
+
 function maybeLastChildNote(note) {
   return _.compose(
     S.chain(maybeRightmostIfExists),
-    maybeFirstChildNote,
+    maybeFirstVisibleChildNote,
   )(note)
 }
 
 export function maybeGetFirstVisibleChildOrNextNote(note) {
   return maybeOrElse(() => maybeNextNote(note))(
-    maybeFirstChildNote(note),
+    maybeFirstVisibleChildNote(note),
   )
 
   function maybeNextNote(note) {
