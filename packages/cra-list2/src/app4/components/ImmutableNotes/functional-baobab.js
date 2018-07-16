@@ -19,3 +19,7 @@ export function maybeDownIfExists(cursor) {
     S.toMaybe,
   )(cursor.down())
 }
+
+export function cursorIsRoot(cursor) {
+  return cursor.isRoot()
+}

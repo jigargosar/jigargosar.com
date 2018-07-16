@@ -1,15 +1,14 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {
-  cn,
-  F,
-  isKey,
-  mrInjectAll,
-  whenKey,
-  withKeyEvent,
-} from '../utils'
+import {cn, F, mrInjectAll, whenKey, withKeyEvent} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
-import {_, maybeOrElse, S, validate} from '../../little-ramda'
+import {
+  _,
+  alwaysNothing,
+  maybeOrElse,
+  S,
+  validate,
+} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
   appendNewSiblingNote,
@@ -23,6 +22,7 @@ import {
 } from '../../ImmutableState/ImmutableNote'
 import {state} from '../../ImmutableState/ImmutableNoteTree'
 import {
+  cursorIsRoot,
   maybeDownIfExists,
   maybeRight,
   maybeUp,
@@ -55,25 +55,26 @@ function cursorForceUpdate(textCursor, component) {
 }
 
 function maybeNextSiblingNote(note) {
-  return maybeRight(note)
+  return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeRight)(note)
 }
 
 function maybeParentNote(note) {
-  return _.compose(S.map(maybeUp), maybeUp)(note)
+  const newVar = _.compose(S.chain(maybeUp), maybeUp)(note)
+  console.log(`newVar.value.get()`, newVar.value.get())
+  return newVar
 }
 
 function maybeFirstChildNote(note) {
   return maybeDownIfExists(note.select('children'))
 }
 
-function maybeNextNote(note) {
-  // debugger
-  const computeNext = n =>
-    maybeOrElse(() => S.chain(computeNext)(maybeParentNote(note)))(
-      maybeNextSiblingNote(n),
-    )
+const maybeNextNote = n =>
+  maybeOrElse(() => S.chain(maybeNextNote)(maybeParentNote(n)))(
+    maybeNextSiblingNote(n),
+  )
 
-  return maybeOrElse(() => computeNext(note))(
+function maybeFirstChildOrNextNote(note) {
+  return maybeOrElse(() => maybeNextNote(note))(
     maybeFirstChildNote(note),
   )
 }
@@ -103,7 +104,9 @@ class NoteTextInput extends React.Component {
     const note = this.note
     withKeyEvent(
       whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
-      whenKey('down')(() => maybeFocusNote(maybeNextNote(note))),
+      whenKey('down')(() =>
+        maybeFocusNote(maybeFirstChildOrNextNote(note)),
+      ),
       whenKey('up')(() => focusNote(note.left())),
     )(e)
   }
@@ -162,6 +165,10 @@ class NoteChildren extends React.Component {
 }
 
 class NoteTree extends React.Component {
+  componentDidMount() {
+    focusNote(state.tree)
+  }
+
   render = () => (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
