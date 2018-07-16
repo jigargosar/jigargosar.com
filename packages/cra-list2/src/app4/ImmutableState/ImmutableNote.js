@@ -176,7 +176,7 @@ function maybeLastChildNote(note) {
   )(note)
 }
 
-export function maybeFirstVisibleChildOrNextNote(note) {
+export function maybeGetFirstVisibleChildOrNextNote(note) {
   return maybeOrElse(() => maybeNextNote(note))(
     maybeFirstChildNote(note),
   )
@@ -188,7 +188,7 @@ export function maybeFirstVisibleChildOrNextNote(note) {
   }
 }
 
-export function maybePreviousNote(note) {
+export function maybeGetPreviousNote(note) {
   return _.compose(
     maybeOrElse(() => maybeParentNote(note)),
     S.map(lastVisibleLeafNoteOrSelf),
@@ -205,7 +205,7 @@ export function maybePreviousNote(note) {
 
 export function deleteAndGetMaybePreviousNote(note) {
   return ifRootThenNothingElse(note => {
-    const prev = maybePreviousNote(note)
+    const prev = maybeGetPreviousNote(note)
     note.up().splice([_.last(note.path), 1])
     return prev
   })(note)

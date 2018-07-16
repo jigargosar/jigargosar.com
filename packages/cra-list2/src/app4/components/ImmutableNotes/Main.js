@@ -25,9 +25,9 @@ import {
   getNoteId,
   getNoteText,
   getNoteTextLength,
-  maybeFirstVisibleChildOrNextNote,
+  maybeGetFirstVisibleChildOrNextNote,
   maybeParentButNotRootNote,
-  maybePreviousNote,
+  maybeGetPreviousNote,
   maybePreviousSiblingNote,
   noteHasChildren,
   selectChildren,
@@ -72,14 +72,14 @@ const onNoteInputKeyDown = note => {
 
   function navigateToPreviousNote(e) {
     return maybeFocusNote(
-      maybePreviousNote(note),
+      maybeGetPreviousNote(note),
       getSelectionFromEvent(e),
     )
   }
 
   function navigateToNextNote(e) {
     return maybeFocusNote(
-      maybeFirstVisibleChildOrNextNote(note),
+      maybeGetFirstVisibleChildOrNextNote(note),
       getSelectionFromEvent(e),
     )
   }
