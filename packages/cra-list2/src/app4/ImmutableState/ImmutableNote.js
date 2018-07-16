@@ -150,14 +150,14 @@ export function maybePreviousSiblingNote(note) {
   return ifRootThenNothingElse(maybeLeft)(note)
 }
 
-export function maybeParentNote(note) {
+export function maybeGetParentNote(note) {
   return _.compose(S.chain(maybeUp), maybeUp)(note)
 }
 
 export function maybeParentButNotRootNote(note) {
   return _.compose(
     S.chain(_.ifElse(isCursorRoot, alwaysNothing, S.Just)),
-    maybeParentNote,
+    maybeGetParentNote,
   )(note)
 }
 
@@ -181,14 +181,14 @@ export function maybeGetFirstVisibleChildOrNextNote(note) {
 
   function maybeNextNote(note) {
     return maybeOrElse(() =>
-      S.chain(maybeNextNote)(maybeParentNote(note)),
+      S.chain(maybeNextNote)(maybeGetParentNote(note)),
     )(maybeNextSiblingNote(note))
   }
 }
 
 export function maybeGetPreviousNote(note) {
   return _.compose(
-    maybeOrElse(() => maybeParentNote(note)),
+    maybeOrElse(() => maybeGetParentNote(note)),
     S.map(lastVisibleLeafNoteOrSelf),
   )(maybePreviousSiblingNote(note))
 

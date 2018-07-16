@@ -30,6 +30,7 @@ import {
   getNoteTextLength,
   isNoteExpanded,
   maybeGetFirstVisibleChildOrNextNote,
+  maybeGetParentNote,
   maybeGetPreviousNote,
   maybeParentButNotRootNote,
   maybePreviousSiblingNote,
@@ -37,7 +38,10 @@ import {
   selectChildren,
   setNoteText,
 } from '../../ImmutableState/ImmutableNote'
-import {getCurrentRootNoteCursor} from '../../ImmutableState/ImmutableNoteTree'
+import {
+  getCurrentRootNoteCursor,
+  setCurrentRootNoteCursor,
+} from '../../ImmutableState/ImmutableNoteTree'
 import S from 'sanctuary'
 import {OnMount} from '../behaviour/OnMount'
 import {releaseCursorIfNotNil} from '../../ImmutableState/functional-baobab'
@@ -73,6 +77,12 @@ const onNoteInputKeyDown = note => {
     whenKey('up')(wrapPD(navigateToPreviousNote)),
     whenKey('shift+up')(wrapPD(() => collapseNote(note))),
     whenKey('shift+down')(wrapPD(() => expandNote(note))),
+    whenKey('mod+.')(wrapPD(() => setCurrentRootNoteCursor(note))),
+    whenKey('mod+,')(
+      wrapPD(() =>
+        S.map(setCurrentRootNoteCursor)(maybeGetParentNote(note)),
+      ),
+    ),
   )
 
   function navigateToPreviousNote(e) {

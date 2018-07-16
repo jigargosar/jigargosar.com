@@ -272,7 +272,7 @@ function createDisplayNoteTransformer(view) {
           this.navigateToPreviousDisplayNote()
         },
         navigateToParent() {
-          view.maybeSetFocusedDisplayNote(this.maybeParentNote)
+          view.maybeSetFocusedDisplayNote(this.maybeGetParentNote)
         },
         navigateToFirstChildNote() {
           view.maybeSetFocusedDisplayNote(this.maybeFirstChildNote)
@@ -290,7 +290,7 @@ function createDisplayNoteTransformer(view) {
         },
         navigateToPreviousDisplayNote() {
           const maybeFDN = _.compose(
-            maybeOrElse(() => this.maybeParentNote),
+            maybeOrElse(() => this.maybeGetParentNote),
             S.map(
               prevSiblingNote =>
                 prevSiblingNote.lastVisibleLeafNoteOrSelf,
@@ -314,7 +314,7 @@ function createDisplayNoteTransformer(view) {
                 parentId: parent.parentId,
                 sortIdx: parent.sortIdxOrZero,
               })
-            })(this.maybeParentNote)
+            })(this.maybeGetParentNote)
           }
         },
         onTabKeyDown(e) {
