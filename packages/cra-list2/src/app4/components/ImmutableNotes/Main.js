@@ -6,7 +6,6 @@ import {
   _,
   alwaysNothing,
   maybeOrElse,
-  S,
   validate,
 } from '../../little-ramda'
 import Baobab from 'baobab'
@@ -27,6 +26,7 @@ import {
   maybeRight,
   maybeUp,
 } from './functional-baobab'
+import S from 'sanctuary'
 
 if (module.hot) {
   window.Baobab = Baobab
@@ -59,9 +59,7 @@ function maybeNextSiblingNote(note) {
 }
 
 function maybeParentNote(note) {
-  const newVar = _.compose(S.chain(maybeUp), maybeUp)(note)
-  console.log(`newVar.value.get()`, newVar.value.get())
-  return newVar
+  return _.compose(S.chain(maybeUp), maybeUp)(note)
 }
 
 function maybeFirstChildNote(note) {
