@@ -145,8 +145,8 @@ function createAppController() {
       currentRootNotePath: ['rootNote'],
     },
     signals: {
-      setText: all => {
-        const {state, props, ...args} = all
+      setText: ({state, props, ...other}) => {
+        console.debug('other', other)
         state.set(`${props.notePath}.text`, props.text)
       },
     },
