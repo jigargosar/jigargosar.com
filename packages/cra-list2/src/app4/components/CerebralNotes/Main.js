@@ -194,6 +194,14 @@ function createAppController() {
     devtools: getDevTools(),
   })
 
+  controller.on('mutation', mutation => {
+    console.log(`mutation`, mutation)
+  })
+
+  controller.on('flush', changes => {
+    console.log(`changes`, changes)
+  })
+
   return controller
 }
 
