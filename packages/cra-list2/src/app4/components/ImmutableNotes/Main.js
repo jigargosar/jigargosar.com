@@ -50,15 +50,14 @@ function cursorForceUpdate(textCursor, component) {
   textCursor.on('update', () => component.forceUpdate())
 }
 
-const onNoteInputKeyDown = note => e => {
+const onNoteInputKeyDown = note =>
   withKeyEvent(
     whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
     whenKey('down')(() =>
       maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),
     ),
     whenKey('up')(() => maybeFocusNote(maybePreviousNote(note))),
-  )(e)
-}
+  )
 
 class NoteTextInput extends React.Component {
   componentDidMount() {
