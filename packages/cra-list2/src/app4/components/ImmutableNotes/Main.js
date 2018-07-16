@@ -1,15 +1,7 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {
-  cn,
-  F,
-  mrInjectAll,
-  PropTypes,
-  whenKey,
-  withKeyEvent,
-} from '../utils'
+import {cn, F, whenKey, withKeyEvent} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
-import {lifecycle} from 'recompose'
 
 import {
   _,
@@ -211,7 +203,7 @@ function NoteTree() {
   )
 }
 
-const Main = mrInjectAll(function Main() {
+function Main() {
   return (
     <TypographyDefaults className={cn('mb4')}>
       <AppHeaderBar>
@@ -224,6 +216,6 @@ const Main = mrInjectAll(function Main() {
       </CenterLayout>
     </TypographyDefaults>
   )
-})
+}
 
 export default Main
