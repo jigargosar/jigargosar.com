@@ -83,11 +83,12 @@ const onNoteInputKeyDown = note => {
     whenKey('backspace')(onBackspaceKeyDown),
     whenKey('tab')(e => {
       _.compose(
-        // _.when(S.isJust)(() => e.preventDefault()),
+        _.when(S.isJust)(() => e.preventDefault()),
         S.map(prev => {
           const noteData = note.get()
           deleteAndGetMaybePreviousNote(note)
-          return appendChildNote(noteData, prev)
+          appendChildNote(noteData, prev)
+          return focusNote(noteData)
         }),
       )(maybePreviousSiblingNote(note))
     }),
