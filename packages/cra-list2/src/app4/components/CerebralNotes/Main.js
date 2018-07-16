@@ -145,6 +145,7 @@ function createAppController() {
   }
 
   const rootNote = createNewNote({text: 'Root Note Title'})
+  setFocusAndSelectionOnDOMId(rootNote.id)
   const app = Module({
     // Define module state, namespaced by module path
     state: {
