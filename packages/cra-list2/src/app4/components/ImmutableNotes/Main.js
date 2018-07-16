@@ -147,7 +147,11 @@ class NoteTextInput extends React.Component {
   // }
 
   componentWillUnmount() {
-    // releaseCursorIfNotNil(this.props.note)
+    releaseCursorIfNotNil(this.props.note)
+  }
+
+  shouldComponentUpdate() {
+    return false
   }
 
   render() {
@@ -212,6 +216,10 @@ class NoteChildren extends React.Component {
 
   componentWillUnmount() {
     releaseCursorIfNotNil(this.cursor)
+  }
+
+  shouldComponentUpdate() {
+    return false
   }
 
   render() {
