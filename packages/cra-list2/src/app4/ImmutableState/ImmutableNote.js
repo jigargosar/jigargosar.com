@@ -210,3 +210,7 @@ export function deleteAndGetMaybePreviousNote(note) {
     return prev
   })(note)
 }
+
+export function appendNoteText(text, note) {
+  return setNoteText(`${getNoteText(note)}${text}`, note)
+}

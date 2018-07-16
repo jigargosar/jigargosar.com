@@ -17,6 +17,7 @@ import Baobab from 'baobab'
 import {
   appendChildNote,
   appendNewSiblingNote,
+  appendNoteText,
   appendSiblingNote,
   deleteAndGetMaybePreviousNote,
   getDebugId,
@@ -63,10 +64,6 @@ function maybeFocusNote(maybeNote, selection) {
 
 function cursorForceUpdate(textCursor, component) {
   textCursor.on('update', () => component.forceUpdate())
-}
-
-function appendNoteText(deletedText, prev) {
-  return setNoteText(`${getNoteText(prev)}${deletedText}`, prev)
 }
 
 const onNoteInputKeyDown = note => {
