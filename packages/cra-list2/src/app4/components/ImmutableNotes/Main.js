@@ -105,28 +105,25 @@ function maybePreviousNote(note) {
 }
 
 class NoteTextInput extends React.Component {
-  get note() {
-    return this.props.note
-  }
-
   componentDidMount() {
-    cursorForceUpdate(selectText(this.note), this)
+    cursorForceUpdate(selectText(this.props.note), this)
   }
 
   render() {
+    const note = this.props.note
     return (
       <input
-        id={getNoteId(this.note)}
+        id={getNoteId(note)}
         className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
-        value={getText(this.note)}
-        onChange={onNoteTextChangeEvent(this.note)}
+        value={getText(note)}
+        onChange={onNoteTextChangeEvent(note)}
         onKeyDown={this.onKeyDown}
       />
     )
   }
 
   onKeyDown = e => {
-    const note = this.note
+    const note = this.props.note
     withKeyEvent(
       whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
       whenKey('down')(() =>
