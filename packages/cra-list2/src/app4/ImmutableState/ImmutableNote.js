@@ -9,7 +9,6 @@ import {
   maybeUp,
 } from '../components/ImmutableNotes/functional-baobab'
 import S from 'sanctuary'
-import {whenKey, withKeyEvent} from '../components/utils'
 
 export function createNote({text = ''} = {}) {
   return {

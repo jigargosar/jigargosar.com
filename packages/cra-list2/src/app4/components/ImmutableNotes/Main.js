@@ -3,17 +3,10 @@ import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, F, whenKey, withKeyEvent} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 
-import {
-  _,
-  alwaysNothing,
-  maybeOr,
-  maybeOrElse,
-  validate,
-} from '../../little-ramda'
+import {_, validate} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
   appendNewSiblingNote,
-  getChildren,
   getDebugId,
   getNoteId,
   getText,
@@ -28,13 +21,6 @@ import {
   getRootNoteCursor,
   state,
 } from '../../ImmutableState/ImmutableNoteTree'
-import {
-  cursorIsRoot,
-  maybeDownIfExists,
-  maybeLeft,
-  maybeRight,
-  maybeUp,
-} from './functional-baobab'
 import S from 'sanctuary'
 import {OnMount} from '../behaviour/OnMount'
 
