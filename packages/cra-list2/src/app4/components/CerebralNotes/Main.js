@@ -25,9 +25,10 @@ const NoteTextInput = connect(
   {
     setText: signal`setText`,
     prependNewChild: signal`prependNewChild`,
+    appendSibling: signal`appendSibling`,
     value: state`noteLookup.${props`id`}.text`,
   },
-  function({setText, value, prependNewChild}, {id}) {
+  function({setText, value, prependNewChild, appendSibling}, {id}) {
     validate('FS', [setText, value])
 
     return {
@@ -40,7 +41,8 @@ const NoteTextInput = connect(
       value,
       onKeyDown: withKeyEvent(
         // whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
-        whenKey('alt+enter')(() => prependNewChild({id})),
+        whenKey('enter')(() => prependNewChild({id})),
+        whenKey('alt+enter')(() => appendSibling({id})),
         // whenKey('backspace')(onBackspaceKeyDown),
         // whenKey('tab')(wrapPD(indentNote)),
         // whenKey('shift+tab')(wrapPD(unIndentNote)),
