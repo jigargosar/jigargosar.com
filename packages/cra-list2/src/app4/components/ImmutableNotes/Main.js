@@ -52,14 +52,14 @@ function focusNote(note, selection = null) {
   return note
 }
 
-function cursorForceUpdate(textCursor, component) {
-  textCursor.on('update', () => component.forceUpdate())
-}
-
 function focusNoteWithSelectionFromEvent(e) {
   return function(note) {
     return focusNote(note, getSelectionFromEvent(e))
   }
+}
+
+function cursorForceUpdate(textCursor, component) {
+  textCursor.on('update', () => component.forceUpdate())
 }
 
 const onNoteInputKeyDown = note => {
