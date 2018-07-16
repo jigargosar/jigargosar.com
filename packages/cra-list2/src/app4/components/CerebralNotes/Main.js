@@ -14,6 +14,7 @@ import {
 } from './utils'
 
 const computedNoteText = Compute(props`notePath`, (path, get) => {
+  debugger
   if (!path) {
     return get(state`rootNote.text`)
   }
@@ -33,6 +34,7 @@ const NoteTextInput = connect(
     }
   },
   function NoteTextInput({value, onChange}) {
+    console.log(`value,onChange`, value, onChange)
     return (
       <input
         // id={getNoteId(note)}
@@ -143,8 +145,9 @@ function createAppController() {
       currentRootNotePath: ['rootNote'],
     },
     signals: {
-      setText: (...args) => {
-        console.log(...args)
+      setText: all => {
+        const {state, props, ...args} = all
+        state.set(`${props.notePath}.text`, props.text)
       },
     },
     modules: {},
