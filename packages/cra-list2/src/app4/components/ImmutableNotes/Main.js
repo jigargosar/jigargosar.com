@@ -38,12 +38,7 @@ function focusNote(note) {
 }
 
 function maybeFocusNote(maybeNote) {
-  S.map(note =>
-    requestAnimationFrame(() => {
-      const noteEl = document.getElementById(getNoteId(note))
-      noteEl.focus()
-    }),
-  )(maybeNote)
+  S.map(focusNote)(maybeNote)
 }
 
 function cursorForceUpdate(textCursor, component) {
