@@ -5,6 +5,10 @@ export function maybeRight(cursor) {
   return S.toMaybe(cursor.right())
 }
 
+export function maybeLeft(cursor) {
+  return S.toMaybe(cursor.left())
+}
+
 export function maybeUp(cursor) {
   return S.toMaybe(cursor.up())
 }

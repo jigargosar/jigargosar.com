@@ -23,6 +23,7 @@ import {state} from '../../ImmutableState/ImmutableNoteTree'
 import {
   cursorIsRoot,
   maybeDownIfExists,
+  maybeLeft,
   maybeRight,
   maybeUp,
 } from './functional-baobab'
@@ -57,6 +58,9 @@ function cursorForceUpdate(textCursor, component) {
 function maybeNextSiblingNote(note) {
   return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeRight)(note)
 }
+function maybePreviousSiblingNote(note) {
+  return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeLeft)(note)
+}
 
 function maybeParentNote(note) {
   return _.compose(S.chain(maybeUp), maybeUp)(note)
@@ -75,6 +79,17 @@ function maybeFirstChildOrNextNote(note) {
   return maybeOrElse(() => maybeNextNote(note))(
     maybeFirstChildNote(note),
   )
+}
+
+function lastVisibleLeafNoteOrSelf(note) {
+  return note
+}
+
+function maybePreviousNote(note) {
+  return _.compose(
+    maybeOrElse(() => maybeParentNote(note)),
+    S.map(lastVisibleLeafNoteOrSelf),
+  )(maybePreviousSiblingNote(note))
 }
 
 class NoteTextInput extends React.Component {
@@ -105,7 +120,7 @@ class NoteTextInput extends React.Component {
       whenKey('down')(() =>
         maybeFocusNote(maybeFirstChildOrNextNote(note)),
       ),
-      whenKey('up')(() => focusNote(note.left())),
+      whenKey('up')(() => maybeFocusNote(maybePreviousNote(note))),
     )(e)
   }
 }
