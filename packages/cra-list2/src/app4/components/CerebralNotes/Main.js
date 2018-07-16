@@ -27,7 +27,8 @@ const NoteTextInput = connect(
   },
   function({setText, value}) {
     return {
-      onChange: e => setText({text: e.target.value}),
+      onChange: e =>
+        setText({text: e.target.value, notePath: ['rootNote']}),
       value,
     }
   },
