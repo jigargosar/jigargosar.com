@@ -10,7 +10,7 @@ import {
   deleteAndGetMaybePreviousNote,
   getDebugId,
   getNoteId,
-  getText,
+  getNoteText,
   maybeFirstVisibleChildOrNextNote,
   maybePreviousNote,
   selectChildren,
@@ -66,7 +66,11 @@ function focusPreviousNote(note) {
 }
 
 function appendNoteText(deletedText, prev) {
-  return setNoteText(`${getText(prev)}${deletedText}`, prev)
+  return setNoteText(`${getNoteText(prev)}${deletedText}`, prev)
+}
+
+function getNoteTextLength(prev) {
+  return getNoteText(prev).length
 }
 
 const onNoteInputKeyDown = note => {
@@ -82,12 +86,11 @@ const onNoteInputKeyDown = note => {
     const selectionRange = getInputSelectionRangeFromEvent(e)
     const selectionAtStart = isSelectionRangeAtZero(selectionRange)
     if (selectionAtStart) {
-      // focusPreviousNote(note)
-      const deletedText = getText(note)
+      const deletedText = getNoteText(note)
       const maybePrev = deleteAndGetMaybePreviousNote(note)
       maybeFocusNote(maybePrev)
       S.map(prev => {
-        const pos = getText(prev).length
+        const pos = getNoteTextLength(prev)
         return focusNote(appendNoteText(deletedText, prev), {
           start: pos,
           end: pos,
@@ -114,7 +117,7 @@ class NoteTextInput extends React.Component {
       <input
         id={getNoteId(note)}
         className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
-        value={getText(note)}
+        value={getNoteText(note)}
         onChange={onNoteTextChangeEvent(note)}
         onKeyDown={onNoteInputKeyDown(note)}
       />

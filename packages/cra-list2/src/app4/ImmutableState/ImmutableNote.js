@@ -81,7 +81,7 @@ export function whenCursorGet(note) {
     : note
 }
 
-export function getText(note) {
+export function getNoteText(note) {
   const {text} = whenCursorGet(note)
   return text
 }
