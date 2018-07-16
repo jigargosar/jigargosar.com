@@ -2,12 +2,13 @@ import {_, alwaysNothing, maybeOr, maybeOrElse} from '../little-ramda'
 import Baobab, {Cursor} from 'baobab'
 import nanoid from 'nanoid'
 import {
-  cursorIsRoot,
+  isCursorRoot,
   maybeDownIfExists,
   maybeLeft,
   maybeRight,
   maybeUp,
-} from '../components/ImmutableNotes/functional-baobab'
+  maybeSelectRightMostIfExists,
+} from './functional-baobab'
 import S from 'sanctuary'
 
 export const initialNoteTree = (() => {
@@ -120,7 +121,7 @@ export function selectText(noteCursor) {
   return noteCursor.select('text')
 }
 
-const ifRootThenNothingElse = _.ifElse(cursorIsRoot)(alwaysNothing)
+const ifRootThenNothingElse = _.ifElse(isCursorRoot)(alwaysNothing)
 
 function maybeNextSiblingNote(note) {
   return ifRootThenNothingElse(maybeRight)(note)
@@ -160,8 +161,8 @@ export function maybePreviousNote(note) {
     return _.compose(
       maybeOr(note),
       S.map(lastVisibleLeafNoteOrSelf),
-      S.last,
-      getChildren,
+      maybeSelectRightMostIfExists,
+      selectChildren,
     )(note)
   }
 }

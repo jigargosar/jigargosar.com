@@ -29,12 +29,18 @@ if (module.hot) {
   window.Baobab = Baobab
 }
 
-function focusNote(note) {
+function focusNote(note, selectionRange = null) {
   const n = whenCursorGet(note)
   validate('O', [n])
   requestAnimationFrame(() => {
     const noteEl = document.getElementById(getNoteId(note))
     noteEl.focus()
+    if (selectionRange) {
+      noteEl.setSelectionRange(
+        selectionRange.start,
+        selectionRange.end,
+      )
+    }
   })
   return note
 }
@@ -60,8 +66,7 @@ function focusPreviousNote(note) {
 }
 
 function appendNoteText(deletedText, prev) {
-  setNoteText(`${getText(prev)}${deletedText}`, prev)
-  return prev
+  return setNoteText(`${getText(prev)}${deletedText}`, prev)
 }
 
 const onNoteInputKeyDown = note =>
@@ -75,11 +80,13 @@ const onNoteInputKeyDown = note =>
         const deletedText = getText(note)
         const maybePrev = deleteAndGetMaybePreviousNote(note)
         maybeFocusNote(maybePrev)
-        S.map(prev =>
-          focusNote(
-            appendNoteText(deletedText, prev) /*{start:0,end:0}*/,
-          ),
-        )(maybePrev)
+        S.map(prev => {
+          const pos = getText(prev).length
+          return focusNote(appendNoteText(deletedText, prev), {
+            start: pos,
+            end: pos,
+          })
+        })(maybePrev)
       }
     }),
     whenKey('down')(() =>
