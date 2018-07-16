@@ -20,6 +20,13 @@ if (module.hot) {
   window.Baobab = Baobab
 }
 
+function focusNewNote(newNote) {
+  requestAnimationFrame(() => {
+    const noteEl = document.getElementById(getNoteId(newNote))
+    noteEl.focus()
+  })
+}
+
 class NoteTextInput extends React.Component {
   get note() {
     return this.props.note
@@ -32,6 +39,7 @@ class NoteTextInput extends React.Component {
   render() {
     return (
       <input
+        id={getNoteId(this.note)}
         className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
         value={getText(this.note)}
         onChange={onNoteTextChangeEvent(this.note)}
@@ -39,10 +47,7 @@ class NoteTextInput extends React.Component {
           _.cond([
             [
               isAnyHotKey(['enter']),
-              () => {
-                const newNote = appendNewSiblingNote(this.note)
-                console.log(`newNote`, newNote)
-              },
+              () => focusNewNote(appendNewSiblingNote(this.note)),
             ],
           ])(e)
         }
