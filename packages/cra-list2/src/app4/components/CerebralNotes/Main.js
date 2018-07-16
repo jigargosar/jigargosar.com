@@ -18,8 +18,13 @@ import {nanoid} from '../../model/util'
 const computedNoteChildrenPaths = Compute(
   props`notePath`,
   (path, get) => {
-    const length = get(state`${path}.children`).length
-    return _.times(idx => `${path}.children.${idx}`)(length)
+    // const length = get(state`${path}.children`).length
+    // return _.times(idx => `${path}.children.${idx}`)(length)
+    const id = get(state`${path}.id`)
+    const childrenPath = `childrenLookup.${id}`
+    const children = get(state`${childrenPath}`)
+    const length = children ? children.length : 0
+    return _.times(idx => `${childrenPath}.${idx}`)(length)
   },
 )
 
@@ -131,7 +136,7 @@ function NoteTree() {
 }
 
 function createNewNote({text}) {
-  return {id: nanoid(), text: text, children: []}
+  return {id: nanoid(), text: text}
 }
 
 function createAppController() {
@@ -164,7 +169,9 @@ function createAppController() {
         //     text: 'new child',
         //   }),
         // )
-        const childrenPath = `childrenLookup.${props.notePath.id}`
+        const childrenPath = `childrenLookup.${
+          state.get(props.notePath).id
+        }`
 
         if (state.get(childrenPath)) {
           state.unshift(
