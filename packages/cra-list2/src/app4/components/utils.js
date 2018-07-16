@@ -159,3 +159,13 @@ export function isSelectionAtStart(selectionRange) {
 export function createSelection(start, end = start) {
   return {start, end}
 }
+
+export function setFocusAndSelectionOnDOMId(domId, selection) {
+  requestAnimationFrame(() => {
+    const el = document.getElementById(domId)
+    el.focus()
+    if (selection) {
+      el.setSelectionRange(selection.start, selection.end)
+    }
+  })
+}

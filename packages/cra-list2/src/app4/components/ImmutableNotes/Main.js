@@ -6,6 +6,7 @@ import {
   F,
   getSelectionFromEvent,
   isSelectionAtStart,
+  setFocusAndSelectionOnDOMId,
   whenKey,
   withKeyEvent,
   wrapPD,
@@ -32,7 +33,6 @@ import {
   selectChildren,
   selectText,
   setNoteText,
-  whenCursorGet,
 } from '../../ImmutableState/ImmutableNote'
 import {
   getRootNoteCursor,
@@ -48,14 +48,7 @@ if (module.hot) {
 function focusNote(note, selection = null) {
   const domId = getNoteId(note)
   validate('S', [domId])
-
-  requestAnimationFrame(() => {
-    const noteEl = document.getElementById(domId)
-    noteEl.focus()
-    if (selection) {
-      noteEl.setSelectionRange(selection.start, selection.end)
-    }
-  })
+  setFocusAndSelectionOnDOMId(domId, selection)
   return note
 }
 
@@ -198,6 +191,7 @@ class NoteChildren extends React.Component {
     )
   }
 }
+
 function NoteTree() {
   return (
     <F>
