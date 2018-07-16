@@ -27,6 +27,7 @@ import {
   getNoteId,
   getNoteText,
   getNoteTextLength,
+  isNoteExpanded,
   maybeGetFirstVisibleChildOrNextNote,
   maybeGetPreviousNote,
   maybeParentButNotRootNote,
@@ -161,7 +162,9 @@ class NoteTextInput extends React.Component {
 function NoteTextLine({note}) {
   return (
     <div className={cn('code flex items-center')}>
-      <div className={cn('mr3')}>-</div>
+      <div className={cn('mr3')}>
+        {isNoteExpanded(note) ? `-` : `+`}
+      </div>
       <div
         className={cn(
           'flex-auto',
@@ -183,7 +186,7 @@ function NoteTextLine({note}) {
 function NoteChild({note}) {
   return (
     <F>
-      {<NoteTextLine note={note} />}
+      <NoteTextLine note={note} />
       <NoteChildren note={note} />
     </F>
   )
