@@ -6,6 +6,7 @@ import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_, validate} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
+  appendChildNote,
   appendNewSiblingNote,
   deleteAndGetMaybePreviousNote,
   getDebugId,
@@ -13,6 +14,8 @@ import {
   getNoteText,
   maybeFirstVisibleChildOrNextNote,
   maybePreviousNote,
+  maybePreviousSiblingNote,
+  noteHasChildren,
   selectChildren,
   selectText,
   setNoteText,
@@ -78,6 +81,16 @@ const onNoteInputKeyDown = note => {
   return withKeyEvent(
     whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
     whenKey('backspace')(onBackspaceKeyDown),
+    whenKey('tab')(e => {
+      _.compose(
+        // _.when(S.isJust)(() => e.preventDefault()),
+        S.map(prev => {
+          const noteData = note.get()
+          deleteAndGetMaybePreviousNote(note)
+          return appendChildNote(noteData, prev)
+        }),
+      )(maybePreviousSiblingNote(note))
+    }),
     whenKey('down')(() =>
       maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),
     ),
@@ -85,7 +98,7 @@ const onNoteInputKeyDown = note => {
   )
   function onBackspaceKeyDown(e) {
     const selection = getSelectionFromEvent(e)
-    if (isSelectionAtStart(selection)) {
+    if (isSelectionAtStart(selection) && !noteHasChildren(note)) {
       const deletedText = getNoteText(note)
       const maybePrev = deleteAndGetMaybePreviousNote(note)
       S.map(prev =>
