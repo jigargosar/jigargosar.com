@@ -75,7 +75,7 @@ const maybeNextNote = n =>
     maybeNextSiblingNote(n),
   )
 
-function maybeFirstChildOrNextNote(note) {
+function maybeFirstVisibleChildOrNextNote(note) {
   return maybeOrElse(() => maybeNextNote(note))(
     maybeFirstChildNote(note),
   )
@@ -118,7 +118,7 @@ class NoteTextInput extends React.Component {
     withKeyEvent(
       whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
       whenKey('down')(() =>
-        maybeFocusNote(maybeFirstChildOrNextNote(note)),
+        maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),
       ),
       whenKey('up')(() => maybeFocusNote(maybePreviousNote(note))),
     )(e)
