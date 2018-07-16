@@ -221,7 +221,9 @@ function setNoteCollapsed(collapsed, noteCursor) {
 }
 
 export function collapseNote(noteCursor) {
-  return setNoteCollapsed(true, noteCursor)
+  return noteHasChildren(noteCursor)
+    ? setNoteCollapsed(true, noteCursor)
+    : noteCursor
 }
 
 export function expandNote(noteCursor) {
