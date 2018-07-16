@@ -29,17 +29,14 @@ if (module.hot) {
   window.Baobab = Baobab
 }
 
-function focusNote(note, selectionRange = null) {
+function focusNote(note, selection = null) {
   const n = whenCursorGet(note)
   validate('O', [n])
   requestAnimationFrame(() => {
     const noteEl = document.getElementById(getNoteId(note))
     noteEl.focus()
-    if (selectionRange) {
-      noteEl.setSelectionRange(
-        selectionRange.start,
-        selectionRange.end,
-      )
+    if (selection) {
+      noteEl.setSelectionRange(selection.start, selection.end)
     }
   })
   return note
@@ -53,11 +50,11 @@ function cursorForceUpdate(textCursor, component) {
   textCursor.on('update', () => component.forceUpdate())
 }
 
-function getInputSelectionRangeFromEvent(e) {
+function getSelectionFromEvent(e) {
   return {start: e.target.selectionStart, end: e.target.selectionEnd}
 }
 
-function isSelectionRangeAtZero(selectionRange) {
+function isSelectionAtStart(selectionRange) {
   return selectionRange.start === 0 && selectionRange.end === 0
 }
 
@@ -73,6 +70,10 @@ function getNoteTextLength(prev) {
   return getNoteText(prev).length
 }
 
+function createSelection(start, end = start) {
+  return {start, end}
+}
+
 const onNoteInputKeyDown = note => {
   return withKeyEvent(
     whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
@@ -83,19 +84,16 @@ const onNoteInputKeyDown = note => {
     whenKey('up')(() => focusPreviousNote(note)),
   )
   function onBackspaceKeyDown(e) {
-    const selectionRange = getInputSelectionRangeFromEvent(e)
-    const selectionAtStart = isSelectionRangeAtZero(selectionRange)
-    if (selectionAtStart) {
+    const selection = getSelectionFromEvent(e)
+    if (isSelectionAtStart(selection)) {
       const deletedText = getNoteText(note)
       const maybePrev = deleteAndGetMaybePreviousNote(note)
-      maybeFocusNote(maybePrev)
-      S.map(prev => {
-        const pos = getNoteTextLength(prev)
-        return focusNote(appendNoteText(deletedText, prev), {
-          start: pos,
-          end: pos,
-        })
-      })(maybePrev)
+      S.map(prev =>
+        focusNote(
+          appendNoteText(deletedText, prev),
+          createSelection(getNoteTextLength(prev)),
+        ),
+      )(maybePrev)
     }
   }
 }
