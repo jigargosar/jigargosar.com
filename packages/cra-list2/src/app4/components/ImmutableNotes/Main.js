@@ -61,6 +61,7 @@ function focusPreviousNote(note) {
 
 function appendNoteText(deletedText, prev) {
   setNoteText(`${getText(prev)}${deletedText}`, prev)
+  return prev
 }
 
 const onNoteInputKeyDown = note =>
