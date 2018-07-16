@@ -15,27 +15,19 @@ import {
 import {_, mapIndexed, validate} from '../../little-ramda'
 import {nanoid} from '../../model/util'
 
-function joinPath(path) {
-  return _.join('.')(path)
-}
+// function joinPath(path) {
+//   return _.join('.')(path)
+// }
 
 const computedNoteText = Compute(props`notePath`, (path, get) =>
-  get(state`${joinPath(path)}.text`),
+  get(state`${path}.text`),
 )
-// const computedNoteChildren = Compute(
-//   props`notePath`,
-//   (nullablePath, get) => {
-//     const path = nullablePath ? nullablePath : ['rootNote']
-//     return get(state`${joinPath(path)}.children`)
-//   },
-// )
 
 const computedNoteChildrenPaths = Compute(
   props`notePath`,
-  (nullablePath, get) => {
-    const path = nullablePath ? nullablePath : ['rootNote']
-    const length = get(state`${joinPath(path)}.children`).length
-    return _.times(idx => _.concat(path, ['children', idx]))(length)
+  (path, get) => {
+    const length = get(state`${path}.children`).length
+    return _.times(idx => `${path}.children.${idx}`)(length)
   },
 )
 
@@ -45,13 +37,9 @@ const NoteTextInput = connect(
     prependNewChild: signal`prependNewChild`,
     value: computedNoteText,
   },
-  function(
-    {setText, value, prependNewChild},
-    {notePath: nullableNotePath},
-  ) {
+  function({setText, value, prependNewChild}, {notePath}) {
     validate('FS', [setText, value])
 
-    const notePath = nullableNotePath || ['rootNote']
     return {
       onChange: e =>
         setText({
@@ -87,16 +75,6 @@ const NoteTextInput = connect(
   },
 )
 
-// const computeNoteFromNotePathProp = Compute(
-//   props`notePath`,
-//   (path, get) => {
-//     if (!path) {
-//       return get(state`rootNote`)
-//     }
-//     return get(state`${path}`)
-//   },
-// )
-
 function NoteTextLine({notePath}) {
   return (
     <div className={cn('code flex items-center')}>
@@ -126,10 +104,11 @@ const NoteChildren = connect(
   {childPaths: computedNoteChildrenPaths},
   function NoteChildren({childPaths}) {
     // if (doesNoteHaveVisibleChildren(note)) {
+    debugger
     return (
       <div className={cn('ml3')}>
-        {mapIndexed((notePath, idx) => (
-          <F key={idx}>
+        {mapIndexed(notePath => (
+          <F key={notePath}>
             <NoteChild notePath={notePath} />
           </F>
         ))(childPaths)}
@@ -153,7 +132,7 @@ const NoteTree = connect({}, function NoteTree() {
   return (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild notePath={['rootNote']} />
+        <NoteChild notePath={'rootNote'} />
       </div>
     </F>
   )
@@ -183,11 +162,11 @@ function createAppController() {
     signals: {
       setText: ({state, props, ...other}) => {
         console.debug('other', other)
-        state.set(`${joinPath(props.notePath)}.text`, props.text)
+        state.set(`${props.notePath}.text`, props.text)
       },
       prependNewChild: ({state, props}) => {
         state.unshift(
-          `${joinPath(props.notePath)}.children`,
+          `${props.notePath}.children`,
           createNewNote({
             text: 'new child',
           }),
