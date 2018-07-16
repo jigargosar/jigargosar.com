@@ -26,11 +26,28 @@ const computedNoteText = Compute(
     return get(state`${joinPath(path)}.text`)
   },
 )
-const computedNoteChildren = Compute(
+// const computedNoteChildren = Compute(
+//   props`notePath`,
+//   (nullablePath, get) => {
+//     const path = nullablePath ? nullablePath : ['rootNote']
+//     return get(state`${joinPath(path)}.children`)
+//   },
+// )
+
+const computedNoteChildrenLength = Compute(
   props`notePath`,
   (nullablePath, get) => {
     const path = nullablePath ? nullablePath : ['rootNote']
-    return get(state`${joinPath(path)}.children`)
+    return get(state`${joinPath(path)}.children`).length
+  },
+)
+
+const computedNoteChildrenPaths = Compute(
+  props`notePath`,
+  (nullablePath, get) => {
+    const path = nullablePath ? nullablePath : ['rootNote']
+    const length = get(state`${joinPath(path)}.children`).length
+    return _.times(idx => _.concat(path, ['children', idx]))(length)
   },
 )
 
@@ -118,18 +135,16 @@ function NoteTextLine({notePath}) {
 }
 
 const NoteChildren = connect(
-  {children: computedNoteChildren},
-  function NoteChildren({children, notePath}) {
+  {childPaths: computedNoteChildrenPaths},
+  function NoteChildren({childPaths}) {
     // if (doesNoteHaveVisibleChildren(note)) {
     return (
       <div className={cn('ml3')}>
-        {mapIndexed((child, idx) => (
-          <F key={child.id}>
-            <NoteChild
-              notePath={_.concat(notePath, ['children', idx])}
-            />
+        {mapIndexed((notePath, idx) => (
+          <F key={idx}>
+            <NoteChild notePath={notePath} />
           </F>
-        ))(children)}
+        ))(childPaths)}
       </div>
     )
     // } else {
