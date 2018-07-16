@@ -19,6 +19,20 @@ export function createNote({text = ''} = {}) {
   }
 }
 
+export function preProcessNote({
+  id = `Note-${nanoid()}`,
+  text,
+  children = [],
+  collapsed = false,
+} = {}) {
+  return {
+    id,
+    text,
+    children: _.map(preProcessNote)(children),
+    collapsed,
+  }
+}
+
 export function appendNote(child) {
   return function(note) {
     return _.assoc('children')(_.append(child, note.children))(note)
@@ -115,10 +129,10 @@ const appendTwoChildren = (() => {
 export const initialNoteTree = appendTwoChildren(
   createNote({text: 'Tree Root'}),
 )
-
 function maybeNextSiblingNote(note) {
   return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeRight)(note)
 }
+
 function maybePreviousSiblingNote(note) {
   return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeLeft)(note)
 }

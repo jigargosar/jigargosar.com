@@ -1,10 +1,11 @@
 import {StorageItem} from '../services/storage'
-import {initialNoteTree} from './ImmutableNote'
+import {initialNoteTree, preProcessNote} from './ImmutableNote'
 import Baobab from 'baobab'
 
 const storedState = StorageItem({
   name: 'NoteTreeState',
   getInitial: () => initialNoteTree,
+  postLoad: tree => preProcessNote(tree),
 })
 
 // const initialTree = initialRoot
