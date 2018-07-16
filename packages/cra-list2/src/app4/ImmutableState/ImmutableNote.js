@@ -140,10 +140,6 @@ export function selectChildren(noteCursor) {
   return noteCursor.select('children')
 }
 
-export function selectText(noteCursor) {
-  return noteCursor.select('text')
-}
-
 const ifRootThenNothingElse = _.ifElse(isCursorRoot)(alwaysNothing)
 
 function maybeNextSiblingNote(note) {
