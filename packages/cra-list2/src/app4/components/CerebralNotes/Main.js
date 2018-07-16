@@ -19,6 +19,7 @@ import {
 } from './utils'
 import {_, validate} from '../../little-ramda'
 import {nanoid} from '../../model/util'
+import {StorageItem} from '../../services/storage'
 
 const NoteTextInput = connect(
   {
@@ -144,17 +145,28 @@ function createAppController() {
     return null
   }
 
-  const rootNote = createNewNote({text: 'Root Note Title'})
-  const rootNoteId = rootNote.id
-  setFocusAndSelectionOnDOMId(rootNoteId)
+  const storedState = StorageItem({
+    name: 'CerebralNoteTreeState',
+    getInitial: () => {
+      const rootNote = createNewNote({text: 'Root Note Title'})
+      const rootNoteId = rootNote.id
+
+      const initialState = {
+        rootNoteId,
+        childrenLookup: {[rootNoteId]: []},
+        noteLookup: {[rootNoteId]: rootNote},
+        currentRootNoteId: rootNoteId,
+      }
+      return initialState
+    },
+  })
+
+  const initialState = storedState.load()
+  setFocusAndSelectionOnDOMId(initialState.rootNoteId)
+
   const app = Module({
     // Define module state, namespaced by module path
-    state: {
-      rootNoteId,
-      childrenLookup: {[rootNoteId]: []},
-      noteLookup: {[rootNoteId]: rootNote},
-      currentRootNoteId: rootNoteId,
-    },
+    state: {...initialState},
     signals: {
       setText: ({state, props}) => {
         state.set(`noteLookup.${props.id}.text`, props.text)
