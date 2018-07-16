@@ -15,14 +15,6 @@ import {
 import {_, mapIndexed, validate} from '../../little-ramda'
 import {nanoid} from '../../model/util'
 
-// function joinPath(path) {
-//   return _.join('.')(path)
-// }
-
-const computedNoteText = Compute(props`notePath`, (path, get) =>
-  get(state`${path}.text`),
-)
-
 const computedNoteChildrenPaths = Compute(
   props`notePath`,
   (path, get) => {
@@ -35,7 +27,7 @@ const NoteTextInput = connect(
   {
     setText: signal`setText`,
     prependNewChild: signal`prependNewChild`,
-    value: computedNoteText,
+    value: state`${props`notePath`}.text`,
   },
   function({setText, value, prependNewChild}, {notePath}) {
     validate('FS', [setText, value])
