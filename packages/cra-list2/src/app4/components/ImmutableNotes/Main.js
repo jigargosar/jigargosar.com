@@ -5,12 +5,14 @@ import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {
   _,
   alwaysNothing,
+  maybeOr,
   maybeOrElse,
   validate,
 } from '../../little-ramda'
 import Baobab from 'baobab'
 import {
   appendNewSiblingNote,
+  getChildren,
   getDebugId,
   getNoteId,
   getText,
@@ -82,7 +84,12 @@ function maybeFirstVisibleChildOrNextNote(note) {
 }
 
 function lastVisibleLeafNoteOrSelf(note) {
-  return note
+  return _.compose(
+    maybeOr(note),
+    S.map(lastVisibleLeafNoteOrSelf),
+    S.last,
+    getChildren,
+  )(note)
 }
 
 function maybePreviousNote(note) {
@@ -177,15 +184,17 @@ class NoteChildren extends React.Component {
   }
 }
 
+const rootNoteCursor = state.tree.select()
+
 class NoteTree extends React.Component {
   componentDidMount() {
-    focusNote(state.tree)
+    focusNote(rootNoteCursor)
   }
 
   render = () => (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild note={state.tree} />
+        <NoteChild note={rootNoteCursor} />
       </div>
     </F>
   )
