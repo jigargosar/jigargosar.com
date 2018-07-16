@@ -139,6 +139,10 @@ export function selectChildren(noteCursor) {
   return noteCursor.select('children')
 }
 
+export function selectText(noteCursor) {
+  return noteCursor.select('text')
+}
+
 function isCurrentRootNote(noteCursor) {
   return _.equals(
     noteCursor.root().get('rootNotePath'),

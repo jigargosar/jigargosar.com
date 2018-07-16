@@ -35,6 +35,7 @@ import {
   maybePreviousSiblingNote,
   noteHasChildren,
   selectChildren,
+  selectText,
   setNoteText,
 } from '../../ImmutableState/ImmutableNote'
 import {
@@ -134,10 +135,10 @@ function onNoteTextChangeEvent(note) {
 
 class NoteTextInput extends React.Component {
   componentDidMount() {
-    // releaseCursorIfNotNil(this.cursor)
-    // this.cursor = selectChildren(this.props.note)
-    // cursorForceUpdate(this.cursor, this)
-    cursorForceUpdate(this.props.note, this)
+    releaseCursorIfNotNil(this.cursor)
+    this.cursor = selectText(this.props.note)
+    cursorForceUpdate(this.cursor, this)
+    // cursorForceUpdate(this.props.note, this)
   }
 
   // componentDidUpdate() {
@@ -147,7 +148,8 @@ class NoteTextInput extends React.Component {
   // }
 
   componentWillUnmount() {
-    releaseCursorIfNotNil(this.props.note)
+    // releaseCursorIfNotNil(this.props.note)
+    releaseCursorIfNotNil(this.cursor)
   }
 
   shouldComponentUpdate() {
