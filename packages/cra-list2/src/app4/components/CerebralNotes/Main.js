@@ -183,6 +183,13 @@ function createAppController() {
   function getParent(id, state) {
     return getNote(getParentId(id, state), state)
   }
+  function getChildren(id, state) {
+    return state.get(`childrenLookup.${id}`)
+  }
+  function getIndexOf(id, state) {
+    const childrenIds = getChildren(id, state)
+    return _.indexOf(id, childrenIds)
+  }
 
   const app = Module({
     // Define module state, namespaced by module path
@@ -208,15 +215,17 @@ function createAppController() {
         if (!hasParent(props.id, state)) {
           return
         }
-        const parentId = getParent(props.id, state)
-        const childNote = createNewNote({
+
+        const idx = getIndexOf(props.id, state)
+
+        const newNote = createNewNote({
           text: nanoid(7),
-          parentId: parentId,
+          parentId: getParentId(props.id, state),
         })
-        const childId = childNote.id
-        state.unshift(`childrenLookup.${parentId}`, childId)
+        const childId = newNote.id
+        state.unshift(`childrenLookup.${newNote.parentId}`, childId)
         state.set(`childrenLookup.${childId}`, [])
-        state.set(`noteLookup.${childId}`, childNote)
+        state.set(`noteLookup.${childId}`, newNote)
 
         setFocusAndSelectionOnDOMId(childId)
       },
