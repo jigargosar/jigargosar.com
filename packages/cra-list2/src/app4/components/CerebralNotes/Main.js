@@ -3,7 +3,8 @@ import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, F} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {Controller, Module} from 'cerebral'
-import {Container} from '@cerebral/react'
+import {connect, Container} from '@cerebral/react'
+import {state} from 'cerebral/tags'
 
 function NoteTextInput({textValue}) {
   return (
@@ -71,15 +72,17 @@ function NoteChild({note}) {
   )
 }
 
-function NoteTree() {
+const NoteTree = connect({note: state`rootNote`}, function NoteTree({
+  note,
+}) {
   return (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild note={{text: 'root note text'}} />
+        <NoteChild note={note} />
       </div>
     </F>
   )
-}
+})
 
 function createAppController() {
   function getDevTools() {
@@ -108,9 +111,11 @@ function createAppController() {
   return controller
 }
 
+const controller = createAppController()
+
 function Main() {
   return (
-    <Container controller={createAppController()}>
+    <Container controller={controller}>
       <TypographyDefaults className={cn('mb4')}>
         <AppHeaderBar>
           <Title className={cn('flex-auto')}>
