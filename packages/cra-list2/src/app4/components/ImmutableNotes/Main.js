@@ -89,7 +89,7 @@ const onNoteInputKeyDown = note => {
           const noteData = note.get()
           deleteAndGetMaybePreviousNote(note)
           appendChildNote(noteData, prev)
-          focusNote(noteData)
+          focusNote(noteData, getSelectionFromEvent(e))
           return e.preventDefault()
         })(maybePreviousSiblingNote(note))
       }),
@@ -100,7 +100,7 @@ const onNoteInputKeyDown = note => {
           const noteData = note.get()
           deleteAndGetMaybePreviousNote(note)
           appendSiblingNote(noteData, parent)
-          focusNote(noteData)
+          focusNote(noteData, getSelectionFromEvent(e))
           return e.preventDefault()
         })(maybeParentButNotRootNote(note))
       }),
