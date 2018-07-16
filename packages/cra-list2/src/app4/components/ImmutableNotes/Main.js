@@ -1,6 +1,6 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {cn, F, whenKey, withKeyEvent} from '../utils'
+import {cn, F, whenKey, withKeyEvent, wrapPD} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 
 import {_, validate} from '../../little-ramda'
@@ -83,24 +83,28 @@ const onNoteInputKeyDown = note => {
   return withKeyEvent(
     whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
     whenKey('backspace')(onBackspaceKeyDown),
-    whenKey('tab')(e => {
-      S.map(prev => {
-        const noteData = note.get()
-        deleteAndGetMaybePreviousNote(note)
-        appendChildNote(noteData, prev)
-        focusNote(noteData)
-        return e.preventDefault()
-      })(maybePreviousSiblingNote(note))
-    }),
-    whenKey('shift+tab')(e => {
-      S.map(parent => {
-        const noteData = note.get()
-        deleteAndGetMaybePreviousNote(note)
-        appendSiblingNote(noteData, parent)
-        focusNote(noteData)
-        return e.preventDefault()
-      })(maybeParentButNotRootNote(note))
-    }),
+    whenKey('tab')(
+      wrapPD(e => {
+        S.map(prev => {
+          const noteData = note.get()
+          deleteAndGetMaybePreviousNote(note)
+          appendChildNote(noteData, prev)
+          focusNote(noteData)
+          return e.preventDefault()
+        })(maybePreviousSiblingNote(note))
+      }),
+    ),
+    whenKey('shift+tab')(
+      wrapPD(e => {
+        S.map(parent => {
+          const noteData = note.get()
+          deleteAndGetMaybePreviousNote(note)
+          appendSiblingNote(noteData, parent)
+          focusNote(noteData)
+          return e.preventDefault()
+        })(maybeParentButNotRootNote(note))
+      }),
+    ),
     whenKey('down')(() =>
       maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),
     ),
