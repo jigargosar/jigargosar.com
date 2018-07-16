@@ -1,12 +1,42 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {cn, F, whenKey, withKeyEvent, wrapPD} from '../utils'
+import {
+  cn,
+  createSelection,
+  F,
+  getSelectionFromEvent,
+  isSelectionAtStart,
+  whenKey,
+  withKeyEvent,
+  wrapPD,
+} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 
 import {_, validate} from '../../little-ramda'
 import Baobab from 'baobab'
-import {appendChildNote, appendNewSiblingNote, appendSiblingNote, deleteAndGetMaybePreviousNote, getDebugId, getNoteId, getNoteText, getNoteTextLength, maybeFirstVisibleChildOrNextNote, maybeParentButNotRootNote, maybePreviousNote, maybePreviousSiblingNote, noteHasChildren, selectChildren, selectText, setNoteText, whenCursorGet} from '../../ImmutableState/ImmutableNote'
-import {getRootNoteCursor, state} from '../../ImmutableState/ImmutableNoteTree'
+import {
+  appendChildNote,
+  appendNewSiblingNote,
+  appendSiblingNote,
+  deleteAndGetMaybePreviousNote,
+  getDebugId,
+  getNoteId,
+  getNoteText,
+  getNoteTextLength,
+  maybeFirstVisibleChildOrNextNote,
+  maybeParentButNotRootNote,
+  maybePreviousNote,
+  maybePreviousSiblingNote,
+  noteHasChildren,
+  selectChildren,
+  selectText,
+  setNoteText,
+  whenCursorGet,
+} from '../../ImmutableState/ImmutableNote'
+import {
+  getRootNoteCursor,
+  state,
+} from '../../ImmutableState/ImmutableNoteTree'
 import S from 'sanctuary'
 import {OnMount} from '../behaviour/OnMount'
 
@@ -35,20 +65,8 @@ function cursorForceUpdate(textCursor, component) {
   textCursor.on('update', () => component.forceUpdate())
 }
 
-function getSelectionFromEvent(e) {
-  return {start: e.target.selectionStart, end: e.target.selectionEnd}
-}
-
-function isSelectionAtStart(selectionRange) {
-  return selectionRange.start === 0 && selectionRange.end === 0
-}
-
 function appendNoteText(deletedText, prev) {
   return setNoteText(`${getNoteText(prev)}${deletedText}`, prev)
-}
-
-function createSelection(start, end = start) {
-  return {start, end}
 }
 
 const onNoteInputKeyDown = note => {

@@ -2,9 +2,10 @@ import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import {_, R, RX, tryCatchLog, validate} from '../little-ramda'
-import {setDisplayName, wrapDisplayName, lifecycle} from 'recompose'
+import {lifecycle, setDisplayName, wrapDisplayName} from 'recompose'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
+
 export {setDisplayName, wrapDisplayName, lifecycle}
 export {F, RC, observer, Observer, isHotKey}
 export const cn = RX.cx
@@ -146,3 +147,15 @@ export const setSelectionRangeRef = options =>
 
 export const tryCatchLogFindDOMNode = fn =>
   tryCatchLog(_.compose(fn, findDOMNode))
+
+export function getSelectionFromEvent(e) {
+  return {start: e.target.selectionStart, end: e.target.selectionEnd}
+}
+
+export function isSelectionAtStart(selectionRange) {
+  return selectionRange.start === 0 && selectionRange.end === 0
+}
+
+export function createSelection(start, end = start) {
+  return {start, end}
+}
