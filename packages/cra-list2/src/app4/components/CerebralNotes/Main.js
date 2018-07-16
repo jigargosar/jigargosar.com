@@ -17,7 +17,7 @@ import {
   signal,
   state,
 } from './utils'
-import {_, validate} from '../../little-ramda'
+import {_, isNotNil, validate} from '../../little-ramda'
 import {nanoid} from '../../model/util'
 import {StorageItem} from '../../services/storage'
 
@@ -166,6 +166,15 @@ function createAppController() {
   const initialState = storedState.load()
   setFocusAndSelectionOnDOMId(initialState.rootNoteId)
 
+  function getNote(id, state) {
+    return state.get(`noteLookup.${id}`)
+  }
+
+  function hasParent(id, state) {
+    const note = getNote(id, state)
+    return isNotNil(note.parentId)
+  }
+
   const app = Module({
     // Define module state, namespaced by module path
     state: {...initialState},
@@ -174,6 +183,22 @@ function createAppController() {
         state.set(`noteLookup.${props.id}.text`, props.text)
       },
       prependNewChild: ({state, props}) => {
+        const parentId = props.id
+        const childNote = createNewNote({
+          text: nanoid(7),
+          parentId: parentId,
+        })
+        const childId = childNote.id
+        state.unshift(`childrenLookup.${parentId}`, childId)
+        state.set(`childrenLookup.${childId}`, [])
+        state.set(`noteLookup.${childId}`, childNote)
+
+        setFocusAndSelectionOnDOMId(childId)
+      },
+      appendSibling: ({state, props}) => {
+        if (!hasParent(props.id, state)) {
+          return
+        }
         const parentId = props.id
         const childNote = createNewNote({
           text: nanoid(7),
