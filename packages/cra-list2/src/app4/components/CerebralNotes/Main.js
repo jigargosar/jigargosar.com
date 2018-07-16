@@ -145,14 +145,15 @@ function createAppController() {
   }
 
   const rootNote = createNewNote({text: 'Root Note Title'})
-  setFocusAndSelectionOnDOMId(rootNote.id)
+  const rootNoteId = rootNote.id
+  setFocusAndSelectionOnDOMId(rootNoteId)
   const app = Module({
     // Define module state, namespaced by module path
     state: {
-      rootNoteId: rootNote.id,
-      childrenLookup: {[rootNote.id]: []},
-      noteLookup: {[rootNote.id]: rootNote},
-      currentRootNotePath: ['rootNote'],
+      rootNoteId,
+      childrenLookup: {[rootNoteId]: []},
+      noteLookup: {[rootNoteId]: rootNote},
+      currentRootNoteId: rootNoteId,
     },
     signals: {
       setText: ({state, props}) => {
