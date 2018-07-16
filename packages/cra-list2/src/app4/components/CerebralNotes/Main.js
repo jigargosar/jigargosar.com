@@ -13,7 +13,6 @@ import {
   state,
 } from './utils'
 import {validate} from '../../little-ramda'
-import {appendNewSiblingNote} from '../../ImmutableState/ImmutableNote'
 
 const computedNoteText = Compute(props`notePath`, (path, get) => {
   debugger
@@ -26,12 +25,16 @@ const computedNoteText = Compute(props`notePath`, (path, get) => {
 const NoteTextInput = connect(
   {
     setText: signal`setText`,
+    prependNewChild: signal`prependNewChild`,
     value: computedNoteText,
   },
-  function({setText, value}, {notePath}) {
+  function(
+    {setText, value, prependNewChild},
+    {notePath: nullableNotePath},
+  ) {
     validate('FS', [setText, value])
 
-    const notePath = notePath || ['rootNote']
+    const notePath = nullableNotePath || ['rootNote']
     return {
       onChange: e =>
         setText({
@@ -40,7 +43,8 @@ const NoteTextInput = connect(
         }),
       value,
       onKeyDown: withKeyEvent(
-        whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
+        // whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
+        whenKey('enter')(() => prependNewChild({notePath})),
         // whenKey('backspace')(onBackspaceKeyDown),
         // whenKey('tab')(wrapPD(indentNote)),
         // whenKey('shift+tab')(wrapPD(unIndentNote)),
@@ -157,6 +161,12 @@ function createAppController() {
       setText: ({state, props, ...other}) => {
         console.debug('other', other)
         state.set(`${props.notePath}.text`, props.text)
+      },
+      prependNewChild: ({state, props}) => {
+        state.unshift(`${props.notePath}.children`, {
+          text: 'new child',
+          children: [],
+        })
       },
     },
     modules: {},
