@@ -45,16 +45,12 @@ function cursorForceUpdate(textCursor, component) {
   textCursor.on('update', () => component.forceUpdate())
 }
 
-// function maybeDown(cursor) {
-//   return S.toMaybe(cursor.down())
-// }
-
 function maybeNextSiblingNote(note) {
   return maybeRight(note)
 }
 
 function maybeParentNote(note) {
-  return _.compose(S.map(maybeUp), S.map(maybeUp))(note)
+  return _.compose(S.map(maybeUp), maybeUp)(note)
 }
 
 function maybeFirstChildNote(note) {
