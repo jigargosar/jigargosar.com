@@ -12,9 +12,9 @@ import {
   getText,
   maybeFirstVisibleChildOrNextNote,
   maybePreviousNote,
-  onNoteTextChangeEvent,
   selectChildren,
   selectText,
+  setNoteText,
   whenCursorGet,
 } from '../../ImmutableState/ImmutableNote'
 import {
@@ -58,6 +58,12 @@ const onNoteInputKeyDown = note =>
     ),
     whenKey('up')(() => maybeFocusNote(maybePreviousNote(note))),
   )
+
+function onNoteTextChangeEvent(note) {
+  return function(e) {
+    return setNoteText(e.target.value, note)
+  }
+}
 
 class NoteTextInput extends React.Component {
   componentDidMount() {
