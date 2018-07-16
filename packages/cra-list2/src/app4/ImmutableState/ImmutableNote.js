@@ -161,10 +161,6 @@ export function maybeParentButNotRootNote(note) {
   )(note)
 }
 
-function maybeFirstChildNote(note) {
-  return maybeDownIfExists(selectChildren(note))
-}
-
 function maybeFirstVisibleChildNote(note) {
   return doesNoteHaveVisibleChildren(note)
     ? maybeDownIfExists(selectChildren(note))
