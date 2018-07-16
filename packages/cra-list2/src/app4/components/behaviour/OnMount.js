@@ -1,5 +1,5 @@
-import {lifecycle} from 'recompose'
 import PropTypes from 'prop-types'
+import {lifecycle} from '../utils'
 
 const OnMount = lifecycle({
   componentDidMount() {
