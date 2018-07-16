@@ -1,7 +1,16 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {cn, F, mrInjectAll, whenKey, withKeyEvent} from '../utils'
+import {
+  cn,
+  F,
+  mrInjectAll,
+  PropTypes,
+  whenKey,
+  withKeyEvent,
+} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
+import {lifecycle} from 'recompose'
+
 import {
   _,
   alwaysNothing,
@@ -33,6 +42,7 @@ import {
   maybeUp,
 } from './functional-baobab'
 import S from 'sanctuary'
+import {OnMount} from '../behaviour/OnMount'
 
 if (module.hot) {
   window.Baobab = Baobab
@@ -186,18 +196,16 @@ class NoteChildren extends React.Component {
     )
   }
 }
-
-class NoteTree extends React.Component {
-  note = getRootNoteCursor(state)
-
-  componentDidMount() {
-    focusNote(this.note)
-  }
-
-  render = () => (
+function NoteTree() {
+  return (
     <F>
+      <OnMount
+        onMount={() => {
+          focusNote(getRootNoteCursor(state))
+        }}
+      />
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild note={this.note} />
+        <NoteChild note={getRootNoteCursor(state)} />
       </div>
     </F>
   )
