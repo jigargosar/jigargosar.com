@@ -3,7 +3,6 @@ import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import {_, R, RX, tryCatchLog, validate} from '../little-ramda'
 import {setDisplayName, wrapDisplayName, lifecycle} from 'recompose'
-
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 export {setDisplayName, wrapDisplayName, lifecycle}
