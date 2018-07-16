@@ -13,42 +13,55 @@ import {
   state,
 } from './utils'
 
+const computedNoteText = Compute(props`notePath`, (path, get) => {
+  if (!path) {
+    return get(state`rootNote.text`)
+  }
+  return get(state`${path}.text`)
+})
+
 const NoteTextInput = connect(
-  {setText: signal`setText`},
-  function NoteTextInput({textValue, setText}) {
+  {
+    setText: signal`setText`,
+    value: computedNoteText,
+  },
+  function({setText, value}) {
+    return {
+      onChange: e => setText({text: e.target.value}),
+      value,
+    }
+  },
+  function NoteTextInput({value, onChange}) {
     return (
       <input
         // id={getNoteId(note)}
         className={cn('flex-auto', 'ma0 pv2 bw0 outline-0')}
         // value={getNoteText(note)}
-        value={textValue}
-        onChange={e => setText(e.target.value)}
+        value={value}
+        onChange={onChange}
         // onKeyDown={onNoteInputKeyDown(note)}
       />
     )
   },
 )
 
-const computeNoteFromNotePathProp = Compute(
-  props`notePath`,
-  (path, get) => {
-    if (!path) {
-      return get(state`rootNote`)
-    }
-    return get(state`${path}`)
-  },
-)
+// const computeNoteFromNotePathProp = Compute(
+//   props`notePath`,
+//   (path, get) => {
+//     if (!path) {
+//       return get(state`rootNote`)
+//     }
+//     return get(state`${path}`)
+//   },
+// )
 
 const NoteTextLine = connect(
-  {
-    note: computeNoteFromNotePathProp,
-    // note: state`${props`notePath`}`,
-  },
+  {},
   function(dp, p, resolve) {
     console.log(`args`, dp, p, resolve)
-    return {note: dp.note}
+    return {...dp, ...p}
   },
-  function NoteTextLine({note}) {
+  function NoteTextLine() {
     return (
       <div className={cn('code flex items-center')}>
         <div className={cn('mr3')}>
@@ -66,7 +79,7 @@ const NoteTextLine = connect(
           {/*{getDebugId(note)}*/}
           {/*</div>*/}
           <div className={cn('flex-auto', 'flex')}>
-            <NoteTextInput textValue={note.text} />
+            <NoteTextInput />
           </div>
         </div>
       </div>
