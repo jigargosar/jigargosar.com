@@ -33,7 +33,6 @@ import {
   maybePreviousSiblingNote,
   noteHasChildren,
   selectChildren,
-  selectText,
   setNoteText,
 } from '../../ImmutableState/ImmutableNote'
 import {
@@ -42,6 +41,7 @@ import {
 } from '../../ImmutableState/ImmutableNoteTree'
 import S from 'sanctuary'
 import {OnMount} from '../behaviour/OnMount'
+import {releaseCursorIfNotNil} from '../../ImmutableState/functional-baobab'
 
 if (module.hot) {
   window.Baobab = Baobab
@@ -129,7 +129,19 @@ function onNoteTextChangeEvent(note) {
 
 class NoteTextInput extends React.Component {
   componentDidMount() {
-    cursorForceUpdate(selectText(this.props.note), this)
+    releaseCursorIfNotNil(this.cursor)
+    this.cursor = selectChildren(this.props.note)
+    cursorForceUpdate(this.cursor, this)
+  }
+
+  componentDidUpdate() {
+    releaseCursorIfNotNil(this.cursor)
+    this.cursor = selectChildren(this.props.note)
+    cursorForceUpdate(this.cursor, this)
+  }
+
+  componentWillUnmount() {
+    releaseCursorIfNotNil(this.cursor)
   }
 
   render() {
@@ -179,7 +191,19 @@ function NoteChild({note}) {
 
 class NoteChildren extends React.Component {
   componentDidMount() {
-    cursorForceUpdate(selectChildren(this.props.note), this)
+    releaseCursorIfNotNil(this.cursor)
+    this.cursor = selectChildren(this.props.note)
+    cursorForceUpdate(this.cursor, this)
+  }
+
+  componentDidUpdate() {
+    releaseCursorIfNotNil(this.cursor)
+    this.cursor = selectChildren(this.props.note)
+    cursorForceUpdate(this.cursor, this)
+  }
+
+  componentWillUnmount() {
+    releaseCursorIfNotNil(this.cursor)
   }
 
   render() {

@@ -1,5 +1,5 @@
 import S from 'sanctuary'
-import {_, constant} from '../little-ramda'
+import {_, constant, isNotNil} from '../little-ramda'
 
 export function maybeRight(cursor) {
   return S.toMaybe(cursor.right())
@@ -31,4 +31,10 @@ export function isCursorRoot(cursor) {
 
 export function maybeRightmostIfExists(cursor) {
   return toMaybeCursorIfExists(cursor.rightmost())
+}
+
+export function releaseCursorIfNotNil(cursor) {
+  if (isNotNil(cursor) && !cursor.state.killed) {
+    cursor.release()
+  }
 }
