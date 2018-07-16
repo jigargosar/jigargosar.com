@@ -35,10 +35,11 @@ function focusNote(note) {
     const noteEl = document.getElementById(getNoteId(note))
     noteEl.focus()
   })
+  return note
 }
 
 function maybeFocusNote(maybeNote) {
-  S.map(focusNote)(maybeNote)
+  return S.map(focusNote)(maybeNote)
 }
 
 function cursorForceUpdate(textCursor, component) {
