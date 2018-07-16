@@ -5,28 +5,8 @@ import {AppHeaderBar} from '../mobx/AppHeaderBar'
 
 import {_, validate} from '../../little-ramda'
 import Baobab from 'baobab'
-import {
-  appendChildNote,
-  appendNewSiblingNote,
-  appendSiblingNote,
-  deleteAndGetMaybePreviousNote,
-  getDebugId,
-  getNoteId,
-  getNoteText,
-  maybeFirstVisibleChildOrNextNote,
-  maybeParentButNotRootNote,
-  maybePreviousNote,
-  maybePreviousSiblingNote,
-  noteHasChildren,
-  selectChildren,
-  selectText,
-  setNoteText,
-  whenCursorGet,
-} from '../../ImmutableState/ImmutableNote'
-import {
-  getRootNoteCursor,
-  state,
-} from '../../ImmutableState/ImmutableNoteTree'
+import {appendChildNote, appendNewSiblingNote, appendSiblingNote, deleteAndGetMaybePreviousNote, getDebugId, getNoteId, getNoteText, getNoteTextLength, maybeFirstVisibleChildOrNextNote, maybeParentButNotRootNote, maybePreviousNote, maybePreviousSiblingNote, noteHasChildren, selectChildren, selectText, setNoteText, whenCursorGet} from '../../ImmutableState/ImmutableNote'
+import {getRootNoteCursor, state} from '../../ImmutableState/ImmutableNoteTree'
 import S from 'sanctuary'
 import {OnMount} from '../behaviour/OnMount'
 
@@ -65,10 +45,6 @@ function isSelectionAtStart(selectionRange) {
 
 function appendNoteText(deletedText, prev) {
   return setNoteText(`${getNoteText(prev)}${deletedText}`, prev)
-}
-
-function getNoteTextLength(prev) {
-  return getNoteText(prev).length
 }
 
 function createSelection(start, end = start) {

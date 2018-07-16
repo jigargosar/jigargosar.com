@@ -101,6 +101,10 @@ function getNoteChildCount(noteOrCursor) {
   return getChildren(noteOrCursor).length
 }
 
+export function getNoteTextLength(note) {
+  return getNoteText(note).length
+}
+
 export function noteHasChildren(noteOrCursor) {
   return getNoteChildCount(noteOrCursor) > 0
 }
