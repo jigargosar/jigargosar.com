@@ -152,14 +152,14 @@ function createAppController() {
       },
       prependNewChild: ({state, props}) => {
         const parentId = props.id
-        const newNote = createNewNote({
+        const childNote = createNewNote({
           text: nanoid(7),
           parentId: parentId,
         })
-        const childId = newNote.id
+        const childId = childNote.id
         state.unshift(`childrenLookup.${parentId}`, childId)
         state.set(`childrenLookup.${childId}`, [])
-        state.set(`noteLookup.${childId}`, newNote)
+        state.set(`noteLookup.${childId}`, childNote)
       },
     },
     modules: {},
