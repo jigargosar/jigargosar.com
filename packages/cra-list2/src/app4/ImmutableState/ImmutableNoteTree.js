@@ -6,7 +6,10 @@ import {_} from '../little-ramda'
 const storedState = StorageItem({
   name: 'NoteTreeState',
   getInitial: () => initialNoteTree,
-  postLoad: _.over(_.lensProp('rootNote'))(preProcessNote),
+  postLoad: _.compose(
+    _.mergeWith(_.defaultTo, {rootNotePath: ['rootNote']}),
+    _.over(_.lensProp('rootNote'))(preProcessNote),
+  ),
 })
 
 // const initialTree = initialRoot
@@ -23,6 +26,16 @@ state.tree.on('update', () => {
   storedState.save(state.tree.serialize())
 })
 
-export function getRootNoteCursor({rootNoteCursor}) {
-  return rootNoteCursor
+export function getRootNoteCursor() {
+  return state.rootNoteCursor
 }
+
+export function getCurrentRootNoteCursor() {
+  return state.tree.select(state.tree.get('rootNotePath'))
+}
+
+export function setCurrentRootNoteCursor(noteCursor) {
+  state.tree.set('rootNotePath', noteCursor.path)
+}
+
+console.log(getCurrentRootNoteCursor().get())

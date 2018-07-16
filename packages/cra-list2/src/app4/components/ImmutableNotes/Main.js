@@ -37,10 +37,7 @@ import {
   selectChildren,
   setNoteText,
 } from '../../ImmutableState/ImmutableNote'
-import {
-  getRootNoteCursor,
-  state,
-} from '../../ImmutableState/ImmutableNoteTree'
+import {getCurrentRootNoteCursor} from '../../ImmutableState/ImmutableNoteTree'
 import S from 'sanctuary'
 import {OnMount} from '../behaviour/OnMount'
 import {releaseCursorIfNotNil} from '../../ImmutableState/functional-baobab'
@@ -233,11 +230,11 @@ function NoteTree() {
     <F>
       <OnMount
         onMount={() => {
-          focusNote(getRootNoteCursor(state))
+          focusNote(getCurrentRootNoteCursor())
         }}
       />
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild note={getRootNoteCursor(state)} />
+        <NoteChild note={getCurrentRootNoteCursor()} />
       </div>
     </F>
   )
