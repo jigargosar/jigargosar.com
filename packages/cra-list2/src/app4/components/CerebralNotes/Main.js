@@ -40,7 +40,7 @@ const NoteTextInput = connect(
       value,
       onKeyDown: withKeyEvent(
         // whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
-        whenKey('enter')(() => prependNewChild({id})),
+        whenKey('alt+enter')(() => prependNewChild({id})),
         // whenKey('backspace')(onBackspaceKeyDown),
         // whenKey('tab')(wrapPD(indentNote)),
         // whenKey('shift+tab')(wrapPD(unIndentNote)),
