@@ -6,6 +6,7 @@ import {_} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
   appendNewSiblingNote,
+  getChildrenCursor,
   getDebugId,
   getNoteId,
   getText,
@@ -78,6 +79,11 @@ function NoteChild({note}) {
   )
 }
 class NoteChildren extends React.Component {
+  componentDidMount() {
+    const childrenCursor = getChildrenCursor(this.note)
+    childrenCursor.on('update', () => this.forceUpdate())
+  }
+
   get note() {
     return this.props.note
   }

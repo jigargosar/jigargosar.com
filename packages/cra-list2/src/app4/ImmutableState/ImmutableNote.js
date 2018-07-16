@@ -88,6 +88,10 @@ export function getTextCursor(note) {
   return note.select('text')
 }
 
+export function getChildrenCursor(note) {
+  return note.select('children')
+}
+
 export const appendTwoChildren = (() => {
   const secondChild = appendNewNotes([
     {text: 'fourth grand child'},
