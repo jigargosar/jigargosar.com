@@ -122,8 +122,8 @@ const NoteTree = connect({id: state`rootNoteId`}, function NoteTree({
     </F>
   )
 })
-function createNewNote({text}) {
-  return {id: nanoid(), text: text}
+function createNewNote({text, parentId = null}) {
+  return {id: nanoid(), text: text, parentId}
 }
 
 function createAppController() {
@@ -151,12 +151,15 @@ function createAppController() {
         state.set(`noteLookup.${props.id}.text`, props.text)
       },
       prependNewChild: ({state, props}) => {
+        const parentId = props.id
         const newNote = createNewNote({
           text: nanoid(7),
+          parentId: parentId,
         })
-        state.unshift(`childrenLookup.${props.id}`, newNote.id)
-        state.set(`childrenLookup.${newNote.id}`, [])
-        state.set(`noteLookup.${newNote.id}`, newNote)
+        const childId = newNote.id
+        state.unshift(`childrenLookup.${parentId}`, childId)
+        state.set(`childrenLookup.${childId}`, [])
+        state.set(`noteLookup.${childId}`, newNote)
       },
     },
     modules: {},
