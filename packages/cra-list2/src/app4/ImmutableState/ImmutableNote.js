@@ -136,15 +136,16 @@ function maybeFirstChildNote(note) {
   return maybeDownIfExists(note.select('children'))
 }
 
-const maybeNextNote = n =>
-  maybeOrElse(() => S.chain(maybeNextNote)(maybeParentNote(n)))(
-    maybeNextSiblingNote(n),
-  )
-
 export function maybeFirstVisibleChildOrNextNote(note) {
   return maybeOrElse(() => maybeNextNote(note))(
     maybeFirstChildNote(note),
   )
+
+  function maybeNextNote(note) {
+    return maybeOrElse(() =>
+      S.chain(maybeNextNote)(maybeParentNote(note)),
+    )(maybeNextSiblingNote(note))
+  }
 }
 
 export function maybePreviousNote(note) {
