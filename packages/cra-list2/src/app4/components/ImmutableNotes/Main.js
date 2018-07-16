@@ -1,8 +1,15 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {cn, F, isKey, mrInjectAll} from '../utils'
+import {
+  cn,
+  F,
+  isKey,
+  mrInjectAll,
+  whenKey,
+  withKeyEvent,
+} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
-import {_, maybeOrElse, S} from '../../little-ramda'
+import {_, maybeOrElse, S, validate} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
   appendNewSiblingNote,
@@ -12,6 +19,7 @@ import {
   onNoteTextChangeEvent,
   selectChildren,
   selectText,
+  whenCursorGet,
 } from '../../ImmutableState/ImmutableNote'
 import {state} from '../../ImmutableState/ImmutableNoteTree'
 import {
@@ -24,9 +32,11 @@ if (module.hot) {
   window.Baobab = Baobab
 }
 
-function focusNote(newNote) {
+function focusNote(note) {
+  const n = whenCursorGet(note)
+  validate('O', [n])
   requestAnimationFrame(() => {
-    const noteEl = document.getElementById(getNoteId(newNote))
+    const noteEl = document.getElementById(getNoteId(note))
     noteEl.focus()
   })
 }
@@ -91,14 +101,11 @@ class NoteTextInput extends React.Component {
 
   onKeyDown = e => {
     const note = this.note
-    _.cond([
-      [
-        isKey('enter'),
-        () => focusNote(appendNewSiblingNote(note)),
-      ],
-      [isKey('down'), () => maybeFocusNote(maybeNextNote(note))],
-      [isKey('up'), () => focusNote(note.left())],
-    ])(e)
+    withKeyEvent(
+      whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
+      whenKey('down')(() => maybeFocusNote(maybeNextNote(note))),
+      whenKey('up')(() => focusNote(note.left())),
+    )(e)
   }
 }
 

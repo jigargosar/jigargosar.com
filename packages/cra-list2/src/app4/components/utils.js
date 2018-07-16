@@ -18,7 +18,23 @@ export const isAnyHotKey = R.compose(
 )
 
 export function isKey(...keys) {
-  return R.compose(R.anyPass, R.map(R.curryN(2, isHotKey)))(keys)
+  return function(keyEvent) {
+    return _.reduce(
+      (acc, key) => (isHotKey(key, keyEvent) ? _.reduced(true) : acc),
+    )(false)(keys)
+  }
+}
+
+export function whenKey(...keys) {
+  return function(fn) {
+    return [isKey(...keys), fn]
+  }
+}
+
+export function withKeyEvent(...conditions) {
+  return function(keyEvent) {
+    return _.cond(conditions)(keyEvent)
+  }
 }
 
 export const wrapPD = fn => e => {
