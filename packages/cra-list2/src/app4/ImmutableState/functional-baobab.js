@@ -29,6 +29,6 @@ export function isCursorRoot(cursor) {
   return cursor.isRoot()
 }
 
-export function maybeSelectRightMostIfExists(cursor) {
+export function maybeRightmostIfExists(cursor) {
   return toMaybeCursorIfExists(cursor.rightmost())
 }

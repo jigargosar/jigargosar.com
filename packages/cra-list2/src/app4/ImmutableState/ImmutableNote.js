@@ -7,7 +7,7 @@ import {
   maybeLeft,
   maybeRight,
   maybeUp,
-  maybeSelectRightMostIfExists,
+  maybeRightmostIfExists,
 } from './functional-baobab'
 import S from 'sanctuary'
 
@@ -136,7 +136,14 @@ function maybeParentNote(note) {
 }
 
 function maybeFirstChildNote(note) {
-  return maybeDownIfExists(note.select('children'))
+  return maybeDownIfExists(selectChildren(note))
+}
+
+function maybeLastChildNote(note) {
+  return _.compose(
+    S.chain(maybeRightmostIfExists),
+    maybeFirstChildNote,
+  )(note)
 }
 
 export function maybeFirstVisibleChildOrNextNote(note) {
@@ -161,8 +168,7 @@ export function maybePreviousNote(note) {
     return _.compose(
       maybeOr(note),
       S.map(lastVisibleLeafNoteOrSelf),
-      maybeSelectRightMostIfExists,
-      selectChildren,
+      maybeLastChildNote,
     )(note)
   }
 }
