@@ -97,7 +97,10 @@ function createAppController() {
 
   const app = Module({
     // Define module state, namespaced by module path
-    state: {rootNote: {text: 'Root Note Title'}},
+    state: {
+      rootNote: {text: 'Root Note Title', children: []},
+      currentRootNotePath: ['rootNote'],
+    },
     signals: {},
     modules: {},
     providers: {},
