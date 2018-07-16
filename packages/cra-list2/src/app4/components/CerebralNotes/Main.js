@@ -44,7 +44,6 @@ const NoteTextInput = connect(
       <input
         // id={getNoteId(note)}
         className={cn('flex-auto', 'ma0 pv2 bw0 outline-0')}
-        // value={getNoteText(note)}
         value={value}
         onChange={onChange}
         // onKeyDown={onNoteInputKeyDown(note)}
