@@ -149,6 +149,7 @@ function createAppController() {
     // Define module state, namespaced by module path
     state: {
       rootNote: createNewNote({text: 'Root Note Title'}),
+      childrenLookup: {},
       currentRootNotePath: ['rootNote'],
     },
     signals: {
@@ -157,12 +158,28 @@ function createAppController() {
         state.set(`${props.notePath}.text`, props.text)
       },
       prependNewChild: ({state, props}) => {
-        state.unshift(
-          `${props.notePath}.children`,
-          createNewNote({
-            text: 'new child',
-          }),
-        )
+        // state.unshift(
+        //   `${props.notePath}.children`,
+        //   createNewNote({
+        //     text: 'new child',
+        //   }),
+        // )
+        const childrenPath = `childrenLookup.${props.notePath.id}`
+
+        if (state.get(childrenPath)) {
+          state.unshift(
+            childrenPath,
+            createNewNote({
+              text: 'new child',
+            }),
+          )
+        } else {
+          state.set(childrenPath, [
+            createNewNote({
+              text: 'new child',
+            }),
+          ])
+        }
       },
     },
     modules: {},
