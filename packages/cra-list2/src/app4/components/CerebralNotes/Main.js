@@ -150,43 +150,25 @@ function createAppController() {
     return null
   }
 
+  const rootNote = createNewNote({text: 'Root Note Title'})
   const app = Module({
     // Define module state, namespaced by module path
     state: {
-      rootNote: createNewNote({text: 'Root Note Title'}),
-      childrenLookup: {},
+      rootNoteId: rootNote.id,
+      childrenLookup: {[rootNote.id]: []},
+      noteLookup: {[rootNote.id]: rootNote},
       currentRootNotePath: ['rootNote'],
     },
     signals: {
-      setText: ({state, props, ...other}) => {
-        console.debug('other', other)
-        state.set(`${props.notePath}.text`, props.text)
+      setText: ({state, props}) => {
+        state.set(`noteLookup.${props.id}.text`, props.text)
       },
       prependNewChild: ({state, props}) => {
-        // state.unshift(
-        //   `${props.notePath}.children`,
-        //   createNewNote({
-        //     text: 'new child',
-        //   }),
-        // )
-        const childrenPath = `childrenLookup.${
-          state.get(props.notePath).id
-        }`
-
-        if (state.get(childrenPath)) {
-          state.unshift(
-            childrenPath,
-            createNewNote({
-              text: 'new child',
-            }),
-          )
-        } else {
-          state.set(childrenPath, [
-            createNewNote({
-              text: 'new child',
-            }),
-          ])
-        }
+        const newNote = createNewNote({
+          text: nanoid(3),
+        })
+        state.unshift(`childrenLookup.${props.id}`, newNote)
+        state.set(`noteLookup.${props.id}`, newNote)
       },
     },
     modules: {},
