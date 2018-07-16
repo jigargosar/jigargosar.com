@@ -175,6 +175,15 @@ function createAppController() {
     return isNotNil(note.parentId)
   }
 
+  function getParentId(id, state) {
+    const note = getNote(id, state)
+    return note.parentId
+  }
+
+  function getParent(id, state) {
+    return getNote(getParentId(id, state), state)
+  }
+
   const app = Module({
     // Define module state, namespaced by module path
     state: {...initialState},
@@ -199,7 +208,7 @@ function createAppController() {
         if (!hasParent(props.id, state)) {
           return
         }
-        const parentId = props.id
+        const parentId = getParent(props.id, state)
         const childNote = createNewNote({
           text: nanoid(7),
           parentId: parentId,
