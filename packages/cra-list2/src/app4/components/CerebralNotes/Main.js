@@ -1,6 +1,12 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {cn, F, whenKey, withKeyEvent} from '../utils'
+import {
+  cn,
+  F,
+  setFocusAndSelectionOnDOMId,
+  whenKey,
+  withKeyEvent,
+} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {
   connect,
@@ -24,6 +30,7 @@ const NoteTextInput = connect(
     validate('FS', [setText, value])
 
     return {
+      id,
       onChange: e =>
         setText({
           text: e.target.value,
@@ -45,10 +52,10 @@ const NoteTextInput = connect(
       ),
     }
   },
-  function NoteTextInput({value, onChange, onKeyDown}) {
+  function NoteTextInput({id, value, onChange, onKeyDown}) {
     return (
       <input
-        // id={getNoteId(note)}
+        id={id}
         className={cn('flex-auto', 'ma0 pv2 bw0 outline-0')}
         value={value}
         onChange={onChange}
@@ -160,6 +167,8 @@ function createAppController() {
         state.unshift(`childrenLookup.${parentId}`, childId)
         state.set(`childrenLookup.${childId}`, [])
         state.set(`noteLookup.${childId}`, childNote)
+
+        setFocusAndSelectionOnDOMId(childId)
       },
     },
     modules: {},
