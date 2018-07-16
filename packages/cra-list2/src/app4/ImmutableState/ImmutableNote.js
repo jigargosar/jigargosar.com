@@ -3,7 +3,12 @@ import Baobab, {Cursor} from 'baobab'
 import nanoid from 'nanoid'
 
 export function createNote({text = ''} = {}) {
-  return {id: `Note-${nanoid()}`, text, children: []}
+  return {
+    id: `Note-${nanoid()}`,
+    text,
+    children: [],
+    collapsed: false,
+  }
 }
 
 export function appendNote(child) {
