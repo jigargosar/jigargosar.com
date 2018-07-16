@@ -1,18 +1,19 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {cn, F} from '../utils'
+import {cn, F, whenKey, withKeyEvent} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {
   Compute,
-  Controller,
-  Module,
   connect,
   Container,
+  Controller,
+  Module,
   props,
   signal,
   state,
 } from './utils'
 import {validate} from '../../little-ramda'
+import {appendNewSiblingNote} from '../../ImmutableState/ImmutableNote'
 
 const computedNoteText = Compute(props`notePath`, (path, get) => {
   debugger
@@ -37,16 +38,28 @@ const NoteTextInput = connect(
           notePath: notePath || ['rootNote'],
         }),
       value,
+      onKeyDown: withKeyEvent(
+        whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
+        // whenKey('backspace')(onBackspaceKeyDown),
+        // whenKey('tab')(wrapPD(indentNote)),
+        // whenKey('shift+tab')(wrapPD(unIndentNote)),
+        // whenKey('down')(wrapPD(navigateToNextNote)),
+        // whenKey('up')(wrapPD(navigateToPreviousNote)),
+        // whenKey('shift+up')(wrapPD(() => collapseNote(note))),
+        // whenKey('shift+down')(wrapPD(() => expandNote(note))),
+        // whenKey('mod+.')(wrapPD(() => setCurrentRootNote(note))),
+        // whenKey('mod+,')(wrapPD(setCurrentRootNoteOneLevelUp)),
+      ),
     }
   },
-  function NoteTextInput({value, onChange}) {
+  function NoteTextInput({value, onChange, onKeyDown}) {
     return (
       <input
         // id={getNoteId(note)}
         className={cn('flex-auto', 'ma0 pv2 bw0 outline-0')}
         value={value}
         onChange={onChange}
-        // onKeyDown={onNoteInputKeyDown(note)}
+        onKeyDown={onKeyDown}
       />
     )
   },
