@@ -30,7 +30,6 @@ const computedNoteChildren = Compute(
   props`notePath`,
   (nullablePath, get) => {
     const path = nullablePath ? nullablePath : ['rootNote']
-    const dotPath = _.join('.')(path)
     return get(state`${joinPath(path)}.children`)
   },
 )
