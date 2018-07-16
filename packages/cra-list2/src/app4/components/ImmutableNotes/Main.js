@@ -59,6 +59,10 @@ function focusPreviousNote(note) {
   return maybeFocusNote(maybePreviousNote(note))
 }
 
+function appendNoteText(deletedText, prev) {
+  setNoteText(`${getText(prev)}${deletedText}`, prev)
+}
+
 const onNoteInputKeyDown = note =>
   withKeyEvent(
     whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
@@ -67,7 +71,14 @@ const onNoteInputKeyDown = note =>
       const selectionAtStart = isSelectionRangeAtZero(selectionRange)
       if (selectionAtStart) {
         // focusPreviousNote(note)
-        maybeFocusNote(deleteAndGetMaybePreviousNote(note))
+        const deletedText = getText(note)
+        const maybePrev = deleteAndGetMaybePreviousNote(note)
+        maybeFocusNote(maybePrev)
+        S.map(prev =>
+          focusNote(
+            appendNoteText(deletedText, prev) /*{start:0,end:0}*/,
+          ),
+        )(maybePrev)
       }
     }),
     whenKey('down')(() =>
