@@ -1,6 +1,6 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {cn, F, isAnyHotKey, mrInjectAll} from '../utils'
+import {cn, F, isAnyHotKey, isKey, mrInjectAll} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {_} from '../../little-ramda'
 import Baobab from 'baobab'
@@ -46,16 +46,20 @@ class NoteTextInput extends React.Component {
         className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
         value={getText(this.note)}
         onChange={onNoteTextChangeEvent(this.note)}
-        onKeyDown={e =>
-          _.cond([
-            [
-              isAnyHotKey(['enter']),
-              () => focusNewNote(appendNewSiblingNote(this.note)),
-            ],
-          ])(e)
-        }
+        onKeyDown={this.onKeyDown}
       />
     )
+  }
+
+  onKeyDown = e => {
+    const note = this.note
+    _.cond([
+      [
+        isKey('enter'),
+        () => focusNewNote(appendNewSiblingNote(note)),
+      ],
+      [isKey('down'), () => focusNewNote(note.right())],
+    ])(e)
   }
 }
 function NoteTextLine({note}) {

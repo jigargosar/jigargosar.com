@@ -17,6 +17,10 @@ export const isAnyHotKey = R.compose(
   R.map(R.curryN(2, isHotKey)),
 )
 
+export function isKey(...keys) {
+  return R.compose(R.anyPass, R.map(R.curryN(2, isHotKey)))(keys)
+}
+
 export const wrapPD = fn => e => {
   e.preventDefault()
   fn(e)
