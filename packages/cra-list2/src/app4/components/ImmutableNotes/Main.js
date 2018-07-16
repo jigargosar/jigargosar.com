@@ -199,16 +199,16 @@ function NoteChild({note}) {
 
 class NoteChildren extends React.Component {
   componentDidMount() {
-    releaseCursorIfNotNil(this.cursor)
+    // releaseCursorIfNotNil(this.cursor)
     this.cursor = selectChildren(this.props.note)
     cursorForceUpdate(this.cursor, this)
   }
 
-  componentDidUpdate() {
-    releaseCursorIfNotNil(this.cursor)
-    this.cursor = selectChildren(this.props.note)
-    cursorForceUpdate(this.cursor, this)
-  }
+  // componentDidUpdate() {
+  //   releaseCursorIfNotNil(this.cursor)
+  //   this.cursor = selectChildren(this.props.note)
+  //   cursorForceUpdate(this.cursor, this)
+  // }
 
   componentWillUnmount() {
     releaseCursorIfNotNil(this.cursor)
