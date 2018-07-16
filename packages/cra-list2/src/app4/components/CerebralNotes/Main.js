@@ -3,7 +3,6 @@ import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, F, whenKey, withKeyEvent} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {
-  Compute,
   connect,
   Container,
   Controller,
@@ -12,21 +11,8 @@ import {
   signal,
   state,
 } from './utils'
-import {_, mapIndexed, validate} from '../../little-ramda'
+import {_, validate} from '../../little-ramda'
 import {nanoid} from '../../model/util'
-
-const computedNoteChildrenPaths = Compute(
-  props`notePath`,
-  (path, get) => {
-    // const length = get(state`${path}.children`).length
-    // return _.times(idx => `${path}.children.${idx}`)(length)
-    const id = get(state`${path}.id`)
-    const childrenPath = `childrenLookup.${id}`
-    const children = get(state`${childrenPath}`)
-    const length = children ? children.length : 0
-    return _.times(idx => `${childrenPath}.${idx}`)(length)
-  },
-)
 
 const NoteTextInput = connect(
   {
@@ -86,9 +72,9 @@ function NoteTextLine({id}) {
           'bb bw1 b--light-gray',
         )}
       >
-        {/*<div className={cn('f6 gray mr3', 'dn')}>*/}
-        {/*{getDebugId(note)}*/}
-        {/*</div>*/}
+        <div className={cn('f6 gray mr3', 'dn_')}>
+          {id.slice(0, 3)}
+        </div>
         <div className={cn('flex-auto', 'flex')}>
           <NoteTextInput id={id} />
         </div>
