@@ -46,10 +46,11 @@ if (module.hot) {
 }
 
 function focusNote(note, selection = null) {
-  const n = whenCursorGet(note)
-  validate('O', [n])
+  const domId = getNoteId(note)
+  validate('S', [domId])
+
   requestAnimationFrame(() => {
-    const noteEl = document.getElementById(getNoteId(note))
+    const noteEl = document.getElementById(domId)
     noteEl.focus()
     if (selection) {
       noteEl.setSelectionRange(selection.start, selection.end)
