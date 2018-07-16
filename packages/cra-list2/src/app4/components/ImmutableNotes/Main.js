@@ -44,7 +44,6 @@ import {
   setCurrentRootNoteOneLevelUp,
 } from '../../ImmutableState/ImmutableNoteTree'
 import S from 'sanctuary'
-import {OnMount} from '../behaviour/OnMount'
 import {releaseCursorIfNotNil} from '../../ImmutableState/functional-baobab'
 
 if (module.hot) {
@@ -135,19 +134,20 @@ function onNoteTextChangeEvent(note) {
 
 class NoteTextInput extends React.Component {
   componentDidMount() {
-    releaseCursorIfNotNil(this.cursor)
-    this.cursor = selectChildren(this.props.note)
-    cursorForceUpdate(this.cursor, this)
+    // releaseCursorIfNotNil(this.cursor)
+    // this.cursor = selectChildren(this.props.note)
+    // cursorForceUpdate(this.cursor, this)
+    cursorForceUpdate(this.props.note, this)
   }
 
-  componentDidUpdate() {
-    releaseCursorIfNotNil(this.cursor)
-    this.cursor = selectChildren(this.props.note)
-    cursorForceUpdate(this.cursor, this)
-  }
+  // componentDidUpdate() {
+  //   releaseCursorIfNotNil(this.cursor)
+  //   this.cursor = selectChildren(this.props.note)
+  //   cursorForceUpdate(this.cursor, this)
+  // }
 
   componentWillUnmount() {
-    releaseCursorIfNotNil(this.cursor)
+    // releaseCursorIfNotNil(this.props.note)
   }
 
   render() {
@@ -238,6 +238,10 @@ class NoteTree extends React.Component {
     this.cursor = getRootNotePathCursor()
     cursorForceUpdate(this.cursor, this)
 
+    focusNote(getCurrentRootNoteCursor())
+  }
+
+  componentDidUpdate() {
     focusNote(getCurrentRootNoteCursor())
   }
 

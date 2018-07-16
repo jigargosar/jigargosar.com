@@ -2,7 +2,6 @@ import {_, alwaysNothing, maybeOr, maybeOrElse} from '../little-ramda'
 import Baobab, {Cursor} from 'baobab'
 import nanoid from 'nanoid'
 import {
-  isCursorRoot,
   maybeDownIfExists,
   maybeLeft,
   maybeRight,
@@ -140,7 +139,16 @@ export function selectChildren(noteCursor) {
   return noteCursor.select('children')
 }
 
-const ifRootThenNothingElse = _.ifElse(isCursorRoot)(alwaysNothing)
+function isCurrentRootNote(noteCursor) {
+  return _.equals(
+    noteCursor.root().get('rootNotePath'),
+    noteCursor.path,
+  )
+}
+
+const ifRootThenNothingElse = _.ifElse(isCurrentRootNote)(
+  alwaysNothing,
+)
 
 function maybeNextSiblingNote(note) {
   return ifRootThenNothingElse(maybeRight)(note)
@@ -156,7 +164,7 @@ export function maybeGetParentNote(note) {
 
 export function maybeParentButNotRootNote(note) {
   return _.compose(
-    S.chain(_.ifElse(isCursorRoot, alwaysNothing, S.Just)),
+    S.chain(_.ifElse(isCurrentRootNote, alwaysNothing, S.Just)),
     maybeGetParentNote,
   )(note)
 }

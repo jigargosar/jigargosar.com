@@ -30,10 +30,6 @@ state.tree.on('update', () => {
   storedState.save(state.tree.serialize())
 })
 
-export function getRootNoteCursor() {
-  return state.rootNoteCursor
-}
-
 export function getRootNotePathCursor() {
   return state.tree.select('rootNotePath')
 }
@@ -47,6 +43,9 @@ export function setCurrentRootNote(noteCursor) {
 }
 
 export function setCurrentRootNoteOneLevelUp() {
+  if (isCurrentRootNoteAtTop()) {
+    return
+  }
   S.map(parent => {
     state.tree.set('rootNotePath', parent.path)
     return ''
@@ -54,3 +53,7 @@ export function setCurrentRootNoteOneLevelUp() {
 }
 
 console.log(getCurrentRootNoteCursor().get())
+
+function isCurrentRootNoteAtTop() {
+  return _.equals(state.tree.get('rootNotePath'), ['rootNote'])
+}

@@ -35,6 +35,6 @@ export function maybeRightmostIfExists(cursor) {
 
 export function releaseCursorIfNotNil(cursor) {
   if (isNotNil(cursor) && !cursor.state.killed) {
-    cursor.release()
+    cursor.unbindAll()
   }
 }
