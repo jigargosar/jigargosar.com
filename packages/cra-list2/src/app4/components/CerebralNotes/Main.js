@@ -12,6 +12,7 @@ import {
   signal,
   state,
 } from './utils'
+import {validate} from '../../little-ramda'
 
 const computedNoteText = Compute(props`notePath`, (path, get) => {
   debugger
@@ -26,15 +27,19 @@ const NoteTextInput = connect(
     setText: signal`setText`,
     value: computedNoteText,
   },
-  function({setText, value}) {
+  function({setText, value}, {notePath}) {
+    validate('FS', [setText, value])
+
     return {
       onChange: e =>
-        setText({text: e.target.value, notePath: ['rootNote']}),
+        setText({
+          text: e.target.value,
+          notePath: notePath || ['rootNote'],
+        }),
       value,
     }
   },
   function NoteTextInput({value, onChange}) {
-    console.log(`value,onChange`, value, onChange)
     return (
       <input
         // id={getNoteId(note)}
@@ -58,40 +63,31 @@ const NoteTextInput = connect(
 //   },
 // )
 
-const NoteTextLine = connect(
-  {},
-  function(dp, p, resolve) {
-    console.log(`args`, dp, p, resolve)
-    return {...dp, ...p}
-  },
-  function NoteTextLine() {
-    return (
-      <div className={cn('code flex items-center')}>
-        <div className={cn('mr3')}>
-          {/*{isNoteExpanded(note) ? `-` : `+`}*/}
-          {`-`}
-        </div>
-        <div
-          className={cn(
-            'flex-auto',
-            'flex items-center',
-            'bb bw1 b--light-gray',
-          )}
-        >
-          {/*<div className={cn('f6 gray mr3', 'dn')}>*/}
-          {/*{getDebugId(note)}*/}
-          {/*</div>*/}
-          <div className={cn('flex-auto', 'flex')}>
-            <NoteTextInput />
-          </div>
+function NoteTextLine() {
+  return (
+    <div className={cn('code flex items-center')}>
+      <div className={cn('mr3')}>
+        {/*{isNoteExpanded(note) ? `-` : `+`}*/}
+        {`-`}
+      </div>
+      <div
+        className={cn(
+          'flex-auto',
+          'flex items-center',
+          'bb bw1 b--light-gray',
+        )}
+      >
+        {/*<div className={cn('f6 gray mr3', 'dn')}>*/}
+        {/*{getDebugId(note)}*/}
+        {/*</div>*/}
+        <div className={cn('flex-auto', 'flex')}>
+          <NoteTextInput />
         </div>
       </div>
-    )
-  },
-)
-/**
- * @return {null}
- */
+    </div>
+  )
+}
+
 function NoteChildren({note}) {
   // if (doesNoteHaveVisibleChildren(note)) {
   //   return (
