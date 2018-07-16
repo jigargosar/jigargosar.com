@@ -7,7 +7,7 @@ import {_, validate} from '../../little-ramda'
 import Baobab from 'baobab'
 import {
   appendNewSiblingNote,
-  deleteNote,
+  deleteAndGetMaybePreviousNote,
   getDebugId,
   getNoteId,
   getText,
@@ -66,8 +66,8 @@ const onNoteInputKeyDown = note =>
       const selectionRange = getInputSelectionRangeFromEvent(e)
       const selectionAtStart = isSelectionRangeAtZero(selectionRange)
       if (selectionAtStart) {
-        focusPreviousNote(note)
-        deleteNote(note)
+        // focusPreviousNote(note)
+        maybeFocusNote(deleteAndGetMaybePreviousNote(note))
       }
     }),
     whenKey('down')(() =>

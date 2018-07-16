@@ -166,4 +166,10 @@ export function maybePreviousNote(note) {
   }
 }
 
-export function deleteNote(note) {}
+export function deleteAndGetMaybePreviousNote(note) {
+  return ifRootThenNothingElse(note => {
+    const prev = maybePreviousNote(note)
+    note.up().splice([_.last(note.path), 1])
+    return prev
+  })(note)
+}
