@@ -40,7 +40,8 @@ class NoteTextInput extends React.Component {
             [
               isAnyHotKey(['enter']),
               () => {
-                return appendNewSiblingNote(this.note)
+                const newNote = appendNewSiblingNote(this.note)
+                console.log(`newNote`, newNote)
               },
             ],
           ])(e)

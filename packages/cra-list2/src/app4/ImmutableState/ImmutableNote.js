@@ -60,9 +60,9 @@ export function onNoteTextChangeEvent(noteCursor) {
 }
 
 export function appendNewSiblingNote(noteCursor) {
-  noteCursor
-    .up()
-    .splice([_.last(noteCursor.path) + 1, 0, createNote()])
+  const newNote = createNote()
+  noteCursor.up().splice([_.last(noteCursor.path) + 1, 0, newNote])
+  return newNote
 }
 
 export function getDisplayText(note) {
