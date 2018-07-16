@@ -2,6 +2,8 @@ import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, F} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
+import {Controller, Module} from 'cerebral'
+import {Container} from '@cerebral/react'
 
 function NoteTextInput({textValue}) {
   return (
@@ -79,18 +81,47 @@ function NoteTree() {
   )
 }
 
+function createAppController() {
+  function getDevTools() {
+    if (module.hot) {
+      return require('cerebral/devtools').default({
+        host: 'localhost:8585',
+        reconnect: true,
+      })
+    }
+    return null
+  }
+
+  const app = Module({
+    // Define module state, namespaced by module path
+    state: {rootNote: {text: 'Root Note Title'}},
+    signals: {},
+    modules: {},
+    providers: {},
+    catch: [],
+  })
+
+  const controller = Controller(app, {
+    devtools: getDevTools(),
+  })
+
+  return controller
+}
+
 function Main() {
   return (
-    <TypographyDefaults className={cn('mb4')}>
-      <AppHeaderBar>
-        <Title className={cn('flex-auto')}>
-          {`Cerebral Note Outliner`}
-        </Title>
-      </AppHeaderBar>
-      <CenterLayout>
-        <NoteTree />
-      </CenterLayout>
-    </TypographyDefaults>
+    <Container controller={createAppController()}>
+      <TypographyDefaults className={cn('mb4')}>
+        <AppHeaderBar>
+          <Title className={cn('flex-auto')}>
+            {`Cerebral Note Outliner`}
+          </Title>
+        </AppHeaderBar>
+        <CenterLayout>
+          <NoteTree />
+        </CenterLayout>
+      </TypographyDefaults>
+    </Container>
   )
 }
 
