@@ -47,8 +47,8 @@ function focusNote(note, selection = null) {
   return note
 }
 
-function maybeFocusNote(maybeNote) {
-  return S.map(focusNote)(maybeNote)
+function maybeFocusNote(maybeNote, selection) {
+  return S.map(note => focusNote(note, selection))(maybeNote)
 }
 
 function cursorForceUpdate(textCursor, component) {
@@ -61,10 +61,6 @@ function getSelectionFromEvent(e) {
 
 function isSelectionAtStart(selectionRange) {
   return selectionRange.start === 0 && selectionRange.end === 0
-}
-
-function focusPreviousNote(note) {
-  return maybeFocusNote(maybePreviousNote(note))
 }
 
 function appendNoteText(deletedText, prev) {
@@ -105,10 +101,22 @@ const onNoteInputKeyDown = note => {
         })(maybeParentButNotRootNote(note))
       }),
     ),
-    whenKey('down')(() =>
-      maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),
+    whenKey('down')(
+      wrapPD(e =>
+        maybeFocusNote(
+          maybeFirstVisibleChildOrNextNote(note),
+          getSelectionFromEvent(e),
+        ),
+      ),
     ),
-    whenKey('up')(() => focusPreviousNote(note)),
+    whenKey('up')(
+      wrapPD(e =>
+        maybeFocusNote(
+          maybePreviousNote(note),
+          getSelectionFromEvent(e),
+        ),
+      ),
+    ),
   )
   function onBackspaceKeyDown(e) {
     const selection = getSelectionFromEvent(e)
