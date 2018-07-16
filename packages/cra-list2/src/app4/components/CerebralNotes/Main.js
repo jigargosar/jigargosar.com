@@ -97,7 +97,7 @@ const NoteChildren = connect(
   {childrenIds: state`childrenLookup.${props`id`}`},
   function NoteChildren({childrenIds}) {
     // if (doesNoteHaveVisibleChildren(note)) {
-    debugger
+    // debugger
     return (
       <div className={cn('ml3')}>
         {_.map(id => (
@@ -183,11 +183,17 @@ function createAppController() {
   function getParent(id, state) {
     return getNote(getParentId(id, state), state)
   }
+
   function getChildren(id, state) {
     return state.get(`childrenLookup.${id}`)
   }
+  function getSiblings(id, state) {
+    const parent = getParent(id, state)
+    return getChildren(parent.id, state)
+  }
   function getIndexOf(id, state) {
     const childrenIds = getChildren(id, state)
+    debugger
     return _.indexOf(id, childrenIds)
   }
 
@@ -217,13 +223,16 @@ function createAppController() {
         }
 
         const idx = getIndexOf(props.id, state)
-
         const newNote = createNewNote({
           text: nanoid(7),
           parentId: getParentId(props.id, state),
         })
         const childId = newNote.id
-        state.unshift(`childrenLookup.${newNote.parentId}`, childId)
+        state.splice(
+          `childrenLookup.${newNote.parentId}`,
+          idx + 1,
+          childId,
+        )
         state.set(`childrenLookup.${childId}`, [])
         state.set(`noteLookup.${childId}`, newNote)
 
