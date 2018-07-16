@@ -17,6 +17,8 @@ import {
   getDebugId,
   getNoteId,
   getText,
+  maybeFirstVisibleChildOrNextNote,
+  maybePreviousNote,
   onNoteTextChangeEvent,
   selectChildren,
   selectText,
@@ -62,46 +64,14 @@ function cursorForceUpdate(textCursor, component) {
   textCursor.on('update', () => component.forceUpdate())
 }
 
-function maybeNextSiblingNote(note) {
-  return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeRight)(note)
-}
-function maybePreviousSiblingNote(note) {
-  return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeLeft)(note)
-}
-
-function maybeParentNote(note) {
-  return _.compose(S.chain(maybeUp), maybeUp)(note)
-}
-
-function maybeFirstChildNote(note) {
-  return maybeDownIfExists(note.select('children'))
-}
-
-const maybeNextNote = n =>
-  maybeOrElse(() => S.chain(maybeNextNote)(maybeParentNote(n)))(
-    maybeNextSiblingNote(n),
-  )
-
-function maybeFirstVisibleChildOrNextNote(note) {
-  return maybeOrElse(() => maybeNextNote(note))(
-    maybeFirstChildNote(note),
-  )
-}
-
-function lastVisibleLeafNoteOrSelf(note) {
-  return _.compose(
-    maybeOr(note),
-    S.map(lastVisibleLeafNoteOrSelf),
-    S.last,
-    getChildren,
-  )(note)
-}
-
-function maybePreviousNote(note) {
-  return _.compose(
-    maybeOrElse(() => maybeParentNote(note)),
-    S.map(lastVisibleLeafNoteOrSelf),
-  )(maybePreviousSiblingNote(note))
+const onNoteInputKeyDown = note => e => {
+  withKeyEvent(
+    whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
+    whenKey('down')(() =>
+      maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),
+    ),
+    whenKey('up')(() => maybeFocusNote(maybePreviousNote(note))),
+  )(e)
 }
 
 class NoteTextInput extends React.Component {
@@ -117,20 +87,9 @@ class NoteTextInput extends React.Component {
         className={cn('flex-auto', 'ma0 pa0 bw0 outline-0')}
         value={getText(note)}
         onChange={onNoteTextChangeEvent(note)}
-        onKeyDown={this.onKeyDown}
+        onKeyDown={onNoteInputKeyDown(note)}
       />
     )
-  }
-
-  onKeyDown = e => {
-    const note = this.props.note
-    withKeyEvent(
-      whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
-      whenKey('down')(() =>
-        maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),
-      ),
-      whenKey('up')(() => maybeFocusNote(maybePreviousNote(note))),
-    )(e)
   }
 }
 

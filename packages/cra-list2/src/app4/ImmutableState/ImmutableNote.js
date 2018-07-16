@@ -1,6 +1,15 @@
-import {_} from '../little-ramda'
+import {_, alwaysNothing, maybeOr, maybeOrElse} from '../little-ramda'
 import Baobab, {Cursor} from 'baobab'
 import nanoid from 'nanoid'
+import {
+  cursorIsRoot,
+  maybeDownIfExists,
+  maybeLeft,
+  maybeRight,
+  maybeUp,
+} from '../components/ImmutableNotes/functional-baobab'
+import S from 'sanctuary'
+import {whenKey, withKeyEvent} from '../components/utils'
 
 export function createNote({text = ''} = {}) {
   return {
@@ -107,3 +116,45 @@ const appendTwoChildren = (() => {
 export const initialNoteTree = appendTwoChildren(
   createNote({text: 'Tree Root'}),
 )
+
+function maybeNextSiblingNote(note) {
+  return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeRight)(note)
+}
+function maybePreviousSiblingNote(note) {
+  return _.ifElse(cursorIsRoot)(alwaysNothing)(maybeLeft)(note)
+}
+
+function maybeParentNote(note) {
+  return _.compose(S.chain(maybeUp), maybeUp)(note)
+}
+
+function maybeFirstChildNote(note) {
+  return maybeDownIfExists(note.select('children'))
+}
+
+const maybeNextNote = n =>
+  maybeOrElse(() => S.chain(maybeNextNote)(maybeParentNote(n)))(
+    maybeNextSiblingNote(n),
+  )
+
+export function maybeFirstVisibleChildOrNextNote(note) {
+  return maybeOrElse(() => maybeNextNote(note))(
+    maybeFirstChildNote(note),
+  )
+}
+
+function lastVisibleLeafNoteOrSelf(note) {
+  return _.compose(
+    maybeOr(note),
+    S.map(lastVisibleLeafNoteOrSelf),
+    S.last,
+    getChildren,
+  )(note)
+}
+
+export function maybePreviousNote(note) {
+  return _.compose(
+    maybeOrElse(() => maybeParentNote(note)),
+    S.map(lastVisibleLeafNoteOrSelf),
+  )(maybePreviousSiblingNote(note))
+}
