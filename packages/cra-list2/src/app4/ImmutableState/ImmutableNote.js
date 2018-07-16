@@ -97,8 +97,12 @@ export function getChildren(noteOrCursor) {
   return children
 }
 
+function getNoteChildCount(noteOrCursor) {
+  return getChildren(noteOrCursor).length
+}
+
 export function noteHasChildren(noteOrCursor) {
-  return getChildren(noteOrCursor).length > 0
+  return getNoteChildCount(noteOrCursor) > 0
 }
 
 export function getNoteId(note) {
@@ -123,7 +127,7 @@ export function appendSiblingNote(note, noteCursor) {
 }
 
 export function appendChildNote(noteData, noteCursor) {
-  const insertIdx = _.last(noteCursor.path) + 1
+  const insertIdx = getNoteChildCount(noteCursor)
   selectChildren(noteCursor).splice([insertIdx, 0, noteData])
   return noteCursor
 }
@@ -148,6 +152,13 @@ export function maybePreviousSiblingNote(note) {
 
 export function maybeParentNote(note) {
   return _.compose(S.chain(maybeUp), maybeUp)(note)
+}
+
+export function maybeParentButNotRootNote(note) {
+  return _.compose(
+    _.when(isCursorRoot)(alwaysNothing),
+    maybeParentNote,
+  )(note)
 }
 
 function maybeFirstChildNote(note) {
