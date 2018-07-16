@@ -8,11 +8,13 @@ import Baobab from 'baobab'
 import {
   appendChildNote,
   appendNewSiblingNote,
+  appendSiblingNote,
   deleteAndGetMaybePreviousNote,
   getDebugId,
   getNoteId,
   getNoteText,
   maybeFirstVisibleChildOrNextNote,
+  maybeParentNote,
   maybePreviousNote,
   maybePreviousSiblingNote,
   noteHasChildren,
@@ -91,6 +93,17 @@ const onNoteInputKeyDown = note => {
           return focusNote(noteData)
         }),
       )(maybePreviousSiblingNote(note))
+    }),
+    whenKey('shift+tab')(e => {
+      _.compose(
+        _.when(S.isJust)(() => e.preventDefault()),
+        S.map(parent => {
+          const noteData = note.get()
+          deleteAndGetMaybePreviousNote(note)
+          appendSiblingNote(noteData, parent)
+          return focusNote(noteData)
+        }),
+      )(maybeParentNote(note))
     }),
     whenKey('down')(() =>
       maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),

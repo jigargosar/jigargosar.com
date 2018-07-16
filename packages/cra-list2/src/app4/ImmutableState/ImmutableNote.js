@@ -6,8 +6,8 @@ import {
   maybeDownIfExists,
   maybeLeft,
   maybeRight,
-  maybeUp,
   maybeRightmostIfExists,
+  maybeUp,
 } from './functional-baobab'
 import S from 'sanctuary'
 
@@ -117,10 +117,14 @@ export function appendNewSiblingNote(noteCursor) {
   return newNote
 }
 
+export function appendSiblingNote(note, noteCursor) {
+  noteCursor.up().splice([_.last(noteCursor.path) + 1, 0, note])
+  return noteCursor
+}
+
 export function appendChildNote(noteData, noteCursor) {
   const insertIdx = _.last(noteCursor.path) + 1
-  const childrenCursor = selectChildren(noteCursor)
-  childrenCursor.splice([insertIdx, 0, noteData])
+  selectChildren(noteCursor).splice([insertIdx, 0, noteData])
   return noteCursor
 }
 
@@ -142,7 +146,7 @@ export function maybePreviousSiblingNote(note) {
   return ifRootThenNothingElse(maybeLeft)(note)
 }
 
-function maybeParentNote(note) {
+export function maybeParentNote(note) {
   return _.compose(S.chain(maybeUp), maybeUp)(note)
 }
 
