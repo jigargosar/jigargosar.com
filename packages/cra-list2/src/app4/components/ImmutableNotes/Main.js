@@ -79,45 +79,46 @@ const onNoteInputKeyDown = note => {
   return withKeyEvent(
     whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
     whenKey('backspace')(onBackspaceKeyDown),
-    whenKey('tab')(
-      wrapPD(e => {
-        S.map(prev => {
-          const noteData = note.get()
-          deleteAndGetMaybePreviousNote(note)
-          appendChildNote(noteData, prev)
-          focusNote(noteData, getSelectionFromEvent(e))
-          return e.preventDefault()
-        })(maybePreviousSiblingNote(note))
-      }),
-    ),
-    whenKey('shift+tab')(
-      wrapPD(e => {
-        S.map(parent => {
-          const noteData = note.get()
-          deleteAndGetMaybePreviousNote(note)
-          appendSiblingNote(noteData, parent)
-          focusNote(noteData, getSelectionFromEvent(e))
-          return e.preventDefault()
-        })(maybeParentButNotRootNote(note))
-      }),
-    ),
-    whenKey('down')(
-      wrapPD(e =>
-        maybeFocusNote(
-          maybeFirstVisibleChildOrNextNote(note),
-          getSelectionFromEvent(e),
-        ),
-      ),
-    ),
-    whenKey('up')(
-      wrapPD(e =>
-        maybeFocusNote(
-          maybePreviousNote(note),
-          getSelectionFromEvent(e),
-        ),
-      ),
-    ),
+    whenKey('tab')(wrapPD(indentNote)),
+    whenKey('shift+tab')(wrapPD(unIndentNote)),
+    whenKey('down')(wrapPD(navigateToNextNote)),
+    whenKey('up')(wrapPD(navigateToPreviousNote)),
   )
+
+  function navigateToPreviousNote(e) {
+    return maybeFocusNote(
+      maybePreviousNote(note),
+      getSelectionFromEvent(e),
+    )
+  }
+
+  function navigateToNextNote(e) {
+    return maybeFocusNote(
+      maybeFirstVisibleChildOrNextNote(note),
+      getSelectionFromEvent(e),
+    )
+  }
+
+  function unIndentNote(e) {
+    S.map(parent => {
+      const noteData = note.get()
+      deleteAndGetMaybePreviousNote(note)
+      appendSiblingNote(noteData, parent)
+      focusNote(noteData, getSelectionFromEvent(e))
+      return e.preventDefault()
+    })(maybeParentButNotRootNote(note))
+  }
+
+  function indentNote(e) {
+    S.map(prev => {
+      const noteData = note.get()
+      deleteAndGetMaybePreviousNote(note)
+      appendChildNote(noteData, prev)
+      focusNote(noteData, getSelectionFromEvent(e))
+      return e.preventDefault()
+    })(maybePreviousSiblingNote(note))
+  }
+
   function onBackspaceKeyDown(e) {
     const selection = getSelectionFromEvent(e)
     if (isSelectionAtStart(selection) && !noteHasChildren(note)) {
