@@ -31,11 +31,12 @@ const NoteTextInput = connect(
   function({setText, value}, {notePath}) {
     validate('FS', [setText, value])
 
+    const notePath = notePath || ['rootNote']
     return {
       onChange: e =>
         setText({
           text: e.target.value,
-          notePath: notePath || ['rootNote'],
+          notePath,
         }),
       value,
       onKeyDown: withKeyEvent(
