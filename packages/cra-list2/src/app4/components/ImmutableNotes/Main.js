@@ -133,7 +133,7 @@ function onNoteTextChangeEvent(note) {
   }
 }
 
-class NoteTextInput extends React.Component {
+class NoteTextInput extends React.PureComponent {
   componentDidMount() {
     releaseCursorIfNotNil(this.cursor)
     this.cursor = selectText(this.props.note)
@@ -152,9 +152,9 @@ class NoteTextInput extends React.Component {
     releaseCursorIfNotNil(this.cursor)
   }
 
-  shouldComponentUpdate() {
-    return false
-  }
+  // shouldComponentUpdate() {
+  //   return false
+  // }
 
   render() {
     const note = this.props.note
@@ -194,16 +194,22 @@ function NoteTextLine({note}) {
   )
 }
 
-function NoteChild({note}) {
-  return (
-    <F>
-      <NoteTextLine note={note} />
-      <NoteChildren note={note} />
-    </F>
-  )
+class NoteChild extends React.PureComponent {
+  // shouldComponentUpdate() {
+  //   return false
+  // }
+  render() {
+    const {note} = this.props
+    return (
+      <F>
+        <NoteTextLine note={note} />
+        <NoteChildren note={note} />
+      </F>
+    )
+  }
 }
 
-class NoteChildren extends React.Component {
+class NoteChildren extends React.PureComponent {
   componentDidMount() {
     // releaseCursorIfNotNil(this.cursor)
     this.cursor = selectChildren(this.props.note)
@@ -220,9 +226,9 @@ class NoteChildren extends React.Component {
     releaseCursorIfNotNil(this.cursor)
   }
 
-  shouldComponentUpdate() {
-    return false
-  }
+  // shouldComponentUpdate() {
+  //   return false
+  // }
 
   render() {
     const note = this.props.note
@@ -242,7 +248,7 @@ class NoteChildren extends React.Component {
   }
 }
 
-class NoteTree extends React.Component {
+class NoteTree extends React.PureComponent {
   componentDidMount() {
     releaseCursorIfNotNil(this.cursor)
     this.cursor = getRootNotePathCursor()
