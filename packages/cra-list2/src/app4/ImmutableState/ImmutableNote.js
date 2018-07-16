@@ -156,7 +156,7 @@ export function maybeParentNote(note) {
 
 export function maybeParentButNotRootNote(note) {
   return _.compose(
-    _.when(isCursorRoot)(alwaysNothing),
+    S.chain(_.ifElse(isCursorRoot, alwaysNothing, S.Just)),
     maybeParentNote,
   )(note)
 }

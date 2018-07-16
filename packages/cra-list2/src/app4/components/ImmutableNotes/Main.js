@@ -14,7 +14,6 @@ import {
   getNoteId,
   getNoteText,
   maybeFirstVisibleChildOrNextNote,
-  maybeParentNote,
   maybeParentButNotRootNote,
   maybePreviousNote,
   maybePreviousSiblingNote,
@@ -30,7 +29,6 @@ import {
 } from '../../ImmutableState/ImmutableNoteTree'
 import S from 'sanctuary'
 import {OnMount} from '../behaviour/OnMount'
-import {isCursorRoot} from '../../ImmutableState/functional-baobab'
 
 if (module.hot) {
   window.Baobab = Baobab
@@ -86,21 +84,20 @@ const onNoteInputKeyDown = note => {
     whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
     whenKey('backspace')(onBackspaceKeyDown),
     whenKey('tab')(e => {
-      _.compose(
-        _.when(S.isJust)(() => e.preventDefault()),
-        S.map(prev => {
-          const noteData = note.get()
-          deleteAndGetMaybePreviousNote(note)
-          appendChildNote(noteData, prev)
-          return focusNote(noteData)
-        }),
-      )(maybePreviousSiblingNote(note))
+      S.map(prev => {
+        const noteData = note.get()
+        deleteAndGetMaybePreviousNote(note)
+        appendChildNote(noteData, prev)
+        focusNote(noteData)
+        return e.preventDefault()
+      })(maybePreviousSiblingNote(note))
     }),
     whenKey('shift+tab')(e => {
       S.map(parent => {
         const noteData = note.get()
         deleteAndGetMaybePreviousNote(note)
         appendSiblingNote(noteData, parent)
+        focusNote(noteData)
         return e.preventDefault()
       })(maybeParentButNotRootNote(note))
     }),
