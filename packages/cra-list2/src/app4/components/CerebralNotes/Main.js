@@ -120,7 +120,7 @@ function NoteChild({notePath}) {
   )
 }
 
-const NoteTree = connect({}, function NoteTree() {
+function NoteTree() {
   return (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
@@ -128,7 +128,7 @@ const NoteTree = connect({}, function NoteTree() {
       </div>
     </F>
   )
-})
+}
 
 function createNewNote({text}) {
   return {id: nanoid(), text: text, children: []}
