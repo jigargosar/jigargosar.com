@@ -169,11 +169,7 @@ function NoteChild({note}) {
 
 class NoteChildren extends React.Component {
   componentDidMount() {
-    cursorForceUpdate(selectChildren(this.note), this)
-  }
-
-  get note() {
-    return this.props.note
+    cursorForceUpdate(selectChildren(this.props.note), this)
   }
 
   render() {
@@ -183,7 +179,7 @@ class NoteChildren extends React.Component {
           <F key={getNoteId(childNote)}>
             <NoteChild note={childNote} />
           </F>
-        ))(selectChildren(this.note))}
+        ))(selectChildren(this.props.note))}
       </div>
     )
   }
