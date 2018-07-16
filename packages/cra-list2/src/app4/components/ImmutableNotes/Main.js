@@ -248,11 +248,6 @@ class NoteTree extends React.Component {
   render() {
     return (
       <F>
-        <OnMount
-          onMount={() => {
-            focusNote(getCurrentRootNoteCursor())
-          }}
-        />
         <div className={cn('ma3 pa3 shadow-1 bg-white')}>
           <NoteChild note={getCurrentRootNoteCursor()} />
         </div>
