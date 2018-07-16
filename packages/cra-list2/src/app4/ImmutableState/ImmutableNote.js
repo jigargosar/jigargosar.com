@@ -94,6 +94,6 @@ const appendTwoChildren = (() => {
   return appendNotes([firstChild, secondChild])
 })()
 
-export const initialRoot = appendTwoChildren(
+export const initialNoteTree = appendTwoChildren(
   createNote({text: 'Tree Root'}),
 )

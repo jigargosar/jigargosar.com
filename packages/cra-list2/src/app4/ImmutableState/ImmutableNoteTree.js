@@ -1,10 +1,10 @@
 import {StorageItem} from '../services/storage'
-import {initialRoot} from './ImmutableNote'
+import {initialNoteTree} from './ImmutableNote'
 import Baobab from 'baobab'
 
 const storedState = StorageItem({
   name: 'NoteTreeState',
-  getInitial: () => initialRoot,
+  getInitial: () => initialNoteTree,
 })
 
 // const initialTree = initialRoot
