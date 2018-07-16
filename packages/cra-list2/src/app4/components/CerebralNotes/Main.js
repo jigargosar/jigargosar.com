@@ -2,48 +2,77 @@ import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, F} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
-import {Controller, Module} from 'cerebral'
-import {connect, Container} from '@cerebral/react'
-import {state} from 'cerebral/tags'
+import {
+  Compute,
+  Controller,
+  Module,
+  connect,
+  Container,
+  props,
+  signal,
+  state,
+} from './utils'
 
-function NoteTextInput({textValue}) {
-  return (
-    <input
-      // id={getNoteId(note)}
-      className={cn('flex-auto', 'ma0 pv2 bw0 outline-0')}
-      // value={getNoteText(note)}
-      defaultValue={textValue}
-      // onChange={onNoteTextChangeEvent(note)}
-      // onKeyDown={onNoteInputKeyDown(note)}
-    />
-  )
-}
+const NoteTextInput = connect(
+  {setText: signal`setText`},
+  function NoteTextInput({textValue, setText}) {
+    return (
+      <input
+        // id={getNoteId(note)}
+        className={cn('flex-auto', 'ma0 pv2 bw0 outline-0')}
+        // value={getNoteText(note)}
+        value={textValue}
+        onChange={e => setText(e.target.value)}
+        // onKeyDown={onNoteInputKeyDown(note)}
+      />
+    )
+  },
+)
 
-function NoteTextLine({note}) {
-  return (
-    <div className={cn('code flex items-center')}>
-      <div className={cn('mr3')}>
-        {/*{isNoteExpanded(note) ? `-` : `+`}*/}
-        {`-`}
-      </div>
-      <div
-        className={cn(
-          'flex-auto',
-          'flex items-center',
-          'bb bw1 b--light-gray',
-        )}
-      >
-        {/*<div className={cn('f6 gray mr3', 'dn')}>*/}
-        {/*{getDebugId(note)}*/}
-        {/*</div>*/}
-        <div className={cn('flex-auto', 'flex')}>
-          <NoteTextInput textValue={note.text} />
+const computeNoteFromNotePathProp = Compute(
+  props`notePath`,
+  (path, get) => {
+    if (!path) {
+      return get(state`rootNote`)
+    }
+    return get(state`${path}`)
+  },
+)
+
+const NoteTextLine = connect(
+  {
+    note: computeNoteFromNotePathProp,
+    // note: state`${props`notePath`}`,
+  },
+  function(dp, p, resolve) {
+    console.log(`args`, dp, p, resolve)
+    return {note: dp.note}
+  },
+  function NoteTextLine({note}) {
+    return (
+      <div className={cn('code flex items-center')}>
+        <div className={cn('mr3')}>
+          {/*{isNoteExpanded(note) ? `-` : `+`}*/}
+          {`-`}
+        </div>
+        <div
+          className={cn(
+            'flex-auto',
+            'flex items-center',
+            'bb bw1 b--light-gray',
+          )}
+        >
+          {/*<div className={cn('f6 gray mr3', 'dn')}>*/}
+          {/*{getDebugId(note)}*/}
+          {/*</div>*/}
+          <div className={cn('flex-auto', 'flex')}>
+            <NoteTextInput textValue={note.text} />
+          </div>
         </div>
       </div>
-    </div>
-  )
-}
-
+    )
+  },
+)
 /**
  * @return {null}
  */
@@ -63,22 +92,20 @@ function NoteChildren({note}) {
   // }
 }
 
-function NoteChild({note}) {
+const NoteChild = connect({}, function NoteChild({notePath}) {
   return (
     <F>
-      <NoteTextLine note={note} />
-      <NoteChildren note={note} />
+      <NoteTextLine notePath={notePath} />
+      <NoteChildren notePath={notePath} />
     </F>
   )
-}
+})
 
-const NoteTree = connect({note: state`rootNote`}, function NoteTree({
-  note,
-}) {
+const NoteTree = connect({}, function NoteTree() {
   return (
     <F>
       <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild note={note} />
+        <NoteChild />
       </div>
     </F>
   )
@@ -101,7 +128,11 @@ function createAppController() {
       rootNote: {text: 'Root Note Title', children: []},
       currentRootNotePath: ['rootNote'],
     },
-    signals: {},
+    signals: {
+      setText: (...args) => {
+        console.log(...args)
+      },
+    },
     modules: {},
     providers: {},
     catch: [],
