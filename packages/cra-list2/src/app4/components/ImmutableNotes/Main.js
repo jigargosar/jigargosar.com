@@ -52,12 +52,14 @@ function focusNote(note, selection = null) {
   return note
 }
 
-function maybeFocusNote(maybeNote, selection) {
-  return S.map(note => focusNote(note, selection))(maybeNote)
-}
-
 function cursorForceUpdate(textCursor, component) {
   textCursor.on('update', () => component.forceUpdate())
+}
+
+function focusNoteWithSelectionFromEvent(e) {
+  return function(note) {
+    return focusNote(note, getSelectionFromEvent(e))
+  }
 }
 
 const onNoteInputKeyDown = note => {
@@ -71,16 +73,14 @@ const onNoteInputKeyDown = note => {
   )
 
   function navigateToPreviousNote(e) {
-    return maybeFocusNote(
+    return S.map(S.map(focusNoteWithSelectionFromEvent(e)))(
       maybeGetPreviousNote(note),
-      getSelectionFromEvent(e),
     )
   }
 
   function navigateToNextNote(e) {
-    return maybeFocusNote(
+    return S.map(focusNoteWithSelectionFromEvent(e))(
       maybeGetFirstVisibleChildOrNextNote(note),
-      getSelectionFromEvent(e),
     )
   }
 
