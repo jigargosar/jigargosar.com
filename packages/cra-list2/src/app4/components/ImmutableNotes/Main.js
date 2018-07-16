@@ -30,7 +30,6 @@ import {
   getNoteTextLength,
   isNoteExpanded,
   maybeGetFirstVisibleChildOrNextNote,
-  maybeGetParentNote,
   maybeGetPreviousNote,
   maybeParentButNotRootNote,
   maybePreviousSiblingNote,
@@ -40,7 +39,9 @@ import {
 } from '../../ImmutableState/ImmutableNote'
 import {
   getCurrentRootNoteCursor,
-  setCurrentRootNoteCursor,
+  getRootNotePathCursor,
+  setCurrentRootNote,
+  setCurrentRootNoteOneLevelUp,
 } from '../../ImmutableState/ImmutableNoteTree'
 import S from 'sanctuary'
 import {OnMount} from '../behaviour/OnMount'
@@ -77,12 +78,8 @@ const onNoteInputKeyDown = note => {
     whenKey('up')(wrapPD(navigateToPreviousNote)),
     whenKey('shift+up')(wrapPD(() => collapseNote(note))),
     whenKey('shift+down')(wrapPD(() => expandNote(note))),
-    whenKey('mod+.')(wrapPD(() => setCurrentRootNoteCursor(note))),
-    whenKey('mod+,')(
-      wrapPD(() =>
-        S.map(setCurrentRootNoteCursor)(maybeGetParentNote(note)),
-      ),
-    ),
+    whenKey('mod+.')(wrapPD(() => setCurrentRootNote(note))),
+    whenKey('mod+,')(wrapPD(setCurrentRootNoteOneLevelUp)),
   )
 
   function navigateToPreviousNote(e) {
@@ -235,19 +232,33 @@ class NoteChildren extends React.Component {
   }
 }
 
-function NoteTree() {
-  return (
-    <F>
-      <OnMount
-        onMount={() => {
-          focusNote(getCurrentRootNoteCursor())
-        }}
-      />
-      <div className={cn('ma3 pa3 shadow-1 bg-white')}>
-        <NoteChild note={getCurrentRootNoteCursor()} />
-      </div>
-    </F>
-  )
+class NoteTree extends React.Component {
+  componentDidMount() {
+    releaseCursorIfNotNil(this.cursor)
+    this.cursor = getRootNotePathCursor()
+    cursorForceUpdate(this.cursor, this)
+
+    focusNote(getCurrentRootNoteCursor())
+  }
+
+  componentWillUnmount() {
+    releaseCursorIfNotNil(this.cursor)
+  }
+
+  render() {
+    return (
+      <F>
+        <OnMount
+          onMount={() => {
+            focusNote(getCurrentRootNoteCursor())
+          }}
+        />
+        <div className={cn('ma3 pa3 shadow-1 bg-white')}>
+          <NoteChild note={getCurrentRootNoteCursor()} />
+        </div>
+      </F>
+    )
+  }
 }
 
 function Main() {

@@ -1,7 +1,11 @@
 import {StorageItem} from '../services/storage'
-import {initialNoteTree, preProcessNote} from './ImmutableNote'
+import {
+  initialNoteTree,
+  maybeGetParentNote,
+  preProcessNote,
+} from './ImmutableNote'
 import Baobab from 'baobab'
-import {_} from '../little-ramda'
+import {_, S} from '../little-ramda'
 
 const storedState = StorageItem({
   name: 'NoteTreeState',
@@ -30,12 +34,23 @@ export function getRootNoteCursor() {
   return state.rootNoteCursor
 }
 
-export function getCurrentRootNoteCursor() {
-  return state.tree.select(state.tree.get('rootNotePath'))
+export function getRootNotePathCursor() {
+  return state.tree.select('rootNotePath')
 }
 
-export function setCurrentRootNoteCursor(noteCursor) {
+export function getCurrentRootNoteCursor() {
+  return state.tree.select(getRootNotePathCursor().get())
+}
+
+export function setCurrentRootNote(noteCursor) {
   state.tree.set('rootNotePath', noteCursor.path)
+}
+
+export function setCurrentRootNoteOneLevelUp() {
+  S.map(parent => {
+    state.tree.set('rootNotePath', parent.path)
+    return ''
+  })(maybeGetParentNote(getCurrentRootNoteCursor()))
 }
 
 console.log(getCurrentRootNoteCursor().get())
