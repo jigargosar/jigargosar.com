@@ -20,14 +20,15 @@ import {
   appendNewSiblingNote,
   appendNoteText,
   appendSiblingNote,
+  collapseNote,
   deleteAndGetMaybePreviousNote,
   getDebugId,
   getNoteId,
   getNoteText,
   getNoteTextLength,
   maybeGetFirstVisibleChildOrNextNote,
-  maybeParentButNotRootNote,
   maybeGetPreviousNote,
+  maybeParentButNotRootNote,
   maybePreviousSiblingNote,
   noteHasChildren,
   selectChildren,
@@ -70,6 +71,11 @@ const onNoteInputKeyDown = note => {
     whenKey('shift+tab')(wrapPD(unIndentNote)),
     whenKey('down')(wrapPD(navigateToNextNote)),
     whenKey('up')(wrapPD(navigateToPreviousNote)),
+    whenKey('shift+up')(
+      wrapPD(() => {
+        collapseNote(note)
+      }),
+    ),
   )
 
   function navigateToPreviousNote(e) {

@@ -214,3 +214,28 @@ export function deleteAndGetMaybePreviousNote(note) {
 export function appendNoteText(text, note) {
   return setNoteText(`${getNoteText(note)}${text}`, note)
 }
+
+function setNoteCollapsed(collapsed, noteCursor) {
+  noteCursor.set('collapsed', collapsed)
+  return noteCursor
+}
+
+export function collapseNote(noteCursor) {
+  return setNoteCollapsed(true, noteCursor)
+}
+
+export function expandNote(noteCursor) {
+  return setNoteCollapsed(false, noteCursor)
+}
+
+export function isNoteCollapsed(noteCursor) {
+  return noteCursor.get('collapsed')
+}
+
+export function isNoteExpanded(noteCursor) {
+  return !isNoteCollapsed(noteCursor)
+}
+
+export function doesNoteHaveVisibleChildren(noteCursor) {
+  return isNoteExpanded(noteCursor) && noteHasChildren(noteCursor)
+}

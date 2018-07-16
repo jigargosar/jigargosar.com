@@ -245,7 +245,7 @@ function createDisplayNoteTransformer(view) {
           }
         },
         onCollapseKeyDown() {
-          if (this.hasVisibleChildren) {
+          if (this.doesNoteHaveVisibleChildren) {
             this.update({collapsed: true})
           } else {
             this.navigateToParent()
