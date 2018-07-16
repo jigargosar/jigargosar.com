@@ -69,31 +69,33 @@ function appendNoteText(deletedText, prev) {
   return setNoteText(`${getText(prev)}${deletedText}`, prev)
 }
 
-const onNoteInputKeyDown = note =>
-  withKeyEvent(
+const onNoteInputKeyDown = note => {
+  return withKeyEvent(
     whenKey('enter')(() => focusNote(appendNewSiblingNote(note))),
-    whenKey('backspace')(e => {
-      const selectionRange = getInputSelectionRangeFromEvent(e)
-      const selectionAtStart = isSelectionRangeAtZero(selectionRange)
-      if (selectionAtStart) {
-        // focusPreviousNote(note)
-        const deletedText = getText(note)
-        const maybePrev = deleteAndGetMaybePreviousNote(note)
-        maybeFocusNote(maybePrev)
-        S.map(prev => {
-          const pos = getText(prev).length
-          return focusNote(appendNoteText(deletedText, prev), {
-            start: pos,
-            end: pos,
-          })
-        })(maybePrev)
-      }
-    }),
+    whenKey('backspace')(onBackspaceKeyDown),
     whenKey('down')(() =>
       maybeFocusNote(maybeFirstVisibleChildOrNextNote(note)),
     ),
     whenKey('up')(() => focusPreviousNote(note)),
   )
+  function onBackspaceKeyDown(e) {
+    const selectionRange = getInputSelectionRangeFromEvent(e)
+    const selectionAtStart = isSelectionRangeAtZero(selectionRange)
+    if (selectionAtStart) {
+      // focusPreviousNote(note)
+      const deletedText = getText(note)
+      const maybePrev = deleteAndGetMaybePreviousNote(note)
+      maybeFocusNote(maybePrev)
+      S.map(prev => {
+        const pos = getText(prev).length
+        return focusNote(appendNoteText(deletedText, prev), {
+          start: pos,
+          end: pos,
+        })
+      })(maybePrev)
+    }
+  }
+}
 
 function onNoteTextChangeEvent(note) {
   return function(e) {
