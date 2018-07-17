@@ -110,11 +110,12 @@ function BucketItem({item}) {
     <div
       className={cn(
         'flex items-center lh-copy f5',
+        'pv2',
         'outline-0 hover-bg-light-blue',
       )}
       tabIndex={0}
     >
-      <div className={cn('pa2', 'flex items-center')}>
+      <div className={cn('ph3', 'flex items-center')}>
         <input type={'checkbox'} tabIndex={-1} />
       </div>
       <div className={cn('code')}>{item.text}</div>
@@ -127,7 +128,7 @@ function Bucket({bucket}) {
     <div
       className={cn(
         'w-100 w-50-ns fl',
-        'pv3',
+        'pt3 pb2',
         'bg-white bw-1px bb br',
         // 'debug-grid-16-solid',
         // 'debug',
