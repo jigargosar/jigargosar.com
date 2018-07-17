@@ -189,7 +189,10 @@ function createState() {
   return state
 
   function createBucketItem(i) {
-    return {id: nanoid(), text: `${i} I ama todo ddda`}
+    return {
+      id: nanoid(),
+      text: `${i} I ama todo `,
+    }
   }
 
   function createBucket(i) {
