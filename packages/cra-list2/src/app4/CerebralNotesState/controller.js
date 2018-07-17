@@ -112,15 +112,15 @@ function createApp() {
               parentId,
             }),
           }),
-          set(props`newNoteId`, props`newNote.id`),
-          set(state`childrenLookup.${props`newNoteId`}`, []),
-          set(state`noteLookup.${props`newNoteId`}`, props`newNote`),
+          // set(props`newNoteId`, props`newNote.id`),
+          set(state`childrenLookup.${props`newNote.id`}`, []),
+          set(state`noteLookup.${props`newNote.id`}`, props`newNote`),
           unshift(
-            state`childrenLookup.${props`parentId`}`,
-            props`newNoteId`,
+            state`childrenLookup.${props`newNote.parentId`}`,
+            props`newNote.id`,
           ),
           ({props}) => {
-            setFocusAndSelectionOnDOMId(props.newNoteId)
+            setFocusAndSelectionOnDOMId(props.newNote.id)
           },
         ],
         appendSibling: ({state, props}) => {
