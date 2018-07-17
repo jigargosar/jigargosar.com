@@ -239,15 +239,16 @@ function createAppController() {
           parentId: getParentId(props.id, state),
         })
         const childId = newNote.id
-        // state.splice(
-        //   `childrenLookup.${newNote.parentId}`,
-        //   idx + 1,
-        //   childId,
-        // )
-        state.set(
-          `childrenLookup.${newNote.parentId}.${idx + 1}`,
-          childId,
+
+        const childrenIds = state.get(
+          `childrenLookup.${newNote.parentId}`,
         )
+
+        state.set(
+          `childrenLookup.${newNote.parentId}`,
+          _.insert(idx + 1)(childId)(childrenIds),
+        )
+
         state.set(`childrenLookup.${childId}`, [])
         state.set(`noteLookup.${childId}`, newNote)
 
