@@ -124,7 +124,9 @@ export function maybeOr(defaultValue) {
 }
 
 export const isNotEmpty = _.complement(_.isEmpty)
+
 export const mergeWithDefaults = _.mergeWith(_.defaultTo)
+
 export const alwaysNothing = constant(S.Nothing)
 
 const modelsToIds = _.map(_.prop('id'))
