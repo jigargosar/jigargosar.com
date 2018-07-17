@@ -1,5 +1,5 @@
 import {StorageItem} from '../services/storage'
-import {_, isNotNil} from '../little-ramda'
+import {_, isNotNil, validate} from '../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../components/utils'
 import {
   Controller,
@@ -13,7 +13,27 @@ import {
 import nanoid from 'nanoid'
 
 function createNewNote({text, parentId = null}) {
+  validate('S', [text])
+  validate('S|Z', [parentId])
   return {id: nanoid(), text: text, parentId}
+}
+
+function createNewNoteAF(text = '', parentId = null) {
+  return function createNewNoteAction({resolve}) {
+    console.log(`resolve`, resolve)
+    console.log(
+      `resolve.value(() => nanoid(6))`,
+      resolve.value(() => nanoid(6)),
+    )
+    debugger
+    const resolvedText = resolve.value(text)
+    return {
+      newNoteAF: createNewNote({
+        text: _.is(Function)(resolvedText) ? text() : text,
+        parentId: resolve.value(parentId),
+      }),
+    }
+  }
 }
 
 function getDevTools() {
@@ -105,6 +125,10 @@ function createApp() {
           set(state`${props`notePath`}.text`, props`text`),
         ],
         prependNewChild: [
+          createNewNoteAF(nanoid(7), props`id`),
+          ({props}) => {
+            console.log(`props`, props)
+          },
           ({props: {id}}) => ({
             newNote: createNewNote({
               text: nanoid(7),
