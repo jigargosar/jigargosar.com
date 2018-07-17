@@ -2,6 +2,7 @@ import {StorageItem} from '../services/storage'
 import {_, modelsToIdLookup, validate} from '../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../components/utils'
 import {
+  Compute,
   createAppController,
   logProps,
   Module,
@@ -144,3 +145,8 @@ function createRootModule() {
 }
 
 export const controller = createAppController(createRootModule())
+export const currentDashboard = Compute(
+  state`dashboards`,
+  state`currentDashboardId`,
+  (ds, id) => ds[id] || ds[0],
+)

@@ -3,7 +3,10 @@ import {CenterLayout, TypographyDefaults} from '../ui'
 import {cn, F, renderKeyedById} from '../utils'
 import {connect, Container, state} from '../../little-cerebral'
 import {_, idEq} from '../../little-ramda'
-import {controller} from '../../CerebralListyState/controller'
+import {
+  controller,
+  currentDashboard,
+} from '../../CerebralListyState/controller'
 import {nanoid} from '../../model/util'
 
 // const NoteTextInput = connect(
@@ -140,29 +143,30 @@ function Bucket({bucket}) {
   )
 }
 
-const ListDashboard = connect({}, function ListDashboard({
-  dashboard,
-}) {
-  return (
-    <F>
-      <div className={cn('bw-1px bl-l')}>
-        {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
-        <div className={cn('cf')} />
-      </div>
-    </F>
-  )
-})
+const ListyDashboard = connect(
+  {dashboard: currentDashboard},
+  function ListDashboard({dashboard}) {
+    return (
+      <F>
+        <div className={cn('bw-1px bl-l')}>
+          {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
+          <div className={cn('cf')} />
+        </div>
+      </F>
+    )
+  },
+)
 const DashboardHeaderTabs = connect(
   {
     dashboards: state`dashboards`,
-    currentDashboardId: state`currentDashboardId`,
+    currentDashboard: currentDashboard,
   },
-  function DashboardHeaderTabs({dashboards, currentDashboardId}) {
+  function DashboardHeaderTabs({dashboards, currentDashboard}) {
     return _.map(d => (
       <div
         key={d.id}
         className={cn('f4 lh-title pa2', {
-          underline: currentDashboardId === d.id,
+          underline: currentDashboard === d,
         })}
       >
         {d.name}
@@ -239,7 +243,7 @@ function ListyMain() {
           <DashboardHeaderTabs />
         </Header>
         <CenterLayout>
-          <ListDashboard dashboard={getCurrentDashboard()} />
+          <ListyDashboard dashboard={getCurrentDashboard()} />
         </CenterLayout>
       </TypographyDefaults>
     </Container>
