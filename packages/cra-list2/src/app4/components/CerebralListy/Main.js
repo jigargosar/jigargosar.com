@@ -106,13 +106,18 @@ import {nanoid} from '../../model/util'
 // }
 
 function BucketItem({item}) {
-  return <div>{item.text}</div>
+  return (
+    <div className={cn('flex items-center lh-copy')}>
+      <input className={cn('mr2')} type={'checkbox'} />
+      <div className={cn('code')}>{item.text}</div>
+    </div>
+  )
 }
 
 function Bucket({bucket}) {
   return (
-    <div className={cn('pa3')}>
-      <div>{bucket.name}</div>
+    <div className={cn('ma3')}>
+      <div className={cn('f4 mb2')}>{bucket.name}</div>
       {renderKeyedById(BucketItem, 'item', bucket.items)}
     </div>
   )
