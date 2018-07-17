@@ -8,17 +8,17 @@ function createNewNote({text, parentId = null}) {
   return {id: nanoid(), text: text, parentId}
 }
 
-function createAppController() {
-  function getDevTools() {
-    if (module.hot) {
-      return require('cerebral/devtools').default({
-        host: 'localhost:8585',
-        reconnect: true,
-      })
-    }
-    return null
+function getDevTools() {
+  if (module.hot) {
+    return require('cerebral/devtools').default({
+      host: 'localhost:8585',
+      reconnect: true,
+    })
   }
+  return null
+}
 
+function createAppController() {
   const storedState = StorageItem({
     name: 'CerebralNoteTreeState',
     getInitial: () => {
