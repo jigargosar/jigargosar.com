@@ -102,9 +102,6 @@ function createApp() {
           state`noteLookup.${props`id`}.text`,
           props`text`,
         ),
-        // setText: ({state, props}) => {
-        //   state.set(`noteLookup.${props.id}.text`, props.text)
-        // },
         prependNewChild: ({state, props}) => {
           const parentId = props.id
           const childNote = createNewNote({
