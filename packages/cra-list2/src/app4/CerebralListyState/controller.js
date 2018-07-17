@@ -15,26 +15,24 @@ import {
 } from '../little-cerebral'
 import nanoid from 'nanoid'
 
-function createDashboard({name, buckets = _.times(createBucket)(5)}) {
+function createDashboard({id = nanoid(), name}) {
   return {
-    id: nanoid(),
+    id,
     name,
-    buckets,
   }
 }
 
-function createBucketItem(i) {
+function createBucketItem() {
   return {
     id: nanoid(),
-    text: `${i} I ama todo `,
+    text: `I ama todo `,
   }
 }
-
-function createBucket(i) {
+function createBucket({dashboardId, name = `New List`}) {
   return {
     id: nanoid(),
-    name: `List ${i}`,
-    items: _.times(createBucketItem)(3),
+    dashboardId,
+    name,
   }
 }
 
@@ -152,4 +150,9 @@ export const currentDashboard = Compute(
   state`currentDashboardId`,
   state`dashboards`,
   findById,
+)
+export const currentBuckets = Compute(
+  state`currentDashboardId`,
+  state`buckets`,
+  _.useWith(_.filter)([_.propEq('dashboardId'), _.defaultTo([])]),
 )

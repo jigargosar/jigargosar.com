@@ -10,6 +10,7 @@ import {
 import {_, idEq} from '../../little-ramda'
 import {
   controller,
+  currentBuckets,
   currentDashboard,
 } from '../../CerebralListyState/controller'
 import {nanoid} from '../../model/util'
@@ -149,12 +150,12 @@ function Bucket({bucket}) {
 }
 
 const ListyDashboard = connect(
-  {dashboard: currentDashboard},
-  function ListDashboard({dashboard}) {
+  {buckets: currentBuckets},
+  function ListDashboard({buckets}) {
     return (
       <F>
         <div className={cn('bw-1px bl-l')}>
-          {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
+          {renderKeyedById(Bucket, 'bucket', buckets)}
           <div className={cn('cf')} />
         </div>
       </F>
