@@ -140,7 +140,9 @@ function Bucket({bucket}) {
   )
 }
 
-function ListDashboard({dashboard}) {
+const ListDashboard = connect({}, function ListDashboard({
+  dashboard,
+}) {
   return (
     <F>
       <div className={cn('bw-1px bl-l')}>
@@ -149,8 +151,7 @@ function ListDashboard({dashboard}) {
       </div>
     </F>
   )
-}
-
+})
 const DashboardHeaderTabs = connect(
   {
     dashboards: state`dashboards`,
@@ -221,10 +222,6 @@ function createState() {
   }
 }
 
-function isCurrentDashboard(dashboard) {
-  return dashboard.id === fakeState.currentDashboardId
-}
-
 function getCurrentDashboard() {
   return _.compose(
     _.defaultTo(fakeState.dashboards[0]),
@@ -233,10 +230,6 @@ function getCurrentDashboard() {
 }
 
 const fakeState = createState()
-
-function getDashboards() {
-  return fakeState.dashboards
-}
 
 function ListyMain() {
   return (
