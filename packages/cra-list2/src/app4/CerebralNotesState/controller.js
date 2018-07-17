@@ -18,7 +18,7 @@ function getDevTools() {
   return null
 }
 
-function createAppController() {
+function createApp() {
   const storedState = StorageItem({
     name: 'CerebralNoteTreeState',
     getInitial: () => {
@@ -134,8 +134,11 @@ function createAppController() {
     providers: {},
     catch: [],
   })
+  return app
+}
 
-  const controller = Controller(app, {
+function createAppController() {
+  const controller = Controller(createApp(), {
     devtools: getDevTools(),
   })
 
@@ -145,7 +148,7 @@ function createAppController() {
 
   controller.on('flush', changes => {
     console.debug(`changes`, changes)
-    storedState.save(controller.getState())
+    // storedState.save(controller.getState())
   })
 
   return controller
