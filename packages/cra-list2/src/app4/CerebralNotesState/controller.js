@@ -1,7 +1,13 @@
 import {StorageItem} from '../services/storage'
 import {_, isNotNil} from '../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../components/utils'
-import {Controller, Module} from '../little-cerebral'
+import {
+  Controller,
+  Module,
+  props,
+  set,
+  state,
+} from '../little-cerebral'
 import nanoid from 'nanoid'
 
 function createNewNote({text, parentId = null}) {
@@ -92,9 +98,13 @@ function createApp() {
       // Define module state, namespaced by module path
       state: {...initialState},
       signals: {
-        setText: ({state, props}) => {
-          state.set(`noteLookup.${props.id}.text`, props.text)
-        },
+        setText: set(
+          state`noteLookup.${props`id`}.text`,
+          props`text`,
+        ),
+        // setText: ({state, props}) => {
+        //   state.set(`noteLookup.${props.id}.text`, props.text)
+        // },
         prependNewChild: ({state, props}) => {
           const parentId = props.id
           const childNote = createNewNote({
@@ -136,7 +146,7 @@ function createApp() {
         },
       },
       modules: {},
-      providers: {},
+      providers: {storedState},
       catch: [],
     }
   })
