@@ -1,7 +1,7 @@
 import {Compute, Controller, Module} from 'cerebral'
 import {connect, Container} from '@cerebral/react'
 import {props, signal, state, string} from 'cerebral/tags'
-import {set} from 'cerebral/operators'
+import {set, unshift} from 'cerebral/operators'
 
 export {
   Compute,
@@ -14,4 +14,5 @@ export {
   state,
   set,
   string,
+  unshift,
 }

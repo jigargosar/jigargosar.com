@@ -8,6 +8,7 @@ import {
   set,
   state,
   string,
+  unshift,
 } from '../little-cerebral'
 import nanoid from 'nanoid'
 
@@ -111,14 +112,18 @@ function createApp() {
               parentId,
             }),
           }),
-          set(state`newNoteId`, string`${props`newNote`}.id`),
+          set(props`newNoteId`, props`newNote.id`),
           set(state`childrenLookup.${props`newNoteId`}`, []),
           set(state`noteLookup.${props`newNoteId`}`, props`newNote`),
+          unshift(
+            state`childrenLookup.${props`parentId`}`,
+            props`newNoteId`,
+          ),
           ({state, props}) => {
-            state.unshift(
-              `childrenLookup.${props.parentId}`,
-              props.newNoteId,
-            )
+            // state.unshift(
+            //   `childrenLookup.${props.parentId}`,
+            //   props.newNoteId,
+            // )
             setFocusAndSelectionOnDOMId(props.newNoteId)
           },
         ],
