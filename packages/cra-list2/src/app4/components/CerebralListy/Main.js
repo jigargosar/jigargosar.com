@@ -5,6 +5,7 @@ import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {Container} from '../../little-cerebral'
 import {_, mapIndexed} from '../../little-ramda'
 import {controller} from '../../CerebralListyState/controller'
+import {nanoid} from '../../model/util'
 
 // const NoteTextInput = connect(
 //   {
@@ -105,20 +106,17 @@ import {controller} from '../../CerebralListyState/controller'
 //   )
 // }
 
-function TodoBucket() {
-  return <div className={cn('pa3')}>TodoBucket</div>
-}
-
-function DashboardBuckets({buckets}) {
-  return <F>{renderKeyedById(TodoBucket, 'todoBucket', buckets)}</F>
+function Bucket({bucket}) {
+  return (
+    <div className={cn('pa3')}>
+      <div>{bucket.name}</div>
+      {}
+    </div>
+  )
 }
 
 function ListDashboard({dashboard}) {
-  return (
-    <F>
-      <DashboardBuckets buckets={dashboard.todoBuckets} />
-    </F>
-  )
+  return <F>{renderKeyedById(Bucket, 'bucket', dashboard.buckets)}</F>
 }
 
 function Header({dashboards, selectedIdx}) {
@@ -128,6 +126,7 @@ function Header({dashboards, selectedIdx}) {
         <div className={cn('flex-auto', 'flex mh3')}>
           {mapIndexed((dashboard, idx) => (
             <div
+              key={idx}
               className={cn('f4 lh-title pa2', {
                 'white bg-black': selectedIdx === idx,
               })}
@@ -158,18 +157,23 @@ function createState() {
   }
   return state
 
-  function createTodoItem(i) {
-    return {text: `${i} I ama todo ddda`}
+  function createBucketItem(i) {
+    return {id: nanoid(), text: `${i} I ama todo ddda`}
   }
 
-  function createTodoList(i) {
-    return {name: `List ${i}`, items: _.times(createTodoItem)(3)}
+  function createBucket(i) {
+    return {
+      id: nanoid(),
+      name: `List ${i}`,
+      items: _.times(createBucketItem)(3),
+    }
   }
 
   function createDashboard({name}) {
     return {
+      id: nanoid(),
       name,
-      todoBuckets: _.times(createTodoList)(5),
+      buckets: _.times(createBucket)(5),
     }
   }
 }
