@@ -42,7 +42,7 @@ function createApp() {
           _.values,
         )(state.noteLookup),
       })
-      console.log(`ns`, ns)
+      console.debug(`ns`, ns)
 
       return ns
     },
@@ -83,56 +83,64 @@ function createApp() {
     return _.indexOf(id, siblingNotes)
   }
 
-  const app = Module({
-    // Define module state, namespaced by module path
-    state: {...initialState},
-    signals: {
-      setText: ({state, props}) => {
-        state.set(`noteLookup.${props.id}.text`, props.text)
+  const app = Module(module => {
+    module.controller.on('flush', changes => {
+      console.log(`changes`, changes)
+      // storedState.save(controller.getState())
+      console.log(`controller.getState()`, controller.getState())
+      console.log(`controller.getModel()`, controller.getModel())
+    })
+    return {
+      // Define module state, namespaced by module path
+      state: {...initialState},
+      signals: {
+        setText: ({state, props}) => {
+          state.set(`noteLookup.${props.id}.text`, props.text)
+        },
+        prependNewChild: ({state, props}) => {
+          const parentId = props.id
+          const childNote = createNewNote({
+            text: nanoid(7),
+            parentId: parentId,
+          })
+          const childId = childNote.id
+          state.unshift(`childrenLookup.${parentId}`, childId)
+          state.set(`childrenLookup.${childId}`, [])
+          state.set(`noteLookup.${childId}`, childNote)
+
+          setFocusAndSelectionOnDOMId(childId)
+        },
+        appendSibling: ({state, props}) => {
+          if (!hasParent(props.id, state)) {
+            return
+          }
+
+          const idx = getIndexOf(props.id, state)
+          const newNote = createNewNote({
+            text: nanoid(7),
+            parentId: getParentId(props.id, state),
+          })
+          const childId = newNote.id
+
+          const childrenIds = state.get(
+            `childrenLookup.${newNote.parentId}`,
+          )
+
+          state.set(
+            `childrenLookup.${newNote.parentId}`,
+            _.insert(idx + 1)(childId)(childrenIds),
+          )
+
+          state.set(`childrenLookup.${childId}`, [])
+          state.set(`noteLookup.${childId}`, newNote)
+
+          setFocusAndSelectionOnDOMId(childId)
+        },
       },
-      prependNewChild: ({state, props}) => {
-        const parentId = props.id
-        const childNote = createNewNote({
-          text: nanoid(7),
-          parentId: parentId,
-        })
-        const childId = childNote.id
-        state.unshift(`childrenLookup.${parentId}`, childId)
-        state.set(`childrenLookup.${childId}`, [])
-        state.set(`noteLookup.${childId}`, childNote)
-
-        setFocusAndSelectionOnDOMId(childId)
-      },
-      appendSibling: ({state, props}) => {
-        if (!hasParent(props.id, state)) {
-          return
-        }
-
-        const idx = getIndexOf(props.id, state)
-        const newNote = createNewNote({
-          text: nanoid(7),
-          parentId: getParentId(props.id, state),
-        })
-        const childId = newNote.id
-
-        const childrenIds = state.get(
-          `childrenLookup.${newNote.parentId}`,
-        )
-
-        state.set(
-          `childrenLookup.${newNote.parentId}`,
-          _.insert(idx + 1)(childId)(childrenIds),
-        )
-
-        state.set(`childrenLookup.${childId}`, [])
-        state.set(`noteLookup.${childId}`, newNote)
-
-        setFocusAndSelectionOnDOMId(childId)
-      },
-    },
-    modules: {},
-    providers: {},
-    catch: [],
+      modules: {},
+      providers: {},
+      catch: [],
+    }
   })
   return app
 }
@@ -140,15 +148,6 @@ function createApp() {
 function createAppController() {
   const controller = Controller(createApp(), {
     devtools: getDevTools(),
-  })
-
-  // controller.on('mutation', mutation => {
-  //   console.log(`mutation`, mutation)
-  // })
-
-  controller.on('flush', changes => {
-    console.debug(`changes`, changes)
-    // storedState.save(controller.getState())
   })
 
   return controller
