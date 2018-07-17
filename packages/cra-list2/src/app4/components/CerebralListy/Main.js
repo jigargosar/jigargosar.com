@@ -156,7 +156,7 @@ function Bucket({bucket}) {
   )
 }
 
-const ListyDashboard = connect(
+const BucketsDashboard = connect(
   {
     buckets: currentBuckets,
     addBucket: signal`addBucket`,
@@ -266,7 +266,7 @@ function ListyMain() {
           <DashboardHeaderTabs />
         </Header>
         <CenterLayout>
-          <ListyDashboard dashboard={getCurrentDashboard()} />
+          <BucketsDashboard dashboard={getCurrentDashboard()} />
         </CenterLayout>
       </TypographyDefaults>
     </Container>
