@@ -107,7 +107,13 @@ import {nanoid} from '../../model/util'
 
 function BucketItem({item}) {
   return (
-    <div className={cn('flex items-center lh-copy')} tabIndex={0}>
+    <div
+      className={cn(
+        'flex items-center lh-copy',
+        'outline-0 hover-bg-light-blue',
+      )}
+      tabIndex={0}
+    >
       <div className={cn('pa2')}>
         <input type={'checkbox'} tabIndex={-1} />
       </div>
