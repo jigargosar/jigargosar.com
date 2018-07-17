@@ -18,7 +18,7 @@ function createNewNote({text, parentId = null}) {
   return {id: nanoid(), text: text, parentId}
 }
 
-function createNewNoteAF(text = '', parentId = null) {
+function createNewNoteAF({text = '', parentId = null}) {
   return function createNewNoteAction({resolve}) {
     const resolvedText = resolve.value(text)
     return {
@@ -121,7 +121,10 @@ function createApp() {
           set(state`${props`notePath`}.text`, props`text`),
         ],
         prependNewChild: [
-          createNewNoteAF(nanoid(7), props`id`),
+          createNewNoteAF({
+            text: () => nanoid(7),
+            parentId: props`id`,
+          }),
           ({props}) => {
             console.log(`props`, props)
           },
