@@ -3,7 +3,7 @@ import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, F, renderKeyedById} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {Container} from '../../little-cerebral'
-import {_} from '../../little-ramda'
+import {_, mapIndexed} from '../../little-ramda'
 import {controller} from '../../CerebralListyState/controller'
 
 // const NoteTextInput = connect(
@@ -121,10 +121,9 @@ function createDashboard({name}) {
 }
 
 const dashboards = [
-  createDashboard({name: 'Main'}),
+  createDashboard({name: 'Master'}),
+  createDashboard({name: 'Project X'}),
   createDashboard({name: 'Tutorial'}),
-  createDashboard({name: 'Help'}),
-  createDashboard({name: 'Settings'}),
 ]
 
 function TodoBucket() {
@@ -143,25 +142,47 @@ function ListDashboard({dashboard}) {
   )
 }
 
-function Header({dashboards}) {
+function Header({dashboards, selectedIdx}) {
   return (
-    <AppHeaderBar>
-      <div className={cn('flex-auto')}>
-        {_.map(dashboard => <Title>{dashboard.name}</Title>)(
-          dashboards,
-        )}
-      </div>
-    </AppHeaderBar>
+    <div className={'shadow-1 bg-light-blue'}>
+      <CenterLayout className={cn('flex items-center', 'pv1 pv2-ns')}>
+        <div className={cn('flex-auto', 'flex mh3')}>
+          {mapIndexed((dashboard, idx) => (
+            <div
+              className={cn('f4 lh-title pa2', {
+                'white bg-black': selectedIdx === idx,
+              })}
+            >
+              {dashboard.name}
+            </div>
+          ))(dashboards)}
+        </div>
+        <div className={cn('flex f5 lh-title mh3')}>
+          <a className={cn('link ml2 pointer')}>Help</a>
+          <a className={cn('link ml2 pointer')}>Settings</a>
+        </div>
+      </CenterLayout>
+    </div>
   )
+}
+
+const state = {
+  dashboards,
+  selectedIdx: 0,
 }
 
 function ListyMain() {
   return (
     <Container controller={controller}>
       <TypographyDefaults className={cn('mb4')}>
-        <Header dashboards={dashboards} />
+        <Header
+          dashboards={state.dashboards}
+          selectedIdx={state.selectedIdx}
+        />
         <CenterLayout>
-          <ListDashboard dashboard={dashboards[0]} />
+          <ListDashboard
+            dashboard={state.dashboards[state.selectedIdx]}
+          />
         </CenterLayout>
       </TypographyDefaults>
     </Container>
