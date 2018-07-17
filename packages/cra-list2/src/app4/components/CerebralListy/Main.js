@@ -109,12 +109,12 @@ function BucketItem({item}) {
   return (
     <div
       className={cn(
-        'flex items-center lh-copy',
+        'flex items-center lh-copy f5',
         'outline-0 hover-bg-light-blue',
       )}
       tabIndex={0}
     >
-      <div className={cn('pa2')}>
+      <div className={cn('pa2', 'flex items-center')}>
         <input type={'checkbox'} tabIndex={-1} />
       </div>
       <div className={cn('code')}>{item.text}</div>
@@ -133,7 +133,7 @@ function Bucket({bucket}) {
         // 'debug',
       )}
     >
-      <div className={cn('f4 pb1')}>{bucket.name}</div>
+      <div className={cn('f4 pl3 pb1')}>{bucket.name}</div>
       {renderKeyedById(BucketItem, 'item', bucket.items)}
     </div>
   )
