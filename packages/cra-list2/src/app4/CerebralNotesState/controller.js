@@ -20,16 +20,12 @@ function createNewNote({text, parentId = null}) {
 
 function createNewNoteAF(text = '', parentId = null) {
   return function createNewNoteAction({resolve}) {
-    console.log(`resolve`, resolve)
-    console.log(
-      `resolve.value(() => nanoid(6))`,
-      resolve.value(() => nanoid(6)),
-    )
-    debugger
     const resolvedText = resolve.value(text)
     return {
       newNoteAF: createNewNote({
-        text: _.is(Function)(resolvedText) ? text() : text,
+        text: _.is(Function)(resolvedText)
+          ? resolvedText()
+          : resolvedText,
         parentId: resolve.value(parentId),
       }),
     }
