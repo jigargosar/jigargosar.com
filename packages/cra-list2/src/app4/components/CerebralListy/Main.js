@@ -2,7 +2,7 @@ import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
 import {cn, F, renderKeyedById} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
-import {connect, Container} from '../../little-cerebral'
+import {Container} from '../../little-cerebral'
 import {_} from '../../little-ramda'
 import {controller} from '../../CerebralListyState/controller'
 
@@ -113,44 +113,55 @@ function createTodoList(i) {
   return {name: `List ${i}`, items: _.times(createTodoItem)(3)}
 }
 
-function createDashboard() {
-  return {name: 'Master Dash', todoLists: _.times(createTodoList)(5)}
+function createDashboard({name}) {
+  return {
+    name,
+    todoBuckets: _.times(createTodoList)(5),
+  }
 }
 
-const dashboard = createDashboard()
+const dashboards = [
+  createDashboard({name: 'Main'}),
+  createDashboard({name: 'Tutorial'}),
+  createDashboard({name: 'Help'}),
+  createDashboard({name: 'Settings'}),
+]
 
-function TodoList() {
-  return <div>TodoList</div>
+function TodoBucket() {
+  return <div className={cn('pa3')}>TodoBucket</div>
 }
 
-const ListDashboard = connect(
-  {},
-  // {dashboard: state`currentDashboard`},
-  // function (dp, p) {
-  //   return {
-  //     todoListsIds:_.map(_.prop('id'))(dashboard.todoLists)
-  //   }
-  // },
-  function ListDashboard() {
-    return (
-      <F>
-        {renderKeyedById(TodoList, 'todoList', dashboard.todoLists)}
-      </F>
-    )
-  },
-)
+function DashboardBuckets({buckets}) {
+  return <F>{renderKeyedById(TodoBucket, 'todoBucket', buckets)}</F>
+}
+
+function ListDashboard({dashboard}) {
+  return (
+    <F>
+      <DashboardBuckets buckets={dashboard.todoBuckets} />
+    </F>
+  )
+}
+
+function Header({dashboards}) {
+  return (
+    <AppHeaderBar>
+      <div className={cn('flex-auto')}>
+        {_.map(dashboard => <Title>{dashboard.name}</Title>)(
+          dashboards,
+        )}
+      </div>
+    </AppHeaderBar>
+  )
+}
 
 function ListyMain() {
   return (
     <Container controller={controller}>
       <TypographyDefaults className={cn('mb4')}>
-        <AppHeaderBar>
-          <Title className={cn('flex-auto')}>
-            {`Cerebral Note Outliner`}
-          </Title>
-        </AppHeaderBar>
+        <Header dashboards={dashboards} />
         <CenterLayout>
-          <ListDashboard />
+          <ListDashboard dashboard={dashboards[0]} />
         </CenterLayout>
       </TypographyDefaults>
     </Container>
