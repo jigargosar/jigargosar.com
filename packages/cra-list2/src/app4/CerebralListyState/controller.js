@@ -8,6 +8,7 @@ import {
   Module,
   pauseFlowThe,
   props,
+  push,
   set,
   state,
   string,
@@ -88,7 +89,10 @@ function createRootModule() {
       // console.debug(`ns`, ns)
       //
       // return ns
-      return state
+      return _.mergeWith(_.defaultTo)(
+        {dashboards: [], buckets: [], items: []},
+        state,
+      )
     },
   })
 
@@ -107,6 +111,14 @@ function createRootModule() {
       signals: {
         switchDashboard: [
           set(state`currentDashboardId`, props`dashboard.id`),
+        ],
+        addBucket: [
+          ({props, state}) => ({
+            newBucket: createBucket({
+              dashboardId: state.get('currentDashboardId'),
+            }),
+          }),
+          push(state`buckets`, props`newBucket`),
         ],
         setText: [
           set(props`notePath`, string`noteLookup.${props`id`}`),

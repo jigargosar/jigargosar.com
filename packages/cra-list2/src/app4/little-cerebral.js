@@ -1,7 +1,7 @@
 import {Compute, Controller, Module} from 'cerebral'
 import {connect, Container} from '@cerebral/react'
 import {props, signal, state, string} from 'cerebral/tags'
-import {set, unshift} from 'cerebral/operators'
+import {set, unshift, push} from 'cerebral/operators'
 import {_} from './little-ramda'
 
 export {
@@ -16,6 +16,7 @@ export {
   set,
   string,
   unshift,
+  push,
 }
 
 export function logProps(ctx) {

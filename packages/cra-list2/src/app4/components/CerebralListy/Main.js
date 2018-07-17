@@ -150,12 +150,16 @@ function Bucket({bucket}) {
 }
 
 const ListyDashboard = connect(
-  {buckets: currentBuckets},
-  function ListDashboard({buckets}) {
+  {
+    buckets: currentBuckets,
+    addBucket: signal`addBucket`,
+  },
+  function ListDashboard({buckets, addBucket}) {
     return (
       <F>
         <div className={cn('bw-1px bl-l')}>
           {renderKeyedById(Bucket, 'bucket', buckets)}
+          <div onClick={() => addBucket()}>Add List</div>
           <div className={cn('cf')} />
         </div>
       </F>
