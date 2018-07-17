@@ -3,7 +3,9 @@ import {_, isNotNil, validate} from '../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../components/utils'
 import {
   Controller,
+  logProps,
   Module,
+  pauseFlowThe,
   props,
   set,
   state,
@@ -112,6 +114,7 @@ function createApp() {
       console.debug(`changes`, changes)
       storedState.save(controller.getState())
     })
+
     return {
       // Define module state, namespaced by module path
       state: {...initialState},
@@ -125,9 +128,8 @@ function createApp() {
             text: () => nanoid(7),
             parentId: props`id`,
           }),
-          ({props}) => {
-            console.log(`props`, props)
-          },
+          logProps,
+          pauseFlowThe,
           ({props: {id}}) => ({
             newNote: createNewNote({
               text: nanoid(7),
