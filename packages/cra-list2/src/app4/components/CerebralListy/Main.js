@@ -172,7 +172,6 @@ const DashboardHeaderTabs = connect(
     currentDashboard,
     switchDashboard,
   }) {
-    debugger
     return _.map(dashboard => (
       <div
         onClick={() => switchDashboard({dashboard})}
