@@ -1,7 +1,12 @@
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
 import {cn, F, renderKeyedById} from '../utils'
-import {connect, Container, state} from '../../little-cerebral'
+import {
+  connect,
+  Container,
+  signal,
+  state,
+} from '../../little-cerebral'
 import {_, idEq} from '../../little-ramda'
 import {
   controller,
@@ -160,16 +165,22 @@ const DashboardHeaderTabs = connect(
   {
     dashboards: state`dashboards`,
     currentDashboard: currentDashboard,
+    switchDashboard: signal`switchDashboard`,
   },
-  function DashboardHeaderTabs({dashboards, currentDashboard}) {
-    return _.map(d => (
+  function DashboardHeaderTabs({
+    dashboards,
+    currentDashboard,
+    switchDashboard,
+  }) {
+    return _.map(dashboard => (
       <div
-        key={d.id}
-        className={cn('f4 lh-title pa2', {
-          underline: currentDashboard === d,
+        onClick={() => switchDashboard({dashboard})}
+        key={dashboard.id}
+        className={cn('f4 lh-title pa2', 'pointer', {
+          underline: currentDashboard === dashboard,
         })}
       >
-        {d.name}
+        {dashboard.name}
       </div>
     ))(dashboards)
   },
