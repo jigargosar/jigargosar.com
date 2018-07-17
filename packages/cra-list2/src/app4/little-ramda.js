@@ -126,7 +126,10 @@ export function maybeOr(defaultValue) {
 export const isNotEmpty = _.complement(_.isEmpty)
 export const mergeWithDefaults = _.mergeWith(_.defaultTo)
 export const alwaysNothing = constant(S.Nothing)
-export const listToLookupById = _.converge(_.zipObj)([
-  _.map(_.prop('id')),
+
+const modelsToIds = _.map(_.prop('id'))
+
+export const modelsToIdLookup = _.converge(_.zipObj)([
+  modelsToIds,
   _.identity,
 ])
