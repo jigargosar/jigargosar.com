@@ -105,27 +105,6 @@ import {controller} from '../../CerebralListyState/controller'
 //   )
 // }
 
-function createTodoItem(i) {
-  return {text: `${i} I ama todo ddda`}
-}
-
-function createTodoList(i) {
-  return {name: `List ${i}`, items: _.times(createTodoItem)(3)}
-}
-
-function createDashboard({name}) {
-  return {
-    name,
-    todoBuckets: _.times(createTodoList)(5),
-  }
-}
-
-const dashboards = [
-  createDashboard({name: 'Master'}),
-  createDashboard({name: 'Project X'}),
-  createDashboard({name: 'Tutorial'}),
-]
-
 function TodoBucket() {
   return <div className={cn('pa3')}>TodoBucket</div>
 }
@@ -166,10 +145,36 @@ function Header({dashboards, selectedIdx}) {
   )
 }
 
-const state = {
-  dashboards,
-  selectedIdx: 0,
+function createState() {
+  const dashboards = [
+    createDashboard({name: 'Master'}),
+    createDashboard({name: 'Project X'}),
+    createDashboard({name: 'Tutorial'}),
+  ]
+
+  const state = {
+    dashboards,
+    selectedIdx: 0,
+  }
+  return state
+
+  function createTodoItem(i) {
+    return {text: `${i} I ama todo ddda`}
+  }
+
+  function createTodoList(i) {
+    return {name: `List ${i}`, items: _.times(createTodoItem)(3)}
+  }
+
+  function createDashboard({name}) {
+    return {
+      name,
+      todoBuckets: _.times(createTodoList)(5),
+    }
+  }
 }
+
+const state = createState()
 
 function ListyMain() {
   return (
