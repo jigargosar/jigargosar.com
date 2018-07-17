@@ -123,7 +123,7 @@ const NoteTree = connect({id: state`rootNoteId`}, function NoteTree({
   )
 })
 
-function Main() {
+function ListyMain() {
   return (
     <Container controller={controller}>
       <TypographyDefaults className={cn('mb4')}>
@@ -140,4 +140,4 @@ function Main() {
   )
 }
 
-export default Main
+export default ListyMain
