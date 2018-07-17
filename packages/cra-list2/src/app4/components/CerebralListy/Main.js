@@ -2,7 +2,7 @@ import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
 import {cn, F, renderKeyedById} from '../utils'
 import {Container} from '../../little-cerebral'
-import {_, mapIndexed} from '../../little-ramda'
+import {_, idEq, mapIndexed} from '../../little-ramda'
 import {controller} from '../../CerebralListyState/controller'
 import {nanoid} from '../../model/util'
 
@@ -151,21 +151,24 @@ function ListDashboard({dashboard}) {
   )
 }
 
-function Header({dashboards, selectedIdx}) {
+function HeaderTab({dashboard}) {
+  return (
+    <div
+      className={cn('f4 lh-title pa2', {
+        'white bg-black': isCurrentDashboard(dashboard),
+      })}
+    >
+      {dashboard.name}
+    </div>
+  )
+}
+
+function Header({dashboards}) {
   return (
     <div className={'bg-light-blue bw-1px bb'}>
       <CenterLayout className={cn('flex items-center', 'pv1 pv2-ns')}>
         <div className={cn('flex-auto', 'flex mh3')}>
-          {mapIndexed((dashboard, idx) => (
-            <div
-              key={idx}
-              className={cn('f4 lh-title pa2', {
-                'white bg-black': selectedIdx === idx,
-              })}
-            >
-              {dashboard.name}
-            </div>
-          ))(dashboards)}
+          {renderKeyedById(HeaderTab, 'dashboard', dashboards)}
         </div>
         <div className={cn('flex f5 lh-title mh3')}>
           <a className={cn('link ml2 pointer')}>Help</a>
@@ -185,7 +188,7 @@ function createState() {
 
   const state = {
     dashboards,
-    selectedIdx: 0,
+    currentDashboardId: dashboards[0].id,
   }
   return state
 
@@ -213,20 +216,30 @@ function createState() {
   }
 }
 
+function isCurrentDashboard(dashboard) {
+  return dashboard.id === state.currentDashboardId
+}
+
+function getCurrentDashboard() {
+  return _.compose(
+    _.defaultTo(state.dashboards[0]),
+    _.find(idEq(state.currentDashboardId)),
+  )(state.dashboards)
+}
+
 const state = createState()
+
+function getDashboards() {
+  return state.dashboards
+}
 
 function ListyMain() {
   return (
     <Container controller={controller}>
       <TypographyDefaults className={cn('mb4')}>
-        <Header
-          dashboards={state.dashboards}
-          selectedIdx={state.selectedIdx}
-        />
+        <Header dashboards={getDashboards()} />
         <CenterLayout>
-          <ListDashboard
-            dashboard={state.dashboards[state.selectedIdx]}
-          />
+          <ListDashboard dashboard={getCurrentDashboard()} />
         </CenterLayout>
       </TypographyDefaults>
     </Container>
