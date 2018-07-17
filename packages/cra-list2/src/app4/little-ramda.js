@@ -135,3 +135,7 @@ export const modelsToIdLookup = _.converge(_.zipObj)([
   modelsToIds,
   _.identity,
 ])
+export const findById = _.curry(function findById(id, arr) {
+  validate('SA', [id, arr])
+  return _.find(idEq(id))(arr)
+})

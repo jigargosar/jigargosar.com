@@ -1,5 +1,10 @@
 import {StorageItem} from '../services/storage'
-import {_, modelsToIdLookup, validate} from '../little-ramda'
+import {
+  _,
+  findById,
+  modelsToIdLookup,
+  validate,
+} from '../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../components/utils'
 import {
   Compute,
@@ -108,6 +113,9 @@ function createRootModule() {
       // Define module state, namespaced by module path
       state: {...decodedState},
       signals: {
+        switchDashboard: [
+          set(state`currentDashboardId`, props`dashboard.id`),
+        ],
         setText: [
           set(props`notePath`, string`noteLookup.${props`id`}`),
           set(state`${props`notePath`}.text`, props`text`),
@@ -145,8 +153,9 @@ function createRootModule() {
 }
 
 export const controller = createAppController(createRootModule())
+
 export const currentDashboard = Compute(
-  state`dashboards`,
   state`currentDashboardId`,
-  (ds, id) => ds[id] || ds[0],
+  state`dashboards`,
+  findById,
 )
