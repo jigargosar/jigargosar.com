@@ -116,7 +116,9 @@ function BucketItem({item}) {
 
 function Bucket({bucket}) {
   return (
-    <div className={cn('w-100 w-50-ns fl', 'bg-white pa3 bw1 bb br')}>
+    <div
+      className={cn('w-100 w-50-ns fl', 'bg-white pa3 bw-1px bb br')}
+    >
       <div className={cn('f4 pb1')}>{bucket.name}</div>
       {renderKeyedById(BucketItem, 'item', bucket.items)}
     </div>
@@ -126,12 +128,9 @@ function Bucket({bucket}) {
 function ListDashboard({dashboard}) {
   return (
     <F>
-      <div
-        className={cn({
-          /*'flex flex-column'*/
-        })}
-      >
+      <div className={cn('bw-1px bl-l')}>
         {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
+        <div className={cn('cf')} />
       </div>
     </F>
   )
@@ -139,7 +138,7 @@ function ListDashboard({dashboard}) {
 
 function Header({dashboards, selectedIdx}) {
   return (
-    <div className={'bg-light-blue bw1 bb'}>
+    <div className={'bg-light-blue bw-1px bb'}>
       <CenterLayout className={cn('flex items-center', 'pv1 pv2-ns')}>
         <div className={cn('flex-auto', 'flex mh3')}>
           {mapIndexed((dashboard, idx) => (
