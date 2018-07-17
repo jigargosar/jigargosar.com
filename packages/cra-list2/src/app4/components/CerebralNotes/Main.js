@@ -192,9 +192,8 @@ function createAppController() {
     return getChildren(parent.id, state)
   }
   function getIndexOf(id, state) {
-    const childrenIds = getChildren(id, state)
-    debugger
-    return _.indexOf(id, childrenIds)
+    const siblingNotes = getSiblings(id, state)
+    return _.indexOf(id, siblingNotes)
   }
 
   const app = Module({
@@ -228,9 +227,13 @@ function createAppController() {
           parentId: getParentId(props.id, state),
         })
         const childId = newNote.id
-        state.splice(
-          `childrenLookup.${newNote.parentId}`,
-          idx + 1,
+        // state.splice(
+        //   `childrenLookup.${newNote.parentId}`,
+        //   idx + 1,
+        //   childId,
+        // )
+        state.set(
+          `childrenLookup.${newNote.parentId}.${idx + 1}`,
           childId,
         )
         state.set(`childrenLookup.${childId}`, [])
