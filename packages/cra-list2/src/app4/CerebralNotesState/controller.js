@@ -104,17 +104,19 @@ function createApp() {
           set(state`${props`notePath`}.text`, props`text`),
         ],
         prependNewChild: ({state, props}) => {
-          const parentId = props.id
-          const childNote = createNewNote({
+          const newNote = createNewNote({
             text: nanoid(7),
-            parentId: parentId,
+            parentId: props.id,
           })
-          const childId = childNote.id
-          state.unshift(`childrenLookup.${parentId}`, childId)
-          state.set(`childrenLookup.${childId}`, [])
-          state.set(`noteLookup.${childId}`, childNote)
+          const newNoteId = newNote.id
+          state.unshift(
+            `childrenLookup.${newNote.parentId}`,
+            newNoteId,
+          )
+          state.set(`childrenLookup.${newNoteId}`, [])
+          state.set(`noteLookup.${newNoteId}`, newNote)
 
-          setFocusAndSelectionOnDOMId(childId)
+          setFocusAndSelectionOnDOMId(newNoteId)
         },
         appendSibling: ({state, props}) => {
           if (!hasParent(props.id, state)) {
