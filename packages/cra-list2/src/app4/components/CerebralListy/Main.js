@@ -9,12 +9,12 @@ import {
 } from '../../little-cerebral'
 import {_, idEq} from '../../little-ramda'
 import {
+  bucketItems,
   controller,
   currentBuckets,
   currentDashboard,
 } from '../../CerebralListyState/controller'
 import {nanoid} from '../../model/util'
-import * as PropTypes from 'prop-types'
 
 // const NoteTextInput = connect(
 //   {
@@ -133,11 +133,12 @@ function BucketItem({item}) {
   )
 }
 
-function BucketItems({items = []}) {
-  return <F>{renderKeyedById(BucketItem, 'item', items)}</F>
-}
-
-BucketItems.propTypes = {idList: PropTypes.any}
+const BucketItems = connect(
+  {items: bucketItems},
+  function BucketItems({items = []}) {
+    return <F>{renderKeyedById(BucketItem, 'item', items)}</F>
+  },
+)
 
 function Bucket({bucket}) {
   return (
@@ -151,7 +152,7 @@ function Bucket({bucket}) {
       )}
     >
       <div className={cn('f4 pl3 pb1')}>{bucket.name}</div>
-      <BucketItems id={bucket.id} />
+      <BucketItems bucketId={bucket.id} />
     </div>
   )
 }

@@ -168,3 +168,9 @@ export const currentBuckets = Compute(
   state`buckets`,
   _.useWith(_.filter)([_.propEq('dashboardId'), _.defaultTo([])]),
 )
+
+export const bucketItems = Compute(
+  props`bucketId`,
+  state`items`,
+  _.useWith(_.filter)([_.propEq('bucketId'), _.defaultTo([])]),
+)
