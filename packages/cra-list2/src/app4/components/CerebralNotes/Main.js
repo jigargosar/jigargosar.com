@@ -161,6 +161,18 @@ function createAppController() {
       }
       return initialState
     },
+    postLoad: state => {
+      const ns = _.merge(state, {
+        childrenLookup: _.compose(
+          _.map(_.map(_.prop('id'))),
+          _.groupBy(_.prop('parentId')),
+          _.values,
+        )(state.noteLookup),
+      })
+      console.log(`ns`, ns)
+
+      return state
+    },
   })
 
   const initialState = storedState.load()
