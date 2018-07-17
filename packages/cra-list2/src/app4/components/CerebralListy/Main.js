@@ -1,7 +1,6 @@
 import React from 'react'
-import {CenterLayout, Title, TypographyDefaults} from '../ui'
+import {CenterLayout, TypographyDefaults} from '../ui'
 import {cn, F, renderKeyedById} from '../utils'
-import {AppHeaderBar} from '../mobx/AppHeaderBar'
 import {Container} from '../../little-cerebral'
 import {_, mapIndexed} from '../../little-ramda'
 import {controller} from '../../CerebralListyState/controller'
@@ -106,11 +105,15 @@ import {nanoid} from '../../model/util'
 //   )
 // }
 
+function BucketItem({item}) {
+  return <div>{item.text}</div>
+}
+
 function Bucket({bucket}) {
   return (
     <div className={cn('pa3')}>
       <div>{bucket.name}</div>
-      {}
+      {renderKeyedById(BucketItem, 'item', bucket.items)}
     </div>
   )
 }
