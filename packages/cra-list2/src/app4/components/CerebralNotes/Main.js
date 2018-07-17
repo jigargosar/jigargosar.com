@@ -163,6 +163,7 @@ function createAppController() {
     postLoad: state => {
       const ns = _.merge(state, {
         childrenLookup: _.compose(
+          _.merge(_.map(() => [])(state.noteLookup)),
           _.map(_.map(_.prop('id'))),
           _.groupBy(_.prop('parentId')),
           _.values,
@@ -170,7 +171,7 @@ function createAppController() {
       })
       console.log(`ns`, ns)
 
-      return state
+      return ns
     },
   })
 
