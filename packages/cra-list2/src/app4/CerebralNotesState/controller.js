@@ -85,10 +85,8 @@ function createApp() {
 
   const app = Module(module => {
     module.controller.on('flush', changes => {
-      console.log(`changes`, changes)
-      // storedState.save(controller.getState())
-      console.log(`controller.getState()`, controller.getState())
-      console.log(`controller.getModel()`, controller.getModel())
+      console.debug(`changes`, changes)
+      storedState.save(controller.getState())
     })
     return {
       // Define module state, namespaced by module path
