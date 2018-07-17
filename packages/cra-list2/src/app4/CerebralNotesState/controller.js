@@ -105,14 +105,12 @@ function createApp() {
           set(state`${props`notePath`}.text`, props`text`),
         ],
         prependNewChild: [
-          set(props`parentId`, string`${props`id`}`),
-          ({props: {parentId}}) => ({
+          ({props: {id}}) => ({
             newNote: createNewNote({
               text: nanoid(7),
-              parentId,
+              parentId: id,
             }),
           }),
-          // set(props`newNoteId`, props`newNote.id`),
           set(state`childrenLookup.${props`newNote.id`}`, []),
           set(state`noteLookup.${props`newNote.id`}`, props`newNote`),
           unshift(
