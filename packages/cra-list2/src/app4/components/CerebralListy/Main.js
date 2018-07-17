@@ -14,6 +14,7 @@ import {
   currentDashboard,
 } from '../../CerebralListyState/controller'
 import {nanoid} from '../../model/util'
+import * as PropTypes from 'prop-types'
 
 // const NoteTextInput = connect(
 //   {
@@ -132,6 +133,12 @@ function BucketItem({item}) {
   )
 }
 
+function BucketItems({items = []}) {
+  return <F>{renderKeyedById(BucketItem, 'item', items)}</F>
+}
+
+BucketItems.propTypes = {idList: PropTypes.any}
+
 function Bucket({bucket}) {
   return (
     <div
@@ -144,7 +151,7 @@ function Bucket({bucket}) {
       )}
     >
       <div className={cn('f4 pl3 pb1')}>{bucket.name}</div>
-      {renderKeyedById(BucketItem, 'item', bucket.items)}
+      <BucketItems id={bucket.id} />
     </div>
   )
 }
