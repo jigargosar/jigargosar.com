@@ -65,7 +65,7 @@ function createRootModule() {
   })
 
   const initialState = storedState.load()
-  setFocusAndSelectionOnDOMId(initialState.rootNoteId)
+  // setFocusAndSelectionOnDOMId(initialState.rootNoteId)
 
   function getNote(id, state) {
     return state.get(`noteLookup.${id}`)

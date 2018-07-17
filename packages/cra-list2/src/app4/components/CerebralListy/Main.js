@@ -1,15 +1,9 @@
 import React from 'react'
 import {CenterLayout, Title, TypographyDefaults} from '../ui'
-import {cn, F, renderKeyedById, whenKey, withKeyEvent} from '../utils'
+import {cn, F, renderKeyedById} from '../utils'
 import {AppHeaderBar} from '../mobx/AppHeaderBar'
-import {
-  connect,
-  Container,
-  props,
-  signal,
-  state,
-} from '../../little-cerebral'
-import {_, validate} from '../../little-ramda'
+import {connect, Container} from '../../little-cerebral'
+import {_} from '../../little-ramda'
 import {controller} from '../../CerebralListyState/controller'
 
 // const NoteTextInput = connect(
@@ -111,12 +105,36 @@ import {controller} from '../../CerebralListyState/controller'
 //   )
 // }
 
+function createTodoItem(i) {
+  return {text: `${i} I ama todo ddda`}
+}
+
+function createTodoList(i) {
+  return {name: `List ${i}`, items: _.times(createTodoItem)(3)}
+}
+
+function createDashboard() {
+  return {name: 'Master Dash', todoLists: _.times(createTodoList)(5)}
+}
+
+const dashboard = createDashboard()
+
+function TodoList() {
+  return <div>TodoList</div>
+}
+
 const ListDashboard = connect(
-  {dashboard: state`currentDashboard`},
-  function ListDashboard({dashboard}) {
+  {},
+  // {dashboard: state`currentDashboard`},
+  // function (dp, p) {
+  //   return {
+  //     todoListsIds:_.map(_.prop('id'))(dashboard.todoLists)
+  //   }
+  // },
+  function ListDashboard() {
     return (
       <F>
-        {renderKeyedById(TodoList, 'todoList', dashboard.todoList)}
+        {renderKeyedById(TodoList, 'todoList', dashboard.todoLists)}
       </F>
     )
   },
