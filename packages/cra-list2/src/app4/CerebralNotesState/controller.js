@@ -7,6 +7,7 @@ import {
   props,
   set,
   state,
+  string,
 } from '../little-cerebral'
 import nanoid from 'nanoid'
 
@@ -98,10 +99,10 @@ function createApp() {
       // Define module state, namespaced by module path
       state: {...initialState},
       signals: {
-        setText: set(
-          state`noteLookup.${props`id`}.text`,
-          props`text`,
-        ),
+        setText: [
+          set(props`notePath`, string`noteLookup.${props`id`}`),
+          set(state`${props`notePath`}.text`, props`text`),
+        ],
         prependNewChild: ({state, props}) => {
           const parentId = props.id
           const childNote = createNewNote({
