@@ -149,7 +149,7 @@ const Bucket = connect(
         className={cn(
           'w-100 w-50-ns fl',
           'pt3 pb2',
-          'bg-white bw-1px bb br',
+          'bg-white bb br',
           // 'debug-grid-16-solid',
           // 'debug',
         )}
@@ -172,7 +172,7 @@ const BucketsDashboard = connect(
   function BucketsDashboard({bucketIds, addBucket}) {
     return (
       <F>
-        <div className={cn('bw-1px bl-l')}>
+        <div className={cn('bl-l')}>
           {_.map(bucketId => (
             <Bucket key={bucketId} bucketId={bucketId} />
           ))(bucketIds)}
@@ -210,7 +210,7 @@ const DashboardHeaderTabs = connect(
 
 function Header({children}) {
   return (
-    <div className={'bg-light-blue bw-1px bb'}>
+    <div className={'bg-light-blue bb'}>
       <CenterLayout className={cn('flex items-center', 'pv1 pv2-ns')}>
         <div className={cn('flex-auto', 'flex mh3')}>{children}</div>
         <div className={cn('flex f5 lh-title mh3')}>
