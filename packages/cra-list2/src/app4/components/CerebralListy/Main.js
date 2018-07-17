@@ -147,7 +147,7 @@ const Bucket = connect(
     return (
       <div
         className={cn(
-          'w-100 w-50-ns fl',
+          'w-100 w-50-m w-33-l fl',
           'pt3 pb2',
           'bg-white bb br',
           // 'debug-grid-16-solid',
@@ -172,12 +172,14 @@ const BucketsDashboard = connect(
   function BucketsDashboard({bucketIds, addBucket}) {
     return (
       <F>
-        <div className={cn('bl-l')}>
-          {_.map(bucketId => (
-            <Bucket key={bucketId} bucketId={bucketId} />
-          ))(bucketIds)}
-          <div onClick={() => addBucket()}>Add List</div>
-          <div className={cn('cf')} />
+        <div className={cn('bl-l bl-m')}>
+          <div className={cn('flex flex-wrap ')}>
+            {_.map(bucketId => (
+              <Bucket key={bucketId} bucketId={bucketId} />
+            ))(bucketIds)}
+            <div onClick={() => addBucket()}>Add List</div>
+          </div>
+          {/*<div className={cn('cf')} />*/}
         </div>
       </F>
     )
