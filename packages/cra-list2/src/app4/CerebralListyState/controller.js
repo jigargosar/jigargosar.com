@@ -39,6 +39,7 @@ function createBucket(i) {
 
 function createInitialState() {
   const masterDashboard = createDashboard({name: 'Master'})
+
   const dashboards = [
     masterDashboard,
     createDashboard({name: 'Project X'}),

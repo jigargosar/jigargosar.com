@@ -1,8 +1,8 @@
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
 import {cn, F, renderKeyedById} from '../utils'
-import {Container} from '../../little-cerebral'
-import {_, idEq, mapIndexed} from '../../little-ramda'
+import {connect, Container, state} from '../../little-cerebral'
+import {_, idEq} from '../../little-ramda'
 import {controller} from '../../CerebralListyState/controller'
 import {nanoid} from '../../model/util'
 
@@ -11,7 +11,7 @@ import {nanoid} from '../../model/util'
 //     setText: signal`setText`,
 //     prependNewChild: signal`prependNewChild`,
 //     appendSibling: signal`appendSibling`,
-//     value: state`noteLookup.${props`id`}.text`,
+//     value: fakeState`noteLookup.${props`id`}.text`,
 //   },
 //   function({setText, value, prependNewChild, appendSibling}, {id}) {
 //     validate('FS', [setText, value])
@@ -78,7 +78,7 @@ import {nanoid} from '../../model/util'
 // }
 //
 // const NoteChildren = connect(
-//   {childrenIds: state`childrenLookup.${props`id`}`},
+//   {childrenIds: fakeState`childrenLookup.${props`id`}`},
 //   function NoteChildren({childrenIds}) {
 //     // if (doesNoteHaveVisibleChildren(note)) {
 //     // debugger
@@ -155,7 +155,7 @@ function HeaderTab({dashboard}) {
   return (
     <div
       className={cn('f4 lh-title pa2', {
-        'white bg-black': isCurrentDashboard(dashboard),
+        underline: isCurrentDashboard(dashboard),
       })}
     >
       {dashboard.name}
@@ -163,13 +163,22 @@ function HeaderTab({dashboard}) {
   )
 }
 
-function Header({dashboards}) {
+const DashboardHeaderTabs = connect(
+  {dashboardLookup: state`dashboardLookup`},
+  function DashboardHeaderTabs({dashboardLookup}) {
+    return renderKeyedById(
+      HeaderTab,
+      'dashboard',
+      _.values(dashboardLookup),
+    )
+  },
+)
+
+function Header({children}) {
   return (
     <div className={'bg-light-blue bw-1px bb'}>
       <CenterLayout className={cn('flex items-center', 'pv1 pv2-ns')}>
-        <div className={cn('flex-auto', 'flex mh3')}>
-          {renderKeyedById(HeaderTab, 'dashboard', dashboards)}
-        </div>
+        <div className={cn('flex-auto', 'flex mh3')}>{children}</div>
         <div className={cn('flex f5 lh-title mh3')}>
           <a className={cn('link ml2 pointer')}>Help</a>
           <a className={cn('link ml2 pointer')}>Settings</a>
@@ -217,27 +226,29 @@ function createState() {
 }
 
 function isCurrentDashboard(dashboard) {
-  return dashboard.id === state.currentDashboardId
+  return dashboard.id === fakeState.currentDashboardId
 }
 
 function getCurrentDashboard() {
   return _.compose(
-    _.defaultTo(state.dashboards[0]),
-    _.find(idEq(state.currentDashboardId)),
-  )(state.dashboards)
+    _.defaultTo(fakeState.dashboards[0]),
+    _.find(idEq(fakeState.currentDashboardId)),
+  )(fakeState.dashboards)
 }
 
-const state = createState()
+const fakeState = createState()
 
 function getDashboards() {
-  return state.dashboards
+  return fakeState.dashboards
 }
 
 function ListyMain() {
   return (
     <Container controller={controller}>
       <TypographyDefaults className={cn('mb4')}>
-        <Header dashboards={getDashboards()} />
+        <Header>
+          <DashboardHeaderTabs dashboards={getDashboards()} />
+        </Header>
         <CenterLayout>
           <ListDashboard dashboard={getCurrentDashboard()} />
         </CenterLayout>
