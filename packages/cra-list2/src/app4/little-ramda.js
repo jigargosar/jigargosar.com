@@ -129,7 +129,7 @@ export const mergeWithDefaults = _.mergeWith(_.defaultTo)
 
 export const alwaysNothing = constant(S.Nothing)
 
-const modelsToIds = _.map(_.prop('id'))
+export const modelsToIds = _.map(_.prop('id'))
 
 export const modelsToIdLookup = _.converge(_.zipObj)([
   modelsToIds,

@@ -9,9 +9,10 @@ import {
 } from '../../little-cerebral'
 import {_, idEq} from '../../little-ramda'
 import {
+  bucketFromProps,
   bucketItems,
   controller,
-  currentBuckets,
+  currentBucketIds,
   currentDashboard,
 } from '../../CerebralListyState/controller'
 import {nanoid} from '../../model/util'
@@ -140,33 +141,41 @@ const BucketItems = connect(
   },
 )
 
-function Bucket({bucket}) {
-  return (
-    <div
-      className={cn(
-        'w-100 w-50-ns fl',
-        'pt3 pb2',
-        'bg-white bw-1px bb br',
-        // 'debug-grid-16-solid',
-        // 'debug',
-      )}
-    >
-      <div className={cn('f4 pl3 pb1')}>{bucket.name}</div>
-      <BucketItems bucketId={bucket.id} />
-    </div>
-  )
-}
+const Bucket = connect(
+  {addItem: signal`addItem`, bucket: bucketFromProps},
+  function Bucket({bucket, addItem}) {
+    return (
+      <div
+        className={cn(
+          'w-100 w-50-ns fl',
+          'pt3 pb2',
+          'bg-white bw-1px bb br',
+          // 'debug-grid-16-solid',
+          // 'debug',
+        )}
+      >
+        <div className={cn('f4 pl3 pb1')}>{bucket.name}</div>
+        <BucketItems bucketId={bucket.id} />
+        <div onClick={() => addItem({bucketId: bucket.id})}>
+          Add Task
+        </div>
+      </div>
+    )
+  },
+)
 
 const BucketsDashboard = connect(
   {
-    buckets: currentBuckets,
+    bucketIds: currentBucketIds,
     addBucket: signal`addBucket`,
   },
-  function ListDashboard({buckets, addBucket}) {
+  function BucketsDashboard({bucketIds, addBucket}) {
     return (
       <F>
         <div className={cn('bw-1px bl-l')}>
-          {renderKeyedById(Bucket, 'bucket', buckets)}
+          {_.map(bucketId => (
+            <Bucket key={bucketId} bucketId={bucketId} />
+          ))(bucketIds)}
           <div onClick={() => addBucket()}>Add List</div>
           <div className={cn('cf')} />
         </div>

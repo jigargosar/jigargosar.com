@@ -1,5 +1,5 @@
 import {StorageItem} from '../services/storage'
-import {_, findById, validate} from '../little-ramda'
+import {_, findById, modelsToIds, validate} from '../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../components/utils'
 import {
   Compute,
@@ -16,20 +16,24 @@ import {
 } from '../little-cerebral'
 import nanoid from 'nanoid'
 
-function createDashboard({id = nanoid(), name}) {
+function createDashboard({id = nanoid(), name = 'New Dash'}) {
   return {
     id,
     name,
   }
 }
 
-function createBucketItem() {
+function createBucketItem({bucketId}) {
+  validate('S', [bucketId])
+
   return {
+    bucketId,
     id: nanoid(),
     text: `I ama todo `,
   }
 }
 function createBucket({dashboardId, name = `New List`}) {
+  validate('S', [dashboardId])
   return {
     id: nanoid(),
     dashboardId,
@@ -113,12 +117,22 @@ function createRootModule() {
           set(state`currentDashboardId`, props`dashboard.id`),
         ],
         addBucket: [
-          ({props, state}) => ({
-            newBucket: createBucket({
-              dashboardId: state.get('currentDashboardId'),
+          ({props, state}) => {
+            return {
+              newBucket: createBucket({
+                dashboardId: state.get('currentDashboardId'),
+              }),
+            }
+          },
+          push(state`buckets`, props`newBucket`),
+        ],
+        addItem: [
+          ({props}) => ({
+            newItem: createBucketItem({
+              bucketId: props.bucketId,
             }),
           }),
-          push(state`buckets`, props`newBucket`),
+          push(state`items`, props`newItem`),
         ],
         setText: [
           set(props`notePath`, string`noteLookup.${props`id`}`),
@@ -169,8 +183,15 @@ export const currentBuckets = Compute(
   _.useWith(_.filter)([_.propEq('dashboardId'), _.defaultTo([])]),
 )
 
+export const currentBucketIds = Compute(currentBuckets, modelsToIds)
+
 export const bucketItems = Compute(
   props`bucketId`,
   state`items`,
   _.useWith(_.filter)([_.propEq('bucketId'), _.defaultTo([])]),
+)
+export const bucketFromProps = Compute(
+  props`bucketId`,
+  state`buckets`,
+  findById,
 )
