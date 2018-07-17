@@ -16,7 +16,7 @@ import {
   props,
   signal,
   state,
-} from './utils'
+} from '../../little-cerebral'
 import {_, isNotNil, validate} from '../../little-ramda'
 import {nanoid} from '../../model/util'
 import {StorageItem} from '../../services/storage'
