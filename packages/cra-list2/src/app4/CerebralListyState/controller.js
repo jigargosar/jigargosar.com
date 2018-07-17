@@ -1,10 +1,5 @@
 import {StorageItem} from '../services/storage'
-import {
-  _,
-  findById,
-  modelsToIdLookup,
-  validate,
-} from '../little-ramda'
+import {_, findById, validate} from '../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../components/utils'
 import {
   Compute,
@@ -54,7 +49,6 @@ function createInitialState() {
 
   const state = {
     dashboards,
-    dashboardLookup: modelsToIdLookup(dashboards),
     currentDashboardId: masterDashboard.id,
   }
   return state
