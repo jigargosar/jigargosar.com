@@ -10,7 +10,7 @@ import {
   state,
 } from '../../little-cerebral'
 import {_, validate} from '../../little-ramda'
-import {controller} from '../../CerebralNotesState/controller'
+import {controller} from '../../CerebralListyState/controller'
 
 const NoteTextInput = connect(
   {

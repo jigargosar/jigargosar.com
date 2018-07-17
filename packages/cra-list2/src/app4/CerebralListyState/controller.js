@@ -34,9 +34,9 @@ function createNewNoteAF({text = '', parentId = null}) {
   }
 }
 
-function createApp() {
+function createRootModule() {
   const storedState = StorageItem({
-    name: 'CerebralNoteTreeState',
+    name: 'CerebralListyState',
     getInitial: () => {
       const rootNote = createNewNote({text: 'Root Note Title'})
       const rootNoteId = rootNote.id
@@ -99,7 +99,7 @@ function createApp() {
     return _.indexOf(id, siblingNotes)
   }
 
-  const app = Module(module => {
+  const rootModule = Module(module => {
     module.controller.on('flush', changes => {
       console.debug(`changes`, changes)
       storedState.save(controller.getState())
@@ -168,7 +168,7 @@ function createApp() {
       catch: [],
     }
   })
-  return app
+  return rootModule
 }
 
-export const controller = createAppController(createApp())
+export const controller = createAppController(createRootModule())

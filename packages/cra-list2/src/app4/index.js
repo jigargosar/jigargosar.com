@@ -33,7 +33,8 @@ function render() {
     // const App = require('./components/Main').default
     // const App = require('./components/ActiveRecord/Main').default
     // const App = require('./components/ImmutableNotes/Main').default
-    const App = require('./components/CerebralNotes/Main').default
+    // const App = require('./components/CerebralNotes/Main').default
+    const App = require('./components/CerebralListy/Main').default
     ReactDOM.render(
       <Provider appState={appState}>
         <App />
@@ -52,6 +53,7 @@ if (module.hot) {
 
   module.hot['accept'](
     [
+      './components/CerebralListy/Main',
       './components/CerebralNotes/Main',
       './components/ImmutableNotes/Main',
       './ImmutableState/ImmutableNoteTree',
