@@ -135,7 +135,7 @@ function BucketItem({item}) {
 
 const BucketItems = connect(
   {items: bucketItems},
-  function BucketItems({items = []}) {
+  function BucketItems({items}) {
     return <F>{renderKeyedById(BucketItem, 'item', items)}</F>
   },
 )
