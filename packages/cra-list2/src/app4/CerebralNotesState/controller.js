@@ -119,11 +119,7 @@ function createApp() {
             state`childrenLookup.${props`parentId`}`,
             props`newNoteId`,
           ),
-          ({state, props}) => {
-            // state.unshift(
-            //   `childrenLookup.${props.parentId}`,
-            //   props.newNoteId,
-            // )
+          ({props}) => {
             setFocusAndSelectionOnDOMId(props.newNoteId)
           },
         ],
