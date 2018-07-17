@@ -109,7 +109,7 @@ function BucketItem({item}) {
   return (
     <div
       className={cn(
-        'flex items-center lh-copy f5',
+        'flex items-center lh-copy f7',
         'pv2',
         'outline-0 hover-bg-light-blue',
       )}
@@ -151,26 +151,22 @@ function ListDashboard({dashboard}) {
   )
 }
 
-function HeaderTab({dashboard}) {
-  return (
-    <div
-      className={cn('f4 lh-title pa2', {
-        underline: isCurrentDashboard(dashboard),
-      })}
-    >
-      {dashboard.name}
-    </div>
-  )
-}
-
 const DashboardHeaderTabs = connect(
-  {dashboardLookup: state`dashboardLookup`},
-  function DashboardHeaderTabs({dashboardLookup}) {
-    return renderKeyedById(
-      HeaderTab,
-      'dashboard',
-      _.values(dashboardLookup),
-    )
+  {
+    dashboards: state`dashboards`,
+    currentDashboardId: state`currentDashboardId`,
+  },
+  function DashboardHeaderTabs({dashboards, currentDashboardId}) {
+    return _.map(d => (
+      <div
+        key={d.id}
+        className={cn('f4 lh-title pa2', {
+          underline: currentDashboardId === d.id,
+        })}
+      >
+        {d.name}
+      </div>
+    ))(dashboards)
   },
 )
 
@@ -247,7 +243,7 @@ function ListyMain() {
     <Container controller={controller}>
       <TypographyDefaults className={cn('mb4')}>
         <Header>
-          <DashboardHeaderTabs dashboards={getDashboards()} />
+          <DashboardHeaderTabs />
         </Header>
         <CenterLayout>
           <ListDashboard dashboard={getCurrentDashboard()} />

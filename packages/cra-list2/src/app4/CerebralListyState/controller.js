@@ -47,6 +47,7 @@ function createInitialState() {
   ]
 
   const state = {
+    dashboards,
     dashboardLookup: modelsToIdLookup(dashboards),
     currentDashboardId: masterDashboard.id,
   }
