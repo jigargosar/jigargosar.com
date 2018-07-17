@@ -27,3 +27,21 @@ export function pauseFlowThe(ctx) {
   debugger
   throw new Error('Action Discontinued')
 }
+
+function getDevTools() {
+  if (module.hot) {
+    return require('cerebral/devtools').default({
+      host: 'localhost:8585',
+      reconnect: true,
+    })
+  }
+  return null
+}
+
+export function createAppController(rootModule) {
+  const controller = Controller(rootModule, {
+    devtools: getDevTools(),
+  })
+
+  return controller
+}
