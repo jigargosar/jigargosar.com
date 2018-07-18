@@ -89,15 +89,16 @@ function createRootModule() {
   // setFocusAndSelectionOnDOMId(decodedState.rootNoteId)
 
   const rootModule = Module(module => {
-    module.controller.on('initialized:model', function(...args) {
-      console.log(`initialized:model`, this, args)
+    const controller = module.controller
+    controller.on('initialized:model', () => {
+      console.log(`initialized:model`)
     })
 
-    module.controller.on('initialized', function(...args) {
-      console.log(`initialized`, this, args)
+    controller.on('initialized', () => {
+      console.log(`initialized`)
     })
 
-    module.controller.on('flush', function(changes) {
+    controller.on('flush', function(changes) {
       console.debug(`changes`, changes)
       console.log(`this`, this)
       this.run(function(ctx) {
