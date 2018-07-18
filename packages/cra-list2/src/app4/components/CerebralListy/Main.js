@@ -166,7 +166,7 @@ const Dashboard = connect(
         <BucketLayout>
           <ListItem
             className={cn('pl3')}
-            colors="black-70 hover-black hover-bg-light-blue"
+            colors={'black-70 hover-black hover-bg-light-blue'}
             onClick={addBucket}
           >{`Add List`}</ListItem>
         </BucketLayout>
