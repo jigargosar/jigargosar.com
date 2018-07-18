@@ -88,23 +88,29 @@ export const currentDashboard = Compute(
   findById,
 )
 
-export const currentBuckets = Compute(
+export const currentBucketIds = Compute(
   state`currentDashboardId`,
   state`buckets`,
   _.useWith(_.filter)([_.propEq('dashboardId'), _.defaultTo([])]),
+  modelsToIds,
 )
 
-export const currentBucketIds = Compute(currentBuckets, modelsToIds)
-
-export const bucketItems = Compute(
+export const computeBucketItemIds = Compute(
   props`bucketId`,
   state`items`,
   _.useWith(_.filter)([_.propEq('bucketId'), _.defaultTo([])]),
+  modelsToIds,
 )
 
-export const bucketFromProps = Compute(
+export const computeBucketById = Compute(
   props`bucketId`,
   state`buckets`,
+  findById,
+)
+
+export const computeItemById = Compute(
+  props`itemId`,
+  state`items`,
   findById,
 )
 

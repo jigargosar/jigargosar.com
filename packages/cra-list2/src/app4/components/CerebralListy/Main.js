@@ -1,7 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
-import {cn, F, renderKeyedById, wrapPD} from '../utils'
+import {cn, F, wrapPD} from '../utils'
 import {
   connect,
   Container,
@@ -10,8 +10,9 @@ import {
 } from '../../little-cerebral'
 import {_, idEq} from '../../little-ramda'
 import {
-  bucketFromProps,
-  bucketItems,
+  computeBucketById,
+  computeBucketItemIds,
+  computeItemById,
   controller,
   currentBucketIds,
   currentDashboard,
@@ -140,8 +141,11 @@ function BucketItem({text, onFocus}) {
 }
 
 BucketItem = connect(
-  {selectItem: signal`selectItem`},
-  function({selectItem}, {item}) {
+  {
+    selectItem: signal`selectItem`,
+    item: computeItemById,
+  },
+  function({selectItem, item}) {
     return {
       onFocus: () => selectItem({item}),
       text: item.text,
@@ -151,14 +155,20 @@ BucketItem = connect(
 )
 
 const BucketItems = connect(
-  {items: bucketItems},
-  function BucketItems({items}) {
-    return <F>{renderKeyedById(BucketItem, 'item', items)}</F>
+  {itemIds: computeBucketItemIds},
+  function BucketItems({itemIds}) {
+    return (
+      <F>
+        {_.map(itemId => <BucketItem key={itemId} itemId={itemId} />)(
+          itemIds,
+        )}
+      </F>
+    )
   },
 )
 
 const Bucket = connect(
-  {addItem: signal`addItem`, bucket: bucketFromProps},
+  {addItem: signal`addItem`, bucket: computeBucketById},
   function Bucket({bucket, addItem}) {
     return (
       <div
