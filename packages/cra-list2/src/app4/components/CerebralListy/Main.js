@@ -16,6 +16,7 @@ import {
   dashboardIdToBucketIds,
   itemById,
 } from '../../CerebralListyState/controller'
+import * as PropTypes from 'prop-types'
 
 function listLinkCN() {
   return cn(
@@ -55,6 +56,23 @@ const BucketItem = connect(
   },
 )
 
+function ListButton(props) {
+  return (
+    <a
+      href={`/add-task`}
+      className={cn(listLinkCN())}
+      onClick={wrapPD(props.fn)}
+    >
+      {props.label}
+    </a>
+  )
+}
+
+ListButton.propTypes = {
+  fn: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+}
+
 const Bucket = connect(
   {
     addItem: signal`addItem`,
@@ -69,19 +87,14 @@ const Bucket = connect(
           'pt3 pb3',
           'bg-white',
           'bb br b--moon-gray',
-          // 'debug-grid-16-solid',
-          // 'debug',
         )}
       >
         <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <a
-          href={`/add-task`}
-          className={cn(listLinkCN())}
-          onClick={wrapPD(() => addItem({bucketId: bucket.id}))}
-        >
-          Add Task
-        </a>
+        <ListButton
+          label={'AddTask'}
+          fn={() => addItem({bucketId: bucket.id})}
+        />
       </div>
     )
   },
