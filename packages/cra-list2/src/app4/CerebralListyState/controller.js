@@ -139,7 +139,7 @@ function createRootModule() {
     controller.on('initialized', () => {
       console.log(`initialized`)
       controller.run(ctx => {
-        console.log(
+        console.debug(
           `resolveValue(maybeSelectedItem, ctx)`,
           S.show(resolveValue(maybeSelectedItem, ctx)),
         )
@@ -148,10 +148,6 @@ function createRootModule() {
 
     controller.on('flush', function(changes) {
       console.debug(`changes`, changes)
-      console.log(`this`, this)
-      this.run(function(ctx) {
-        console.log(`ctx.resolve`, ctx.resolve)
-      })
       storedState.save(controller.getState())
     })
 
