@@ -134,33 +134,6 @@ function createRootModule() {
           }),
           push(state`items`, props`newItem`),
         ],
-        setText: [
-          set(props`notePath`, string`noteLookup.${props`id`}`),
-          set(state`${props`notePath`}.text`, props`text`),
-        ],
-        prependNewChild: [
-          createNewNoteAF({
-            text: () => nanoid(7),
-            parentId: props`id`,
-          }),
-          logProps,
-          pauseFlowThe,
-          ({props: {id}}) => ({
-            newNote: createNewNote({
-              text: nanoid(7),
-              parentId: id,
-            }),
-          }),
-          set(state`childrenLookup.${props`newNote.id`}`, []),
-          set(state`noteLookup.${props`newNote.id`}`, props`newNote`),
-          unshift(
-            state`childrenLookup.${props`newNote.parentId`}`,
-            props`newNote.id`,
-          ),
-          ({props}) => {
-            setFocusAndSelectionOnDOMId(props.newNote.id)
-          },
-        ],
       },
       modules: {},
       providers: {storedState},
