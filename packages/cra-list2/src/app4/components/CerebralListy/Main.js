@@ -190,6 +190,15 @@ const Dashboard = connect(
     )
   },
 )
+
+function linkCN({isSelected = false, isHeader = false}) {
+  return cn(
+    'pa2',
+    'code link pointer',
+    isSelected ? 'bg-white-80 hover-black-70' : 'hover-bg-white-20',
+  )
+}
+
 const DashboardHeaderTabs = connect(
   {
     dashboards: state`dashboards`,
@@ -205,14 +214,10 @@ const DashboardHeaderTabs = connect(
       <div
         onClick={() => switchDashboard({dashboard})}
         key={dashboard.id}
-        className={cn(
-          'code',
-          'pa2',
-          'pointer',
-          isSelected(dashboard)
-            ? 'bg-white-80 hover-black-70'
-            : 'hover-bg-white-20',
-        )}
+        className={linkCN({
+          isHeader: true,
+          isSelected: isSelected(dashboard),
+        })}
       >
         {dashboard.name}
       </div>
