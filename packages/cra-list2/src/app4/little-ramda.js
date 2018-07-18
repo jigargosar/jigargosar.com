@@ -63,11 +63,11 @@ export function tapLogWith(msg) {
   return _.tap(args => console.warn(msg, args))
 }
 
+export const tapLog = tapLogWith('tapLog')
+
 export function tapShowWith(msg) {
   return _.tap(args => console.warn(msg, S.show(args)))
 }
-
-export const tapLog = tapLogWith('tapLog')
 
 export const tapShow = tapShowWith('tapShow')
 
