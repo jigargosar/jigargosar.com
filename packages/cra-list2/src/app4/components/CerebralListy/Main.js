@@ -1,6 +1,6 @@
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
-import {cn, F, renderKeyedById} from '../utils'
+import {cn, F, renderKeyedById, wrapPD} from '../utils'
 import {
   connect,
   Container,
@@ -193,9 +193,12 @@ const Dashboard = connect(
 
 function linkCN({isSelected = false, isHeader = false}) {
   return cn(
+    'input-reset button-reset bn',
     'pa2',
-    'code link pointer',
-    isSelected ? 'bg-white-80 hover-black-70' : 'hover-bg-white-20',
+    'code link pointer outline-transparent',
+    isSelected
+      ? 'black bg-white-80 hover-black-70'
+      : 'black hover-bg-white-20',
   )
 }
 
@@ -211,16 +214,18 @@ const DashboardHeaderTabs = connect(
     switchDashboard,
   }) {
     return _.map(dashboard => (
-      <div
-        onClick={() => switchDashboard({dashboard})}
+      <a
+        onClick={wrapPD(() => switchDashboard({dashboard}))}
+        href={`/dashboard/${dashboard.id}/${dashboard.name}`}
         key={dashboard.id}
+        tabIndex={0}
         className={linkCN({
           isHeader: true,
           isSelected: isSelected(dashboard),
         })}
       >
         {dashboard.name}
-      </div>
+      </a>
     ))(dashboards)
 
     function isSelected(dashboard) {
