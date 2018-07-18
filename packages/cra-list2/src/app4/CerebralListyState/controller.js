@@ -158,7 +158,9 @@ function createRootModule() {
         switchDashboard: [
           set(state`currentDashboardId`, props`dashboard.id`),
         ],
-        selectItem: [],
+        selectItem: [
+          set(state`nullableSelectedItemId`, props`item.id`),
+        ],
         addBucket: [
           function createNewBucketInProps({props, state}) {
             return {
