@@ -120,7 +120,9 @@ function BucketItem({item}) {
   return (
     <div
       className={cn(
-        'flex items-center lh-copy f7',
+        'flex items-center',
+        // 'lh-copy f5',
+        'f7 lh-solid',
         'pv2',
         'outline-0 hover-bg-light-blue',
       )}
@@ -159,7 +161,7 @@ const Bucket = connect(
         <BucketItems bucketId={bucket.id} />
         <a
           href={`/add-task`}
-          className={cn(headerLinkCN({isHeader: false}))}
+          className={cn(listLinkCN())}
           onClick={wrapPD(() => addItem({bucketId: bucket.id}))}
         >
           Add Task
@@ -206,6 +208,10 @@ function headerLinkCN({isSelected = false}) {
       ? 'black bg-white-80 o-hover-black-70'
       : 'black hover-bg-white-20',
   )
+}
+
+function listLinkCN() {
+  return cn('link code black-60')
 }
 
 const DashboardHeaderTabs = connect(
