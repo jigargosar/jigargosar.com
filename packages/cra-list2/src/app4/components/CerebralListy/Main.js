@@ -149,7 +149,8 @@ const Bucket = connect(
         className={cn(
           'w-100 w-50-m w-33-l fl',
           'pt3 pb2',
-          'bg-white bb br',
+          'bg-white',
+          'bb br b--moon-gray',
           // 'debug-grid-16-solid',
           // 'debug',
         )}
@@ -172,14 +173,13 @@ const BucketsDashboard = connect(
   function BucketsDashboard({bucketIds, addBucket}) {
     return (
       <F>
-        <div className={cn('bl-l bl-m')}>
+        <div className={cn('', 'bl-l bl-mb b--moon-gray')}>
           <div className={cn('flex flex-wrap ')}>
             {_.map(bucketId => (
               <Bucket key={bucketId} bucketId={bucketId} />
             ))(bucketIds)}
             <div onClick={() => addBucket()}>Add List</div>
           </div>
-          {/*<div className={cn('cf')} />*/}
         </div>
       </F>
     )
@@ -212,7 +212,7 @@ const DashboardHeaderTabs = connect(
 
 function Header({children}) {
   return (
-    <div className={'bg-light-blue bb'}>
+    <div className={cn('bg-light-blue', 'bb b--moon-gray')}>
       <CenterLayout className={cn('flex items-center', 'pv1 pv2-ns')}>
         <div className={cn('flex-auto', 'flex mh3')}>{children}</div>
         <div className={cn('flex f5 lh-title mh3')}>
@@ -277,9 +277,7 @@ function ListyMain() {
         <Header>
           <DashboardHeaderTabs />
         </Header>
-        <CenterLayout>
-          <BucketsDashboard dashboard={getCurrentDashboard()} />
-        </CenterLayout>
+        <BucketsDashboard dashboard={getCurrentDashboard()} />
       </TypographyDefaults>
     </Container>
   )
