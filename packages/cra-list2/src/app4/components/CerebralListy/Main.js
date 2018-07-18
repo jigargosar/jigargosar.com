@@ -117,7 +117,7 @@ import {nanoid} from '../../model/util'
 //   )
 // }
 
-function BucketItem({text}) {
+function BucketItem({text, onFocus}) {
   return (
     <div
       className={cn(
@@ -129,7 +129,7 @@ function BucketItem({text}) {
         'flex items-center',
       )}
       tabIndex={0}
-      // onFocus={()=>selectItem({item})}
+      onFocus={onFocus}
     >
       <div className={cn('ph3', 'flex items-center')}>
         <input type={'checkbox'} tabIndex={-1} />
