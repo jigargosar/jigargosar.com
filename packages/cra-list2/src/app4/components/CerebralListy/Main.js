@@ -162,15 +162,14 @@ BucketItem = connect(
   BucketItem,
 )
 
+const Component = BucketItem
+const idName = 'itemId'
+
 const BucketItems = connect(
-  {itemIds: bucketIdToItemIds},
-  function BucketItems({itemIds}) {
-    return (
-      <F>
-        {_.map(itemId => <BucketItem key={itemId} itemId={itemId} />)(
-          itemIds,
-        )}
-      </F>
+  {idList: bucketIdToItemIds},
+  function BucketItems({idList}) {
+    return _.map(id => <Component key={id} {...{[idName]: id}} />)(
+      idList,
     )
   },
 )
