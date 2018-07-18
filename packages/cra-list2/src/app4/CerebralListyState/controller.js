@@ -116,8 +116,9 @@ function createRootModule() {
         switchDashboard: [
           set(state`currentDashboardId`, props`dashboard.id`),
         ],
+        selectItem: [],
         addBucket: [
-          ({props, state}) => {
+          function createNewBucketInProps({props, state}) {
             return {
               newBucket: createBucket({
                 dashboardId: state.get('currentDashboardId'),
@@ -127,11 +128,13 @@ function createRootModule() {
           push(state`buckets`, props`newBucket`),
         ],
         addItem: [
-          ({props}) => ({
-            newItem: createBucketItem({
-              bucketId: props.bucketId,
-            }),
-          }),
+          function createNewItemInProps({props}) {
+            return {
+              newItem: createBucketItem({
+                bucketId: props.bucketId,
+              }),
+            }
+          },
           push(state`items`, props`newItem`),
         ],
       },
