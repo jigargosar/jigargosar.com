@@ -63,14 +63,13 @@ function ListButton(props) {
       className={cn(listLinkCN())}
       onClick={wrapPD(props.fn)}
     >
-      {props.label}
+      {props.children}
     </a>
   )
 }
 
 ListButton.propTypes = {
   fn: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
 }
 
 const Bucket = connect(
@@ -79,7 +78,12 @@ const Bucket = connect(
     bucket: bucketById,
     itemIds: bucketIdToItemIds,
   },
-  function Bucket({bucket, itemIds, addItem}) {
+  ({bucket, addItem, itemIds}) => ({
+    onAddItem: () => addItem({bucketId: bucket.id}),
+    bucket,
+    itemIds,
+  }),
+  function Bucket({bucket, itemIds, onAddItem}) {
     return (
       <div
         className={cn(
@@ -91,10 +95,7 @@ const Bucket = connect(
       >
         <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <ListButton
-          label={'AddTask'}
-          fn={() => addItem({bucketId: bucket.id})}
-        />
+        <ListButton fn={onAddItem}>Add Task</ListButton>
       </div>
     )
   },
