@@ -205,8 +205,8 @@ const DashboardHeaderTabs = connect(
       <div
         onClick={() => switchDashboard({dashboard})}
         key={dashboard.id}
-        className={cn('f4 lh-title pa2', 'pointer', {
-          underline: currentDashboard === dashboard,
+        className={cn('dim', ' lh-title pv1 ph2', 'pointer', {
+          'bg-light-blue black': currentDashboard === dashboard,
         })}
       >
         {dashboard.name}
@@ -217,10 +217,10 @@ const DashboardHeaderTabs = connect(
 
 function Header({children}) {
   return (
-    <div className={cn('bg-light-blue', 'bb b--moon-gray')}>
+    <div className={cn('white bg-blue', 'bb b--moon-gray')}>
       <CenterLayout className={cn('flex items-center', 'pv1 pv2-ns')}>
         <div className={cn('flex-auto', 'flex mh3')}>{children}</div>
-        <div className={cn('flex f5 lh-title mh3')}>
+        <div className={cn('flex f5 fw3 lh-title mh3')}>
           <a className={cn('link ml2 pointer')}>Help</a>
           <a className={cn('link ml2 pointer')}>Settings</a>
         </div>
