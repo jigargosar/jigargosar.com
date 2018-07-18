@@ -11,8 +11,8 @@ import {
 import {_, idEq} from '../../little-ramda'
 import {
   computeBucketById,
-  computeBucketItemIds,
-  computeDashboardBucketIds,
+  bucketIdToItemIds,
+  dashboardIdToBucketIds,
   computeItemById,
   controller,
 } from '../../CerebralListyState/controller'
@@ -163,7 +163,7 @@ BucketItem = connect(
 )
 
 const BucketItems = connect(
-  {itemIds: computeBucketItemIds},
+  {itemIds: bucketIdToItemIds},
   function BucketItems({itemIds}) {
     return (
       <F>
@@ -205,7 +205,7 @@ const Bucket = connect(
 
 const Dashboard = connect(
   {
-    bucketIds: computeDashboardBucketIds,
+    bucketIds: dashboardIdToBucketIds,
     addBucket: signal`addBucket`,
   },
   function Dashboard({bucketIds, addBucket}) {

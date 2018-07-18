@@ -82,20 +82,14 @@ function createInitialState() {
 //   }
 // }
 
-export const currentDashboard = Compute(
-  state`currentDashboardId`,
-  state`dashboards`,
-  findById,
-)
-
-export const computeDashboardBucketIds = Compute(
+export const dashboardIdToBucketIds = Compute(
   props`dashboardId`,
   state`buckets`,
   _.useWith(_.filter)([_.propEq('dashboardId'), _.defaultTo([])]),
   modelsToIds,
 )
 
-export const computeBucketItemIds = Compute(
+export const bucketIdToItemIds = Compute(
   props`bucketId`,
   state`items`,
   _.useWith(_.filter)([_.propEq('bucketId'), _.defaultTo([])]),
