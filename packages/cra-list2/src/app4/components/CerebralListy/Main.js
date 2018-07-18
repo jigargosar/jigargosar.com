@@ -147,7 +147,7 @@ const Bucket = connect(
     return (
       <div
         className={cn(
-          'w-100 w-50-m w-33-l fl',
+          'w-100 w-50-m w-third-l fl',
           'pt3 pb2',
           'bg-white',
           'bb br b--moon-gray',
@@ -165,15 +165,20 @@ const Bucket = connect(
   },
 )
 
-const BucketsDashboard = connect(
+const Dashboard = connect(
   {
     bucketIds: currentBucketIds,
     addBucket: signal`addBucket`,
   },
-  function BucketsDashboard({bucketIds, addBucket}) {
+  function Dashboard({bucketIds, addBucket}) {
     return (
       <F>
-        <div className={cn('', 'bl-l bl-mb b--moon-gray')}>
+        <div
+          className={cn(
+            '',
+            // 'bl-l bl-m b--moon-gray'
+          )}
+        >
           <div className={cn('flex flex-wrap ')}>
             {_.map(bucketId => (
               <Bucket key={bucketId} bucketId={bucketId} />
@@ -277,7 +282,7 @@ function ListyMain() {
         <Header>
           <DashboardHeaderTabs />
         </Header>
-        <BucketsDashboard dashboard={getCurrentDashboard()} />
+        <Dashboard dashboard={getCurrentDashboard()} />
       </TypographyDefaults>
     </Container>
   )
