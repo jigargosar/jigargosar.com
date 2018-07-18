@@ -1,5 +1,13 @@
 import {StorageItem} from '../services/storage'
-import {_, findById, modelsToIds, S, validate} from '../little-ramda'
+import {
+  _,
+  findById,
+  findByMaybeId,
+  modelsToIds,
+  S,
+  tapShow,
+  validate,
+} from '../little-ramda'
 import {
   Compute,
   createAppController,
@@ -73,6 +81,10 @@ function createInitialState() {
 //   }
 // }
 
+function resolveValue(computed, ctx) {
+  return ctx.resolve.value(computed)
+}
+
 function createRootModule() {
   const storedState = StorageItem({
     name: 'CerebralListyState',
@@ -96,6 +108,24 @@ function createRootModule() {
 
     controller.on('initialized', () => {
       console.log(`initialized`)
+      controller.run(ctx => {
+        // const [a1, a2] = [
+        //   state`nullableSelectedItemId`,
+        //   state`items`,
+        // ].map(x => ctx.resolve.value(x))
+        // console.log(`a1,a2`, a1, a2)
+        // console.log(`findById(a1,a2)`, findById(a1, a2))
+        console.log(
+          `resolveValue(maybeSelectedItem, ctx)`,
+          resolveValue(maybeSelectedItem, ctx),
+        )
+      })
+
+      // console.log(
+      //   `controller.resolve.value(maybeSelectedItem)`,
+      //
+      //   controller.resolve.value(maybeSelectedItem),
+      // )
     })
 
     controller.on('flush', function(changes) {
@@ -144,12 +174,6 @@ function createRootModule() {
   return rootModule
 }
 
-export const controller = createAppController(createRootModule(), {
-  stateChanges: {
-    // currentDashboardId: 'kOYniDg34h9xp3cI1xzN1',
-  },
-})
-
 export const currentDashboard = Compute(
   state`currentDashboardId`,
   state`dashboards`,
@@ -177,7 +201,16 @@ export const bucketFromProps = Compute(
 
 export const maybeSelectedItem = Compute(
   state`nullableSelectedItemId`,
+  x => S.toMaybe(x),
+  tapShow,
   state`items`,
-  findById,
-  S.toMaybe,
+  findByMaybeId,
+  tapShow,
 )
+
+export const controller = createAppController(createRootModule(), {
+  stateChanges: {
+    // currentDashboardId: 'kOYniDg34h9xp3cI1xzN1',
+    nullableSelectedItemId: 'OEqPlt2OOepfvjgTOSJX0',
+  },
+})

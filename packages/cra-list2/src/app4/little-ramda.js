@@ -69,7 +69,7 @@ export function tapShowWith(msg) {
 
 export const tapLog = tapLogWith('tapLog')
 
-export const tapShow = tapLogWith('tapShow')
+export const tapShow = tapShowWith('tapShow')
 
 export function wrapLog(fn) {
   const fnName = _.defaultTo('wrapTapLog fn', fn.name)
@@ -139,4 +139,11 @@ export const modelsToIdLookup = _.converge(_.zipObj)([
 export const findById = _.curry(function findById(id, arr) {
   validate('SA', [id, arr])
   return _.find(idEq(id))(arr)
+})
+
+export const findByMaybeId = _.curry(function findByMaybeId(
+  maybeId,
+  arr,
+) {
+  return S.map(_.flip(findById)(arr))(maybeId)
 })
