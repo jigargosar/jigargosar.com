@@ -110,7 +110,9 @@ const Dashboard = connect(
     return (
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
-        <div onClick={() => addBucket()}>Add List</div>
+        <div className={cn('flex-auto', 'bg-white')}>
+          <ListButton fn={addBucket}>Add List</ListButton>
+        </div>
       </div>
     )
   },
