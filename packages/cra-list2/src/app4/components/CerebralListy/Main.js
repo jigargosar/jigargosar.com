@@ -74,7 +74,6 @@ const Bucket = connect(
         )}
       >
         <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
-        {/*<BucketItems bucketId={bucket.id} />*/}
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <a
           href={`/add-task`}
