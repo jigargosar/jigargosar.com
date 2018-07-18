@@ -116,6 +116,16 @@ import {
 //   )
 // }
 
+function listLinkCN() {
+  return cn(
+    'db',
+    'pv2 pl3',
+    'f7 lh-solid',
+    'link code black-60',
+    'hover-black hover-bg-light-blue',
+  )
+}
+
 function BucketItem({text, onFocus}) {
   return (
     <div
@@ -229,16 +239,6 @@ function headerLinkCN({isSelected = false}) {
     isSelected
       ? 'black bg-white-80 o-hover-black-70'
       : 'black hover-bg-white-20',
-  )
-}
-
-function listLinkCN() {
-  return cn(
-    'db',
-    'pv2 pl3',
-    'f7 lh-solid',
-    'link code black-60',
-    'hover-black hover-bg-light-blue',
   )
 }
 
