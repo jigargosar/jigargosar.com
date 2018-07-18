@@ -2,7 +2,7 @@ import {Compute, Controller, Module} from 'cerebral'
 import {connect, Container} from '@cerebral/react'
 import {props, signal, state, string} from 'cerebral/tags'
 import {set, unshift, push} from 'cerebral/operators'
-import {_} from './little-ramda'
+import {_, mergeWithDefaults} from './little-ramda'
 
 export {
   Compute,
@@ -39,10 +39,13 @@ function getDevTools() {
   return null
 }
 
-export function createAppController(rootModule) {
-  const controller = Controller(rootModule, {
-    devtools: getDevTools(),
-  })
+export function createAppController(rootModule, options = {}) {
+  const controller = Controller(
+    rootModule,
+    mergeWithDefaults({
+      devtools: getDevTools(),
+    })(options),
+  )
 
   return controller
 }
