@@ -10,10 +10,10 @@ import {
 } from '../../little-cerebral'
 import {_, idEq} from '../../little-ramda'
 import {
-  computeBucketById,
+  bucketById,
   bucketIdToItemIds,
   dashboardIdToBucketIds,
-  computeItemById,
+  itemById,
   controller,
 } from '../../CerebralListyState/controller'
 
@@ -151,7 +151,7 @@ function BucketItem({text, onFocus}) {
 BucketItem = connect(
   {
     selectItem: signal`selectItem`,
-    item: computeItemById,
+    item: itemById,
   },
   function({selectItem, item}) {
     return {
@@ -176,7 +176,7 @@ const BucketItems = connect(
 )
 
 const Bucket = connect(
-  {addItem: signal`addItem`, bucket: computeBucketById},
+  {addItem: signal`addItem`, bucket: bucketById},
   function Bucket({bucket, addItem}) {
     return (
       <div

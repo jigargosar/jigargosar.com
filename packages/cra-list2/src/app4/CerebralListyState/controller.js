@@ -96,17 +96,13 @@ export const bucketIdToItemIds = Compute(
   modelsToIds,
 )
 
-export const computeBucketById = Compute(
+export const bucketById = Compute(
   props`bucketId`,
   state`buckets`,
   findById,
 )
 
-export const computeItemById = Compute(
-  props`itemId`,
-  state`items`,
-  findById,
-)
+export const itemById = Compute(props`itemId`, state`items`, findById)
 
 const maybeSelectedItemId = computeToMaybe(
   state`nullableSelectedItemId`,
