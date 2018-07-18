@@ -169,27 +169,6 @@ BucketItem = connect(
   BucketItem,
 )
 
-function createKeyedIdListComponent(
-  displayName,
-  Component,
-  idName,
-  idListTag,
-) {
-  const IdList = ({idList}) =>
-    _.map(id => <Component key={id} {...{[idName]: id}} />)(idList)
-
-  IdList.displayName = displayName
-
-  return connect({idList: idListTag}, IdList)
-}
-
-const BucketItems = createKeyedIdListComponent(
-  'BucketItems',
-  BucketItem,
-  'itemId',
-  bucketIdToItemIds,
-)
-
 const Bucket = connect(
   {
     addItem: signal`addItem`,
@@ -238,9 +217,9 @@ const Dashboard = connect(
           )}
         >
           <div className={cn('flex flex-wrap ')}>
-            {_.map(bucketId => (
-              <Bucket key={bucketId} bucketId={bucketId} />
-            ))(bucketIds)}
+            {_.map(id => <Bucket key={id} bucketId={id} />)(
+              bucketIds,
+            )}
             <div onClick={() => addBucket()}>Add List</div>
           </div>
         </div>
