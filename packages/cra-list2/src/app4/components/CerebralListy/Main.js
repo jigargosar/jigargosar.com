@@ -23,8 +23,20 @@ function listLinkCN() {
     'db',
     'pv2 pl3',
     'f7 lh-solid',
-    'link code black-60',
+    'link code ',
+    'black-60 hover-black hover-bg-light-blue',
+    'flex items-center',
+  )
+}
+
+function itemCN() {
+  return cn(
+    'db',
+    'pv2',
+    'f7 lh-solid',
+    'link code',
     'hover-black hover-bg-light-blue',
+    'flex items-center',
   )
 }
 
@@ -36,14 +48,7 @@ const BucketItem = connect(
   function BucketItem({item, selectItem}) {
     return (
       <div
-        className={cn(
-          // 'lh-copy f5',
-          'f7 lh-solid',
-          'pv2',
-          'link',
-          'outline-0 hover-bg-light-blue',
-          'flex items-center',
-        )}
+        className={itemCN()}
         tabIndex={0}
         onFocus={() => selectItem({item})}
       >
