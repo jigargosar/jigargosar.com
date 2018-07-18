@@ -54,3 +54,7 @@ export function createAppController(rootModule, options = {}) {
 export function computeToMaybe(operator) {
   return Compute(operator, x => S.toMaybe(x))
 }
+
+export function resolveValue(computed, ctx) {
+  return ctx.resolve.value(computed)
+}

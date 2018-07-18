@@ -13,6 +13,7 @@ import {
   Module,
   props,
   push,
+  resolveValue,
   set,
   state,
 } from '../little-cerebral'
@@ -80,9 +81,41 @@ function createInitialState() {
 //   }
 // }
 
-function resolveValue(computed, ctx) {
-  return ctx.resolve.value(computed)
-}
+export const currentDashboard = Compute(
+  state`currentDashboardId`,
+  state`dashboards`,
+  findById,
+)
+
+export const currentBuckets = Compute(
+  state`currentDashboardId`,
+  state`buckets`,
+  _.useWith(_.filter)([_.propEq('dashboardId'), _.defaultTo([])]),
+)
+
+export const currentBucketIds = Compute(currentBuckets, modelsToIds)
+
+export const bucketItems = Compute(
+  props`bucketId`,
+  state`items`,
+  _.useWith(_.filter)([_.propEq('bucketId'), _.defaultTo([])]),
+)
+
+export const bucketFromProps = Compute(
+  props`bucketId`,
+  state`buckets`,
+  findById,
+)
+
+const maybeSelectedItemId = computeToMaybe(
+  state`nullableSelectedItemId`,
+)
+
+export const maybeSelectedItem = Compute(
+  maybeSelectedItemId,
+  state`items`,
+  findByMaybeId,
+)
 
 function createRootModule() {
   const storedState = StorageItem({
@@ -172,41 +205,6 @@ function createRootModule() {
   })
   return rootModule
 }
-
-export const currentDashboard = Compute(
-  state`currentDashboardId`,
-  state`dashboards`,
-  findById,
-)
-export const currentBuckets = Compute(
-  state`currentDashboardId`,
-  state`buckets`,
-  _.useWith(_.filter)([_.propEq('dashboardId'), _.defaultTo([])]),
-)
-
-export const currentBucketIds = Compute(currentBuckets, modelsToIds)
-
-export const bucketItems = Compute(
-  props`bucketId`,
-  state`items`,
-  _.useWith(_.filter)([_.propEq('bucketId'), _.defaultTo([])]),
-)
-
-export const bucketFromProps = Compute(
-  props`bucketId`,
-  state`buckets`,
-  findById,
-)
-
-const maybeSelectedItemId = computeToMaybe(
-  state`nullableSelectedItemId`,
-)
-
-export const maybeSelectedItem = Compute(
-  maybeSelectedItemId,
-  state`items`,
-  findByMaybeId,
-)
 
 export const controller = createAppController(createRootModule(), {
   stateChanges: {
