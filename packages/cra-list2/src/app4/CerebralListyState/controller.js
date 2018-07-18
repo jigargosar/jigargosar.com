@@ -4,6 +4,7 @@ import {
   findById,
   findByMaybeId,
   modelsToIds,
+  S,
   validate,
 } from '../little-ramda'
 import {
@@ -134,30 +135,15 @@ function createRootModule() {
 
   const rootModule = Module(module => {
     const controller = module.controller
-    controller.on('initialized:model', () => {
-      console.log(`initialized:model`)
-    })
 
     controller.on('initialized', () => {
       console.log(`initialized`)
       controller.run(ctx => {
-        // const [a1, a2] = [
-        //   state`nullableSelectedItemId`,
-        //   state`items`,
-        // ].map(x => ctx.resolve.value(x))
-        // console.log(`a1,a2`, a1, a2)
-        // console.log(`findById(a1,a2)`, findById(a1, a2))
         console.log(
           `resolveValue(maybeSelectedItem, ctx)`,
-          resolveValue(maybeSelectedItem, ctx),
+          S.show(resolveValue(maybeSelectedItem, ctx)),
         )
       })
-
-      // console.log(
-      //   `controller.resolve.value(maybeSelectedItem)`,
-      //
-      //   controller.resolve.value(maybeSelectedItem),
-      // )
     })
 
     controller.on('flush', function(changes) {

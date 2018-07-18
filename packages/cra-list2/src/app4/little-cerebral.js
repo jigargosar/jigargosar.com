@@ -58,3 +58,7 @@ export function computeToMaybe(operator) {
 export function resolveValue(computed, ctx) {
   return ctx.resolve.value(computed)
 }
+
+// controller.on('initialized:model', () => {
+//   console.log(`initialized:model`)
+// })
