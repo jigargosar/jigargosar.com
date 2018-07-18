@@ -144,12 +144,18 @@ function createRootModule() {
 
     controller.on('initialized', () => {
       console.log(`initialized`)
-      controller.run(ctx => {
-        console.debug(
-          `resolveValue(maybeSelectedItem, ctx)`,
-          S.show(resolveValue(maybeSelectedItem, ctx)),
-        )
-      })
+      controller.runSignal(
+        'show-maybeSelectedItem',
+        [
+          ctx => {
+            console.debug(
+              `resolveValue(maybeSelectedItem, ctx)`,
+              S.show(resolveValue(maybeSelectedItem, ctx)),
+            )
+          },
+        ],
+        {},
+      )
     })
 
     controller.on('flush', function(changes) {
