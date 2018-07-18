@@ -1,18 +1,13 @@
 import {StorageItem} from '../services/storage'
-import {_, findById, modelsToIds, validate} from '../little-ramda'
-import {setFocusAndSelectionOnDOMId} from '../components/utils'
+import {_, findById, modelsToIds, S, validate} from '../little-ramda'
 import {
   Compute,
   createAppController,
-  logProps,
   Module,
-  pauseFlowThe,
   props,
   push,
   set,
   state,
-  string,
-  unshift,
 } from '../little-cerebral'
 import nanoid from 'nanoid'
 
@@ -53,6 +48,7 @@ function createInitialState() {
   const state = {
     dashboards,
     currentDashboardId: masterDashboard.id,
+    nullableSelectedItemId: null,
   }
   return state
 }
@@ -63,36 +59,25 @@ function createNewNote({text, parentId = null}) {
   return {id: nanoid(), text: text, parentId}
 }
 
-function createNewNoteAF({text = '', parentId = null}) {
-  return function createNewNoteAction({resolve}) {
-    const resolvedText = resolve.value(text)
-    return {
-      newNoteAF: createNewNote({
-        text: _.is(Function)(resolvedText)
-          ? resolvedText()
-          : resolvedText,
-        parentId: resolve.value(parentId),
-      }),
-    }
-  }
-}
+// function createNewNoteAF({text = '', parentId = null}) {
+//   return function createNewNoteAction({resolve}) {
+//     const resolvedText = resolve.value(text)
+//     return {
+//       newNoteAF: createNewNote({
+//         text: _.is(Function)(resolvedText)
+//           ? resolvedText()
+//           : resolvedText,
+//         parentId: resolve.value(parentId),
+//       }),
+//     }
+//   }
+// }
 
 function createRootModule() {
   const storedState = StorageItem({
     name: 'CerebralListyState',
     getInitial: createInitialState,
     postLoad: state => {
-      // const ns = _.merge(state, {
-      //   childrenLookup: _.compose(
-      //     _.merge(_.map(() => [])(state.noteLookup)),
-      //     _.map(_.map(_.prop('id'))),
-      //     _.groupBy(_.prop('parentId')),
-      //     _.values,
-      //   )(state.noteLookup),
-      // })
-      // console.debug(`ns`, ns)
-      //
-      // return ns
       return _.mergeWith(_.defaultTo)(
         {dashboards: [], buckets: [], items: []},
         state,
@@ -104,8 +89,12 @@ function createRootModule() {
   // setFocusAndSelectionOnDOMId(decodedState.rootNoteId)
 
   const rootModule = Module(module => {
-    module.controller.on('flush', changes => {
+    module.controller.on('flush', function(changes) {
       console.debug(`changes`, changes)
+      console.log(`this`, this)
+      this.run(function(ctx) {
+        console.log(`ctx.resolve`, ctx.resolve)
+      })
       storedState.save(controller.getState())
     })
 
@@ -166,8 +155,16 @@ export const bucketItems = Compute(
   state`items`,
   _.useWith(_.filter)([_.propEq('bucketId'), _.defaultTo([])]),
 )
+
 export const bucketFromProps = Compute(
   props`bucketId`,
   state`buckets`,
   findById,
+)
+
+export const maybeSelectedItem = Compute(
+  state`nullableSelectedItemId`,
+  state`items`,
+  findById,
+  S.toMaybe,
 )
