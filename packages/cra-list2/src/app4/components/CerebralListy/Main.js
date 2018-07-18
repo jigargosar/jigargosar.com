@@ -120,11 +120,12 @@ function BucketItem({item}) {
   return (
     <div
       className={cn(
-        'flex items-center',
         // 'lh-copy f5',
         'f7 lh-solid',
         'pv2',
+        'link',
         'outline-0 hover-bg-light-blue',
+        'flex items-center',
       )}
       tabIndex={0}
     >
@@ -150,14 +151,14 @@ const Bucket = connect(
       <div
         className={cn(
           'w-100 w-50-m w-third-l fl',
-          'pt3 pb2',
+          'pt3 pb3',
           'bg-white',
           'bb br b--moon-gray',
           // 'debug-grid-16-solid',
           // 'debug',
         )}
       >
-        <div className={cn('f4 pl3 pb1')}>{bucket.name}</div>
+        <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
         <BucketItems bucketId={bucket.id} />
         <a
           href={`/add-task`}
@@ -211,7 +212,13 @@ function headerLinkCN({isSelected = false}) {
 }
 
 function listLinkCN() {
-  return cn('link code black-60')
+  return cn(
+    'db',
+    'pv2 pl3',
+    'f7 lh-solid',
+    'link code black-60',
+    'hover-black hover-bg-light-blue',
+  )
 }
 
 const DashboardHeaderTabs = connect(
