@@ -1,3 +1,4 @@
+/* eslint-disable no-func-assign*/
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
 import {cn, F, renderKeyedById, wrapPD} from '../utils'
@@ -116,7 +117,7 @@ import {nanoid} from '../../model/util'
 //   )
 // }
 
-function BucketItem({item}) {
+function BucketItem({text}) {
   return (
     <div
       className={cn(
@@ -128,14 +129,26 @@ function BucketItem({item}) {
         'flex items-center',
       )}
       tabIndex={0}
+      // onFocus={()=>selectItem({item})}
     >
       <div className={cn('ph3', 'flex items-center')}>
         <input type={'checkbox'} tabIndex={-1} />
       </div>
-      <div className={cn('code')}>{item.text}</div>
+      <div className={cn('code')}>{text}</div>
     </div>
   )
 }
+
+BucketItem = connect(
+  {selectItem: signal`selectItem`},
+  function({selectItem}, {item}) {
+    return {
+      onFocus: () => selectItem({item}),
+      text: item.text,
+    }
+  },
+  BucketItem,
+)
 
 const BucketItems = connect(
   {items: bucketItems},
