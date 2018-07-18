@@ -159,7 +159,7 @@ const Bucket = connect(
         <BucketItems bucketId={bucket.id} />
         <a
           href={`/add-task`}
-          className={cn(linkCN({isHeader: false}))}
+          className={cn(headerLinkCN({isHeader: false}))}
           onClick={wrapPD(() => addItem({bucketId: bucket.id}))}
         >
           Add Task
@@ -195,7 +195,7 @@ const Dashboard = connect(
   },
 )
 
-function linkCN({isSelected = false}) {
+function headerLinkCN({isSelected = false}) {
   return cn(
     'input-reset button-reset',
     'link hover-z-1',
@@ -225,8 +225,7 @@ const DashboardHeaderTabs = connect(
         href={`/dashboard/${dashboard.id}/${dashboard.name}`}
         key={dashboard.id}
         tabIndex={0}
-        className={linkCN({
-          isHeader: true,
+        className={headerLinkCN({
           isSelected: isSelected(dashboard),
         })}
       >
