@@ -53,11 +53,11 @@ function createInitialState() {
   return state
 }
 
-function createNewNote({text, parentId = null}) {
-  validate('S', [text])
-  validate('S|Z', [parentId])
-  return {id: nanoid(), text: text, parentId}
-}
+// function createNewNote({text, parentId = null}) {
+//   validate('S', [text])
+//   validate('S|Z', [parentId])
+//   return {id: nanoid(), text: text, parentId}
+// }
 
 // function createNewNoteAF({text = '', parentId = null}) {
 //   return function createNewNoteAction({resolve}) {
