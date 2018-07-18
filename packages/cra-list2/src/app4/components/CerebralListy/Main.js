@@ -18,10 +18,29 @@ import {
 } from '../../CerebralListyState/controller'
 import * as PropTypes from 'prop-types'
 
+function ListItem({children, className, ...other}) {
+  return (
+    <div
+      className={cn(
+        'db',
+        'pv2',
+        'f7 lh-solid',
+        'link code',
+        'hover-black hover-bg-light-blue',
+        'flex items-center',
+        className,
+      )}
+      {...other}
+    >
+      {children}
+    </div>
+  )
+}
+
 function listLinkCN() {
   return cn(
     'db',
-    'pv2 pl3',
+    'pv2',
     'f7 lh-solid',
     'link code ',
     'black-60 hover-black hover-bg-light-blue',
@@ -65,7 +84,7 @@ function ListButton(props) {
   return (
     <a
       href={`/add-task`}
-      className={cn(listLinkCN())}
+      className={cn('black-60 pl3')}
       onClick={wrapPD(props.fn)}
     >
       {props.children}
@@ -108,7 +127,9 @@ const Bucket = connect(
       <BucketLayout>
         <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <ListButton fn={onAddItem}>Add Task</ListButton>
+        <ListItem>
+          <ListButton fn={onAddItem}>Add Task</ListButton>
+        </ListItem>
       </BucketLayout>
     )
   },
@@ -124,7 +145,9 @@ const Dashboard = connect(
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
         <BucketLayout>
-          <ListButton fn={addBucket}>Add List</ListButton>
+          <ListItem>
+            <ListButton fn={addBucket}>Add List</ListButton>
+          </ListItem>
         </BucketLayout>
       </div>
     )
