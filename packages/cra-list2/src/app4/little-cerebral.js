@@ -1,8 +1,9 @@
 import {Compute, Controller, Module} from 'cerebral'
 import {connect, Container} from '@cerebral/react'
 import {props, signal, state, string} from 'cerebral/tags'
-import {set, unshift, push} from 'cerebral/operators'
+import {push, set, unshift} from 'cerebral/operators'
 import {_, mergeWithDefaults} from './little-ramda'
+import S from 'sanctuary'
 
 export {
   Compute,
@@ -48,4 +49,8 @@ export function createAppController(rootModule, options = {}) {
   )
 
   return controller
+}
+
+export function computeToMaybe(operator) {
+  return Compute(operator, x => S.toMaybe(x))
 }

@@ -4,12 +4,11 @@ import {
   findById,
   findByMaybeId,
   modelsToIds,
-  S,
-  tapShow,
   validate,
 } from '../little-ramda'
 import {
   Compute,
+  computeToMaybe,
   createAppController,
   Module,
   props,
@@ -199,13 +198,14 @@ export const bucketFromProps = Compute(
   findById,
 )
 
-export const maybeSelectedItem = Compute(
+const maybeSelectedItemId = computeToMaybe(
   state`nullableSelectedItemId`,
-  x => S.toMaybe(x),
-  tapShow,
+)
+
+export const maybeSelectedItem = Compute(
+  maybeSelectedItemId,
   state`items`,
   findByMaybeId,
-  tapShow,
 )
 
 export const controller = createAppController(createRootModule(), {
