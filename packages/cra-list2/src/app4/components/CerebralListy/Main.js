@@ -1,7 +1,13 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
-import {cn, F, wrapPD} from '../utils'
+import {
+  cn,
+  F,
+  getDisplayName,
+  wrapDisplayName,
+  wrapPD,
+} from '../utils'
 import {
   connect,
   Container,
@@ -12,10 +18,11 @@ import {_, idEq} from '../../little-ramda'
 import {
   bucketById,
   bucketIdToItemIds,
+  controller,
   dashboardIdToBucketIds,
   itemById,
-  controller,
 } from '../../CerebralListyState/controller'
+import {pluralize} from '../../model/utils'
 
 // const NoteTextInput = connect(
 //   {
@@ -162,16 +169,25 @@ BucketItem = connect(
   BucketItem,
 )
 
-const Component = BucketItem
-const idName = 'itemId'
+function createKeyedIdListComponent(
+  displayName,
+  Component,
+  idName,
+  idListTag,
+) {
+  const IdList = ({idList}) =>
+    _.map(id => <Component key={id} {...{[idName]: id}} />)(idList)
 
-const BucketItems = connect(
-  {idList: bucketIdToItemIds},
-  function BucketItems({idList}) {
-    return _.map(id => <Component key={id} {...{[idName]: id}} />)(
-      idList,
-    )
-  },
+  IdList.displayName = displayName
+
+  return connect({idList: idListTag}, IdList)
+}
+
+const BucketItems = createKeyedIdListComponent(
+  'BucketItems',
+  BucketItem,
+  'itemId',
+  bucketIdToItemIds,
 )
 
 const Bucket = connect(

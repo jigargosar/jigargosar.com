@@ -1,4 +1,4 @@
-import {nanoid} from '../../model/util'
+import {nanoid} from '../../model/utils'
 import {S, validate} from '../../little-ramda'
 
 function createNote({

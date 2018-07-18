@@ -1,7 +1,7 @@
 import nanoid from 'nanoid'
 import {_} from '../little-ramda'
-
-export {nanoid}
+import pluralize from 'pluralize'
+export {nanoid, pluralize}
 
 // function clampListIdx(list, idx) {
 //   if (list.length < 0) {

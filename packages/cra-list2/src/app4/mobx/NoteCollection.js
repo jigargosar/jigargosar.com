@@ -5,7 +5,7 @@ import {
   mSet,
   mValues,
 } from './little-mobx'
-import {nanoid} from '../model/util'
+import {nanoid} from '../model/utils'
 import Chance from 'chance'
 import {_, R, validate} from '../little-ramda'
 import {localActorId} from '../services/ActorId'

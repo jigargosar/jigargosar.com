@@ -1,5 +1,5 @@
 import {createObservableObject, mAutoRun} from './little-mobx'
-import {nanoid} from '../model/util'
+import {nanoid} from '../model/utils'
 import {_, S, validate} from '../little-ramda'
 import {storage} from '../services/storage'
 

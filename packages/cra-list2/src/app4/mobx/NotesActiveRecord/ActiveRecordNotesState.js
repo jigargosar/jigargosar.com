@@ -26,7 +26,7 @@ import {
   getOrUpsertRootNote,
   Notes,
 } from './NotesActiveRecord'
-import {nanoid} from '../../model/util'
+import {nanoid} from '../../model/utils'
 import S from 'sanctuary'
 
 function createDisplayNoteTransformer(view) {

@@ -1,6 +1,6 @@
 import {storage} from './storage'
 import {_, validate} from '../little-ramda'
-import {nanoid} from '../model/util'
+import {nanoid} from '../model/utils'
 
 export const localActorId = (() => {
   const storedLocalActorId = storage.get('localActorId')

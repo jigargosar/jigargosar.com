@@ -2,11 +2,16 @@ import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import {_, R, RX, tryCatchLog, validate} from '../little-ramda'
-import {lifecycle, setDisplayName, wrapDisplayName} from 'recompose'
+import {
+  lifecycle,
+  setDisplayName,
+  wrapDisplayName,
+  getDisplayName,
+} from 'recompose'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 
-export {setDisplayName, wrapDisplayName, lifecycle}
+export {setDisplayName, wrapDisplayName, lifecycle, getDisplayName}
 export {F, RC, observer, Observer, isHotKey}
 export const cn = RX.cx
 

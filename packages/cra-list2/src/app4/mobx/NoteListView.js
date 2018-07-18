@@ -7,7 +7,7 @@ import {
   oObject,
 } from './little-mobx'
 import {_, swapElementsAt} from '../little-ramda'
-import {clampIdx, cycleIdx} from '../model/util'
+import {clampIdx, cycleIdx} from '../model/utils'
 import escapeStringRegexp from 'escape-string-regexp'
 import {getParsedQS} from '../services/Location'
 
