@@ -94,21 +94,10 @@ const Dashboard = connect(
   },
   function Dashboard({bucketIds, addBucket}) {
     return (
-      <F>
-        <div
-          className={cn(
-            '',
-            // 'bl-l bl-m b--moon-gray'
-          )}
-        >
-          <div className={cn('flex flex-wrap ')}>
-            {_.map(id => <Bucket key={id} bucketId={id} />)(
-              bucketIds,
-            )}
-            <div onClick={() => addBucket()}>Add List</div>
-          </div>
-        </div>
-      </F>
+      <div className={cn('flex flex-wrap')}>
+        {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
+        <div onClick={() => addBucket()}>Add List</div>
+      </div>
     )
   },
 )
