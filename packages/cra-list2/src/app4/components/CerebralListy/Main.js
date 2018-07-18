@@ -1,7 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
-import {cn, F, wrapPD} from '../utils'
+import {cn, wrapPD} from '../utils'
 import {
   connect,
   Container,
