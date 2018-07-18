@@ -191,8 +191,12 @@ const BucketItems = createKeyedIdListComponent(
 )
 
 const Bucket = connect(
-  {addItem: signal`addItem`, bucket: bucketById},
-  function Bucket({bucket, addItem}) {
+  {
+    addItem: signal`addItem`,
+    bucket: bucketById,
+    itemIds: bucketIdToItemIds,
+  },
+  function Bucket({bucket, itemIds, addItem}) {
     return (
       <div
         className={cn(
@@ -205,7 +209,8 @@ const Bucket = connect(
         )}
       >
         <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
-        <BucketItems bucketId={bucket.id} />
+        {/*<BucketItems bucketId={bucket.id} />*/}
+        {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <a
           href={`/add-task`}
           className={cn(listLinkCN())}
