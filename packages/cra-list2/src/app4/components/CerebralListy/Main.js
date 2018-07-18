@@ -72,6 +72,21 @@ ListButton.propTypes = {
   fn: PropTypes.func.isRequired,
 }
 
+function BucketLayout({children}) {
+  return (
+    <div
+      className={cn(
+        'w-100 w-50-m w-third-l fl',
+        'pt3 pb3',
+        'bg-white',
+        'bb br b--moon-gray',
+      )}
+    >
+      {children}
+    </div>
+  )
+}
+
 const Bucket = connect(
   {
     addItem: signal`addItem`,
@@ -85,18 +100,11 @@ const Bucket = connect(
   }),
   function Bucket({bucket, itemIds, onAddItem}) {
     return (
-      <div
-        className={cn(
-          'w-100 w-50-m w-third-l fl',
-          'pt3 pb3',
-          'bg-white',
-          'bb br b--moon-gray',
-        )}
-      >
+      <BucketLayout>
         <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <ListButton fn={onAddItem}>Add Task</ListButton>
-      </div>
+      </BucketLayout>
     )
   },
 )
@@ -110,9 +118,9 @@ const Dashboard = connect(
     return (
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
-        <div className={cn('flex-auto', 'bg-white')}>
+        <BucketLayout>
           <ListButton fn={addBucket}>Add List</ListButton>
-        </div>
+        </BucketLayout>
       </div>
     )
   },
