@@ -18,7 +18,13 @@ import {
 } from '../../CerebralListyState/controller'
 import * as PropTypes from 'prop-types'
 
-function ListItem({children, className, action = S.I, ...other}) {
+function ListItem({
+  children,
+  className,
+  action = S.I,
+  colors = 'black hover-black hover-bg-light-blue',
+  ...other
+}) {
   return (
     <a
       href={'/'}
@@ -28,7 +34,7 @@ function ListItem({children, className, action = S.I, ...other}) {
         'pv2',
         'f7 lh-solid',
         'link code',
-        'black hover-black hover-bg-light-blue',
+        colors,
         'flex items-center',
         className,
       )}
@@ -135,7 +141,12 @@ const Bucket = connect(
       <BucketLayout>
         <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <ListItem href={`/add-task`} action={onAddItem}>
+        <ListItem
+          className={cn('pl3')}
+          colors="black-70 hover-black hover-bg-light-blue"
+          href={`/add-task`}
+          action={onAddItem}
+        >
           {`Add Task`}
         </ListItem>
       </BucketLayout>
@@ -153,9 +164,11 @@ const Dashboard = connect(
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
         <BucketLayout>
-          <ListItem>
-            <ListButton fn={addBucket}>Add List</ListButton>
-          </ListItem>
+          <ListItem
+            className={cn('pl3')}
+            colors="black-70 hover-black hover-bg-light-blue"
+            onClick={addBucket}
+          >{`Add List`}</ListItem>
         </BucketLayout>
       </div>
     )
