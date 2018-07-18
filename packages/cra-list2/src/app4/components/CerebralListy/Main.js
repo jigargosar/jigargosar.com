@@ -157,9 +157,13 @@ const Bucket = connect(
       >
         <div className={cn('f4 pl3 pb1')}>{bucket.name}</div>
         <BucketItems bucketId={bucket.id} />
-        <div onClick={() => addItem({bucketId: bucket.id})}>
+        <a
+          href={`/add-task`}
+          className={cn(linkCN({isHeader: false}))}
+          onClick={wrapPD(() => addItem({bucketId: bucket.id}))}
+        >
           Add Task
-        </div>
+        </a>
       </div>
     )
   },
@@ -191,13 +195,13 @@ const Dashboard = connect(
   },
 )
 
-function linkCN({isSelected = false, isHeader = false}) {
+function linkCN({isSelected = false}) {
   return cn(
     'input-reset button-reset',
     'link hover-z-1',
     'bn',
     'pa2',
-    'code pointer outline-transparent',
+    'code pointer',
     isSelected
       ? 'black bg-white-80 o-hover-black-70'
       : 'black hover-bg-white-20',
