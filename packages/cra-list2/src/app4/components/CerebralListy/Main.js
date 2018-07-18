@@ -1,13 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
-import {
-  cn,
-  F,
-  getDisplayName,
-  wrapDisplayName,
-  wrapPD,
-} from '../utils'
+import {cn, F, wrapPD} from '../utils'
 import {
   connect,
   Container,
@@ -22,7 +16,6 @@ import {
   dashboardIdToBucketIds,
   itemById,
 } from '../../CerebralListyState/controller'
-import {pluralize} from '../../model/utils'
 
 // const NoteTextInput = connect(
 //   {
