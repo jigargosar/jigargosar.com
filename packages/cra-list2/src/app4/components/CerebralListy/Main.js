@@ -18,15 +18,17 @@ import {
 } from '../../CerebralListyState/controller'
 import * as PropTypes from 'prop-types'
 
-function ListItem({children, className, ...other}) {
+function ListItem({children, className, action = S.I, ...other}) {
   return (
-    <div
+    <a
+      href={'/'}
+      onClick={wrapPD(action)}
       className={cn(
         'db',
         'pv2',
         'f7 lh-solid',
         'link code',
-        'hover-black hover-bg-light-blue',
+        'black hover-black hover-bg-light-blue',
         'flex items-center',
         className,
       )}
@@ -34,7 +36,7 @@ function ListItem({children, className, ...other}) {
       {...other}
     >
       {children}
-    </div>
+    </a>
   )
 }
 
@@ -133,8 +135,8 @@ const Bucket = connect(
       <BucketLayout>
         <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <ListItem onClick={onAddItem}>
-          <ListButton>Add Task</ListButton>
+        <ListItem href={`/add-task`} action={onAddItem}>
+          {`Add Task`}
         </ListItem>
       </BucketLayout>
     )
