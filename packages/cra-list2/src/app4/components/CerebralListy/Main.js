@@ -193,11 +193,13 @@ const Dashboard = connect(
 
 function linkCN({isSelected = false, isHeader = false}) {
   return cn(
-    'input-reset button-reset bn',
+    'input-reset button-reset',
+    'link hover-z-1',
+    'bn',
     'pa2',
-    'code link pointer outline-transparent',
+    'code pointer outline-transparent',
     isSelected
-      ? 'black bg-white-80 hover-black-70'
+      ? 'black bg-white-80 o-hover-black-70'
       : 'black hover-bg-white-20',
   )
 }
