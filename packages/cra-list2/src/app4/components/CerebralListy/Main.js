@@ -12,12 +12,10 @@ import {_, idEq} from '../../little-ramda'
 import {
   computeBucketById,
   computeBucketItemIds,
+  computeDashboardBucketIds,
   computeItemById,
   controller,
-  currentBucketIds,
-  currentDashboard,
 } from '../../CerebralListyState/controller'
-import {nanoid} from '../../model/util'
 
 // const NoteTextInput = connect(
 //   {
@@ -197,7 +195,7 @@ const Bucket = connect(
 
 const Dashboard = connect(
   {
-    bucketIds: currentBucketIds,
+    bucketIds: computeDashboardBucketIds,
     addBucket: signal`addBucket`,
   },
   function Dashboard({bucketIds, addBucket}) {
@@ -247,31 +245,28 @@ function listLinkCN() {
 const DashboardHeaderTabs = connect(
   {
     dashboards: state`dashboards`,
-    currentDashboard: currentDashboard,
+    currentDashboardId: state`currentDashboardId`,
     switchDashboard: signal`switchDashboard`,
   },
   function DashboardHeaderTabs({
     dashboards,
-    currentDashboard,
+    currentDashboardId,
     switchDashboard,
   }) {
-    return _.map(dashboard => (
-      <a
-        onClick={wrapPD(() => switchDashboard({dashboard}))}
-        href={`/dashboard/${dashboard.id}/${dashboard.name}`}
-        key={dashboard.id}
-        tabIndex={0}
-        className={headerLinkCN({
-          isSelected: isSelected(dashboard),
-        })}
-      >
-        {dashboard.name}
-      </a>
-    ))(dashboards)
-
-    function isSelected(dashboard) {
-      return currentDashboard === dashboard
-    }
+    return _.map(dashboard => {
+      const isSelected = idEq(currentDashboardId, dashboard)
+      return (
+        <a
+          onClick={wrapPD(() => switchDashboard({dashboard}))}
+          href={`/dashboard/${dashboard.id}/${dashboard.name}`}
+          key={dashboard.id}
+          tabIndex={0}
+          className={headerLinkCN({isSelected})}
+        >
+          {dashboard.name}
+        </a>
+      )
+    })(dashboards)
   },
 )
 
@@ -289,51 +284,14 @@ function Header({children}) {
   )
 }
 
-function createState() {
-  const dashboards = [
-    createDashboard({name: 'Master'}),
-    createDashboard({name: 'Project X'}),
-    createDashboard({name: 'Tutorial'}),
-  ]
-
-  const state = {
-    dashboards,
-    currentDashboardId: dashboards[0].id,
-  }
-  return state
-
-  function createBucketItem(i) {
-    return {
-      id: nanoid(),
-      text: `${i} I ama todo `,
-    }
-  }
-
-  function createBucket(i) {
-    return {
-      id: nanoid(),
-      name: `List ${i}`,
-      items: _.times(createBucketItem)(3),
-    }
-  }
-
-  function createDashboard({name}) {
-    return {
-      id: nanoid(),
-      name,
-      buckets: _.times(createBucket)(5),
-    }
-  }
+function CurrentDashboard({currentDashboardId}) {
+  return <Dashboard dashboardId={currentDashboardId} />
 }
 
-function getCurrentDashboard() {
-  return _.compose(
-    _.defaultTo(fakeState.dashboards[0]),
-    _.find(idEq(fakeState.currentDashboardId)),
-  )(fakeState.dashboards)
-}
-
-const fakeState = createState()
+CurrentDashboard = connect(
+  {currentDashboardId: state`currentDashboardId`},
+  CurrentDashboard,
+)
 
 function ListyMain() {
   return (
@@ -342,7 +300,7 @@ function ListyMain() {
         <Header>
           <DashboardHeaderTabs />
         </Header>
-        <Dashboard dashboard={getCurrentDashboard()} />
+        <CurrentDashboard />
       </TypographyDefaults>
     </Container>
   )
