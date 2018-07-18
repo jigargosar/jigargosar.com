@@ -205,19 +205,28 @@ const DashboardHeaderTabs = connect(
       <div
         onClick={() => switchDashboard({dashboard})}
         key={dashboard.id}
-        className={cn('dim', ' lh-title pv1 ph2', 'pointer', {
-          'bg-light-blue black': currentDashboard === dashboard,
-        })}
+        className={cn(
+          'code',
+          'pa2',
+          'pointer',
+          isSelected(dashboard)
+            ? 'bg-white-80 hover-black-70'
+            : 'hover-bg-white-20',
+        )}
       >
         {dashboard.name}
       </div>
     ))(dashboards)
+
+    function isSelected(dashboard) {
+      return currentDashboard === dashboard
+    }
   },
 )
 
 function Header({children}) {
   return (
-    <div className={cn('white bg-blue', 'bb b--moon-gray')}>
+    <div className={cn('black bg-light-blue', 'bb b--moon-gray')}>
       <CenterLayout className={cn('flex items-center', 'pv1 pv2-ns')}>
         <div className={cn('flex-auto', 'flex mh3')}>{children}</div>
         <div className={cn('flex f5 fw3 lh-title mh3')}>
