@@ -27,40 +27,32 @@ function listLinkCN() {
   )
 }
 
-function BucketItem({text, onFocus}) {
-  return (
-    <div
-      className={cn(
-        // 'lh-copy f5',
-        'f7 lh-solid',
-        'pv2',
-        'link',
-        'outline-0 hover-bg-light-blue',
-        'flex items-center',
-      )}
-      tabIndex={0}
-      onFocus={onFocus}
-    >
-      <div className={cn('ph3', 'flex items-center')}>
-        <input type={'checkbox'} tabIndex={-1} />
-      </div>
-      <div className={cn('code')}>{text}</div>
-    </div>
-  )
-}
-
-BucketItem = connect(
+const BucketItem = connect(
   {
     selectItem: signal`selectItem`,
     item: itemById,
   },
-  function({selectItem, item}) {
-    return {
-      onFocus: () => selectItem({item}),
-      text: item.text,
-    }
+  function BucketItem({item, selectItem}) {
+    return (
+      <div
+        className={cn(
+          // 'lh-copy f5',
+          'f7 lh-solid',
+          'pv2',
+          'link',
+          'outline-0 hover-bg-light-blue',
+          'flex items-center',
+        )}
+        tabIndex={0}
+        onFocus={() => selectItem({item})}
+      >
+        <div className={cn('ph3', 'flex items-center')}>
+          <input type={'checkbox'} tabIndex={-1} />
+        </div>
+        <div className={cn('code')}>{item.text}</div>
+      </div>
+    )
   },
-  BucketItem,
 )
 
 const Bucket = connect(
