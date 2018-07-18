@@ -145,7 +145,7 @@ function createRootModule() {
 
 export const controller = createAppController(createRootModule(), {
   stateChanges: {
-    currentDashboardId: 'kOYniDg34h9xp3cI1xzN1',
+    // currentDashboardId: 'kOYniDg34h9xp3cI1xzN1',
   },
 })
 
