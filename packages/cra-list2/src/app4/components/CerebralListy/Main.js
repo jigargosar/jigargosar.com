@@ -8,7 +8,7 @@ import {
   signal,
   state,
 } from '../../little-cerebral'
-import {_, idEq} from '../../little-ramda'
+import {_, idEq, S} from '../../little-ramda'
 import {
   bucketById,
   bucketIdToItemIds,
@@ -30,6 +30,7 @@ function ListItem({children, className, ...other}) {
         'flex items-center',
         className,
       )}
+      tabIndex={0}
       {...other}
     >
       {children}
@@ -37,27 +38,27 @@ function ListItem({children, className, ...other}) {
   )
 }
 
-function listLinkCN() {
-  return cn(
-    'db',
-    'pv2',
-    'f7 lh-solid',
-    'link code ',
-    'black-60 hover-black hover-bg-light-blue',
-    'flex items-center',
-  )
-}
-
-function itemCN() {
-  return cn(
-    'db',
-    'pv2',
-    'f7 lh-solid',
-    'link code',
-    'hover-black hover-bg-light-blue',
-    'flex items-center',
-  )
-}
+// function listLinkCN() {
+//   return cn(
+//     'db',
+//     'pv2',
+//     'f7 lh-solid',
+//     'link code ',
+//     'black-60 hover-black hover-bg-light-blue',
+//     'flex items-center',
+//   )
+// }
+//
+// function itemCN() {
+//   return cn(
+//     'db',
+//     'pv2',
+//     'f7 lh-solid',
+//     'link code',
+//     'hover-black hover-bg-light-blue',
+//     'flex items-center',
+//   )
+// }
 
 const BucketItem = connect(
   {
@@ -66,8 +67,8 @@ const BucketItem = connect(
   },
   function BucketItem({item, selectItem}) {
     return (
-      <div
-        className={itemCN()}
+      <ListItem
+        // className={itemCN()}
         tabIndex={0}
         onFocus={() => selectItem({item})}
       >
@@ -75,7 +76,7 @@ const BucketItem = connect(
           <input type={'checkbox'} tabIndex={-1} />
         </div>
         <div className={cn('code')}>{item.text}</div>
-      </div>
+      </ListItem>
     )
   },
 )
@@ -84,8 +85,9 @@ function ListButton(props) {
   return (
     <a
       href={`/add-task`}
-      className={cn('black-60 pl3')}
+      className={cn('black-60 pl3 outline-0')}
       onClick={wrapPD(props.fn)}
+      tabIndex={-1}
     >
       {props.children}
     </a>
@@ -93,7 +95,11 @@ function ListButton(props) {
 }
 
 ListButton.propTypes = {
-  fn: PropTypes.func.isRequired,
+  fn: PropTypes.func,
+}
+
+ListButton.defaultProps = {
+  fn: S.I,
 }
 
 function BucketLayout({children}) {
@@ -127,8 +133,8 @@ const Bucket = connect(
       <BucketLayout>
         <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <ListItem>
-          <ListButton fn={onAddItem}>Add Task</ListButton>
+        <ListItem onClick={onAddItem}>
+          <ListButton>Add Task</ListButton>
         </ListItem>
       </BucketLayout>
     )
