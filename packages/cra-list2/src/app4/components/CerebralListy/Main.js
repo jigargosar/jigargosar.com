@@ -8,7 +8,7 @@ import {
   signal,
   state,
 } from '../../little-cerebral'
-import {_, idEq, S} from '../../little-ramda'
+import {_, idEq} from '../../little-ramda'
 import {
   bucketById,
   bucketIdToItemIds,
@@ -23,14 +23,12 @@ import {rc} from '../recompose-utils'
 const LI = _.compose(
   rc.defaultProps({
     tabIndex: 0,
-    colors: 'black hover-black hover-bg-light-blue',
+    colors: 'black-80 hover-black hover-bg-black-10',
   }),
-  rc.withProps(({className, colors}) => {
-    return {
-      className: cn('w-100', colors, className),
-    }
-  }),
-)(Btn)
+  rc.withProps(({className, colors}) => ({
+    className: cn('w-100 link', colors, className),
+  })),
+)(Row)
 
 const BucketItem = connect(
   {
@@ -98,7 +96,9 @@ const Bucket = connect(
           colors="black-50 hover-black-80 hover-bg-black-10"
           onClick={onAddItem}
         >
-          <Row className={cn('f5 w-100 pv2 ph3')}>{`Add Task`}</Row>
+          <Row
+            className={cn('f5 flex-auto pv2 ph3')}
+          >{`Add Task`}</Row>
         </LI>
       </BucketWrapper>
     )
