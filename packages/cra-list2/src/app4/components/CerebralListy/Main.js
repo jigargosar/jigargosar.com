@@ -34,9 +34,7 @@ const BucketItem = connect(
         <ListPane.ItemText className={cn('code')}>
           {item.text}
         </ListPane.ItemText>
-        <Btn className={cn('f4 black-60 hover-black link grow')}>
-          <Delete fontSize={'inherit'} />
-        </Btn>
+        <ListPane.ItemAction Icon={Delete} />
       </ListPane.Item>
     )
   },

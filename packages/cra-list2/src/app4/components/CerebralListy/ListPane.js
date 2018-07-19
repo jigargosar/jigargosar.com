@@ -34,7 +34,11 @@ const ListPaneItemText = _.compose(
 function ListPaneItemAction({className, Icon, ...others}) {
   return (
     <Btn
-      className={cn('mr1', 'black-60 hover-black grow', className)}
+      className={cn(
+        'mr1',
+        'f4 black-60 hover-black-80 grow',
+        className,
+      )}
       {...others}
     >
       <Icon fontSize={'inherit'} />
