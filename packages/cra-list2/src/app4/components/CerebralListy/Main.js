@@ -3,7 +3,7 @@ import React from 'react'
 import {TypographyDefaults} from '../ui'
 import {cn} from '../utils'
 import {Container} from '../../little-cerebral'
-import {controller} from '../../CerebralListyState/controller'
+import {controller} from '../../cerebral/CerebralListyState/controller'
 import {DashboardHeaderTabs, Header} from './Header'
 import {CurrentDashboard} from './Dashboard'
 

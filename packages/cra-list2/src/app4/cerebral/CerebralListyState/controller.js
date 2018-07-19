@@ -1,4 +1,4 @@
-import {createAppController} from '../little-cerebral'
+import {createAppController} from '../../little-cerebral'
 import {createRootModule} from './app'
 
 export const controller = createAppController(createRootModule(), {

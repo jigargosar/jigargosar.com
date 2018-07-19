@@ -1,6 +1,6 @@
-import {StorageItem} from '../services/storage'
-import {_, isNotNil, validate} from '../little-ramda'
-import {setFocusAndSelectionOnDOMId} from '../components/utils'
+import {StorageItem} from '../../services/storage'
+import {_, isNotNil, validate} from '../../little-ramda'
+import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import {
   createAppController,
   logProps,
@@ -11,7 +11,7 @@ import {
   state,
   string,
   unshift,
-} from '../little-cerebral'
+} from '../../little-cerebral'
 import nanoid from 'nanoid'
 
 function createNewNote({text, parentId = null}) {

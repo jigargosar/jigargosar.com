@@ -1,4 +1,4 @@
-import {StorageItem} from '../services/storage'
+import {StorageItem} from '../../services/storage'
 import {
   _,
   mergeWithDefaults,
@@ -6,7 +6,7 @@ import {
   modelsToIds,
   S,
   validate,
-} from '../little-ramda'
+} from '../../little-ramda'
 import {
   Compute,
   Module,
@@ -15,7 +15,7 @@ import {
   set,
   state,
   unset,
-} from '../little-cerebral'
+} from '../../little-cerebral'
 import nanoid from 'nanoid'
 
 function createDashboard({id = nanoid(), name = 'New Dash'}) {

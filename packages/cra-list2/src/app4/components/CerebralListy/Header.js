@@ -5,7 +5,7 @@ import {cn, wrapPD} from '../utils'
 import {connect, signal, state} from '../../little-cerebral'
 import {_, idEq} from '../../little-ramda'
 import {Add} from '@material-ui/icons'
-import {dashboards} from '../../CerebralListyState/app'
+import {dashboards} from '../../cerebral/CerebralListyState/app'
 
 function headerLinkCN({isSelected = false}) {
   return cn(
