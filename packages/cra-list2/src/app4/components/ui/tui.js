@@ -8,6 +8,9 @@ export function Box(props) {
   const {
     p,
     ph,
+    pv,
+    mh,
+    mv,
     pt,
     pr,
     pb,
@@ -24,11 +27,13 @@ export function Box(props) {
     ...other
   } = props
 
-  const padding = S.map(_.repeat(_.__, 4))(S.toMaybe(p))
-  console.log(`S.show(padding)`, S.show(padding))
   const cns = cn(
     {
       [`pt${p} pr${p} pb${p} pl${p}`]: isNotNil(p),
+      [`pr${ph} pl${ph}`]: isNotNil(ph),
+      [`pt${pv} pb${pv}`]: isNotNil(pv),
+      [`mr${mh} ml${mh}`]: isNotNil(mh),
+      [`mt${mv} mb${mv}`]: isNotNil(mv),
       [`mt${m} mr${m} mb${m} ml${m}`]: isNotNil(m),
       [`pt${pt}`]: isNotNil(pt),
       [`pr${pr}`]: isNotNil(pr),
