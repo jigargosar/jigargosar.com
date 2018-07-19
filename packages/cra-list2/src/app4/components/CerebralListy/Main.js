@@ -17,7 +17,7 @@ import {
   itemById,
 } from '../../CerebralListyState/controller'
 import {Add, AddCircleOutline, Delete, Edit} from '@material-ui/icons'
-import {Btn, Row} from '../ui/tui'
+import {Btn, Row, withClassNames} from '../ui/tui'
 import {rc} from '../recompose-utils'
 
 const ListItem = _.compose(
@@ -26,15 +26,17 @@ const ListItem = _.compose(
     colors: 'black-80 hover-black hover-bg-black-10',
   }),
   rc.withProps(({className, colors}) => ({
-    className: cn('w-100 link', colors, className),
+    className: cn('w-100 ph2 link', colors, className),
   })),
 )(Row)
 
-ListItem.Text = rc.defaultProps({
-  pv: 2,
-  ph: 3,
-  className: cn('flex-auto'),
-})(Row)
+ListItem.Text = _.compose(
+  rc.defaultProps({
+    pv: 2,
+    ph: 2,
+  }),
+  withClassNames('flex-auto'),
+)(Row)
 
 const BucketItem = connect(
   {
@@ -44,7 +46,7 @@ const BucketItem = connect(
   function BucketItem({item, selectItem}) {
     return (
       <ListItem onFocus={() => selectItem({item})}>
-        <Row className={cn('ph3')}>
+        <Row p={2}>
           <input type={'checkbox'} tabIndex={-1} />
         </Row>
         <ListItem.Text className={cn('code')}>
