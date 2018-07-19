@@ -40,7 +40,7 @@ function renderBucketHeader(bucket, onAddItem, deleteBucket) {
   return (
     <ListPane.Item className={cn('f4 lh-copy')}>
       <ListPane.ItemText className={cn('f5', 'flex-auto')}>
-        {bucket.name}
+        {bucket.name || 'I am a Bucket Short and Stout'}
       </ListPane.ItemText>
       <ListPane.ItemSecondaryAction
         onClick={onAddItem}
@@ -112,7 +112,8 @@ function Bucket({bucket, onAddItem, deleteBucket}) {
 
 Bucket = _.compose(
   inject(({store: {store}}) => ({
-    bucket: {name: 'Bucket Name'},
+    bucket: store.bucket,
+    onAddItem: store.addItem,
     deleteBucket: _.F,
   })),
   observer,
