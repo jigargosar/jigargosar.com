@@ -24,16 +24,18 @@ const DomainStore = types
   })
   .views(views)
   .actions(self => ({
-    add() {
-      self.itemLookup.put(Item.create({id: modelId(Item.name)}))
+    addItem() {
+      return self.itemLookup.put(
+        Item.create({id: modelId(Item.name)}),
+      )
     },
   }))
 
 const store = DomainStore.create()
 
 if (module.hot) {
-  store.add()
-  store.add()
+  store.addItem()
+  store.addItem()
 
   const snap = dotPath('hot.data.snap')(module)
   _.when(isNotNil)(applySnapshot2(store))(snap)

@@ -1,14 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {cn} from '../utils'
-import {connect, signal} from '../../little-cerebral'
 import {_} from '../../little-ramda'
-import {
-  bucketById,
-  bucketIdToItemIds,
-  isItemSelected,
-  itemById,
-} from '../../cerebral/CerebralListyState/app'
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
@@ -96,7 +89,7 @@ function Bucket({bucket, itemIds, onAddItem, deleteBucket}) {
 Bucket = _.compose(
   inject(({store: {store}}) => {
     return {
-      onAddItem: store.add,
+      onAddItem: store.addItem,
       bucket: {name: 'Bucket Name'},
       itemIds: store.itemIds,
       deleteBucket: _.F,
