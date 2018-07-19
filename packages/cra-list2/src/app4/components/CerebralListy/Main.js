@@ -123,6 +123,14 @@ function Box({
   )
 }
 
+function Row(className, children, ...other) {
+  return (
+    <div className={cn(className)} {...other}>
+      {children}
+    </div>
+  )
+}
+
 const oneTo6 = ['1', '2', '3', '4', '5', '6', 1, 2, 3, 4, 5, 6]
 Box.propTypes = {
   p: PropTypes.oneOf(oneTo6),
