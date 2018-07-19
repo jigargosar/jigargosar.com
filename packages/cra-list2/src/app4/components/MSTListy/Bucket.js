@@ -46,12 +46,10 @@ function renderBucketHeader(bucket, onAddItem, deleteBucket) {
         onClick={onAddItem}
         Icon={PlaylistAdd}
       />
-      {/*<ListPane.ItemAction Icon={Settings} />*/}
       {renderDeleteIcon(() => deleteBucket({bucketId: bucket.id}))}
     </ListPane.Item>
   )
 }
-
 
 function BucketAddItem({onAddItem}) {
   return (
