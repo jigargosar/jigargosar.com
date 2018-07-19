@@ -201,6 +201,7 @@ export function createRootModule() {
             }
           },
           push(state`items`, props`newItem`),
+          set(state`itemLookup.${props`newItem.id`}`, props`newItem`),
         ],
         deleteItem: [splice(state`items`, itemIndexById, 1)],
         deleteBucket: [splice(state`buckets`, bucketIndexById, 1)],
