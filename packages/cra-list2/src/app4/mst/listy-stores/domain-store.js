@@ -42,6 +42,14 @@ function actions(self) {
         }),
       )
     },
+    addBucket(values) {
+      return self.bucketLookup.put(
+        Bucket.create({
+          ...values,
+          id: modelId(Bucket.name),
+        }),
+      )
+    },
     deleteItem(model) {
       return self.itemLookup.delete(model.id)
     },

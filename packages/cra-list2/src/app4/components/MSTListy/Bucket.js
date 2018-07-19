@@ -7,7 +7,7 @@ import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
 
-function BucketItem({isSelected, item, selectItem}) {
+function BucketItem({item}) {
   return (
     <ListPane.Item
       colors={cn({
@@ -28,8 +28,6 @@ function BucketItem({isSelected, item, selectItem}) {
 
 BucketItem = _.compose(
   inject(({store: {store}}, {item}) => ({
-    selectItem: _.F,
-    isSelected: false,
     item,
   })),
   observer,
