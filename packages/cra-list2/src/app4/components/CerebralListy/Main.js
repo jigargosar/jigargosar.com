@@ -204,13 +204,11 @@ function Header({children}) {
   )
 }
 
-function CurrentDashboard({currentDashboardId}) {
-  return <Dashboard dashboardId={currentDashboardId} />
-}
-
-CurrentDashboard = connect(
+const CurrentDashboard = connect(
   {currentDashboardId: state`currentDashboardId`},
-  CurrentDashboard,
+  function CurrentDashboard({currentDashboardId}) {
+    return <Dashboard dashboardId={currentDashboardId} />
+  },
 )
 
 function ListyMain() {
