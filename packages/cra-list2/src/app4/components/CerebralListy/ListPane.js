@@ -32,7 +32,7 @@ const ListPaneItemText = _.compose(
   withClassNames('flex-auto'),
 )(Row)
 
-function ListPaneItemsecondaryAction({className, Icon, ...others}) {
+function ListPaneItemSecondaryAction({className, Icon, ...others}) {
   return (
     <Btn
       className={cn(
@@ -51,10 +51,10 @@ ListPane.Item = ListPaneItem
 
 ListPane.ItemText = ListPaneItemText
 
-ListPane.ItemsecondaryAction = ListPaneItemsecondaryAction
+ListPane.ItemSecondaryAction = ListPaneItemSecondaryAction
 
 export function renderDeleteIcon(onClick) {
   return (
-    <ListPane.ItemsecondaryAction Icon={Delete} onClick={onClick} />
+    <ListPane.ItemSecondaryAction Icon={Delete} onClick={onClick} />
   )
 }

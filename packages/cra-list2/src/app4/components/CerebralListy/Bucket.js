@@ -39,7 +39,7 @@ function renderBucketHeader(bucket, onAddItem, deleteBucket) {
       <ListPane.ItemText className={cn('f5', 'flex-auto')}>
         {bucket.name}
       </ListPane.ItemText>
-      <ListPane.ItemsecondaryAction
+      <ListPane.ItemSecondaryAction
         onClick={onAddItem}
         Icon={PlaylistAdd}
       />
