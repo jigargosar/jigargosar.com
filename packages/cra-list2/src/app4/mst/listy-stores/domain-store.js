@@ -4,10 +4,13 @@ import {mValues} from '../../mobx/little-mobx'
 import {applySnapshot2, mapSnapshot} from '../little-mst'
 import {_, dotPath, isNotNil, modelsToIds} from '../../little-ramda'
 import {Item} from './Item'
+import {Bucket} from './Bucket'
 
 const DomainStore = types
   .model('DomainStore', {
     itemLookup: types.map(Item),
+    bucketLookup: types.map(Bucket),
+    bucket: types.reference(Bucket),
   })
   .views(views)
   .actions(actions)
@@ -27,16 +30,33 @@ function actions(self) {
   return {
     addItem(values) {
       return self.itemLookup.put(
-        Item.create({...values, id: modelId(Item.name)}),
+        Item.create({
+          bucket: self.bucket,
+          ...values,
+          id: modelId(Item.name),
+        }),
       )
     },
-    deleteItem(item) {
-      return self.itemLookup.delete(item.id)
+    deleteItem(model) {
+      return self.itemLookup.delete(model.id)
+    },
+    deleteBucket(model) {
+      return self.bucketLookup.delete(model.id)
     },
   }
 }
 
-const store = DomainStore.create()
+const bucketId = modelId('Bucket')
+const store = DomainStore.create({
+  bucketLookup: {[bucketId]: {id: bucketId}},
+  bucket: bucketId,
+})
+
+function logStoreSnapshot() {
+  console.log(`getSnapshot(store)`, getSnapshot(store))
+}
+
+logStoreSnapshot()
 
 if (module.hot) {
   store.addItem()
@@ -46,7 +66,7 @@ if (module.hot) {
   store.deleteItem(store.addItem())
   store.deleteItem(store.addItem())
   store.addItem({text: 'FaDuu ToDOO'})
-
+  logStoreSnapshot()
   const snap = dotPath('hot.data.snap')(module)
   _.when(isNotNil)(applySnapshot2(store))(snap)
 

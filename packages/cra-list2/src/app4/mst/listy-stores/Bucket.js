@@ -1,12 +1,9 @@
 import {getRoot, types} from 'mobx-state-tree'
-import {Bucket} from './Bucket'
 
-export const Item = types
-  .model('Item', {
+export const Bucket = types
+  .model('Bucket', {
     id: types.identifier,
-    bucket: types.reference(Bucket),
-    text: '',
-    done: false,
+    name: '',
   })
   .views(views)
   .actions(actions)
@@ -14,7 +11,7 @@ export const Item = types
 function actions(self) {
   return {
     delete() {
-      self.root.deleteItem(self)
+      self.root.deleteBucket(self)
     },
   }
 }

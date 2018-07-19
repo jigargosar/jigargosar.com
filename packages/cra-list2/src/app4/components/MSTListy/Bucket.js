@@ -52,20 +52,20 @@ function renderBucketHeader(bucket, onAddItem, deleteBucket) {
   )
 }
 
-function renderBucketAddItem(onAddItem) {
-  return (
-    <ListPane.Item
-      Component={Btn}
-      colors="black-50 hover-black-80 hover-bg-black-10"
-      onClick={onAddItem}
-    >
-      <Row p={2} pr={1} className={cn('f4')}>
-        <PlaylistAdd fontSize={'inherit'} />
-      </Row>
-      <ListPane.ItemText>{`Add Task`}</ListPane.ItemText>
-    </ListPane.Item>
-  )
-}
+// function renderBucketAddItem(onAddItem) {
+//   return (
+//     <ListPane.Item
+//       Component={Btn}
+//       colors="black-50 hover-black-80 hover-bg-black-10"
+//       onClick={onAddItem}
+//     >
+//       <Row p={2} pr={1} className={cn('f4')}>
+//         <PlaylistAdd fontSize={'inherit'} />
+//       </Row>
+//       <ListPane.ItemText>{`Add Task`}</ListPane.ItemText>
+//     </ListPane.Item>
+//   )
+// }
 
 function BucketAddItem({onAddItem}) {
   return (
