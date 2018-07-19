@@ -1,34 +1,41 @@
 import * as rc from 'recompose'
-import {_, isNotNil, overProp} from '../../little-ramda'
+import {_, overProp} from '../../little-ramda'
 import {cn, cnWith} from '../utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 
 const toStrUnlessNil = _.unless(_.isNil)(String)
+const concatKeyVal = _.compose(
+  _.map(_.join('')),
+  _.toPairs,
+  _.reject(_.isNil),
+)
+
+const numPropsNames = [
+  'p',
+  'ph',
+  'pv',
+  'pt',
+  'pr',
+  'pb',
+  'pl',
+  'm',
+  'mh',
+  'mv',
+  'mt',
+  'mr',
+  'mb',
+  'ml',
+  'bw',
+]
+
+const numPropsToStrUnlessNil = _.compose(
+  _.map(toStrUnlessNil),
+  _.pickAll(numPropsNames),
+)
 
 export function Box(props) {
   let {className, Component, children, ...other} = props
-
-  const numPropsNames = [
-    'p',
-    'ph',
-    'pv',
-    'pt',
-    'pr',
-    'pb',
-    'pl',
-
-    'm',
-    'mh',
-    'mv',
-    'mt',
-    'mr',
-    'mb',
-    'ml',
-
-    'bw',
-  ]
-
   const {
     p,
     ph,
@@ -45,9 +52,7 @@ export function Box(props) {
     mb,
     ml,
     bw,
-  } = _.compose(_.map(toStrUnlessNil), _.pickAll(numPropsNames))(
-    other,
-  )
+  } = numPropsToStrUnlessNil(other)
 
   const padObj = {
     pt: pt || pv || p,
@@ -56,24 +61,18 @@ export function Box(props) {
     pl: pl || ph || p,
   }
 
-  const padCNS = _.compose(
-    _.map(_.join('')),
-    _.toPairs,
-    _.reject(_.isNil),
-  )(padObj)
+  const marginObj = {
+    mt: mt || mv || m,
+    mr: mr || mh || m,
+    mb: mb || mv || m,
+    ml: ml || mh || m,
+  }
 
   const cns = cn(
-    padCNS,
+    concatKeyVal(padObj),
+    concatKeyVal(marginObj),
     {
-      [`mr${mh} ml${mh}`]: isNotNil(mh),
-      [`mt${mv} mb${mv}`]: isNotNil(mv),
-      [`mt${m} mr${m} mb${m} ml${m}`]: isNotNil(m),
-
-      [`mt${mt}`]: isNotNil(mt),
-      [`mr${mr}`]: isNotNil(mr),
-      [`mb${mb}`]: isNotNil(mb),
-      [`ml${ml}`]: isNotNil(ml),
-      [`bw${bw}`]: isNotNil(bw),
+      [`bw${bw}`]: bw,
     },
     className,
   )
