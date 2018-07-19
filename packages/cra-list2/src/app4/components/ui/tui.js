@@ -4,7 +4,31 @@ import {cn, cnWith} from '../utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 
+const toStrUnlessNil = _.unless(_.isNil)(String)
+
 export function Box(props) {
+  let {className, Component, children, ...other} = props
+
+  const numPropsNames = [
+    'p',
+    'ph',
+    'pv',
+    'pt',
+    'pr',
+    'pb',
+    'pl',
+
+    'm',
+    'mh',
+    'mv',
+    'mt',
+    'mr',
+    'mb',
+    'ml',
+
+    'bw',
+  ]
+
   const {
     p,
     ph,
@@ -13,7 +37,6 @@ export function Box(props) {
     pr,
     pb,
     pl,
-
     m,
     mh,
     mv,
@@ -21,28 +44,31 @@ export function Box(props) {
     mr,
     mb,
     ml,
-
     bw,
-    className,
-    Component,
-    children,
-    ...other
-  } = props
+  } = _.compose(_.map(toStrUnlessNil), _.pickAll(numPropsNames))(
+    other,
+  )
+
+  const padObj = {
+    pt: pt || pv || p,
+    pr: pr || ph || p,
+    pb: pb || pv || p,
+    pl: pl || ph || p,
+  }
+
+  const padCNS = _.compose(
+    _.map(_.join('')),
+    _.toPairs,
+    _.reject(_.isNil),
+  )(padObj)
 
   const cns = cn(
+    padCNS,
     {
-      [`pt${p} pr${p} pb${p} pl${p}`]: isNotNil(p),
-      [`pr${ph} pl${ph}`]: isNotNil(ph),
-      [`pt${pv} pb${pv}`]: isNotNil(pv),
-
       [`mr${mh} ml${mh}`]: isNotNil(mh),
       [`mt${mv} mb${mv}`]: isNotNil(mv),
       [`mt${m} mr${m} mb${m} ml${m}`]: isNotNil(m),
 
-      [`pt${pt}`]: isNotNil(pt),
-      [`pr${pr}`]: isNotNil(pr),
-      [`pb${pb}`]: isNotNil(pb),
-      [`pl${pl}`]: isNotNil(pl),
       [`mt${mt}`]: isNotNil(mt),
       [`mr${mr}`]: isNotNil(mr),
       [`mb${mb}`]: isNotNil(mb),
@@ -56,7 +82,7 @@ export function Box(props) {
   // }
 
   return (
-    <Component className={cns} {...other}>
+    <Component className={cns} {..._.omit(numPropsNames)(other)}>
       {children}
     </Component>
   )

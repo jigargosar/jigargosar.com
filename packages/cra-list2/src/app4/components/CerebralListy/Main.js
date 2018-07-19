@@ -17,7 +17,7 @@ import {
   itemById,
 } from '../../CerebralListyState/controller'
 import {Add, Delete, PlaylistAdd, Settings} from '@material-ui/icons'
-import {Box, Btn, Row} from '../ui/tui'
+import {Row} from '../ui/tui'
 import {ListPane} from './ListPane'
 
 const BucketItem = connect(
