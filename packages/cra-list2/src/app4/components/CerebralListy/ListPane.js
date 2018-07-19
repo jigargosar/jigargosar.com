@@ -3,6 +3,7 @@ import {cn} from '../utils'
 import {_} from '../../little-ramda'
 import * as rc from 'recompose'
 import React from 'react'
+import {Delete} from '@material-ui/icons'
 
 export const ListPane = withClassNames(
   cn(
@@ -51,3 +52,9 @@ ListPane.Item = ListPaneItem
 ListPane.ItemText = ListPaneItemText
 
 ListPane.ItemsecondaryAction = ListPaneItemsecondaryAction
+
+export function renderDeleteIcon(onClick) {
+  return (
+    <ListPane.ItemsecondaryAction Icon={Delete} onClick={onClick} />
+  )
+}
