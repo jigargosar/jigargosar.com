@@ -42,6 +42,29 @@ const BucketItem = connect(
   },
 )
 
+function renderBucketHeader(bucket, onAddItem) {
+  return (
+    <ListPane.Item className={cn('f4 lh-copy')}>
+      <ListPane.ItemText className={cn('f5', 'flex-auto')}>
+        {bucket.name}
+      </ListPane.ItemText>
+      <ListPane.ItemAction onClick={onAddItem} Icon={PlaylistAdd} />
+      <ListPane.ItemAction Icon={Settings} />
+    </ListPane.Item>
+  )
+}
+
+function renderBucketAddItem(onAddItem) {
+  return (
+    <ListPane.Item
+      colors="black-50 hover-black-80 hover-bg-black-10"
+      onClick={onAddItem}
+    >
+      <ListPane.ItemText>{`Add Task`}</ListPane.ItemText>
+    </ListPane.Item>
+  )
+}
+
 const Bucket = connect(
   {
     addItem: signal`addItem`,
@@ -56,23 +79,9 @@ const Bucket = connect(
   function Bucket({bucket, itemIds, onAddItem}) {
     return (
       <ListPane>
-        <ListPane.Item className={cn('f4 lh-copy')}>
-          <ListPane.ItemText className={cn('f5', 'flex-auto')}>
-            {bucket.name}
-          </ListPane.ItemText>
-          <ListPane.ItemAction
-            onClick={onAddItem}
-            Icon={PlaylistAdd}
-          />
-          <ListPane.ItemAction Icon={Settings} />
-        </ListPane.Item>
+        {renderBucketHeader(bucket, onAddItem)}
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <ListPane.Item
-          colors="black-50 hover-black-80 hover-bg-black-10"
-          onClick={onAddItem}
-        >
-          <ListPane.ItemText>{`Add Task`}</ListPane.ItemText>
-        </ListPane.Item>
+        {renderBucketAddItem(onAddItem)}
       </ListPane>
     )
   },
