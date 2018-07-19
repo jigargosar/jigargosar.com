@@ -3,10 +3,19 @@ import React from 'react'
 import styled from 'styled-components'
 import {cx as cn} from 'ramda-extension'
 import {PropTypes} from '../utils'
+import {
+  Error,
+  Add,
+  Edit,
+  ModeEdit,
+  AddCircleOutline,
+} from '@material-ui/icons'
 
 /*eslint-enable*/
 
 /*eslint-disable no-empty-pattern*/
+
+export {Error, Add, Edit, ModeEdit, AddCircleOutline}
 
 export const CenterLayout = styled.div.attrs({
   className: 'center mw7',

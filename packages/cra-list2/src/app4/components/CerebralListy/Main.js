@@ -16,13 +16,8 @@ import {
   dashboardIdToBucketIds,
   itemById,
 } from '../../CerebralListyState/controller'
-import {
-  Error,
-  Add,
-  Edit,
-  ModeEdit,
-  AddCircleOutline,
-} from '@material-ui/icons'
+import {Add, AddCircleOutline, Edit} from '@material-ui/icons'
+import {rc} from '../recompose-utils'
 
 function ListItem({
   children,
@@ -84,6 +79,13 @@ function BucketLayout({children}) {
   )
 }
 
+// function Div({className, children, ...others}) {
+//   return <div className={cn('className')}>{children}</div>
+// }
+
+// const dd = defaultProps({component: 'div'})
+// const Div = dd(componentFromProp('component'))
+
 function Box({
   p,
   pt,
@@ -123,13 +125,13 @@ function Box({
   )
 }
 
-function Row(className, children, ...other) {
-  return (
-    <div className={cn(className)} {...other}>
-      {children}
-    </div>
-  )
-}
+// function Row(className, children, ...other) {
+//   return (
+//     <div className={cn(className)} {...other}>
+//       {children}
+//     </div>
+//   )
+// }
 
 const oneTo6 = ['1', '2', '3', '4', '5', '6', 1, 2, 3, 4, 5, 6]
 Box.propTypes = {
@@ -144,6 +146,14 @@ Box.propTypes = {
   mb: PropTypes.oneOf(oneTo6),
   ml: PropTypes.oneOf(oneTo6),
 }
+
+function overProp(name) {
+  return _.over(_.lensProp(name))
+}
+
+const Row = rc.withProps(
+  overProp('className')(cls => cn('flex items-center', cls)),
+)(Box)
 
 const Bucket = connect(
   {
