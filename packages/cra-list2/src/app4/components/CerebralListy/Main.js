@@ -120,7 +120,9 @@ const Dashboard = connect(
             onClick={addBucket}
           >
             <Row
-              className={cn('f5 flex-auto pv2 ph3')}
+              pv={2}
+              pg={3}
+              className={cn('f5 flex-auto')}
             >{`Add List`}</Row>
           </ListItem>
         </BucketWrapper>
