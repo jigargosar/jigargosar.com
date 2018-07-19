@@ -67,13 +67,14 @@ function renderBucketAddItem(onAddItem) {
   )
 }
 
-function BucketItems({itemIds}) {
-  return _.map(id => <BucketItem key={id} itemId={id} />)(itemIds)
+function BucketItems({items}) {
+  return _.map(({id}) => <BucketItem key={id} itemId={id} />)(items)
 }
 
 BucketItems = _.compose(
   inject(({store: {store}}) => ({
     itemIds: store.itemIds,
+    items: store.items,
   })),
   observer,
 )(BucketItems)
