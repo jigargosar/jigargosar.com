@@ -1,7 +1,6 @@
 import {StorageItem} from '../services/storage'
 import {
   _,
-  findById,
   findByMaybeId,
   findIndexById,
   mergeWithDefaults,
@@ -99,13 +98,8 @@ export const bucketIdToItemIds = Compute(
   modelsToIds,
 )
 
-// export const bucketById = Compute(
-//   props`bucketId`,
-//   state`buckets`,
-//   findById,
-// )
-
 export const bucketById = state`bucketLookup.${props`bucketId`}`
+export const itemById = state`itemLookup.${props`itemId`}`
 
 export const bucketIndexById = Compute(
   props`bucketId`,
@@ -113,7 +107,6 @@ export const bucketIndexById = Compute(
   findIndexById,
 )
 
-export const itemById = Compute(props`itemId`, state`items`, findById)
 export const itemIndexById = Compute(
   props`itemId`,
   state`items`,
