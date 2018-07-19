@@ -12,6 +12,7 @@ import {
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
+import {inject, observer} from 'mobx-react'
 
 const BucketItem = connect(
   {
@@ -71,26 +72,39 @@ function renderBucketAddItem(onAddItem) {
   )
 }
 
-export const Bucket = connect(
-  {
-    addItem: signal`addItem`,
-    bucket: bucketById,
-    itemIds: bucketIdToItemIds,
-    deleteBucket: signal`deleteBucket`,
-  },
-  ({bucket, addItem, itemIds, deleteBucket}) => ({
-    onAddItem: () => addItem({bucketId: bucket.id}),
-    bucket,
-    itemIds,
-    deleteBucket,
-  }),
-  function Bucket({bucket, itemIds, onAddItem, deleteBucket}) {
-    return (
-      <ListPane>
-        {renderBucketHeader(bucket, onAddItem, deleteBucket)}
-        {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        {renderBucketAddItem(onAddItem)}
-      </ListPane>
-    )
-  },
-)
+function Bucket({bucket, itemIds, onAddItem, deleteBucket}) {
+  return (
+    <ListPane>
+      {renderBucketHeader(bucket, onAddItem, deleteBucket)}
+      {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
+      {renderBucketAddItem(onAddItem)}
+    </ListPane>
+  )
+}
+
+Bucket = _.compose(
+  inject(store => ({
+    onAddItem: _.F,
+    bucket: {name: 'Bucket Name'},
+    itemIds: [],
+    deleteBucket: _.F,
+  })),
+  observer,
+)(Bucket)
+
+export {Bucket}
+// Bucket = connect(
+//   {
+//     addItem: signal`addItem`,
+//     bucket: bucketById,
+//     itemIds: bucketIdToItemIds,
+//     deleteBucket: signal`deleteBucket`,
+//   },
+//   ({bucket, addItem, itemIds, deleteBucket}) => ({
+//     onAddItem: () => addItem({bucketId: bucket.id}),
+//     bucket,
+//     itemIds,
+//     deleteBucket,
+//   }),
+//   Bucket,
+// )

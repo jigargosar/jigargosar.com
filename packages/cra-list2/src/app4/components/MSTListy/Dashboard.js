@@ -34,7 +34,7 @@ function Dashboard({bucketIds, addBucket, dashboardId}) {
 
 Dashboard = _.compose(
   inject(store => ({
-    bucketIds: [],
+    bucketIds: ['1'],
     addBucket: _.F,
     dashboardId: null,
   })),
