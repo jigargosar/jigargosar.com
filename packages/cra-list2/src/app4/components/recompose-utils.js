@@ -9,6 +9,7 @@ export {
   getDisplayName,
   componentFromProp,
   defaultProps,
+  setPropTypes,
   withProps,
   withStateHandlers,
   withState,

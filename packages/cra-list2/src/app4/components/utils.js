@@ -2,35 +2,9 @@ import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import {_, R, RX, tryCatchLog, validate} from '../little-ramda'
-// import {
-//   lifecycle,
-//   setDisplayName,
-//   wrapDisplayName,
-//   getDisplayName,
-//   componentFromProp,
-//   defaultProps,
-//   withProps,
-//   withStateHandlers,
-//   withState,
-//   withContext,
-//   withHandlers,
-//   withPropsOnChange,
-//   withReducer,
-//   withRenderProps,
-//
-// } from 'recompose'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import {setDisplayName, wrapDisplayName} from './recompose-utils'
-
-// export {
-//   setDisplayName,
-//   wrapDisplayName,
-//   lifecycle,
-//   getDisplayName,
-//   componentFromProp,
-//   defaultProps,
-// }
 
 export {F, RC, observer, Observer, isHotKey}
 export const cn = RX.cx

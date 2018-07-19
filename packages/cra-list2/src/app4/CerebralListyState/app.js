@@ -136,7 +136,7 @@ export function createRootModule() {
     getInitial: createInitialState,
     postLoad: _.compose(
       state =>
-        _.merge({
+        _.merge(_.__, {
           dashboardLookup: modelsToIdLookup(state.dashboards),
           bucketLookup: modelsToIdLookup(state.buckets),
           itemLookup: modelsToIdLookup(state.items),
@@ -189,11 +189,12 @@ export function createRootModule() {
           function createNewBucketInProps({props}) {
             return {
               newBucket: createBucket({
-                dashboardId: props.bucket,
+                dashboardId: props.dashboardId,
               }),
             }
           },
           push(state`buckets`, props`newBucket`),
+          push(state`bucketLookup`, props`newBucket`),
         ],
         addItem: [
           function createNewItemInProps({props}) {

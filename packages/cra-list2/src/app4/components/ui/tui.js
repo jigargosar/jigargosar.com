@@ -35,7 +35,8 @@ const numPropsToStrUnlessNil = _.compose(
 )
 
 export function Box(props) {
-  let {className, Component, children, ...other} = props
+  const {className, Component, children, ...other} = props
+  console.log(`Component`, Component)
   const {
     p,
     ph,
@@ -84,7 +85,7 @@ export function Box(props) {
   )
 }
 
-export const zeroTo6 = [
+const zeroTo6 = [
   '0',
   '1',
   '2',
@@ -141,22 +142,24 @@ export function withClassNames(...classNames) {
 
 export const Row = withClassNames('flex items-center')(Box)
 
-Row.propTypes = Box.propTypes
-Row.defaultProps = Box.defaultProps
+Row.propTypes = {...Box.propTypes}
+Row.defaultProps = {...Box.defaultProps}
+Row.displayName = Row
 
-export const Btn = _.compose(
-  rc.defaultProps({
-    href: '/',
-    m: 0,
-    p: 0,
-    Component: 'button',
-  }),
-  withClassNames(
-    'input-reset button-reset bw0 link pointer tl bg-transparent',
-  ),
+export const Btn = withClassNames(
+  'input-reset button-reset bw0 link pointer tl bg-transparent',
 )(Row)
 
 Btn.propTypes = {
   ...Row.propTypes,
   href: PropTypes.string,
 }
+
+Btn.defaultProps = {
+  ...Row.defaultProps,
+  href: '/',
+  m: 0,
+  p: 0,
+  Component: 'button',
+}
+Btn.displayName = 'Btn'
