@@ -1,8 +1,6 @@
 import {StorageItem} from '../services/storage'
 import {
   _,
-  findByMaybeId,
-  findIndexById,
   mergeWithDefaults,
   modelsToIdLookup,
   modelsToIds,
@@ -11,13 +9,10 @@ import {
 } from '../little-ramda'
 import {
   Compute,
-  computeToMaybe,
   Module,
   props,
-  push,
   resolveValue,
   set,
-  splice,
   state,
   unset,
 } from '../little-cerebral'
@@ -58,7 +53,7 @@ function createInitialState() {
   ]
 
   const state = {
-    dashboards,
+    dashboardLookup: modelsToIdLookup(dashboards),
     currentDashboardId: masterDashboard.id,
     nullableSelectedItemId: null,
   }
@@ -106,44 +101,24 @@ export const bucketIdToItemIds = Compute(
 export const bucketById = state`bucketLookup.${props`bucketId`}`
 export const itemById = state`itemLookup.${props`itemId`}`
 
-export const bucketIndexById = Compute(
-  props`bucketId`,
-  buckets,
-  findIndexById,
-)
-
-export const itemIndexById = Compute(
-  props`itemId`,
-  items,
-  findIndexById,
-)
-
-const maybeSelectedItemId = computeToMaybe(
-  state`nullableSelectedItemId`,
-)
+export const nullableSelectedItemId = state`nullableSelectedItemId`
 
 export const maybeSelectedItem = Compute(
-  maybeSelectedItemId,
+  nullableSelectedItemId,
   items,
-  findByMaybeId,
+  _.compose(S.toMaybe, _.prop),
 )
 
 export function createRootModule() {
   const storedState = StorageItem({
     name: 'CerebralListyState',
     getInitial: createInitialState,
-    postLoad: _.compose(
-      state =>
-        _.merge(_.__, {
-          dashboardLookup: modelsToIdLookup(state.dashboards),
-          bucketLookup: modelsToIdLookup(state.buckets),
-          itemLookup: modelsToIdLookup(state.items),
-        })(state),
+    postLoad: _.compose(state =>
       mergeWithDefaults({
-        dashboards: [],
-        buckets: [],
-        items: [],
-      }),
+        dashboardLookup: {},
+        bucketLookup: {},
+        itemLookup: {},
+      })(state),
     ),
   })
 
@@ -191,7 +166,6 @@ export function createRootModule() {
               }),
             }
           },
-          push(state`buckets`, props`newBucket`),
           set(
             state`bucketLookup.${props`newBucket.id`}`,
             props`newBucket`,
@@ -205,17 +179,10 @@ export function createRootModule() {
               }),
             }
           },
-          push(state`items`, props`newItem`),
           set(state`itemLookup.${props`newItem.id`}`, props`newItem`),
         ],
-        deleteBucket: [
-          splice(state`buckets`, bucketIndexById, 1),
-          unset(bucketById),
-        ],
-        deleteItem: [
-          splice(state`items`, itemIndexById, 1),
-          unset(itemById),
-        ],
+        deleteBucket: [unset(bucketById)],
+        deleteItem: [unset(itemById)],
       },
       modules: {},
       providers: {storedState},

@@ -7,6 +7,7 @@ import {
   bucketById,
   bucketIdToItemIds,
   itemById,
+  nullableSelectedItemId,
 } from '../../CerebralListyState/app'
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
@@ -17,10 +18,21 @@ const BucketItem = connect(
     selectItem: signal`selectItem`,
     item: itemById,
     deleteItem: signal`deleteItem`,
+    nullableSelectedItemId,
   },
-  function BucketItem({item, selectItem, deleteItem}) {
+  function BucketItem({
+    nullableSelectedItemId,
+    item,
+    selectItem,
+    deleteItem,
+  }) {
     return (
-      <ListPane.Item onFocus={() => selectItem({item})}>
+      <ListPane.Item
+        colors={cn({
+          'black bg-black-10': item.id === nullableSelectedItemId,
+        })}
+        onFocus={() => selectItem({item})}
+      >
         <Row p={2}>
           <input type={'checkbox'} tabIndex={-1} />
         </Row>
