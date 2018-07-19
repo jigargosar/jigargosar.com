@@ -78,7 +78,6 @@ function Bucket({bucket, onAddItem, deleteBucket}) {
     <ListPane>
       {renderBucketHeader(bucket, onAddItem, deleteBucket)}
       <BucketItems />
-      {/*<BucketAddItem />*/}
       {renderBucketAddItem(onAddItem)}
     </ListPane>
   )
