@@ -2,7 +2,6 @@ import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import {_, R, RX, tryCatchLog, validate} from '../little-ramda'
-
 // import {
 //   lifecycle,
 //   setDisplayName,
@@ -194,4 +193,8 @@ export function setFocusAndSelectionOnDOMId(domId, selection) {
       el.setSelectionRange(selection.start, selection.end)
     }
   })
+}
+
+export function cnWith(...cnArgs) {
+  return cls => cn(...cnArgs, cls)
 }

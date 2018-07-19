@@ -147,3 +147,7 @@ export const findByMaybeId = _.curry(function findByMaybeId(
 ) {
   return S.map(_.flip(findById)(arr))(maybeId)
 })
+
+export function overProp(name) {
+  return _.over(_.lensProp(name))
+}

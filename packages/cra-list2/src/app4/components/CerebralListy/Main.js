@@ -1,14 +1,14 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
-import {cn, PropTypes, wrapPD} from '../utils'
+import {cn, cnWith, PropTypes, wrapPD} from '../utils'
 import {
   connect,
   Container,
   signal,
   state,
 } from '../../little-cerebral'
-import {_, idEq, S} from '../../little-ramda'
+import {_, idEq, overProp, S} from '../../little-ramda'
 import {
   bucketById,
   bucketIdToItemIds,
@@ -147,13 +147,11 @@ Box.propTypes = {
   ml: PropTypes.oneOf(oneTo6),
 }
 
-function overProp(name) {
-  return _.over(_.lensProp(name))
+function withClassNames(...classNames) {
+  return rc.withProps(overProp('className')(cnWith(...classNames)))
 }
 
-const Row = rc.withProps(
-  overProp('className')(cls => cn('flex items-center', cls)),
-)(Box)
+const Row = withClassNames('flex items-center')(Box)
 
 const Bucket = connect(
   {
