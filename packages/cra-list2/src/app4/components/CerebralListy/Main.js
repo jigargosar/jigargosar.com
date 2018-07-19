@@ -50,9 +50,6 @@ const ListPaneItemText = _.compose(
 ListPane.Item = ListPaneItem
 ListPane.Item.Text = ListPaneItemText
 
-const ListItem = ListPaneItem
-ListItem.Text = ListPaneItemText
-
 const BucketItem = connect(
   {
     selectItem: signal`selectItem`,
@@ -60,17 +57,17 @@ const BucketItem = connect(
   },
   function BucketItem({item, selectItem}) {
     return (
-      <ListItem onFocus={() => selectItem({item})}>
+      <ListPane.Item onFocus={() => selectItem({item})}>
         <Row p={2}>
           <input type={'checkbox'} tabIndex={-1} />
         </Row>
-        <ListItem.Text className={cn('code')}>
+        <ListPane.Item.Text className={cn('code')}>
           {item.text}
-        </ListItem.Text>
+        </ListPane.Item.Text>
         <Btn className={cn('f4 black-60 hover-black link grow')}>
           <Delete fontSize={'inherit'} />
         </Btn>
-      </ListItem>
+      </ListPane.Item>
     )
   },
 )
@@ -98,10 +95,10 @@ const Bucket = connect(
   function Bucket({bucket, itemIds, onAddItem}) {
     return (
       <BucketWrapper>
-        <ListItem className={cn('f4 lh-copy')}>
-          <ListItem.Text className={cn('f5', 'flex-auto')}>
+        <ListPane.Item className={cn('f4 lh-copy')}>
+          <ListPane.Item.Text className={cn('f5', 'flex-auto')}>
             {bucket.name}
-          </ListItem.Text>
+          </ListPane.Item.Text>
           <Btn
             onClick={onAddItem}
             className={cn('mr1', 'black-60 hover-black grow')}
@@ -113,14 +110,14 @@ const Bucket = connect(
           <Btn className={cn('black-60 hover-black grow')}>
             <Settings fontSize={'inherit'} />
           </Btn>
-        </ListItem>
+        </ListPane.Item>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <ListItem
+        <ListPane.Item
           colors="black-50 hover-black-80 hover-bg-black-10"
           onClick={onAddItem}
         >
-          <ListItem.Text>{`Add Task`}</ListItem.Text>
-        </ListItem>
+          <ListPane.Item.Text>{`Add Task`}</ListPane.Item.Text>
+        </ListPane.Item>
       </BucketWrapper>
     )
   },
@@ -136,12 +133,12 @@ const Dashboard = connect(
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
         <BucketWrapper>
-          <ListItem
+          <ListPane.Item
             colors={'black-50 hover-black-80 hover-bg-black-10'}
             onClick={addBucket}
           >
-            <ListItem.Text>{`Add List`}</ListItem.Text>
-          </ListItem>
+            <ListPane.Item.Text>{`Add List`}</ListPane.Item.Text>
+          </ListPane.Item>
         </BucketWrapper>
       </div>
     )
