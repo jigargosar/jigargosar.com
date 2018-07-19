@@ -14,31 +14,33 @@ import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
 
-const BucketItem = connect(
+function BucketItem({isSelected, item, selectItem, deleteItem}) {
+  return (
+    <ListPane.Item
+      colors={cn({
+        'black bg-black-10': isSelected,
+      })}
+      onFocus={() => selectItem({item})}
+    >
+      <Row p={2}>
+        <input type={'checkbox'} tabIndex={-1} />
+      </Row>
+      <ListPane.ItemText className={cn('code')}>
+        {item.text}
+      </ListPane.ItemText>
+      {renderDeleteIcon(() => deleteItem({itemId: item.id}))}
+    </ListPane.Item>
+  )
+}
+
+BucketItem = connect(
   {
     selectItem: signal`selectItem`,
     item: itemById,
     deleteItem: signal`deleteItem`,
     isSelected: isItemSelected,
   },
-  function BucketItem({isSelected, item, selectItem, deleteItem}) {
-    return (
-      <ListPane.Item
-        colors={cn({
-          'black bg-black-10': isSelected,
-        })}
-        onFocus={() => selectItem({item})}
-      >
-        <Row p={2}>
-          <input type={'checkbox'} tabIndex={-1} />
-        </Row>
-        <ListPane.ItemText className={cn('code')}>
-          {item.text}
-        </ListPane.ItemText>
-        {renderDeleteIcon(() => deleteItem({itemId: item.id}))}
-      </ListPane.Item>
-    )
-  },
+  BucketItem,
 )
 
 function renderBucketHeader(bucket, onAddItem, deleteBucket) {
@@ -86,7 +88,7 @@ Bucket = _.compose(
   inject(store => ({
     onAddItem: _.F,
     bucket: {name: 'Bucket Name'},
-    itemIds: [],
+    itemIds: store.itemIds,
     deleteBucket: _.F,
   })),
   observer,
