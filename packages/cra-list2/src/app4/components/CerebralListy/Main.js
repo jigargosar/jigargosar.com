@@ -31,9 +31,9 @@ const BucketItem = connect(
         <Row p={2}>
           <input type={'checkbox'} tabIndex={-1} />
         </Row>
-        <ListPane.Item.Text className={cn('code')}>
+        <ListPane.ItemText className={cn('code')}>
           {item.text}
-        </ListPane.Item.Text>
+        </ListPane.ItemText>
         <Btn className={cn('f4 black-60 hover-black link grow')}>
           <Delete fontSize={'inherit'} />
         </Btn>
@@ -57,9 +57,9 @@ const Bucket = connect(
     return (
       <ListPane>
         <ListPane.Item className={cn('f4 lh-copy')}>
-          <ListPane.Item.Text className={cn('f5', 'flex-auto')}>
+          <ListPane.ItemText className={cn('f5', 'flex-auto')}>
             {bucket.name}
-          </ListPane.Item.Text>
+          </ListPane.ItemText>
           <Btn
             onClick={onAddItem}
             className={cn('mr1', 'black-60 hover-black grow')}
@@ -77,7 +77,7 @@ const Bucket = connect(
           colors="black-50 hover-black-80 hover-bg-black-10"
           onClick={onAddItem}
         >
-          <ListPane.Item.Text>{`Add Task`}</ListPane.Item.Text>
+          <ListPane.ItemText>{`Add Task`}</ListPane.ItemText>
         </ListPane.Item>
       </ListPane>
     )
@@ -98,7 +98,7 @@ const Dashboard = connect(
             colors={'black-50 hover-black-80 hover-bg-black-10'}
             onClick={addBucket}
           >
-            <ListPane.Item.Text>{`Add List`}</ListPane.Item.Text>
+            <ListPane.ItemText>{`Add List`}</ListPane.ItemText>
           </ListPane.Item>
         </ListPane>
       </div>

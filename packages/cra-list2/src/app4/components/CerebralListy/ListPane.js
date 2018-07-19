@@ -31,4 +31,4 @@ const ListPaneItemText = _.compose(
 )(Row)
 
 ListPane.Item = ListPaneItem
-ListPane.Item.Text = ListPaneItemText
+ListPane.ItemText = ListPaneItemText
