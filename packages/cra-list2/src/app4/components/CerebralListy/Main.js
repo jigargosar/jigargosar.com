@@ -20,6 +20,10 @@ import {Add, Delete, PlaylistAdd, Settings} from '@material-ui/icons'
 import {Row} from '../ui/tui'
 import {ListPane} from './ListPane'
 
+function renderDeleteIcon(onClick) {
+  return <ListPane.ItemAction Icon={Delete} onClick={onClick} />
+}
+
 const BucketItem = connect(
   {
     selectItem: signal`selectItem`,
@@ -35,23 +39,21 @@ const BucketItem = connect(
         <ListPane.ItemText className={cn('code')}>
           {item.text}
         </ListPane.ItemText>
-        <ListPane.ItemAction
-          Icon={Delete}
-          onClick={() => deleteItem({itemId: item.id})}
-        />
+        {renderDeleteIcon(() => deleteItem({itemId: item.id}))}
       </ListPane.Item>
     )
   },
 )
 
-function renderBucketHeader(bucket, onAddItem) {
+function renderBucketHeader(bucket, onAddItem, deleteBucket) {
   return (
     <ListPane.Item className={cn('f4 lh-copy')}>
       <ListPane.ItemText className={cn('f5', 'flex-auto')}>
         {bucket.name}
       </ListPane.ItemText>
       <ListPane.ItemAction onClick={onAddItem} Icon={PlaylistAdd} />
-      <ListPane.ItemAction Icon={Settings} />
+      {/*<ListPane.ItemAction Icon={Settings} />*/}
+      {renderDeleteIcon(() => deleteBucket({bucketId: bucket.id}))}
     </ListPane.Item>
   )
 }
@@ -75,16 +77,18 @@ const Bucket = connect(
     addItem: signal`addItem`,
     bucket: bucketById,
     itemIds: bucketIdToItemIds,
+    deleteBucket: signal`deleteBucket`,
   },
-  ({bucket, addItem, itemIds}) => ({
+  ({bucket, addItem, itemIds, deleteBucket}) => ({
     onAddItem: () => addItem({bucketId: bucket.id}),
     bucket,
     itemIds,
+    deleteBucket,
   }),
-  function Bucket({bucket, itemIds, onAddItem}) {
+  function Bucket({bucket, itemIds, onAddItem, deleteBucket}) {
     return (
       <ListPane>
-        {renderBucketHeader(bucket, onAddItem)}
+        {renderBucketHeader(bucket, onAddItem, deleteBucket)}
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         {renderBucketAddItem(onAddItem)}
       </ListPane>
@@ -104,7 +108,7 @@ const Dashboard = connect(
         <ListPane>
           <ListPane.Item
             colors={'black-50 hover-black-80 hover-bg-black-10'}
-            onClick={addBucket}
+            onClick={() => addBucket()}
           >
             <ListPane.ItemText>{`Add List`}</ListPane.ItemText>
           </ListPane.Item>

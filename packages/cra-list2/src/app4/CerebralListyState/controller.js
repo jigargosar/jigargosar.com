@@ -104,6 +104,12 @@ export const bucketById = Compute(
   findById,
 )
 
+export const bucketIndexById = Compute(
+  props`bucketId`,
+  state`buckets`,
+  findIndexById,
+)
+
 export const itemById = Compute(props`itemId`, state`items`, findById)
 export const itemIndexById = Compute(
   props`itemId`,
@@ -191,6 +197,7 @@ function createRootModule() {
           push(state`items`, props`newItem`),
         ],
         deleteItem: [splice(state`items`, itemIndexById, 1)],
+        deleteBucket: [splice(state`buckets`, bucketIndexById, 1)],
       },
       modules: {},
       providers: {storedState},
