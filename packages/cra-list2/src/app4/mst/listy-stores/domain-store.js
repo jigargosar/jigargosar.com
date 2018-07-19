@@ -11,6 +11,7 @@ const DomainStore = types
     itemLookup: types.map(Item),
     bucketLookup: types.map(Bucket),
     bucket: types.reference(Bucket),
+    selectedItem: types.maybe(types.reference(Item)),
   })
   .views(views)
   .actions(actions)
@@ -28,6 +29,10 @@ function views(self) {
 
 function actions(self) {
   return {
+    selectItem(item) {
+      self.selectedItem = item
+      return self.selectedItem
+    },
     addItem(values) {
       return self.itemLookup.put(
         Item.create({

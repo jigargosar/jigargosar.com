@@ -16,7 +16,9 @@ function actions(self) {
     delete() {
       self.root.deleteItem(self)
     },
-    select() {},
+    select() {
+      self.root.selectItem(self)
+    },
   }
 }
 
@@ -26,7 +28,7 @@ function views(self) {
       return getRoot(self)
     },
     get isSelected() {
-      return false
+      return self.root.selectedItem === self
     },
   }
 }
