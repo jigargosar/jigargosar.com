@@ -7,13 +7,13 @@ import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
 
-function BucketItem({isSelected, item, selectItem, deleteItem}) {
+function BucketItem({isSelected, item, selectItem}) {
   return (
     <ListPane.Item
       colors={cn({
-        'black bg-black-10': isSelected,
+        'black bg-black-10': item.isSelected,
       })}
-      onFocus={selectItem}
+      onFocus={item.select}
     >
       <Row p={2}>
         <input type={'checkbox'} tabIndex={-1} />
