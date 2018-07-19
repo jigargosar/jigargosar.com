@@ -8,7 +8,7 @@ import {
   signal,
   state,
 } from '../../little-cerebral'
-import {_, idEq, overProp, S} from '../../little-ramda'
+import {_, idEq, isNotNil, overProp, S} from '../../little-ramda'
 import {
   bucketById,
   bucketIdToItemIds,
@@ -102,25 +102,27 @@ function Box({
   children,
   ...other
 }) {
+  const cns = cn(
+    {
+      [`pt${p} pr${p} pb${p} pl${p}`]: isNotNil(p),
+      [`mt${m} mr${m} mb${m} ml${m}`]: isNotNil(m),
+      [`pt${pt}`]: isNotNil(pt),
+      [`pr${pr}`]: isNotNil(pr),
+      [`pb${pb}`]: isNotNil(pb),
+      [`pl${pl}`]: isNotNil(pl),
+      [`mt${mt}`]: isNotNil(mt),
+      [`mr${mr}`]: isNotNil(mr),
+      [`mb${mb}`]: isNotNil(mb),
+      [`ml${ml}`]: isNotNil(ml),
+    },
+    className,
+  )
+  if (Component === 'button') {
+    console.log(`cns`, cns)
+  }
+
   return (
-    <Component
-      className={cn(
-        {
-          [`pt${p} pr${p} pb${p} pl${p}`]: p,
-          [`mt${m} mr${m} mb${m} ml${m}`]: m,
-          [`pt${pt}`]: pt,
-          [`pr${pr}`]: pr,
-          [`pb${pb}`]: pb,
-          [`pl${pl}`]: pl,
-          [`mt${mt}`]: mt,
-          [`mr${mr}`]: mr,
-          [`mb${mb}`]: mb,
-          [`ml${ml}`]: ml,
-        },
-        className,
-      )}
-      {...other}
-    >
+    <Component className={cns} {...other}>
       {children}
     </Component>
   )
@@ -134,19 +136,34 @@ function Box({
 //   )
 // }
 
-const oneTo6 = ['1', '2', '3', '4', '5', '6', 1, 2, 3, 4, 5, 6]
+const zeroTo6 = [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+]
 Box.propTypes = {
   className: PropTypes.string,
-  p: PropTypes.oneOf(oneTo6),
-  m: PropTypes.oneOf(oneTo6),
-  pt: PropTypes.oneOf(oneTo6),
-  pr: PropTypes.oneOf(oneTo6),
-  pb: PropTypes.oneOf(oneTo6),
-  pl: PropTypes.oneOf(oneTo6),
-  mt: PropTypes.oneOf(oneTo6),
-  mr: PropTypes.oneOf(oneTo6),
-  mb: PropTypes.oneOf(oneTo6),
-  ml: PropTypes.oneOf(oneTo6),
+  p: PropTypes.oneOf(zeroTo6),
+  m: PropTypes.oneOf(zeroTo6),
+  pt: PropTypes.oneOf(zeroTo6),
+  pr: PropTypes.oneOf(zeroTo6),
+  pb: PropTypes.oneOf(zeroTo6),
+  pl: PropTypes.oneOf(zeroTo6),
+  mt: PropTypes.oneOf(zeroTo6),
+  mr: PropTypes.oneOf(zeroTo6),
+  mb: PropTypes.oneOf(zeroTo6),
+  ml: PropTypes.oneOf(zeroTo6),
   Component: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
@@ -170,27 +187,30 @@ const Row = withClassNames('flex items-center')(Box)
 
 Row.propTypes = {
   className: PropTypes.string,
-  p: PropTypes.oneOf(oneTo6),
-  m: PropTypes.oneOf(oneTo6),
-  pt: PropTypes.oneOf(oneTo6),
-  pr: PropTypes.oneOf(oneTo6),
-  pb: PropTypes.oneOf(oneTo6),
-  pl: PropTypes.oneOf(oneTo6),
-  mt: PropTypes.oneOf(oneTo6),
-  mr: PropTypes.oneOf(oneTo6),
-  mb: PropTypes.oneOf(oneTo6),
-  ml: PropTypes.oneOf(oneTo6),
+  p: PropTypes.oneOf(zeroTo6),
+  m: PropTypes.oneOf(zeroTo6),
+  pt: PropTypes.oneOf(zeroTo6),
+  pr: PropTypes.oneOf(zeroTo6),
+  pb: PropTypes.oneOf(zeroTo6),
+  pl: PropTypes.oneOf(zeroTo6),
+  mt: PropTypes.oneOf(zeroTo6),
+  mr: PropTypes.oneOf(zeroTo6),
+  mb: PropTypes.oneOf(zeroTo6),
+  ml: PropTypes.oneOf(zeroTo6),
   Component: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
   ]),
 }
 
-const Link = rc.withProps(
-  _.compose(
-    overProp('Component')(_.defaultTo('a')),
-    prependOverClassName('flex items-center'),
-  ),
+const Link = _.compose(
+  rc.defaultProps({
+    href: '/',
+    m: 0,
+    p: 0,
+    Component: 'button',
+  }),
+  withClassNames('input-reset button-reset'),
 )(Row)
 
 const Bucket = connect(
@@ -210,6 +230,8 @@ const Bucket = connect(
         <Row pl={3} mr={3} className={cn('f4 lh-copy')}>
           <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
           <Link
+            m={0}
+            p={0}
             href={'/add'}
             onClick={wrapPD(S.I)}
             className={cn('mr1', 'black-60 hover-black link grow')}
