@@ -116,7 +116,6 @@ const Dashboard = connect(
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
         <BucketWrapper>
           <ListItem
-            pl={3}
             colors={'black-50 hover-black-80 hover-bg-black-10'}
             onClick={addBucket}
           >
