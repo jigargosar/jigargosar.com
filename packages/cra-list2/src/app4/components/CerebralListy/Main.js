@@ -158,8 +158,12 @@ Box.defaultProps = {
   Component: 'div',
 }
 
+function prependOverClassName(...classNames) {
+  return overProp('className')(cnWith(...classNames))
+}
+
 function withClassNames(...classNames) {
-  return rc.withProps(overProp('className')(cnWith(...classNames)))
+  return rc.withProps(prependOverClassName(...classNames))
 }
 
 const Row = withClassNames('flex items-center')(Box)
@@ -182,6 +186,13 @@ Row.propTypes = {
   ]),
 }
 
+const Link = rc.withProps(
+  _.compose(
+    // overProp('Component')(_.defaultTo('a')),
+    prependOverClassName('flex items-center'),
+  ),
+)(Row)
+
 const Bucket = connect(
   {
     addItem: signal`addItem`,
@@ -198,22 +209,20 @@ const Bucket = connect(
       <BucketLayout>
         <Row pl={3} mr={3} className={cn('f4 lh-copy')}>
           <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
-          <Row
-            Component={'a'}
+          <Link
             href={'/add'}
             onClick={wrapPD(S.I)}
             className={cn('mr1', 'black-60 hover-black link grow')}
           >
             <AddCircleOutline fontSize={'inherit'} />
-          </Row>
-          <Row
-            Component={'a'}
+          </Link>
+          <Link
             href={'/add'}
             onClick={wrapPD(S.I)}
             className={cn('black-60 hover-black link grow')}
           >
             <Edit fontSize={'inherit'} />
-          </Row>
+          </Link>
         </Row>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <ListItem
