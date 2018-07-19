@@ -1,5 +1,7 @@
-import {types, getSnapshot} from 'mobx-state-tree'
+import {getSnapshot, types} from 'mobx-state-tree'
 import {modelId} from '../../model/utils'
+import {mValues} from '../../mobx/little-mobx'
+import {_} from '../../little-ramda'
 
 const Item = types.model('Item', {
   id: types.identifier,
@@ -7,10 +9,16 @@ const Item = types.model('Item', {
   done: false,
 })
 
+const views = self => ({
+  get items() {
+    return mValues(self.itemLookup)
+  },
+})
 const DomainStore = types
   .model('DomainStore', {
     itemLookup: types.map(Item),
   })
+  .views(views)
   .actions(self => ({
     add() {
       self.itemLookup.put(Item.create({id: modelId(Item.name)}))
@@ -23,6 +31,6 @@ store.add()
 store.add()
 store.add()
 
-console.log(`store.itemLookup`, getSnapshot(store.itemLookup))
+console.table(_.map(getSnapshot)(store.items))
 
 export default store
