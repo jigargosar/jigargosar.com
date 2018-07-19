@@ -46,7 +46,23 @@ function renderBucketHeader(bucket, onAddItem, deleteBucket) {
         onClick={onAddItem}
         Icon={PlaylistAdd}
       />
+      {/*<ListPane.ItemAction Icon={Settings} />*/}
       {renderDeleteIcon(() => deleteBucket({bucketId: bucket.id}))}
+    </ListPane.Item>
+  )
+}
+
+function renderBucketAddItem(onAddItem) {
+  return (
+    <ListPane.Item
+      Component={Btn}
+      colors="black-50 hover-black-80 hover-bg-black-10"
+      onClick={onAddItem}
+    >
+      <Row p={2} pr={1} className={cn('f4')}>
+        <PlaylistAdd fontSize={'inherit'} />
+      </Row>
+      <ListPane.ItemText>{`Add Task`}</ListPane.ItemText>
     </ListPane.Item>
   )
 }
