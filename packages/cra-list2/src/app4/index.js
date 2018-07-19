@@ -34,10 +34,9 @@ function render() {
     // const App = require('./components/ActiveRecord/Main').default
     // const App = require('./components/ImmutableNotes/Main').default
     // const App = require('./components/CerebralNotes/Main').default
-    Object.assign(
-      storeBox,
-      require('./mst/listy-stores/domain-store').default,
-    )
+    Object.assign(storeBox, {
+      store: require('./mst/listy-stores/domain-store').default,
+    })
     const App = require('./components/MSTListy/Main').default
     ReactDOM.render(
       <Provider store={storeBox}>

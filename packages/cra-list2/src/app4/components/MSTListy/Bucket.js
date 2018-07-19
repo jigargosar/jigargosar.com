@@ -26,22 +26,31 @@ function BucketItem({isSelected, item, selectItem, deleteItem}) {
         <input type={'checkbox'} tabIndex={-1} />
       </Row>
       <ListPane.ItemText className={cn('code')}>
-        {item.text}
+        {item.text || 'I am a hard core TODo'}
       </ListPane.ItemText>
       {renderDeleteIcon(() => deleteItem({itemId: item.id}))}
     </ListPane.Item>
   )
 }
 
-BucketItem = connect(
-  {
-    selectItem: signal`selectItem`,
-    item: itemById,
-    deleteItem: signal`deleteItem`,
-    isSelected: isItemSelected,
-  },
-  BucketItem,
-)
+BucketItem = _.compose(
+  inject(({store: {store}}, {itemId}) => ({
+    selectItem: _.F,
+    item: store.itemLookup.get(itemId),
+    deleteItem: _.F,
+    isSelected: false,
+  })),
+  observer,
+)(BucketItem)
+// BucketItem = connect(
+//   {
+//     selectItem: signal`selectItem`,
+//     item: itemById,
+//     deleteItem: signal`deleteItem`,
+//     isSelected: isItemSelected,
+//   },
+//   BucketItem,
+// )
 
 function renderBucketHeader(bucket, onAddItem, deleteBucket) {
   return (
@@ -85,12 +94,14 @@ function Bucket({bucket, itemIds, onAddItem, deleteBucket}) {
 }
 
 Bucket = _.compose(
-  inject(store => ({
-    onAddItem: _.F,
-    bucket: {name: 'Bucket Name'},
-    itemIds: store.itemIds,
-    deleteBucket: _.F,
-  })),
+  inject(({store: {store}}) => {
+    return {
+      onAddItem: store.add,
+      bucket: {name: 'Bucket Name'},
+      itemIds: store.itemIds,
+      deleteBucket: _.F,
+    }
+  }),
   observer,
 )(Bucket)
 
