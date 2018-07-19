@@ -4,6 +4,7 @@ import {
   findById,
   findByMaybeId,
   findIndexById,
+  modelsToIdLookup,
   modelsToIds,
   S,
   validate,
@@ -130,11 +131,19 @@ export function createRootModule() {
   const storedState = StorageItem({
     name: 'CerebralListyState',
     getInitial: createInitialState,
-    postLoad: state =>
-      _.mergeWith(_.defaultTo)(
-        {dashboards: [], buckets: [], items: []},
-        state,
-      ),
+    postLoad: _.compose(
+      state =>
+        _.merge({
+          dashboardLookup: modelsToIdLookup(state.dashboards),
+          bucketLookup: modelsToIdLookup(state.buckets),
+          itemLookup: modelsToIdLookup(state.items),
+        })(state),
+      _.mergeWith(_.defaultTo)({
+        dashboards: [],
+        buckets: [],
+        items: [],
+      }),
+    ),
   })
 
   const decodedState = storedState.load()
