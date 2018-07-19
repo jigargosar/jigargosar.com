@@ -26,15 +26,11 @@ function BucketItem({isSelected, item, selectItem, deleteItem}) {
   )
 }
 
-function removeItem(store, itemId) {
-  return store.removeItem(itemId)
-}
-
 BucketItem = _.compose(
   inject(({store: {store}}, {itemId}) => ({
     selectItem: _.F,
     item: store.itemLookup.get(itemId),
-    deleteItem: () => removeItem(store, itemId),
+    deleteItem: store.itemLookup.get(itemId).delete,
     isSelected: false,
   })),
   observer,

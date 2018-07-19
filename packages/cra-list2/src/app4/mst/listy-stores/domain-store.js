@@ -3,12 +3,7 @@ import {modelId} from '../../model/utils'
 import {mValues} from '../../mobx/little-mobx'
 import {applySnapshot2, mapSnapshot} from '../little-mst'
 import {_, dotPath, isNotNil, modelsToIds} from '../../little-ramda'
-
-const Item = types.model('Item', {
-  id: types.identifier,
-  text: '',
-  done: false,
-})
+import {Item} from './Item'
 
 const DomainStore = types
   .model('DomainStore', {
@@ -35,8 +30,8 @@ function actions(self) {
         Item.create({...values, id: modelId(Item.name)}),
       )
     },
-    removeItem(itemId) {
-      return self.itemLookup.delete(itemId)
+    deleteItem(item) {
+      return self.itemLookup.delete(item.id)
     },
   }
 }
@@ -46,10 +41,10 @@ const store = DomainStore.create()
 if (module.hot) {
   store.addItem()
   store.addItem({text: 'MoTu ToDOO'})
-  store.removeItem(store.addItem().id)
-  store.removeItem(store.addItem().id)
-  store.removeItem(store.addItem().id)
-  store.removeItem(store.addItem().id)
+  store.deleteItem(store.addItem().id)
+  store.deleteItem(store.addItem().id)
+  store.deleteItem(store.addItem().id)
+  store.deleteItem(store.addItem().id)
   store.addItem({text: 'FaDuu ToDOO'})
 
   const snap = dotPath('hot.data.snap')(module)
