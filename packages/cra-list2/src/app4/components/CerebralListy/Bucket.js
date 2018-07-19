@@ -6,8 +6,8 @@ import {_} from '../../little-ramda'
 import {
   bucketById,
   bucketIdToItemIds,
+  isItemSelected,
   itemById,
-  nullableSelectedItemId,
 } from '../../CerebralListyState/app'
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
@@ -18,18 +18,13 @@ const BucketItem = connect(
     selectItem: signal`selectItem`,
     item: itemById,
     deleteItem: signal`deleteItem`,
-    nullableSelectedItemId,
+    isSelected: isItemSelected,
   },
-  function BucketItem({
-    nullableSelectedItemId,
-    item,
-    selectItem,
-    deleteItem,
-  }) {
+  function BucketItem({isSelected, item, selectItem, deleteItem}) {
     return (
       <ListPane.Item
         colors={cn({
-          'black bg-black-10': item.id === nullableSelectedItemId,
+          'black bg-black-10': isSelected,
         })}
         onFocus={() => selectItem({item})}
       >

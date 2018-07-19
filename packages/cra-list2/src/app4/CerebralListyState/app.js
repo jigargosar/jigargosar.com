@@ -191,3 +191,9 @@ export function createRootModule() {
   })
   return rootModule
 }
+
+export const isItemSelected = Compute(
+  nullableSelectedItemId,
+  props`itemId`,
+  _.equals,
+)
