@@ -13,7 +13,7 @@ const Dashboard = connect(
     bucketIds: dashboardIdToBucketIds,
     addBucket: signal`addBucket`,
   },
-  function Dashboard({bucketIds, addBucket}) {
+  function Dashboard({bucketIds, addBucket, dashboardId}) {
     return (
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
@@ -21,7 +21,7 @@ const Dashboard = connect(
           <ListPane.Item
             Component={Btn}
             colors={'black-50 hover-black-80 hover-bg-black-10'}
-            onClick={() => addBucket()}
+            onClick={() => addBucket({dashboardId})}
           >
             <ListPane.ItemText>{`Add List`}</ListPane.ItemText>
           </ListPane.Item>

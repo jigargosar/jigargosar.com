@@ -174,10 +174,10 @@ export function createRootModule() {
           set(state`nullableSelectedItemId`, props`item.id`),
         ],
         addBucket: [
-          function createNewBucketInProps({props, state}) {
+          function createNewBucketInProps({props}) {
             return {
               newBucket: createBucket({
-                dashboardId: state.get('currentDashboardId'),
+                dashboardId: props.bucket,
               }),
             }
           },
