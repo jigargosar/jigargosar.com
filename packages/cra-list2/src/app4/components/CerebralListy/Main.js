@@ -98,6 +98,7 @@ function Box(props) {
     mr,
     mb,
     ml,
+    bw,
     className,
     Component,
     children,
@@ -116,6 +117,7 @@ function Box(props) {
       [`mr${mr}`]: isNotNil(mr),
       [`mb${mb}`]: isNotNil(mb),
       [`ml${ml}`]: isNotNil(ml),
+      [`bw${bw}`]: isNotNil(bw),
     },
     className,
   )
@@ -170,6 +172,7 @@ Box.propTypes = {
     PropTypes.string,
     PropTypes.element,
   ]),
+  bw: PropTypes.oneOf(zeroTo6),
 }
 
 Box.defaultProps = {
