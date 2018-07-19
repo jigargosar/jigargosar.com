@@ -3,6 +3,7 @@ import {
   _,
   findById,
   findByMaybeId,
+  findIndexById,
   modelsToIds,
   S,
   validate,
@@ -16,6 +17,7 @@ import {
   push,
   resolveValue,
   set,
+  splice,
   state,
 } from '../little-cerebral'
 import nanoid from 'nanoid'
@@ -103,6 +105,11 @@ export const bucketById = Compute(
 )
 
 export const itemById = Compute(props`itemId`, state`items`, findById)
+export const itemIndexById = Compute(
+  props`itemId`,
+  state`items`,
+  findIndexById,
+)
 
 const maybeSelectedItemId = computeToMaybe(
   state`nullableSelectedItemId`,
@@ -183,7 +190,7 @@ function createRootModule() {
           },
           push(state`items`, props`newItem`),
         ],
-        deleteItem: [],
+        deleteItem: [splice(state`items`, itemIndexById, 1)],
       },
       modules: {},
       providers: {storedState},

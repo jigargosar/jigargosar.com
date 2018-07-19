@@ -141,6 +141,11 @@ export const findById = _.curry(function findById(id, arr) {
   return _.find(idEq(id))(arr)
 })
 
+export const findIndexById = _.curry(function findIndexById(id, arr) {
+  validate('SA', [id, arr])
+  return _.findIndex(idEq(id))(arr)
+})
+
 export const findByMaybeId = _.curry(function findByMaybeId(
   maybeId,
   arr,
