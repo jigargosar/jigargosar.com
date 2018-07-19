@@ -65,19 +65,17 @@ function renderBucketAddItem(onAddItem) {
   )
 }
 
-function BucketItems({items}) {
+function BucketItems({bucket: {items}}) {
   return renderKeyedById(BucketItem, 'item', items)
 }
 
-BucketItems = oInject(({store}) => ({
-  items: store.items,
-}))(BucketItems)
+BucketItems = observer(BucketItems)
 
 function Bucket({bucket, onAddItem, deleteBucket}) {
   return (
     <ListPane>
       {renderBucketHeader(bucket, onAddItem, deleteBucket)}
-      <BucketItems />
+      <BucketItems bucket={bucket} />
       {renderBucketAddItem(onAddItem)}
     </ListPane>
   )

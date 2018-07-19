@@ -1,4 +1,5 @@
 import {getRoot, types} from 'mobx-state-tree'
+import {_} from '../../little-ramda'
 
 export const Bucket = types
   .model('Bucket', {
@@ -18,6 +19,9 @@ function actions(self) {
 
 function views(self) {
   return {
+    get items() {
+      return self.root.items.filter(_.propEq('bucket')(self))
+    },
     get root() {
       return getRoot(self)
     },
