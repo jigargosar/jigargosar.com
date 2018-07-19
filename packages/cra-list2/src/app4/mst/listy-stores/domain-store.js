@@ -53,7 +53,7 @@ const store = DomainStore.create({
 })
 
 function logStoreSnapshot() {
-  console.log(`getSnapshot(store)`, getSnapshot(store))
+  console.debug(`getSnapshot(store)`, getSnapshot(store))
 }
 
 logStoreSnapshot()
@@ -70,7 +70,7 @@ if (module.hot) {
   const snap = dotPath('hot.data.snap')(module)
   _.when(isNotNil)(applySnapshot2(store))(snap)
 
-  console.table(mapSnapshot(store.items))
+  // console.table(mapSnapshot(store.items))
 
   module.hot.dispose(data => (data.snap = getSnapshot(store)))
 }
