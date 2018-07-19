@@ -199,7 +199,7 @@ const Link = _.compose(
     p: 0,
     Component: 'button',
   }),
-  withClassNames('input-reset button-reset'),
+  withClassNames('input-reset button-reset bw0'),
 )(Row)
 
 const Bucket = connect(
