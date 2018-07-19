@@ -31,12 +31,11 @@ const store = DomainStore.create()
 if (module.hot) {
   store.add()
   store.add()
-  store.add()
-
-  console.table(mapSnapshot(store.items))
 
   const snap = dotPath('hot.data.snap')(module)
   _.when(isNotNil)(applySnapshot2(store))(snap)
+
+  console.table(mapSnapshot(store.items))
 
   module.hot.dispose(data => (data.snap = getSnapshot(store)))
 }
