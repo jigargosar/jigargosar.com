@@ -21,7 +21,7 @@ function BucketItem({isSelected, item, selectItem, deleteItem}) {
       <ListPane.ItemText className={cn('code')}>
         {item.text || 'I am a hard core TODo'}
       </ListPane.ItemText>
-      {renderDeleteIcon(deleteItem)}
+      {renderDeleteIcon(item.delete)}
     </ListPane.Item>
   )
 }
@@ -29,10 +29,8 @@ function BucketItem({isSelected, item, selectItem, deleteItem}) {
 BucketItem = _.compose(
   inject(({store: {store}}, {item}) => ({
     selectItem: _.F,
-    // item: store.itemLookup.get(itemId),
-    item,
-    deleteItem: item.delete,
     isSelected: false,
+    item,
   })),
   observer,
 )(BucketItem)
