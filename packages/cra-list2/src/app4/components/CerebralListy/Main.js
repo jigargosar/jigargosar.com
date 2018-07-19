@@ -17,38 +17,8 @@ import {
   itemById,
 } from '../../CerebralListyState/controller'
 import {Add, Delete, PlaylistAdd, Settings} from '@material-ui/icons'
-import {Box, Btn, Row, withClassNames} from '../ui/tui'
-import {rc} from '../recompose-utils'
-
-const ListPane = withClassNames(
-  cn(
-    'w-100 w-50-m w-third-l fl',
-    'pv1',
-    'bg-white',
-    'bb br b--moon-gray',
-  ),
-)(Box)
-
-const ListPaneItem = _.compose(
-  rc.defaultProps({
-    tabIndex: 0,
-    colors: 'black-80 hover-black hover-bg-black-10',
-  }),
-  rc.withProps(({className, colors}) => ({
-    className: cn('w-100 ph2 link', colors, className),
-  })),
-)(Row)
-
-const ListPaneItemText = _.compose(
-  rc.defaultProps({
-    pv: 2,
-    ph: 2,
-  }),
-  withClassNames('flex-auto'),
-)(Row)
-
-ListPane.Item = ListPaneItem
-ListPane.Item.Text = ListPaneItemText
+import {Btn, Row} from '../ui/tui'
+import {ListPane} from './ListPane'
 
 const BucketItem = connect(
   {
@@ -72,15 +42,6 @@ const BucketItem = connect(
   },
 )
 
-const BucketWrapper = withClassNames(
-  cn(
-    'w-100 w-50-m w-third-l fl',
-    'pv1',
-    'bg-white',
-    'bb br b--moon-gray',
-  ),
-)(Box)
-
 const Bucket = connect(
   {
     addItem: signal`addItem`,
@@ -94,7 +55,7 @@ const Bucket = connect(
   }),
   function Bucket({bucket, itemIds, onAddItem}) {
     return (
-      <BucketWrapper>
+      <ListPane>
         <ListPane.Item className={cn('f4 lh-copy')}>
           <ListPane.Item.Text className={cn('f5', 'flex-auto')}>
             {bucket.name}
@@ -118,7 +79,7 @@ const Bucket = connect(
         >
           <ListPane.Item.Text>{`Add Task`}</ListPane.Item.Text>
         </ListPane.Item>
-      </BucketWrapper>
+      </ListPane>
     )
   },
 )
@@ -132,14 +93,14 @@ const Dashboard = connect(
     return (
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
-        <BucketWrapper>
+        <ListPane>
           <ListPane.Item
             colors={'black-50 hover-black-80 hover-bg-black-10'}
             onClick={addBucket}
           >
             <ListPane.Item.Text>{`Add List`}</ListPane.Item.Text>
           </ListPane.Item>
-        </BucketWrapper>
+        </ListPane>
       </div>
     )
   },
