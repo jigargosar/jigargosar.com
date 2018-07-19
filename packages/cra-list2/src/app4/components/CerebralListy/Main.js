@@ -20,7 +20,7 @@ import {Add, AddCircleOutline, Delete, Edit} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {rc} from '../recompose-utils'
 
-const LI = _.compose(
+const BucketListItem = _.compose(
   rc.defaultProps({
     tabIndex: 0,
     colors: 'black-80 hover-black hover-bg-black-10',
@@ -37,7 +37,7 @@ const BucketItem = connect(
   },
   function BucketItem({item, selectItem}) {
     return (
-      <LI onFocus={() => selectItem({item})}>
+      <BucketListItem onFocus={() => selectItem({item})}>
         <div className={cn('ph3', 'flex items-center')}>
           <input type={'checkbox'} tabIndex={-1} />
         </div>
@@ -45,7 +45,7 @@ const BucketItem = connect(
         <Btn className={cn('f4 black-60 hover-black link grow')}>
           <Delete fontSize={'inherit'} />
         </Btn>
-      </LI>
+      </BucketListItem>
     )
   },
 )
@@ -92,14 +92,14 @@ const Bucket = connect(
           </Btn>
         </Row>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <LI
+        <BucketListItem
           colors="black-50 hover-black-80 hover-bg-black-10"
           onClick={onAddItem}
         >
           <Row
             className={cn('f5 flex-auto pv2 ph3')}
           >{`Add Task`}</Row>
-        </LI>
+        </BucketListItem>
       </BucketWrapper>
     )
   },
@@ -115,11 +115,11 @@ const Dashboard = connect(
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
         <BucketWrapper>
-          <LI
+          <BucketListItem
             className={cn('pl3')}
             colors={'black-70 hover-black hover-bg-light-blue'}
             action={addBucket}
-          >{`Add List`}</LI>
+          >{`Add List`}</BucketListItem>
         </BucketWrapper>
       </div>
     )
