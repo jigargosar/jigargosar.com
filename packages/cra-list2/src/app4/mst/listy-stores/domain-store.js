@@ -1,7 +1,7 @@
-import {getSnapshot, types} from 'mobx-state-tree'
+import {types} from 'mobx-state-tree'
 import {modelId} from '../../model/utils'
 import {mValues} from '../../mobx/little-mobx'
-import {_} from '../../little-ramda'
+import {mapSnapshot} from '../little-mst'
 
 const Item = types.model('Item', {
   id: types.identifier,
@@ -31,6 +31,6 @@ store.add()
 store.add()
 store.add()
 
-console.table(_.map(getSnapshot)(store.items))
+console.table(mapSnapshot(store.items))
 
 export default store
