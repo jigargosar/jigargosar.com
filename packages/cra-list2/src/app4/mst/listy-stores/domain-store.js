@@ -1,7 +1,8 @@
-import {types} from 'mobx-state-tree'
+import {getSnapshot, types} from 'mobx-state-tree'
 import {modelId} from '../../model/utils'
 import {mValues} from '../../mobx/little-mobx'
-import {mapSnapshot} from '../little-mst'
+import {applySnapshot2, mapSnapshot} from '../little-mst'
+import {_, dotPath, isNotNil} from '../../little-ramda'
 
 const Item = types.model('Item', {
   id: types.identifier,
@@ -27,10 +28,17 @@ const DomainStore = types
 
 const store = DomainStore.create()
 
-store.add()
-store.add()
-store.add()
+if (module.hot) {
+  store.add()
+  store.add()
+  store.add()
 
-console.table(mapSnapshot(store.items))
+  console.table(mapSnapshot(store.items))
+
+  const snap = dotPath('hot.data.snap')(module)
+  _.when(isNotNil)(applySnapshot2(store))(snap)
+
+  module.hot.dispose(data => (data.snap = getSnapshot(store)))
+}
 
 export default store

@@ -1,4 +1,47 @@
 import {_} from '../little-ramda'
-import {getSnapshot} from 'mobx-state-tree'
+import {applySnapshot, getSnapshot} from 'mobx-state-tree'
+
+export {
+  getSnapshot,
+  types,
+  flow,
+  clone,
+  addDisposer,
+  getEnv,
+  getRoot,
+  applySnapshot,
+  getType,
+  isStateTreeNode,
+  onSnapshot,
+  addMiddleware,
+  applyAction,
+  applyPatch,
+  createActionTrackingMiddleware,
+  decorate,
+  destroy,
+  detach,
+  escapeJsonPath,
+  getChildType,
+  getIdentifier,
+  getMembers,
+  getParent,
+  getParentOfType,
+  getPath,
+  getPathParts,
+  getRelativePath,
+  hasParent,
+  hasParentOfType,
+  isAlive,
+  isProtected,
+  isRoot,
+  walk,
+  unprotect,
+  unescapeJsonPath,
+  typecheck,
+  tryResolve,
+  splitJsonPath,
+  setLivelynessChecking,
+} from 'mobx-state-tree'
 
 export const mapSnapshot = _.map(getSnapshot)
+export const applySnapshot2 = _.curryN(2, applySnapshot)
