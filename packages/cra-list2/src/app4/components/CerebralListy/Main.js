@@ -60,17 +60,11 @@ const Bucket = connect(
           <ListPane.ItemText className={cn('f5', 'flex-auto')}>
             {bucket.name}
           </ListPane.ItemText>
-          <Btn
+          <ListPane.ItemAction
             onClick={onAddItem}
-            className={cn('mr1', 'black-60 hover-black grow')}
-          >
-            <PlaylistAdd fontSize={'inherit'} />
-            {/*<List fontSize={'inherit'} />*/}
-            {/*<FormatListBulleted fontSize={'inherit'} />*/}
-          </Btn>
-          <Btn className={cn('black-60 hover-black grow')}>
-            <Settings fontSize={'inherit'} />
-          </Btn>
+            Icon={PlaylistAdd}
+          />
+          <ListPane.ItemAction Icon={Settings} />
         </ListPane.Item>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <ListPane.Item

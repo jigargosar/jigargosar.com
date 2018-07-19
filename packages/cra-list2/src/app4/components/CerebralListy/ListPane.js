@@ -1,7 +1,8 @@
-import {Box, Row, withClassNames} from '../ui/tui'
+import {Box, Btn, Row, withClassNames} from '../ui/tui'
 import {cn} from '../utils'
 import {_} from '../../little-ramda'
 import * as rc from 'recompose'
+import React from 'react'
 
 export const ListPane = withClassNames(
   cn(
@@ -30,5 +31,19 @@ const ListPaneItemText = _.compose(
   withClassNames('flex-auto'),
 )(Row)
 
+function ListPaneItemAction({className, Icon, ...others}) {
+  return (
+    <Btn
+      className={cn('mr1', 'black-60 hover-black grow', className)}
+      {...others}
+    >
+      <Icon fontSize={'inherit'} />
+    </Btn>
+  )
+}
+
 ListPane.Item = ListPaneItem
+
 ListPane.ItemText = ListPaneItemText
+
+ListPane.ItemAction = ListPaneItemAction
