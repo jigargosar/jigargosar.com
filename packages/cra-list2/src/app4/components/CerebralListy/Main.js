@@ -1,7 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
-import {cn, wrapPD} from '../utils'
+import {cn, PropTypes, wrapPD} from '../utils'
 import {
   connect,
   Container,
@@ -82,6 +82,51 @@ function BucketLayout({children}) {
       {children}
     </div>
   )
+}
+
+function Box({
+  p,
+  pt,
+  pr,
+  pb,
+  pl,
+  m,
+  mt,
+  mr,
+  mb,
+  ml,
+  children,
+  className,
+  ...other
+}) {
+  return (
+    <div
+      className={cn(
+        {
+          [`pt${p} pr${p} pb${p} pl${p}`]: p,
+          [`mt${m} mr${m} mb${m} ml${m}`]: m,
+          [`pt${pt}`]: pt,
+          [`pr${pr}`]: pr,
+          [`pb${pb}`]: pb,
+          [`pl${pl}`]: pl,
+          [`mt${mt}`]: mt,
+          [`mr${mr}`]: mr,
+          [`mb${mb}`]: mb,
+          [`ml${ml}`]: ml,
+        },
+        className,
+      )}
+      {...other}
+    >
+      {children}
+    </div>
+  )
+}
+
+const oneTo6 = ['1', '2', '3', '4', '5', '6', 1, 2, 3, 4, 5, 6]
+Box.propTypes = {
+  p: PropTypes.oneOf(oneTo6),
+  m: PropTypes.oneOf(oneTo6),
 }
 
 const Bucket = connect(
