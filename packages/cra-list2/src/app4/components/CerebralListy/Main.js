@@ -27,7 +27,7 @@ const LI = _.compose(
   }),
   rc.withProps(({className, colors}) => {
     return {
-      className: cn('w-100 ', 'code', colors, className),
+      className: cn('w-100', colors, className),
     }
   }),
 )(Btn)
@@ -98,9 +98,7 @@ const Bucket = connect(
           colors="black-50 hover-black-80 hover-bg-black-10"
           onClick={onAddItem}
         >
-          <Row
-            className={cn('f6 code w-100 pv2 ph3')}
-          >{`Add Task`}</Row>
+          <Row className={cn('f5 w-100 pv2 ph3')}>{`Add Task`}</Row>
         </LI>
       </BucketWrapper>
     )
