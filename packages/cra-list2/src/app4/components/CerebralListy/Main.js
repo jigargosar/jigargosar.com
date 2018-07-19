@@ -87,19 +87,12 @@ const Bucket = connect(
         <Row pl={3} mr={3} className={cn('f4 lh-copy')}>
           <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
           <Btn
-            m={0}
-            p={0}
-            href={'/add'}
-            onClick={wrapPD(S.I)}
+            onClick={onAddItem}
             className={cn('mr1', 'black-60 hover-black link grow')}
           >
             <AddCircleOutline fontSize={'inherit'} />
           </Btn>
-          <Btn
-            href={'/add'}
-            onClick={wrapPD(S.I)}
-            className={cn('black-60 hover-black link grow')}
-          >
+          <Btn className={cn('black-60 hover-black link grow')}>
             <Edit fontSize={'inherit'} />
           </Btn>
         </Row>
