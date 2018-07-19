@@ -16,8 +16,8 @@ import {
   dashboardIdToBucketIds,
   itemById,
 } from '../../CerebralListyState/controller'
-import {Add, Delete, PlaylistAdd, Settings} from '@material-ui/icons'
-import {Row} from '../ui/tui'
+import {Add, Delete, PlaylistAdd} from '@material-ui/icons'
+import {Btn, Row} from '../ui/tui'
 import {ListPane} from './ListPane'
 
 function renderDeleteIcon(onClick) {
@@ -61,6 +61,7 @@ function renderBucketHeader(bucket, onAddItem, deleteBucket) {
 function renderBucketAddItem(onAddItem) {
   return (
     <ListPane.Item
+      Component={Btn}
       colors="black-50 hover-black-80 hover-bg-black-10"
       onClick={onAddItem}
     >
