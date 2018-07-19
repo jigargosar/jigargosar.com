@@ -17,7 +17,7 @@ import {
   itemById,
 } from '../../CerebralListyState/controller'
 import {Add, Delete, PlaylistAdd, Settings} from '@material-ui/icons'
-import {Btn, Row} from '../ui/tui'
+import {Box, Btn, Row} from '../ui/tui'
 import {ListPane} from './ListPane'
 
 const BucketItem = connect(
@@ -58,6 +58,9 @@ function renderBucketAddItem(onAddItem) {
       colors="black-50 hover-black-80 hover-bg-black-10"
       onClick={onAddItem}
     >
+      <Row p={2} pr={1} className={cn('f4')}>
+        <PlaylistAdd fontSize={'inherit'} />
+      </Row>
       <ListPane.ItemText>{`Add Task`}</ListPane.ItemText>
     </ListPane.Item>
   )
