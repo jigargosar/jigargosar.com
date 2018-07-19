@@ -27,10 +27,11 @@ function BucketItem({isSelected, item, selectItem, deleteItem}) {
 }
 
 BucketItem = _.compose(
-  inject(({store: {store}}, {itemId}) => ({
+  inject(({store: {store}}, {item}) => ({
     selectItem: _.F,
-    item: store.itemLookup.get(itemId),
-    deleteItem: store.itemLookup.get(itemId).delete,
+    // item: store.itemLookup.get(itemId),
+    item,
+    deleteItem: item.delete,
     isSelected: false,
   })),
   observer,
@@ -68,7 +69,9 @@ function renderBucketAddItem(onAddItem) {
 }
 
 function BucketItems({items}) {
-  return _.map(({id}) => <BucketItem key={id} itemId={id} />)(items)
+  return _.map(item => <BucketItem key={item.id} item={item} />)(
+    items,
+  )
 }
 
 BucketItems = _.compose(
