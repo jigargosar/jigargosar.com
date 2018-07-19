@@ -85,16 +85,20 @@ function createInitialState() {
 //   }
 // }
 
+export const dashboards = Compute(state`dashboardLookup`, _.values)
+export const buckets = Compute(state`bucketLookup`, _.values)
+export const items = Compute(state`itemLookup`, _.values)
+
 export const dashboardIdToBucketIds = Compute(
   props`dashboardId`,
-  state`buckets`,
+  buckets,
   _.useWith(_.filter)([_.propEq('dashboardId'), _.defaultTo([])]),
   modelsToIds,
 )
 
 export const bucketIdToItemIds = Compute(
   props`bucketId`,
-  state`items`,
+  items,
   _.useWith(_.filter)([_.propEq('bucketId'), _.defaultTo([])]),
   modelsToIds,
 )
@@ -104,13 +108,13 @@ export const itemById = state`itemLookup.${props`itemId`}`
 
 export const bucketIndexById = Compute(
   props`bucketId`,
-  state`buckets`,
+  buckets,
   findIndexById,
 )
 
 export const itemIndexById = Compute(
   props`itemId`,
-  state`items`,
+  items,
   findIndexById,
 )
 
@@ -120,7 +124,7 @@ const maybeSelectedItemId = computeToMaybe(
 
 export const maybeSelectedItem = Compute(
   maybeSelectedItemId,
-  state`items`,
+  items,
   findByMaybeId,
 )
 

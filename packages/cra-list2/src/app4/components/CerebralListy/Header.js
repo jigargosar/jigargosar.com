@@ -5,6 +5,7 @@ import {cn, wrapPD} from '../utils'
 import {connect, signal, state} from '../../little-cerebral'
 import {_, idEq} from '../../little-ramda'
 import {Add} from '@material-ui/icons'
+import {dashboards} from '../../CerebralListyState/app'
 
 function headerLinkCN({isSelected = false}) {
   return cn(
@@ -21,7 +22,7 @@ function headerLinkCN({isSelected = false}) {
 
 export const DashboardHeaderTabs = connect(
   {
-    dashboards: state`dashboards`,
+    dashboards,
     currentDashboardId: state`currentDashboardId`,
     switchDashboard: signal`switchDashboard`,
   },
