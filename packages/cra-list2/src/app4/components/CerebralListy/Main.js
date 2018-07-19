@@ -63,27 +63,6 @@ const BucketItem = connect(
   },
 )
 
-function ListButton(props) {
-  return (
-    <a
-      href={`/add-task`}
-      className={cn('black-60 pl3 outline-0')}
-      onClick={wrapPD(props.fn)}
-      tabIndex={-1}
-    >
-      {props.children}
-    </a>
-  )
-}
-
-ListButton.propTypes = {
-  fn: PropTypes.func,
-}
-
-ListButton.defaultProps = {
-  fn: S.I,
-}
-
 function BucketLayout({children}) {
   return (
     <div
