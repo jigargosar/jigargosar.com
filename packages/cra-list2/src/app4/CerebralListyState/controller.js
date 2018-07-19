@@ -183,6 +183,7 @@ function createRootModule() {
           },
           push(state`items`, props`newItem`),
         ],
+        deleteItem: [],
       },
       modules: {},
       providers: {storedState},

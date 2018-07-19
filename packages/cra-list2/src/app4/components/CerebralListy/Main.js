@@ -24,8 +24,9 @@ const BucketItem = connect(
   {
     selectItem: signal`selectItem`,
     item: itemById,
+    deleteItem: signal`deleteItem`,
   },
-  function BucketItem({item, selectItem}) {
+  function BucketItem({item, selectItem, deleteItem}) {
     return (
       <ListPane.Item onFocus={() => selectItem({item})}>
         <Row p={2}>
@@ -34,7 +35,10 @@ const BucketItem = connect(
         <ListPane.ItemText className={cn('code')}>
           {item.text}
         </ListPane.ItemText>
-        <ListPane.ItemAction Icon={Delete} />
+        <ListPane.ItemAction
+          Icon={Delete}
+          onClick={() => deleteItem({itemId: item.id})}
+        />
       </ListPane.Item>
     )
   },
