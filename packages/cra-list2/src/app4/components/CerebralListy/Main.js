@@ -38,9 +38,9 @@ const BucketItem = connect(
   function BucketItem({item, selectItem}) {
     return (
       <ListItem onFocus={() => selectItem({item})}>
-        <div className={cn('ph3', 'flex items-center')}>
+        <Row className={cn('ph3')}>
           <input type={'checkbox'} tabIndex={-1} />
-        </div>
+        </Row>
         <div className={cn('pv2 flex-auto code')}>{item.text}</div>
         <Btn className={cn('f4 black-60 hover-black link grow')}>
           <Delete fontSize={'inherit'} />
