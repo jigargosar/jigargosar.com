@@ -65,7 +65,7 @@ const BucketItem = connect(
   },
 )
 
-function BucketLayout({children}) {
+function BucketWrapper({children}) {
   return (
     <div
       className={cn(
@@ -93,7 +93,7 @@ const Bucket = connect(
   }),
   function Bucket({bucket, itemIds, onAddItem}) {
     return (
-      <BucketLayout>
+      <BucketWrapper>
         <Row pl={3} mr={3} className={cn('f4 lh-copy')}>
           <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
           <Btn
@@ -122,7 +122,7 @@ const Bucket = connect(
         >
           {`Add Task`}
         </ListItem>
-      </BucketLayout>
+      </BucketWrapper>
     )
   },
 )
@@ -136,13 +136,13 @@ const Dashboard = connect(
     return (
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
-        <BucketLayout>
+        <BucketWrapper>
           <ListItem
             className={cn('pl3')}
             colors={'black-70 hover-black hover-bg-light-blue'}
             action={addBucket}
           >{`Add List`}</ListItem>
-        </BucketLayout>
+        </BucketWrapper>
       </div>
     )
   },
