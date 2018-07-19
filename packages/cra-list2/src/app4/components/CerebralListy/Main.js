@@ -116,10 +116,14 @@ const Dashboard = connect(
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
         <BucketWrapper>
           <ListItem
-            className={cn('pl3')}
-            colors={'black-70 hover-black hover-bg-light-blue'}
+            pl={3}
+            colors={'black-50 hover-black-80 hover-bg-black-10'}
             onClick={addBucket}
-          >{`Add List`}</ListItem>
+          >
+            <Row
+              className={cn('f5 flex-auto pv2 ph3')}
+            >{`Add List`}</Row>
+          </ListItem>
         </BucketWrapper>
       </div>
     )
