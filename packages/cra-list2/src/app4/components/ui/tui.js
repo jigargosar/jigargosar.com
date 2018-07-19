@@ -142,22 +142,22 @@ export function withClassNames(...classNames) {
 
 export const Row = withClassNames('flex items-center')(Box)
 
-// Row.propTypes = {...Box.propTypes}
-// Row.defaultProps = {...Box.defaultProps}
+Row.propTypes = {...Box.propTypes}
+Row.defaultProps = {...Box.defaultProps}
 Row.displayName = Row
 
 export const Btn = withClassNames(
   'input-reset button-reset bw0 link pointer tl bg-transparent',
 )(Row)
 
-// Btn.propTypes = {
-//   ...Row.propTypes,
-//   href: PropTypes.string,
-// }
+Btn.propTypes = {
+  ...Row.propTypes,
+  href: PropTypes.string,
+}
 
 Btn.defaultProps = {
-  // ...Row.defaultProps,
-  // href: '/',
+  ...Row.defaultProps,
+  href: '/',
   m: 0,
   p: 0,
   Component: 'button',
