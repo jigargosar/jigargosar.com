@@ -67,28 +67,6 @@ function renderBucketAddItem(onAddItem) {
   )
 }
 
-function BucketAddItem({onAddItem}) {
-  return (
-    <ListPane.Item
-      Component={Btn}
-      colors="black-50 hover-black-80 hover-bg-black-10"
-      onClick={onAddItem}
-    >
-      <Row p={2} pr={1} className={cn('f4')}>
-        <PlaylistAdd fontSize={'inherit'} />
-      </Row>
-      <ListPane.ItemText>{`Add Task`}</ListPane.ItemText>
-    </ListPane.Item>
-  )
-}
-
-BucketAddItem = _.compose(
-  inject(({store: {store}}) => ({
-    onAddItem: store.addItem,
-  })),
-  observer,
-)(BucketAddItem)
-
 function BucketItems({itemIds}) {
   return _.map(id => <BucketItem key={id} itemId={id} />)(itemIds)
 }
@@ -105,7 +83,8 @@ function Bucket({bucket, onAddItem, deleteBucket}) {
     <ListPane>
       {renderBucketHeader(bucket, onAddItem, deleteBucket)}
       <BucketItems />
-      <BucketAddItem />
+      {/*<BucketAddItem />*/}
+      {renderBucketAddItem(onAddItem)}
     </ListPane>
   )
 }
