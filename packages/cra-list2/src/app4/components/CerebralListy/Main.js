@@ -103,6 +103,7 @@ function Box(props) {
     children,
     ...other
   } = props
+
   const cns = cn(
     {
       [`pt${p} pr${p} pb${p} pl${p}`]: isNotNil(p),
