@@ -85,11 +85,11 @@ const Bucket = connect(
           <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
           <Btn
             onClick={onAddItem}
-            className={cn('mr1', 'black-60 hover-black link grow')}
+            className={cn('mr1', 'black-60 hover-black grow')}
           >
             <AddCircleOutline fontSize={'inherit'} />
           </Btn>
-          <Btn className={cn('black-60 hover-black link grow')}>
+          <Btn className={cn('black-60 hover-black grow')}>
             <Edit fontSize={'inherit'} />
           </Btn>
         </Row>
