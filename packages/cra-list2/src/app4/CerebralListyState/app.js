@@ -131,11 +131,12 @@ function createRootModule() {
   const storedState = StorageItem({
     name: 'CerebralListyState',
     getInitial: createInitialState,
-    postLoad: state =>
-      _.mergeWith(_.defaultTo)(
+    postLoad: state => {
+      return _.mergeWith(_.defaultTo)(
         {dashboards: [], buckets: [], items: []},
         state,
-      ),
+      )
+    },
   })
 
   const decodedState = storedState.load()
@@ -149,11 +150,12 @@ function createRootModule() {
       controller.runSignal(
         'show-maybeSelectedItem',
         [
-          ctx =>
+          ctx => {
             console.debug(
               `resolveValue(maybeSelectedItem, ctx)`,
               S.show(resolveValue(maybeSelectedItem, ctx)),
-            ),
+            )
+          },
         ],
         {},
       )
@@ -208,6 +210,6 @@ function createRootModule() {
 export const controller = createAppController(createRootModule(), {
   stateChanges: {
     // currentDashboardId: 'kOYniDg34h9xp3cI1xzN1',
-    // nullableSelectedItemId: 'OEqPlt2OOepfvjgTOSJX0',
+    nullableSelectedItemId: 'OEqPlt2OOepfvjgTOSJX0',
   },
 })
