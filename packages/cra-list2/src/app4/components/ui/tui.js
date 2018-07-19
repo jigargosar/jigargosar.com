@@ -36,7 +36,7 @@ const numPropsToStrUnlessNil = _.compose(
 
 export function Box(props) {
   const {className, Component, children, ...other} = props
-  console.log(`Component`, Component)
+  // console.log(`Component`, Component)
   const {
     p,
     ph,
