@@ -188,7 +188,7 @@ Row.propTypes = {
 
 const Link = rc.withProps(
   _.compose(
-    // overProp('Component')(_.defaultTo('a')),
+    overProp('Component')(_.defaultTo('a')),
     prependOverClassName('flex items-center'),
   ),
 )(Row)
