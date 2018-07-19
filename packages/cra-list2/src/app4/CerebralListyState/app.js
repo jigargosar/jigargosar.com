@@ -4,6 +4,7 @@ import {
   findById,
   findByMaybeId,
   findIndexById,
+  mergeWithDefaults,
   modelsToIdLookup,
   modelsToIds,
   S,
@@ -138,7 +139,7 @@ export function createRootModule() {
           bucketLookup: modelsToIdLookup(state.buckets),
           itemLookup: modelsToIdLookup(state.items),
         })(state),
-      _.mergeWith(_.defaultTo)({
+      mergeWithDefaults({
         dashboards: [],
         buckets: [],
         items: [],
