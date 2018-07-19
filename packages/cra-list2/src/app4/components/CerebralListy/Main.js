@@ -47,7 +47,9 @@ const BucketItem = connect(
         <Row className={cn('ph3')}>
           <input type={'checkbox'} tabIndex={-1} />
         </Row>
-        <div className={cn('pv2 flex-auto code')}>{item.text}</div>
+        <ListItem.Text className={cn('code')}>
+          {item.text}
+        </ListItem.Text>
         <Btn className={cn('f4 black-60 hover-black link grow')}>
           <Delete fontSize={'inherit'} />
         </Btn>
