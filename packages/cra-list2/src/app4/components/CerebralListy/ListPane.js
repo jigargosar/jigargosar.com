@@ -31,7 +31,7 @@ const ListPaneItemText = _.compose(
   withClassNames('flex-auto'),
 )(Row)
 
-function ListPaneItemAction({className, Icon, ...others}) {
+function ListPaneItemsecondaryAction({className, Icon, ...others}) {
   return (
     <Btn
       className={cn(
@@ -50,4 +50,4 @@ ListPane.Item = ListPaneItem
 
 ListPane.ItemText = ListPaneItemText
 
-ListPane.ItemAction = ListPaneItemAction
+ListPane.ItemsecondaryAction = ListPaneItemsecondaryAction

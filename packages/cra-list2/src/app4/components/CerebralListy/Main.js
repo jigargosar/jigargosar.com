@@ -21,7 +21,9 @@ import {Btn, Row} from '../ui/tui'
 import {ListPane} from './ListPane'
 
 function renderDeleteIcon(onClick) {
-  return <ListPane.ItemAction Icon={Delete} onClick={onClick} />
+  return (
+    <ListPane.ItemsecondaryAction Icon={Delete} onClick={onClick} />
+  )
 }
 
 const BucketItem = connect(
@@ -51,7 +53,10 @@ function renderBucketHeader(bucket, onAddItem, deleteBucket) {
       <ListPane.ItemText className={cn('f5', 'flex-auto')}>
         {bucket.name}
       </ListPane.ItemText>
-      <ListPane.ItemAction onClick={onAddItem} Icon={PlaylistAdd} />
+      <ListPane.ItemsecondaryAction
+        onClick={onAddItem}
+        Icon={PlaylistAdd}
+      />
       {/*<ListPane.ItemAction Icon={Settings} />*/}
       {renderDeleteIcon(() => deleteBucket({bucketId: bucket.id}))}
     </ListPane.Item>
@@ -108,6 +113,7 @@ const Dashboard = connect(
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
         <ListPane>
           <ListPane.Item
+            Component={Btn}
             colors={'black-50 hover-black-80 hover-bg-black-10'}
             onClick={() => addBucket()}
           >
