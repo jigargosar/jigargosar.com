@@ -28,7 +28,7 @@ function ListItem({
   ...other
 }) {
   return (
-    <a
+    <Btn
       href={'/'}
       onClick={wrapPD(action)}
       className={cn(
@@ -44,7 +44,7 @@ function ListItem({
       {...other}
     >
       {children}
-    </a>
+    </Btn>
   )
 }
 

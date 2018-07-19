@@ -100,6 +100,9 @@ function withClassNames(...classNames) {
 }
 
 export const Row = withClassNames('flex items-center')(Box)
+
+Row.propTypes = Box.propTypes
+
 export const Btn = _.compose(
   rc.defaultProps({
     href: '/',
@@ -110,4 +113,7 @@ export const Btn = _.compose(
   withClassNames('input-reset button-reset bw0'),
 )(Row)
 
-Row.propTypes = Box.propTypes
+Btn.propTypes = {
+  ...Row.propTypes,
+  href: PropTypes.string,
+}
