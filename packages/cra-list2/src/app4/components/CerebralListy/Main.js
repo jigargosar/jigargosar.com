@@ -199,6 +199,7 @@ const Bucket = connect(
         <Row pl={3} mr={3} className={cn('f4 lh-copy')}>
           <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
           <Row
+            Component={'a'}
             href={'/add'}
             onClick={wrapPD(S.I)}
             className={cn('mr1', 'black-60 hover-black link grow')}
