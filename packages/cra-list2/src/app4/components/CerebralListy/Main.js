@@ -16,6 +16,13 @@ import {
   dashboardIdToBucketIds,
   itemById,
 } from '../../CerebralListyState/controller'
+import {
+  Error,
+  Add,
+  Edit,
+  ModeEdit,
+  AddCircleOutline,
+} from '@material-ui/icons'
 
 function ListItem({
   children,
@@ -91,7 +98,32 @@ const Bucket = connect(
   function Bucket({bucket, itemIds, onAddItem}) {
     return (
       <BucketLayout>
-        <div className={cn('f5 pl3 pb1')}>{bucket.name}</div>
+        <div
+          className={cn('pl3 mr3 f4', 'flex items-center lh-copy')}
+        >
+          <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
+          <a
+            href={'/add'}
+            onClick={wrapPD(S.I)}
+            className={cn(
+              'mr1',
+              'black-60 hover-black link grow',
+              'flex items-center ',
+            )}
+          >
+            <AddCircleOutline fontSize={'inherit'} />
+          </a>
+          <a
+            href={'/add'}
+            onClick={wrapPD(S.I)}
+            className={cn(
+              'black-60 hover-black link grow',
+              'flex items-center',
+            )}
+          >
+            <Edit fontSize={'inherit'} />
+          </a>
+        </div>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <ListItem
           className={cn('pl3')}
@@ -172,7 +204,11 @@ function Header({children}) {
   return (
     <div className={cn('black bg-light-blue', 'bb b--moon-gray')}>
       <CenterLayout className={cn('flex items-center', 'pv1 pv2-ns')}>
-        <div className={cn('flex-auto', 'flex mh3')}>{children}</div>
+        <div className={cn('', 'flex ml3')}>{children}</div>
+        <div className={cn('flex items-center mh3')}>
+          <Add />
+        </div>
+        <div className={cn('flex-auto', 'flex mh3')} />
         <div className={cn('flex f5 fw3 lh-title mh3')}>
           <a className={cn('link ml2 pointer')}>Help</a>
           <a className={cn('link ml2 pointer')}>Settings</a>
