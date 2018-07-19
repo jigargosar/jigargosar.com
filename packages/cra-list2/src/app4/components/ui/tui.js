@@ -76,9 +76,6 @@ export function Box(props) {
     },
     className,
   )
-  // if (Component === 'button') {
-  //   console.log(`cns`, cns)
-  // }
 
   return (
     <Component className={cns} {..._.omit(numPropsNames)(other)}>
