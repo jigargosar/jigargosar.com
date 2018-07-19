@@ -29,17 +29,8 @@ function ListItem({
 }) {
   return (
     <Btn
-      href={'/'}
       onClick={wrapPD(action)}
-      className={cn(
-        'db',
-        'pv2',
-        'f7 lh-solid',
-        'link code',
-        colors,
-        'flex items-center',
-        className,
-      )}
+      className={cn('pv2', 'f7 lh-solid', 'code', colors, className)}
       tabIndex={tabIndex}
       {...other}
     >
