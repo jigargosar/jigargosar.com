@@ -67,11 +67,22 @@ function renderBucketAddItem(onAddItem) {
   )
 }
 
-function Bucket({bucket, itemIds, onAddItem, deleteBucket}) {
+function BucketItems({itemIds}) {
+  return _.map(id => <BucketItem key={id} itemId={id} />)(itemIds)
+}
+
+BucketItems = _.compose(
+  inject(({store: {store}}) => ({
+    itemIds: store.itemIds,
+  })),
+  observer,
+)(BucketItems)
+
+function Bucket({bucket, onAddItem, deleteBucket}) {
   return (
     <ListPane>
       {renderBucketHeader(bucket, onAddItem, deleteBucket)}
-      {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
+      <BucketItems />
       {renderBucketAddItem(onAddItem)}
     </ListPane>
   )
@@ -81,7 +92,6 @@ Bucket = _.compose(
   inject(({store: {store}}) => ({
     onAddItem: store.addItem,
     bucket: {name: 'Bucket Name'},
-    itemIds: store.itemIds,
     deleteBucket: _.F,
   })),
   observer,
