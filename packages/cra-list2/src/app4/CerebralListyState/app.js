@@ -194,7 +194,10 @@ export function createRootModule() {
             }
           },
           push(state`buckets`, props`newBucket`),
-          set(bucketById, props`newBucket`),
+          set(
+            state`bucketLookup.${props`newBucket.id`}`,
+            props`newBucket`,
+          ),
         ],
         addItem: [
           function createNewItemInProps({props}) {
