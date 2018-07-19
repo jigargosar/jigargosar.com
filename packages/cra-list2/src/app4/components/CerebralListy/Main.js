@@ -16,7 +16,7 @@ import {
   dashboardIdToBucketIds,
   itemById,
 } from '../../CerebralListyState/controller'
-import {Add, AddCircleOutline, Delete, Edit} from '@material-ui/icons'
+import {Add, Delete, PlaylistAdd, Settings} from '@material-ui/icons'
 import {Btn, Row, withClassNames} from '../ui/tui'
 import {rc} from '../recompose-utils'
 
@@ -95,10 +95,12 @@ const Bucket = connect(
             onClick={onAddItem}
             className={cn('mr1', 'black-60 hover-black grow')}
           >
-            <AddCircleOutline fontSize={'inherit'} />
+            <PlaylistAdd fontSize={'inherit'} />
+            {/*<List fontSize={'inherit'} />*/}
+            {/*<FormatListBulleted fontSize={'inherit'} />*/}
           </Btn>
           <Btn className={cn('black-60 hover-black grow')}>
-            <Edit fontSize={'inherit'} />
+            <Settings fontSize={'inherit'} />
           </Btn>
         </Row>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
