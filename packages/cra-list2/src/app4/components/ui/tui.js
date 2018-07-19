@@ -1,5 +1,5 @@
 import * as rc from 'recompose'
-import {_, isNotNil, overProp} from '../../little-ramda'
+import {_, isNotNil, overProp, S} from '../../little-ramda'
 import {cn, cnWith} from '../utils'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 export function Box(props) {
   const {
     p,
+    ph,
     pt,
     pr,
     pb,
@@ -23,6 +24,8 @@ export function Box(props) {
     ...other
   } = props
 
+  const padding = S.map(_.repeat(_.__, 4))(S.toMaybe(p))
+  console.log(`S.show(padding)`, S.show(padding))
   const cns = cn(
     {
       [`pt${p} pr${p} pb${p} pl${p}`]: isNotNil(p),
@@ -70,11 +73,12 @@ export const zeroTo6 = [
 Box.propTypes = {
   className: PropTypes.string,
   p: PropTypes.oneOf(zeroTo6),
-  m: PropTypes.oneOf(zeroTo6),
+  ph: PropTypes.oneOf(zeroTo6),
   pt: PropTypes.oneOf(zeroTo6),
   pr: PropTypes.oneOf(zeroTo6),
   pb: PropTypes.oneOf(zeroTo6),
   pl: PropTypes.oneOf(zeroTo6),
+  m: PropTypes.oneOf(zeroTo6),
   mt: PropTypes.oneOf(zeroTo6),
   mr: PropTypes.oneOf(zeroTo6),
   mb: PropTypes.oneOf(zeroTo6),

@@ -118,7 +118,7 @@ const Dashboard = connect(
           <ListItem
             className={cn('pl3')}
             colors={'black-70 hover-black hover-bg-light-blue'}
-            action={addBucket}
+            onClick={addBucket}
           >{`Add List`}</ListItem>
         </BucketWrapper>
       </div>
