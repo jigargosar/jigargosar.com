@@ -16,7 +16,7 @@ import {
   dashboardIdToBucketIds,
   itemById,
 } from '../../CerebralListyState/controller'
-import {Add, AddCircleOutline, Edit} from '@material-ui/icons'
+import {Add, AddCircleOutline, Delete, Edit} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {rc} from '../recompose-utils'
 
@@ -27,13 +27,7 @@ const LI = _.compose(
   }),
   rc.withProps(({className, colors}) => {
     return {
-      className: cn(
-        'w-100 pv2',
-        'f7 lh-solid',
-        'code',
-        colors,
-        className,
-      ),
+      className: cn('w-100 ', 'code', colors, className),
     }
   }),
 )(Btn)
@@ -49,7 +43,10 @@ const BucketItem = connect(
         <div className={cn('ph3', 'flex items-center')}>
           <input type={'checkbox'} tabIndex={-1} />
         </div>
-        <div className={cn('code')}>{item.text}</div>
+        <div className={cn('pv2 flex-auto code')}>{item.text}</div>
+        <Btn className={cn('f4 black-60 hover-black link grow')}>
+          <Delete fontSize={'inherit'} />
+        </Btn>
       </LI>
     )
   },

@@ -110,7 +110,9 @@ export const Btn = _.compose(
     p: 0,
     Component: 'button',
   }),
-  withClassNames('input-reset button-reset bw0 link'),
+  withClassNames(
+    'input-reset button-reset bw0 link tl bg-transparent',
+  ),
 )(Row)
 
 Btn.propTypes = {
