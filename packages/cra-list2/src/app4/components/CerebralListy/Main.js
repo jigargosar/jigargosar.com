@@ -17,10 +17,19 @@ import {
   itemById,
 } from '../../CerebralListyState/controller'
 import {Add, Delete, PlaylistAdd, Settings} from '@material-ui/icons'
-import {Btn, Row, withClassNames} from '../ui/tui'
+import {Box, Btn, Row, withClassNames} from '../ui/tui'
 import {rc} from '../recompose-utils'
 
-const ListItem = _.compose(
+const ListPane = withClassNames(
+  cn(
+    'w-100 w-50-m w-third-l fl',
+    'pv1',
+    'bg-white',
+    'bb br b--moon-gray',
+  ),
+)(Box)
+
+const ListPaneItem = _.compose(
   rc.defaultProps({
     tabIndex: 0,
     colors: 'black-80 hover-black hover-bg-black-10',
@@ -30,13 +39,19 @@ const ListItem = _.compose(
   })),
 )(Row)
 
-ListItem.Text = _.compose(
+const ListPaneItemText = _.compose(
   rc.defaultProps({
     pv: 2,
     ph: 2,
   }),
   withClassNames('flex-auto'),
 )(Row)
+
+ListPane.Item = ListPaneItem
+ListPane.Item.Text = ListPaneItemText
+
+const ListItem = ListPaneItem
+ListItem.Text = ListPaneItemText
 
 const BucketItem = connect(
   {
@@ -60,20 +75,14 @@ const BucketItem = connect(
   },
 )
 
-function BucketWrapper({children}) {
-  return (
-    <div
-      className={cn(
-        'w-100 w-50-m w-third-l fl',
-        'pt3 pb3',
-        'bg-white',
-        'bb br b--moon-gray',
-      )}
-    >
-      {children}
-    </div>
-  )
-}
+const BucketWrapper = withClassNames(
+  cn(
+    'w-100 w-50-m w-third-l fl',
+    'pv1',
+    'bg-white',
+    'bb br b--moon-gray',
+  ),
+)(Box)
 
 const Bucket = connect(
   {
@@ -89,8 +98,10 @@ const Bucket = connect(
   function Bucket({bucket, itemIds, onAddItem}) {
     return (
       <BucketWrapper>
-        <Row pl={3} mr={3} className={cn('f4 lh-copy')}>
-          <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
+        <ListItem className={cn('f4 lh-copy')}>
+          <ListItem.Text className={cn('f5', 'flex-auto')}>
+            {bucket.name}
+          </ListItem.Text>
           <Btn
             onClick={onAddItem}
             className={cn('mr1', 'black-60 hover-black grow')}
@@ -102,7 +113,7 @@ const Bucket = connect(
           <Btn className={cn('black-60 hover-black grow')}>
             <Settings fontSize={'inherit'} />
           </Btn>
-        </Row>
+        </ListItem>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <ListItem
           colors="black-50 hover-black-80 hover-bg-black-10"
