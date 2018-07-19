@@ -97,12 +97,13 @@ function Box({
   mr,
   mb,
   ml,
-  children,
   className,
+  Component,
+  children,
   ...other
 }) {
   return (
-    <div
+    <Component
       className={cn(
         {
           [`pt${p} pr${p} pb${p} pl${p}`]: p,
@@ -121,7 +122,7 @@ function Box({
       {...other}
     >
       {children}
-    </div>
+    </Component>
   )
 }
 
@@ -145,6 +146,11 @@ Box.propTypes = {
   mr: PropTypes.oneOf(oneTo6),
   mb: PropTypes.oneOf(oneTo6),
   ml: PropTypes.oneOf(oneTo6),
+  Component: PropTypes.element,
+}
+
+Box.defaultProps = {
+  Component: 'div',
 }
 
 function withClassNames(...classNames) {
