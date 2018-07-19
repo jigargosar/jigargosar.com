@@ -1,7 +1,7 @@
 import {getSnapshot, types} from 'mobx-state-tree'
 import {modelId} from '../../model/utils'
 import {mValues} from '../../mobx/little-mobx'
-import {applySnapshot2, mapSnapshot} from '../little-mst'
+import {applySnapshot2} from '../little-mst'
 import {_, dotPath, isNotNil, modelsToIds} from '../../little-ramda'
 import {Item} from './Item'
 import {Bucket} from './Bucket'
