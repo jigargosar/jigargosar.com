@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import {setDisplayName, wrapDisplayName} from './recompose-utils'
 
-export {F, RC, observer, Observer, isHotKey}
+export {F, RC, observer, Observer, inject, isHotKey}
 export const cn = RX.cx
 
 export {PropTypes}

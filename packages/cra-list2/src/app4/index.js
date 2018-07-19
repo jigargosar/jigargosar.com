@@ -38,7 +38,7 @@ function render() {
       storeBox,
       require('./mst/listy-stores/domain-store').default,
     )
-    const App = require('./components/CerebralListy/Main').default
+    const App = require('./components/MSTListy/Main').default
     ReactDOM.render(
       <Provider store={storeBox}>
         <App />
@@ -58,6 +58,7 @@ if (module.hot) {
   module.hot['accept'](
     [
       './mst/listy-stores/domain-store',
+      './components/MSTListy/Main',
 
       './components/CerebralListy/Main',
       './components/CerebralNotes/Main',
