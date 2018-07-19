@@ -136,6 +136,7 @@ function Box({
 
 const oneTo6 = ['1', '2', '3', '4', '5', '6', 1, 2, 3, 4, 5, 6]
 Box.propTypes = {
+  className: PropTypes.string,
   p: PropTypes.oneOf(oneTo6),
   m: PropTypes.oneOf(oneTo6),
   pt: PropTypes.oneOf(oneTo6),
@@ -146,10 +147,14 @@ Box.propTypes = {
   mr: PropTypes.oneOf(oneTo6),
   mb: PropTypes.oneOf(oneTo6),
   ml: PropTypes.oneOf(oneTo6),
-  Component: PropTypes.element,
+  Component: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
 }
 
 Box.defaultProps = {
+  className: '',
   Component: 'div',
 }
 
@@ -158,6 +163,24 @@ function withClassNames(...classNames) {
 }
 
 const Row = withClassNames('flex items-center')(Box)
+
+Row.propTypes = {
+  className: PropTypes.string,
+  p: PropTypes.oneOf(oneTo6),
+  m: PropTypes.oneOf(oneTo6),
+  pt: PropTypes.oneOf(oneTo6),
+  pr: PropTypes.oneOf(oneTo6),
+  pb: PropTypes.oneOf(oneTo6),
+  pl: PropTypes.oneOf(oneTo6),
+  mt: PropTypes.oneOf(oneTo6),
+  mr: PropTypes.oneOf(oneTo6),
+  mb: PropTypes.oneOf(oneTo6),
+  ml: PropTypes.oneOf(oneTo6),
+  Component: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+}
 
 const Bucket = connect(
   {
@@ -173,9 +196,7 @@ const Bucket = connect(
   function Bucket({bucket, itemIds, onAddItem}) {
     return (
       <BucketLayout>
-        <div
-          className={cn('pl3 mr3 f4', 'flex items-center lh-copy')}
-        >
+        <Row pl={3} mr={3} className={cn('f4 lh-copy')}>
           <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
           <a
             href={'/add'}
@@ -198,7 +219,7 @@ const Bucket = connect(
           >
             <Edit fontSize={'inherit'} />
           </a>
-        </div>
+        </Row>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <ListItem
           className={cn('pl3')}
