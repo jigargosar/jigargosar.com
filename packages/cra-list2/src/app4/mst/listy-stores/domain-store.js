@@ -24,10 +24,13 @@ const DomainStore = types
   })
   .views(views)
   .actions(self => ({
-    addItem() {
+    addItem(values) {
       return self.itemLookup.put(
-        Item.create({id: modelId(Item.name)}),
+        Item.create({...values, id: modelId(Item.name)}),
       )
+    },
+    removeItem(itemId) {
+      return self.itemLookup.delete(itemId)
     },
   }))
 
@@ -35,7 +38,12 @@ const store = DomainStore.create()
 
 if (module.hot) {
   store.addItem()
-  store.addItem()
+  store.addItem({text: 'MoTu ToDOO'})
+  store.removeItem(store.addItem().id)
+  store.removeItem(store.addItem().id)
+  store.removeItem(store.addItem().id)
+  store.removeItem(store.addItem().id)
+  store.addItem({text: 'FaDuu ToDOO'})
 
   const snap = dotPath('hot.data.snap')(module)
   _.when(isNotNil)(applySnapshot2(store))(snap)

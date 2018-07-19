@@ -30,7 +30,7 @@ BucketItem = _.compose(
   inject(({store: {store}}, {itemId}) => ({
     selectItem: _.F,
     item: store.itemLookup.get(itemId),
-    deleteItem: _.F,
+    deleteItem: () => store.removeItem(itemId),
     isSelected: false,
   })),
   observer,
