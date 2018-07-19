@@ -123,12 +123,12 @@ Box.propTypes = {
   Component: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
+    PropTypes.node,
   ]),
   bw: PropTypes.oneOf(zeroTo6),
 }
 
 Box.defaultProps = {
-  className: '',
   Component: 'div',
 }
 
@@ -143,6 +143,7 @@ export function withClassNames(...classNames) {
 export const Row = withClassNames('flex items-center')(Box)
 
 Row.propTypes = Box.propTypes
+Row.defaultProps = Box.defaultProps
 
 export const Btn = _.compose(
   rc.defaultProps({

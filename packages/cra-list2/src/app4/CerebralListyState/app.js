@@ -99,11 +99,13 @@ export const bucketIdToItemIds = Compute(
   modelsToIds,
 )
 
-export const bucketById = Compute(
-  props`bucketId`,
-  state`buckets`,
-  findById,
-)
+// export const bucketById = Compute(
+//   props`bucketId`,
+//   state`buckets`,
+//   findById,
+// )
+
+export const bucketById = state`bucketLookup.${props`bucketId`}`
 
 export const bucketIndexById = Compute(
   props`bucketId`,
