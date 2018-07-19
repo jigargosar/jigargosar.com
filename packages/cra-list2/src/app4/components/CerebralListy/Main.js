@@ -16,7 +16,6 @@ import {
   dashboardIdToBucketIds,
   itemById,
 } from '../../CerebralListyState/controller'
-import * as PropTypes from 'prop-types'
 
 function ListItem({
   children,
