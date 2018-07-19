@@ -6,7 +6,7 @@ import {mRunInAction, oObject} from './mobx/little-mobx'
 import {tryCatchLog} from './little-ramda'
 import {Provider} from 'mobx-react'
 
-const appState = oObject({}, {}, {name: 'appState'})
+const storeBox = oObject({}, {}, {name: 'storeBox'})
 
 let firstTime = true
 
@@ -20,23 +20,27 @@ function render() {
       console.log('Clearing Console on Hot Reload')
     }
 
-    // Object.assign(appState, require('./mobx').state)
+    // Object.assign(storeBox, require('./mobx').state)
     // Object.assign(
-    //   appState,
+    //   storeBox,
     //   require('./mobx/NotesActiveRecord/ActiveRecordNotesState')
     //     .state,
     // )
     // Object.assign(
-    //   appState,
+    //   storeBox,
     //   require('./ImmutableState/ImmutableNoteTree').state,
     // )
     // const App = require('./components/Main').default
     // const App = require('./components/ActiveRecord/Main').default
     // const App = require('./components/ImmutableNotes/Main').default
     // const App = require('./components/CerebralNotes/Main').default
+    Object.assign(
+      storeBox,
+      require('./mst/listy-stores/domain-store').default,
+    )
     const App = require('./components/CerebralListy/Main').default
     ReactDOM.render(
-      <Provider appState={appState}>
+      <Provider store={storeBox}>
         <App />
       </Provider>,
       document.getElementById('root'),
@@ -49,10 +53,12 @@ render()
 registerServiceWorker()
 
 if (module.hot) {
-  window.s = appState
+  window.s = storeBox
 
   module.hot['accept'](
     [
+      './mst/listy-stores/domain-store',
+
       './components/CerebralListy/Main',
       './components/CerebralNotes/Main',
       './components/ImmutableNotes/Main',

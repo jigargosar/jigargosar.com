@@ -27,3 +27,7 @@ export const cycleIdx = _.curry(function cycleIdx(listLength, idx) {
   }
   return idx
 })
+
+export function modelId(name) {
+  return `${name}-${nanoid()}`
+}

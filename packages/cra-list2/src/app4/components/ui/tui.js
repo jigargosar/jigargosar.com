@@ -121,10 +121,10 @@ Box.propTypes = {
 
   className: PropTypes.string,
 
-  Component: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]),
+  // Component: PropTypes.oneOfType([
+  //   PropTypes.string,
+  //   PropTypes.element,
+  // ]),
   bw: PropTypes.oneOf(zeroTo6),
 }
 

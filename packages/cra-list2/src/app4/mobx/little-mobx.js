@@ -18,6 +18,7 @@ export {createTransformer, createViewModel} from 'mobx-utils'
 m.configure({computedRequiresReaction: true, enforceActions: true})
 
 export const oObject = m.observable.object
+export const oBox = m.observable.box
 export const oRef = m.observable.ref
 export const oObject3 = _.curryN(3, m.observable.object)
 export const extendObservable = m.extendObservable
