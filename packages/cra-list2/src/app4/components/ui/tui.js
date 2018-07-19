@@ -95,7 +95,7 @@ function prependOverClassName(...classNames) {
   return overProp('className')(cnWith(...classNames))
 }
 
-function withClassNames(...classNames) {
+export function withClassNames(...classNames) {
   return rc.withProps(prependOverClassName(...classNames))
 }
 

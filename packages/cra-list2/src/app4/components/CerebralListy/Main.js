@@ -18,26 +18,25 @@ import {
 } from '../../CerebralListyState/controller'
 import {Add, AddCircleOutline, Edit} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
+import {rc} from '../recompose-utils'
 
-function ListItem({
-  children,
-  className,
-  action = S.I,
-  tabIndex = 0,
-  colors = 'black hover-black hover-bg-light-blue',
-  ...other
-}) {
-  return (
-    <Btn
-      onClick={wrapPD(action)}
-      className={cn('pv2', 'f7 lh-solid', 'code', colors, className)}
-      tabIndex={tabIndex}
-      {...other}
-    >
-      {children}
-    </Btn>
-  )
-}
+const LI = _.compose(
+  rc.defaultProps({
+    tabIndex: 0,
+    colors: 'black hover-black hover-bg-light-blue',
+  }),
+  rc.withProps(({className, colors}) => {
+    return {
+      className: cn(
+        'w-100 pv2',
+        'f7 lh-solid',
+        'code',
+        colors,
+        className,
+      ),
+    }
+  }),
+)(Btn)
 
 const BucketItem = connect(
   {
@@ -46,12 +45,12 @@ const BucketItem = connect(
   },
   function BucketItem({item, selectItem}) {
     return (
-      <ListItem onFocus={() => selectItem({item})}>
+      <LI onFocus={() => selectItem({item})}>
         <div className={cn('ph3', 'flex items-center')}>
           <input type={'checkbox'} tabIndex={-1} />
         </div>
         <div className={cn('code')}>{item.text}</div>
-      </ListItem>
+      </LI>
     )
   },
 )
@@ -105,14 +104,14 @@ const Bucket = connect(
           </Btn>
         </Row>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
-        <ListItem
+        <LI
           className={cn('pl3')}
           colors="black-70 hover-black hover-bg-light-blue"
           href={`/add-task`}
-          action={onAddItem}
+          onClick={onAddItem}
         >
           {`Add Task`}
-        </ListItem>
+        </LI>
       </BucketWrapper>
     )
   },
@@ -128,11 +127,11 @@ const Dashboard = connect(
       <div className={cn('flex flex-wrap')}>
         {_.map(id => <Bucket key={id} bucketId={id} />)(bucketIds)}
         <BucketWrapper>
-          <ListItem
+          <LI
             className={cn('pl3')}
             colors={'black-70 hover-black hover-bg-light-blue'}
             action={addBucket}
-          >{`Add List`}</ListItem>
+          >{`Add List`}</LI>
         </BucketWrapper>
       </div>
     )
