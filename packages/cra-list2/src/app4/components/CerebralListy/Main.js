@@ -23,6 +23,7 @@ function ListItem({
   children,
   className,
   action = S.I,
+  tabIndex = 0,
   colors = 'black hover-black hover-bg-light-blue',
   ...other
 }) {
@@ -39,7 +40,7 @@ function ListItem({
         'flex items-center',
         className,
       )}
-      tabIndex={0}
+      tabIndex={tabIndex}
       {...other}
     >
       {children}
@@ -54,7 +55,7 @@ const BucketItem = connect(
   },
   function BucketItem({item, selectItem}) {
     return (
-      <ListItem tabIndex={0} onFocus={() => selectItem({item})}>
+      <ListItem onFocus={() => selectItem({item})}>
         <div className={cn('ph3', 'flex items-center')}>
           <input type={'checkbox'} tabIndex={-1} />
         </div>
