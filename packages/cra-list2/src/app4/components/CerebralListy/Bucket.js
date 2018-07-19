@@ -12,6 +12,7 @@ import {
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
+import {rc} from '../recompose-utils'
 
 const BucketItem = connect(
   {
@@ -20,7 +21,12 @@ const BucketItem = connect(
     deleteItem: signal`deleteItem`,
     isSelected: isItemSelected,
   },
-  function BucketItem({isSelected, item, selectItem, deleteItem}) {
+  rc.pure(function BucketItem({
+    isSelected,
+    item,
+    selectItem,
+    deleteItem,
+  }) {
     return (
       <ListPane.Item
         colors={cn({
@@ -37,7 +43,7 @@ const BucketItem = connect(
         {renderDeleteIcon(() => deleteItem({itemId: item.id}))}
       </ListPane.Item>
     )
-  },
+  }),
 )
 
 function renderBucketHeader(bucket, onAddItem, deleteBucket) {
