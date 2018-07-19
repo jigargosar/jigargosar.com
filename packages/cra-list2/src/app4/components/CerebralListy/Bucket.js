@@ -7,7 +7,7 @@ import {
   bucketById,
   bucketIdToItemIds,
   itemById,
-} from '../../CerebralListyState/controller'
+} from '../../CerebralListyState/app'
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
