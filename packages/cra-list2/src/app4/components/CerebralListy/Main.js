@@ -1,14 +1,14 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {CenterLayout, TypographyDefaults} from '../ui'
-import {cn, cnWith, PropTypes, wrapPD} from '../utils'
+import {cn, wrapPD} from '../utils'
 import {
   connect,
   Container,
   signal,
   state,
 } from '../../little-cerebral'
-import {_, idEq, isNotNil, overProp, S} from '../../little-ramda'
+import {_, idEq, S} from '../../little-ramda'
 import {
   bucketById,
   bucketIdToItemIds,
@@ -17,7 +17,7 @@ import {
   itemById,
 } from '../../CerebralListyState/controller'
 import {Add, AddCircleOutline, Edit} from '@material-ui/icons'
-import {rc} from '../recompose-utils'
+import {Btn, Row} from '../ui/tui'
 
 function ListItem({
   children,
@@ -79,129 +79,6 @@ function BucketLayout({children}) {
   )
 }
 
-// function Div({className, children, ...others}) {
-//   return <div className={cn('className')}>{children}</div>
-// }
-
-// const dd = defaultProps({component: 'div'})
-// const Div = dd(componentFromProp('component'))
-
-function Box(props) {
-  const {
-    p,
-    pt,
-    pr,
-    pb,
-    pl,
-    m,
-    mt,
-    mr,
-    mb,
-    ml,
-    bw,
-    className,
-    Component,
-    children,
-    ...other
-  } = props
-
-  const cns = cn(
-    {
-      [`pt${p} pr${p} pb${p} pl${p}`]: isNotNil(p),
-      [`mt${m} mr${m} mb${m} ml${m}`]: isNotNil(m),
-      [`pt${pt}`]: isNotNil(pt),
-      [`pr${pr}`]: isNotNil(pr),
-      [`pb${pb}`]: isNotNil(pb),
-      [`pl${pl}`]: isNotNil(pl),
-      [`mt${mt}`]: isNotNil(mt),
-      [`mr${mr}`]: isNotNil(mr),
-      [`mb${mb}`]: isNotNil(mb),
-      [`ml${ml}`]: isNotNil(ml),
-      [`bw${bw}`]: isNotNil(bw),
-    },
-    className,
-  )
-  // if (Component === 'button') {
-  //   console.log(`cns`, cns)
-  // }
-
-  return (
-    <Component className={cns} {...other}>
-      {children}
-    </Component>
-  )
-}
-
-// function Row(className, children, ...other) {
-//   return (
-//     <div className={cn(className)} {...other}>
-//       {children}
-//     </div>
-//   )
-// }
-
-const zeroTo6 = [
-  '0',
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  0,
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
-]
-Box.propTypes = {
-  className: PropTypes.string,
-  p: PropTypes.oneOf(zeroTo6),
-  m: PropTypes.oneOf(zeroTo6),
-  pt: PropTypes.oneOf(zeroTo6),
-  pr: PropTypes.oneOf(zeroTo6),
-  pb: PropTypes.oneOf(zeroTo6),
-  pl: PropTypes.oneOf(zeroTo6),
-  mt: PropTypes.oneOf(zeroTo6),
-  mr: PropTypes.oneOf(zeroTo6),
-  mb: PropTypes.oneOf(zeroTo6),
-  ml: PropTypes.oneOf(zeroTo6),
-  Component: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]),
-  bw: PropTypes.oneOf(zeroTo6),
-}
-
-Box.defaultProps = {
-  className: '',
-  Component: 'div',
-}
-
-function prependOverClassName(...classNames) {
-  return overProp('className')(cnWith(...classNames))
-}
-
-function withClassNames(...classNames) {
-  return rc.withProps(prependOverClassName(...classNames))
-}
-
-const Row = withClassNames('flex items-center')(Box)
-
-Row.propTypes = Box.propTypes
-
-const Link = _.compose(
-  rc.defaultProps({
-    href: '/',
-    m: 0,
-    p: 0,
-    Component: 'button',
-  }),
-  withClassNames('input-reset button-reset bw0'),
-)(Row)
-
 const Bucket = connect(
   {
     addItem: signal`addItem`,
@@ -218,7 +95,7 @@ const Bucket = connect(
       <BucketLayout>
         <Row pl={3} mr={3} className={cn('f4 lh-copy')}>
           <div className={cn('f5', 'flex-auto')}>{bucket.name}</div>
-          <Link
+          <Btn
             m={0}
             p={0}
             href={'/add'}
@@ -226,14 +103,14 @@ const Bucket = connect(
             className={cn('mr1', 'black-60 hover-black link grow')}
           >
             <AddCircleOutline fontSize={'inherit'} />
-          </Link>
-          <Link
+          </Btn>
+          <Btn
             href={'/add'}
             onClick={wrapPD(S.I)}
             className={cn('black-60 hover-black link grow')}
           >
             <Edit fontSize={'inherit'} />
-          </Link>
+          </Btn>
         </Row>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <ListItem
