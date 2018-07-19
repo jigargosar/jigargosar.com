@@ -86,22 +86,23 @@ function BucketLayout({children}) {
 // const dd = defaultProps({component: 'div'})
 // const Div = dd(componentFromProp('component'))
 
-function Box({
-  p,
-  pt,
-  pr,
-  pb,
-  pl,
-  m,
-  mt,
-  mr,
-  mb,
-  ml,
-  className,
-  Component,
-  children,
-  ...other
-}) {
+function Box(props) {
+  const {
+    p,
+    pt,
+    pr,
+    pb,
+    pl,
+    m,
+    mt,
+    mr,
+    mb,
+    ml,
+    className,
+    Component,
+    children,
+    ...other
+  } = props
   const cns = cn(
     {
       [`pt${p} pr${p} pb${p} pl${p}`]: isNotNil(p),
