@@ -123,7 +123,6 @@ Box.propTypes = {
   Component: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
-    PropTypes.node,
   ]),
   bw: PropTypes.oneOf(zeroTo6),
 }
