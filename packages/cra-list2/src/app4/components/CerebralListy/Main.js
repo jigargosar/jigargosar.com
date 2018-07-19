@@ -121,9 +121,9 @@ function Box(props) {
     },
     className,
   )
-  if (Component === 'button') {
-    console.log(`cns`, cns)
-  }
+  // if (Component === 'button') {
+  //   console.log(`cns`, cns)
+  // }
 
   return (
     <Component className={cns} {...other}>
@@ -190,23 +190,7 @@ function withClassNames(...classNames) {
 
 const Row = withClassNames('flex items-center')(Box)
 
-Row.propTypes = {
-  className: PropTypes.string,
-  p: PropTypes.oneOf(zeroTo6),
-  m: PropTypes.oneOf(zeroTo6),
-  pt: PropTypes.oneOf(zeroTo6),
-  pr: PropTypes.oneOf(zeroTo6),
-  pb: PropTypes.oneOf(zeroTo6),
-  pl: PropTypes.oneOf(zeroTo6),
-  mt: PropTypes.oneOf(zeroTo6),
-  mr: PropTypes.oneOf(zeroTo6),
-  mb: PropTypes.oneOf(zeroTo6),
-  ml: PropTypes.oneOf(zeroTo6),
-  Component: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]),
-}
+Row.propTypes = Box.propTypes
 
 const Link = _.compose(
   rc.defaultProps({
