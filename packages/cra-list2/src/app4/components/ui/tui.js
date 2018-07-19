@@ -111,7 +111,7 @@ export const Btn = _.compose(
     Component: 'button',
   }),
   withClassNames(
-    'input-reset button-reset bw0 link tl bg-transparent',
+    'input-reset button-reset bw0 link pointer tl bg-transparent',
   ),
 )(Row)
 

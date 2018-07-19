@@ -95,12 +95,12 @@ const Bucket = connect(
         </Row>
         {_.map(id => <BucketItem key={id} itemId={id} />)(itemIds)}
         <LI
-          className={cn('pl3')}
-          colors="black-70 hover-black hover-bg-light-blue"
-          href={`/add-task`}
+          colors="black-50 hover-black-80 hover-bg-black-10"
           onClick={onAddItem}
         >
-          {`Add Task`}
+          <Row
+            className={cn('f6 code w-100 pv2 ph3')}
+          >{`Add Task`}</Row>
         </LI>
       </BucketWrapper>
     )
