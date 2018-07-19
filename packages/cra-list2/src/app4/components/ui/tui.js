@@ -21,6 +21,7 @@ export function Box(props) {
     mr,
     mb,
     ml,
+
     bw,
     className,
     Component,
