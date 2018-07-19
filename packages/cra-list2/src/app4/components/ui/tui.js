@@ -80,17 +80,20 @@ export const zeroTo6 = [
 
 Box.propTypes = {
   className: PropTypes.string,
+
   p: PropTypes.oneOf(zeroTo6),
   ph: PropTypes.oneOf(zeroTo6),
   pv: PropTypes.oneOf(zeroTo6),
-  mh: PropTypes.oneOf(zeroTo6),
-  mv: PropTypes.oneOf(zeroTo6),
 
   pt: PropTypes.oneOf(zeroTo6),
   pr: PropTypes.oneOf(zeroTo6),
   pb: PropTypes.oneOf(zeroTo6),
   pl: PropTypes.oneOf(zeroTo6),
+
   m: PropTypes.oneOf(zeroTo6),
+  mh: PropTypes.oneOf(zeroTo6),
+  mv: PropTypes.oneOf(zeroTo6),
+
   mt: PropTypes.oneOf(zeroTo6),
   mr: PropTypes.oneOf(zeroTo6),
   mb: PropTypes.oneOf(zeroTo6),
