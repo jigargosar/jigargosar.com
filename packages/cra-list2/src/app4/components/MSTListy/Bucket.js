@@ -13,7 +13,7 @@ function BucketItem({isSelected, item, selectItem, deleteItem}) {
       colors={cn({
         'black bg-black-10': isSelected,
       })}
-      onFocus={() => selectItem({item})}
+      onFocus={selectItem}
     >
       <Row p={2}>
         <input type={'checkbox'} tabIndex={-1} />
@@ -21,16 +21,20 @@ function BucketItem({isSelected, item, selectItem, deleteItem}) {
       <ListPane.ItemText className={cn('code')}>
         {item.text || 'I am a hard core TODo'}
       </ListPane.ItemText>
-      {renderDeleteIcon(() => deleteItem({itemId: item.id}))}
+      {renderDeleteIcon(deleteItem)}
     </ListPane.Item>
   )
+}
+
+function removeItem(store, itemId) {
+  return store.removeItem(itemId)
 }
 
 BucketItem = _.compose(
   inject(({store: {store}}, {itemId}) => ({
     selectItem: _.F,
     item: store.itemLookup.get(itemId),
-    deleteItem: () => store.removeItem(itemId),
+    deleteItem: () => removeItem(store, itemId),
     isSelected: false,
   })),
   observer,
