@@ -73,7 +73,6 @@ function BucketItems({items}) {
 
 BucketItems = _.compose(
   inject(({store: {store}}) => ({
-    itemIds: store.itemIds,
     items: store.items,
   })),
   observer,
