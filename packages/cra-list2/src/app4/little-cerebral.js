@@ -1,7 +1,16 @@
 import {Compute, Controller, Module} from 'cerebral'
 import {connect, Container} from '@cerebral/react'
 import {props, signal, state, string} from 'cerebral/tags'
-import {push, set, unshift, splice, concat} from 'cerebral/operators'
+import {
+  push,
+  set,
+  unset,
+  unshift,
+  splice,
+  concat,
+  merge,
+  equals,
+} from 'cerebral/operators'
 import {_, mergeWithDefaults} from './little-ramda'
 import S from 'sanctuary'
 
@@ -20,6 +29,9 @@ export {
   push,
   splice,
   concat,
+  unset,
+  merge,
+  equals,
 }
 
 export function logProps(ctx) {

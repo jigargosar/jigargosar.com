@@ -19,6 +19,7 @@ import {
   set,
   splice,
   state,
+  unset,
 } from '../little-cerebral'
 import nanoid from 'nanoid'
 
@@ -203,8 +204,14 @@ export function createRootModule() {
           push(state`items`, props`newItem`),
           set(state`itemLookup.${props`newItem.id`}`, props`newItem`),
         ],
-        deleteItem: [splice(state`items`, itemIndexById, 1)],
-        deleteBucket: [splice(state`buckets`, bucketIndexById, 1)],
+        deleteBucket: [
+          splice(state`buckets`, bucketIndexById, 1),
+          unset(bucketById),
+        ],
+        deleteItem: [
+          splice(state`items`, itemIndexById, 1),
+          unset(itemById),
+        ],
       },
       modules: {},
       providers: {storedState},
