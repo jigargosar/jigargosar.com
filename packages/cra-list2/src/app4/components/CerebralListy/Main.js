@@ -30,6 +30,12 @@ const ListItem = _.compose(
   })),
 )(Row)
 
+ListItem.Text = rc.defaultProps({
+  pv: 2,
+  ph: 3,
+  className: cn('flex-auto'),
+})(Row)
+
 const BucketItem = connect(
   {
     selectItem: signal`selectItem`,
@@ -96,9 +102,7 @@ const Bucket = connect(
           colors="black-50 hover-black-80 hover-bg-black-10"
           onClick={onAddItem}
         >
-          <Row
-            className={cn('f5 flex-auto pv2 ph3')}
-          >{`Add Task`}</Row>
+          <ListItem.Text>{`Add Task`}</ListItem.Text>
         </ListItem>
       </BucketWrapper>
     )
@@ -121,7 +125,7 @@ const Dashboard = connect(
           >
             <Row
               pv={2}
-              pg={3}
+              ph={3}
               className={cn('f5 flex-auto')}
             >{`Add List`}</Row>
           </ListItem>
