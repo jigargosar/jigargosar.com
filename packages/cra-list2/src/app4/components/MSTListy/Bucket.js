@@ -1,11 +1,17 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
-import {cn} from '../utils'
+import {cn, renderKeyedById} from '../utils'
 import {_} from '../../little-ramda'
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
+
+const oInject = fn =>
+  _.compose(
+    inject(({store: {store}}, props) => fn({store}, props)),
+    observer,
+  )
 
 function BucketItem({item}) {
   return (
@@ -26,12 +32,7 @@ function BucketItem({item}) {
   )
 }
 
-BucketItem = _.compose(
-  inject(({store: {store}}, {item}) => ({
-    item,
-  })),
-  observer,
-)(BucketItem)
+BucketItem = observer(BucketItem)
 
 function renderBucketHeader(bucket, onAddItem, deleteBucket) {
   return (
@@ -65,17 +66,12 @@ function renderBucketAddItem(onAddItem) {
 }
 
 function BucketItems({items}) {
-  return _.map(item => <BucketItem key={item.id} item={item} />)(
-    items,
-  )
+  return renderKeyedById(BucketItem, 'item', items)
 }
 
-BucketItems = _.compose(
-  inject(({store: {store}}) => ({
-    items: store.items,
-  })),
-  observer,
-)(BucketItems)
+BucketItems = oInject(({store}) => ({
+  items: store.items,
+}))(BucketItems)
 
 function Bucket({bucket, onAddItem, deleteBucket}) {
   return (
