@@ -35,15 +35,6 @@ BucketItem = _.compose(
   })),
   observer,
 )(BucketItem)
-// BucketItem = connect(
-//   {
-//     selectItem: signal`selectItem`,
-//     item: itemById,
-//     deleteItem: signal`deleteItem`,
-//     isSelected: isItemSelected,
-//   },
-//   BucketItem,
-// )
 
 function renderBucketHeader(bucket, onAddItem, deleteBucket) {
   return (
@@ -87,30 +78,13 @@ function Bucket({bucket, itemIds, onAddItem, deleteBucket}) {
 }
 
 Bucket = _.compose(
-  inject(({store: {store}}) => {
-    return {
-      onAddItem: store.addItem,
-      bucket: {name: 'Bucket Name'},
-      itemIds: store.itemIds,
-      deleteBucket: _.F,
-    }
-  }),
+  inject(({store: {store}}) => ({
+    onAddItem: store.addItem,
+    bucket: {name: 'Bucket Name'},
+    itemIds: store.itemIds,
+    deleteBucket: _.F,
+  })),
   observer,
 )(Bucket)
 
 export {Bucket}
-// Bucket = connect(
-//   {
-//     addItem: signal`addItem`,
-//     bucket: bucketById,
-//     itemIds: bucketIdToItemIds,
-//     deleteBucket: signal`deleteBucket`,
-//   },
-//   ({bucket, addItem, itemIds, deleteBucket}) => ({
-//     onAddItem: () => addItem({bucketId: bucket.id}),
-//     bucket,
-//     itemIds,
-//     deleteBucket,
-//   }),
-//   Bucket,
-// )
