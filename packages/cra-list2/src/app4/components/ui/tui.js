@@ -1,5 +1,5 @@
 import * as rc from 'recompose'
-import {_, isNotNil, overProp, S} from '../../little-ramda'
+import {_, isNotNil, overProp} from '../../little-ramda'
 import {cn, cnWith} from '../utils'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -9,13 +9,14 @@ export function Box(props) {
     p,
     ph,
     pv,
-    mh,
-    mv,
     pt,
     pr,
     pb,
     pl,
+
     m,
+    mh,
+    mv,
     mt,
     mr,
     mb,
@@ -32,9 +33,11 @@ export function Box(props) {
       [`pt${p} pr${p} pb${p} pl${p}`]: isNotNil(p),
       [`pr${ph} pl${ph}`]: isNotNil(ph),
       [`pt${pv} pb${pv}`]: isNotNil(pv),
+
       [`mr${mh} ml${mh}`]: isNotNil(mh),
       [`mt${mv} mb${mv}`]: isNotNil(mv),
       [`mt${m} mr${m} mb${m} ml${m}`]: isNotNil(m),
+
       [`pt${pt}`]: isNotNil(pt),
       [`pr${pr}`]: isNotNil(pr),
       [`pb${pb}`]: isNotNil(pb),
@@ -79,6 +82,10 @@ Box.propTypes = {
   className: PropTypes.string,
   p: PropTypes.oneOf(zeroTo6),
   ph: PropTypes.oneOf(zeroTo6),
+  pv: PropTypes.oneOf(zeroTo6),
+  mh: PropTypes.oneOf(zeroTo6),
+  mv: PropTypes.oneOf(zeroTo6),
+
   pt: PropTypes.oneOf(zeroTo6),
   pr: PropTypes.oneOf(zeroTo6),
   pb: PropTypes.oneOf(zeroTo6),
