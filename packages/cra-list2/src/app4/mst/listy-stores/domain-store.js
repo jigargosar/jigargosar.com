@@ -10,20 +10,26 @@ const Item = types.model('Item', {
   done: false,
 })
 
-const views = self => ({
-  get items() {
-    return mValues(self.itemLookup)
-  },
-  get itemIds() {
-    return modelsToIds(self.items)
-  },
-})
 const DomainStore = types
   .model('DomainStore', {
     itemLookup: types.map(Item),
   })
   .views(views)
-  .actions(self => ({
+  .actions(actions)
+
+function views(self) {
+  return {
+    get items() {
+      return mValues(self.itemLookup)
+    },
+    get itemIds() {
+      return modelsToIds(self.items)
+    },
+  }
+}
+
+function actions(self) {
+  return {
     addItem(values) {
       return self.itemLookup.put(
         Item.create({...values, id: modelId(Item.name)}),
@@ -32,7 +38,8 @@ const DomainStore = types
     removeItem(itemId) {
       return self.itemLookup.delete(itemId)
     },
-  }))
+  }
+}
 
 const store = DomainStore.create()
 
