@@ -127,6 +127,14 @@ const oneTo6 = ['1', '2', '3', '4', '5', '6', 1, 2, 3, 4, 5, 6]
 Box.propTypes = {
   p: PropTypes.oneOf(oneTo6),
   m: PropTypes.oneOf(oneTo6),
+  pt: PropTypes.oneOf(oneTo6),
+  pr: PropTypes.oneOf(oneTo6),
+  pb: PropTypes.oneOf(oneTo6),
+  pl: PropTypes.oneOf(oneTo6),
+  mt: PropTypes.oneOf(oneTo6),
+  mr: PropTypes.oneOf(oneTo6),
+  mb: PropTypes.oneOf(oneTo6),
+  ml: PropTypes.oneOf(oneTo6),
 }
 
 const Bucket = connect(
