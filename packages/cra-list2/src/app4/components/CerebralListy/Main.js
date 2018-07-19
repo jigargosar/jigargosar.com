@@ -123,11 +123,7 @@ const Dashboard = connect(
             colors={'black-50 hover-black-80 hover-bg-black-10'}
             onClick={addBucket}
           >
-            <Row
-              pv={2}
-              ph={3}
-              className={cn('f5 flex-auto')}
-            >{`Add List`}</Row>
+            <ListItem.Text>{`Add List`}</ListItem.Text>
           </ListItem>
         </BucketWrapper>
       </div>
