@@ -5,7 +5,7 @@ import {Bucket} from './Bucket'
 import {detach, setLivelynessChecking, types} from 'mobx-state-tree'
 import {idEq} from '../../little-ramda'
 
-setLivelynessChecking('error')
+// setLivelynessChecking('error')
 
 export const DomainStore = types
   .model('DomainStore', {
@@ -55,7 +55,7 @@ function actions(self) {
       )
     },
     deleteItem(model) {
-      detach(model)
+      // detach(model)
       if (self.nullableSelectedItem === model.id) {
         self.nullableSelectedItem = null
       }
