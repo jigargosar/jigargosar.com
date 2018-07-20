@@ -10,18 +10,18 @@ export const Bucket = types
   .views(views)
   .actions(actions)
 
-function actions(self) {
-  return {
-    delete() {
-      self.domain.deleteBucket(self)
-    },
-  }
-}
-
 function views(self) {
   return {
     get items() {
       return self.domain.getBucketItems(self)
+    },
+  }
+}
+
+function actions(self) {
+  return {
+    delete() {
+      self.domain.deleteBucket(self)
     },
   }
 }
