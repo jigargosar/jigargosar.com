@@ -20,19 +20,21 @@ function views(self) {
   }
 }
 
+function createItem(values, bucket) {
+  return Item.create({
+    bucket,
+    ...values,
+    id: modelId(Item.name),
+  })
+}
+
 function actions(self) {
   return {
     delete() {
       self.domain.deleteBucket(self)
     },
     addItem(values) {
-      return self.domain.addItem(
-        Item.create({
-          bucket: self,
-          ...values,
-          id: modelId(Item.name),
-        }),
-      )
+      return self.domain.addItem(createItem(values, self))
     },
     onAddItem() {
       return self.addItem()
