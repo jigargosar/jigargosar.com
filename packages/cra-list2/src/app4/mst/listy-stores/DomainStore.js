@@ -23,8 +23,8 @@ function views(self) {
       return mValues(self.itemLookup)
     },
     get activeItems() {
-      // return _.reject(_.prop('deleted'))(self.items)
-      return self.items
+      return _.reject(_.propOr(false, 'deleted'))(self.items)
+      // return self.items
     },
     getBucketItems(bucketId) {
       return _.compose(
@@ -74,12 +74,12 @@ function actions(self) {
         self.nullableSelectedItem = null
       }
     },
-    deleteItem(model) {
-      // detach(model)
-      self.unSelectItem(model)
-      self.itemLookup.delete(model.id)
-      self.bucket.updateItemIds()
-    },
+    // deleteItem(model) {
+    //   // detach(model)
+    //   self.unSelectItem(model)
+    //   self.itemLookup.delete(model.id)
+    //   self.bucket.updateItemIds()
+    // },
     deleteBucket(model) {
       return self.bucketLookup.delete(model.id)
     },

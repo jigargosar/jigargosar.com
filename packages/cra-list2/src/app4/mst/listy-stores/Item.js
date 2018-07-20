@@ -8,6 +8,7 @@ export const Item = types
     bucket: types.reference(Bucket),
     text: '',
     done: false,
+    deleted: false,
   })
   .views(commonViews)
   .views(views)
@@ -28,7 +29,8 @@ function actions(self) {
     },
 
     onDelete() {
-      self.domain.deleteItem(self)
+      self.deleted = true
+      // self.domain.deleteItem(self)
     },
     onFocus() {
       self.setSelected()
