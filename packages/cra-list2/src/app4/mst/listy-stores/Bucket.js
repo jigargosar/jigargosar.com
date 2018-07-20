@@ -33,13 +33,13 @@ function actions(self) {
       self.domain.deleteBucket(self)
     },
     addItem(values) {
-      return self.domain.addItem([
+      return self.domain.addItem(
         Item.create({
           bucket: self,
           ...values,
           id: modelId(Item.name),
         }),
-      ])
+      )
     },
     onAddItem() {
       return self.addItem()
