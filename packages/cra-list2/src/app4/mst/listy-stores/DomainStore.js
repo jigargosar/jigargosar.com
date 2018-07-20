@@ -2,10 +2,10 @@ import {mValues} from '../../mobx/little-mobx'
 import {Item} from './Item'
 import {modelId} from '../../model/utils'
 import {Bucket} from './Bucket'
-import {types} from 'mobx-state-tree'
+import {setLivelynessChecking, types} from 'mobx-state-tree'
 import {_, idEq, modelsToIds} from '../../little-ramda'
 
-// setLivelynessChecking('error')
+setLivelynessChecking('error')
 
 export const DomainStore = types
   .model('DomainStore', {

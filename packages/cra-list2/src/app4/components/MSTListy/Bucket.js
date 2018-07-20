@@ -7,8 +7,12 @@ import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
 import {oInject} from './utils'
+import {isAlive} from 'mobx-state-tree'
 
 function BucketItem(props) {
+  if (props.item && !isAlive(props.item)) {
+    return null
+  }
   const {itemText, onFocus, isSelected, onDeleteItem} = props
   // const {
   //   text: itemText,
@@ -16,6 +20,7 @@ function BucketItem(props) {
   //   onFocus,
   //   onDelete: onDeleteItem,
   // } = props.item
+
   return (
     <ListPane.Item
       colors={cn({
@@ -44,7 +49,7 @@ BucketItem = inject(({store: {store}}, {itemId}) => {
     isSelected: item && item.isSelected,
     onDeleteItem: item && item.onDelete,
     itemText: item && item.text,
-    // item,
+    item,
   }
 })(
   /*withProps(({store, item}) => {
