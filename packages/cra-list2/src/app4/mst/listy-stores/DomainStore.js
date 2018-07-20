@@ -43,7 +43,7 @@ function views(self) {
 
 function actions(self) {
   return {
-    setItemSelection(item) {
+    setSelectedItem(item) {
       self.nullableSelectedItemId = item.id
     },
     addItem(values) {

@@ -25,7 +25,7 @@ function views(self) {
 function actions(self) {
   return {
     setSelected() {
-      self.domain.setItemSelection(self)
+      self.domain.setSelectedItem(self)
     },
 
     onDelete() {
