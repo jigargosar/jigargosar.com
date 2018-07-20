@@ -6,7 +6,6 @@ import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
-import {oInject} from './utils'
 
 function BucketItem({item}) {
   const {
@@ -67,23 +66,27 @@ function renderBucketAddItem(onAddItem) {
   )
 }
 
-function BucketItems({items}) {
-  return renderKeyedById(BucketItem, 'item', items)
+function BucketItems({bucket}) {
+  return renderKeyedById(BucketItem, 'item', bucket.items)
 }
 
-BucketItems = oInject(({store}, {bucketId}) => {
-  const bucket = store.bucketLookup.get(bucketId)
-  return {
-    itemIds: bucket.itemIds,
-    items: bucket.items,
-  }
-})(BucketItems)
+// function BucketItems({items}) {
+//   return renderKeyedById(BucketItem, 'item', items)
+// }
+//
+// BucketItems = oInject(({store}, {bucketId}) => {
+//   const bucket = store.bucketLookup.get(bucketId)
+//   return {
+//     itemIds: bucket.itemIds,
+//     items: bucket.items,
+//   }
+// })(BucketItems)
 
 function Bucket({bucket, onAddItem, deleteBucket}) {
   return (
     <ListPane>
       {renderBucketHeader(bucket, onAddItem, deleteBucket)}
-      <BucketItems bucketId={bucket.id} />
+      <BucketItems bucket={bucket} />
       {renderBucketAddItem(onAddItem)}
     </ListPane>
   )
