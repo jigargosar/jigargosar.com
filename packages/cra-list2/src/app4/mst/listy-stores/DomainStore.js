@@ -16,6 +16,11 @@ export const DomainStore = types
   .views(views)
   .actions(actions)
 
+function hasRelation(relation) {
+  const [key, value] = _.compose(_.head, _.toPairs)(relation)
+  return item => item[key] === value
+}
+
 function views(self) {
   return {
     get items() {
@@ -25,7 +30,7 @@ function views(self) {
       return _.reject(isDeleted)(self.items)
     },
     getBucketItems(bucket) {
-      return _.filter(_.propEq('bucket', bucket))(self.activeItems)
+      return _.filter(hasRelation({bucket}))(self.activeItems)
     },
     isItemSelected(model) {
       return self.nullableSelectedItem === model
