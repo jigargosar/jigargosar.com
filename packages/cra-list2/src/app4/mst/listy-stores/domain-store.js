@@ -1,63 +1,9 @@
-import {getSnapshot, types} from 'mobx-state-tree'
+import {getSnapshot} from 'mobx-state-tree'
 import {modelId} from '../../model/utils'
-import {mValues} from '../../mobx/little-mobx'
 import {applySnapshot2} from '../little-mst'
-import {_, dotPath, isNotNil, modelsToIds} from '../../little-ramda'
-import {Item} from './Item'
+import {_, dotPath, isNotNil} from '../../little-ramda'
 import {Bucket} from './Bucket'
-
-const DomainStore = types
-  .model('DomainStore', {
-    itemLookup: types.map(Item),
-    bucketLookup: types.map(Bucket),
-    bucket: types.reference(Bucket),
-    selectedItem: types.maybe(types.reference(Item)),
-  })
-  .views(views)
-  .actions(actions)
-
-function views(self) {
-  return {
-    get items() {
-      return mValues(self.itemLookup)
-    },
-    get itemIds() {
-      return modelsToIds(self.items)
-    },
-  }
-}
-
-function actions(self) {
-  return {
-    selectItem(item) {
-      self.selectedItem = item
-      return self.selectedItem
-    },
-    addItem(values) {
-      return self.itemLookup.put(
-        Item.create({
-          bucket: self.bucket,
-          ...values,
-          id: modelId(Item.name),
-        }),
-      )
-    },
-    addBucket(values) {
-      return self.bucketLookup.put(
-        Bucket.create({
-          ...values,
-          id: modelId(Bucket.name),
-        }),
-      )
-    },
-    deleteItem(model) {
-      return self.itemLookup.delete(model.id)
-    },
-    deleteBucket(model) {
-      return self.bucketLookup.delete(model.id)
-    },
-  }
-}
+import {DomainStore} from './DomainStore'
 
 const bucketId = modelId('Bucket')
 const store = DomainStore.create({
