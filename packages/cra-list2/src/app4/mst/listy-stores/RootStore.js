@@ -58,6 +58,18 @@ function views(self) {
   }
 }
 
+function actions(self) {
+  return {
+    addMockData: AddMockDataAction(self),
+    addItem(item) {
+      return self.itemLookup.put(item)
+    },
+    addBucket(values = {}) {
+      return self.bucketLookup.put(createBucket(values))
+    },
+  }
+}
+
 function AddMockDataAction(self) {
   return () => {
     const itemValues = [
@@ -69,18 +81,6 @@ function AddMockDataAction(self) {
 
     const bucket = self.addBucket()
     itemValues.forEach(bucket.addItem)
-  }
-}
-
-function actions(self) {
-  return {
-    addMockData: AddMockDataAction(self),
-    addItem(item) {
-      return self.itemLookup.put(item)
-    },
-    addBucket(values = {}) {
-      return self.bucketLookup.put(createBucket(values))
-    },
   }
 }
 
