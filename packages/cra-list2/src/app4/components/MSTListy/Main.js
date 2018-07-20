@@ -5,7 +5,7 @@ import {cn} from '../utils'
 import {Container} from '../../little-cerebral'
 import {controller} from '../../cerebral/CerebralListyState/controller'
 import {DashboardHeaderTabs, Header} from './Header'
-import {CurrentDashboard} from './Dashboard'
+import {Dashboard} from './Dashboard'
 
 function ListyMain() {
   return (
@@ -14,7 +14,7 @@ function ListyMain() {
         <Header>
           <DashboardHeaderTabs />
         </Header>
-        <CurrentDashboard />
+        <Dashboard />
       </TypographyDefaults>
     </Container>
   )

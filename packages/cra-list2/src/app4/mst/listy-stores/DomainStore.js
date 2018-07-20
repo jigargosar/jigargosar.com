@@ -1,5 +1,4 @@
 import {mValues} from '../../mobx/little-mobx'
-import {modelsToIds} from '../../little-ramda'
 import {Item} from './Item'
 import {modelId} from '../../model/utils'
 import {Bucket} from './Bucket'

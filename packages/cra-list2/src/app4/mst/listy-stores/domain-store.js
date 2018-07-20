@@ -2,7 +2,6 @@ import {getSnapshot} from 'mobx-state-tree'
 import {modelId} from '../../model/utils'
 import {applySnapshot2} from '../little-mst'
 import {_, dotPath, isNotNil} from '../../little-ramda'
-import {Bucket} from './Bucket'
 import {DomainStore} from './DomainStore'
 
 const bucketId = modelId('Bucket')
@@ -34,4 +33,4 @@ if (module.hot) {
   module.hot.dispose(data => (data.snap = getSnapshot(store)))
 }
 
-export default store
+export {store}

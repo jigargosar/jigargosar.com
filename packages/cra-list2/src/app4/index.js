@@ -35,7 +35,7 @@ function render() {
     // const App = require('./components/ImmutableNotes/Main').default
     // const App = require('./components/CerebralNotes/Main').default
     Object.assign(storeBox, {
-      store: require('./mst/listy-stores/domain-store').default,
+      store: require('./mst/listy-stores/domain-store').store,
     })
     const App = require('./components/MSTListy/Main').default
     ReactDOM.render(

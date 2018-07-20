@@ -7,12 +7,6 @@ import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
 
-const oInject = fn =>
-  _.compose(
-    inject(({store: {store}}, props) => fn({store}, props)),
-    observer,
-  )
-
 function BucketItem({item}) {
   return (
     <ListPane.Item
