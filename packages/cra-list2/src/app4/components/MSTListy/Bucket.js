@@ -2,7 +2,7 @@
 import React from 'react'
 import {cn, renderKeyedById} from '../utils'
 import {PlaylistAdd} from '@material-ui/icons'
-import {Btn, Row} from '../ui/tui'
+import {Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {observer} from 'mobx-react'
 
@@ -50,21 +50,6 @@ function renderBucketHeader(bucket) {
   )
 }
 
-function renderBucketAddItem(onAddItem) {
-  return (
-    <ListPane.Item
-      Component={Btn}
-      colors="black-50 hover-black-80 hover-bg-black-10"
-      onClick={onAddItem}
-    >
-      <Row p={2} pr={1} className={cn('f4')}>
-        <PlaylistAdd fontSize={'inherit'} />
-      </Row>
-      <ListPane.ItemText>{`Add Task`}</ListPane.ItemText>
-    </ListPane.Item>
-  )
-}
-
 function BucketItems({bucket}) {
   return renderKeyedById(BucketItem, 'item', bucket.items)
 }
@@ -76,7 +61,6 @@ function Bucket({bucket}) {
     <ListPane>
       {renderBucketHeader(bucket)}
       <BucketItems bucket={bucket} />
-      {renderBucketAddItem(bucket.onAddItem)}
     </ListPane>
   )
 }
