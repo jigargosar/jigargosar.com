@@ -60,26 +60,25 @@ function views(self) {
 
 function actions(self) {
   return {
-    createNewItemsInBucketWithId(itemValues, bucketId) {
-      itemValues.forEach(self.bucketById(bucketId).addItem)
-    },
-    addMockData() {
-      const itemValues = [
-        {text: 'FaDuu ToDOO'},
-        {},
-        {text: 'MoTu ToDOO'},
-        {text: 'MoTu ToDOO'},
-      ]
-
-      const bucket = self.addBucket()
-      itemValues.forEach(bucket.addItem)
-    },
+    addMockData,
     addItem(item) {
       return self.itemLookup.put(item)
     },
     addBucket(values = {}) {
       return self.bucketLookup.put(createBucket(values))
     },
+  }
+
+  function addMockData() {
+    const itemValues = [
+      {text: 'FaDuu ToDOO'},
+      {},
+      {text: 'MoTu ToDOO'},
+      {text: 'MoTu ToDOO'},
+    ]
+
+    const bucket = self.addBucket()
+    itemValues.forEach(bucket.addItem)
   }
 }
 
