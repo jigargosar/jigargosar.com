@@ -52,6 +52,11 @@ function ItemSelectionExtension(self) {
           self.maybeSelectedItem,
         )
       },
+      onSelectPrev() {
+        S.map(i => self.setSelectedItem(i.getPrev()))(
+          self.maybeSelectedItem,
+        )
+      },
     },
   }
 }
