@@ -32,14 +32,16 @@ function views(self) {
     get buckets() {
       return mValues(self.bucketLookup)
     },
+    bucketById(id) {
+      return self.bucketLookup.get(id)
+    },
   }
 }
 
 function actions(self) {
   return {
     createNewItemsInBucketWithId(itemValues, bucketId) {
-      const bucket = self.bucketLookup.get(bucketId)
-      itemValues.forEach(bucket.addItem)
+      itemValues.forEach(self.bucketById(bucketId).addItem)
     },
     addItem(item) {
       return self.itemLookup.put(item)
