@@ -14,7 +14,7 @@ export const Bucket = types
   .views(views)
   .actions(actions)
 
-function getNexSiblingOf(item, list) {
+function getNextSiblingOf(item, list) {
   if (_.isEmpty(list)) {
     return null
   }
@@ -22,8 +22,16 @@ function getNexSiblingOf(item, list) {
   return isIndexOutOfBounds(idx, list) ? null : list[idx]
 }
 
+function getPrevSiblingOf(item, list) {
+  if (_.isEmpty(list)) {
+    return null
+  }
+  const idx = _.indexOf(item)(list) - 1
+  return isIndexOutOfBounds(idx, list) ? null : list[idx]
+}
+
 function maybeGetNexSiblingOf(item, list) {
-  return S.toMaybe(getNexSiblingOf(item, list))
+  return S.toMaybe(getNextSiblingOf(item, list))
 }
 
 function views(self) {
@@ -33,13 +41,10 @@ function views(self) {
     },
     nextSiblingOfItem(item) {
       maybeOr(item)(maybeGetNexSiblingOf(item, self.items))
-      return getNexSiblingOf(item, self.items)
+      return getNextSiblingOf(item, self.items)
     },
     prevSiblingOfItem(item) {
-      const idx = _.indexOf(item)(self.items) - 1
-      return isIndexOutOfBounds(idx, self.items)
-        ? item
-        : self.items[idx]
+      return getPrevSiblingOf(item, self.items)
     },
   }
 }

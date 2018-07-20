@@ -38,6 +38,9 @@ function ItemSelectionExtension(self) {
     },
     actions: {
       setSelectedItem(item) {
+        if (!item) {
+          return
+        }
         self.nullableSelectedItem = item
         if (item && !item.deleted) {
           setFocusAndSelectionOnDOMId(item.id)
