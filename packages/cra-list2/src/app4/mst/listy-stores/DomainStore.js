@@ -30,7 +30,6 @@ function views(self) {
     isItemSelected(model) {
       return self.nullableSelectedItem === model
     },
-
     get buckets() {
       return mValues(self.bucketLookup)
     },
