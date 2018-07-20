@@ -1,5 +1,4 @@
 // import {getSnapshot} from 'mobx-state-tree'
-import {modelId} from '../../model/utils'
 import {applySnapshot2} from '../little-mst'
 import {dotPath, whenNotNil} from '../../little-ramda'
 import {RootStore} from './RootStore'
@@ -7,10 +6,7 @@ import {getSnapshot, setLivelynessChecking} from 'mobx-state-tree'
 
 setLivelynessChecking('error')
 
-const bucketId = modelId('Bucket')
-const rootStore = RootStore.create({
-  bucketLookup: {[bucketId]: {id: bucketId}},
-})
+const rootStore = RootStore.create({})
 
 function logStoreSnapshot(store) {
   console.debug(`getSnapshot(store)`, getSnapshot(store))
@@ -19,15 +15,8 @@ function logStoreSnapshot(store) {
 logStoreSnapshot(rootStore)
 
 if (module.hot) {
-  rootStore.createNewItemsInBucketWithId(
-    [
-      {text: 'FaDuu ToDOO'},
-      {},
-      {text: 'MoTu ToDOO'},
-      {text: 'MoTu ToDOO'},
-    ],
-    bucketId,
-  )
+  rootStore.addMockData()
+
   logStoreSnapshot(rootStore)
 
   const snap = dotPath('hot.data.snap')(module)
