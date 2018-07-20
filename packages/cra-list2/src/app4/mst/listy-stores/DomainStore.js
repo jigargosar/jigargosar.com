@@ -6,14 +6,38 @@ import {setLivelynessChecking, types} from 'mobx-state-tree'
 
 setLivelynessChecking('error')
 
+const selectionProps = {
+  nullableSelectedItem: types.maybeNull(types.reference(Item)),
+}
+function selectionExtension(self) {
+  return {
+    views: {
+      isItemSelected(model) {
+        return self.nullableSelectedItem === model
+      },
+    },
+    actions: {
+      setSelectedItem(item) {
+        self.nullableSelectedItem = item
+      },
+      unSelectItem(model) {
+        if (self.nullableSelectedItem === model.id) {
+          self.nullableSelectedItem = null
+        }
+      },
+    },
+  }
+}
+
 export const DomainStore = types
   .model('DomainStore', {
     itemLookup: types.map(Item),
     bucketLookup: types.map(Bucket),
-    nullableSelectedItem: types.maybeNull(types.reference(Item)),
   })
   .views(views)
   .actions(actions)
+  .props(selectionProps)
+  .extend(selectionExtension)
 
 function views(self) {
   return {
@@ -25,9 +49,6 @@ function views(self) {
     },
     getBucketItems(bucket) {
       return selectWhere({bucket})(self.activeItems)
-    },
-    isItemSelected(model) {
-      return self.nullableSelectedItem === model
     },
     get buckets() {
       return mValues(self.bucketLookup)
@@ -46,9 +67,6 @@ function actions(self) {
     addItem(item) {
       return self.itemLookup.put(item)
     },
-    setSelectedItem(item) {
-      self.nullableSelectedItem = item
-    },
     addBucket(values) {
       return self.bucketLookup.put(
         Bucket.create({
@@ -56,11 +74,6 @@ function actions(self) {
           id: modelId(Bucket.name),
         }),
       )
-    },
-    unSelectItem(model) {
-      if (self.nullableSelectedItem === model.id) {
-        self.nullableSelectedItem = null
-      }
     },
   }
 }
