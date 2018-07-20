@@ -2,6 +2,7 @@ import {types} from 'mobx-state-tree'
 import {commonViews} from './Views'
 import {createItem} from './Item'
 import {modelId} from '../../model/utils'
+import {_, isIndexOutOfBounds} from '../../little-ramda'
 
 export const Bucket = types
   .model('Bucket', {
@@ -17,6 +18,12 @@ function views(self) {
   return {
     get items() {
       return self.root.getBucketItems(self)
+    },
+    nextSiblingOfItem(item) {
+      const idx = _.indexOf(item)(self.items) + 1
+      return isIndexOutOfBounds(idx, self.item)
+        ? item
+        : self.items[idx]
     },
   }
 }

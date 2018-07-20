@@ -23,6 +23,10 @@ function views(self) {
     get isSelected() {
       return self.root.isItemSelected(self)
     },
+
+    getNext() {
+      self.bucket.nextSiblingOfItem(self)
+    },
   }
 }
 
