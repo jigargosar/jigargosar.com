@@ -88,8 +88,10 @@ function BucketItems({itemIds}) {
 }
 
 BucketItems = oInject(({store}, {bucketId}) => {
+  const bucket = store.bucketLookup.get(bucketId)
   return {
-    itemIds: store.bucketLookup.get(bucketId).itemIds,
+    itemIds: bucket.itemIds,
+    items: bucket.items,
   }
 })(BucketItems)
 
