@@ -2,7 +2,6 @@
 import React from 'react'
 import {cn, renderKeyedById} from '../utils'
 import {PlaylistAdd} from '@material-ui/icons'
-import {Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {observer} from 'mobx-react'
 
@@ -14,9 +13,6 @@ function BucketItem({item}) {
       kind={isSelected ? 'selected' : 'button'}
       onFocus={onFocus}
     >
-      <Row p={2}>
-        <input type={'checkbox'} tabIndex={-1} />
-      </Row>
       <ListPane.ItemText className={cn('code')}>
         {itemText || 'I am a hard core TODo'}
       </ListPane.ItemText>
