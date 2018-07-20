@@ -10,25 +10,27 @@ const ItemSelection = types
   .model('ItemSelection', {
     nullableSelectedItem: types.maybeNull(types.reference(Item)),
   })
-  .extend(function(self) {
-    return {
-      views: {
-        isItemSelected(model) {
-          return self.nullableSelectedItem === model
-        },
+  .extend(ItemSelectionExtension)
+
+function ItemSelectionExtension(self) {
+  return {
+    views: {
+      isItemSelected(model) {
+        return self.nullableSelectedItem === model
       },
-      actions: {
-        setSelectedItem(item) {
-          self.nullableSelectedItem = item
-        },
-        unSelectItem(model) {
-          if (self.nullableSelectedItem === model.id) {
-            self.nullableSelectedItem = null
-          }
-        },
+    },
+    actions: {
+      setSelectedItem(item) {
+        self.nullableSelectedItem = item
       },
-    }
-  })
+      unSelectItem(model) {
+        if (self.nullableSelectedItem === model.id) {
+          self.nullableSelectedItem = null
+        }
+      },
+    },
+  }
+}
 
 const DomainStore = types
   .model('DomainStore', {
