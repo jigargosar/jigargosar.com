@@ -1,7 +1,7 @@
 import {mValues} from '../../mobx/little-mobx'
 import {Item} from './Item'
-import {modelId, rejectDeleted, selectWhere} from '../../model/utils'
-import {Bucket} from './Bucket'
+import {rejectDeleted, selectWhere} from '../../model/utils'
+import {Bucket, createBucket} from './Bucket'
 import {types} from 'mobx-state-tree'
 
 const ItemSelection = types
@@ -78,12 +78,7 @@ function actions(self) {
       return self.itemLookup.put(item)
     },
     addBucket(values = {}) {
-      return self.bucketLookup.put(
-        Bucket.create({
-          ...values,
-          id: modelId(Bucket.name),
-        }),
-      )
+      return self.bucketLookup.put(createBucket(values))
     },
   }
 }
