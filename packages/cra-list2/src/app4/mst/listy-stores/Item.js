@@ -1,4 +1,4 @@
-import {getRoot, types} from 'mobx-state-tree'
+import {types} from 'mobx-state-tree'
 import {Bucket} from './Bucket'
 import {commonViews} from './Views'
 
