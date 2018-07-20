@@ -6,27 +6,35 @@ import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
+import {oInject} from './utils'
 
-function BucketItem({item}) {
+function BucketItem({itemText, onFocus, isSelected, onDeleteItem}) {
   return (
     <ListPane.Item
       colors={cn({
-        'black bg-black-10': item.isSelected,
+        'black bg-black-10': isSelected,
       })}
-      onFocus={item.select}
+      onFocus={onFocus}
     >
       <Row p={2}>
         <input type={'checkbox'} tabIndex={-1} />
       </Row>
       <ListPane.ItemText className={cn('code')}>
-        {item.text || 'I am a hard core TODo'}
+        {itemText || 'I am a hard core TODo'}
       </ListPane.ItemText>
-      {renderDeleteIcon(item.delete)}
+      {renderDeleteIcon(onDeleteItem)}
     </ListPane.Item>
   )
 }
 
-BucketItem = observer(BucketItem)
+BucketItem = oInject(({store}, {item}) => {
+  return {
+    onFocus: () => item.select(),
+    isSelected: item.isSelected,
+    onDeleteItem: () => store.deleteItem(item),
+    itemText: item.text,
+  }
+})(BucketItem)
 
 function renderBucketHeader(bucket, onAddItem, deleteBucket) {
   return (
