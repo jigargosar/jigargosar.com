@@ -43,17 +43,23 @@ function views(self) {
     get items() {
       return mValues(self.itemLookup)
     },
-    get activeItems() {
-      return rejectDeleted(self.items)
-    },
-    getBucketItems(bucket) {
-      return selectWhere({bucket})(self.activeItems)
-    },
     get buckets() {
       return mValues(self.bucketLookup)
     },
+    get activeItems() {
+      return rejectDeleted(self.items)
+    },
+    get activeBuckets() {
+      return rejectDeleted(self.buckets)
+    },
     bucketById(id) {
       return self.bucketLookup.get(id)
+    },
+    itemById(id) {
+      return self.itemLookup.get(id)
+    },
+    getBucketItems(bucket) {
+      return selectWhere({bucket})(self.activeItems)
     },
   }
 }
