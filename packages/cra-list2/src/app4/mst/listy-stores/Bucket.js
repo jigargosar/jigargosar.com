@@ -19,9 +19,6 @@ function volatiles(self) {
 
 function views(self) {
   return {
-    get itemIds() {
-      return self.domain.getBucketItemIds(self.id)
-    },
     get items() {
       return self.domain.getBucketItems(self)
     },
@@ -30,9 +27,6 @@ function views(self) {
 
 function actions(self) {
   return {
-    updateItemIds() {
-      // self.itemIds = self.domain.getBucketItems(self.id)
-    },
     delete() {
       self.domain.deleteBucket(self)
     },
