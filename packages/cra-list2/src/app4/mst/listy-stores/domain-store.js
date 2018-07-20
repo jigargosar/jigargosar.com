@@ -2,11 +2,11 @@
 import {modelId} from '../../model/utils'
 import {applySnapshot2} from '../little-mst'
 import {dotPath, whenNotNil} from '../../little-ramda'
-import {DomainStore} from './DomainStore'
+import {RootStore} from './RootStore'
 import {getSnapshot} from 'mobx-state-tree'
 
 const bucketId = modelId('Bucket')
-const domainStore = DomainStore.create({
+const domainStore = RootStore.create({
   bucketLookup: {[bucketId]: {id: bucketId}},
   bucket: bucketId,
 })

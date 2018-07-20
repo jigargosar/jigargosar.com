@@ -1,10 +1,10 @@
 import {getParentOfType} from 'mobx-state-tree'
-import {DomainStore} from './DomainStore'
+import {RootStore} from './RootStore'
 
 export function commonViews(self) {
   return {
     get domain() {
-      return getParentOfType(self, DomainStore)
+      return getParentOfType(self, RootStore)
     },
   }
 }
