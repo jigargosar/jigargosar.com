@@ -4,7 +4,7 @@ import {rejectDeleted, selectWhere} from '../../model/utils'
 import {Bucket, createBucket} from './Bucket'
 import {types} from 'mobx-state-tree'
 import {commonViews} from './Views'
-import {_, S} from '../../little-ramda'
+import {S} from '../../little-ramda'
 
 const ItemSelection = types
   .model('ItemSelection', {
@@ -45,7 +45,7 @@ function ItemSelectionExtension(self) {
         }
       },
       onDeleteSelected() {
-        S.map(_.invoke(0, 'delete'))(self.maybeSelectedItem)
+        S.map(i => i.onDelete())(self.maybeSelectedItem)
       },
     },
   }
