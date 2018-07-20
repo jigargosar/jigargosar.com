@@ -43,17 +43,15 @@ function views(self) {
 
 function actions(self) {
   return {
+    addItemValuesToBucketId(itemValues, bucketId) {
+      const bucket = self.bucketLookup.get(bucketId)
+      itemValues.forEach(bucket.addItem)
+    },
+    addItem(item) {
+      self.itemLookup.put(item)
+    },
     setSelectedItem(item) {
       self.nullableSelectedItemId = item.id
-    },
-    addItem(values) {
-      return self.itemLookup.put(
-        Item.create({
-          bucket: self.bucket,
-          ...values,
-          id: modelId(Item.name),
-        }),
-      )
     },
     addBucket(values) {
       return self.bucketLookup.put(

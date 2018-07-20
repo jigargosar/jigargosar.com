@@ -18,13 +18,15 @@ function logStoreSnapshot() {
 logStoreSnapshot()
 
 if (module.hot) {
-  domainStore.addItem()
-  domainStore.addItem({text: 'MoTu ToDOO'})
-  // domainStore.deleteItem(domainStore.addItem())
-  // domainStore.deleteItem(domainStore.addItem())
-  // domainStore.deleteItem(domainStore.addItem())
-  // domainStore.deleteItem(domainStore.addItem())
-  domainStore.addItem({text: 'FaDuu ToDOO'})
+  domainStore.addItemValuesToBucketId(
+    [
+      {text: 'FaDuu ToDOO'},
+      {},
+      {text: 'MoTu ToDOO'},
+      {text: 'MoTu ToDOO'},
+    ],
+    bucketId,
+  )
   logStoreSnapshot()
   const snap = dotPath('hot.data.snap')(module)
   whenNotNil(applySnapshot2(domainStore))(snap)
