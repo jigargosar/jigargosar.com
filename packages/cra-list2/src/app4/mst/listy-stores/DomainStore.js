@@ -3,7 +3,7 @@ import {Item} from './Item'
 import {modelId} from '../../model/utils'
 import {Bucket} from './Bucket'
 import {types} from 'mobx-state-tree'
-import {_, idEq} from '../../little-ramda'
+import {_, idEq, modelsToIds} from '../../little-ramda'
 
 // setLivelynessChecking('error')
 
@@ -26,10 +26,11 @@ function views(self) {
       // return _.reject(_.prop('deleted'))(self.items)
       return self.items
     },
-    getBucketItems(bucket) {
-      return self.activeItems.filter(
-        _.pathEq(['bucket', 'id'])(bucket.id),
-      )
+    getBucketItems(bucketId) {
+      return _.compose(
+        modelsToIds,
+        _.filter(_.pathEq(['bucket', 'id'], bucketId)),
+      )(self.activeItems)
     },
     isItemSelected(model) {
       return idEq(self.nullableSelectedItemId)(model)
@@ -43,7 +44,7 @@ function views(self) {
 
 function actions(self) {
   return {
-    selectItem(item) {
+    setItemSelection(item) {
       self.nullableSelectedItemId = item.id
     },
     addItem(values) {
@@ -63,12 +64,15 @@ function actions(self) {
         }),
       )
     },
-    deleteItem(model) {
-      // detach(model)
+    unSelectItem(model) {
       if (self.nullableSelectedItem === model.id) {
         self.nullableSelectedItem = null
       }
-      return self.itemLookup.delete(model.id)
+    },
+    deleteItem(model) {
+      // detach(model)
+      self.unSelectItem(model)
+      self.itemLookup.delete(model.id)
     },
     deleteBucket(model) {
       return self.bucketLookup.delete(model.id)

@@ -14,14 +14,7 @@ export const Item = types
   .actions(actions)
 
 function actions(self) {
-  return {
-    delete() {
-      self.domain.deleteItem(self)
-    },
-    select() {
-      self.domain.selectItem(self)
-    },
-  }
+  return {}
 }
 
 function views(self) {

@@ -11,11 +11,7 @@ export const Bucket = types
   .actions(actions)
 
 function views(self) {
-  return {
-    get items() {
-      return self.domain.getBucketItems(self)
-    },
-  }
+  return {}
 }
 
 function actions(self) {

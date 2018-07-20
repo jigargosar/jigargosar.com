@@ -1,6 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
-import {cn, renderKeyedById} from '../utils'
+import {cn} from '../utils'
 import {_} from '../../little-ramda'
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
@@ -27,10 +27,14 @@ function BucketItem({itemText, onFocus, isSelected, onDeleteItem}) {
   )
 }
 
-BucketItem = oInject(({store}, {item}) => {
+BucketItem = oInject(({store}, {itemId}) => {
+  const item = store.itemLookup.get(itemId)
+  if (!item) {
+    debugger
+  }
   return {
-    onFocus: () => item.select(),
-    isSelected: item.isSelected,
+    onFocus: () => store.setItemSelection(item),
+    isSelected: store.isItemSelected(item),
     onDeleteItem: () => store.deleteItem(item),
     itemText: item.text,
   }
@@ -67,17 +71,21 @@ function renderBucketAddItem(onAddItem) {
   )
 }
 
-function BucketItems({bucket: {items}}) {
-  return renderKeyedById(BucketItem, 'item', items)
+function BucketItems({itemIds}) {
+  return _.map(id => <BucketItem key={id} itemId={id} />)(itemIds)
 }
 
-BucketItems = observer(BucketItems)
+BucketItems = oInject(({store}, {bucketId}) => {
+  return {
+    itemIds: store.getBucketItems(bucketId),
+  }
+})(BucketItems)
 
 function Bucket({bucket, onAddItem, deleteBucket}) {
   return (
     <ListPane>
       {renderBucketHeader(bucket, onAddItem, deleteBucket)}
-      <BucketItems bucket={bucket} />
+      <BucketItems bucketId={bucket.id} />
       {renderBucketAddItem(onAddItem)}
     </ListPane>
   )
