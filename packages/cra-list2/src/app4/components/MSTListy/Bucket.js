@@ -34,7 +34,7 @@ function BucketItem(props) {
   )
 }
 
-BucketItem = oInject(({store}, {itemId}) => {
+BucketItem = inject(({store: {store}}, {itemId}) => {
   const item = store.itemLookup.get(itemId)
   if (!item) {
     debugger
