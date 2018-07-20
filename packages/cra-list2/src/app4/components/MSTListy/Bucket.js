@@ -1,6 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
-import {cn} from '../utils'
+import {cn, renderKeyedById} from '../utils'
 import {_} from '../../little-ramda'
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
@@ -38,7 +38,10 @@ function BucketItem(props) {
   )
 }
 
-BucketItem = oInject(({store}, {itemId}) => {
+BucketItem = oInject(({store}, {itemId, item: item_}) => {
+  if (item_) {
+    return item_
+  }
   const item = store.itemLookup.get(itemId)
   if (!item) {
     debugger
@@ -83,8 +86,12 @@ function renderBucketAddItem(onAddItem) {
   )
 }
 
-function BucketItems({itemIds}) {
-  return _.map(id => <BucketItem key={id} itemId={id} />)(itemIds)
+// function BucketItems({itemIds}) {
+//   return _.map(id => <BucketItem key={id} itemId={id} />)(itemIds)
+// }
+
+function BucketItems({items}) {
+  return renderKeyedById(BucketItem, 'item', items)
 }
 
 BucketItems = oInject(({store}, {bucketId}) => {
