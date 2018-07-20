@@ -41,8 +41,6 @@ const DomainStore = types
   })
   .views(views)
   .actions(actions)
-  .props(ItemSelection.props)
-  .extend(ItemSelection.extend)
 
 function views(self) {
   return {
