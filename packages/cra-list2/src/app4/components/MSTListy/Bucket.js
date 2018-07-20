@@ -36,7 +36,11 @@ BucketItem = observer(BucketItem)
 
 function renderBucketHeader(bucket) {
   return (
-    <ListPane.Item className={cn('f4 lh-copy')}>
+    <ListPane.Item
+      kind={'header'}
+      tabIndex={null}
+      className={cn('f4 lh-copy')}
+    >
       <ListPane.ItemText className={cn('f5', 'flex-auto')}>
         {bucket.name || 'I am a Bucket Short and Stout'}
       </ListPane.ItemText>

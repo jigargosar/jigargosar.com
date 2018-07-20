@@ -1,9 +1,9 @@
 import {Box, Btn, Row, withClassNames} from '../ui/tui'
 import {cn} from '../utils'
 import {_} from '../../little-ramda'
-import * as rc from 'recompose'
 import React from 'react'
 import {Delete} from '@material-ui/icons'
+import {defaultProps, mapProps} from '../recompose-utils'
 
 export const ListPane = withClassNames(
   cn(
@@ -14,18 +14,23 @@ export const ListPane = withClassNames(
   ),
 )(Box)
 
+const kindCn = {
+  button: ['link', 'black-80 hover-black hover-bg-black-10'],
+  header: '',
+}
 const ListPaneItem = _.compose(
-  rc.defaultProps({
+  defaultProps({
     tabIndex: 0,
-    colors: 'black-80 hover-black hover-bg-black-10',
+    kind: 'button',
   }),
-  rc.withProps(({className, colors}) => ({
-    className: cn('w-100 ph2 link', colors, className),
+  mapProps(({className, kind, ...other}) => ({
+    className: cn('w-100 ph2', kindCn[kind], className),
+    ...other,
   })),
 )(Row)
 
 const ListPaneItemText = _.compose(
-  rc.defaultProps({
+  defaultProps({
     pv: 2,
     ph: 2,
   }),

@@ -10,6 +10,8 @@ export {
   componentFromProp,
   defaultProps,
   setPropTypes,
+  mapProps,
+  renderComponent,
   withProps,
   withStateHandlers,
   withState,
