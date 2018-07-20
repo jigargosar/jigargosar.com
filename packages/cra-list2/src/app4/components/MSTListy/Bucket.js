@@ -8,17 +8,13 @@ import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
 import {oInject} from './utils'
 
-function BucketItem(props) {
-  // if (props.item && !isAlive(props.item)) {
-  //   return null
-  // }
-  // const {itemText, onFocus, isSelected, onDeleteItem} = props
+function BucketItem({item}) {
   const {
     text: itemText,
     isSelected,
     onFocus,
     onDelete: onDeleteItem,
-  } = props.item
+  } = item
 
   return (
     <ListPane.Item
@@ -38,22 +34,7 @@ function BucketItem(props) {
   )
 }
 
-BucketItem = oInject(({store}, {itemId, item: item_}) => {
-  if (item_) {
-    return item_
-  }
-  const item = store.itemLookup.get(itemId)
-  if (!item) {
-    debugger
-  }
-  return {
-    // onFocus: item && item.onFocus,
-    // isSelected: item && item.isSelected,
-    // onDeleteItem: item && item.onDelete,
-    // itemText: item && item.text,
-    item,
-  }
-})(BucketItem)
+BucketItem = observer(BucketItem)
 
 function renderBucketHeader(bucket, onAddItem, deleteBucket) {
   return (
