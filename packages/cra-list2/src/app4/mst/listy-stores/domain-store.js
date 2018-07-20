@@ -18,7 +18,7 @@ function logStoreSnapshot() {
 logStoreSnapshot()
 
 if (module.hot) {
-  domainStore.addItemValuesToBucketId(
+  domainStore.createNewItemsInBucketWithId(
     [
       {text: 'FaDuu ToDOO'},
       {},

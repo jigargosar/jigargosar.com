@@ -37,7 +37,7 @@ function views(self) {
 
 function actions(self) {
   return {
-    addItemValuesToBucketId(itemValues, bucketId) {
+    createNewItemsInBucketWithId(itemValues, bucketId) {
       const bucket = self.bucketLookup.get(bucketId)
       itemValues.forEach(bucket.addItem)
     },
