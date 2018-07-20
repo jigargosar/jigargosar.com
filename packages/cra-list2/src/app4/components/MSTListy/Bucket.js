@@ -72,18 +72,6 @@ function BucketItems({bucket}) {
 
 BucketItems = observer(BucketItems)
 
-// function BucketItems({items}) {
-//   return renderKeyedById(BucketItem, 'item', items)
-// }
-//
-// BucketItems = oInject(({store}, {bucketId}) => {
-//   const bucket = store.bucketLookup.get(bucketId)
-//   return {
-//     itemIds: bucket.itemIds,
-//     items: bucket.items,
-//   }
-// })(BucketItems)
-
 function Bucket({bucket, onAddItem, deleteBucket}) {
   return (
     <ListPane>
