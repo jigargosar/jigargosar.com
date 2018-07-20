@@ -1,9 +1,8 @@
 import {mValues} from '../../mobx/little-mobx'
 import {Item} from './Item'
-import {modelId, rejectDeleted} from '../../model/utils'
+import {modelId, rejectDeleted, selectWhere} from '../../model/utils'
 import {Bucket} from './Bucket'
 import {setLivelynessChecking, types} from 'mobx-state-tree'
-import {_} from '../../little-ramda'
 
 setLivelynessChecking('error')
 
@@ -16,12 +15,6 @@ export const DomainStore = types
   .views(views)
   .actions(actions)
 
-function keysEqValues(shape) {
-  return _.allPass(
-    _.compose(_.map(_.flip(_.propEq)), _.toPairs)(shape),
-  )
-}
-
 function views(self) {
   return {
     get items() {
@@ -31,7 +24,7 @@ function views(self) {
       return rejectDeleted(self.items)
     },
     getBucketItems(bucket) {
-      return _.filter(keysEqValues({bucket}))(self.activeItems)
+      return selectWhere({bucket})(self.activeItems)
     },
     isItemSelected(model) {
       return self.nullableSelectedItem === model
