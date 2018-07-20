@@ -32,7 +32,8 @@ function views(self) {
       return self.root.getBucketItems(self)
     },
     nextSiblingOfItem(item) {
-      return maybeOr(item)(maybeGetNexSiblingOf(item, self.items))
+      maybeOr(item)(maybeGetNexSiblingOf(item, self.items))
+      return getNexSiblingOf(item, self.items)
     },
     prevSiblingOfItem(item) {
       const idx = _.indexOf(item)(self.items) - 1
