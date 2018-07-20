@@ -11,6 +11,19 @@ const ItemSelection = types
   })
   .extend(ItemSelectionExtension)
 
+export const DomainStore = types
+  .model('DomainStore', {
+    itemLookup: types.map(Item),
+    bucketLookup: types.map(Bucket),
+  })
+  .views(views)
+  .actions(actions)
+
+export const RootStore = types
+  .compose(DomainStore, ItemSelection)
+  .views(commonViews)
+  .named('RootStore')
+
 function ItemSelectionExtension(self) {
   return {
     views: {
@@ -30,14 +43,6 @@ function ItemSelectionExtension(self) {
     },
   }
 }
-
-export const DomainStore = types
-  .model('DomainStore', {
-    itemLookup: types.map(Item),
-    bucketLookup: types.map(Bucket),
-  })
-  .views(views)
-  .actions(actions)
 
 function views(self) {
   return {
@@ -93,8 +98,3 @@ function AddMockDataAction(self) {
     itemValues.forEach(bucket.addItem)
   }
 }
-
-export const RootStore = types
-  .compose(DomainStore, ItemSelection)
-  .views(commonViews)
-  .named('RootStore')
