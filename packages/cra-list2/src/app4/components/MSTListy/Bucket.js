@@ -7,9 +7,15 @@ import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
 import {oInject} from './utils'
-import {withProps} from '../recompose-utils'
 
-function BucketItem({itemText, onFocus, isSelected, onDeleteItem}) {
+function BucketItem(props) {
+  const {itemText, onFocus, isSelected, onDeleteItem} = props
+  // const {
+  //   text: itemText,
+  //   isSelected,
+  //   onFocus,
+  //   onDelete: onDeleteItem,
+  // } = props.item
   return (
     <ListPane.Item
       colors={cn({
@@ -34,18 +40,21 @@ BucketItem = oInject(({store}, {itemId}) => {
     debugger
   }
   return {
-    item,
-    store,
+    onFocus: item && item.onFocus,
+    isSelected: item && item.isSelected,
+    onDeleteItem: item && item.onDelete,
+    itemText: item && item.text,
+    // item,
   }
 })(
-  withProps(({store, item}) => {
+  /*withProps(({store, item}) => {
     return {
       onFocus: () => store.setItemSelection(item),
       isSelected: item && item.isSelected,
       onDeleteItem: () => store.deleteItem(item),
       itemText: item.text,
     }
-  })(BucketItem),
+  })*/ BucketItem,
 )
 
 function renderBucketHeader(bucket, onAddItem, deleteBucket) {

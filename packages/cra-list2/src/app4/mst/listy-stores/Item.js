@@ -13,14 +13,25 @@ export const Item = types
   .views(views)
   .actions(actions)
 
-function actions(self) {
-  return {}
-}
-
 function views(self) {
   return {
     get isSelected() {
       return self.domain.isItemSelected(self)
+    },
+  }
+}
+
+function actions(self) {
+  return {
+    setSelected() {
+      self.domain.setItemSelection(self)
+    },
+
+    onDelete() {
+      self.domain.deleteItem(self)
+    },
+    onFocus() {
+      self.setSelected()
     },
   }
 }
