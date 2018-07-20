@@ -58,18 +58,8 @@ function views(self) {
   }
 }
 
-function actions(self) {
-  return {
-    addMockData,
-    addItem(item) {
-      return self.itemLookup.put(item)
-    },
-    addBucket(values = {}) {
-      return self.bucketLookup.put(createBucket(values))
-    },
-  }
-
-  function addMockData() {
+function AddMockDataAction(self) {
+  return () => {
     const itemValues = [
       {text: 'FaDuu ToDOO'},
       {},
@@ -79,6 +69,18 @@ function actions(self) {
 
     const bucket = self.addBucket()
     itemValues.forEach(bucket.addItem)
+  }
+}
+
+function actions(self) {
+  return {
+    addMockData: AddMockDataAction(self),
+    addItem(item) {
+      return self.itemLookup.put(item)
+    },
+    addBucket(values = {}) {
+      return self.bucketLookup.put(createBucket(values))
+    },
   }
 }
 
