@@ -70,10 +70,10 @@ function actions(self) {
     addItem(item) {
       return self.itemLookup.put(item)
     },
-    addBucket(values = {}) {
-      return self.bucketLookup.put(createBucket(values))
+    _addBucket(bucket) {
+      return self.bucketLookup.put(bucket)
     },
-    _addBucket(values) {
+    addBucket(values = {}) {
       return self.bucketLookup.put(createBucket(values))
     },
   }
