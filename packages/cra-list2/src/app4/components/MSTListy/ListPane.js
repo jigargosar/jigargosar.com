@@ -16,6 +16,7 @@ export const ListPane = withClassNames(
 
 const kindCn = {
   button: ['link', 'black-80 hover-black hover-bg-black-10'],
+  selected: ['link', 'black bg-black-10'],
   header: '',
 }
 const ListPaneItem = _.compose(

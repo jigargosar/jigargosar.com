@@ -16,9 +16,7 @@ function BucketItem({item}) {
 
   return (
     <ListPane.Item
-      colors={cn({
-        'black bg-black-10': isSelected,
-      })}
+      kind={isSelected ? 'selected' : 'button'}
       onFocus={onFocus}
     >
       <Row p={2}>
