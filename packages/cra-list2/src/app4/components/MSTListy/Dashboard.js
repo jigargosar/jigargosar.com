@@ -1,21 +1,20 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {cn, renderKeyedById} from '../utils'
-import {_} from '../../little-ramda'
 import {Btn} from '../ui/tui'
 import {ListPane} from './ListPane'
 import {Bucket} from './Bucket'
-import {inject, observer} from 'mobx-react'
+import {observer} from 'mobx-react'
 
-function Dashboard({buckets, addBucket}) {
+function Dashboard({dashboard}) {
   return (
     <div className={cn('flex flex-wrap')}>
-      {renderKeyedById(Bucket, 'bucket', buckets)}
+      {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
       <ListPane>
         <ListPane.Item
           Component={Btn}
           colors={'black-50 hover-black-80 hover-bg-black-10'}
-          onClick={addBucket}
+          onClick={dashboard.onAddBucket}
         >
           <ListPane.ItemText>{`Add List`}</ListPane.ItemText>
         </ListPane.Item>
@@ -24,12 +23,6 @@ function Dashboard({buckets, addBucket}) {
   )
 }
 
-Dashboard = _.compose(
-  inject(({store: {store}}) => ({
-    buckets: store.buckets,
-    addBucket: () => store.addBucket(),
-  })),
-  observer,
-)(Dashboard)
+Dashboard = observer(Dashboard)
 
 export {Dashboard}

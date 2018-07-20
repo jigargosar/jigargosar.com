@@ -3,14 +3,15 @@ import React from 'react'
 import {TypographyDefaults} from '../ui'
 import {cn} from '../utils'
 import {Dashboard} from './Dashboard'
-import {observer} from 'mobx-react'
+import {oInject} from './utils'
+import {_} from '../../little-ramda'
 
-function ListyMain() {
+function ListyMain({store}) {
   return (
     <TypographyDefaults className={cn('mb4')}>
-      <Dashboard />
+      <Dashboard dashboard={store} />
     </TypographyDefaults>
   )
 }
 
-export default observer(ListyMain)
+export default oInject(_.identity)(ListyMain)
