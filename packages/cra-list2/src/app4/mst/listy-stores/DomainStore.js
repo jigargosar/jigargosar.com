@@ -20,8 +20,9 @@ function views(self) {
     get items() {
       return mValues(self.itemLookup)
     },
-    get itemIds() {
-      return modelsToIds(self.items)
+
+    get buckets() {
+      return mValues(self.bucketLookup)
     },
   }
 }
