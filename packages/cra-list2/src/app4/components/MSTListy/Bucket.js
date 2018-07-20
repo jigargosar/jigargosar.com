@@ -1,11 +1,10 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {cn, renderKeyedById} from '../utils'
-import {_} from '../../little-ramda'
 import {PlaylistAdd} from '@material-ui/icons'
 import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
-import {inject, observer} from 'mobx-react'
+import {observer} from 'mobx-react'
 
 function BucketItem({item}) {
   const {
@@ -35,7 +34,7 @@ function BucketItem({item}) {
 
 BucketItem = observer(BucketItem)
 
-function renderBucketHeader(bucket, deleteBucket) {
+function renderBucketHeader(bucket) {
   return (
     <ListPane.Item className={cn('f4 lh-copy')}>
       <ListPane.ItemText className={cn('f5', 'flex-auto')}>
@@ -46,7 +45,7 @@ function renderBucketHeader(bucket, deleteBucket) {
         Icon={PlaylistAdd}
       />
       {/*<ListPane.ItemAction Icon={Settings} />*/}
-      {renderDeleteIcon(() => deleteBucket({bucketId: bucket.id}))}
+      {renderDeleteIcon(bucket.onDelete)}
     </ListPane.Item>
   )
 }
@@ -72,22 +71,16 @@ function BucketItems({bucket}) {
 
 BucketItems = observer(BucketItems)
 
-function Bucket({bucket, deleteBucket}) {
+function Bucket({bucket}) {
   return (
     <ListPane>
-      {renderBucketHeader(bucket, deleteBucket)}
+      {renderBucketHeader(bucket)}
       <BucketItems bucket={bucket} />
       {renderBucketAddItem(bucket.onAddItem)}
     </ListPane>
   )
 }
 
-Bucket = _.compose(
-  inject(({store: {store}}) => ({
-    bucket: store.bucket,
-    deleteBucket: _.F,
-  })),
-  observer,
-)(Bucket)
+Bucket = observer(Bucket)
 
 export {Bucket}

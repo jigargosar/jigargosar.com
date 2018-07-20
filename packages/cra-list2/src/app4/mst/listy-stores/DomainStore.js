@@ -11,7 +11,6 @@ export const DomainStore = types
   .model('DomainStore', {
     itemLookup: types.map(Item),
     bucketLookup: types.map(Bucket),
-    bucket: types.reference(Bucket),
     nullableSelectedItemId: types.maybeNull(types.string),
   })
   .views(views)

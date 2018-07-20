@@ -22,7 +22,7 @@ function views(self) {
 
 function actions(self) {
   return {
-    delete() {
+    onDelete() {
       self.deleted = true
     },
     addItem(values) {
