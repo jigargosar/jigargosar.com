@@ -44,7 +44,7 @@ function actions(self) {
       itemValues.forEach(bucket.addItem)
     },
     addItem(item) {
-      self.itemLookup.put(item)
+      return self.itemLookup.put(item)
     },
     setSelectedItem(item) {
       self.nullableSelectedItem = item

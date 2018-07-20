@@ -29,7 +29,7 @@ function actions(self) {
       return self.domain.addItem(createItem(values, self))
     },
     onAddItem() {
-      return self.addItem()
+      return self.addItem().setSelected()
     },
   }
 }
