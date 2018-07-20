@@ -1,6 +1,6 @@
 import {mValues} from '../../mobx/little-mobx'
 import {Item} from './Item'
-import {isDeleted, modelId} from '../../model/utils'
+import {modelId, rejectDeleted} from '../../model/utils'
 import {Bucket} from './Bucket'
 import {setLivelynessChecking, types} from 'mobx-state-tree'
 import {_} from '../../little-ramda'
@@ -16,7 +16,7 @@ export const DomainStore = types
   .views(views)
   .actions(actions)
 
-function hasRelation(relation) {
+function isEqualByObjProps(relation) {
   const [key, value] = _.compose(_.head, _.toPairs)(relation)
   return item => item[key] === value
 }
@@ -27,10 +27,10 @@ function views(self) {
       return mValues(self.itemLookup)
     },
     get activeItems() {
-      return _.reject(isDeleted)(self.items)
+      return rejectDeleted(self.items)
     },
     getBucketItems(bucket) {
-      return _.filter(hasRelation({bucket}))(self.activeItems)
+      return _.filter(isEqualByObjProps({bucket}))(self.activeItems)
     },
     isItemSelected(model) {
       return self.nullableSelectedItem === model

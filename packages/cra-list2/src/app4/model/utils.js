@@ -34,3 +34,4 @@ export function modelId(name) {
 }
 
 export const isDeleted = _.propOr(false, 'deleted')
+export const rejectDeleted = _.reject(isDeleted)
