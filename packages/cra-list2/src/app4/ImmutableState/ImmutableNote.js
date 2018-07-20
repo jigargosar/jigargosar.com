@@ -145,7 +145,7 @@ export function selectText(noteCursor) {
 
 function isCurrentRootNote(noteCursor) {
   return _.equals(
-    noteCursor.root().get('rootNotePath'),
+    noteCursor.domain().get('rootNotePath'),
     noteCursor.path,
   )
 }

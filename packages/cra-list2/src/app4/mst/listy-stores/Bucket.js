@@ -1,18 +1,20 @@
-import {getRoot, types} from 'mobx-state-tree'
+import {types} from 'mobx-state-tree'
 import {_} from '../../little-ramda'
+import {commonViews} from './Views'
 
 export const Bucket = types
   .model('Bucket', {
     id: types.identifier,
     name: '',
   })
+  .views(commonViews)
   .views(views)
   .actions(actions)
 
 function actions(self) {
   return {
     delete() {
-      self.root.deleteBucket(self)
+      self.domain.deleteBucket(self)
     },
   }
 }
@@ -20,10 +22,7 @@ function actions(self) {
 function views(self) {
   return {
     get items() {
-      return self.root.items.filter(_.propEq('bucket')(self))
-    },
-    get root() {
-      return getRoot(self)
+      return self.domain.items.filter(_.propEq('bucket')(self))
     },
   }
 }
