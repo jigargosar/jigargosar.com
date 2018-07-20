@@ -28,7 +28,7 @@ function actions(self) {
     addItem(values) {
       return self.domain.addItem(
         Item.create({
-          bucketId: self,
+          bucket: self,
           ...values,
           id: modelId(Item.name),
         }),

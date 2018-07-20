@@ -5,7 +5,7 @@ import {commonViews} from './Views'
 export const Item = types
   .model('Item', {
     id: types.identifier,
-    bucketId: types.reference(Bucket),
+    bucket: types.reference(Bucket),
     text: '',
     done: false,
     deleted: false,
@@ -18,12 +18,6 @@ function views(self) {
   return {
     get isSelected() {
       return self.domain.isItemSelected(self)
-    },
-    get bucket() {
-      return self.bucketId
-    },
-    set bucket(bucket) {
-      self.bucketId = bucket
     },
   }
 }
