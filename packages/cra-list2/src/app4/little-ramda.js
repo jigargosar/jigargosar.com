@@ -156,3 +156,6 @@ export const findByMaybeId = _.curry(function findByMaybeId(
 export function overProp(name) {
   return _.over(_.lensProp(name))
 }
+
+export const whenNotNil = _.when(isNotNil)
+export const unlessNil = _.unless(_.isNil)

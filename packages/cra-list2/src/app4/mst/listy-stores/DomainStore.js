@@ -3,7 +3,7 @@ import {Item} from './Item'
 import {modelId} from '../../model/utils'
 import {Bucket} from './Bucket'
 import {types} from 'mobx-state-tree'
-import {idEq} from '../../little-ramda'
+import {_, idEq} from '../../little-ramda'
 
 // setLivelynessChecking('error')
 
@@ -19,6 +19,11 @@ export const DomainStore = types
 
 function views(self) {
   return {
+    getBucketItems(bucket) {
+      // console.log(`self.itemLookup.filter`, self.itemLookup)
+      // return []
+      return self.items.filter(_.pathEq(['bucket', 'id'])(bucket.id))
+    },
     isItemSelected(model) {
       return idEq(self.nullableSelectedItemId)(model)
     },

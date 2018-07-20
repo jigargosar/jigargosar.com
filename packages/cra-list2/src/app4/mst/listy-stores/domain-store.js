@@ -1,8 +1,9 @@
-import {getSnapshot} from 'mobx-state-tree'
+// import {getSnapshot} from 'mobx-state-tree'
 import {modelId} from '../../model/utils'
 import {applySnapshot2} from '../little-mst'
-import {_, dotPath, isNotNil} from '../../little-ramda'
+import {dotPath, whenNotNil} from '../../little-ramda'
 import {DomainStore} from './DomainStore'
+import {getSnapshot} from 'mobx-state-tree'
 
 const bucketId = modelId('Bucket')
 const store = DomainStore.create({
@@ -26,7 +27,7 @@ if (module.hot) {
   store.addItem({text: 'FaDuu ToDOO'})
   logStoreSnapshot()
   const snap = dotPath('hot.data.snap')(module)
-  _.when(isNotNil)(applySnapshot2(store))(snap)
+  whenNotNil(applySnapshot2(store))(snap)
 
   // console.table(mapSnapshot(store.items))
 
