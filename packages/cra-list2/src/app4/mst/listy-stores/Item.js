@@ -1,6 +1,7 @@
 import {types} from 'mobx-state-tree'
 import {Bucket} from './Bucket'
 import {commonViews} from './Views'
+import {modelId} from '../../model/utils'
 
 export const Item = types
   .model('Item', {
@@ -36,4 +37,12 @@ function actions(self) {
       self.setSelected()
     },
   }
+}
+
+export function createItem(values, bucket) {
+  return Item.create({
+    bucket,
+    ...values,
+    id: modelId(Item.name),
+  })
 }
