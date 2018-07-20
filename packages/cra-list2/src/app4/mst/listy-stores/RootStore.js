@@ -71,7 +71,8 @@ function actions(self) {
         {text: 'MoTu ToDOO'},
       ]
 
-      itemValues.forEach(self.addBucket().addItem)
+      const bucket = self.addBucket()
+      itemValues.forEach(bucket.addItem)
     },
     addItem(item) {
       return self.itemLookup.put(item)
