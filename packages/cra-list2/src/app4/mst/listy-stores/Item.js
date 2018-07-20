@@ -31,7 +31,6 @@ function actions(self) {
 
     onDelete() {
       self.deleted = true
-      // self.domain.deleteItem(self)
     },
     onFocus() {
       self.setSelected()
