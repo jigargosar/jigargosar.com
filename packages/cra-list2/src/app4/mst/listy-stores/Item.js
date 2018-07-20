@@ -25,7 +25,7 @@ function views(self) {
     },
 
     getNext() {
-      self.bucket.nextSiblingOfItem(self)
+      return self.bucket.nextSiblingOfItem(self)
     },
   }
 }

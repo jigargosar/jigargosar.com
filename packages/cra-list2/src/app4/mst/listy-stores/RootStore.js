@@ -48,7 +48,9 @@ function ItemSelectionExtension(self) {
         S.map(i => i.onDelete())(self.maybeSelectedItem)
       },
       onSelectNext() {
-        S.map(i => i.getNext())(self.maybeSelectedItem)
+        S.map(i => self.setSelectedItem(i.getNext()))(
+          self.maybeSelectedItem,
+        )
       },
     },
   }

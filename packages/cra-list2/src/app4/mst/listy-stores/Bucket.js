@@ -21,7 +21,7 @@ function views(self) {
     },
     nextSiblingOfItem(item) {
       const idx = _.indexOf(item)(self.items) + 1
-      return isIndexOutOfBounds(idx, self.item)
+      return isIndexOutOfBounds(idx, self.items)
         ? item
         : self.items[idx]
     },
