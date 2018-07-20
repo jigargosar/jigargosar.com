@@ -2,7 +2,7 @@ import {mValues} from '../../mobx/little-mobx'
 import {Item} from './Item'
 import {modelId} from '../../model/utils'
 import {Bucket} from './Bucket'
-import {setLivelynessChecking, types} from 'mobx-state-tree'
+import {detach, setLivelynessChecking, types} from 'mobx-state-tree'
 import {idEq} from '../../little-ramda'
 
 setLivelynessChecking('error')
@@ -55,6 +55,7 @@ function actions(self) {
       )
     },
     deleteItem(model) {
+      detach(model)
       if (self.nullableSelectedItem === model.id) {
         self.nullableSelectedItem = null
       }
