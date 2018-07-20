@@ -1,6 +1,7 @@
 import nanoid from 'nanoid'
 import {_} from '../little-ramda'
 import pluralize from 'pluralize'
+
 export {nanoid, pluralize}
 
 // function clampListIdx(list, idx) {
@@ -31,3 +32,5 @@ export const cycleIdx = _.curry(function cycleIdx(listLength, idx) {
 export function modelId(name) {
   return `${name}-${nanoid()}`
 }
+
+export const isDeleted = _.propOr(false, 'deleted')

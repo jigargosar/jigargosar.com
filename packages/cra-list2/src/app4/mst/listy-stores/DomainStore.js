@@ -1,6 +1,6 @@
 import {mValues} from '../../mobx/little-mobx'
 import {Item} from './Item'
-import {modelId} from '../../model/utils'
+import {isDeleted, modelId} from '../../model/utils'
 import {Bucket} from './Bucket'
 import {setLivelynessChecking, types} from 'mobx-state-tree'
 import {_} from '../../little-ramda'
@@ -22,7 +22,7 @@ function views(self) {
       return mValues(self.itemLookup)
     },
     get activeItems() {
-      return _.reject(_.propOr(false, 'deleted'))(self.items)
+      return _.reject(isDeleted)(self.items)
     },
     getBucketItems(bucket) {
       return _.filter(_.propEq('bucket', bucket))(self.activeItems)
