@@ -2,7 +2,7 @@ import {mValues} from '../../mobx/little-mobx'
 import {Item} from './Item'
 import {modelId} from '../../model/utils'
 import {Bucket} from './Bucket'
-import {detach, setLivelynessChecking, types} from 'mobx-state-tree'
+import {types} from 'mobx-state-tree'
 import {idEq} from '../../little-ramda'
 
 // setLivelynessChecking('error')
