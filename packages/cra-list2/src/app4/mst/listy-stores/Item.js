@@ -27,7 +27,7 @@ function actions(self) {
 function views(self) {
   return {
     get isSelected() {
-      return self.domain.selectedItem === self
+      return self.domain.isItemSelected(self)
     },
   }
 }

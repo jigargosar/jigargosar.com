@@ -2,20 +2,25 @@ import {mValues} from '../../mobx/little-mobx'
 import {Item} from './Item'
 import {modelId} from '../../model/utils'
 import {Bucket} from './Bucket'
-import {types} from 'mobx-state-tree'
+import {setLivelynessChecking, types} from 'mobx-state-tree'
+
+setLivelynessChecking('error')
 
 export const DomainStore = types
   .model('DomainStore', {
     itemLookup: types.map(Item),
     bucketLookup: types.map(Bucket),
     bucket: types.reference(Bucket),
-    selectedItem: types.maybe(types.reference(Item)),
+    nullableSelectedItem: types.maybeNull(types.reference(Item)),
   })
   .views(views)
   .actions(actions)
 
 function views(self) {
   return {
+    isItemSelected(model) {
+      return model === this.nullableSelectedItem
+    },
     get items() {
       return mValues(self.itemLookup)
     },
@@ -29,8 +34,7 @@ function views(self) {
 function actions(self) {
   return {
     selectItem(item) {
-      self.selectedItem = item
-      return self.selectedItem
+      self.nullableSelectedItem = item
     },
     addItem(values) {
       return self.itemLookup.put(
@@ -50,6 +54,9 @@ function actions(self) {
       )
     },
     deleteItem(model) {
+      if (self.nullableSelectedItem === model) {
+        self.nullableSelectedItem = null
+      }
       return self.itemLookup.delete(model.id)
     },
     deleteBucket(model) {
