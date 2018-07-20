@@ -19,10 +19,15 @@ export const DomainStore = types
 
 function views(self) {
   return {
+    get activeItems() {
+      return _.reject(_.prop('deleted'))(self.items)
+    },
     getBucketItems(bucket) {
       // console.log(`self.itemLookup.filter`, self.itemLookup)
       // return []
-      return self.items.filter(_.pathEq(['bucket', 'id'])(bucket.id))
+      return self.activeItems.filter(
+        _.pathEq(['bucket', 'id'])(bucket.id),
+      )
     },
     isItemSelected(model) {
       return idEq(self.nullableSelectedItemId)(model)
