@@ -6,11 +6,11 @@ import {setLivelynessChecking, types} from 'mobx-state-tree'
 
 setLivelynessChecking('error')
 
-const ItemSelection = {
-  props: {
+const ItemSelection = types
+  .model('ItemSelection', {
     nullableSelectedItem: types.maybeNull(types.reference(Item)),
-  },
-  extend(self) {
+  })
+  .extend(function(self) {
     return {
       views: {
         isItemSelected(model) {
@@ -28,11 +28,7 @@ const ItemSelection = {
         },
       },
     }
-  },
-}
-const IS = types
-  .model('ItemSelection', ItemSelection.props)
-  .extend(ItemSelection.extend)
+  })
 
 const DomainStore = types
   .model('DomainStore', {
@@ -82,5 +78,5 @@ function actions(self) {
 }
 
 export const RootStore = types
-  .compose(DomainStore, IS)
+  .compose(DomainStore, ItemSelection)
   .named('RootStore')
