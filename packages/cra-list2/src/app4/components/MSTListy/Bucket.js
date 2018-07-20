@@ -34,10 +34,6 @@ BucketItem = oInject(({store}, {itemId}) => {
     debugger
   }
   return {
-    // onFocus: () => store.setItemSelection(item),
-    // isSelected: item && item.isSelected,
-    // onDeleteItem: () => store.deleteItem(item),
-    // itemText: item.text,
     item,
     store,
   }
