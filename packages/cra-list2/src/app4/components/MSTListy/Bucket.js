@@ -7,12 +7,7 @@ import {ListPane, renderDeleteIcon} from './ListPane'
 import {observer} from 'mobx-react'
 
 function BucketItem({item}) {
-  const {
-    text: itemText,
-    isSelected,
-    onFocus,
-    onDelete: onDeleteItem,
-  } = item
+  const {text: itemText, isSelected, onFocus} = item
 
   return (
     <ListPane.Item
@@ -25,7 +20,6 @@ function BucketItem({item}) {
       <ListPane.ItemText className={cn('code')}>
         {itemText || 'I am a hard core TODo'}
       </ListPane.ItemText>
-      {renderDeleteIcon(onDeleteItem)}
     </ListPane.Item>
   )
 }
