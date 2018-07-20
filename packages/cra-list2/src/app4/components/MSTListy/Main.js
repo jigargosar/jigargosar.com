@@ -20,6 +20,7 @@ class KeyboardShortcuts extends React.Component {
     return withKeyEvent(
       whenKey('d')(store.onDeleteSelected),
       whenKey('down')(store.onSelectNext),
+      whenKey('up')(store.onSelectPrev),
     )(e)
   }
   render() {
