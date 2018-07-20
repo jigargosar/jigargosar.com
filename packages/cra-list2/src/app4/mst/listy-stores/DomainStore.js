@@ -44,17 +44,22 @@ function views(self) {
 
 function actions(self) {
   return {
+    afterCreate() {
+      self.buckets.forEach(_.invoker(0, 'updateItemIds'))
+    },
     setItemSelection(item) {
       self.nullableSelectedItemId = item.id
     },
     addItem(values) {
-      return self.itemLookup.put(
+      const item = self.itemLookup.put(
         Item.create({
           bucket: self.bucket,
           ...values,
           id: modelId(Item.name),
         }),
       )
+      self.bucket.updateItemIds()
+      return item
     },
     addBucket(values) {
       return self.bucketLookup.put(
@@ -73,6 +78,7 @@ function actions(self) {
       // detach(model)
       self.unSelectItem(model)
       self.itemLookup.delete(model.id)
+      self.bucket.updateItemIds()
     },
     deleteBucket(model) {
       return self.bucketLookup.delete(model.id)

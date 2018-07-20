@@ -7,6 +7,7 @@ import {Btn, Row} from '../ui/tui'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {inject, observer} from 'mobx-react'
 import {oInject} from './utils'
+import {withProps} from '../recompose-utils'
 
 function BucketItem({itemText, onFocus, isSelected, onDeleteItem}) {
   return (
@@ -33,12 +34,23 @@ BucketItem = oInject(({store}, {itemId}) => {
     debugger
   }
   return {
-    onFocus: () => store.setItemSelection(item),
-    isSelected: store.isItemSelected(item),
-    onDeleteItem: () => store.deleteItem(item),
-    itemText: item.text,
+    // onFocus: () => store.setItemSelection(item),
+    // isSelected: item && item.isSelected,
+    // onDeleteItem: () => store.deleteItem(item),
+    // itemText: item.text,
+    item,
+    store,
   }
-})(BucketItem)
+})(
+  withProps(({store, item}) => {
+    return {
+      onFocus: () => store.setItemSelection(item),
+      isSelected: item && item.isSelected,
+      onDeleteItem: () => store.deleteItem(item),
+      itemText: item.text,
+    }
+  })(BucketItem),
+)
 
 function renderBucketHeader(bucket, onAddItem, deleteBucket) {
   return (
@@ -77,7 +89,7 @@ function BucketItems({itemIds}) {
 
 BucketItems = oInject(({store}, {bucketId}) => {
   return {
-    itemIds: store.getBucketItems(bucketId),
+    itemIds: store.bucketLookup.get(bucketId).itemIds,
   }
 })(BucketItems)
 
