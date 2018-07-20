@@ -30,7 +30,7 @@ function ItemSelectionExtension(self) {
   }
 }
 
-const DomainStore = types
+export const DomainStore = types
   .model('DomainStore', {
     itemLookup: types.map(Item),
     bucketLookup: types.map(Bucket),
@@ -71,6 +71,9 @@ function actions(self) {
       return self.itemLookup.put(item)
     },
     addBucket(values = {}) {
+      return self.bucketLookup.put(createBucket(values))
+    },
+    _addBucket(values) {
       return self.bucketLookup.put(createBucket(values))
     },
   }
