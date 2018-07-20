@@ -10,6 +10,7 @@ function BucketItem({item}) {
 
   return (
     <ListPane.Item
+      id={item.id}
       kind={isSelected ? 'selected' : 'button'}
       onFocus={onFocus}
     >

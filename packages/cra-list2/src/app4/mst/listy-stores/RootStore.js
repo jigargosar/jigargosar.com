@@ -5,6 +5,7 @@ import {Bucket, createBucket} from './Bucket'
 import {types} from 'mobx-state-tree'
 import {commonViews} from './Views'
 import {S} from '../../little-ramda'
+import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 
 const ItemSelection = types
   .model('ItemSelection', {
@@ -38,6 +39,9 @@ function ItemSelectionExtension(self) {
     actions: {
       setSelectedItem(item) {
         self.nullableSelectedItem = item
+        if (!item.deleted) {
+          setFocusAndSelectionOnDOMId(item.id)
+        }
       },
       unSelectItem(model) {
         if (self.nullableSelectedItem === model.id) {
