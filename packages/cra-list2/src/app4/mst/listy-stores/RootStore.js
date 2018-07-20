@@ -4,6 +4,7 @@ import {rejectDeleted, selectWhere} from '../../model/utils'
 import {Bucket, createBucket} from './Bucket'
 import {types} from 'mobx-state-tree'
 import {commonViews} from './Views'
+import {_, S} from '../../little-ramda'
 
 const ItemSelection = types
   .model('ItemSelection', {
@@ -30,6 +31,9 @@ function ItemSelectionExtension(self) {
       isItemSelected(model) {
         return self.nullableSelectedItem === model
       },
+      get maybeSelectedItem() {
+        return S.toMaybe(self.nullableSelectedItem)
+      },
     },
     actions: {
       setSelectedItem(item) {
@@ -39,6 +43,9 @@ function ItemSelectionExtension(self) {
         if (self.nullableSelectedItem === model.id) {
           self.nullableSelectedItem = null
         }
+      },
+      onDeleteSelected() {
+        S.map(_.invoke(0, 'delete'))(self.maybeSelectedItem)
       },
     },
   }
