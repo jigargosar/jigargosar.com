@@ -8,16 +8,9 @@ export const Bucket = types
     id: types.identifier,
     name: '',
   })
-  .volatile(volatiles)
   .views(commonViews)
   .views(views)
   .actions(actions)
-
-function volatiles(self) {
-  return {
-    // itemIds: [],
-  }
-}
 
 function views(self) {
   return {
@@ -35,7 +28,7 @@ function actions(self) {
     addItem(values) {
       return self.domain.addItem(
         Item.create({
-          bucket: self,
+          bucketId: self,
           ...values,
           id: modelId(Item.name),
         }),

@@ -24,12 +24,9 @@ function views(self) {
     },
     get activeItems() {
       return _.reject(_.propOr(false, 'deleted'))(self.items)
-      // return self.items
     },
     getBucketItems(bucket) {
-      return _.compose(_.filter(_.pathEq(['bucket'], bucket)))(
-        self.activeItems,
-      )
+      return _.filter(_.propEq('bucket', bucket))(self.activeItems)
     },
     isItemSelected(model) {
       return idEq(self.nullableSelectedItemId)(model)
