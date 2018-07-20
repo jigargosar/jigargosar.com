@@ -67,10 +67,6 @@ function renderBucketAddItem(onAddItem) {
   )
 }
 
-// function BucketItems({itemIds}) {
-//   return _.map(id => <BucketItem key={id} itemId={id} />)(itemIds)
-// }
-
 function BucketItems({items}) {
   return renderKeyedById(BucketItem, 'item', items)
 }
