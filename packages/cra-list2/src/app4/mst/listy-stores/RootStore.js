@@ -3,6 +3,7 @@ import {Item} from './Item'
 import {rejectDeleted, selectWhere} from '../../model/utils'
 import {Bucket, createBucket} from './Bucket'
 import {types} from 'mobx-state-tree'
+import {commonViews} from './Views'
 
 const ItemSelection = types
   .model('ItemSelection', {
@@ -74,7 +75,7 @@ function actions(self) {
       return self.bucketLookup.put(bucket)
     },
     addBucket(values = {}) {
-      return self.bucketLookup.put(createBucket(values))
+      return self.root.bucketLookup.put(createBucket(values))
     },
   }
 }
@@ -95,4 +96,5 @@ function AddMockDataAction(self) {
 
 export const RootStore = types
   .compose(DomainStore, ItemSelection)
+  .views(commonViews)
   .named('RootStore')

@@ -16,7 +16,7 @@ export const Bucket = types
 function views(self) {
   return {
     get items() {
-      return self.domain.getBucketItems(self)
+      return self.root.getBucketItems(self)
     },
   }
 }
@@ -27,7 +27,7 @@ function actions(self) {
       self.deleted = true
     },
     addItem(values) {
-      return self.domain.addItem(createItem(values, self))
+      return self.root.addItem(createItem(values, self))
     },
     onAddItem() {
       return self.addItem().setSelected()

@@ -21,7 +21,7 @@ export const Item = types
 function views(self) {
   return {
     get isSelected() {
-      return self.domain.isItemSelected(self)
+      return self.root.isItemSelected(self)
     },
   }
 }
@@ -29,7 +29,7 @@ function views(self) {
 function actions(self) {
   return {
     setSelected() {
-      self.domain.setSelectedItem(self)
+      self.root.setSelectedItem(self)
     },
 
     onDelete() {
