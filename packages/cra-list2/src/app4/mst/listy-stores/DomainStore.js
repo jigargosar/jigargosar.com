@@ -6,29 +6,30 @@ import {setLivelynessChecking, types} from 'mobx-state-tree'
 
 setLivelynessChecking('error')
 
-const selectionProps = {
-  nullableSelectedItem: types.maybeNull(types.reference(Item)),
+const SelectionMixin = {
+  props: {
+    nullableSelectedItem: types.maybeNull(types.reference(Item)),
+  },
+  extend(self) {
+    return {
+      views: {
+        isItemSelected(model) {
+          return self.nullableSelectedItem === model
+        },
+      },
+      actions: {
+        setSelectedItem(item) {
+          self.nullableSelectedItem = item
+        },
+        unSelectItem(model) {
+          if (self.nullableSelectedItem === model.id) {
+            self.nullableSelectedItem = null
+          }
+        },
+      },
+    }
+  },
 }
-function selectionExtension(self) {
-  return {
-    views: {
-      isItemSelected(model) {
-        return self.nullableSelectedItem === model
-      },
-    },
-    actions: {
-      setSelectedItem(item) {
-        self.nullableSelectedItem = item
-      },
-      unSelectItem(model) {
-        if (self.nullableSelectedItem === model.id) {
-          self.nullableSelectedItem = null
-        }
-      },
-    },
-  }
-}
-
 export const DomainStore = types
   .model('DomainStore', {
     itemLookup: types.map(Item),
@@ -36,8 +37,8 @@ export const DomainStore = types
   })
   .views(views)
   .actions(actions)
-  .props(selectionProps)
-  .extend(selectionExtension)
+  .props(SelectionMixin.props)
+  .extend(SelectionMixin.extend)
 
 function views(self) {
   return {
