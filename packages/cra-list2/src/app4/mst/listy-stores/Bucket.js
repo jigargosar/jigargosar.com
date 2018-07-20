@@ -20,11 +20,11 @@ function volatiles(self) {
 function views(self) {
   return {
     get itemIds() {
-      return self.domain.getBucketItems(self.id)
+      return self.domain.getBucketItemIds(self.id)
     },
-    // get items(){
-    //   return _.map(self.domain.getItemById)(self.itemIds)
-    // }
+    get items() {
+      return self.domain.getBucketItems(self)
+    },
   }
 }
 

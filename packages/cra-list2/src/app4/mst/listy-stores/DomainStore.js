@@ -26,7 +26,12 @@ function views(self) {
       return _.reject(_.propOr(false, 'deleted'))(self.items)
       // return self.items
     },
-    getBucketItems(bucketId) {
+    getBucketItems(bucket) {
+      return _.compose(_.filter(_.pathEq(['bucket'], bucket)))(
+        self.activeItems,
+      )
+    },
+    getBucketItemIds(bucketId) {
       return _.compose(
         modelsToIds,
         _.filter(_.pathEq(['bucket', 'id'], bucketId)),
