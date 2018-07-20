@@ -16,7 +16,7 @@ export const DomainStore = types
   .views(views)
   .actions(actions)
 
-function equalsKeyValues(shape) {
+function keysEqValues(shape) {
   return _.allPass(
     _.compose(_.map(_.flip(_.propEq)), _.toPairs)(shape),
   )
@@ -31,7 +31,7 @@ function views(self) {
       return rejectDeleted(self.items)
     },
     getBucketItems(bucket) {
-      return _.filter(equalsKeyValues({bucket}))(self.activeItems)
+      return _.filter(keysEqValues({bucket}))(self.activeItems)
     },
     isItemSelected(model) {
       return self.nullableSelectedItem === model
