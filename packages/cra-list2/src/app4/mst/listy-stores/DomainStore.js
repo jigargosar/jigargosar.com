@@ -16,9 +16,10 @@ export const DomainStore = types
   .views(views)
   .actions(actions)
 
-function isEqualByObjProps(relation) {
-  const [key, value] = _.compose(_.head, _.toPairs)(relation)
-  return item => item[key] === value
+function equalsKeyValues(shape) {
+  return _.allPass(
+    _.compose(_.map(_.flip(_.propEq)), _.toPairs)(shape),
+  )
 }
 
 function views(self) {
@@ -30,7 +31,7 @@ function views(self) {
       return rejectDeleted(self.items)
     },
     getBucketItems(bucket) {
-      return _.filter(isEqualByObjProps({bucket}))(self.activeItems)
+      return _.filter(equalsKeyValues({bucket}))(self.activeItems)
     },
     isItemSelected(model) {
       return self.nullableSelectedItem === model
