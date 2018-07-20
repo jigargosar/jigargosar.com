@@ -70,6 +70,8 @@ function BucketItems({bucket}) {
   return renderKeyedById(BucketItem, 'item', bucket.items)
 }
 
+BucketItems = observer(BucketItems)
+
 // function BucketItems({items}) {
 //   return renderKeyedById(BucketItem, 'item', items)
 // }
