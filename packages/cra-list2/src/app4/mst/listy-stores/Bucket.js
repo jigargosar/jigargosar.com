@@ -2,7 +2,7 @@ import {types} from 'mobx-state-tree'
 import {commonViews} from './Views'
 import {createItem} from './Item'
 import {modelId} from '../../model/utils'
-import {_, isIndexOutOfBounds} from '../../little-ramda'
+import {_, isIndexOutOfBounds, maybeOr, S} from '../../little-ramda'
 
 export const Bucket = types
   .model('Bucket', {
@@ -14,16 +14,25 @@ export const Bucket = types
   .views(views)
   .actions(actions)
 
+function getNexSiblingOf(item, list) {
+  if (_.isEmpty(list)) {
+    return null
+  }
+  const idx = _.indexOf(item)(list) + 1
+  return isIndexOutOfBounds(idx, list) ? null : list[idx]
+}
+
+function maybeGetNexSiblingOf(item, list) {
+  return S.toMaybe(getNexSiblingOf(item, list))
+}
+
 function views(self) {
   return {
     get items() {
       return self.root.getBucketItems(self)
     },
     nextSiblingOfItem(item) {
-      const idx = _.indexOf(item)(self.items) + 1
-      return isIndexOutOfBounds(idx, self.items)
-        ? item
-        : self.items[idx]
+      return maybeOr(item)(maybeGetNexSiblingOf(item, self.items))
     },
     prevSiblingOfItem(item) {
       const idx = _.indexOf(item)(self.items) - 1

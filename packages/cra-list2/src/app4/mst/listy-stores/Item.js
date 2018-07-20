@@ -41,6 +41,7 @@ function actions(self) {
 
     onDelete() {
       self.deleted = true
+      self.root.setSelectedItem(self.getNext())
     },
     onFocus() {
       self.setSelected()
