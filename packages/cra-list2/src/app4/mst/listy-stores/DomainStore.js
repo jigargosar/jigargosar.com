@@ -3,7 +3,7 @@ import {Item} from './Item'
 import {modelId} from '../../model/utils'
 import {Bucket} from './Bucket'
 import {setLivelynessChecking, types} from 'mobx-state-tree'
-import {_, idEq} from '../../little-ramda'
+import {_} from '../../little-ramda'
 
 setLivelynessChecking('error')
 
@@ -11,7 +11,7 @@ export const DomainStore = types
   .model('DomainStore', {
     itemLookup: types.map(Item),
     bucketLookup: types.map(Bucket),
-    nullableSelectedItemId: types.maybeNull(types.string),
+    nullableSelectedItem: types.maybeNull(types.reference(Item)),
   })
   .views(views)
   .actions(actions)
@@ -28,7 +28,7 @@ function views(self) {
       return _.filter(_.propEq('bucket', bucket))(self.activeItems)
     },
     isItemSelected(model) {
-      return idEq(self.nullableSelectedItemId)(model)
+      return self.nullableSelectedItem === model
     },
 
     get buckets() {
@@ -47,7 +47,7 @@ function actions(self) {
       self.itemLookup.put(item)
     },
     setSelectedItem(item) {
-      self.nullableSelectedItemId = item.id
+      self.nullableSelectedItem = item
     },
     addBucket(values) {
       return self.bucketLookup.put(
