@@ -63,10 +63,20 @@ function actions(self) {
     createNewItemsInBucketWithId(itemValues, bucketId) {
       itemValues.forEach(self.bucketById(bucketId).addItem)
     },
+    addMockData() {
+      const itemValues = [
+        {text: 'FaDuu ToDOO'},
+        {},
+        {text: 'MoTu ToDOO'},
+        {text: 'MoTu ToDOO'},
+      ]
+
+      itemValues.forEach(self.addBucket().addItem)
+    },
     addItem(item) {
       return self.itemLookup.put(item)
     },
-    addBucket(values) {
+    addBucket(values = {}) {
       return self.bucketLookup.put(
         Bucket.create({
           ...values,

@@ -10,7 +10,6 @@ setLivelynessChecking('error')
 const bucketId = modelId('Bucket')
 const rootStore = RootStore.create({
   bucketLookup: {[bucketId]: {id: bucketId}},
-  bucket: bucketId,
 })
 
 function logStoreSnapshot(store) {
