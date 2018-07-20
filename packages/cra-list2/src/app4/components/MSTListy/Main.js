@@ -6,6 +6,7 @@ import {Container} from '../../little-cerebral'
 import {controller} from '../../cerebral/CerebralListyState/controller'
 import {DashboardHeaderTabs, Header} from './Header'
 import {Dashboard} from './Dashboard'
+import {observer} from 'mobx-react'
 
 function ListyMain() {
   return (
@@ -20,4 +21,4 @@ function ListyMain() {
   )
 }
 
-export default ListyMain
+export default observer(ListyMain)
