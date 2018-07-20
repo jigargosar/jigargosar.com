@@ -6,6 +6,7 @@ export const Bucket = types
   .model('Bucket', {
     id: types.identifier,
     name: '',
+    deleted: false,
   })
   .views(commonViews)
   .views(views)
@@ -22,7 +23,7 @@ function views(self) {
 function actions(self) {
   return {
     delete() {
-      self.domain.deleteBucket(self)
+      self.deleted = true
     },
     addItem(values) {
       return self.domain.addItem(createItem(values, self))

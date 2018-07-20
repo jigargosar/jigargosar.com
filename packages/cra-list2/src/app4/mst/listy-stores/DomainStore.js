@@ -63,8 +63,5 @@ function actions(self) {
         self.nullableSelectedItem = null
       }
     },
-    deleteBucket(model) {
-      return self.bucketLookup.delete(model.id)
-    },
   }
 }
