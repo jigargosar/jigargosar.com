@@ -6,32 +6,32 @@ import {DomainStore} from './DomainStore'
 import {getSnapshot} from 'mobx-state-tree'
 
 const bucketId = modelId('Bucket')
-const store = DomainStore.create({
+const domainStore = DomainStore.create({
   bucketLookup: {[bucketId]: {id: bucketId}},
   bucket: bucketId,
 })
 
 function logStoreSnapshot() {
-  console.debug(`getSnapshot(store)`, getSnapshot(store))
+  console.debug(`getSnapshot(store)`, getSnapshot(domainStore))
 }
 
 logStoreSnapshot()
 
 if (module.hot) {
-  store.addItem()
-  store.addItem({text: 'MoTu ToDOO'})
-  store.deleteItem(store.addItem())
-  store.deleteItem(store.addItem())
-  store.deleteItem(store.addItem())
-  store.deleteItem(store.addItem())
-  store.addItem({text: 'FaDuu ToDOO'})
+  domainStore.addItem()
+  domainStore.addItem({text: 'MoTu ToDOO'})
+  domainStore.deleteItem(domainStore.addItem())
+  domainStore.deleteItem(domainStore.addItem())
+  domainStore.deleteItem(domainStore.addItem())
+  domainStore.deleteItem(domainStore.addItem())
+  domainStore.addItem({text: 'FaDuu ToDOO'})
   logStoreSnapshot()
   const snap = dotPath('hot.data.snap')(module)
-  whenNotNil(applySnapshot2(store))(snap)
+  whenNotNil(applySnapshot2(domainStore))(snap)
 
   // console.table(mapSnapshot(store.items))
 
-  module.hot.dispose(data => (data.snap = getSnapshot(store)))
+  module.hot.dispose(data => (data.snap = getSnapshot(domainStore)))
 }
 
-export {store}
+export default domainStore

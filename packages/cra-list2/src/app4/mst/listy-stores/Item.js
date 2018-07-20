@@ -8,6 +8,7 @@ export const Item = types
     bucket: types.reference(Bucket),
     text: '',
     done: false,
+    deleted: false,
   })
   .views(commonViews)
   .views(views)
@@ -16,6 +17,7 @@ export const Item = types
 function actions(self) {
   return {
     delete() {
+      self.deleted = true
       self.domain.deleteItem(self)
     },
     select() {

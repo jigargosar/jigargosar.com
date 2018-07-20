@@ -35,7 +35,7 @@ function render() {
     // const App = require('./components/ImmutableNotes/Main').default
     // const App = require('./components/CerebralNotes/Main').default
     Object.assign(storeBox, {
-      store: require('./mst/listy-stores/domain-store').store,
+      store: require('./mst/listy-stores').store,
     })
     const App = require('./components/MSTListy/Main').default
     ReactDOM.render(
@@ -56,7 +56,7 @@ if (module.hot) {
 
   module.hot['accept'](
     [
-      './mst/listy-stores/domain-store',
+      './mst/listy-stores',
       './components/MSTListy/Main',
 
       './components/CerebralListy/Main',
