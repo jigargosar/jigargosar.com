@@ -1,13 +1,16 @@
 import {types} from 'mobx-state-tree'
 import {Bucket} from './Bucket'
 import {commonViews} from './Views'
-import {modelId} from '../../model/utils'
+import {modelId, nanoid} from '../../model/utils'
 
 export const Item = types
   .model('Item', {
     id: types.identifier,
     bucket: types.reference(Bucket),
-    text: '',
+    text: types.optional(
+      types.string,
+      () => `${nanoid(3)} I am a TudHDuu`,
+    ),
     done: false,
     deleted: false,
   })
