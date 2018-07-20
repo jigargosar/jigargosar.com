@@ -3,22 +3,24 @@ import {modelId} from '../../model/utils'
 import {applySnapshot2} from '../little-mst'
 import {dotPath, whenNotNil} from '../../little-ramda'
 import {RootStore} from './RootStore'
-import {getSnapshot} from 'mobx-state-tree'
+import {getSnapshot, setLivelynessChecking} from 'mobx-state-tree'
+
+setLivelynessChecking('error')
 
 const bucketId = modelId('Bucket')
-const domainStore = RootStore.create({
+const rootStore = RootStore.create({
   bucketLookup: {[bucketId]: {id: bucketId}},
   bucket: bucketId,
 })
 
-function logStoreSnapshot() {
-  console.debug(`getSnapshot(store)`, getSnapshot(domainStore))
+function logStoreSnapshot(store) {
+  console.debug(`getSnapshot(store)`, getSnapshot(store))
 }
 
-logStoreSnapshot()
+logStoreSnapshot(rootStore)
 
 if (module.hot) {
-  domainStore.createNewItemsInBucketWithId(
+  rootStore.createNewItemsInBucketWithId(
     [
       {text: 'FaDuu ToDOO'},
       {},
@@ -27,13 +29,14 @@ if (module.hot) {
     ],
     bucketId,
   )
-  logStoreSnapshot()
+  logStoreSnapshot(rootStore)
+
   const snap = dotPath('hot.data.snap')(module)
-  whenNotNil(applySnapshot2(domainStore))(snap)
+  whenNotNil(applySnapshot2(rootStore))(snap)
 
   // console.table(mapSnapshot(store.items))
 
-  module.hot.dispose(data => (data.snap = getSnapshot(domainStore)))
+  module.hot.dispose(data => (data.snap = getSnapshot(rootStore)))
 }
 
-export default domainStore
+export default rootStore

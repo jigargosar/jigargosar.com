@@ -2,9 +2,7 @@ import {mValues} from '../../mobx/little-mobx'
 import {Item} from './Item'
 import {modelId, rejectDeleted, selectWhere} from '../../model/utils'
 import {Bucket} from './Bucket'
-import {setLivelynessChecking, types} from 'mobx-state-tree'
-
-setLivelynessChecking('error')
+import {types} from 'mobx-state-tree'
 
 const ItemSelection = types
   .model('ItemSelection', {

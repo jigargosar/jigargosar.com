@@ -1,3 +1,3 @@
-import domainStore from './domain-store'
+import rootStore from './root-store'
 
-export const store = domainStore
+export const store = rootStore
