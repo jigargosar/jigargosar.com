@@ -24,12 +24,12 @@ const Dashboard = Model({
   name: 'Dashboard',
 })
   .views(self => ({
-    get buckets() {
+    get [`buckets`]() {
       return getBucketCollection(self).whereEq({dashboard: self})
     },
   }))
   .actions(self => ({
-    addBucket(model) {
+    [`add${'Bucket'}`](model) {
       return getBucketCollection(self).add({
         ...model,
         dashboard: self,
