@@ -3,7 +3,13 @@ import React from 'react'
 import styled from 'styled-components'
 import {cx as cn} from 'ramda-extension'
 import {PropTypes} from '../utils'
-import {Add, AddCircleOutline, Edit, Error, ModeEdit} from '@material-ui/icons'
+import {
+  Add,
+  AddCircleOutline,
+  Edit,
+  Error,
+  ModeEdit,
+} from '@material-ui/icons'
 
 /*eslint-enable*/
 
