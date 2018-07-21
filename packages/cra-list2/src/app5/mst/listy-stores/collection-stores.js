@@ -59,23 +59,11 @@ const ItemM = Model({
   attrs: {bucket: types.reference(BucketM)},
 })
 
-const DashboardC = Collection({
-  model: DashboardM,
-})
-
-const BucketC = Collection({
-  model: BucketM,
-})
-
-const ItemC = Collection({
-  model: ItemM,
-})
-
 export const Domain = types
   .model('Domain', {
-    items: types.optional(ItemC, {}),
-    buckets: types.optional(BucketC, {}),
-    dashboards: types.optional(DashboardC, {}),
+    items: types.optional(Collection(ItemM), {}),
+    buckets: types.optional(Collection(BucketM), {}),
+    dashboards: types.optional(Collection(DashboardM), {}),
   })
   .views(domainViews)
   .actions(domainActions)

@@ -2,7 +2,7 @@ import {types} from 'mobx-state-tree'
 import {R, validate} from '../little-ramda'
 import {mValues} from '../mobx/little-mobx'
 
-export function Collection({model: Model}) {
+export function Collection(Model) {
   return types
     .model(`${Model.name}Collection`, {
       lookup: types.map(Model),
