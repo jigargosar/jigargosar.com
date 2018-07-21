@@ -35,4 +35,5 @@ const b = BucketModel.create({dashboard: d})
 Items.add({bucket: b})
 
 const list = Items.list
-console.log(`ItemCollection.list`, list, mapSnapshot(list))
+
+console.log(`Items.list`, list, mapSnapshot(list))
