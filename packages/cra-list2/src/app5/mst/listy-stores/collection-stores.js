@@ -46,15 +46,15 @@ const ItemM = Model({
   attrs: {bucket: types.reference(BucketM)},
 })
 
-export const DashboardC = Collection({
+const DashboardC = Collection({
   model: DashboardM,
 })
 
-export const BucketC = Collection({
+const BucketC = Collection({
   model: BucketM,
 })
 
-export const ItemC = Collection({
+const ItemC = Collection({
   model: ItemM,
 })
 
