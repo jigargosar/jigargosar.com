@@ -10,8 +10,8 @@ import {
 } from 'styled-system'
 
 import Tag from 'clean-tag'
-import {componentFromProp, defaultProps} from './recompose-utils'
 import React from 'react'
+import {PropTypes} from './utils'
 
 injectGlobal`
 body{
@@ -19,26 +19,6 @@ body{
   min-width: 300px;
 }
 `
-
-const theme = {
-  fontSizes: [12, 14, 16, 24, 32, 48, 64, 96, 128],
-  lineHeights: [1, 1.25, 1.5],
-  space: [
-    // margin and padding
-    0,
-    4,
-    8,
-    16,
-    32,
-    64,
-    128,
-    256,
-  ],
-  colors: {
-    blue: '#07c',
-    red: '#e10',
-  },
-}
 
 export const Box = styled(Tag)`
 ${space}
@@ -50,11 +30,6 @@ ${lineHeight}
 ${flex}
 `
 
-export const DefaultThemeProvider = defaultProps({
-  comp: ThemeProvider,
-  theme,
-})(componentFromProp('comp'))
-
 export const BaseStyle = styled(Box).attrs({
   className: 'sans-serif ',
 })``
@@ -64,10 +39,36 @@ BaseStyle.defaultProps = {
   lineHeight: 0,
 }
 
-export function StyleRoot({children}) {
+export function StyleRoot({theme, children}) {
   return (
-    <DefaultThemeProvider>
+    <ThemeProvider theme={theme}>
       <BaseStyle>{children}</BaseStyle>
-    </DefaultThemeProvider>
+    </ThemeProvider>
   )
+}
+
+StyleRoot.propTypes = {
+  theme: PropTypes.object,
+}
+
+StyleRoot.defaultProps = {
+  theme: {
+    fontSizes: [12, 14, 16, 24, 32, 48, 64, 96, 128],
+    lineHeights: [1, 1.25, 1.5],
+    space: [
+      // margin and padding
+      0,
+      4,
+      8,
+      16,
+      32,
+      64,
+      128,
+      256,
+    ],
+    colors: {
+      blue: '#07c',
+      red: '#e10',
+    },
+  },
 }
