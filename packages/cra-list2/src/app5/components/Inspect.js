@@ -1,53 +1,16 @@
-import {
-  Inspector,
-  ObjectName,
-  ObjectRootLabel,
-  ObjectValue,
-} from 'react-inspector'
-import PropTypes from 'prop-types'
+import {Inspector} from 'react-inspector'
 import React, {Fragment} from 'react'
-import {Domain} from '../mst/listy-stores/collection-stores'
-
-const ObjectLabel = ({name, data, isNonenumerable}) => {
-  const object = data
-
-  return (
-    <span>
-      <ObjectName name={name} dimmed={isNonenumerable} />
-      <span>: </span>
-      {typeof object === 'function' ? (
-        object.toString()
-      ) : (
-        <ObjectValue object={object} />
-      )}
-    </span>
-  )
-}
-const defaultNodeRenderer = ({
-  depth,
-  name,
-  data,
-  isNonenumerable,
-}) => {
-  // console.log(`data`, data)
-
-  return depth === 0 ? (
-    <ObjectRootLabel name={name} data={data} />
-  ) : (
-    <ObjectLabel
-      name={name}
-      data={data}
-      isNonenumerable={isNonenumerable}
-    />
-  )
-}
+import {domain} from '../mst/listy-stores'
+import {defaultNodeRenderer} from './Inspect/defaultNodeRenderer'
 
 export function INS() {
   return (
     <Fragment>
       <Inspector
-        name={'Domain'}
-        data={Domain}
+        name={'domain'}
+        data={domain}
+        // name={'Domain'}
+        // data={Domain}
         // showNonenumerable
         expandLevel={2}
         nodeRenderer={defaultNodeRenderer}
@@ -75,14 +38,4 @@ export function INS() {
 */}
     </Fragment>
   )
-}
-
-ObjectLabel.propTypes = {
-  data: PropTypes.any,
-  isNonenumerable: PropTypes.bool,
-  name: PropTypes.any,
-}
-
-ObjectLabel.defaultProps = {
-  isNonenumerable: false,
 }

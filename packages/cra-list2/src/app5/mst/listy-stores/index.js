@@ -12,3 +12,5 @@ domain
   .addItem()
 console.debug(`domain`, domain)
 console.debug(`getSnapshot(domain)`, getSnapshot(domain))
+
+export {domain}
