@@ -8,6 +8,7 @@ import {setDisplayName, wrapDisplayName} from './recompose-utils'
 
 export {F, RC, observer, Observer, inject, isHotKey}
 export const cn = RX.cx
+export const cn2 = _.curryN(2, RX.cx)
 
 export {PropTypes}
 

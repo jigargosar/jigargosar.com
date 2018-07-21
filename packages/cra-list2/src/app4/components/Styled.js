@@ -11,7 +11,8 @@ import {
 
 import Tag from 'clean-tag'
 import React, {Component} from 'react'
-import {PropTypes} from './utils'
+import {cn, cn2, PropTypes} from './utils'
+import {_, overProp} from '../little-ramda'
 
 injectGlobal`
 body{
@@ -31,7 +32,7 @@ ${flex}
 `
 
 export const BaseStyle = styled(Box).attrs({
-  className: 'sans-serif ',
+  className: _.compose(cn2('sans-serif'), _.prop('className')),
 })``
 
 BaseStyle.defaultProps = {
@@ -68,10 +69,10 @@ export class StyleRoot extends Component {
   }
 
   render() {
-    const {theme, children} = this.props
+    const {theme, children, ...other} = this.props
     return (
       <ThemeProvider theme={theme}>
-        <BaseStyle>{children}</BaseStyle>
+        <BaseStyle {...other}>{children}</BaseStyle>
       </ThemeProvider>
     )
   }
