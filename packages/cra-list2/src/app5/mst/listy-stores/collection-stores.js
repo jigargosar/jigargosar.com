@@ -48,4 +48,18 @@ const DashboardCollection = Collection({
 
 export const Dashboards = DashboardCollection.create()
 
-export const Domain = types.model('Domain', {})
+export const Domain = types
+  .model('Domain', {
+    items: types.optional(ItemCollection, {}),
+    buckets: types.optional(BucketCollection, {}),
+    dashboards: types.optional(DashboardCollection, {}),
+  })
+  .actions(domainActions)
+
+function domainActions(self) {
+  return {
+    addDashboard(model) {
+      self.dashboards.add(model)
+    },
+  }
+}

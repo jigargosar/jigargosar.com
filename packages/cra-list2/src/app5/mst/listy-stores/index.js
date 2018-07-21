@@ -1,6 +1,11 @@
 import rootStore from './root-store'
 import {mapSnapshot} from '../../little-mst'
-import {BucketModel, DashboardModel, Items} from './collection-stores'
+import {
+  BucketModel,
+  DashboardModel,
+  Domain,
+  Items,
+} from './collection-stores'
 
 export const store = rootStore
 
@@ -12,3 +17,7 @@ Items.add({bucket: b})
 const list = Items.list
 
 console.log(`Items.list`, list, mapSnapshot(list))
+
+const domain = Domain.create()
+
+domain.addDashboard({})
