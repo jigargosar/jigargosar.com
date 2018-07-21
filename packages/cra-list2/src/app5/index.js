@@ -6,26 +6,26 @@ import {mRunInAction, oObject} from './mobx/little-mobx'
 import {tryCatchLog} from './little-ramda'
 import {Provider} from 'mobx-react'
 
-const allStores = oObject({}, {}, {name: 'allStores'})
+const storesBox = oObject({}, {}, {name: 'storesBox'})
 
-let firstTime = true
+let firstLoad = true
 
 function render() {
   mRunInAction('Hot Update States', () => {
-    if (firstTime) {
+    if (firstLoad) {
       console.log('App Reloaded')
-      firstTime = false
+      firstLoad = false
     } else {
       console.clear()
       console.log('Clearing Console on Hot Reload')
     }
 
-    Object.assign(allStores, {
+    Object.assign(storesBox, {
       store: require('./mst/listy-stores').store,
     })
     const App = require('./components/MSTListy/Main').default
     ReactDOM.render(
-      <Provider store={allStores}>
+      <Provider store={storesBox}>
         <App />
       </Provider>,
       document.getElementById('root'),
@@ -38,22 +38,10 @@ render()
 registerServiceWorker()
 
 if (module.hot) {
-  window.s = allStores
+  window.s = storesBox
 
   module.hot['accept'](
-    [
-      './mst/listy-stores',
-      './components/MSTListy/Main',
-
-      // './components/CerebralListy/Main',
-      // './components/CerebralNotes/Main',
-      // './components/ImmutableNotes/Main',
-      // './ImmutableState/ImmutableNoteTree',
-      // './components/Main',
-      // './components/ActiveRecord/Main',
-      // './mobx',
-      // './mobx/NotesActiveRecord/ActiveRecordNotesState',
-    ],
+    ['./mst/listy-stores', './components/MSTListy/Main'],
     tryCatchLog(render),
   )
 }
