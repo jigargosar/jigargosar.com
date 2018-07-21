@@ -11,8 +11,8 @@ import {
 
 import Tag from 'clean-tag'
 import React, {Component} from 'react'
-import {cn, cn2, PropTypes} from './utils'
-import {_, overProp} from '../little-ramda'
+import {cn2, PropTypes} from './utils'
+import {_} from '../little-ramda'
 
 injectGlobal`
 body{
@@ -31,8 +31,12 @@ ${lineHeight}
 ${flex}
 `
 
+function cnProp(...cns) {
+  return {className: _.compose(cn2(cns), _.prop('className'))}
+}
+
 export const BaseStyle = styled(Box).attrs({
-  className: _.compose(cn2('sans-serif'), _.prop('className')),
+  ...cnProp('sans-serif'),
 })``
 
 BaseStyle.defaultProps = {
