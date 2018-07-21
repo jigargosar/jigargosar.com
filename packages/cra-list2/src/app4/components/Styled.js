@@ -10,7 +10,7 @@ import {
 } from 'styled-system'
 
 import Tag from 'clean-tag'
-import React from 'react'
+import React, {Component} from 'react'
 import {PropTypes} from './utils'
 
 injectGlobal`
@@ -39,36 +39,40 @@ BaseStyle.defaultProps = {
   lineHeight: 0,
 }
 
-export function StyleRoot({theme, children}) {
-  return (
-    <ThemeProvider theme={theme}>
-      <BaseStyle>{children}</BaseStyle>
-    </ThemeProvider>
-  )
-}
-
-StyleRoot.propTypes = {
-  theme: PropTypes.object,
-}
-
-StyleRoot.defaultProps = {
-  theme: {
-    fontSizes: [12, 14, 16, 24, 32, 48, 64, 96, 128],
-    lineHeights: [1, 1.25, 1.5],
-    space: [
-      // margin and padding
-      0,
-      4,
-      8,
-      16,
-      32,
-      64,
-      128,
-      256,
-    ],
-    colors: {
-      blue: '#07c',
-      red: '#e10',
+export class StyleRoot extends Component {
+  static defaultProps = {
+    theme: {
+      fontSizes: [12, 14, 16, 24, 32, 48, 64, 96, 128],
+      lineHeights: [1, 1.25, 1.5],
+      space: [
+        // margin and padding
+        0,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256,
+      ],
+      colors: {
+        blue: '#07c',
+        red: '#e10',
+      },
     },
-  },
+  }
+
+  static propTypes = {
+    children: PropTypes.any,
+    theme: PropTypes.object,
+  }
+
+  render() {
+    const {theme, children} = this.props
+    return (
+      <ThemeProvider theme={theme}>
+        <BaseStyle>{children}</BaseStyle>
+      </ThemeProvider>
+    )
+  }
 }
