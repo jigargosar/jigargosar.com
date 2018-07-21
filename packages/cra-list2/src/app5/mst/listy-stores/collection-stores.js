@@ -42,7 +42,7 @@ const Bucket = Model({
   attrs: {dashboard: types.reference(Dashboard)},
 })
   .views(self => ({
-    get item() {
+    get items() {
       return getItemCollection(self).whereEq({bucket: self})
     },
   }))
