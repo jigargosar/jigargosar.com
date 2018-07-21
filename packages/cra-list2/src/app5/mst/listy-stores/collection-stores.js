@@ -1,60 +1,78 @@
 import {Model} from '../Model'
-import {types} from 'mobx-state-tree'
+import {getParentOfType, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {constant, R} from '../../little-ramda'
 
-export const DashboardModel = Model({
+export const DashboardM = Model({
   name: 'Dashboard',
-}).views(self => ({
-  get buckets() {
-    return Buckets.whereDashboardEq(self)
-  },
-}))
+})
+  .views(self => ({
+    get buckets() {
+      return Buckets.whereDashboardEq(self)
+    },
+  }))
+  .actions(self => ({
+    addBucket(model) {
+      return getParentOfType(self, Domain).buckets.add({
+        ...model,
+        dashboard: self,
+      })
+    },
+  }))
 
-export const BucketModel = Model({
+export const BucketM = Model({
   name: 'Bucket',
-  attrs: {dashboard: types.reference(DashboardModel)},
-}).views(self => ({
-  get items() {
-    return Items.whereBucketEq(self)
-  },
-}))
+  attrs: {dashboard: types.reference(DashboardM)},
+})
+  .views(self => ({
+    get items() {
+      return Items.whereBucketEq(self)
+    },
+  }))
+  .actions(self => ({
+    addItem(model) {
+      return getParentOfType(self, Domain).items.add({
+        ...model,
+        bucket: self,
+      })
+    },
+  }))
 
-const ItemModel = Model({
+const ItemM = Model({
   name: 'Item',
-  attrs: {bucket: types.reference(BucketModel)},
+  attrs: {bucket: types.reference(BucketM)},
 })
 
-export const ItemCollection = Collection({
-  model: ItemModel,
+export const ItemC = Collection({
+  model: ItemM,
 }).views(self => ({
   whereBucketEq(bucket) {
     return self.whereEq({bucket})
   },
 }))
 
-export const Items = ItemCollection.create()
+export const Items = ItemC.create()
 
-export const BucketCollection = Collection({
-  model: BucketModel,
+export const BucketC = Collection({
+  model: BucketM,
 }).views(self => ({
   whereDashboardEq(dashboard) {
     return self.whereEq({dashboard})
   },
 }))
-export const Buckets = BucketCollection.create()
+export const Buckets = BucketC.create()
 
-export const DashboardCollection = Collection({
-  model: DashboardModel,
+export const DashboardC = Collection({
+  model: DashboardM,
 })
 
-export const Dashboards = DashboardCollection.create()
+export const Dashboards = DashboardC.create()
 
 export const Domain = types
   .model('Domain', {
-    items: types.optional(ItemCollection, {}),
-    buckets: types.optional(BucketCollection, {}),
-    dashboards: types.optional(DashboardCollection, {}),
+    items: types.optional(ItemC, {}),
+    buckets: types.optional(BucketC, {}),
+    dashboards: types.optional(DashboardC, {}),
   })
   .views(domainViews)
   .actions(domainActions)
@@ -63,9 +81,9 @@ function domainViews(self) {
   return {
     collectionFromType(ct) {
       return R.cond([
-        [R.equals(ItemCollection), constant(self.items)],
-        [R.equals(BucketCollection), constant(self.buckets)],
-        [R.equals(DashboardCollection), constant(self.dashboards)],
+        [R.equals(ItemC), constant(self.items)],
+        [R.equals(BucketC), constant(self.buckets)],
+        [R.equals(DashboardC), constant(self.dashboards)],
       ])(ct)
     },
   }
