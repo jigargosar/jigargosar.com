@@ -1,5 +1,5 @@
 import {types} from 'mobx-state-tree'
-import {modelId, nanoid} from '../little-model'
+import {modelId} from '../little-model'
 import {R} from '../little-ramda'
 
 export function Model({name, attrs}) {
