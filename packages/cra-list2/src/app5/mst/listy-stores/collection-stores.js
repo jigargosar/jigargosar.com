@@ -67,32 +67,19 @@ export const BucketC = Collection({
   },
 }))
 
-export const Domain = types
-  .model('Domain', {
-    items: types.optional(ItemC, {}),
-    buckets: types.optional(BucketC, {}),
-    dashboards: types.optional(DashboardC, {}),
-  })
-  .views(domainViews)
-  .actions(domainActions)
+export const Domain = types.model('Domain', {
+  items: types.optional(ItemC, {}),
+  buckets: types.optional(BucketC, {}),
+  dashboards: types.optional(DashboardC, {}),
+})
+// .views(domainViews)
 
-function domainViews(self) {
-  return {
-    collectionFromType(ct) {
-      return R.cond([
-        [R.equals(ItemC), constant(self.items)],
-        [R.equals(BucketC), constant(self.buckets)],
-        [R.equals(DashboardC), constant(self.dashboards)],
-      ])(ct)
-    },
-  }
-}
+// function domainViews(self) {
+//   return {}
+// }
 
 function domainActions(self) {
   return {
-    add(model, collectionType) {
-      return self.collectionFromType(collectionType).add(model)
-    },
     addDashboard(model) {
       return self.dashboards.add(model)
     },
