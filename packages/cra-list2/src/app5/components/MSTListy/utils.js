@@ -20,6 +20,5 @@ function injectNamed(...names) {
 }
 
 export const oInject = fn => _.compose(injectStores(fn), observer)
-export const oInjectNamed = (...names) => c => {
-  return _.compose(injectNamed(...names), observer)(c)
-}
+export const oInjectNamed = (...names) => c =>
+  _.compose(injectNamed(...names), observer)(c)
