@@ -7,7 +7,7 @@ export const store = rootStore
 const domain = Domain.create()
 
 domain
-  .add({}, DashboardC)
+  .addDashboard({})
   .addBucket()
   .addItem()
 console.log(`domain`, domain)

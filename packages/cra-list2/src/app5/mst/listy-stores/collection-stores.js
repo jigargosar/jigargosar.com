@@ -94,7 +94,7 @@ function domainActions(self) {
     add(model, collectionType) {
       return self.collectionFromType(collectionType).add(model)
     },
-    addD(model) {
+    addDashboard(model) {
       return self.dashboards.add(model)
     },
   }
