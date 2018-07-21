@@ -6,7 +6,7 @@ function getDomain(self) {
   return getParentOfType(self, Domain)
 }
 
-export const DashboardM = Model({
+const DashboardM = Model({
   name: 'Dashboard',
 })
   .views(self => ({
@@ -23,7 +23,7 @@ export const DashboardM = Model({
     },
   }))
 
-export const BucketM = Model({
+const BucketM = Model({
   name: 'Bucket',
   attrs: {dashboard: types.reference(DashboardM)},
 })
