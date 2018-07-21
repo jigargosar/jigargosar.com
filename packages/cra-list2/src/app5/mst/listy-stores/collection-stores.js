@@ -20,7 +20,7 @@ function getDashboards(self) {
   return getDomain(self).dashboards
 }
 
-const DashboardM = Model({
+const Dashboard = Model({
   name: 'Dashboard',
 })
   .views(self => ({
@@ -37,9 +37,9 @@ const DashboardM = Model({
     },
   }))
 
-const BucketM = Model({
+const Bucket = Model({
   name: 'Bucket',
-  attrs: {dashboard: types.reference(DashboardM)},
+  attrs: {dashboard: types.reference(Dashboard)},
 })
   .views(self => ({
     get items() {
@@ -55,15 +55,15 @@ const BucketM = Model({
     },
   }))
 
-const ItemM = Model({
+const Item = Model({
   name: 'Item',
-  attrs: {bucket: types.reference(BucketM)},
+  attrs: {bucket: types.reference(Bucket)},
 })
 
 const collectionProps = {
-  items: Collection(ItemM),
-  buckets: Collection(BucketM),
-  dashboards: Collection(DashboardM),
+  items: Collection(Item),
+  buckets: Collection(Bucket),
+  dashboards: Collection(Dashboard),
 }
 
 export const Domain = types
