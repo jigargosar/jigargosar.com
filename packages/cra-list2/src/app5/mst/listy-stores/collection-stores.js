@@ -48,7 +48,7 @@ const Bucket = Model({
   }))
   .actions(self => ({
     addItem(model) {
-      return getParentOfType(self, Domain).items.add({
+      return getItems(self).add({
         ...model,
         bucket: self,
       })
