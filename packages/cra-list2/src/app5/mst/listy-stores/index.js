@@ -11,4 +11,4 @@ domain
   .addBucket()
   .addItem()
 console.log(`domain`, domain)
-console.log(`getSnapshot(domain)`, getSnapshot(domain))
+// console.log(`getSnapshot(domain)`, getSnapshot(domain))
