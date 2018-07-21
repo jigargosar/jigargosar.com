@@ -1,7 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {Flex, StyleRoot} from '../styled'
-import {whenKey, withKeyEvent} from '../utils'
+import {cn, whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
 import {oInject} from './utils'
 import {_} from '../../little-ramda'
@@ -37,6 +37,8 @@ const InspectStore = observer(function InspectStore({store}) {
   getSnapshot(store)
   return (
     <Inspector
+      style={{padding: '100px'}}
+      className={cn('p3')}
       name={'store'}
       data={store}
       // showNonenumerable
@@ -50,13 +52,9 @@ function ListyMain({store}) {
     <StyleRoot>
       <KeyboardShortcuts store={store} />
       <Dashboard dashboard={store} />
-      <Flex bg={'pink'} p={10}>
-        <Flex p={1}>
-          <InspectStore store={domain} style={{padding: 10}} />
-        </Flex>
-        <Flex>
-          <InspectStore store={store} />
-        </Flex>
+      <Flex>
+        <InspectStore store={domain} />
+        <InspectStore store={store} />
       </Flex>
     </StyleRoot>
   )
