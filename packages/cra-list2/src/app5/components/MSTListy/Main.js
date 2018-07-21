@@ -5,10 +5,9 @@ import {whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
 import {oInject} from './utils'
 import {_} from '../../little-ramda'
-import {Inspector} from 'react-inspector'
-import {getSnapshot, getType} from 'mobx-state-tree'
 import {observer} from 'mobx-react'
 import {domain} from '../../mst/listy-stores'
+import {InspectSnapshot} from '../Inspect'
 
 const KeyboardShortcuts = observer(
   class KeyboardShortcuts extends React.Component {
@@ -33,19 +32,6 @@ const KeyboardShortcuts = observer(
     }
   },
 )
-const InspectSnapshot = observer(function InspectSnapshot({
-  node,
-  ...other
-}) {
-  return (
-    <Inspector
-      name={getType(node).name}
-      data={getSnapshot(node)}
-      expandLevel={20}
-      {...other}
-    />
-  )
-})
 
 function ListyMain({store}) {
   return (
