@@ -1,11 +1,11 @@
 import {types} from 'mobx-state-tree'
-import {R} from '../little-ramda'
+import {R, validate} from '../little-ramda'
 import {mValues} from '../mobx/little-mobx'
 
-export function Collection({model}) {
+export function Collection({model: Model}) {
   return types
-    .model(`${model.name}Collection`, {
-      lookup: types.map(model),
+    .model(`${Model.name}Collection`, {
+      lookup: types.map(Model),
     })
     .views(views)
     .actions(actions)
@@ -32,8 +32,13 @@ export function Collection({model}) {
 
   function actions(self) {
     return {
-      add(v) {
-        self.lookup.put(model.create(v))
+      add(model) {
+        validate('O', [model])
+        return self.lookup.put(Model.create(model))
+      },
+      addAll(models) {
+        validate('A', [models])
+        return R.map(self.add)(models)
       },
     }
   }
