@@ -3,10 +3,8 @@ import React from 'react'
 import {Flex, StyleRoot} from '../styled'
 import {whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
-import {oInject} from './utils'
-import {_} from '../../little-ramda'
+import {oInjectNamed} from './utils'
 import {observer} from 'mobx-react'
-import {domain} from '../../mst/listy-stores'
 import {InspectSnapshot} from '../Inspect/index'
 
 const KeyboardShortcuts = observer(
@@ -33,7 +31,7 @@ const KeyboardShortcuts = observer(
   },
 )
 
-function ListyMain({store}) {
+function ListyMain({store, domain}) {
   return (
     <StyleRoot>
       <KeyboardShortcuts store={store} />
@@ -46,4 +44,4 @@ function ListyMain({store}) {
   )
 }
 
-export default oInject(_.identity)(ListyMain)
+export default oInjectNamed('store', 'domain')(ListyMain)

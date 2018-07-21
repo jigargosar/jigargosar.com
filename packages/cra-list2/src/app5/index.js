@@ -20,11 +20,11 @@ function render() {
   }
 
   Object.assign(storesBox, {
-    store: require('./mst/listy-stores').store,
+    ...require('./mst/listy-stores'),
   })
   const App = require('./components/MSTListy/Main').default
   ReactDOM.render(
-    <Provider store={storesBox}>
+    <Provider stores={storesBox}>
       <App />
     </Provider>,
     document.getElementById('root'),
