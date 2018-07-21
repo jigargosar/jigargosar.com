@@ -70,14 +70,14 @@ function ItemSelectionExtension(self) {
 
 function views(self) {
   return {
-    get items() {
+    get itemCollection() {
       return mValues(self.itemLookup)
     },
     get buckets() {
       return mValues(self.bucketLookup)
     },
     get activeItems() {
-      return rejectDeleted(self.items)
+      return rejectDeleted(self.itemCollection)
     },
     get activeBuckets() {
       return rejectDeleted(self.buckets)

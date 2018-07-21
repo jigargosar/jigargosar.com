@@ -36,15 +36,15 @@ function maybeGetNexSiblingOf(item, list) {
 
 function views(self) {
   return {
-    get items() {
+    get itemCollection() {
       return self.root.getBucketItems(self)
     },
     nextSiblingOfItem(item) {
-      maybeOr(item)(maybeGetNexSiblingOf(item, self.items))
-      return getNextSiblingOf(item, self.items)
+      maybeOr(item)(maybeGetNexSiblingOf(item, self.itemCollection))
+      return getNextSiblingOf(item, self.itemCollection)
     },
     prevSiblingOfItem(item) {
-      return getPrevSiblingOf(item, self.items)
+      return getPrevSiblingOf(item, self.itemCollection)
     },
   }
 }

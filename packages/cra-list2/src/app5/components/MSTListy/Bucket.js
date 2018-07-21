@@ -43,7 +43,7 @@ function renderBucketHeader(bucket) {
 }
 
 function BucketItems({bucket}) {
-  return renderKeyedById(BucketItem, 'item', bucket.items)
+  return renderKeyedById(BucketItem, 'item', bucket.itemCollection)
 }
 
 BucketItems = observer(BucketItems)

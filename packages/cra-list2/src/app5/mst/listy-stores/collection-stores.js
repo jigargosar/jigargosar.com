@@ -9,7 +9,7 @@ function getDomain(self) {
     : getParentOfType(self, Domain)
 }
 function getItemCollection(self) {
-  return getDomain(self).items
+  return getDomain(self).itemCollection
 }
 
 function getBucketCollection(self) {
@@ -42,7 +42,7 @@ const Bucket = Model({
   attrs: {dashboard: types.reference(Dashboard)},
 })
   .views(self => ({
-    get items() {
+    get item() {
       return getItemCollection(self).whereEq({bucket: self})
     },
   }))
@@ -61,7 +61,7 @@ const Item = Model({
 })
 
 const collectionProps = {
-  items: Collection(Item),
+  itemCollection: Collection(Item),
   buckets: Collection(Bucket),
   dashboards: Collection(Dashboard),
 }
