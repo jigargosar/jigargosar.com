@@ -13,16 +13,12 @@ function getBuckets(self) {
   return getDomain(self).buckets
 }
 
-function getDashboards(self) {
-  return getDomain(self).dashboards
-}
-
 const DashboardM = Model({
   name: 'Dashboard',
 })
   .views(self => ({
     get buckets() {
-      return getDomain(self).buckets.whereEq({dashboard: self})
+      return getBuckets(self).whereEq({dashboard: self})
     },
   }))
   .actions(self => ({
@@ -40,7 +36,7 @@ const BucketM = Model({
 })
   .views(self => ({
     get items() {
-      return getDomain(self).items.whereEq({bucket: self})
+      return getItems(self).whereEq({bucket: self})
     },
   }))
   .actions(self => ({
@@ -75,12 +71,12 @@ export const Domain = types
     buckets: types.optional(BucketC, {}),
     dashboards: types.optional(DashboardC, {}),
   })
-  // .views(domainViews)
+  .views(domainViews)
   .actions(domainActions)
 
-// function domainViews(self) {
-//   return {}
-// }
+function domainViews(self) {
+  return {}
+}
 
 function domainActions(self) {
   return {
