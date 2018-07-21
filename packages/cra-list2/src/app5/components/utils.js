@@ -17,7 +17,7 @@ export const isAnyHotKey = R.compose(
   R.map(R.curryN(2, isHotKey)),
 )
 
-export function isKey(...keys) {
+function isKey(...keys) {
   return function(keyEvent) {
     return _.reduce(
       (acc, key) => (isHotKey(key, keyEvent) ? _.reduced(true) : acc),
