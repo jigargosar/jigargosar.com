@@ -24,26 +24,28 @@ const ItemModel = Model({
   attrs: {bucket: types.reference(BucketModel)},
 })
 
-export const Items = Collection({
+const ItemCollection = Collection({
   model: ItemModel,
-})
-  .views(self => ({
-    whereBucketEq(bucket) {
-      return self.whereEq({bucket})
-    },
-  }))
-  .create()
+}).views(self => ({
+  whereBucketEq(bucket) {
+    return self.whereEq({bucket})
+  },
+}))
+export const Items = ItemCollection.create()
 
-export const Buckets = Collection({
+const BucketCollection = Collection({
   model: BucketModel,
-})
-  .views(self => ({
-    whereDashboardEq(dashboard) {
-      return self.whereEq({dashboard})
-    },
-  }))
-  .create()
+}).views(self => ({
+  whereDashboardEq(dashboard) {
+    return self.whereEq({dashboard})
+  },
+}))
+export const Buckets = BucketCollection.create()
 
-export const Dashboards = Collection({
+const DashboardCollection = Collection({
   model: DashboardModel,
-}).create()
+})
+
+export const Dashboards = DashboardCollection.create()
+
+export const Domain = types.model('Domain', {})
