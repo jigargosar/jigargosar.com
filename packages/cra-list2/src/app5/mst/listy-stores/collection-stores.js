@@ -1,6 +1,7 @@
 import {Model} from '../Model'
 import {getParentOfType, getType, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
+import {optionalCollections} from '../../little-mst'
 
 function getDomain(self) {
   return getType(self) === Domain
@@ -59,12 +60,15 @@ const ItemM = Model({
   attrs: {bucket: types.reference(BucketM)},
 })
 
+const collectionProps = {
+  items: Collection(ItemM),
+  buckets: Collection(BucketM),
+  dashboards: Collection(DashboardM),
+}
+
 export const Domain = types
-  .model('Domain', {
-    items: types.optional(Collection(ItemM), {}),
-    buckets: types.optional(Collection(BucketM), {}),
-    dashboards: types.optional(Collection(DashboardM), {}),
-  })
+  .model('Domain')
+  .props(optionalCollections(collectionProps))
   .views(domainViews)
   .actions(domainActions)
 

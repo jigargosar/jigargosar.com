@@ -1,5 +1,6 @@
 import {_} from './little-ramda'
-import {applySnapshot, getSnapshot} from 'mobx-state-tree'
+import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
+import * as R from 'ramda'
 
 export {
   getSnapshot,
@@ -45,3 +46,5 @@ export {
 
 export const mapSnapshot = _.map(getSnapshot)
 export const applySnapshot2 = _.curryN(2, applySnapshot)
+const optionalObj = T => types.optional(T, {})
+export const optionalCollections = R.map(optionalObj)
