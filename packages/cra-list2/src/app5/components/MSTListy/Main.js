@@ -33,10 +33,12 @@ const KeyboardShortcuts = observer(
   },
 )
 const InspectStore = observer(function InspectStore({store}) {
+  getSnapshot(store)
   return (
     <Inspector
       name={'store'}
-      data={getSnapshot(store)}
+      data={store}
+      // showNonenumerable
       expandLevel={2}
     />
   )
