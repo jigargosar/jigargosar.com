@@ -27,6 +27,9 @@ export function Collection({model: Model}) {
       reject(pred) {
         return R.reject(pred)(self.list)
       },
+      find(pred = R.T) {
+        return R.find(pred)(self.list)
+      },
     }
   }
 

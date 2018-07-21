@@ -2,12 +2,16 @@ import rootStore from './root-store'
 import {Model} from '../Model'
 import {Collection} from '../Collection'
 import {types} from 'mobx-state-tree'
+import {mapSnapshot} from '../../little-mst'
 
 export const store = rootStore
 
+const DashboardModel = Model({
+  name: 'Dashboard',
+})
 const BucketModel = Model({
   name: 'Bucket',
-  attrs: {},
+  attrs: {dashboard: types.reference(DashboardModel)},
 })
 
 const ItemModel = Model({
@@ -25,8 +29,10 @@ const ItemCollection = Collection({
   }))
   .create()
 
-const b = BucketModel.create()
+const d = DashboardModel.create()
+const b = BucketModel.create({dashboard: d})
 
 ItemCollection.add({bucket: b})
 
-console.log(`ItemCollection`, ItemCollection.list)
+const list = ItemCollection.list
+console.log(`ItemCollection.list`, list, mapSnapshot(list))
