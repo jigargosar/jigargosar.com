@@ -6,7 +6,9 @@ export const store = rootStore
 
 const domain = Domain.create()
 
-const dashboard = domain.add({}, DashboardC)
-dashboard.addBucket().addItem()
+domain
+  .add({}, DashboardC)
+  .addBucket()
+  .addItem()
 console.log(`domain`, domain)
 console.log(`getSnapshot(domain)`, getSnapshot(domain))
