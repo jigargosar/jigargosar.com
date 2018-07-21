@@ -3,7 +3,7 @@ import {cn} from '../utils'
 import {_} from '../../little-ramda'
 import React from 'react'
 import {Delete} from '@material-ui/icons'
-import {defaultProps, mapProps} from '../recompose-utils'
+import {defaultProps, mapProps} from '../little-recompose'
 
 export const ListPane = withClassNames(
   cn(

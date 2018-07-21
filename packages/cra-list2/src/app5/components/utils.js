@@ -4,7 +4,7 @@ import isHotKey from 'is-hotkey'
 import {_, R, RX, tryCatchLog, validate} from '../little-ramda'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import {setDisplayName, wrapDisplayName} from './recompose-utils'
+import {setDisplayName, wrapDisplayName} from './little-recompose'
 
 export {F, RC, observer, Observer, inject, isHotKey}
 export const cn = RX.cx
@@ -41,13 +41,6 @@ export const wrapPD = fn => e => {
   e.preventDefault()
   fn(e)
 }
-
-// export function wrapPD(fn) {
-//   return function wrapPD(e) {
-//     e.preventDefault()
-//     return fn(e)
-//   }
-// }
 
 /**
  * @return {null}
