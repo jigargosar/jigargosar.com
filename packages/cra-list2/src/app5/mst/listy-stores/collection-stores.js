@@ -1,7 +1,6 @@
 import {Model} from '../Model'
 import {getParentOfType, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
-import {constant, R} from '../../little-ramda'
 
 function getDomain(self) {
   return getParentOfType(self, Domain)
