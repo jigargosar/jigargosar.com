@@ -19,7 +19,7 @@ const ItemModel = Model({
   attrs: {bucket: types.reference(BucketModel)},
 })
 
-const ItemCollection = Collection({
+const Items = Collection({
   model: ItemModel,
 })
   .views(self => ({
@@ -32,7 +32,7 @@ const ItemCollection = Collection({
 const d = DashboardModel.create()
 const b = BucketModel.create({dashboard: d})
 
-ItemCollection.add({bucket: b})
+Items.add({bucket: b})
 
-const list = ItemCollection.list
+const list = Items.list
 console.log(`ItemCollection.list`, list, mapSnapshot(list))
