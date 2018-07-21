@@ -7,7 +7,7 @@ import {oInject} from './utils'
 import {_} from '../../little-ramda'
 import {observer} from 'mobx-react'
 import {domain} from '../../mst/listy-stores'
-import {InspectSnapshot} from '../Inspect'
+import {InspectSnapshot} from '../Inspect/index'
 
 const KeyboardShortcuts = observer(
   class KeyboardShortcuts extends React.Component {
