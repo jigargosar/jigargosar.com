@@ -10,8 +10,6 @@ export function injectStores(fn) {
 
 function injectNamed(...names) {
   return injectStores((stores, props) => {
-    debugger
-
     return {
       ...R.pick(names)(stores),
       ...props,
