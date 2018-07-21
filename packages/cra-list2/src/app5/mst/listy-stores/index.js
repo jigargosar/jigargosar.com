@@ -1,20 +1,32 @@
 import rootStore from './root-store'
 import {Model} from '../Model'
 import {Collection} from '../Collection'
+import {types} from 'mobx-state-tree'
 
 export const store = rootStore
 
-const ItemModel = Model({
-  name: 'Item',
+const BucketModel = Model({
+  name: 'Bucket',
   attrs: {},
 })
 
-console.log(`ItemModel`, ItemModel)
+const ItemModel = Model({
+  name: 'Item',
+  attrs: {bucket: types.reference(BucketModel)},
+})
 
 const ItemCollection = Collection({
   model: ItemModel,
 })
-  .views(self => ({}))
+  .views(self => ({
+    whereBucketEq(bucket) {
+      return self.whereEq({bucket})
+    },
+  }))
   .create()
 
-console.log(`ItemCollection`, ItemCollection)
+const b = BucketModel.create()
+
+ItemCollection.add({bucket: b})
+
+console.log(`ItemCollection`, ItemCollection.list)

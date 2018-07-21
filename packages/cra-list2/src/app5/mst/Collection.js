@@ -7,9 +7,10 @@ export function Collection({model}) {
     .model(`${model.name}Collection`, {
       lookup: types.map(model),
     })
-    .views(ext)
+    .views(views)
+    .actions(actions)
 
-  function ext(self) {
+  function views(self) {
     return {
       get list() {
         return mValues(self.lookup)
@@ -25,6 +26,14 @@ export function Collection({model}) {
       },
       reject(pred) {
         return R.reject(pred)(self.list)
+      },
+    }
+  }
+
+  function actions(self) {
+    return {
+      add(v) {
+        self.lookup.put(model.create(v))
       },
     }
   }
