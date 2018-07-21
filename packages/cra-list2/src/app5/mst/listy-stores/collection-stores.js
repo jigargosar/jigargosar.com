@@ -1,9 +1,11 @@
 import {Model} from '../Model'
-import {getParentOfType, types} from 'mobx-state-tree'
+import {getParentOfType, getType, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 
 function getDomain(self) {
-  return getParentOfType(self, Domain)
+  return getType(self) === Domain
+    ? self
+    : getParentOfType(self, Domain)
 }
 function getItems(self) {
   return getDomain(self).items
@@ -11,6 +13,10 @@ function getItems(self) {
 
 function getBuckets(self) {
   return getDomain(self).buckets
+}
+
+function getDashboards(self) {
+  return getDomain(self).dashboards
 }
 
 const DashboardM = Model({
@@ -23,7 +29,7 @@ const DashboardM = Model({
   }))
   .actions(self => ({
     addBucket(model) {
-      return getDomain(self).buckets.add({
+      return getBuckets(self).add({
         ...model,
         dashboard: self,
       })
@@ -81,7 +87,7 @@ function domainViews(self) {
 function domainActions(self) {
   return {
     addDashboard(model) {
-      return self.dashboards.add(model)
+      return getDashboards(self).add(model)
     },
   }
 }
