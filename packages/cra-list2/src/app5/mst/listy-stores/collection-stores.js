@@ -8,15 +8,15 @@ function getDomain(self) {
     ? self
     : getParentOfType(self, Domain)
 }
-function getItems(self) {
+function getItemCollection(self) {
   return getDomain(self).items
 }
 
-function getBuckets(self) {
+function getBucketCollection(self) {
   return getDomain(self).buckets
 }
 
-function getDashboards(self) {
+function getDashboardCollection(self) {
   return getDomain(self).dashboards
 }
 
@@ -25,12 +25,12 @@ const Dashboard = Model({
 })
   .views(self => ({
     get buckets() {
-      return getBuckets(self).whereEq({dashboard: self})
+      return getBucketCollection(self).whereEq({dashboard: self})
     },
   }))
   .actions(self => ({
     addBucket(model) {
-      return getBuckets(self).add({
+      return getBucketCollection(self).add({
         ...model,
         dashboard: self,
       })
@@ -43,12 +43,12 @@ const Bucket = Model({
 })
   .views(self => ({
     get items() {
-      return getItems(self).whereEq({bucket: self})
+      return getItemCollection(self).whereEq({bucket: self})
     },
   }))
   .actions(self => ({
     addItem(model) {
-      return getItems(self).add({
+      return getItemCollection(self).add({
         ...model,
         bucket: self,
       })
@@ -79,7 +79,7 @@ function domainViews(self) {
 function domainActions(self) {
   return {
     addDashboard(model) {
-      return getDashboards(self).add(model)
+      return getDashboardCollection(self).add(model)
     },
   }
 }
