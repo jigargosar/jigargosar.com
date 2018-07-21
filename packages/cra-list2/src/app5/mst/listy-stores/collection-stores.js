@@ -67,12 +67,14 @@ export const BucketC = Collection({
   },
 }))
 
-export const Domain = types.model('Domain', {
-  items: types.optional(ItemC, {}),
-  buckets: types.optional(BucketC, {}),
-  dashboards: types.optional(DashboardC, {}),
-})
-// .views(domainViews)
+export const Domain = types
+  .model('Domain', {
+    items: types.optional(ItemC, {}),
+    buckets: types.optional(BucketC, {}),
+    dashboards: types.optional(DashboardC, {}),
+  })
+  // .views(domainViews)
+  .actions(domainActions)
 
 // function domainViews(self) {
 //   return {}
