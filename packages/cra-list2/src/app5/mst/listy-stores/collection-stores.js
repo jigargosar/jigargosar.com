@@ -3,6 +3,10 @@ import {getParentOfType, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {constant, R} from '../../little-ramda'
 
+function getDomain(self) {
+  return getParentOfType(self, Domain)
+}
+
 export const DashboardM = Model({
   name: 'Dashboard',
 })
@@ -13,7 +17,7 @@ export const DashboardM = Model({
   }))
   .actions(self => ({
     addBucket(model) {
-      return getParentOfType(self, Domain).buckets.add({
+      return getDomain(self).buckets.add({
         ...model,
         dashboard: self,
       })
@@ -26,7 +30,7 @@ export const BucketM = Model({
 })
   .views(self => ({
     get items() {
-      return Items.whereBucketEq(self)
+      return getDomain(self).items.whereBucketEq(self)
     },
   }))
   .actions(self => ({
@@ -65,8 +69,6 @@ export const Buckets = BucketC.create()
 export const DashboardC = Collection({
   model: DashboardM,
 })
-
-export const Dashboards = DashboardC.create()
 
 export const Domain = types
   .model('Domain', {
