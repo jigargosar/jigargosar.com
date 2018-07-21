@@ -5,6 +5,17 @@ import {Collection} from '../Collection'
 function getDomain(self) {
   return getParentOfType(self, Domain)
 }
+function getItems(self) {
+  return getDomain(self).items
+}
+
+function getBuckets(self) {
+  return getDomain(self).buckets
+}
+
+function getDashboards(self) {
+  return getDomain(self).dashboards
+}
 
 const DashboardM = Model({
   name: 'Dashboard',
