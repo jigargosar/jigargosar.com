@@ -13,11 +13,11 @@ let firstLoad = true
 function render() {
   mRunInAction('Hot Update States', () => {
     if (firstLoad) {
-      console.log('App Reloaded')
+      console.log('Full Page Load')
       firstLoad = false
     } else {
       console.clear()
-      console.log('Clearing Console on Hot Reload')
+      console.log('HMR: Console Cleared')
     }
 
     Object.assign(storesBox, {
