@@ -46,25 +46,17 @@ const ItemM = Model({
   attrs: {bucket: types.reference(BucketM)},
 })
 
-export const ItemC = Collection({
-  model: ItemM,
-}).views(self => ({
-  whereBucketEq(bucket) {
-    return self.whereEq({bucket})
-  },
-}))
-
 export const DashboardC = Collection({
   model: DashboardM,
 })
 
 export const BucketC = Collection({
   model: BucketM,
-}).views(self => ({
-  whereDashboardEq(dashboard) {
-    return self.whereEq({dashboard})
-  },
-}))
+})
+
+export const ItemC = Collection({
+  model: ItemM,
+})
 
 export const Domain = types
   .model('Domain', {
