@@ -1,6 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
-import {StyleRoot} from '../styled'
+import {Flex, StyleRoot} from '../styled'
 import {whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
 import {oInject} from './utils'
@@ -8,6 +8,7 @@ import {_} from '../../little-ramda'
 import {Inspector} from 'react-inspector'
 import {getSnapshot} from 'mobx-state-tree'
 import {observer} from 'mobx-react'
+import {domain} from '../../mst/listy-stores'
 
 const KeyboardShortcuts = observer(
   class KeyboardShortcuts extends React.Component {
@@ -43,12 +44,20 @@ const InspectStore = observer(function InspectStore({store}) {
     />
   )
 })
+
 function ListyMain({store}) {
   return (
     <StyleRoot>
       <KeyboardShortcuts store={store} />
       <Dashboard dashboard={store} />
-      <InspectStore store={store} />
+      <Flex bg={'pink'} p={10}>
+        <Flex p={1}>
+          <InspectStore store={domain} style={{padding: 10}} />
+        </Flex>
+        <Flex>
+          <InspectStore store={store} />
+        </Flex>
+      </Flex>
     </StyleRoot>
   )
 }

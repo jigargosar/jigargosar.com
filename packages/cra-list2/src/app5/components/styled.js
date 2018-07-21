@@ -7,6 +7,7 @@ import {
   lineHeight,
   space,
   width,
+  display,
 } from 'styled-system'
 
 import Tag from 'clean-tag'
@@ -29,7 +30,14 @@ ${color}
 ${fontWeight}
 ${lineHeight}
 ${flex}
+${display}
 `
+
+export const Flex = styled(Box)``
+
+Flex.defaultProps = {
+  display: 'flex',
+}
 
 function cnp(...cns) {
   return {className: _.compose(cn2(cns), _.prop('className'))}
