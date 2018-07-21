@@ -11,6 +11,10 @@ const ItemModel = Model({
 
 console.log(`ItemModel`, ItemModel)
 
-const ItemCollection = Collection({model: ItemModel})
+const ItemCollection = Collection({
+  model: ItemModel,
+})
+  .views(self => ({}))
+  .create()
 
 console.log(`ItemCollection`, ItemCollection)
