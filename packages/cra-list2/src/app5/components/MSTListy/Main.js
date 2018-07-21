@@ -1,12 +1,12 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {Flex, StyleRoot} from '../styled'
-import {cn, whenKey, withKeyEvent} from '../utils'
+import {whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
 import {oInject} from './utils'
 import {_} from '../../little-ramda'
 import {Inspector} from 'react-inspector'
-import {getSnapshot} from 'mobx-state-tree'
+import {getSnapshot, getType} from 'mobx-state-tree'
 import {observer} from 'mobx-react'
 import {domain} from '../../mst/listy-stores'
 
@@ -33,16 +33,16 @@ const KeyboardShortcuts = observer(
     }
   },
 )
-const InspectStore = observer(function InspectStore({store}) {
-  getSnapshot(store)
+const InspectSnapshot = observer(function InspectSnapshot({
+  node,
+  ...other
+}) {
   return (
     <Inspector
-      style={{padding: '100px'}}
-      className={cn('p3')}
-      name={'store'}
-      data={store}
-      // showNonenumerable
-      expandLevel={2}
+      name={getType(node).name}
+      data={getSnapshot(node)}
+      expandLevel={20}
+      {...other}
     />
   )
 })
@@ -53,8 +53,8 @@ function ListyMain({store}) {
       <KeyboardShortcuts store={store} />
       <Dashboard dashboard={store} />
       <Flex>
-        <InspectStore store={domain} />
-        <InspectStore store={store} />
+        <InspectSnapshot node={domain} />
+        <InspectSnapshot node={store} />
       </Flex>
     </StyleRoot>
   )
