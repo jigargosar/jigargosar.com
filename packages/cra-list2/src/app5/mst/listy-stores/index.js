@@ -10,5 +10,5 @@ domain
   .addDashboard({})
   .addBucket()
   .addItem()
-console.log(`domain`, domain)
-// console.log(`getSnapshot(domain)`, getSnapshot(domain))
+console.debug(`domain`, domain)
+console.debug(`getSnapshot(domain)`, getSnapshot(domain))
