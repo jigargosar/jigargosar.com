@@ -18,20 +18,21 @@ function getDashboardCollection(self) {
 
 const Dashboard = Model({
   name: 'Dashboard',
-})
-  .views(self => ({
+}).extend(self => ({
+  views: {
     get [`buckets`]() {
       return getDomain(self).buckets.whereEq({dashboard: self})
     },
-  }))
-  .actions(self => ({
+  },
+  actions: {
     [`add${'Bucket'}`](model) {
       return getDomain(self).buckets.add({
         ...model,
         dashboard: self,
       })
     },
-  }))
+  },
+}))
 
 const Bucket = Model({
   name: 'Bucket',
