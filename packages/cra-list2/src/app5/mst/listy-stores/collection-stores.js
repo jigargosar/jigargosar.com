@@ -11,7 +11,7 @@ export const DashboardM = Model({
 })
   .views(self => ({
     get buckets() {
-      return getDomain(self).buckets.whereDashboardEq(self)
+      return getDomain(self).buckets.whereEq({dashboard: self})
     },
   }))
   .actions(self => ({
@@ -29,7 +29,7 @@ export const BucketM = Model({
 })
   .views(self => ({
     get items() {
-      return getDomain(self).items.whereBucketEq(self)
+      return getDomain(self).items.whereEq({bucket: self})
     },
   }))
   .actions(self => ({
