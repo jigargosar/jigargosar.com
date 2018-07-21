@@ -12,10 +12,6 @@ function getItemCollection(self) {
   return getDomain(self).itemCollection
 }
 
-function getBucketCollection(self) {
-  return getDomain(self).buckets
-}
-
 function getDashboardCollection(self) {
   return getDomain(self).dashboards
 }
@@ -25,12 +21,12 @@ const Dashboard = Model({
 })
   .views(self => ({
     get [`buckets`]() {
-      return getBucketCollection(self).whereEq({dashboard: self})
+      return getDomain(self).buckets.whereEq({dashboard: self})
     },
   }))
   .actions(self => ({
     [`add${'Bucket'}`](model) {
-      return getBucketCollection(self).add({
+      return getDomain(self).buckets.add({
         ...model,
         dashboard: self,
       })
