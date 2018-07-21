@@ -31,12 +31,12 @@ ${lineHeight}
 ${flex}
 `
 
-function cnProp(...cns) {
+function cnp(...cns) {
   return {className: _.compose(cn2(cns), _.prop('className'))}
 }
 
 export const BaseStyle = styled(Box).attrs({
-  ...cnProp('sans-serif'),
+  ...cnp('sans-serif'),
 })``
 
 BaseStyle.defaultProps = {
