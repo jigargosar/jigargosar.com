@@ -1,23 +1,18 @@
 import rootStore from './root-store'
-import {mapSnapshot} from '../../little-mst'
 import {
-  BucketModel,
-  DashboardModel,
+  BucketCollection,
+  DashboardCollection,
   Domain,
-  Items,
+  ItemCollection,
 } from './collection-stores'
+import {getSnapshot} from 'mobx-state-tree'
 
 export const store = rootStore
 
-const d = DashboardModel.create()
-const b = BucketModel.create({dashboard: d})
-
-Items.add({bucket: b})
-
-const list = Items.list
-
-console.log(`Items.list`, list, mapSnapshot(list))
-
 const domain = Domain.create()
 
-domain.addDashboard({})
+const dashboard = domain.add({}, DashboardCollection)
+const bucket = domain.add({dashboard}, BucketCollection)
+domain.add({bucket}, ItemCollection)
+console.log(`domain`, domain)
+console.log(`getSnapshot(domain)`, getSnapshot(domain))

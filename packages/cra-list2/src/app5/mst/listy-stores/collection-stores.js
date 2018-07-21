@@ -1,6 +1,7 @@
 import {Model} from '../Model'
 import {types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
+import {constant, R} from '../../little-ramda'
 
 export const DashboardModel = Model({
   name: 'Dashboard',
@@ -24,16 +25,17 @@ const ItemModel = Model({
   attrs: {bucket: types.reference(BucketModel)},
 })
 
-const ItemCollection = Collection({
+export const ItemCollection = Collection({
   model: ItemModel,
 }).views(self => ({
   whereBucketEq(bucket) {
     return self.whereEq({bucket})
   },
 }))
+
 export const Items = ItemCollection.create()
 
-const BucketCollection = Collection({
+export const BucketCollection = Collection({
   model: BucketModel,
 }).views(self => ({
   whereDashboardEq(dashboard) {
@@ -42,7 +44,7 @@ const BucketCollection = Collection({
 }))
 export const Buckets = BucketCollection.create()
 
-const DashboardCollection = Collection({
+export const DashboardCollection = Collection({
   model: DashboardModel,
 })
 
@@ -54,12 +56,25 @@ export const Domain = types
     buckets: types.optional(BucketCollection, {}),
     dashboards: types.optional(DashboardCollection, {}),
   })
+  .views(domainViews)
   .actions(domainActions)
+
+function domainViews(self) {
+  return {
+    collectionFromType(ct) {
+      return R.cond([
+        [R.equals(ItemCollection), constant(self.items)],
+        [R.equals(BucketCollection), constant(self.buckets)],
+        [R.equals(DashboardCollection), constant(self.dashboards)],
+      ])(ct)
+    },
+  }
+}
 
 function domainActions(self) {
   return {
-    addDashboard(model) {
-      self.dashboards.add(model)
+    add(model, collectionType) {
+      return self.collectionFromType(collectionType).add(model)
     },
   }
 }
