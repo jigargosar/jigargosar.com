@@ -11,29 +11,31 @@ const storesBox = oObject({}, {}, {name: 'storesBox'})
 let firstLoad = true
 
 function render() {
-  mRunInAction('Hot Update States', () => {
-    if (firstLoad) {
-      console.log('Full Page Load')
-      firstLoad = false
-    } else {
-      console.clear()
-      console.log('HMR: Console Cleared')
-    }
+  if (firstLoad) {
+    console.log('Full Page Load')
+    firstLoad = false
+  } else {
+    console.clear()
+    console.log('HMR: Console Cleared')
+  }
 
-    Object.assign(storesBox, {
-      store: require('./mst/listy-stores').store,
-    })
-    const App = require('./components/MSTListy/Main').default
-    ReactDOM.render(
-      <Provider store={storesBox}>
-        <App />
-      </Provider>,
-      document.getElementById('root'),
-    )
+  Object.assign(storesBox, {
+    store: require('./mst/listy-stores').store,
   })
+  const App = require('./components/MSTListy/Main').default
+  ReactDOM.render(
+    <Provider store={storesBox}>
+      <App />
+    </Provider>,
+    document.getElementById('root'),
+  )
 }
 
-render()
+function renderAction() {
+  mRunInAction('render', render)
+}
+
+renderAction()
 
 registerServiceWorker()
 
@@ -42,6 +44,6 @@ if (module.hot) {
 
   module.hot['accept'](
     ['./mst/listy-stores', './components/MSTListy/Main'],
-    tryCatchLog(render),
+    tryCatchLog(renderAction),
   )
 }
