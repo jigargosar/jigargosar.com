@@ -1,5 +1,5 @@
 import rootStore from './root-store'
-import {DashboardC, Domain} from './collection-stores'
+import {Domain} from './collection-stores'
 import {getSnapshot} from 'mobx-state-tree'
 
 export const store = rootStore

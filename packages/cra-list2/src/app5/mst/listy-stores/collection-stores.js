@@ -12,7 +12,7 @@ export const DashboardM = Model({
 })
   .views(self => ({
     get buckets() {
-      return Buckets.whereDashboardEq(self)
+      return getDomain(self).buckets.whereDashboardEq(self)
     },
   }))
   .actions(self => ({
@@ -55,7 +55,9 @@ export const ItemC = Collection({
   },
 }))
 
-export const Items = ItemC.create()
+export const DashboardC = Collection({
+  model: DashboardM,
+})
 
 export const BucketC = Collection({
   model: BucketM,
@@ -64,11 +66,6 @@ export const BucketC = Collection({
     return self.whereEq({dashboard})
   },
 }))
-export const Buckets = BucketC.create()
-
-export const DashboardC = Collection({
-  model: DashboardM,
-})
 
 export const Domain = types
   .model('Domain', {
