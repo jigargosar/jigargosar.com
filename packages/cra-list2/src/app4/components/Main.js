@@ -5,7 +5,6 @@ import {
   List,
   ListItem,
   Paper,
-  TypographyDefaults,
   Section,
   Text,
   Title,
@@ -26,6 +25,7 @@ import FocusChild from './mobx/FocusChild'
 import {localActorId, shortenAID} from '../services/ActorId'
 import {LinkTo} from './mobx/Router'
 import TimeAgo from 'react-timeago'
+import {BaseStyle} from './Styled'
 
 const NoteInput = observer(function NoteInput({note}) {
   return (
@@ -174,13 +174,13 @@ const AppHeader = mrInjectAll(function AppHeader({fire}) {
 
 const Main = mrInjectAll(function App({pop}) {
   return (
-    <TypographyDefaults>
+    <BaseStyle>
       <CenterLayout>
         <AppHeader />
         {/*{pop.isRunningAsBrowserPopup ? 'POPUP' : <NoteList />}*/}
         <NoteList />
       </CenterLayout>
-    </TypographyDefaults>
+    </BaseStyle>
   )
 })
 

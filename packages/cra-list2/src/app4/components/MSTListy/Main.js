@@ -1,7 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
-import {TypographyDefaults} from '../ui'
-import {cn, whenKey, withKeyEvent} from '../utils'
+import {StyleRoot} from '../Styled'
+import {whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
 import {oInject} from './utils'
 import {_} from '../../little-ramda'
@@ -30,10 +30,10 @@ class KeyboardShortcuts extends React.Component {
 
 function ListyMain({store}) {
   return (
-    <TypographyDefaults className={cn('mb4')}>
+    <StyleRoot>
       <KeyboardShortcuts store={store} />
       <Dashboard dashboard={store} />
-    </TypographyDefaults>
+    </StyleRoot>
   )
 }
 

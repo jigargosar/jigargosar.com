@@ -26,6 +26,7 @@
     "cerebral": "^4.2.2",
     "chance": "^1.0.16",
     "classnames": "^2.2.6",
+    "clean-tag": "^2.0.0",
     "console-feed": "^2.8.3",
     "date-fns": "^1.29.0",
     "escape-string-regexp": "^1.0.5",
@@ -91,6 +92,7 @@
     "router5": "^6.3.0",
     "sanctuary": "^0.15.0",
     "styled-components": "^3.3.3",
+    "styled-system": "^3.0.2",
     "tachyons": "^4.10.0",
     "xstate": "^3.3.3"
   },

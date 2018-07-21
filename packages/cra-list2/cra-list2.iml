@@ -12,6 +12,8 @@
       <excludeFolder url="file://$MODULE_DIR$/src/app4/components/ImmutableNotes" />
       <excludeFolder url="file://$MODULE_DIR$/src/app4/components/behaviour" />
       <excludeFolder url="file://$MODULE_DIR$/src/app4/components/mobx" />
+      <excludeFolder url="file://$MODULE_DIR$/src/app4/mobx/NotesActiveRecord" />
+      <excludeFolder url="file://$MODULE_DIR$/src/app4/mobx/NotesTree" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

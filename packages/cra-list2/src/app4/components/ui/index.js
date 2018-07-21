@@ -3,13 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import {cx as cn} from 'ramda-extension'
 import {PropTypes} from '../utils'
-import {
-  Error,
-  Add,
-  Edit,
-  ModeEdit,
-  AddCircleOutline,
-} from '@material-ui/icons'
+import {Add, AddCircleOutline, Edit, Error, ModeEdit} from '@material-ui/icons'
 
 /*eslint-enable*/
 
@@ -19,10 +13,6 @@ export {Error, Add, Edit, ModeEdit, AddCircleOutline}
 
 export const CenterLayout = styled.div.attrs({
   className: 'center mw7',
-})``
-
-export const TypographyDefaults = styled.div.attrs({
-  className: 'sans-serif f5 lh-solid',
 })``
 
 export const Title = styled.div.attrs({
