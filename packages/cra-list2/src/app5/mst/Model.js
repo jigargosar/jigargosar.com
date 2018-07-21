@@ -9,6 +9,7 @@ export function Model({name, attrs}) {
       R.merge(attrs, {
         id: types.optional(types.identifier, () => modelId(name)),
         name: '',
+        deleted: false,
       }),
     ),
   })

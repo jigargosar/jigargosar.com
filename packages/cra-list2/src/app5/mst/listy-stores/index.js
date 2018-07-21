@@ -5,9 +5,7 @@ export const store = rootStore
 
 const ItemModel = Model({
   name: 'Item',
-  attrs: {
-    deleted: false,
-  },
+  attrs: {},
 })
 
 console.log(`ItemModel`, ItemModel)
