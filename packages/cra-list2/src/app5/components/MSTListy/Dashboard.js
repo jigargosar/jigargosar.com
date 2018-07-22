@@ -3,7 +3,7 @@ import React from 'react'
 import {renderKeyedById} from '../utils'
 import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
-import {B} from '../little-rebass'
+import {B, Btn} from '../little-rebass'
 import {rc} from '../little-recompose'
 import system from 'system-components'
 
@@ -28,7 +28,7 @@ const Dashboard = observer(function Dashboard({dashboard}) {
     <Layout>
       {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
       <Panel>
-        <B.Button
+        <Btn
           onClick={() => dashboard.addBucket()}
           children={'Add List'}
         />
