@@ -30,7 +30,7 @@ const Button = system({
   bg: 'transparent solid',
   color: '#666',
   border: 0,
-  p: 2,
+  p: 1,
   fontSize: 3,
   display: 'flex',
   alignItems: 'center',
