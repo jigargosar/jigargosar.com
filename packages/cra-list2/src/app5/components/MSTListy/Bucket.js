@@ -4,6 +4,7 @@ import {cn, renderKeyedById} from '../utils'
 import {PlaylistAdd} from '@material-ui/icons'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {observer} from 'mobx-react'
+import {REB} from '../REB'
 
 function BucketItem({item}) {
   const {text: itemText, isSelected, onFocus} = item
@@ -50,10 +51,10 @@ BucketItems = observer(BucketItems)
 
 function Bucket({bucket}) {
   return (
-    <ListPane>
+    <REB.Flex flexDirection={'column'}>
       {renderBucketHeader(bucket)}
       <BucketItems bucket={bucket} />
-    </ListPane>
+    </REB.Flex>
   )
 }
 

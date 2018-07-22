@@ -8,9 +8,7 @@ import {REB} from '../REB'
 function Dashboard({dashboard}) {
   return (
     <REB.Flex flexWrap={'wrap'}>
-      {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
       <REB.Flex
-        flex={'1 1 auto'}
         flexDirection={'column'}
         // align={'stretch'}
       >
@@ -19,6 +17,7 @@ function Dashboard({dashboard}) {
           children={'Add List'}
         />
       </REB.Flex>
+      {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
     </REB.Flex>
   )
 }
