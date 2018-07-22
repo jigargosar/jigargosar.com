@@ -125,6 +125,12 @@ export function maybeOr(defaultValue) {
   return S.maybe(defaultValue)(S.I)
 }
 
+export function maybeOr_(fn) {
+  return S.maybe_(fn)(S.I)
+}
+
+export const maybeOrNil = S.maybe_(() => null)
+
 export const isNotEmpty = _.complement(_.isEmpty)
 
 export const mergeWithDefaults = _.mergeWith(_.defaultTo)
