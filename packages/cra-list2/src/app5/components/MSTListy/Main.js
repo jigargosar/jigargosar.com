@@ -7,7 +7,9 @@ import {Dashboard} from './Dashboard'
 import {oInjectNamed} from '../little-mobx-react'
 import {observer} from 'mobx-react'
 import {InspectSnapshot} from '../Inspect/index'
-import {S} from '../../little-ramda'
+import {mapIndexed, R, S} from '../../little-ramda'
+import {onPatch} from 'mobx-state-tree'
+import {domain} from '../../mst/listy-stores'
 
 const KeyboardShortcuts = observer(
   class KeyboardShortcuts extends React.Component {
@@ -27,6 +29,7 @@ const KeyboardShortcuts = observer(
         whenKey('up')(store.onSelectPrev),
       )(e)
     }
+
     render() {
       return null
     }
@@ -43,6 +46,34 @@ const DebugStores = oInjectNamed('store', 'domain')(
   },
 )
 
+const DomainPatches = class DomainPatches extends React.Component {
+  state = {
+    patches: [],
+  }
+  componentDidMount() {
+    this.disposer = onPatch(domain, patch => {
+      this.setState({
+        patches: R.prepend(patch, this.state.patches),
+      })
+      console.log(`patches`, ...this.state.patches)
+    })
+  }
+
+  componentWillUnmount() {
+    this.disposer()
+  }
+
+  render() {
+    return (
+      <div>
+        {mapIndexed((p, idx) => (
+          <pre key={idx}>{JSON.stringify(p, null, 2)}</pre>
+        ))(this.state.patches)}
+      </div>
+    )
+  }
+}
+
 function ListyMain({store, domain}) {
   return (
     <StyleRoot>
@@ -50,6 +81,7 @@ function ListyMain({store, domain}) {
       {S.maybe_(() => null)(dashboard => (
         <Dashboard dashboard={dashboard} />
       ))(domain.currentDashboard)}
+      <DomainPatches />
       <DebugStores />
     </StyleRoot>
   )

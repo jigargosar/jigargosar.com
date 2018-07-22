@@ -6,11 +6,11 @@ const store = rootStore
 
 const domain = Domain.create()
 
-export const domainPatches = []
-onPatch(domain, patch => {
-  domainPatches.push(patch)
-  console.log(`patches`, ...domainPatches)
-})
+// export const domainPatches = []
+// onPatch(domain, patch => {
+//   domainPatches.push(patch)
+//   console.log(`patches`, ...domainPatches)
+// })
 
 function loggerCallBack(message) {
   return (...a) => console.debug(message, ...a)
