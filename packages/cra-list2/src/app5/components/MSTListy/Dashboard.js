@@ -7,10 +7,10 @@ import {REB} from '../REB'
 
 function Dashboard({dashboard}) {
   return (
-    <REB.Flex flexWrap={'wrap'}>
+    <REB.Box flexWrap={'wrap'}>
       <REB.Flex
-        flexDirection={'column'}
-        // align={'stretch'}
+      // flexDirection={'column'}
+      // align={'stretch'}
       >
         <REB.Button
           onClick={() => dashboard.addBucket()}
@@ -18,7 +18,7 @@ function Dashboard({dashboard}) {
         />
       </REB.Flex>
       {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
-    </REB.Flex>
+    </REB.Box>
   )
 }
 

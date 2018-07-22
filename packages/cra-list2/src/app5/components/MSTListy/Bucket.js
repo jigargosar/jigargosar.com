@@ -10,15 +10,9 @@ function BucketItem({item}) {
   const {text: itemText, isSelected, onFocus} = item
 
   return (
-    <ListPane.Item
-      id={item.id}
-      kind={isSelected ? 'selected' : 'button'}
-      onFocus={onFocus}
-    >
-      <ListPane.ItemText className={cn('code')}>
-        {itemText || 'I am a hard core TODo'}
-      </ListPane.ItemText>
-    </ListPane.Item>
+    <REB.Flex id={item.id} onFocus={onFocus}>
+      {itemText || 'I am a hard core TODo'}
+    </REB.Flex>
   )
 }
 
