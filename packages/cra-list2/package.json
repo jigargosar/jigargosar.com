@@ -80,6 +80,7 @@
     "ramda-extension": "^0.4.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-icons": "^2.2.7",
     "react-inspector": "^2.3.0",
     "react-json-view": "^1.19.0",
     "react-memoize-one": "^0.1.0",
@@ -104,7 +105,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "xx": "x0 docs -op 8080"
   },
   "devDependencies": {
     "@compositor/kit": "^1.0.47",
