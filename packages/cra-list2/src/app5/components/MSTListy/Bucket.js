@@ -18,19 +18,6 @@ function BucketItem({item}) {
 
 BucketItem = observer(BucketItem)
 
-function renderBucketHeader(bucket) {
-  return (
-    <B.Flex>
-      {bucket.name || 'I am a Bucket Short and Stout'}
-      <ListPane.ItemSecondaryAction
-        onClick={() => bucket.addItem()}
-        Icon={PlaylistAdd}
-      />
-      {renderDeleteIcon(bucket.onDelete)}
-    </B.Flex>
-  )
-}
-
 function BucketItems({bucket}) {
   return renderKeyedById(BucketItem, 'item', bucket.items)
 }
@@ -40,7 +27,14 @@ BucketItems = observer(BucketItems)
 function Bucket({bucket}) {
   return (
     <Fragment>
-      {renderBucketHeader(bucket)}
+      <B.Flex>
+        {bucket.name || 'I am a Bucket Short and Stout'}
+        <ListPane.ItemSecondaryAction
+          onClick={() => bucket.addItem()}
+          Icon={PlaylistAdd}
+        />
+        {renderDeleteIcon(bucket.onDelete)}
+      </B.Flex>
       <BucketItems bucket={bucket} />
     </Fragment>
   )
