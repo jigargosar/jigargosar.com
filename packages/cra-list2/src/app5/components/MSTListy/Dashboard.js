@@ -11,8 +11,9 @@ function Dashboard({dashboard}) {
     // flexWrap={'wrap'}
     >
       <REB.Flex
-      // flexDirection={'column'}
-      // align={'stretch'}
+        m={2}
+        // flexDirection={'column'}
+        // align={'stretch'}
       >
         <REB.Button
           onClick={() => dashboard.addBucket()}
