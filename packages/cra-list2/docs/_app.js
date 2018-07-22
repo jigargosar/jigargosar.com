@@ -15,12 +15,6 @@ function NavLink({route: {path, name}}) {
 }
 
 export default class extends React.Component {
-  state = {
-    count: 0,
-  }
-
-  update = fn => this.setState(fn)
-
   render() {
     const {render, routes} = this.props
     console.debug(`this.props`, this.props)
@@ -33,11 +27,7 @@ export default class extends React.Component {
         {renderKeyedByProp(NavLink, 'route', 'path', routes)}
         <Inspector data={this.props} expandLevel={1} />
         {/*<Inspector data={this.props.render()} expandLevel={1} />*/}
-        {render({
-          ...this.state,
-          decrement: () => this.update(s => ({count: s.count - 1})),
-          increment: () => this.update(s => ({count: s.count + 1})),
-        })}
+        {render()}
       </Fragment>
     )
   }
