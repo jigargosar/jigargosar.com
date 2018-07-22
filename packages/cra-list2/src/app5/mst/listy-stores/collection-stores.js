@@ -18,29 +18,22 @@ function getDashboardCollection(self) {
 
 const Dashboard = Model({
   name: 'Dashboard',
-}).extend(self => {
-  const queryName = `buckets`
-  const tableName = `buckets`
-  const hasManyModelName = `Bucket`
-  const identifiedBy = 'dashboard'
-  return {
-    views: {
-      get [queryName]() {
-        return getDomain(self)[tableName].whereEq({
-          [identifiedBy]: self,
-        })
-      },
-    },
-    actions: {
-      [`add${hasManyModelName}`](model) {
-        return getDomain(self)[tableName].add({
-          ...model,
-          [identifiedBy]: self,
-        })
-      },
-    },
-  }
 })
+  .views(self => ({
+    get buckets() {
+      return getDomain(self).buckets.whereEq({
+        dashboard: self,
+      })
+    },
+  }))
+  .actions(self => ({
+    addBucket(model) {
+      return getDomain(self).buckets.add({
+        ...model,
+        dashboard: self,
+      })
+    },
+  }))
 
 const Bucket = Model({
   name: 'Bucket',
@@ -64,16 +57,6 @@ const Item = Model({
   name: 'Item',
   attrs: {bucket: types.reference(Bucket)},
 })
-
-// function hasMany(Model, ManyModel) {
-//   return {
-//     manyPropName: R.compose(pluralize, R.toLower)(ManyModel.name),
-//     addManyModelFnName: `add${ManyModel.name}`,
-//     identifiedBy: R.toLower(Model.name),
-//   }
-// }
-// console.log(`hasMany(Dashboard, Bucket)`, hasMany(Dashboard, Bucket))
-//
 
 const collectionProps = {
   itemCollection: Collection(Item),
