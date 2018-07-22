@@ -7,7 +7,7 @@ import {
 } from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
-import {R} from '../../little-ramda'
+import {S} from '../../little-ramda'
 
 function getDomain(self) {
   return getType(self) === Domain
@@ -79,7 +79,7 @@ export const Domain = types
 function domainViews(self) {
   return {
     get currentDashboard() {
-      return R.head(getDashboardCollection(self).list)
+      return S.head(getDashboardCollection(self).list)
     },
   }
 }

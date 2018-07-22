@@ -1,11 +1,13 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
-import {Flex, StyleRoot} from '../styled'
+import {StyleRoot} from '../styled'
+import {Flex} from 'rebass'
 import {renderIndexed, whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
 import {oInjectNamed} from '../little-mobx-react'
 import {observer} from 'mobx-react'
 import {InspectSnapshot} from '../Inspect/index'
+import {S} from '../../little-ramda'
 
 const KeyboardShortcuts = observer(
   class KeyboardShortcuts extends React.Component {
@@ -45,7 +47,9 @@ function ListyMain({store, domain}) {
   return (
     <StyleRoot>
       <KeyboardShortcuts store={store} />
-      <Dashboard dashboard={domain.currentDashboard} />
+      {S.maybe_(() => null)(dashboard => (
+        <Dashboard dashboard={dashboard} />
+      ))(domain.currentDashboard)}
       <DebugStores />
     </StyleRoot>
   )

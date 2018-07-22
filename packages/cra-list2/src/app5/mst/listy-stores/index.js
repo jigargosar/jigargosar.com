@@ -1,19 +1,27 @@
 import rootStore from './root-store'
 import {Domain} from './collection-stores'
-import {mAutoRun} from '../../mobx/little-mobx'
-import {getSnapshot} from 'mobx-state-tree'
+import {onAction, onPatch, onSnapshot} from 'mobx-state-tree'
+import {mRunInAction} from '../../mobx/little-mobx'
 
 const store = rootStore
 
 const domain = Domain.create()
 
-domain.addMockData()
+onSnapshot(domain, function(...a) {
+  console.log(`onSnapshot`, a)
+})
 
+onPatch(domain, function(...a) {
+  console.log(`onPatch`, a)
+})
+
+onAction(domain, function(...a) {
+  console.log(`onAction`, a)
+})
+
+setTimeout(() => {
+  mRunInAction(() => {
+    domain.addMockData()
+  })
+}, 10)
 export {domain, store}
-
-mAutoRun(
-  () => {
-    console.log(`getSnapshot(domain)`, getSnapshot(domain))
-  },
-  {name: 'domain snapshots'},
-)
