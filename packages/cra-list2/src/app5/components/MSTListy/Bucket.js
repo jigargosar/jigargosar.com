@@ -2,10 +2,8 @@
 import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
-import {ListPane, renderDeleteIcon} from './ListPane'
 import {observer} from 'mobx-react'
-import {B} from '../little-rebass'
-import system from 'system-components'
+import {B, Btn} from '../little-rebass'
 
 function BucketItem({item}) {
   const {text: itemText, /*isSelected,*/ onFocus} = item
@@ -25,18 +23,6 @@ function BucketItems({bucket}) {
 
 BucketItems = observer(BucketItems)
 
-const Button = system({
-  is: 'button',
-  bg: 'transparent solid',
-  color: '#666',
-  border: 0,
-  p: 1,
-  fontSize: 3,
-  display: 'flex',
-  alignItems: 'center',
-  lineHeight: 'inherit',
-})
-
 function Bucket({bucket}) {
   return (
     <Fragment>
@@ -44,8 +30,8 @@ function Bucket({bucket}) {
         <B.Box fontSize={3} flex={'1 1'}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </B.Box>
-        <Button children={<Delete fontSize={'inherit'} />} />
-        <Button
+        <Btn children={<Delete fontSize={'inherit'} />} />
+        <Btn
           children={<PlaylistAdd fontSize={'inherit'} />}
           onClick={() => bucket.addItem()}
         />
