@@ -1,7 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {Flex, StyleRoot} from '../styled'
-import {whenKey, withKeyEvent} from '../utils'
+import {renderIndexed, whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
 import {oInjectNamed} from '../little-mobx-react'
 import {observer} from 'mobx-react'
@@ -31,15 +31,22 @@ const KeyboardShortcuts = observer(
   },
 )
 
+const DebugStores = oInjectNamed('store', 'domain')(
+  function DebugStores(props) {
+    return (
+      <Flex>
+        {renderIndexed(InspectSnapshot, 'node', Object.values(props))}
+      </Flex>
+    )
+  },
+)
+
 function ListyMain({store, domain}) {
   return (
     <StyleRoot>
       <KeyboardShortcuts store={store} />
       <Dashboard dashboard={domain.currentDashboard} />
-      <Flex>
-        <InspectSnapshot node={domain} />
-        <InspectSnapshot node={store} />
-      </Flex>
+      <DebugStores />
     </StyleRoot>
   )
 }

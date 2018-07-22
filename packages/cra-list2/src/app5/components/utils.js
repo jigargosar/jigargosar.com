@@ -1,14 +1,17 @@
 import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
-import {_, R, RX, tryCatchLog, validate} from '../little-ramda'
+import {
+  _,
+  mapIndexed,
+  R,
+  RX,
+  tryCatchLog,
+  validate,
+} from '../little-ramda'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import {
-  setDisplayName,
-  withProps,
-  wrapDisplayName,
-} from './little-recompose'
+import {setDisplayName, wrapDisplayName} from './little-recompose'
 
 export {F, RC, observer, Observer, inject, isHotKey}
 export const cn = RX.cx
@@ -67,6 +70,12 @@ export function renderKeyed(Component, propName, getKey, idList) {
   return R.map(value => (
     <Component key={getKey(value)} {...{[propName]: value}} />
   ))(idList)
+}
+
+export function renderIndexed(Component, propName, list) {
+  return mapIndexed((model, idx) => (
+    <Component key={idx} {...{[propName]: model}} />
+  ))(list)
 }
 
 export function renderKeyedByProp(
