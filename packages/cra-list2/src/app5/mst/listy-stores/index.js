@@ -7,9 +7,17 @@ const store = rootStore
 
 const domain = Domain.create()
 
+const patches = []
+onPatch(domain, patch => {
+  patches.push(patch)
+  console.log(`patches`, ...patches)
+})
+
 function loggerCallBack(message) {
   return (...a) => console.log(message, a)
 }
+
+// const snapshots
 
 onSnapshot(domain, loggerCallBack(`onSnapshot`))
 

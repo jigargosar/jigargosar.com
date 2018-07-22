@@ -1,10 +1,5 @@
 import {Model} from '../Model'
-import {
-  getParentOfType,
-  getSnapshot,
-  getType,
-  types,
-} from 'mobx-state-tree'
+import {getParentOfType, getType, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
 import {S} from '../../little-ramda'
@@ -94,8 +89,6 @@ function domainActions(self) {
         .addDashboard({})
         .addBucket()
         .addItem()
-      console.debug(`domain`, self)
-      console.debug(`getSnapshot(domain)`, getSnapshot(self))
     },
   }
 }
