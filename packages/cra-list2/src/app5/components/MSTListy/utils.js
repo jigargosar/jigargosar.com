@@ -1,4 +1,3 @@
-import {_} from '../../little-ramda'
 import {inject, observer} from 'mobx-react'
 import * as R from 'ramda'
 
@@ -13,6 +12,6 @@ function injectNamed(...names) {
   }))
 }
 
-export const oInject = fn => _.compose(injectStores(fn), observer)
+export const oInject = fn => R.compose(injectStores(fn), observer)
 export const oInjectNamed = (...names) => c =>
-  _.compose(injectNamed(...names), observer)(c)
+  R.compose(injectNamed(...names), observer)(c)
