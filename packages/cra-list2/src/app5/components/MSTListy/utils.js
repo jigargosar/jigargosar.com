@@ -3,18 +3,14 @@ import {inject, observer} from 'mobx-react'
 import * as R from 'ramda'
 
 export function injectStores(fn) {
-  return inject(({stores}, props) => {
-    return fn(stores, props)
-  })
+  return inject(({stores}, props) => fn(stores, props))
 }
 
 function injectNamed(...names) {
-  return injectStores((stores, props) => {
-    return {
-      ...R.pick(names)(stores),
-      ...props,
-    }
-  })
+  return injectStores((stores, props) => ({
+    ...R.pick(names)(stores),
+    ...props,
+  }))
 }
 
 export const oInject = fn => _.compose(injectStores(fn), observer)
