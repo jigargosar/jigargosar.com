@@ -3,7 +3,7 @@ import React from 'react'
 import {Flex, StyleRoot} from '../styled'
 import {whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
-import {oInjectNamed} from './little-mobx-react'
+import {oInjectNamed} from '../little-mobx-react'
 import {observer} from 'mobx-react'
 import {InspectSnapshot} from '../Inspect/index'
 
