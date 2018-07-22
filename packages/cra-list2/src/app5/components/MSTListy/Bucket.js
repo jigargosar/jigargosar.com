@@ -1,10 +1,11 @@
 /* eslint-disable no-func-assign*/
 import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
-import {PlaylistAdd} from '@material-ui/icons'
+import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {observer} from 'mobx-react'
 import {B} from '../little-rebass'
+import system from 'system-components'
 
 function BucketItem({item}) {
   const {text: itemText, /*isSelected,*/ onFocus} = item
@@ -24,11 +25,28 @@ function BucketItems({bucket}) {
 
 BucketItems = observer(BucketItems)
 
+const Button = system({
+  is: 'button',
+  bg: 'transparent solid',
+  color: '#666',
+  border: 0,
+  p: 2,
+  fontSize: 3,
+  display: 'flex',
+  alignItems: 'center',
+  lineHeight: 'inherit',
+})
+
 function Bucket({bucket}) {
   return (
     <Fragment>
-      <B.Flex>
-        {bucket.name || 'I am a Bucket Short and Stout'}
+      <B.Flex alignItems={'center'}>
+        <B.Box fontSize={3} flex={'1 1'}>
+          {bucket.name || 'I am a Bucket Short and Stout'}
+        </B.Box>
+        <Button children={<Delete fontSize={'inherit'} />}>
+          {/*<Delete />*/}
+        </Button>
         <ListPane.ItemSecondaryAction
           onClick={() => bucket.addItem()}
           Icon={PlaylistAdd}
