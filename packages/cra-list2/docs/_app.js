@@ -1,10 +1,6 @@
 import React, {Fragment} from 'react'
 import {Link} from 'react-router-dom'
-import {R} from '../src/app5/little-ramda'
-import {
-  renderKeyed,
-  renderKeyedByProp,
-} from '../src/app5/components/utils'
+import {renderKeyedByProp} from '../src/app5/components/utils'
 import {Inspector} from '../src/little-exports'
 
 function NavLink({route: {path, name}}) {
