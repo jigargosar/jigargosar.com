@@ -1,8 +1,8 @@
 import React, {Fragment} from 'react'
-import {Inspector} from 'react-inspector'
 import {Link} from 'react-router-dom'
 import {R} from '../src/app5/little-ramda'
 import {renderKeyed} from '../src/app5/components/utils'
+import {Inspector} from '../src/little-exports'
 
 function NavLink({route: {path, name}}) {
   return (
@@ -28,7 +28,7 @@ export default class extends React.Component {
     return (
       <Fragment>
         {renderKeyed(NavLink, 'route', R.prop('path'), routes)}
-        {/*<Inspector data={this.props} expandLevel={0} />*/}
+        <Inspector data={this.props} expandLevel={1} />
         {/*<Inspector data={this.props.render()} expandLevel={1} />*/}
         {render({
           ...this.state,
