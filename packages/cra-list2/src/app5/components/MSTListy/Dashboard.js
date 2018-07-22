@@ -4,42 +4,35 @@ import {renderKeyedById} from '../utils'
 import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
 import {B} from '../little-rebass'
-import styled from 'styled-components'
 import {rc} from '../little-recompose'
+import system from 'system-components'
 
-const Layout = styled(B.Box)``
+const Layout = system({
+  is: B.Flex,
+  flexWrap: 'wrap',
+})
 
-Layout.defaultProps = {
-  // flexDirection: 'column',
-  // alignItems: 'center',
-  // flexWrap={'wrap'}
-}
-
-const Panel = styled(B.Flex)``
-
-Panel.defaultProps = {
+const Panel = system({
+  is: B.Box,
+  width: [1, 1 / 2, 1 / 2, 1 / 3, 1 / 4],
   p: 3,
-  m: 3,
-  border: '1px solid',
-}
+  border: 1,
+  borderColor: 'lightgray',
+})
 
 const BucketPanel = rc.nest(Panel, Bucket)
 
 const Dashboard = observer(function Dashboard({dashboard}) {
   return (
-    <B.Box
-    // flexWrap={'wrap'}
-    >
-      <Layout>
-        {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
-      </Layout>
+    <Layout>
+      {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
       <Panel>
         <B.Button
           onClick={() => dashboard.addBucket()}
           children={'Add List'}
         />
       </Panel>
-    </B.Box>
+    </Layout>
   )
 })
 

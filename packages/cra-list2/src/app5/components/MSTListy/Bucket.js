@@ -40,8 +40,7 @@ BucketItems = observer(BucketItems)
 function Bucket({bucket}) {
   return (
     <B.Box
-      width={1 / 2}
-      // flexDirection={'column'}
+    // flexDirection={'column'}
     >
       {renderBucketHeader(bucket)}
       <BucketItems bucket={bucket} />
