@@ -14,7 +14,11 @@ const Layout = system({
 
 const Panel = system({
   is: B.Box,
-  width: [1, 1 / 2, 1 / 2, 1 / 3, 1 / 4],
+  width: [1, 1, 1 / 2, 1 / 3, 1 / 4],
+
+  // minWidth: '350px',
+  // maxWidth: '34em',
+  // flex: '1 1 auto',
   p: 3,
   border: 1,
   borderColor: 'lightgray',
