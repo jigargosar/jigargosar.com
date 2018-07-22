@@ -2,6 +2,7 @@ import {Model} from '../Model'
 import {getParentOfType, getType, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
+import {R} from '../../little-ramda'
 
 function getDomain(self) {
   return getType(self) === Domain
@@ -71,7 +72,11 @@ export const Domain = types
   .actions(domainActions)
 
 function domainViews(self) {
-  return {}
+  return {
+    get currentDashboard() {
+      return R.head(getDashboardCollection(self).list)
+    },
+  }
 }
 
 function domainActions(self) {

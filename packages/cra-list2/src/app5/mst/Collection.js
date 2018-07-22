@@ -19,7 +19,7 @@ export function Collection(Model) {
         return self.lookup.get(id)
       },
       whereEq(attrs) {
-        return R.whereEq(attrs)(self.list)
+        return self.filter(R.whereEq(attrs))
       },
       filter(pred) {
         return R.filter(pred)(self.list)

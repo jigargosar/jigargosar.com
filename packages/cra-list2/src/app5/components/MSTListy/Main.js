@@ -35,7 +35,7 @@ function ListyMain({store, domain}) {
   return (
     <StyleRoot>
       <KeyboardShortcuts store={store} />
-      <Dashboard dashboard={store} />
+      <Dashboard dashboard={domain.currentDashboard} />
       <Flex>
         <InspectSnapshot node={domain} />
         <InspectSnapshot node={store} />
