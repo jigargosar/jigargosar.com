@@ -7,17 +7,15 @@ const store = rootStore
 
 const domain = Domain.create()
 
-onSnapshot(domain, function(...a) {
-  console.log(`onSnapshot`, a)
-})
+function loggerCallBack(message) {
+  return (...a) => console.log(message, a)
+}
 
-onPatch(domain, function(...a) {
-  console.log(`onPatch`, a)
-})
+onSnapshot(domain, loggerCallBack(`onSnapshot`))
 
-onAction(domain, function(...a) {
-  console.log(`onAction`, a)
-})
+onPatch(domain, loggerCallBack(`onPatch`))
+
+onAction(domain, loggerCallBack(`onAction`))
 
 setTimeout(() => {
   mRunInAction(() => {

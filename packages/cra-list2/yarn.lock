@@ -8007,6 +8007,10 @@ ms@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
 
+mst-middlewares@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/mst-middlewares/-/mst-middlewares-3.0.0.tgz#f802f12c39d3e7d630a9d9997b6b91859bf68f54"
+
 multicast-dns-service-types@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/multicast-dns-service-types/-/multicast-dns-service-types-1.1.0.tgz#899f11d9686e5e05cb91b35d5f0e63b773cfc901"
