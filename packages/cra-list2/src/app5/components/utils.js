@@ -4,7 +4,11 @@ import isHotKey from 'is-hotkey'
 import {_, R, RX, tryCatchLog, validate} from '../little-ramda'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import {setDisplayName, wrapDisplayName} from './little-recompose'
+import {
+  setDisplayName,
+  withProps,
+  wrapDisplayName,
+} from './little-recompose'
 
 export {F, RC, observer, Observer, inject, isHotKey}
 export const cn = RX.cx
@@ -63,6 +67,15 @@ export function renderKeyed(Component, propName, getKey, idList) {
   return R.map(value => (
     <Component key={getKey(value)} {...{[propName]: value}} />
   ))(idList)
+}
+
+export function renderKeyedByProp(
+  Component,
+  propName,
+  keyName,
+  models,
+) {
+  return renderKeyed(Component, propName, _.prop(keyName), models)
 }
 
 export class C extends RC {
