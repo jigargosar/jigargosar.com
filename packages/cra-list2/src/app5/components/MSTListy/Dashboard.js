@@ -20,7 +20,7 @@ const Panel = system({
   // maxWidth: '34em',
   // flex: '1 1 auto',
   p: 3,
-  mx: [0, 'auto', 0, 0, 0],
+  mx: [0, 'auto', 0],
   border: 1,
   borderColor: 'lightgray',
 })
