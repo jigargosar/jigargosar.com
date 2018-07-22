@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 import {Link} from 'react-router-dom'
 import {renderKeyedByProp} from '../src/app5/components/utils'
-import {Inspector} from '../src/little-exports'
+import {Inspector} from '../src/app5/little-exports'
 import {SidebarLayout} from '@compositor/x0/components'
 
 function NavLink({route: {path, name}}) {

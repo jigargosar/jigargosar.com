@@ -1,12 +1,12 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
-import {StyleRoot} from '../styled'
 import {whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
 import {oInjectNamed} from '../little-mobx-react'
 import {observer} from 'mobx-react'
 import {maybeOrNil} from '../../little-ramda'
 import {DebugStores, DomainPatches} from './Debug'
+import {REB} from '../REB'
 
 const KeyboardShortcuts = observer(
   class KeyboardShortcuts extends React.Component {
@@ -35,14 +35,14 @@ const KeyboardShortcuts = observer(
 
 function ListyMain({store, domain}) {
   return (
-    <StyleRoot>
+    <REB.Provider>
       <KeyboardShortcuts store={store} />
       {maybeOrNil(dashboard => <Dashboard dashboard={dashboard} />)(
         domain.currentDashboard,
       )}
       <DomainPatches />
       <DebugStores />
-    </StyleRoot>
+    </REB.Provider>
   )
 }
 

@@ -5,10 +5,11 @@ import {Btn} from '../tui'
 import {ListPane} from './ListPane'
 import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
+import {REB} from '../REB'
 
 function Dashboard({dashboard}) {
   return (
-    <div className={cn('flex flex-wrap')}>
+    <REB.Flex className={cn('flex flex-wrap')}>
       {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
       <ListPane>
         <ListPane.Item
@@ -19,7 +20,7 @@ function Dashboard({dashboard}) {
           <ListPane.ItemText>{`Add List`}</ListPane.ItemText>
         </ListPane.Item>
       </ListPane>
-    </div>
+    </REB.Flex>
   )
 }
 
