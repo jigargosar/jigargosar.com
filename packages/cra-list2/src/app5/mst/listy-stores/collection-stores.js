@@ -34,6 +34,9 @@ const Dashboard = Model({
         dashboard: self,
       })
     },
+    onAddBucket() {
+      return self.addBucket()
+    },
   }))
 
 const Bucket = Model({
