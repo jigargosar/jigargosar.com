@@ -3,25 +3,27 @@ import React from 'react'
 import {renderKeyedById} from '../utils'
 import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
-import {REB} from '../REB'
+import {B} from '../little-rebass'
 
 function Dashboard({dashboard}) {
   return (
-    <REB.Box
+    <B.Box
     // flexWrap={'wrap'}
     >
-      <REB.Flex
+      <B.Flex
         m={2}
         // flexDirection={'column'}
         // align={'stretch'}
       >
-        <REB.Button
+        <B.Button
           onClick={() => dashboard.addBucket()}
           children={'Add List'}
         />
-      </REB.Flex>
-      {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
-    </REB.Box>
+      </B.Flex>
+      <B.Flex flexDirection={'column'} alignItems={'center'}>
+        {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
+      </B.Flex>
+    </B.Box>
   )
 }
 

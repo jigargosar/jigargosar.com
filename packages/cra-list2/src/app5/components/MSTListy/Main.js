@@ -6,7 +6,7 @@ import {oInjectNamed} from '../little-mobx-react'
 import {observer} from 'mobx-react'
 import {maybeOrNil} from '../../little-ramda'
 import {DebugStores, DomainPatches} from './Debug'
-import {REB} from '../REB'
+import {B} from '../little-rebass'
 
 const KeyboardShortcuts = observer(
   class KeyboardShortcuts extends React.Component {
@@ -35,14 +35,14 @@ const KeyboardShortcuts = observer(
 
 function ListyMain({store, domain}) {
   return (
-    <REB.Provider>
+    <B.Provider>
       <KeyboardShortcuts store={store} />
       {maybeOrNil(dashboard => <Dashboard dashboard={dashboard} />)(
         domain.currentDashboard,
       )}
       <DomainPatches />
       <DebugStores />
-    </REB.Provider>
+    </B.Provider>
   )
 }
 

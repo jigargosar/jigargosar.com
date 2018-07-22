@@ -4,15 +4,15 @@ import {cn, renderKeyedById} from '../utils'
 import {PlaylistAdd} from '@material-ui/icons'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {observer} from 'mobx-react'
-import {REB} from '../REB'
+import {B} from '../little-rebass'
 
 function BucketItem({item}) {
   const {text: itemText, isSelected, onFocus} = item
 
   return (
-    <REB.Flex id={item.id} onFocus={onFocus}>
+    <B.Flex id={item.id} onFocus={onFocus}>
       {itemText || 'I am a hard core TODo'}
-    </REB.Flex>
+    </B.Flex>
   )
 }
 
@@ -20,14 +20,14 @@ BucketItem = observer(BucketItem)
 
 function renderBucketHeader(bucket) {
   return (
-    <REB.Flex>
+    <B.Flex>
       {bucket.name || 'I am a Bucket Short and Stout'}
       <ListPane.ItemSecondaryAction
         onClick={() => bucket.addItem()}
         Icon={PlaylistAdd}
       />
       {renderDeleteIcon(bucket.onDelete)}
-    </REB.Flex>
+    </B.Flex>
   )
 }
 
@@ -39,10 +39,13 @@ BucketItems = observer(BucketItems)
 
 function Bucket({bucket}) {
   return (
-    <REB.Flex flexDirection={'column'}>
+    <B.Box
+      width={1 / 2}
+      // flexDirection={'column'}
+    >
       {renderBucketHeader(bucket)}
       <BucketItems bucket={bucket} />
-    </REB.Flex>
+    </B.Box>
   )
 }
 

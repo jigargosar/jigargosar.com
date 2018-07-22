@@ -1,3 +1,3 @@
 import * as rebass from 'rebass'
 
-export const REB = rebass
+export const B = rebass
