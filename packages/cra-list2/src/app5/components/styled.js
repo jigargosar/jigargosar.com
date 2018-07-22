@@ -8,6 +8,7 @@ import {
   space,
   width,
   display,
+  fontFamily,
 } from 'styled-system'
 
 import Tag from 'clean-tag'
@@ -31,6 +32,7 @@ ${fontWeight}
 ${lineHeight}
 ${flex}
 ${display}
+${fontFamily}
 `
 
 export const Flex = styled(Box)``
