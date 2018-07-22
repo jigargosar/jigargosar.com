@@ -5,6 +5,7 @@ import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
 import {B} from '../little-rebass'
 import styled from 'styled-components'
+import {rc} from '../little-recompose'
 
 const Layout = styled(B.Box)``
 
@@ -22,32 +23,22 @@ Panel.defaultProps = {
   border: '1px solid',
 }
 
-const BucketPanel = observer(function({bucket}) {
-  return (
-    <Panel bucket={bucket}>
-      <Bucket bucket={bucket} />
-    </Panel>
-  )
-})
+const BucketPanel = rc.nest(Panel, Bucket)
 
 const Dashboard = observer(function Dashboard({dashboard}) {
   return (
     <B.Box
     // flexWrap={'wrap'}
     >
-      <B.Flex
-        m={2}
-        // flexDirection={'column'}
-        // align={'stretch'}
-      >
+      <Layout>
+        {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
+      </Layout>
+      <Panel>
         <B.Button
           onClick={() => dashboard.addBucket()}
           children={'Add List'}
         />
-      </B.Flex>
-      <Layout>
-        {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
-      </Layout>
+      </Panel>
     </B.Box>
   )
 })
