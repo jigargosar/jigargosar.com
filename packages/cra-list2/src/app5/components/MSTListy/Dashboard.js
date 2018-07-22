@@ -14,9 +14,9 @@ const Layout = system({
 
 const Panel = system({
   is: B.Box,
-  width: [1, 0.8, 1 / 2, 1 / 3, 1 / 4],
+  width: [1, 1, 1 / 2, 1 / 3, 1 / 4],
   p: 3,
-  mx: [0, 'auto', 0],
+  // mx: [0, 'auto', 0],
   border: 1,
   borderColor: 'lightgray',
 })
