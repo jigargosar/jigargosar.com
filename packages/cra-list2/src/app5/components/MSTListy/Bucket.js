@@ -34,7 +34,7 @@ function renderBucketHeader(bucket) {
         {bucket.name || 'I am a Bucket Short and Stout'}
       </ListPane.ItemText>
       <ListPane.ItemSecondaryAction
-        onClick={bucket.onAddItem}
+        onClick={() => bucket.addItem()}
         Icon={PlaylistAdd}
       />
       {renderDeleteIcon(bucket.onDelete)}
