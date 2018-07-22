@@ -14,7 +14,7 @@ function Dashboard({dashboard}) {
         <ListPane.Item
           Component={Btn}
           colors={'black-50 hover-black-80 hover-bg-black-10'}
-          onClick={dashboard.onAddBucket}
+          onClick={() => dashboard.addBucket()}
         >
           <ListPane.ItemText>{`Add List`}</ListPane.ItemText>
         </ListPane.Item>
