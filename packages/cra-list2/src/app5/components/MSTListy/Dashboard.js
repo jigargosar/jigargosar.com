@@ -7,7 +7,6 @@ import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
 
 function Dashboard({dashboard}) {
-  debugger
   return (
     <div className={cn('flex flex-wrap')}>
       {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
