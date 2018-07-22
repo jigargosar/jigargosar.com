@@ -4,8 +4,33 @@ import {renderKeyedById} from '../utils'
 import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
 import {B} from '../little-rebass'
+import styled from 'styled-components'
 
-function Dashboard({dashboard}) {
+const Layout = styled(B.Box)``
+
+Layout.defaultProps = {
+  // flexDirection: 'column',
+  // alignItems: 'center',
+  // flexWrap={'wrap'}
+}
+
+const Panel = styled(B.Flex)``
+
+Panel.defaultProps = {
+  p: 3,
+  m: 3,
+  border: '1px solid',
+}
+
+const BucketPanel = observer(function({bucket}) {
+  return (
+    <Panel bucket={bucket}>
+      <Bucket bucket={bucket} />
+    </Panel>
+  )
+})
+
+const Dashboard = observer(function Dashboard({dashboard}) {
   return (
     <B.Box
     // flexWrap={'wrap'}
@@ -20,13 +45,11 @@ function Dashboard({dashboard}) {
           children={'Add List'}
         />
       </B.Flex>
-      <B.Flex flexDirection={'column'} alignItems={'center'}>
-        {renderKeyedById(Bucket, 'bucket', dashboard.buckets)}
-      </B.Flex>
+      <Layout>
+        {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
+      </Layout>
     </B.Box>
   )
-}
-
-Dashboard = observer(Dashboard)
+})
 
 export {Dashboard}

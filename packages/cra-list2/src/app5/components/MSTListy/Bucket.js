@@ -1,13 +1,13 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
-import {cn, renderKeyedById} from '../utils'
+import {renderKeyedById} from '../utils'
 import {PlaylistAdd} from '@material-ui/icons'
 import {ListPane, renderDeleteIcon} from './ListPane'
 import {observer} from 'mobx-react'
 import {B} from '../little-rebass'
 
 function BucketItem({item}) {
-  const {text: itemText, isSelected, onFocus} = item
+  const {text: itemText, /*isSelected,*/ onFocus} = item
 
   return (
     <B.Flex id={item.id} onFocus={onFocus}>
