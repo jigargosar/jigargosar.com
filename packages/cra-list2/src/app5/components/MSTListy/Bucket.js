@@ -1,5 +1,5 @@
 /* eslint-disable no-func-assign*/
-import React from 'react'
+import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {PlaylistAdd} from '@material-ui/icons'
 import {ListPane, renderDeleteIcon} from './ListPane'
@@ -39,12 +39,10 @@ BucketItems = observer(BucketItems)
 
 function Bucket({bucket}) {
   return (
-    <B.Box
-    // flexDirection={'column'}
-    >
+    <Fragment>
       {renderBucketHeader(bucket)}
       <BucketItems bucket={bucket} />
-    </B.Box>
+    </Fragment>
   )
 }
 
