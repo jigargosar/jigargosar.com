@@ -44,14 +44,11 @@ function Bucket({bucket}) {
         <B.Box fontSize={3} flex={'1 1'}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </B.Box>
-        <Button children={<Delete fontSize={'inherit'} />}>
-          {/*<Delete />*/}
-        </Button>
-        <ListPane.ItemSecondaryAction
+        <Button children={<Delete fontSize={'inherit'} />} />
+        <Button
+          children={<PlaylistAdd fontSize={'inherit'} />}
           onClick={() => bucket.addItem()}
-          Icon={PlaylistAdd}
         />
-        {renderDeleteIcon(bucket.onDelete)}
       </B.Flex>
       <BucketItems bucket={bucket} />
     </Fragment>
