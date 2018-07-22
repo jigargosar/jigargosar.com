@@ -7,7 +7,9 @@ import {REB} from '../REB'
 
 function Dashboard({dashboard}) {
   return (
-    <REB.Box flexWrap={'wrap'}>
+    <REB.Box
+    // flexWrap={'wrap'}
+    >
       <REB.Flex
       // flexDirection={'column'}
       // align={'stretch'}
