@@ -3,7 +3,7 @@ import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
-import {B, Btn} from '../little-rebass'
+import {B, IcnBtn} from '../little-rebass'
 
 function BucketItem({item}) {
   const {text: itemText, /*isSelected,*/ onFocus} = item
@@ -30,8 +30,8 @@ function Bucket({bucket}) {
         <B.Box fontSize={3} flex={'1 1'}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </B.Box>
-        <Btn children={<Delete fontSize={'inherit'} />} />
-        <Btn
+        <IcnBtn children={<Delete fontSize={'inherit'} />} />
+        <IcnBtn
           children={<PlaylistAdd fontSize={'inherit'} />}
           onClick={() => bucket.addItem()}
         />

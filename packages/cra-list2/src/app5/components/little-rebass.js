@@ -3,7 +3,8 @@ import system from 'system-components'
 import styled from 'styled-components'
 
 export const B = rebass
-const SystemButton = system({
+
+const SIcnBtn = system({
   is: 'button',
   bg: 'transparent solid',
   color: '#666',
@@ -14,7 +15,8 @@ const SystemButton = system({
   alignItems: 'center',
   lineHeight: 'inherit',
 })
-export const Btn = styled(SystemButton)`
+
+export const IcnBtn = styled(SIcnBtn)`
   :focus {
     z-index: 1;
   }
