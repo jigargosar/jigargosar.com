@@ -30,7 +30,7 @@ function Bucket({bucket}) {
         <B.Box fontSize={3} flex={'1 1'}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </B.Box>
-        <IconBtn icon={Delete} fontSize={4} />
+        <IconBtn icon={Delete} />
         <IconBtn
           icon={PlaylistAdd}
           onClick={() => bucket.addItem()}

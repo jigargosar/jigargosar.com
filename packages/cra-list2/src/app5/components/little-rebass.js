@@ -41,3 +41,7 @@ export function IconBtn({icon: Icon, ...other}) {
     </Btn>
   )
 }
+
+IconBtn.defaultProps = {
+  fontSize: 3,
+}
