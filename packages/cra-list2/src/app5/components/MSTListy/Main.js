@@ -5,7 +5,6 @@ import {Dashboard} from './Dashboard'
 import {oInjectNamed} from '../little-mobx-react'
 import {observer} from 'mobx-react'
 import {maybeOrNil} from '../../little-ramda'
-import {DebugStores, DomainPatches} from './Debug'
 import {B} from '../little-rebass'
 
 const KeyboardShortcuts = observer(
@@ -40,8 +39,8 @@ function ListyMain({store, domain}) {
       {maybeOrNil(dashboard => <Dashboard dashboard={dashboard} />)(
         domain.currentDashboard,
       )}
-      <DomainPatches />
-      <DebugStores />
+      {/*<DomainPatches />*/}
+      {/*<DebugStores />*/}
     </B.Provider>
   )
 }
