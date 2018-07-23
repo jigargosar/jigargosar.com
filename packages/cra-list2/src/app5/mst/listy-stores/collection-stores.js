@@ -185,8 +185,14 @@ const Item = Model({
         whenKeyPD('space')(() => alert('space')),
       )
     },
-    onInputKeyDown(e) {
-      return e.stopPropagation()
+    get onInputKeyDown() {
+      return e => {
+        e.stopPropagation()
+        return withKeyEvent(
+          whenKeyPD('shift+enter')(self.onAppendSibling),
+          whenKeyPD('enter')(self.onEndEditing),
+        )(e)
+      }
     },
     get isEditing() {
       return isEditing(self)
@@ -210,6 +216,9 @@ const Item = Model({
     onStartEditing() {
       startEditing(self)
       setFocusAndSelectionOnDOMId(self.inputDOMId)
+    },
+    onEndEditing() {
+      endEditing(self)
     },
     onInputChange(e) {
       const text = e.target.value
