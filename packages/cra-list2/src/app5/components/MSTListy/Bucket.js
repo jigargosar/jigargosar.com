@@ -35,8 +35,8 @@ const BucketItem = observer(function BucketItem({item}) {
       onBlur={item.onBlur}
       tabIndex={0}
       onKeyDown={withKeyEvent(
+        whenKeyPD('up')(item.onNavigatePrev),
         whenKeyPD('down')(item.onNavigateNext),
-        whenKeyPD('up')(() => alert('up')),
         whenKeyPD('enter')(() => alert('enter')),
         whenKeyPD('space')(() => alert('space')),
       )}

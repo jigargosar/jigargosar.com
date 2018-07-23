@@ -92,6 +92,9 @@ const Item = Model({
     get isLast() {
       return self.index === self.siblings.length - 1
     },
+    get isFirst() {
+      return self.index === 0
+    },
   }))
   .actions(self => ({
     onFocus() {
@@ -105,6 +108,14 @@ const Item = Model({
       } else {
         getSelectionManager(self).selectItem(
           self.siblings[self.index + 1],
+        )
+      }
+    },
+    onNavigatePrev() {
+      if (self.isFirst) {
+      } else {
+        getSelectionManager(self).selectItem(
+          self.siblings[self.index - 1],
         )
       }
     },
