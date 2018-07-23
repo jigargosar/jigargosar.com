@@ -53,6 +53,7 @@ function createDarkTheme() {
       bucketLine: {},
       dim: {
         color: transparentize(0.3, white),
+        cursor: 'pointer',
       },
     },
     fonts: {
