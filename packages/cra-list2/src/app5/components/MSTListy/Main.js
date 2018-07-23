@@ -7,7 +7,7 @@ import {oInjectNamed} from '../little-mobx-react'
 import {observer} from 'mobx-react'
 import {maybeOrNil, overProp, R, tapLog} from '../../little-ramda'
 import {B, Box} from '../little-rebass'
-import {darken, lighten} from 'polished'
+import {darken, lighten, opacify, transparentize} from 'polished'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
@@ -47,6 +47,12 @@ function createDarkTheme() {
       root: {
         color: white,
         backgroundColor: black,
+      },
+    },
+    buttons: {
+      bucketLine: {},
+      dim: {
+        color: transparentize(0.3, white),
       },
     },
     fonts: {

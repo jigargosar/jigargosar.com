@@ -32,20 +32,21 @@ import {omit, Tag} from 'clean-tag'
 export {styled}
 export const B = rebass
 export const Flex = B.Flex
-export const Box = styled(B.Box)`
-  ${colorStyle};
-  ${textStyle};
-  ${buttonStyle};
-  ${minHeight};
-`
+export const Box = system(
+  'width',
+  'fontSize',
+  'flex',
+  'order',
+  'alignSelf',
+  'colorStyle',
+  'minHeight',
+)
 
 injectGlobal`
 body{
   //background: #f1f1f1;
-  
   //min-width: 300px;
   line-height: 1.1;
-  font-family: -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif
 }
 `
 
@@ -79,7 +80,7 @@ export const Btn = styled(
   system({
     is: 'button',
     bg: 'transparent',
-    colors: 'dark.3',
+    variant: 'dim',
     border: 0,
     p: 1,
     textAlign: 'start',
