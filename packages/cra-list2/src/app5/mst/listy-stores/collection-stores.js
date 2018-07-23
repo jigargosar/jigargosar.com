@@ -128,6 +128,7 @@ const Item = Model({
     },
     onNavigatePrev() {
       if (self.isFirst) {
+        setFocusAndSelectionOnDOMId(self.bucket.headerDOMId)
       } else {
         getSelectionManager(self).selectItem(
           self.siblings[self.index - 1],
