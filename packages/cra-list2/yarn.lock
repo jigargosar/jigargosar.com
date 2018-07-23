@@ -9885,6 +9885,12 @@ react-textarea-autosize@^6.1.0:
   dependencies:
     prop-types "^15.6.0"
 
+react-textarea-autosize@^7.0.4:
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-7.0.4.tgz#4e4be649b544a88713e7b5043f76950f35d3d503"
+  dependencies:
+    prop-types "^15.6.0"
+
 react-time-ago@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/react-time-ago/-/react-time-ago-2.0.3.tgz#d2ca1a7205a098f49de70921218a10bde6713ba6"

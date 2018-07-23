@@ -27,6 +27,8 @@ import {
   borderColor,
 } from 'styled-system'
 
+import TextArea from 'react-textarea-autosize'
+
 import {omit, Tag} from 'clean-tag'
 
 import {
@@ -77,19 +79,24 @@ export const Text = styled(B.Text).attrs({})`
   ${colorStyle};
 `
 
-export const Input = styled(
-  system({
-    is: 'textarea',
-    display: 'block',
-    flex: 1,
-    colors: 'selected',
-    border: 'none',
-    lineHeight: null,
-    p: 0,
-  }),
-)`
+export const Input = styled(TextArea).attrs({})`
   outline: none;
+  ${display};
+  ${flex};
+  ${colorStyle};
+  ${border};
+  ${lineHeight};
+  ${space};
 `
+
+Input.defaultProps = {
+  display: 'block',
+  flex: 1,
+  colors: 'selected',
+  border: 'none',
+  p: 0,
+  rows: 1,
+}
 
 export const Btn = system({
   is: 'button',

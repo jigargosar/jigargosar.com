@@ -92,6 +92,7 @@
     "react-router5": "^6.0.4",
     "react-scripts": "^1.1.4",
     "react-spring": "^5.4.0",
+    "react-textarea-autosize": "^7.0.4",
     "react-time-ago": "^2.0.3",
     "react-timeago": "^4.1.9",
     "rebass": "^2.0.0-10",
