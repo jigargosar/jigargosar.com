@@ -2,9 +2,7 @@
 import {applySnapshot2} from '../../little-mst'
 import {dotPath, whenNotNil} from '../../little-ramda'
 import {RootStore} from './RootStore'
-import {getSnapshot, setLivelynessChecking} from 'mobx-state-tree'
-
-setLivelynessChecking('error')
+import {getSnapshot} from 'mobx-state-tree'
 
 const rootStore = RootStore.create({})
 

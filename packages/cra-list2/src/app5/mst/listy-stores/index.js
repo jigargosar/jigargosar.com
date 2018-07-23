@@ -2,8 +2,9 @@ import rootStore from './root-store'
 import {Root} from './collection-stores'
 import {dotPath, isNotNil, R} from '../../little-ramda'
 import {applySnapshot2} from '../../little-mst'
-import {getSnapshot} from 'mobx-state-tree'
+import {getSnapshot, setLivelynessChecking} from 'mobx-state-tree'
 
+setLivelynessChecking('warn')
 const store = rootStore
 
 const root = Root.create()
