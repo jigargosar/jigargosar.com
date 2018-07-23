@@ -56,8 +56,9 @@ const BucketItem = observer(function BucketItem({item}) {
       {item.isEditing ? (
         <Input
           id={item.inputDOMId}
-          lineHeight={2}
           rows={1}
+          lineHeight={1.25}
+          py={1}
           mx={1}
           value={item.name}
           onBlur={item.onInputBlur}
@@ -66,7 +67,7 @@ const BucketItem = observer(function BucketItem({item}) {
           onKeyDown={item.onInputKeyDown}
         />
       ) : (
-        <Text lineHeight={2} mx={1}>
+        <Text lineHeight={1.25} py={1} mx={1}>
           {item.name || 'I am a hard core TODo'}
         </Text>
       )}

@@ -77,6 +77,7 @@ export const FlexRow = styled(Flex).attrs({
 `
 export const Text = styled(B.Text).attrs({})`
   ${colorStyle};
+  white-space: pre-line;
 `
 
 export const Input = styled(TextArea).attrs({})`
