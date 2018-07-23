@@ -17,9 +17,14 @@ function getSelectionManager(self) {
   return getRoot(self).selectionManager
 }
 
+function selectItem(item, self) {
+  return getSelectionManager(self).selectItem(item)
+}
+
 function getDomain(self) {
   return getRoot(self).domain
 }
+
 function getItemCollection(self) {
   return getDomain(self).items
 }
@@ -62,9 +67,9 @@ const Bucket = Model({
   attrs: {dashboard: types.reference(Dashboard)},
 })
   .views(self => ({
-    get addItemDOMId() {
-      return `bucket-add-item-${this.id}`
-    },
+    // get addItemDOMId() {
+    //   return `bucket-add-item-${this.id}`
+    // },
     get headerDOMId() {
       return `bucket-header-${this.id}`
     },
@@ -82,9 +87,9 @@ const Bucket = Model({
         bucket: self,
       })
     },
-    onAddItem() {
-      getSelectionManager(self).selectItem(self.addItem())
-    },
+    // onAddItem() {
+    //   getSelectionManager(self).selectItem(self.addItem())
+    // },
     onDelete() {
       getDomain(self).deleteBucket(self)
     },
@@ -120,24 +125,20 @@ const Item = Model({
     },
     onNavigateNext() {
       if (self.isLast) {
-        setFocusAndSelectionOnDOMId(self.bucket.addItemDOMId)
+        // setFocusAndSelectionOnDOMId(self.bucket.addItemDOMId)
       } else {
-        getSelectionManager(self).selectItem(
-          self.siblings[self.index + 1],
-        )
+        selectItem(self.siblings[self.index + 1], self)
       }
     },
     onNavigatePrev() {
       if (self.isFirst) {
         setFocusAndSelectionOnDOMId(self.bucket.headerDOMId)
       } else {
-        getSelectionManager(self).selectItem(
-          self.siblings[self.index - 1],
-        )
+        selectItem(self.siblings[self.index - 1], self)
       }
     },
     onAppendSibling() {
-      return self.bucket.onAddItem()
+      return selectItem(self.bucket.addItem(), self)
     },
   }))
 

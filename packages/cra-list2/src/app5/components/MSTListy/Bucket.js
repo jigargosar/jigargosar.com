@@ -87,11 +87,11 @@ function Bucket({bucket}) {
         </Box>
       </BucketHeaderLayout>
       <BucketItems bucket={bucket} />
-      <BucketItemBtn
-        children={'Add Item'}
-        id={bucket.addItemDOMId}
-        onClick={bucket.onAddItem}
-      />
+      {/*<BucketItemBtn*/}
+      {/*// children={'Add Item'}*/}
+      {/*// id={bucket.addItemDOMId}*/}
+      {/*// onClick={bucket.onAddItem}*/}
+      {/*/>*/}
     </Fragment>
   )
 }
