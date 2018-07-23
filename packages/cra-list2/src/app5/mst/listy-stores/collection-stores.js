@@ -2,7 +2,7 @@ import {Model} from '../Model'
 import {getRoot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
-import {R, S} from '../../little-ramda'
+import {maybeOrElse, R, S} from '../../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 
 function getSelectionManager(self) {
@@ -45,11 +45,7 @@ const Dashboard = Model({
   }))
   .actions(self => ({
     onMount() {
-      R.compose(
-        S.map(R.tap(i => setFocusAndSelectionOnDOMId(i.id))),
-        S.chain(b => b.firstItem),
-      )(self.firstBucket)
-      getSelectionManager(self)
+      getSelectionManager(self).onDashboardMount(self)
     },
   }))
 
@@ -120,12 +116,29 @@ function domainActions(self) {
   }
 }
 
-export const SelectionManager = types
-  .model('SelectionManager')
+function modelNamed(name) {
+  return types.model(name)
+}
+
+export const SelectionManager = modelNamed('SelectionManager')
   .props({
-    selectedItem: types.maybeNull(types.reference(Item)),
+    _selectedItem: types.maybeNull(types.reference(Item)),
   })
+  .views(self => ({
+    get selectedItem() {
+      return S.toMaybe(self._selectedItem)
+    },
+    set selectedItem(i) {
+      self._selectedItem = i
+    },
+  }))
   .actions(self => ({
+    onDashboardMount(d) {
+      R.compose(
+        S.map(R.tap(i => setFocusAndSelectionOnDOMId(i.id))),
+        maybeOrElse(() => S.chain(b => b.firstItem)(d.firstBucket)),
+      )(self.selectedItem)
+    },
     onItemFocus(item) {
       self.selectedItem = item
     },
