@@ -22,6 +22,10 @@ export const B = rebass
 export const Flex = B.Flex
 export const Box = B.Box
 
+export const FlexRow = styled(Flex).attrs({
+  alignItems: 'center',
+})``
+
 const SBtn = system({
   is: 'button',
   bg: 'transparent',
