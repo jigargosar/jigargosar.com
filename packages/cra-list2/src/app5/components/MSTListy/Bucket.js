@@ -7,7 +7,7 @@ import {Box, Flex, FlexRow, IconBtn} from '../little-rebass'
 
 const BucketItem = observer(function BucketItem({item}) {
   return (
-    <Flex id={item.id} onFocus={item.onFocus}>
+    <Flex id={item.id} pl={2} onFocus={item.onFocus}>
       {item.text || 'I am a hard core TODo'}
     </Flex>
   )
