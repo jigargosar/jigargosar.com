@@ -15,8 +15,10 @@ if (module.hot) {
   console.debug(`store`, store)
   domain.addMockData()
 
-  const snap = dotPath('hot.data.snap')(module)
-  R.ifElse(isNotNil)(applySnapshot2(root))(domain.addMockData)(snap)
+  const rootSnap = dotPath('hot.data.rootSnap')(module)
+  R.ifElse(isNotNil)(applySnapshot2(root))(domain.addMockData)(
+    rootSnap,
+  )
 
-  module.hot.dispose(data => (data.snap = getSnapshot(root)))
+  module.hot.dispose(data => (data.rootSnap = getSnapshot(root)))
 }
