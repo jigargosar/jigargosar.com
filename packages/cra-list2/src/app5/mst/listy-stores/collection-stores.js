@@ -152,17 +152,17 @@ const Item = Model({
     },
   }))
   .actions(self => ({
+    navigateTo() {
+      getSelectionManager(self).selectItem(self)
+    },
     onDelete() {
-      getDomain(self).deleteBucket(self)
+      getDomain(self).deleteItem(self)
     },
     onFocus() {
       getSelectionManager(self).onItemFocus(self)
     },
     onBlur() {
       getSelectionManager(self).onItemBlur()
-    },
-    navigateTo() {
-      getSelectionManager(self).selectItem(self)
     },
     onNavigateNext() {
       if (self.isLast) {
@@ -206,6 +206,9 @@ export const Domain = modelNamed('Domain')
       deleteBucket(b) {
         self.items.deleteAll(b.items)
         self.buckets.delete(b)
+      },
+      deleteItem(i) {
+        self.items.delete(i)
       },
       addMockData() {
         self
