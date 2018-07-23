@@ -88,6 +88,7 @@ const Bucket = Model({
     onDelete() {
       getDomain(self).deleteBucket(self)
     },
+    navigateToNextBucketHeader() {},
   }))
 
 const Item = Model({
