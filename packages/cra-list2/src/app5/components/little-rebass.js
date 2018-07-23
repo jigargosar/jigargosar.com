@@ -37,38 +37,54 @@ export const FlexRow = styled(Flex).attrs({
   alignItems: 'center',
 })``
 
-export const Btn = styled('button').attrs({})`
-  
-  
-${width}
-${border}
-${textAlign}
-${space}
-${background}
-${color}
-${fontSize}
-${flex}
-${display}
-  
-`
+// export const Btn = styled('button').attrs({})`
+//
+//
+// ${width}
+// ${border}
+// ${textAlign}
+// ${space}
+// ${background}
+// ${color}
+// ${fontSize}
+// ${flex}
+// ${display}
+//
+// `
+//
+// Btn.defaultProps = {
+//   bg: 'transparent',
+//   color: '#666',
+//   border: 0,
+//   p: 1,
+//   textAlign: 'start',
+// }
+export const Btn = styled(
+  system({
+    is: 'button',
+    bg: 'transparent',
+    color: '#666',
+    border: 0,
+    p: 1,
+    textAlign: 'start',
+    width: null,
+    fontSize: null,
+    lineHeight: null,
+  }),
+)``
 
-Btn.defaultProps = {
-  bg: 'transparent',
-  color: '#666',
-  border: 0,
-  p: 1,
-  textAlign: 'start',
-}
-
-export function IconBtn({icon: Icon, ...other}) {
+export function IconBtn({icon: Icon, fz, ...other}) {
   return (
     <Btn {...other}>
-      <Icon fontSize={'inherit'} />
+      <Icon fontSize={'fz'} />
     </Btn>
   )
 }
 
 IconBtn.defaultProps = {
   ...Btn.defaultProps,
-  fontSize: 3,
+  // fontSize: 3,
+  lineHeight: 0,
+  p: 0,
+  fz: 'default',
 }
