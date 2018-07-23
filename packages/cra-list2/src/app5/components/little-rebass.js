@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 import * as rebass from 'rebass'
 import system from 'system-components'
 import styled from 'styled-components'
@@ -13,6 +15,8 @@ import {
   display,
   fontFamily,
 } from 'styled-system'
+
+/*eslint-enable, eslint-disable no-empty-pattern*/
 
 export const B = rebass
 
