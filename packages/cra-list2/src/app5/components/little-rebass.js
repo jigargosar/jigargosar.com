@@ -31,7 +31,11 @@ import {omit, Tag} from 'clean-tag'
 export {styled}
 export const B = rebass
 export const Flex = B.Flex
-export const Box = B.Box
+export const Box = styled(B.Box)`
+  ${colorStyle};
+  ${textStyle};
+  ${buttonStyle};
+`
 
 injectGlobal`
 body{
@@ -39,6 +43,7 @@ body{
   
   //min-width: 300px;
   line-height: 1.1;
+  font-family: -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif
 }
 `
 
@@ -72,7 +77,7 @@ export const Btn = styled(
   system({
     is: 'button',
     bg: 'transparent',
-    color: '#666',
+    colors: 'dark.dim',
     border: 0,
     p: 1,
     textAlign: 'start',
@@ -85,7 +90,7 @@ export const Btn = styled(
 export function IconBtn({icon: Icon, fz, ...other}) {
   return (
     <Btn {...other}>
-      <Icon fontSize={'fz'} />
+      <Icon fontSize={fz} />
     </Btn>
   )
 }

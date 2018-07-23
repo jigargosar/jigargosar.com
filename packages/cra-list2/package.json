@@ -69,6 +69,7 @@
     "p-reflect": "^1.0.0",
     "p-tap": "^2.0.0",
     "pluralize": "^7.0.0",
+    "polished": "^1.9.3",
     "pouchdb-all-dbs": "^1.0.2",
     "pouchdb-browser": "^7.0.0",
     "power-assert": "^1.6.0",
