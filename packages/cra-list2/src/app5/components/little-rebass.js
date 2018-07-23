@@ -2,7 +2,7 @@
 
 import * as rebass from 'rebass'
 import system from 'system-components'
-import styled from 'styled-components'
+import styled, {injectGlobal} from 'styled-components'
 import React from 'react'
 import {
   color,
@@ -32,6 +32,15 @@ export {styled}
 export const B = rebass
 export const Flex = B.Flex
 export const Box = B.Box
+
+injectGlobal`
+body{
+  //background: #f1f1f1;
+  
+  //min-width: 300px;
+  line-height: 1.5;
+}
+`
 
 export const FlexRow = styled(Flex).attrs({
   alignItems: 'center',

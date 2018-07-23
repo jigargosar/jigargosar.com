@@ -3,7 +3,7 @@ import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
-import {Box, Btn, Flex, FlexRow, IconBtn} from '../little-rebass'
+import {B, Box, Btn, FlexRow, IconBtn} from '../little-rebass'
 import styled from 'styled-components'
 
 export const BucketItemBtn = styled(Btn).attrs({
@@ -13,7 +13,7 @@ export const BucketItemBtn = styled(Btn).attrs({
 
 const BucketItem = observer(function BucketItem({item}) {
   return (
-    <Flex
+    <B.Text
       id={item.id}
       pl={2}
       onFocus={item.onFocus}
@@ -21,7 +21,7 @@ const BucketItem = observer(function BucketItem({item}) {
       tabIndex={-1}
     >
       {item.text || 'I am a hard core TODo'}
-    </Flex>
+    </B.Text>
   )
 })
 
