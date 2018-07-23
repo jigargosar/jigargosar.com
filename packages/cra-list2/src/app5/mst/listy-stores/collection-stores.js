@@ -143,6 +143,9 @@ export const Domain = modelNamed('Domain')
       addDashboard(model) {
         return getDashboardCollection(self).add(model)
       },
+      deleteBucket(b) {
+        self.buckets.delete(b)
+      },
       addMockData() {
         self
           .addDashboard({})

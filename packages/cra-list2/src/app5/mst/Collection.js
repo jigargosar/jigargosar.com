@@ -43,6 +43,9 @@ export function Collection(Model) {
         validate('A', [models])
         return R.map(self.add)(models)
       },
+      delete(model) {
+        self.lookup.delete(model.id)
+      },
     }
   }
 }
