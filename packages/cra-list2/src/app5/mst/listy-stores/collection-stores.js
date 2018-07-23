@@ -283,6 +283,29 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
   }))
 
+export const EditManager = modelNamed('EditManager')
+  .props({
+    _editRef: types.maybeNull(
+      types.union(types.reference(Bucket), types.reference(Item)),
+    ),
+  })
+  .views(self => ({
+    get editRef() {
+      return S.toMaybe(self._editRef)
+    },
+    set editRef(ref) {
+      self._editRef = ref
+    },
+    isEditing(ref) {
+      return self._editRef === ref
+    },
+  }))
+  .actions(self => ({
+    startEditing(ref) {
+      self.editRef = ref
+    },
+  }))
+
 export const Root = types
   .model('Root')
   .props({
