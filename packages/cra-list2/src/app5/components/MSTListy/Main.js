@@ -46,8 +46,7 @@ const KeyboardShortcuts = observer(
 
 function createDarkTheme() {
   const white = '#d3d3d3'
-  // const black = '#000'
-  const black = '#363636'
+  const black = '#2B2B2B'
 
   const baseButton = {
     cursor: 'pointer',
