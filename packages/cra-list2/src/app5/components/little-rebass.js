@@ -22,7 +22,7 @@ export const B = rebass
 
 const SBtn = system({
   is: 'button',
-  bg: 'transparent solid',
+  bg: 'transparent',
   color: '#666',
   border: 0,
   p: 1,
