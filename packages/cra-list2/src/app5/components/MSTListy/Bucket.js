@@ -47,6 +47,7 @@ const BucketItem = observer(function BucketItem({item}) {
         whenKeyPD('up')(item.onNavigatePrev),
         whenKeyPD('down')(item.onNavigateNext),
         whenKeyPD('mod+enter')(item.onAppendSibling),
+        whenKeyPD('d')(item.onDelete),
         whenKeyPD('enter')(() => alert('enter')),
         whenKeyPD('space')(() => alert('space')),
       )}
