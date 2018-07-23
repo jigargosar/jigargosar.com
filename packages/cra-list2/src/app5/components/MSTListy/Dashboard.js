@@ -19,7 +19,7 @@ const Panel = system({
   // mx: [0, 'auto', 0],
   borderBottom: 1,
   borderRight: 1,
-  // borderColor: 'dark.dim.1',
+  colors: 'dimBorder',
 })
 
 const BucketPanel = rc.nest(Panel, Bucket)

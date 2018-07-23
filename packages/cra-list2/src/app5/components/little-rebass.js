@@ -23,6 +23,8 @@ import {
   colorStyle,
   textStyle,
   minHeight,
+  borders,
+  borderColor,
 } from 'styled-system'
 
 import {omit, Tag} from 'clean-tag'
@@ -41,6 +43,8 @@ export const Box = system(
   'alignSelf',
   'colorStyle',
   'minHeight',
+  'border',
+  'borderColor',
 )
 
 injectGlobal`

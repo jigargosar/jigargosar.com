@@ -49,6 +49,9 @@ function createDarkTheme() {
         color: white,
         backgroundColor: black,
       },
+      dimBorder: {
+        borderColor: transparentize(0.9, white),
+      },
     },
     buttons: {
       bucketLine: {},
