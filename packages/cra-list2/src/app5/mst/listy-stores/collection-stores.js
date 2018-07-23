@@ -63,7 +63,10 @@ const Bucket = Model({
 })
   .views(self => ({
     get addItemDOMId() {
-      return `add-item-${this.id}`
+      return `bucket-add-item-${this.id}`
+    },
+    get headerDOMId() {
+      return `bucket-header-${this.id}`
     },
     get items() {
       return getItemCollection(self).whereEq({bucket: self})
