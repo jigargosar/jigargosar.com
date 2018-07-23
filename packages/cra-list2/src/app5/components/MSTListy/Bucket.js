@@ -1,7 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React, {Fragment} from 'react'
 import {renderKeyedById, whenKeyPD, withKeyEvent} from '../utils'
-import {Delete} from '@material-ui/icons'
 import {observer} from 'mobx-react'
 import {
   B,
@@ -9,7 +8,6 @@ import {
   Btn,
   buttonStyle,
   FlexRow,
-  IconBtn,
   modularScale,
   Text,
 } from '../little-rebass'
@@ -86,7 +84,6 @@ function Bucket({bucket}) {
         <Box textStyle={'bucketTitle'} flex={1}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </Box>
-        <IconBtn icon={Delete} />
       </BucketHeaderLayout>
       <BucketItems bucket={bucket} />
       <BucketItemBtn
