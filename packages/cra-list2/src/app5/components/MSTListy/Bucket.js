@@ -42,6 +42,7 @@ const BucketItem = observer(function BucketItem({item}) {
   return (
     <BucketItemLayout
       id={item.id}
+      colors={item.isEditing ? 'selected' : 'default'}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
@@ -52,13 +53,18 @@ const BucketItem = observer(function BucketItem({item}) {
           {item.id.slice(5, 8)}
         </Text>
       </B.Tooltip>
-      <Text lineHeight={2} mx={1}>
-        {item.isEditing ? (
-          <Input value={item.text || 'I am a hard core TODo'} />
-        ) : (
-          item.text || 'I am a hard core TODo'
-        )}
-      </Text>
+      {item.isEditing ? (
+        <Input
+          lineHeight={2}
+          rows={1}
+          mx={1}
+          value={item.text || 'I am a hard core TODo'}
+        />
+      ) : (
+        <Text lineHeight={2} mx={1}>
+          {item.text || 'I am a hard core TODo'}
+        </Text>
+      )}
     </BucketItemLayout>
   )
 })

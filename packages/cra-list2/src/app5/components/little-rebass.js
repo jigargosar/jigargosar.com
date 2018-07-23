@@ -57,6 +57,7 @@ export const Box = system(
   'border',
   'borderColor',
   'textStyle',
+  'buttonStyle',
 )
 
 injectGlobal`
@@ -76,8 +77,18 @@ export const Text = styled(B.Text).attrs({})`
   ${colorStyle};
 `
 
-export const Input = styled(B.Input).attrs({})`
-  ${colorStyle};
+export const Input = styled(
+  system({
+    is: 'textarea',
+    display: 'block',
+    flex: 1,
+    colors: 'selected',
+    border: 'none',
+    lineHeight: null,
+    p: 0,
+  }),
+)`
+  outline: none;
 `
 
 export const Btn = system({

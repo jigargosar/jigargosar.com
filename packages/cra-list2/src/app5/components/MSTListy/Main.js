@@ -27,6 +27,15 @@ function createDarkTheme() {
         color: white,
         backgroundColor: black,
       },
+      selected: {
+        color: white,
+        backgroundColor: '#214283',
+        outline: 'none',
+      },
+      default: {
+        color: white,
+        outline: 'none',
+      },
       dimBorder: {
         borderColor: transparentize(0.9, white),
       },
@@ -50,6 +59,10 @@ function createDarkTheme() {
         '&:focus': {
           backgroundColor: '#214283',
         },
+      },
+      selected: {
+        ...baseButton,
+        backgroundColor: '#214283',
       },
       icon: {
         ...baseButton,
