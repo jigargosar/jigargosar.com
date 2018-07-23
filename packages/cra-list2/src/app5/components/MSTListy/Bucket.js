@@ -41,10 +41,14 @@ const BucketItem = observer(function BucketItem({item}) {
         whenKeyPD('enter')(() => alert('enter')),
         whenKeyPD('space')(() => alert('space')),
       )}
+      mx={-1}
     >
-      <B.Text lineHeight={2}>
-        {`${item.id.slice(5, 7)}${item.text ||
-          'I am a hard core TODo'}`}
+      <B.Text lineHeight={2} mx={1}>{`${item.id.slice(
+        5,
+        8,
+      )}`}</B.Text>
+      <B.Text lineHeight={2} mx={1}>
+        {`${item.text || 'I am a hard core TODo'}`}
       </B.Text>
     </BucketItemLayout>
   )
