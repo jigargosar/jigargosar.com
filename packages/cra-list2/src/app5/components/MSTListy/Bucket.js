@@ -74,8 +74,8 @@ function Bucket({bucket}) {
       <BucketHeaderLayout
         id={bucket.headerDOMId}
         onKeyDown={withKeyEvent(
-          // whenKeyPD('up')(item.onNavigatePrev),
-          // whenKeyPD('down')(item.onNavigateNext),
+          whenKeyPD('up')(bucket.onHeaderNavigatePrev),
+          whenKeyPD('down')(bucket.onHeaderNavigateNext),
           // whenKeyPD('mod+enter')(item.appendSibling),
           whenKeyPD('d')(bucket.onDelete),
           whenKeyPD('enter')(() => alert('enter')),

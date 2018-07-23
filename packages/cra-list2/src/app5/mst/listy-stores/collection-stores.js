@@ -93,10 +93,18 @@ const Bucket = Model({
     get isLast() {
       return self.index === self.siblings.length - 1
     },
+    get isFirst() {
+      return self.index === 0
+    },
 
     get nextBucket() {
       return S.toMaybe(
         self.isLast ? null : self.siblings[self.index + 1],
+      )
+    },
+    get prevBucket() {
+      return S.toMaybe(
+        self.isFirst ? null : self.siblings[self.index - 1],
       )
     },
   }))
@@ -110,11 +118,12 @@ const Bucket = Model({
     onDelete() {
       getDomain(self).deleteBucket(self)
     },
+    onHeaderNavigatePrev() {
+      S.map(R.tap(b => b.navigateToHeader()))(self.prevBucket)
+    },
+    onHeaderNavigateNext() {},
     navigateToNextBucketHeader() {
-      R.compose(
-        maybeOrElse(() => self.dashboard.navigateToAddListButton()),
-        S.map(R.tap(b => b.navigateToHeader())),
-      )(self.nextBucket)
+      S.map(R.tap(b => b.navigateToHeader()))(self.nextBucket)
     },
     navigateToHeader() {
       setFocusAndSelectionOnDOMId(self.headerDOMId)
