@@ -179,7 +179,7 @@ const Item = Model({
       }
     },
     onAppendSibling() {
-      self.bucket.addItem().select()
+      self.bucket.addItem().navigateTo()
     },
   }))
 

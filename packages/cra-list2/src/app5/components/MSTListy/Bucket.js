@@ -79,6 +79,7 @@ function Bucket({bucket}) {
           whenKeyPD('down')(bucket.onHeaderNavigateNext),
           // whenKeyPD('mod+enter')(item.appendSibling),
           whenKeyPD('d')(bucket.onDelete),
+          whenKeyPD('alt+enter')(() => alert('alt+enter')),
           whenKeyPD('enter')(() => alert('enter')),
           whenKeyPD('space')(() => alert('space')),
         )}
