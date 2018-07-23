@@ -4,6 +4,12 @@ import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
 import {Box, Btn, Flex, FlexRow, IconBtn} from '../little-rebass'
+import styled from 'styled-components'
+
+const FullWidthBtn = styled(Btn).attrs({
+  pl: 2,
+  w: 1,
+})``
 
 const BucketItem = observer(function BucketItem({item}) {
   return (
@@ -31,9 +37,9 @@ function Bucket({bucket}) {
         />
       </FlexRow>
       <BucketItems bucket={bucket} />
-      <Btn id={`add-item-${bucket.id}`} pl={2} width={1}>
+      <FullWidthBtn id={`add-item-${bucket.id}`}>
         {`Add Item`}
-      </Btn>
+      </FullWidthBtn>
     </Fragment>
   )
 }
