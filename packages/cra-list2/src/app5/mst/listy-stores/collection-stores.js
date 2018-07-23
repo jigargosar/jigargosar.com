@@ -189,7 +189,7 @@ const Item = Model({
       return e => {
         e.stopPropagation()
         return withKeyEvent(
-          whenKeyPD('shift+enter')(self.onAppendSibling),
+          // whenKeyPD('shift+enter')(self.onAppendSibling),
           whenKeyPD('enter')(self.onEndEditing),
         )(e)
       }
