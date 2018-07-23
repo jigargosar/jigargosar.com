@@ -123,7 +123,7 @@ const Bucket = Model({
       )(self.nextBucket)
     },
     navigateToHeader() {
-      setFocusAndSelectionOnDOMId(self.bucket.headerDOMId)
+      setFocusAndSelectionOnDOMId(self.headerDOMId)
     },
   }))
 
