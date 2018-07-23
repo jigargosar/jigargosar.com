@@ -68,15 +68,12 @@ function Bucket({bucket}) {
           {bucket.name || 'I am a Bucket Short and Stout'}
         </Box>
         <IconBtn icon={Delete} />
-        <IconBtn
-          icon={PlaylistAdd}
-          onClick={() => bucket.addItem()}
-        />
       </FlexRow>
       <BucketItems bucket={bucket} />
       <BucketItemBtn
         children={'Add Item'}
         id={`add-item-${bucket.id}`}
+        onClick={() => bucket.addItem()}
       />
     </Fragment>
   )
