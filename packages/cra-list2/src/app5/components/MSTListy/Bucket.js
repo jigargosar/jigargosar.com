@@ -88,7 +88,7 @@ function Bucket({bucket}) {
       <BucketItems bucket={bucket} />
       <BucketItemBtn
         children={'Add Item'}
-        id={`add-item-${bucket.id}`}
+        id={bucket.addItemDOMId}
         onClick={() => bucket.addItem()}
       />
     </Fragment>

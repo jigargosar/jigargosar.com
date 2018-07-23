@@ -10,7 +10,7 @@ const store = rootStore
 const root = Root.create()
 const domain = root.domain
 
-export {domain, store}
+export {domain}
 
 if (module.hot) {
   console.debug(`store`, store)
