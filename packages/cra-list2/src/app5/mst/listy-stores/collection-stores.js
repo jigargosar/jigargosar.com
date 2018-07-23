@@ -304,6 +304,9 @@ export const EditManager = modelNamed('EditManager')
     startEditing(ref) {
       self.editRef = ref
     },
+    endEditing() {
+      self.editRef = null
+    },
   }))
 
 export const Root = types
