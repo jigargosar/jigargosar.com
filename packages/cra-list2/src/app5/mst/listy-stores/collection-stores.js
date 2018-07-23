@@ -12,7 +12,6 @@ import {
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import assert from 'assert'
 import S from 'sanctuary'
-import {domain} from './index'
 
 function getSelectionManager(self) {
   return getRoot(self).selectionManager
@@ -206,7 +205,8 @@ export const Root = types
   .actions(self => ({
     initModule(module) {
       if (module.hot) {
-        domain.addMockData()
+        const root = self
+        const domain = getDomain(self)
 
         const rootSnap = dotPath('hot.data.rootSnap')(module)
         R.ifElse(isNotNil)(applySnapshot2(root))(domain.addMockData)(
