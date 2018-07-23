@@ -93,7 +93,12 @@ const Bucket = Model({
     onDelete() {
       getDomain(self).deleteBucket(self)
     },
-    navigateToNextBucketHeader() {},
+    navigateToNextBucketHeader() {
+      S.map()
+    },
+    navigateToHeader() {
+      setFocusAndSelectionOnDOMId(self.bucket.headerDOMId)
+    },
   }))
 
 const Item = Model({
@@ -125,6 +130,7 @@ const Item = Model({
     },
     onNavigateNext() {
       if (self.isLast) {
+        self.bucket.navigateToNextBucketHeader()
         // setFocusAndSelectionOnDOMId(self.bucket.addItemDOMId)
       } else {
         selectItem(self.siblings[self.index + 1], self)
@@ -132,7 +138,7 @@ const Item = Model({
     },
     onNavigatePrev() {
       if (self.isFirst) {
-        setFocusAndSelectionOnDOMId(self.bucket.headerDOMId)
+        self.bucket.navigateToHeader()
       } else {
         selectItem(self.siblings[self.index - 1], self)
       }
