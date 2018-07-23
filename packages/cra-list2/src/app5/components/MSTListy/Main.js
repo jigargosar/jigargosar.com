@@ -38,28 +38,15 @@ const KeyboardShortcuts = observer(
   },
 )
 
-function createTheme() {
+function createDarkTheme() {
   const white = '#fff'
   const black = '#000'
-  const dark = {
-    color: darken(0, white),
-    backgroundColor: black,
-  }
-
-  function getDarkDim(amount) {
-    return {color: darken(amount, white)}
-  }
-
-  const darkDim = getDarkDim(0.3)
 
   const theme = {
     colorStyles: {
-      dark: {
-        ...dark,
-        ...R.compose(
-          R.zipObj(R.range(1, 9)),
-          R.map(R.compose(getDarkDim, R.divide(R.__, 10))),
-        )(R.range(1, 9)),
+      root: {
+        color: white,
+        backgroundColor: black,
       },
     },
     fonts: {
@@ -71,11 +58,11 @@ function createTheme() {
   return theme
 }
 
-const theme = createTheme()
+const theme = createDarkTheme()
 function ListyMain({store, domain}) {
   return (
     <B.Provider theme={theme}>
-      <Box colors={'dark'}>
+      <Box colors={'root'} minHeight={'100vh'}>
         <KeyboardShortcuts store={store} />
         {maybeOrNil(dashboard => <Dashboard dashboard={dashboard} />)(
           domain.currentDashboard,

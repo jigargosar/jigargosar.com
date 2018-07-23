@@ -22,6 +22,7 @@ import {
   alignItems,
   colorStyle,
   textStyle,
+  minHeight,
 } from 'styled-system'
 
 import {omit, Tag} from 'clean-tag'
@@ -35,6 +36,7 @@ export const Box = styled(B.Box)`
   ${colorStyle};
   ${textStyle};
   ${buttonStyle};
+  ${minHeight};
 `
 
 injectGlobal`
