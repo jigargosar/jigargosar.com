@@ -13,15 +13,17 @@ export const BucketItemBtn = styled(Btn).attrs({
 
 const BucketItem = observer(function BucketItem({item}) {
   return (
-    <B.Text
+    <FlexRow
       id={item.id}
       pl={2}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       tabIndex={-1}
     >
-      {item.text || 'I am a hard core TODo'}
-    </B.Text>
+      <B.Text lineHeight={2}>
+        {item.text || 'I am a hard core TODo'}
+      </B.Text>
+    </FlexRow>
   )
 })
 

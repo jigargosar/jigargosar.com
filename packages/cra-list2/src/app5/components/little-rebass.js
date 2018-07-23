@@ -38,7 +38,7 @@ body{
   //background: #f1f1f1;
   
   //min-width: 300px;
-  line-height: 1.5;
+  line-height: 1.1;
 }
 `
 
