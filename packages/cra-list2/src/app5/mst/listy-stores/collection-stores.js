@@ -79,18 +79,24 @@ const Bucket = Model({
 const Item = Model({
   name: 'Item',
   attrs: {bucket: types.reference(Bucket)},
-}).actions(self => ({
-  onFocus() {
-    getSelectionManager(self).onItemFocus(self)
-  },
-  onBlur() {
-    getSelectionManager(self).onItemBlur()
-  },
-  onNavigateNext() {
-    const idx = R.indexOf(self, self.bucket.items)
-    assert(!isIndexOutOfBounds(idx, self.bucket.items))
-  },
-}))
+})
+  .views(self => ({
+    get siblings() {
+      return self.bucket.items
+    },
+  }))
+  .actions(self => ({
+    onFocus() {
+      getSelectionManager(self).onItemFocus(self)
+    },
+    onBlur() {
+      getSelectionManager(self).onItemBlur()
+    },
+    onNavigateNext() {
+      const idx = R.indexOf(self, self.siblings)
+      assert(!isIndexOutOfBounds(idx, self.siblings))
+    },
+  }))
 
 const collectionProps = {
   itemCollection: Collection(Item),
