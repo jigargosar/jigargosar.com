@@ -14,6 +14,7 @@ import {
   transparentize,
   modularScale,
 } from 'polished'
+import FocusTrap from 'focus-trap-react'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
@@ -68,7 +69,7 @@ function createDarkTheme() {
     },
     textStyles: {
       bucketTitle: {
-        fontSize: modularScale(0.5),
+        fontSize: modularScale(1.2, 0.8),
         lineHeight: 2,
       },
     },
@@ -76,8 +77,11 @@ function createDarkTheme() {
       bucketLine: {},
       default: {
         ...baseButton,
-        '&:hover, &:focus': {
+        '&:hover': {
           backgroundColor: lighten(0.05, black),
+        },
+        '&:focus': {
+          backgroundColor: '#214283',
         },
       },
       icon: {
@@ -102,16 +106,18 @@ function createDarkTheme() {
 const theme = createDarkTheme()
 function ListyMain({store, domain}) {
   return (
-    <B.Provider theme={theme}>
-      <Box colors={'root'} minHeight={'100vh'} fontFamily={'mono'}>
-        <KeyboardShortcuts store={store} />
-        {maybeOrNil(dashboard => <Dashboard dashboard={dashboard} />)(
-          domain.currentDashboard,
-        )}
-        {/*<DomainPatches />*/}
-        {/*<DebugStores />*/}
-      </Box>
-    </B.Provider>
+    <FocusTrap>
+      <B.Provider theme={theme}>
+        <Box colors={'root'} minHeight={'100vh'} fontFamily={'mono'}>
+          <KeyboardShortcuts store={store} />
+          {maybeOrNil(dashboard => (
+            <Dashboard dashboard={dashboard} />
+          ))(domain.currentDashboard)}
+          {/*<DomainPatches />*/}
+          {/*<DebugStores />*/}
+        </Box>
+      </B.Provider>
+    </FocusTrap>
   )
 }
 
