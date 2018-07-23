@@ -99,7 +99,7 @@ const Bucket = Model({
 
     get nextBucket() {
       return S.toMaybe(
-        self.isLast ? self.siblings[self.index + 1] : null,
+        self.isLast ? null : self.siblings[self.index + 1],
       )
     },
   }))
