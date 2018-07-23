@@ -73,9 +73,6 @@ const Bucket = Model({
   attrs: {dashboard: types.reference(Dashboard)},
 })
   .views(self => ({
-    // get addItemDOMId() {
-    //   return `bucket-add-item-${this.id}`
-    // },
     get headerDOMId() {
       return `bucket-header-${this.id}`
     },
@@ -110,9 +107,6 @@ const Bucket = Model({
         bucket: self,
       })
     },
-    // onAddItem() {
-    //   getSelectionManager(self).selectItem(self.addItem())
-    // },
     onDelete() {
       getDomain(self).deleteBucket(self)
     },
@@ -157,7 +151,6 @@ const Item = Model({
     onNavigateNext() {
       if (self.isLast) {
         self.bucket.navigateToNextBucketHeader()
-        // setFocusAndSelectionOnDOMId(self.bucket.addItemDOMId)
       } else {
         selectItem(self.siblings[self.index + 1], self)
       }
