@@ -4,9 +4,8 @@ import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
 import {Box, Btn, Flex, FlexRow, IconBtn} from '../little-rebass'
-import styled from 'styled-components'
 
-export const FullWidthBtn = styled(Btn).attrs({
+export const FullWidthBtn = Btn.extend.attrs({
   pl: 2,
   w: 1,
 })``

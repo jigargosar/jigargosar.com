@@ -30,11 +30,6 @@ export const FlexRow = styled(Flex).attrs({
 
 export const Btn = styled(Box).attrs({
   is: 'button',
-  bg: 'transparent',
-  color: '#666',
-  border: 0,
-  p: 1,
-  textAlign: 'start',
   // display: 'flex',
   // alignItems: 'center',
   // lineHeight: 'inherit',
@@ -47,14 +42,28 @@ export const Btn = styled(Box).attrs({
   ${textAlign};
 `
 
-export function IconBtn({icon: Icon, ...other}) {
-  return (
-    <Btn {...other}>
-      <Icon fontSize={'inherit'} />
-    </Btn>
-  )
+Btn.defaultProps = {
+  bg: 'transparent',
+  color: '#666',
+  border: 0,
+  p: 1,
+  textAlign: 'start',
 }
 
+export const IconBtn = Btn.extend.attrs({
+  children: ({icon: Icon}) => <Icon fontSize={'inherit'} />,
+  // fontSize: 3,
+})``
+
+// export function IconBtn({icon: Icon, ...other}) {
+//   return (
+//     <Btn {...other}>
+//       <Icon fontSize={'inherit'} />
+//     </Btn>
+//   )
+// }
+//
 IconBtn.defaultProps = {
+  ...Btn.defaultProps,
   fontSize: 3,
 }
