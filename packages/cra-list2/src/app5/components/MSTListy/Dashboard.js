@@ -4,7 +4,7 @@ import {renderKeyedById} from '../utils'
 import {Bucket, BucketItemBtn} from './Bucket'
 import {observer} from 'mobx-react'
 import {B} from '../little-rebass'
-import {rc} from '../little-recompose'
+import {lifecycle, rc} from '../little-recompose'
 import system from 'system-components'
 
 const Layout = system({
@@ -24,18 +24,28 @@ const Panel = system({
 
 const BucketPanel = rc.nest(Panel, Bucket)
 
-const Dashboard = observer(function Dashboard({dashboard}) {
-  return (
-    <Layout>
-      {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
-      <Panel>
-        <BucketItemBtn
-          onClick={() => dashboard.addBucket()}
-          children={'Add List'}
-        />
-      </Panel>
-    </Layout>
-  )
+const focusItemOnMount = lifecycle({
+  componentDidMount() {
+    this.props.dashboard.onMount()
+    console.log(`componentDidMount`, 'componentDidMount')
+    console.log(`componentDidMount`, 'componentDidMount')
+  },
 })
+
+const Dashboard = focusItemOnMount(
+  observer(function Dashboard({dashboard}) {
+    return (
+      <Layout>
+        {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
+        <Panel>
+          <BucketItemBtn
+            onClick={() => dashboard.addBucket()}
+            children={'Add List'}
+          />
+        </Panel>
+      </Layout>
+    )
+  }),
+)
 
 export {Dashboard}

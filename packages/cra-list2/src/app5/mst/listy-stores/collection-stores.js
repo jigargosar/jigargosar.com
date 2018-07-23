@@ -2,7 +2,8 @@ import {Model} from '../Model'
 import {getRoot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
-import {S} from '../../little-ramda'
+import {R, S} from '../../little-ramda'
+import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 
 function getSelectionManager(self) {
   return getRoot(self).selectionManager
@@ -37,6 +38,20 @@ const Dashboard = Model({
       })
     },
   }))
+  .views(self => ({
+    get firstBucket() {
+      return S.head(self.buckets)
+    },
+  }))
+  .actions(self => ({
+    onMount() {
+      R.compose(
+        S.map(R.tap(i => setFocusAndSelectionOnDOMId(i.id))),
+        S.chain(b => b.firstItem),
+      )(self.firstBucket)
+      getSelectionManager(self)
+    },
+  }))
 
 const Bucket = Model({
   name: 'Bucket',
@@ -45,6 +60,9 @@ const Bucket = Model({
   .views(self => ({
     get items() {
       return getItemCollection(self).whereEq({bucket: self})
+    },
+    get firstItem() {
+      return S.head(self.items)
     },
   }))
   .actions(self => ({
