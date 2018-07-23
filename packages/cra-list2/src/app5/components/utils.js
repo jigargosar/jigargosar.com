@@ -38,6 +38,12 @@ export function whenKey(...keys) {
   }
 }
 
+export function whenKeyPD(...keys) {
+  return function(fn) {
+    return [isKey(...keys), wrapPD(fn)]
+  }
+}
+
 export function withKeyEvent(...conditions) {
   return function(keyEvent) {
     return _.cond(conditions)(keyEvent)
