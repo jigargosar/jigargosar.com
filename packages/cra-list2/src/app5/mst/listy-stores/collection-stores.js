@@ -119,7 +119,7 @@ const Item = Model({
       }
     },
     appendSibling() {
-      self.bucket.addItem()
+      getSelectionManager(self).selectItem(self.bucket.addItem())
     },
   }))
 
