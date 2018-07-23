@@ -119,6 +119,7 @@ const Item = Model({
     },
     onNavigateNext() {
       if (self.isLast) {
+        setFocusAndSelectionOnDOMId(self.bucket.addItemDOMId)
       } else {
         getSelectionManager(self).selectItem(
           self.siblings[self.index + 1],
