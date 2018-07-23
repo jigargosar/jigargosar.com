@@ -24,8 +24,8 @@ function getSelectionManager(self) {
 function getEditManager(self) {
   return getRoot(self).editManager
 }
-function startEditing(ref) {
-  getEditManager(self).startEditing(ref)
+function startEditing(self) {
+  getEditManager(self).startEditing(self)
 }
 
 function getDomain(self) {
@@ -169,7 +169,7 @@ const Item = Model({
         whenKeyPD('down')(self.onNavigateNext),
         whenKeyPD('mod+enter')(self.onAppendSibling),
         whenKeyPD('d')(self.onDelete),
-        whenKeyPD('enter')(() => alert('enter')),
+        whenKeyPD('enter')(self.onStartEditing),
         whenKeyPD('space')(() => alert('space')),
       )
     },
@@ -189,7 +189,7 @@ const Item = Model({
     },
   }))
   .actions(self => ({
-    onEdit() {
+    onStartEditing() {
       startEditing(self)
     },
     navigateTo() {
