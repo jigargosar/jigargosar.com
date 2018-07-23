@@ -29,7 +29,17 @@ import {
 
 import {omit, Tag} from 'clean-tag'
 
+import {
+  darken,
+  lighten,
+  opacify,
+  transparentize,
+  modularScale,
+} from 'polished'
+
 /*eslint-enable, eslint-disable no-empty-pattern*/
+
+export {darken, lighten, opacify, transparentize, modularScale}
 
 export {styled}
 export const B = rebass

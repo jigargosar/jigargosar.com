@@ -3,11 +3,18 @@ import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
-import {B, Box, Btn, FlexRow, IconBtn} from '../little-rebass'
+import {
+  B,
+  Box,
+  Btn,
+  FlexRow,
+  IconBtn,
+  modularScale,
+} from '../little-rebass'
 import styled from 'styled-components'
 
 export const BucketItemBtn = styled(Btn).attrs({
-  pl: 2,
+  pl: modularScale(0.5),
   width: 1,
 })``
 
@@ -34,7 +41,7 @@ const BucketItems = observer(function BucketItems({bucket}) {
 function Bucket({bucket}) {
   return (
     <Fragment>
-      <FlexRow colors={'dim'}>
+      <FlexRow pb={2} colors={'dim'}>
         <Box textStyle={'bucketTitle'} flex={1}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </Box>
