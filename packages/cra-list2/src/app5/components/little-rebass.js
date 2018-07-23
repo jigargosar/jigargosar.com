@@ -45,6 +45,7 @@ export const Box = system(
   'minHeight',
   'border',
   'borderColor',
+  'textStyle',
 )
 
 injectGlobal`
@@ -57,7 +58,9 @@ body{
 
 export const FlexRow = styled(Flex).attrs({
   alignItems: 'center',
-})``
+})`
+  ${colorStyle};
+`
 
 export const Btn = system({
   is: 'button',

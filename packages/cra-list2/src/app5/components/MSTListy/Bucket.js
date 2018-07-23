@@ -5,6 +5,7 @@ import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
 import {B, Box, Btn, FlexRow, IconBtn} from '../little-rebass'
 import styled from 'styled-components'
+import {modularScale} from 'polished'
 
 export const BucketItemBtn = styled(Btn).attrs({
   pl: 2,
@@ -34,8 +35,8 @@ const BucketItems = observer(function BucketItems({bucket}) {
 function Bucket({bucket}) {
   return (
     <Fragment>
-      <FlexRow>
-        <Box fontSize={3} flex={1}>
+      <FlexRow colors={'dim'}>
+        <Box textStyle={'bucketTitle'} flex={1}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </Box>
         <IconBtn icon={Delete} />
