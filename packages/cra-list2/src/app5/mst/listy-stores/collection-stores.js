@@ -2,8 +2,14 @@ import {Model} from '../Model'
 import {getRoot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
-import {maybeOrElse, R, S} from '../../little-ramda'
+import {
+  isIndexOutOfBounds,
+  maybeOrElse,
+  R,
+  S,
+} from '../../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
+import assert from 'assert'
 
 function getSelectionManager(self) {
   return getRoot(self).selectionManager
@@ -79,6 +85,10 @@ const Item = Model({
   },
   onBlur() {
     getSelectionManager(self).onItemBlur()
+  },
+  onNavigateNext() {
+    const idx = R.indexOf(self, self.bucket.items)
+    assert(!isIndexOutOfBounds(idx, self.bucket.items))
   },
 }))
 
