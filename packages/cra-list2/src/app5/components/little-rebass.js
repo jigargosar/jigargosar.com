@@ -15,6 +15,7 @@ import {
   display,
   fontFamily,
   border,
+  textAlign,
 } from 'styled-system'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
@@ -33,15 +34,17 @@ export const Btn = styled(Box).attrs({
   color: '#666',
   border: 0,
   p: 1,
-  display: 'flex',
-  alignItems: 'center',
-  lineHeight: 'inherit',
+  textAlign: 'start',
+  // display: 'flex',
+  // alignItems: 'center',
+  // lineHeight: 'inherit',
 })`
   :focus {
     z-index: 1;
   }
   ${fontSize};
   ${border};
+  ${textAlign};
 `
 
 export function IconBtn({icon: Icon, ...other}) {
