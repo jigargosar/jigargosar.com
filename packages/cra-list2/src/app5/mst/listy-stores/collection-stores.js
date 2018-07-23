@@ -117,7 +117,12 @@ const Bucket = Model({
     onHeaderNavigatePrev() {
       S.map(R.tap(b => b.navigateToHeader()))(self.prevBucket)
     },
-    onHeaderNavigateNext() {},
+    onHeaderNavigateNext() {
+      R.compose(
+        maybeOrElse(() => self.navigateToNextBucketHeader()),
+        S.map(R.tap(i => i.navigate())),
+      )(self.firstItem)
+    },
     navigateToNextBucketHeader() {
       S.map(R.tap(b => b.navigateToHeader()))(self.nextBucket)
     },
@@ -153,21 +158,21 @@ const Item = Model({
     onBlur() {
       getSelectionManager(self).onItemBlur()
     },
-    select() {
+    navigate() {
       getSelectionManager(self).selectItem(self)
     },
     onNavigateNext() {
       if (self.isLast) {
         self.bucket.navigateToNextBucketHeader()
       } else {
-        self.siblings[self.index + 1].select()
+        self.siblings[self.index + 1].navigate()
       }
     },
     onNavigatePrev() {
       if (self.isFirst) {
         self.bucket.navigateToHeader()
       } else {
-        self.siblings[self.index - 1].select()
+        self.siblings[self.index - 1].navigate()
       }
     },
     onAppendSibling() {
