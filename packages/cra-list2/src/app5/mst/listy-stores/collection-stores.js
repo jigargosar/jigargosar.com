@@ -246,13 +246,14 @@ export const Root = types
         const root = self
         const domain = getDomain(self)
 
-        const rootSnap = dotPath('hot.data.rootSnap')(module)
+        const snapKey = Root.name
+        const snap = dotPath(`hot.data.${snapKey}`)(module)
         R.ifElse(isNotNil)(applySnapshot2(root))(domain.addMockData)(
-          rootSnap,
+          snap,
         )
 
         module.hot.dispose(
-          data => (data.rootSnap = getSnapshot(root)),
+          data => (data[snapKey] = getSnapshot(root)),
         )
       }
     },
