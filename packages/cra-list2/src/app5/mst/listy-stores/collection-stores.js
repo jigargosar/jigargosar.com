@@ -24,8 +24,13 @@ function getSelectionManager(self) {
 function getEditManager(self) {
   return getRoot(self).editManager
 }
+
 function startEditing(self) {
   getEditManager(self).startEditing(self)
+}
+
+function isEditing(self) {
+  return getEditManager(self).isEditing(self)
 }
 
 function getDomain(self) {
@@ -173,6 +178,9 @@ const Item = Model({
         whenKeyPD('space')(() => alert('space')),
       )
     },
+    get isEditing() {
+      return isEditing(self)
+    },
     get siblings() {
       return self.bucket.items
     },
@@ -295,19 +303,17 @@ export const SelectionManager = modelNamed('SelectionManager')
 
 export const EditManager = modelNamed('EditManager')
   .props({
-    _editRef: types.maybeNull(
-      types.union(types.reference(Bucket), types.reference(Item)),
-    ),
+    _editId: types.maybeNull(types.string),
   })
   .views(self => ({
     get editRef() {
-      return S.toMaybe(self._editRef)
+      return S.toMaybe(self._editId)
     },
     set editRef(ref) {
-      self._editRef = ref
+      self._editId = ref.id
     },
     isEditing(ref) {
-      return self._editRef === ref
+      return self._editId === ref.id
     },
   }))
   .actions(self => ({
@@ -315,7 +321,7 @@ export const EditManager = modelNamed('EditManager')
       self.editRef = ref
     },
     endEditing() {
-      self.editRef = null
+      self._editId = null
     },
   }))
 

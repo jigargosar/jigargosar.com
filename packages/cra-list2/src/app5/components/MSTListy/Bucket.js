@@ -51,9 +51,13 @@ const BucketItem = observer(function BucketItem({item}) {
           {item.id.slice(5, 8)}
         </Text>
       </B.Tooltip>
-      <Text lineHeight={2} mx={1}>
-        {item.text || 'I am a hard core TODo'}
-      </Text>
+      {item.isEditing ? (
+        'editing'
+      ) : (
+        <Text lineHeight={2} mx={1}>
+          {item.text || 'I am a hard core TODo'}
+        </Text>
+      )}
     </BucketItemLayout>
   )
 })
