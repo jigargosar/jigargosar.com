@@ -1,11 +1,18 @@
 import {Model} from '../Model'
-import {getRoot, types} from 'mobx-state-tree'
+import {getRoot, getSnapshot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
-import {optionalCollections} from '../../little-mst'
-import {isIndexOutOfBounds, maybeOrElse, R} from '../../little-ramda'
+import {applySnapshot2, optionalCollections} from '../../little-mst'
+import {
+  dotPath,
+  isIndexOutOfBounds,
+  isNotNil,
+  maybeOrElse,
+  R,
+} from '../../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import assert from 'assert'
 import S from 'sanctuary'
+import {domain} from './index'
 
 function getSelectionManager(self) {
   return getRoot(self).selectionManager
@@ -190,7 +197,25 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
   }))
 
-export const Root = types.model('Root').props({
-  domain: types.optional(Domain, {}),
-  selectionManager: types.optional(SelectionManager, {}),
-})
+export const Root = types
+  .model('Root')
+  .props({
+    domain: types.optional(Domain, {}),
+    selectionManager: types.optional(SelectionManager, {}),
+  })
+  .actions(self => ({
+    initModule(module) {
+      if (module.hot) {
+        domain.addMockData()
+
+        const rootSnap = dotPath('hot.data.rootSnap')(module)
+        R.ifElse(isNotNil)(applySnapshot2(root))(domain.addMockData)(
+          rootSnap,
+        )
+
+        module.hot.dispose(
+          data => (data.rootSnap = getSnapshot(root)),
+        )
+      }
+    },
+  }))
