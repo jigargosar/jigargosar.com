@@ -4,6 +4,12 @@ import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
 import {S} from '../../little-ramda'
 
+function getSelectionManager(self) {
+  return getType(self) === SelectionManager
+    ? self
+    : getParentOfType(self, SelectionManager)
+}
+
 function getDomain(self) {
   return getType(self) === Domain
     ? self
@@ -57,7 +63,11 @@ const Bucket = Model({
 const Item = Model({
   name: 'Item',
   attrs: {bucket: types.reference(Bucket)},
-})
+}).actions(self => ({
+  onFocus() {
+    getSelectionManager(self).onItemFocus(self)
+  },
+}))
 
 const collectionProps = {
   itemCollection: Collection(Item),
@@ -92,3 +102,22 @@ function domainActions(self) {
     },
   }
 }
+
+export const SelectionManager = types
+  .model('SelectionManager')
+  .props({
+    selectedItem: types.maybeNull(types.reference(Item)),
+  })
+  .actions(self => ({
+    onItemFocus(item) {
+      self.selectedItem = item
+    },
+    onItemBlur() {
+      self.selectedItem = null
+    },
+  }))
+
+export const Root = types.model('Root').props({
+  domain: types.optional(Domain, {}),
+  selectionManager: types.optional(SelectionManager, {}),
+})
