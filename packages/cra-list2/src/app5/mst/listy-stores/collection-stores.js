@@ -120,7 +120,7 @@ const Bucket = Model({
     onHeaderNavigateNext() {
       R.compose(
         maybeOrElse(() => self.navigateToNextBucketHeader()),
-        S.map(R.tap(i => i.navigate())),
+        S.map(R.tap(i => i.navigateTo())),
       )(self.firstItem)
     },
     navigateToNextBucketHeader() {
@@ -152,27 +152,30 @@ const Item = Model({
     },
   }))
   .actions(self => ({
+    onDelete() {
+      getDomain(self).deleteBucket(self)
+    },
     onFocus() {
       getSelectionManager(self).onItemFocus(self)
     },
     onBlur() {
       getSelectionManager(self).onItemBlur()
     },
-    navigate() {
+    navigateTo() {
       getSelectionManager(self).selectItem(self)
     },
     onNavigateNext() {
       if (self.isLast) {
         self.bucket.navigateToNextBucketHeader()
       } else {
-        self.siblings[self.index + 1].navigate()
+        self.siblings[self.index + 1].navigateTo()
       }
     },
     onNavigatePrev() {
       if (self.isFirst) {
         self.bucket.navigateToHeader()
       } else {
-        self.siblings[self.index - 1].navigate()
+        self.siblings[self.index - 1].navigateTo()
       }
     },
     onAppendSibling() {
