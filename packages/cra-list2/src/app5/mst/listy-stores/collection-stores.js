@@ -17,10 +17,6 @@ function getSelectionManager(self) {
   return getRoot(self).selectionManager
 }
 
-function selectItem(item, self) {
-  return getSelectionManager(self).selectItem(item)
-}
-
 function getDomain(self) {
   return getRoot(self).domain
 }
@@ -157,22 +153,25 @@ const Item = Model({
     onBlur() {
       getSelectionManager(self).onItemBlur()
     },
+    select() {
+      getSelectionManager(self).selectItem(self)
+    },
     onNavigateNext() {
       if (self.isLast) {
         self.bucket.navigateToNextBucketHeader()
       } else {
-        selectItem(self.siblings[self.index + 1], self)
+        self.siblings[self.index + 1].select()
       }
     },
     onNavigatePrev() {
       if (self.isFirst) {
         self.bucket.navigateToHeader()
       } else {
-        selectItem(self.siblings[self.index - 1], self)
+        self.siblings[self.index - 1].select()
       }
     },
     onAppendSibling() {
-      return selectItem(self.bucket.addItem(), self)
+      self.bucket.addItem().select()
     },
   }))
 
