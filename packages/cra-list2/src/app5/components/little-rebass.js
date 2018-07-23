@@ -72,6 +72,9 @@ export const FlexRow = styled(Flex).attrs({
 })`
   ${colorStyle};
 `
+export const Text = styled(B.Text).attrs({})`
+  ${colorStyle};
+`
 
 export const Btn = system({
   is: 'button',

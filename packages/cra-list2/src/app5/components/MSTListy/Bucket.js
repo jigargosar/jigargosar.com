@@ -11,6 +11,7 @@ import {
   FlexRow,
   IconBtn,
   modularScale,
+  Text,
 } from '../little-rebass'
 import styled from 'styled-components'
 
@@ -43,13 +44,14 @@ const BucketItem = observer(function BucketItem({item}) {
       )}
       mx={-1}
     >
-      <B.Text lineHeight={2} mx={1}>{`${item.id.slice(
-        5,
-        8,
-      )}`}</B.Text>
-      <B.Text lineHeight={2} mx={1}>
+      <B.Tooltip text={item.id}>
+        <Text lineHeight={2} mx={1} colors={'dim'} fontSize={0}>
+          {`${item.id.slice(5, 8)}`}
+        </Text>
+      </B.Tooltip>
+      <Text lineHeight={2} mx={1}>
         {`${item.text || 'I am a hard core TODo'}`}
-      </B.Text>
+      </Text>
     </BucketItemLayout>
   )
 })
