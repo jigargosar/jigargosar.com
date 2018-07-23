@@ -223,6 +223,9 @@ const Item = Model({
     onInputBlur() {
       endEditing(self)
     },
+    onInputFocus() {
+      getSelectionManager(self).onItemFocus(self)
+    },
     onNavigateNext() {
       if (self.isLast) {
         self.bucket.navigateToNextBucketHeader()

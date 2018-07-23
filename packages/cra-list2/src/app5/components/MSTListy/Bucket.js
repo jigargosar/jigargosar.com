@@ -60,10 +60,8 @@ const BucketItem = observer(function BucketItem({item}) {
           rows={1}
           mx={1}
           defaultValue={item.text || 'I am a hard core TODo'}
-          onBlur={() => {
-            document.getElementById(item.id).focus()
-            item.onInputBlur()
-          }}
+          onBlur={item.onInputBlur}
+          onFocus={item.onInputFocus}
         />
       ) : (
         <Text lineHeight={2} mx={1}>
