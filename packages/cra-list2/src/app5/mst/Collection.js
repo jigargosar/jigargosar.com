@@ -46,6 +46,9 @@ export function Collection(Model) {
       delete(model) {
         self.lookup.delete(model.id)
       },
+      deleteAll(models) {
+        R.forEach(self.delete)(models)
+      },
     }
   }
 }

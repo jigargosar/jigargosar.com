@@ -15,7 +15,7 @@ function getDomain(self) {
   return getRoot(self).domain
 }
 function getItemCollection(self) {
-  return getDomain(self).itemCollection
+  return getDomain(self).items
 }
 
 function getDashboardCollection(self) {
@@ -124,7 +124,7 @@ const Item = Model({
   }))
 
 const collectionProps = {
-  itemCollection: Collection(Item),
+  items: Collection(Item),
   buckets: Collection(Bucket),
   dashboards: Collection(Dashboard),
 }
@@ -144,6 +144,7 @@ export const Domain = modelNamed('Domain')
         return getDashboardCollection(self).add(model)
       },
       deleteBucket(b) {
+        self.items.deleteAll(b.items)
         self.buckets.delete(b)
       },
       addMockData() {
