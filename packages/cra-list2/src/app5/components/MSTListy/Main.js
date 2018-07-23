@@ -55,6 +55,10 @@ function createDarkTheme() {
         color: transparentize(0.3, white),
         cursor: 'pointer',
       },
+      icon: {
+        color: transparentize(0.3, white),
+        cursor: 'pointer',
+      },
     },
     fonts: {
       sans:

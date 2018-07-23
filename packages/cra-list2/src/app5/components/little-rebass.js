@@ -75,8 +75,7 @@ export function IconBtn({icon: Icon, fz, ...other}) {
 }
 
 IconBtn.defaultProps = {
-  ...Btn.defaultProps,
-  // fontSize: 3,
+  variant: 'icon',
   lineHeight: 0,
   p: 0,
   fz: 'default',
