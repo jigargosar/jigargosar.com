@@ -3,7 +3,7 @@ import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
-import {Box, Flex, FlexRow, IconBtn} from '../little-rebass'
+import {Box, Btn, Flex, FlexRow, IconBtn} from '../little-rebass'
 
 const BucketItem = observer(function BucketItem({item}) {
   return (
@@ -31,6 +31,9 @@ function Bucket({bucket}) {
         />
       </FlexRow>
       <BucketItems bucket={bucket} />
+      <Btn id={`add-item-${bucket.id}`} pl={2}>
+        {`Add Item`}
+      </Btn>
     </Fragment>
   )
 }
