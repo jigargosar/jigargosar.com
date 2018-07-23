@@ -5,7 +5,7 @@ import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
 import {Box, Btn, Flex, FlexRow, IconBtn} from '../little-rebass'
 
-export const FullWidthBtn = Btn.extend.attrs({
+export const BucketItemBtn = Btn.extend.attrs({
   pl: 2,
   w: 1,
 })``
@@ -36,7 +36,7 @@ function Bucket({bucket}) {
         />
       </FlexRow>
       <BucketItems bucket={bucket} />
-      <FullWidthBtn
+      <BucketItemBtn
         children={'Add Item'}
         id={`add-item-${bucket.id}`}
       />
