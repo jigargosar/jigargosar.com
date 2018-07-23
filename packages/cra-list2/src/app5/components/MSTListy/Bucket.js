@@ -48,11 +48,11 @@ const BucketItem = observer(function BucketItem({item}) {
     >
       <B.Tooltip text={item.id}>
         <Text lineHeight={2} mx={1} colors={'dim'} fontSize={0}>
-          {`${item.id.slice(5, 8)}`}
+          {item.id.slice(5, 8)}
         </Text>
       </B.Tooltip>
       <Text lineHeight={2} mx={1}>
-        {`${item.text || 'I am a hard core TODo'}`}
+        {item.text || 'I am a hard core TODo'}
       </Text>
     </BucketItemLayout>
   )
