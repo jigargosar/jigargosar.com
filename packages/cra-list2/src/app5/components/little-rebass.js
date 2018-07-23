@@ -76,6 +76,10 @@ export const Text = styled(B.Text).attrs({})`
   ${colorStyle};
 `
 
+export const Input = styled(B.Input).attrs({})`
+  ${colorStyle};
+`
+
 export const Btn = system({
   is: 'button',
   bg: 'transparent',

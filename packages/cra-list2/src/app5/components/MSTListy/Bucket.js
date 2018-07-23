@@ -8,6 +8,7 @@ import {
   Btn,
   buttonStyle,
   FlexRow,
+  Input,
   modularScale,
   Text,
 } from '../little-rebass'
@@ -51,13 +52,13 @@ const BucketItem = observer(function BucketItem({item}) {
           {item.id.slice(5, 8)}
         </Text>
       </B.Tooltip>
-      {item.isEditing ? (
-        'editing'
-      ) : (
-        <Text lineHeight={2} mx={1}>
-          {item.text || 'I am a hard core TODo'}
-        </Text>
-      )}
+      <Text lineHeight={2} mx={1}>
+        {item.isEditing ? (
+          <Input value={item.text || 'I am a hard core TODo'} />
+        ) : (
+          item.text || 'I am a hard core TODo'
+        )}
+      </Text>
     </BucketItemLayout>
   )
 })
