@@ -185,6 +185,9 @@ const Item = Model({
         whenKeyPD('space')(() => alert('space')),
       )
     },
+    onInputKeyDown(e) {
+      return e.stopPropagation()
+    },
     get isEditing() {
       return isEditing(self)
     },

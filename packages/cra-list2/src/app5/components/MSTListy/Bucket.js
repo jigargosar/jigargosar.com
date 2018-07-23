@@ -63,6 +63,7 @@ const BucketItem = observer(function BucketItem({item}) {
           onBlur={item.onInputBlur}
           onFocus={item.onInputFocus}
           onChange={item.onInputChange}
+          onKeyDown={item.onInputKeyDown}
         />
       ) : (
         <Text lineHeight={2} mx={1}>
