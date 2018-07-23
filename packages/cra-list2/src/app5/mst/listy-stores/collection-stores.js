@@ -29,6 +29,10 @@ function startEditing(self) {
   getEditManager(self).startEditing(self)
 }
 
+function endEditing(self) {
+  getEditManager(self).endEditing(self)
+}
+
 function isEditing(self) {
   return getEditManager(self).isEditing(self)
 }
@@ -216,6 +220,9 @@ const Item = Model({
     onBlur() {
       getSelectionManager(self).onItemBlur()
     },
+    onInputBlur() {
+      endEditing(self)
+    },
     onNavigateNext() {
       if (self.isLast) {
         self.bucket.navigateToNextBucketHeader()
@@ -324,8 +331,10 @@ export const EditManager = modelNamed('EditManager')
     startEditing(ref) {
       self.editRef = ref
     },
-    endEditing() {
-      self._editId = null
+    endEditing(ref) {
+      if (self.isEditing(ref)) {
+        self._editId = null
+      }
     },
   }))
 
