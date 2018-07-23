@@ -42,6 +42,9 @@ const Dashboard = Model({
         dashboard: self,
       })
     },
+    get addListButtonDOMId() {
+      return `'add-list-button-${self.id}`
+    },
   }))
   .actions(self => ({
     addBucket(model = {}) {
@@ -59,6 +62,9 @@ const Dashboard = Model({
   .actions(self => ({
     onMount() {
       getSelectionManager(self).onDashboardMount(self)
+    },
+    navigateToAddListButton() {
+      setFocusAndSelectionOnDOMId(self.addListButtonDOMId)
     },
   }))
 
@@ -79,6 +85,17 @@ const Bucket = Model({
     get firstItem() {
       return S.head(self.items)
     },
+    get siblings() {
+      return self.dashboard.buckets
+    },
+    get index() {
+      const index = R.indexOf(self, self.siblings)
+      assert(!isIndexOutOfBounds(index, self.siblings))
+      return index
+    },
+    get nextBucket() {
+      return self.siblings[self.index + 1]
+    },
   }))
   .actions(self => ({
     addItem(model) {
@@ -94,7 +111,10 @@ const Bucket = Model({
       getDomain(self).deleteBucket(self)
     },
     navigateToNextBucketHeader() {
-      S.map()
+      R.compose(
+        maybeOrElse(() => self.dashboard.navigateToAddListButton()),
+        S.map(R.tap(b => b.navigateToHeader())),
+      )(self.nextBucket)
     },
     navigateToHeader() {
       setFocusAndSelectionOnDOMId(self.bucket.headerDOMId)
