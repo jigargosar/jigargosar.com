@@ -16,6 +16,12 @@ import {
   fontFamily,
   border,
   textAlign,
+  background,
+  buttonStyle,
+  alignContent,
+  alignItems,
+  colorStyle,
+  textStyle,
 } from 'styled-system'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
@@ -28,8 +34,8 @@ export const FlexRow = styled(Flex).attrs({
   alignItems: 'center',
 })``
 
-export const Btn = styled(Box).attrs({
-  is: 'button',
+export const Btn = styled('button').attrs({
+  // is: 'button',
   // display: 'flex',
   // alignItems: 'center',
   // lineHeight: 'inherit',
@@ -37,9 +43,12 @@ export const Btn = styled(Box).attrs({
   :focus {
     z-index: 1;
   }
+  ${space};
   ${fontSize};
   ${border};
   ${textAlign};
+  ${background};
+  ${color};
 `
 
 Btn.defaultProps = {
