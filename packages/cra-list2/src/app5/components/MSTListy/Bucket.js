@@ -1,6 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React, {Fragment} from 'react'
-import {renderKeyedById, whenKeyPD, withKeyEvent} from '../utils'
+import {renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
 import {
   B,
@@ -43,7 +43,7 @@ const BucketItem = observer(function BucketItem({item}) {
       id={item.id}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
-      onKeyDown={item.onKeyDown}
+      onKeyDown={item.onLIKeydown}
       mx={-1}
     >
       <B.Tooltip text={item.id}>

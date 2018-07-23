@@ -78,7 +78,7 @@ const Bucket = Model({
         whenKeyPD('up')(self.onHeaderNavigatePrev),
         whenKeyPD('down')(self.onHeaderNavigateNext),
         whenKeyPD('d')(self.onDelete),
-        whenKeyPD('alt+enter')(() => alert('alt+enter')),
+        whenKeyPD('mod+enter')(self.onPrependItem),
         whenKeyPD('enter')(() => alert('enter')),
         whenKeyPD('space')(() => alert('space')),
       )
@@ -125,6 +125,12 @@ const Bucket = Model({
         bucket: self,
       })
     },
+    onAddItem() {
+      self.addItem().navigateTo()
+    },
+    onPrependItem() {
+      self.onAddItem()
+    },
     onDelete() {
       getDomain(self).deleteBucket(self)
     },
@@ -150,7 +156,7 @@ const Item = Model({
   attrs: {bucket: types.reference(Bucket)},
 })
   .views(self => ({
-    get onKeydown() {
+    get onLIKeydown() {
       return withKeyEvent(
         whenKeyPD('up')(self.onNavigatePrev),
         whenKeyPD('down')(self.onNavigateNext),
@@ -203,7 +209,7 @@ const Item = Model({
       }
     },
     onAppendSibling() {
-      self.bucket.addItem().navigateTo()
+      self.bucket.onAddItem()
     },
   }))
 
