@@ -27,8 +27,6 @@ const BucketPanel = rc.nest(Panel, Bucket)
 const focusItemOnMount = lifecycle({
   componentDidMount() {
     this.props.dashboard.onMount()
-    console.log(`componentDidMount`, 'componentDidMount')
-    console.log(`componentDidMount`, 'componentDidMount')
   },
 })
 
