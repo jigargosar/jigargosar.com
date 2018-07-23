@@ -46,7 +46,7 @@ const BucketItem = observer(function BucketItem({item}) {
       onKeyDown={withKeyEvent(
         whenKeyPD('up')(item.onNavigatePrev),
         whenKeyPD('down')(item.onNavigateNext),
-        whenKeyPD('mod+enter')(item.appendSibling),
+        whenKeyPD('mod+enter')(item.onAppendSibling),
         whenKeyPD('enter')(() => alert('enter')),
         whenKeyPD('space')(() => alert('space')),
       )}
@@ -89,7 +89,7 @@ function Bucket({bucket}) {
       <BucketItemBtn
         children={'Add Item'}
         id={bucket.addItemDOMId}
-        onClick={() => bucket.addItem()}
+        onClick={bucket.onAddItem}
       />
     </Fragment>
   )

@@ -76,6 +76,9 @@ const Bucket = Model({
         bucket: self,
       })
     },
+    onAddItem() {
+      getSelectionManager(self).selectItem(self.addItem())
+    },
     onDelete() {
       getDomain(self).deleteBucket(self)
     },
@@ -124,8 +127,8 @@ const Item = Model({
         )
       }
     },
-    appendSibling() {
-      getSelectionManager(self).selectItem(self.bucket.addItem())
+    onAppendSibling() {
+      return self.bucket.onAddItem()
     },
   }))
 
