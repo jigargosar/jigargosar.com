@@ -34,6 +34,7 @@ export const B = rebass
 export const Flex = B.Flex
 export const Box = system(
   'width',
+  'fontFamily',
   'fontSize',
   'flex',
   'order',
@@ -66,17 +67,15 @@ export const Btn = system({
   lineHeight: null,
 })
 
-export function IconBtn({icon: Icon, fz, ...other}) {
+export function IconBtn({icon: Icon, iconSize, ...other}) {
   return (
     <Btn {...other}>
-      <Icon fontSize={fz} />
+      <Icon fontSize={iconSize} />
     </Btn>
   )
 }
 
 IconBtn.defaultProps = {
   variant: 'icon',
-  lineHeight: 0,
-  p: 0,
-  fz: 'default',
+  iconSize: 'default',
 }

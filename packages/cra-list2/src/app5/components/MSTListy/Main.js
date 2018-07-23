@@ -39,8 +39,9 @@ const KeyboardShortcuts = observer(
 )
 
 function createDarkTheme() {
-  const white = '#fff'
-  const black = '#000'
+  const white = '#d3d3d3'
+  // const black = '#000'
+  const black = '#363636'
 
   const theme = {
     colorStyles: {
@@ -52,12 +53,14 @@ function createDarkTheme() {
     buttons: {
       bucketLine: {},
       dim: {
-        color: transparentize(0.3, white),
+        color: transparentize(0.5, white),
         cursor: 'pointer',
       },
       icon: {
-        color: transparentize(0.3, white),
+        color: transparentize(0.5, white),
         cursor: 'pointer',
+        lineHeight: 0,
+        padding: 0,
       },
     },
     fonts: {
@@ -73,7 +76,7 @@ const theme = createDarkTheme()
 function ListyMain({store, domain}) {
   return (
     <B.Provider theme={theme}>
-      <Box colors={'root'} minHeight={'100vh'}>
+      <Box colors={'root'} minHeight={'100vh'} fontFamily={'mono'}>
         <KeyboardShortcuts store={store} />
         {maybeOrNil(dashboard => <Dashboard dashboard={dashboard} />)(
           domain.currentDashboard,
