@@ -119,6 +119,9 @@ const Item = Model({
         )
       }
     },
+    appendSibling() {
+      self.bucket.addItem()
+    },
   }))
 
 const collectionProps = {
