@@ -70,6 +70,7 @@ function createDarkTheme() {
     textStyles: {
       bucketTitle: {
         fontSize: modularScale(0.5),
+        lineHeight: 2,
       },
     },
     buttons: {
