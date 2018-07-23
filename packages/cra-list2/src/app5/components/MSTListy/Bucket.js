@@ -43,7 +43,8 @@ const BucketItem = observer(function BucketItem({item}) {
       )}
     >
       <B.Text lineHeight={2}>
-        {item.text || 'I am a hard core TODo'}
+        {`${item.id.slice(5, 7)}${item.text ||
+          'I am a hard core TODo'}`}
       </B.Text>
     </BucketItemLayout>
   )
