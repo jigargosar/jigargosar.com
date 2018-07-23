@@ -3,15 +3,15 @@ import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
-import {B, Box, Flex, IconBtn} from '../little-rebass'
+import {Box, Flex, IconBtn} from '../little-rebass'
 
 function BucketItem({item}) {
   const {text: itemText, /*isSelected,*/ onFocus} = item
 
   return (
-    <B.Flex id={item.id} onFocus={onFocus}>
+    <Flex id={item.id} onFocus={onFocus}>
       {itemText || 'I am a hard core TODo'}
-    </B.Flex>
+    </Flex>
   )
 }
 
