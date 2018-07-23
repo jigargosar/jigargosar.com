@@ -6,11 +6,9 @@ import {observer} from 'mobx-react'
 import {Box, Flex, FlexRow, IconBtn} from '../little-rebass'
 
 const BucketItem = observer(function BucketItem({item}) {
-  const {text: itemText, /*isSelected,*/ onFocus} = item
-
   return (
-    <Flex id={item.id} onFocus={onFocus}>
-      {itemText || 'I am a hard core TODo'}
+    <Flex id={item.id} onFocus={item.onFocus}>
+      {item.text || 'I am a hard core TODo'}
     </Flex>
   )
 })
