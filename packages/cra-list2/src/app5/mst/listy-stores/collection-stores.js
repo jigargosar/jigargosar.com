@@ -93,8 +93,14 @@ const Bucket = Model({
       assert(!isIndexOutOfBounds(index, self.siblings))
       return index
     },
+    get isLast() {
+      return self.index === self.siblings.length - 1
+    },
+
     get nextBucket() {
-      return self.siblings[self.index + 1]
+      return S.toMaybe(
+        self.isLast ? self.siblings[self.index + 1] : null,
+      )
     },
   }))
   .actions(self => ({

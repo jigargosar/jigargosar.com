@@ -38,6 +38,7 @@ const Dashboard = focusItemOnMount(
         {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
         <Panel>
           <BucketItemBtn
+            id={dashboard.addListButtonDOMId}
             onClick={() => dashboard.addBucket()}
             children={'Add List'}
           />
