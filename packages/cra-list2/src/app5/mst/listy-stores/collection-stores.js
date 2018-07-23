@@ -1,19 +1,20 @@
 import {Model} from '../Model'
-import {getParentOfType, getType, types} from 'mobx-state-tree'
+import {
+  getParentOfType,
+  getRoot,
+  getType,
+  types,
+} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
 import {S} from '../../little-ramda'
 
 function getSelectionManager(self) {
-  return getType(self) === SelectionManager
-    ? self
-    : getParentOfType(self, SelectionManager)
+  return getRoot(self).selectionManager
 }
 
 function getDomain(self) {
-  return getType(self) === Domain
-    ? self
-    : getParentOfType(self, Domain)
+  return getRoot(self).domain
 }
 function getItemCollection(self) {
   return getDomain(self).itemCollection
@@ -66,6 +67,9 @@ const Item = Model({
 }).actions(self => ({
   onFocus() {
     getSelectionManager(self).onItemFocus(self)
+  },
+  onBlur() {
+    getSelectionManager(self).onItemBlur()
   },
 }))
 

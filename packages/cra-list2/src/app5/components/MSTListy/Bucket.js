@@ -10,8 +10,6 @@ export const BucketItemBtn = Btn.extend.attrs({
   w: 1,
 })``
 
-const BucketItemContainer = Flex.extend``
-
 const BucketItem = observer(function BucketItem({item}) {
   return (
     <Flex
@@ -19,6 +17,7 @@ const BucketItem = observer(function BucketItem({item}) {
       pl={2}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
+      tabIndex={-1}
     >
       {item.text || 'I am a hard core TODo'}
     </Flex>
