@@ -1,6 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React, {Fragment} from 'react'
-import {renderKeyedById} from '../utils'
+import {renderKeyedById, whenKey, withKeyEvent} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
 import {
@@ -34,6 +34,7 @@ const BucketItem = observer(function BucketItem({item}) {
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       tabIndex={-1}
+      onKeyDown={withKeyEvent(whenKey('down')(() => alert('down')))}
     >
       <B.Text lineHeight={2}>
         {item.text || 'I am a hard core TODo'}
