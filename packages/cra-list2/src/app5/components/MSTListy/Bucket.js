@@ -7,6 +7,7 @@ import {
   B,
   Box,
   Btn,
+  buttonStyle,
   FlexRow,
   IconBtn,
   modularScale,
@@ -18,11 +19,18 @@ export const BucketItemBtn = styled(Btn).attrs({
   width: 1,
 })``
 
+export const BucketItemLayout = styled(FlexRow).attrs({
+  pl: modularScale(0.5),
+  width: 1,
+  variant: 'default',
+})`
+  ${buttonStyle};
+`
+
 const BucketItem = observer(function BucketItem({item}) {
   return (
-    <FlexRow
+    <BucketItemLayout
       id={item.id}
-      pl={2}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       tabIndex={-1}
@@ -30,7 +38,7 @@ const BucketItem = observer(function BucketItem({item}) {
       <B.Text lineHeight={2}>
         {item.text || 'I am a hard core TODo'}
       </B.Text>
-    </FlexRow>
+    </BucketItemLayout>
   )
 })
 

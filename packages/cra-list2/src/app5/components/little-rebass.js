@@ -39,6 +39,7 @@ import {
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
+export {textStyle, buttonStyle, colorStyle}
 export {darken, lighten, opacify, transparentize, modularScale}
 
 export {styled}
@@ -75,7 +76,8 @@ export const FlexRow = styled(Flex).attrs({
 export const Btn = system({
   is: 'button',
   bg: 'transparent',
-  variant: 'dim',
+  variant: 'default',
+  colors: 'dim',
   border: 0,
   p: 1,
   textAlign: 'start',
