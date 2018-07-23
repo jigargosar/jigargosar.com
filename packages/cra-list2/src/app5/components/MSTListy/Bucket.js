@@ -72,6 +72,7 @@ function Bucket({bucket}) {
   return (
     <Fragment>
       <BucketHeaderLayout
+        id={bucket.headerDOMId}
         onKeyDown={withKeyEvent(
           // whenKeyPD('up')(item.onNavigatePrev),
           // whenKeyPD('down')(item.onNavigateNext),
