@@ -39,7 +39,7 @@ const Dashboard = Model({
     },
   }))
   .actions(self => ({
-    addBucket(model) {
+    addBucket(model = {}) {
       return getDomain(self).buckets.add({
         ...model,
         dashboard: self,
@@ -146,7 +146,7 @@ export const Domain = modelNamed('Domain')
   })
   .actions(function(self) {
     return {
-      addDashboard(model) {
+      addDashboard(model = {}) {
         return getDashboardCollection(self).add(model)
       },
       deleteBucket(b) {
@@ -155,7 +155,7 @@ export const Domain = modelNamed('Domain')
       },
       addMockData() {
         self
-          .addDashboard({})
+          .addDashboard()
           .addBucket()
           .addItem()
       },
