@@ -1,7 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {renderKeyedById} from '../utils'
-import {Bucket} from './Bucket'
+import {Bucket, FullWidthBtn} from './Bucket'
 import {observer} from 'mobx-react'
 import {B, Btn} from '../little-rebass'
 import {rc} from '../little-recompose'
@@ -29,7 +29,7 @@ const Dashboard = observer(function Dashboard({dashboard}) {
     <Layout>
       {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
       <Panel>
-        <Btn
+        <FullWidthBtn
           onClick={() => dashboard.addBucket()}
           children={'Add List'}
         />

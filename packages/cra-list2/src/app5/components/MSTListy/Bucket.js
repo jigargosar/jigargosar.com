@@ -6,7 +6,7 @@ import {observer} from 'mobx-react'
 import {Box, Btn, Flex, FlexRow, IconBtn} from '../little-rebass'
 import styled from 'styled-components'
 
-const FullWidthBtn = styled(Btn).attrs({
+export const FullWidthBtn = styled(Btn).attrs({
   pl: 2,
   w: 1,
 })``
@@ -37,9 +37,10 @@ function Bucket({bucket}) {
         />
       </FlexRow>
       <BucketItems bucket={bucket} />
-      <FullWidthBtn id={`add-item-${bucket.id}`}>
-        {`Add Item`}
-      </FullWidthBtn>
+      <FullWidthBtn
+        children={'Add Item'}
+        id={`add-item-${bucket.id}`}
+      />
     </Fragment>
   )
 }
