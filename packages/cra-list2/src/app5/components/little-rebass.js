@@ -14,6 +14,7 @@ import {
   width,
   display,
   fontFamily,
+  border,
 } from 'styled-system'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
@@ -26,7 +27,7 @@ export const FlexRow = styled(Flex).attrs({
   alignItems: 'center',
 })``
 
-const SBtn = system({
+export const Btn = styled(Box).attrs({
   is: 'button',
   bg: 'transparent',
   color: '#666',
@@ -35,13 +36,12 @@ const SBtn = system({
   display: 'flex',
   alignItems: 'center',
   lineHeight: 'inherit',
-})
-
-export const Btn = styled(SBtn)`
+})`
   :focus {
     z-index: 1;
   }
   ${fontSize};
+  ${border};
 `
 
 export function IconBtn({icon: Icon, ...other}) {

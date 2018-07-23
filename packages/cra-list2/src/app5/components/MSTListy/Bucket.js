@@ -31,7 +31,7 @@ function Bucket({bucket}) {
         />
       </FlexRow>
       <BucketItems bucket={bucket} />
-      <Btn id={`add-item-${bucket.id}`} pl={2}>
+      <Btn id={`add-item-${bucket.id}`} pl={2} width={1}>
         {`Add Item`}
       </Btn>
     </Fragment>
