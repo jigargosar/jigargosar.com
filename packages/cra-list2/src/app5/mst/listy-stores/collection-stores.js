@@ -21,6 +21,13 @@ function getSelectionManager(self) {
   return getRoot(self).selectionManager
 }
 
+function getEditManager(self) {
+  return getRoot(self).editManager
+}
+function startEditing(ref) {
+  getEditManager(self).startEditing(ref)
+}
+
 function getDomain(self) {
   return getRoot(self).domain
 }
@@ -182,6 +189,9 @@ const Item = Model({
     },
   }))
   .actions(self => ({
+    onEdit() {
+      startEditing(self)
+    },
     navigateTo() {
       getSelectionManager(self).selectItem(self)
     },
@@ -314,6 +324,7 @@ export const Root = types
   .props({
     domain: types.optional(Domain, {}),
     selectionManager: types.optional(SelectionManager, {}),
+    editManager: types.optional(EditManager, {}),
   })
   .actions(self => ({
     initModule(module) {
