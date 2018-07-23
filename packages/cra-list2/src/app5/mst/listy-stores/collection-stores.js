@@ -208,6 +208,10 @@ const Item = Model({
       startEditing(self)
       setFocusAndSelectionOnDOMId(self.inputDOMId)
     },
+    onInputChange(e) {
+      const text = e.target.value
+      self.name = text
+    },
     navigateTo() {
       getSelectionManager(self).selectItem(self)
     },

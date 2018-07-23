@@ -59,13 +59,14 @@ const BucketItem = observer(function BucketItem({item}) {
           lineHeight={2}
           rows={1}
           mx={1}
-          defaultValue={item.text || 'I am a hard core TODo'}
+          value={item.name}
           onBlur={item.onInputBlur}
           onFocus={item.onInputFocus}
+          onChange={item.onInputChange}
         />
       ) : (
         <Text lineHeight={2} mx={1}>
-          {item.text || 'I am a hard core TODo'}
+          {item.name || 'I am a hard core TODo'}
         </Text>
       )}
     </BucketItemLayout>
