@@ -73,7 +73,16 @@ const BucketItems = observer(function BucketItems({bucket}) {
 function Bucket({bucket}) {
   return (
     <Fragment>
-      <BucketHeaderLayout>
+      <BucketHeaderLayout
+        onKeyDown={withKeyEvent(
+          // whenKeyPD('up')(item.onNavigatePrev),
+          // whenKeyPD('down')(item.onNavigateNext),
+          // whenKeyPD('mod+enter')(item.appendSibling),
+          whenKeyPD('d')(bucket.onDelete),
+          whenKeyPD('enter')(() => alert('enter')),
+          whenKeyPD('space')(() => alert('space')),
+        )}
+      >
         <Box textStyle={'bucketTitle'} flex={1}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </Box>

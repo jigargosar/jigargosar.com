@@ -2,14 +2,10 @@ import {Model} from '../Model'
 import {getRoot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
-import {
-  isIndexOutOfBounds,
-  maybeOrElse,
-  R,
-  S,
-} from '../../little-ramda'
+import {isIndexOutOfBounds, maybeOrElse, R} from '../../little-ramda'
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import assert from 'assert'
+import S from 'sanctuary'
 
 function getSelectionManager(self) {
   return getRoot(self).selectionManager
@@ -74,6 +70,9 @@ const Bucket = Model({
         bucket: self,
       })
     },
+    onDelete() {
+      getDomain(self).deleteBucket(self)
+    },
   }))
 
 const Item = Model({
@@ -130,33 +129,28 @@ const collectionProps = {
   dashboards: Collection(Dashboard),
 }
 
-export const Domain = types
-  .model('Domain')
+export const Domain = modelNamed('Domain')
   .props(optionalCollections(collectionProps))
-  .views(domainViews)
-  .actions(domainActions)
-
-function domainViews(self) {
-  return {
-    get currentDashboard() {
-      return S.head(getDashboardCollection(self).list)
-    },
-  }
-}
-
-function domainActions(self) {
-  return {
-    addDashboard(model) {
-      return getDashboardCollection(self).add(model)
-    },
-    addMockData() {
-      self
-        .addDashboard({})
-        .addBucket()
-        .addItem()
-    },
-  }
-}
+  .views(function(self) {
+    return {
+      get currentDashboard() {
+        return S.head(getDashboardCollection(self).list)
+      },
+    }
+  })
+  .actions(function(self) {
+    return {
+      addDashboard(model) {
+        return getDashboardCollection(self).add(model)
+      },
+      addMockData() {
+        self
+          .addDashboard({})
+          .addBucket()
+          .addItem()
+      },
+    }
+  })
 
 function modelNamed(name) {
   return types.model(name)
