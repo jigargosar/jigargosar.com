@@ -43,14 +43,7 @@ const BucketItem = observer(function BucketItem({item}) {
       id={item.id}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
-      onKeyDown={withKeyEvent(
-        whenKeyPD('up')(item.onNavigatePrev),
-        whenKeyPD('down')(item.onNavigateNext),
-        whenKeyPD('mod+enter')(item.onAppendSibling),
-        whenKeyPD('d')(item.onDelete),
-        whenKeyPD('enter')(() => alert('enter')),
-        whenKeyPD('space')(() => alert('space')),
-      )}
+      onKeyDown={item.onKeyDown}
       mx={-1}
     >
       <B.Tooltip text={item.id}>
@@ -74,15 +67,7 @@ function Bucket({bucket}) {
     <Fragment>
       <BucketHeaderLayout
         id={bucket.headerDOMId}
-        onKeyDown={withKeyEvent(
-          whenKeyPD('up')(bucket.onHeaderNavigatePrev),
-          whenKeyPD('down')(bucket.onHeaderNavigateNext),
-          // whenKeyPD('mod+enter')(item.appendSibling),
-          whenKeyPD('d')(bucket.onDelete),
-          whenKeyPD('alt+enter')(() => alert('alt+enter')),
-          whenKeyPD('enter')(() => alert('enter')),
-          whenKeyPD('space')(() => alert('space')),
-        )}
+        onKeyDown={bucket.onHeaderKeydown}
       >
         <Box textStyle={'bucketTitle'} flex={1}>
           {bucket.name || 'I am a Bucket Short and Stout'}

@@ -9,7 +9,11 @@ import {
   maybeOrElse,
   R,
 } from '../../little-ramda'
-import {setFocusAndSelectionOnDOMId} from '../../components/utils'
+import {
+  setFocusAndSelectionOnDOMId,
+  whenKeyPD,
+  withKeyEvent,
+} from '../../components/utils'
 import assert from 'assert'
 import S from 'sanctuary'
 
@@ -69,6 +73,16 @@ const Bucket = Model({
   attrs: {dashboard: types.reference(Dashboard)},
 })
   .views(self => ({
+    get onHeaderKeydown() {
+      return withKeyEvent(
+        whenKeyPD('up')(self.onHeaderNavigatePrev),
+        whenKeyPD('down')(self.onHeaderNavigateNext),
+        whenKeyPD('d')(self.onDelete),
+        whenKeyPD('alt+enter')(() => alert('alt+enter')),
+        whenKeyPD('enter')(() => alert('enter')),
+        whenKeyPD('space')(() => alert('space')),
+      )
+    },
     get headerDOMId() {
       return `bucket-header-${this.id}`
     },
@@ -136,6 +150,16 @@ const Item = Model({
   attrs: {bucket: types.reference(Bucket)},
 })
   .views(self => ({
+    get onKeydown() {
+      return withKeyEvent(
+        whenKeyPD('up')(self.onNavigatePrev),
+        whenKeyPD('down')(self.onNavigateNext),
+        whenKeyPD('mod+enter')(self.onAppendSibling),
+        whenKeyPD('d')(self.onDelete),
+        whenKeyPD('enter')(() => alert('enter')),
+        whenKeyPD('space')(() => alert('space')),
+      )
+    },
     get siblings() {
       return self.bucket.items
     },
