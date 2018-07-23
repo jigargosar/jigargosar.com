@@ -1,7 +1,7 @@
 /* eslint-disable no-func-assign*/
 import React, {Fragment} from 'react'
 import {renderKeyedById, whenKeyPD, withKeyEvent} from '../utils'
-import {Delete, PlaylistAdd} from '@material-ui/icons'
+import {Delete} from '@material-ui/icons'
 import {observer} from 'mobx-react'
 import {
   B,
