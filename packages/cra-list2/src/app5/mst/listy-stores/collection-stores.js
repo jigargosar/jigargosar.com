@@ -168,6 +168,9 @@ const Item = Model({
   attrs: {bucket: types.reference(Bucket)},
 })
   .views(self => ({
+    get inputDOMId() {
+      return `input-${self.id}`
+    },
     get onLIKeydown() {
       return withKeyEvent(
         whenKeyPD('up')(self.onNavigatePrev),
@@ -199,6 +202,7 @@ const Item = Model({
   .actions(self => ({
     onStartEditing() {
       startEditing(self)
+      setFocusAndSelectionOnDOMId(self.inputDOMId)
     },
     navigateTo() {
       getSelectionManager(self).selectItem(self)

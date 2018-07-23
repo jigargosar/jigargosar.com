@@ -32,7 +32,6 @@ export const BucketHeaderLayout = styled(FlexRow).attrs({
 export const BucketItemLayout = styled(FlexRow).attrs({
   pl: modularScale(0.5),
   width: 1,
-  variant: 'default',
   tabIndex: 0,
 })`
   ${buttonStyle};
@@ -43,6 +42,7 @@ const BucketItem = observer(function BucketItem({item}) {
     <BucketItemLayout
       id={item.id}
       colors={item.isEditing ? 'selected' : 'default'}
+      variant={item.isEditing ? 'selected' : 'default'}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
@@ -55,6 +55,7 @@ const BucketItem = observer(function BucketItem({item}) {
       </B.Tooltip>
       {item.isEditing ? (
         <Input
+          id={item.inputDOMId}
           lineHeight={2}
           rows={1}
           mx={1}
