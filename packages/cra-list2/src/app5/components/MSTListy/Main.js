@@ -49,6 +49,12 @@ function createDarkTheme() {
   // const black = '#000'
   const black = '#363636'
 
+  const baseButton = {
+    color: transparentize(0.5, white),
+    cursor: 'pointer',
+    outline: 'none',
+  }
+
   const theme = {
     colorStyles: {
       root: {
@@ -70,14 +76,19 @@ function createDarkTheme() {
     buttons: {
       bucketLine: {},
       dim: {
-        color: transparentize(0.5, white),
-        cursor: 'pointer',
+        ...baseButton,
+        '&:hover, &:focus': {
+          backgroundColor: lighten(0.05, black),
+        },
       },
       icon: {
-        color: transparentize(0.5, white),
-        cursor: 'pointer',
+        ...baseButton,
         lineHeight: 0,
         padding: 0,
+        '&:hover, &:focus': {
+          color: lighten(1, white),
+          backgroundColor: lighten(0.05, black),
+        },
       },
     },
     fonts: {

@@ -5,7 +5,6 @@ import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
 import {B, Box, Btn, FlexRow, IconBtn} from '../little-rebass'
 import styled from 'styled-components'
-import {modularScale} from 'polished'
 
 export const BucketItemBtn = styled(Btn).attrs({
   pl: 2,
