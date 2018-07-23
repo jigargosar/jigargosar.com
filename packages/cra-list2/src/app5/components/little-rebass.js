@@ -77,7 +77,7 @@ export const Btn = styled(
   system({
     is: 'button',
     bg: 'transparent',
-    colors: 'dark.dim',
+    colors: 'dark.3',
     border: 0,
     p: 1,
     textAlign: 'start',

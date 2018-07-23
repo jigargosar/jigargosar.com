@@ -5,7 +5,7 @@ import {whenKey, withKeyEvent} from '../utils'
 import {Dashboard} from './Dashboard'
 import {oInjectNamed} from '../little-mobx-react'
 import {observer} from 'mobx-react'
-import {maybeOrNil, overProp, R} from '../../little-ramda'
+import {maybeOrNil, overProp, R, tapLog} from '../../little-ramda'
 import {B, Box} from '../little-rebass'
 import {darken, lighten} from 'polished'
 
@@ -46,12 +46,21 @@ function createTheme() {
     backgroundColor: black,
   }
 
-  const darkDim = {...dark, color: darken(0.3, white)}
+  function getDarkDim(amount) {
+    return {color: darken(amount, white)}
+  }
+
+  const darkDim = getDarkDim(0.3)
 
   const theme = {
     colorStyles: {
-      dark: {...dark, dim: darkDim},
-      dim: {},
+      dark: {
+        ...dark,
+        ...R.compose(
+          R.zipObj(R.range(1, 9)),
+          R.map(R.compose(getDarkDim, R.divide(R.__, 10))),
+        )(R.range(1, 9)),
+      },
     },
     fonts: {
       sans:
