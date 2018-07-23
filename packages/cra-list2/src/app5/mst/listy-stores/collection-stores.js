@@ -84,6 +84,14 @@ const Item = Model({
     get siblings() {
       return self.bucket.items
     },
+    get index() {
+      const index = R.indexOf(self, self.siblings)
+      assert(!isIndexOutOfBounds(index, self.siblings))
+      return index
+    },
+    get isLast() {
+      return self.index === self.siblings.length - 1
+    },
   }))
   .actions(self => ({
     onFocus() {
@@ -93,8 +101,12 @@ const Item = Model({
       getSelectionManager(self).onItemBlur()
     },
     onNavigateNext() {
-      const idx = R.indexOf(self, self.siblings)
-      assert(!isIndexOutOfBounds(idx, self.siblings))
+      if (self.isLast) {
+      } else {
+        getSelectionManager(self).selectItem(
+          self.siblings[self.index + 1],
+        )
+      }
     },
   }))
 
@@ -149,9 +161,12 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
   }))
   .actions(self => ({
+    selectItem(i) {
+      setFocusAndSelectionOnDOMId(i.id)
+    },
     onDashboardMount(d) {
       R.compose(
-        S.map(R.tap(i => setFocusAndSelectionOnDOMId(i.id))),
+        S.map(R.tap(self.selectItem)),
         maybeOrElse(() => S.chain(b => b.firstItem)(d.firstBucket)),
       )(self.selectedItem)
     },
