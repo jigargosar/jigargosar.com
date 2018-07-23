@@ -1,10 +1,5 @@
 import {Model} from '../Model'
-import {
-  getParentOfType,
-  getRoot,
-  getType,
-  types,
-} from 'mobx-state-tree'
+import {getRoot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {optionalCollections} from '../../little-mst'
 import {S} from '../../little-ramda'

@@ -24,8 +24,11 @@ import {
   textStyle,
 } from 'styled-system'
 
+import {omit, Tag} from 'clean-tag'
+
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
+export {styled}
 export const B = rebass
 export const Flex = B.Flex
 export const Box = B.Box
@@ -34,21 +37,19 @@ export const FlexRow = styled(Flex).attrs({
   alignItems: 'center',
 })``
 
-export const Btn = styled('button').attrs({
-  // is: 'button',
-  // display: 'flex',
-  // alignItems: 'center',
-  // lineHeight: 'inherit',
-})`
-  :focus {
-    z-index: 1;
-  }
-  ${space};
-  ${fontSize};
-  ${border};
-  ${textAlign};
-  ${background};
-  ${color};
+export const Btn = styled('button').attrs({})`
+  
+  
+${width}
+${border}
+${textAlign}
+${space}
+${background}
+${color}
+${fontSize}
+${flex}
+${display}
+  
 `
 
 Btn.defaultProps = {
@@ -59,19 +60,14 @@ Btn.defaultProps = {
   textAlign: 'start',
 }
 
-export const IconBtn = Btn.extend.attrs({
-  children: ({icon: Icon}) => <Icon fontSize={'inherit'} />,
-  // fontSize: 3,
-})``
+export function IconBtn({icon: Icon, ...other}) {
+  return (
+    <Btn {...other}>
+      <Icon fontSize={'inherit'} />
+    </Btn>
+  )
+}
 
-// export function IconBtn({icon: Icon, ...other}) {
-//   return (
-//     <Btn {...other}>
-//       <Icon fontSize={'inherit'} />
-//     </Btn>
-//   )
-// }
-//
 IconBtn.defaultProps = {
   ...Btn.defaultProps,
   fontSize: 3,

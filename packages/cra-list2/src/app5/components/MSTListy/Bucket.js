@@ -4,10 +4,11 @@ import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
 import {Box, Btn, Flex, FlexRow, IconBtn} from '../little-rebass'
+import styled from 'styled-components'
 
-export const BucketItemBtn = Btn.extend.attrs({
+export const BucketItemBtn = styled(Btn).attrs({
   pl: 2,
-  w: 1,
+  width: 1,
 })``
 
 const BucketItem = observer(function BucketItem({item}) {
