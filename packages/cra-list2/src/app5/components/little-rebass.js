@@ -19,6 +19,8 @@ import {
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
 export const B = rebass
+export const Flex = B.Flex
+export const Box = B.Box
 
 const SBtn = system({
   is: 'button',

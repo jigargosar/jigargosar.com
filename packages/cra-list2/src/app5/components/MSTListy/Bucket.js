@@ -3,7 +3,7 @@ import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {Delete, PlaylistAdd} from '@material-ui/icons'
 import {observer} from 'mobx-react'
-import {B, IconBtn} from '../little-rebass'
+import {B, Box, Flex, IconBtn} from '../little-rebass'
 
 function BucketItem({item}) {
   const {text: itemText, /*isSelected,*/ onFocus} = item
@@ -26,16 +26,16 @@ BucketItems = observer(BucketItems)
 function Bucket({bucket}) {
   return (
     <Fragment>
-      <B.Flex alignItems={'center'}>
-        <B.Box fontSize={3} flex={'1 1'}>
+      <Flex alignItems={'center'}>
+        <Box fontSize={3} flex={'1 1'}>
           {bucket.name || 'I am a Bucket Short and Stout'}
-        </B.Box>
+        </Box>
         <IconBtn icon={Delete} />
         <IconBtn
           icon={PlaylistAdd}
           onClick={() => bucket.addItem()}
         />
-      </B.Flex>
+      </Flex>
       <BucketItems bucket={bucket} />
     </Fragment>
   )
