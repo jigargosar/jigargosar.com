@@ -3,7 +3,6 @@
 import React from 'react'
 import system from 'system-components'
 import {buttonStyle, colorStyle, textStyle} from 'styled-system'
-import {Provider} from 'rebass'
 import {ThemeProvider} from 'styled-components'
 
 import {
