@@ -57,9 +57,9 @@ const BucketItem = observer(function BucketItem({item}) {
         <TextAreaAuto
           id={item.inputDOMId}
           rows={1}
-          // lineHeight={1.25}
-          // py={1}
-          // mx={1}
+          lineHeight={1.25}
+          py={1}
+          mx={1}
           value={item.name}
           // onBlur={item.onInputBlur}
           onFocus={item.onInputFocus}

@@ -99,7 +99,7 @@ TextAreaAuto.defaultProps = {
   border: 'none',
   p: 0,
   rows: 1,
-  lineHeight: 2,
+  lineHeight: null,
 }
 
 export const Btn = system({
