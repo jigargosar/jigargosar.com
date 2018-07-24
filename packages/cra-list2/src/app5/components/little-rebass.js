@@ -122,7 +122,6 @@ function createDarkTheme() {
       },
     },
     buttons: {
-      bucketLine: {},
       default: {
         ...baseButton,
         '&:hover': {
