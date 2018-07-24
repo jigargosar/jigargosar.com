@@ -56,28 +56,30 @@ const BucketItem = observer(function BucketItem({item}) {
           {item.id.slice(5, 8)}
         </Text>
       </B.Tooltip>
-      {item.isEditing ? (
-        <FocusTrap className={cn('flex-auto flex')}>
-          <AutoSize>
-            <TextArea
-              id={item.inputDOMId}
-              rows={1}
-              py={1}
-              mx={1}
-              colors={'selected'}
-              value={item.name}
-              // onBlur={item.onInputBlur}
-              onFocus={item.onInputFocus}
-              onChange={item.onInputChange}
-              onKeyDown={item.onInputKeyDown}
-            />
-          </AutoSize>
-        </FocusTrap>
-      ) : (
-        <Text py={1} mx={1}>
-          {item.name || 'I am a hard core TODo'}
-        </Text>
-      )}
+      <FlexRow flex={'1'}>
+        {item.isEditing ? (
+          <FocusTrap className={cn('flex-auto flex')}>
+            <AutoSize>
+              <TextArea
+                id={item.inputDOMId}
+                rows={1}
+                py={1}
+                mx={1}
+                colors={'selected'}
+                value={item.name}
+                // onBlur={item.onInputBlur}
+                onFocus={item.onInputFocus}
+                onChange={item.onInputChange}
+                onKeyDown={item.onInputKeyDown}
+              />
+            </AutoSize>
+          </FocusTrap>
+        ) : (
+          <Text py={1} mx={1}>
+            {item.name || 'I am a hard core TODo'}
+          </Text>
+        )}
+      </FlexRow>
     </BucketItemLayout>
   )
 })
