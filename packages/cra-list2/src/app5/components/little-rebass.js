@@ -27,7 +27,8 @@ import {
   borderColor,
 } from 'styled-system'
 
-import TextArea from 'react-textarea-autosize'
+import TextAreaAutoSize from 'react-autosize-textarea'
+// import TextArea from 'react-textarea-autosize'
 
 import {omit, Tag} from 'clean-tag'
 
@@ -38,6 +39,7 @@ import {
   transparentize,
   modularScale,
 } from 'polished'
+import {R} from '../little-ramda'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
@@ -80,7 +82,7 @@ export const Text = styled(B.Text).attrs({})`
   white-space: pre-line;
 `
 
-export const Input = styled(TextArea).attrs({})`
+export const TextAreaAuto = styled(TextAreaAutoSize).attrs({})`
   outline: none;
   ${display};
   ${flex};
@@ -90,13 +92,14 @@ export const Input = styled(TextArea).attrs({})`
   ${space};
 `
 
-Input.defaultProps = {
+TextAreaAuto.defaultProps = {
   display: 'block',
   flex: 1,
   colors: 'selected',
   border: 'none',
   p: 0,
   rows: 1,
+  lineHeight: 2,
 }
 
 export const Btn = system({

@@ -8,7 +8,7 @@ import {
   Btn,
   buttonStyle,
   FlexRow,
-  Input,
+  TextAreaAuto,
   modularScale,
   Text,
 } from '../little-rebass'
@@ -54,14 +54,14 @@ const BucketItem = observer(function BucketItem({item}) {
         </Text>
       </B.Tooltip>
       {item.isEditing ? (
-        <Input
+        <TextAreaAuto
           id={item.inputDOMId}
           rows={1}
-          lineHeight={1.25}
-          py={1}
-          mx={1}
+          // lineHeight={1.25}
+          // py={1}
+          // mx={1}
           value={item.name}
-          onBlur={item.onInputBlur}
+          // onBlur={item.onInputBlur}
           onFocus={item.onInputFocus}
           onChange={item.onInputChange}
           onKeyDown={item.onInputKeyDown}
