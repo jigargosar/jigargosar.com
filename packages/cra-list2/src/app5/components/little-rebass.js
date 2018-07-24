@@ -102,7 +102,6 @@ function createDarkTheme() {
       selected: {
         color: white,
         backgroundColor: '#214283',
-        outline: 'none',
       },
       default: {
         color: white,
