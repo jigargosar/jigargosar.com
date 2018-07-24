@@ -7,6 +7,7 @@ import {maybeOrNil} from '../../little-ramda'
 import {B, Box} from '../little-rebass'
 import {lighten, modularScale, transparentize} from 'polished'
 import FocusTrap from 'focus-trap-react'
+import {defaultProps} from '../little-recompose'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
@@ -84,10 +85,13 @@ function createDarkTheme() {
 }
 
 const theme = createDarkTheme()
+
+const DarkThemeProvider = defaultProps({theme})(B.Provider)
+
 function ListyMain({domain}) {
   return (
     <FocusTrap>
-      <B.Provider theme={theme}>
+      <DarkThemeProvider>
         <Box colors={'root'} minHeight={'100vh'} fontFamily={'mono'}>
           {maybeOrNil(dashboard => (
             <Dashboard dashboard={dashboard} />
@@ -95,7 +99,7 @@ function ListyMain({domain}) {
           {/*<DomainPatches />*/}
           {/*<DebugStores />*/}
         </Box>
-      </B.Provider>
+      </DarkThemeProvider>
     </FocusTrap>
   )
 }
