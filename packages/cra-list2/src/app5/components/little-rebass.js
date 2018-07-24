@@ -1,9 +1,10 @@
 /*eslint-disable*/
 
-import {Provider} from 'rebass'
-import system from 'system-components'
 import React from 'react'
+import system from 'system-components'
 import {buttonStyle, colorStyle, textStyle} from 'styled-system'
+import {Provider} from 'rebass'
+import {ThemeProvider} from 'styled-components'
 
 import {
   darken,
@@ -77,18 +78,11 @@ export const Btn = system({
   lineHeight: null,
 })
 
-export function IconBtn({icon: Icon, iconSize, ...other}) {
-  return (
-    <Btn {...other}>
-      <Icon fontSize={iconSize} />
-    </Btn>
-  )
-}
+const breakpoints = ['32em', '40em', '52em', '64em']
+const fontSizes = [12, 14, 16, 20, 24, 32, 48, 64, 72]
+const space = [0, 4, 8, 16, 32, 64, 128, 256, 512]
 
-IconBtn.defaultProps = {
-  variant: 'icon',
-  iconSize: 'default',
-}
+const defaultTheme = {breakpoints, fontSizes, space}
 
 function createDarkTheme() {
   const white = '#d3d3d3'
@@ -100,6 +94,7 @@ function createDarkTheme() {
   }
 
   const theme = {
+    ...defaultTheme,
     colorStyles: {
       root: {
         color: white,
@@ -161,5 +156,6 @@ function createDarkTheme() {
   return theme
 }
 
-const theme = createDarkTheme()
-export const DarkThemeProvider = defaultProps({theme})(Provider)
+export const DarkThemeProvider = defaultProps({
+  theme: createDarkTheme(),
+})(ThemeProvider)
