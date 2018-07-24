@@ -2,7 +2,7 @@
 import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
-import {Box, FlexRow, system} from '../little-rebass'
+import {FlexRow, system} from '../little-rebass'
 import {BucketItem} from './BucketItem'
 
 const BucketItems = observer(function BucketItems({bucket}) {
