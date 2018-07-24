@@ -14,7 +14,6 @@ import {
   transparentize,
 } from 'polished'
 import {defaultProps} from './little-recompose'
-// import TextArea from 'react-textarea-autosize'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
