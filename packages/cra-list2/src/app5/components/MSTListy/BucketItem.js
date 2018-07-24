@@ -1,5 +1,11 @@
 import styled from 'styled-components'
-import {Box, buttonStyle, FlexRow, TextArea} from '../little-rebass'
+import {
+  Box,
+  Btn,
+  buttonStyle,
+  FlexRow,
+  TextArea,
+} from '../little-rebass'
 import modularScale from 'polished/lib/helpers/modularScale'
 import {observer} from 'mobx-react'
 import FocusTrap from 'focus-trap-react'
@@ -59,3 +65,7 @@ export const BucketItem = observer(function BucketItem({item}) {
     </BucketItemLayout>
   )
 })
+export const BucketItemBtn = styled(Btn).attrs({
+  pl: modularScale(0.5),
+  width: 1,
+})``

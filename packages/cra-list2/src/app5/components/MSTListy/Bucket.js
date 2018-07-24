@@ -2,22 +2,11 @@
 import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
-import {
-  Box,
-  Btn,
-  buttonStyle,
-  FlexRow,
-  modularScale,
-} from '../little-rebass'
+import {Box, buttonStyle, FlexRow} from '../little-rebass'
 import styled from 'styled-components'
 import {BucketItem} from './BucketItem'
 
-export const BucketItemBtn = styled(Btn).attrs({
-  pl: modularScale(0.5),
-  width: 1,
-})``
-
-export const BucketHeaderLayout = styled(FlexRow).attrs({
+export const HeaderLayout = styled(FlexRow).attrs({
   mb: 2,
   pl: 1,
   colors: 'dim',
@@ -34,14 +23,14 @@ const BucketItems = observer(function BucketItems({bucket}) {
 function Bucket({bucket}) {
   return (
     <Fragment>
-      <BucketHeaderLayout
+      <HeaderLayout
         id={bucket.headerDOMId}
         onKeyDown={bucket.onHeaderKeydown}
       >
         <Box textStyle={'bucketTitle'} flex={1}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </Box>
-      </BucketHeaderLayout>
+      </HeaderLayout>
       <BucketItems bucket={bucket} />
     </Fragment>
   )

@@ -1,11 +1,12 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
 import {renderKeyedById} from '../utils'
-import {Bucket, BucketItemBtn} from './Bucket'
+import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
 import {Box, Flex} from '../little-rebass'
 import {lifecycle, rc} from '../little-recompose'
 import system from 'system-components'
+import {BucketItemBtn} from './BucketItem'
 
 const Layout = system({
   is: Flex,
