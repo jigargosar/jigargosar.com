@@ -49,6 +49,7 @@ export const Box = system(
   'borderColor',
   'textStyle',
   'buttonStyle',
+  'lineHeight',
 )
 
 injectGlobal`
