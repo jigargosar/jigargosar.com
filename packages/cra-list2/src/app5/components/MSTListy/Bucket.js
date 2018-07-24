@@ -8,9 +8,9 @@ import {
   Btn,
   buttonStyle,
   FlexRow,
-  TextAreaAuto,
   modularScale,
   Text,
+  TextAreaAS,
 } from '../little-rebass'
 import styled from 'styled-components'
 
@@ -54,12 +54,15 @@ const BucketItem = observer(function BucketItem({item}) {
         </Text>
       </B.Tooltip>
       {item.isEditing ? (
-        <TextAreaAuto
+        <TextAreaAS
           id={item.inputDOMId}
           rows={1}
           lineHeight={1.25}
+          py={1}
+          mx={1}
+          colors={'selected'}
           value={item.name}
-          // onBlur={item.onInputBlur}
+          onBlur={item.onInputBlur}
           onFocus={item.onInputFocus}
           onChange={item.onInputChange}
           onKeyDown={item.onInputKeyDown}

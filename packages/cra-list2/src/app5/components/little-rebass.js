@@ -3,7 +3,7 @@
 import * as rebass from 'rebass'
 import system from 'system-components'
 import styled, {injectGlobal} from 'styled-components'
-import React from 'react'
+import React, {Component} from 'react'
 import {
   color,
   flex,
@@ -39,7 +39,7 @@ import {
   transparentize,
   modularScale,
 } from 'polished'
-import {R} from '../little-ramda'
+import {R, tapLog} from '../little-ramda'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
@@ -82,25 +82,63 @@ export const Text = styled(B.Text).attrs({})`
   white-space: pre-line;
 `
 
-export const TextAreaAuto = styled.textarea`
+export const StyledTextAreaAutoSize = styled.textarea`
+  ${lineHeight};
   outline: none;
   ${display};
   ${flex};
   ${colorStyle};
   ${border};
+  ${borders};
   ${space};
-  line-height: 1.25;
+  //line-height: 1.25;
 `
 
-TextAreaAuto.defaultProps = {
+StyledTextAreaAutoSize.propTypes = {
+  ...display.propTypes,
+  ...flex.propTypes,
+  ...colorStyle.propTypes,
+  ...borders.propTypes,
+  ...border.propTypes,
+  ...space.propTypes,
+  ...lineHeight.propTypes,
+}
+
+StyledTextAreaAutoSize.defaultProps = {
   display: 'block',
   flex: 1,
   colors: 'selected',
   border: 'none',
   rows: 1,
-  py: 1,
-  px: 1,
 }
+
+export class TextAreaAS extends Component {
+  render() {
+    return <StyledTextAreaAutoSize {...this.props} />
+  }
+}
+// export class TextAreaAS extends Component {
+//   render() {
+//     console.log(`r().props`, r())
+//     return (
+//       <StyledTextAreaAutoSize
+//         {...R.pick([
+//           'id',
+//           'rows',
+//           'className',
+//           'style',
+//           'value',
+//           'defaultValue',
+//           'onBlur',
+//           'onFocus',
+//           'onChange',
+//           'onKeyDown',
+//           ...tapLog(Object.keys(TextAreaAutoSize.propTypes)),
+//         ])(this.props)}
+//       />
+//     )
+//   }
+// }
 
 export const Btn = system({
   is: 'button',
