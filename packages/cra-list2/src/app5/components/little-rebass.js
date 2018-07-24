@@ -35,8 +35,8 @@ export {darken, lighten, opacify, transparentize, modularScale}
 
 export {styled}
 export const B = rebass
-export const Flex = B.Flex
 export const Box = system(
+  'space',
   'width',
   'fontFamily',
   'fontSize',
@@ -60,12 +60,13 @@ body{
 }
 `
 
-export const FlexRow = styled(Flex).attrs({
+export const FlexRow = system({
+  is: Box,
+  display: 'flex',
+  flexDirection: 'row',
   alignItems: 'center',
-})`
-  ${colorStyle};
-  ${lineHeight};
-`
+})
+
 export const Text = styled(B.Text).attrs({})`
   ${colorStyle};
   white-space: pre-wrap;
