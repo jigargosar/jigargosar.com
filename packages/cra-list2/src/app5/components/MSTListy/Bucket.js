@@ -9,7 +9,7 @@ import {
   buttonStyle,
   FlexRow,
   modularScale,
-  Text,
+  PreWrap,
   AutoSize,
   TextArea,
 } from '../little-rebass'
@@ -77,7 +77,7 @@ const BucketItem = observer(function BucketItem({item}) {
             </AutoSize>
           </FocusTrap>
         ) : (
-          <Text>{item.name || 'I am a hard core TODo'}</Text>
+          <PreWrap>{item.name || 'I am a hard core TODo'}</PreWrap>
         )}
       </FlexRow>
     </BucketItemLayout>

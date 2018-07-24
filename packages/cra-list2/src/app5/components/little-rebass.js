@@ -67,8 +67,7 @@ export const FlexRow = system({
   alignItems: 'center',
 })
 
-export const Text = styled(B.Text).attrs({})`
-  ${colorStyle};
+export const PreWrap = styled(Box)`
   white-space: pre-wrap;
 `
 
