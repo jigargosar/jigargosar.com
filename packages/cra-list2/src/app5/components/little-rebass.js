@@ -52,14 +52,6 @@ export const Box = system(
   'lineHeight',
 )
 
-injectGlobal`
-body{
-  //background: #f1f1f1;
-  //min-width: 300px;
-  line-height: 1.1;
-}
-`
-
 export const FlexRow = system({
   is: Box,
   display: 'flex',
@@ -103,29 +95,6 @@ export class AutoSize extends Component {
     return this.props.children
   }
 }
-
-// export class TextAreaAS extends Component {
-//   render() {
-//     console.log(`r().props`, r())
-//     return (
-//       <StyledTextAreaAutoSize
-//         {...R.pick([
-//           'id',
-//           'rows',
-//           'className',
-//           'style',
-//           'value',
-//           'defaultValue',
-//           'onBlur',
-//           'onFocus',
-//           'onChange',
-//           'onKeyDown',
-//           ...tapLog(Object.keys(TextAreaAutoSize.propTypes)),
-//         ])(this.props)}
-//       />
-//     )
-//   }
-// }
 
 export const Btn = system({
   is: 'button',
