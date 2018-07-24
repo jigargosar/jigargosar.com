@@ -82,14 +82,14 @@ export const Text = styled(B.Text).attrs({})`
   white-space: pre-line;
 `
 
-export const TextAreaAuto = styled(TextAreaAutoSize).attrs({})`
+export const TextAreaAuto = styled.textarea`
   outline: none;
   ${display};
   ${flex};
   ${colorStyle};
   ${border};
-  ${lineHeight};
   ${space};
+  line-height: 1.25;
 `
 
 TextAreaAuto.defaultProps = {
@@ -97,9 +97,9 @@ TextAreaAuto.defaultProps = {
   flex: 1,
   colors: 'selected',
   border: 'none',
-  p: 0,
   rows: 1,
-  lineHeight: null,
+  py: 1,
+  px: 1,
 }
 
 export const Btn = system({
