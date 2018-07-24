@@ -2,7 +2,7 @@
 import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
-import {FlexRow, system} from '../little-rebass'
+import {dpFlexRow, system} from '../little-rebass'
 import {BucketItem} from './BucketItem'
 
 const BucketItems = observer(function BucketItems({bucket}) {
@@ -10,7 +10,7 @@ const BucketItems = observer(function BucketItems({bucket}) {
 })
 
 const Header = system({
-  is: FlexRow,
+  ...dpFlexRow,
   mb: 2,
   pl: 1,
   colors: 'dim',
