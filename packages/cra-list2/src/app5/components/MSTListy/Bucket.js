@@ -6,7 +6,11 @@ import {Box, buttonStyle, FlexRow} from '../little-rebass'
 import styled from 'styled-components'
 import {BucketItem} from './BucketItem'
 
-export const HeaderLayout = styled(FlexRow).attrs({
+const BucketItems = observer(function BucketItems({bucket}) {
+  return renderKeyedById(BucketItem, 'item', bucket.items)
+})
+
+const Header = styled(FlexRow).attrs({
   mb: 2,
   pl: 1,
   colors: 'dim',
@@ -16,21 +20,17 @@ export const HeaderLayout = styled(FlexRow).attrs({
   ${buttonStyle};
 `
 
-const BucketItems = observer(function BucketItems({bucket}) {
-  return renderKeyedById(BucketItem, 'item', bucket.items)
-})
-
 function Bucket({bucket}) {
   return (
     <Fragment>
-      <HeaderLayout
+      <Header
         id={bucket.headerDOMId}
         onKeyDown={bucket.onHeaderKeydown}
       >
         <Box textStyle={'bucketTitle'} flex={1}>
           {bucket.name || 'I am a Bucket Short and Stout'}
         </Box>
-      </HeaderLayout>
+      </Header>
       <BucketItems bucket={bucket} />
     </Fragment>
   )
