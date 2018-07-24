@@ -2,7 +2,6 @@
 
 import {Provider} from 'rebass'
 import system from 'system-components'
-import styled from 'styled-components'
 import React from 'react'
 import {buttonStyle, colorStyle, textStyle} from 'styled-system'
 
@@ -20,7 +19,6 @@ import {defaultProps} from './little-recompose'
 export {textStyle, buttonStyle, colorStyle}
 export {darken, lighten, opacify, transparentize, modularScale}
 
-export {styled}
 export const Box = system(
   'space',
   'width',
