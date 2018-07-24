@@ -3,13 +3,12 @@ import React, {Fragment} from 'react'
 import {cn, renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
 import {
-  B,
+  AutoSize,
   Box,
   Btn,
   buttonStyle,
   FlexRow,
   modularScale,
-  AutoSize,
   TextArea,
 } from '../little-rebass'
 import styled from 'styled-components'
@@ -56,11 +55,9 @@ const BucketItem = observer(function BucketItem({item}) {
       lineHeight={1.25}
     >
       <FlexRow mx={1}>
-        <B.Tooltip text={item.id}>
-          <Box lineHeight={2} colors={'dim'} fontSize={0}>
-            {item.id.slice(5, 8)}
-          </Box>
-        </B.Tooltip>
+        <Box lineHeight={2} colors={'dim'} fontSize={0}>
+          {item.id.slice(5, 8)}
+        </Box>
       </FlexRow>
       <FlexRow flex={'1'} mx={1}>
         {item.isEditing ? (
