@@ -1,7 +1,6 @@
 /*eslint-disable*/
 
 import PropTypes from 'prop-types'
-import * as rebass from 'rebass'
 import {Provider} from 'rebass'
 import system from 'system-components'
 import styled from 'styled-components'
@@ -27,7 +26,6 @@ export {textStyle, buttonStyle, colorStyle}
 export {darken, lighten, opacify, transparentize, modularScale}
 
 export {styled}
-export const B = rebass
 export const Box = system(
   'space',
   'width',

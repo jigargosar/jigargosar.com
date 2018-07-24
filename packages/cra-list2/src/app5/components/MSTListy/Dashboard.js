@@ -3,7 +3,7 @@ import React from 'react'
 import {renderKeyedById} from '../utils'
 import {Bucket, BucketItemBtn} from './Bucket'
 import {observer} from 'mobx-react'
-import {B, Box, Flex} from '../little-rebass'
+import {Box, Flex} from '../little-rebass'
 import {lifecycle, rc} from '../little-recompose'
 import system from 'system-components'
 
