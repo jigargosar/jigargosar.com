@@ -51,11 +51,13 @@ const BucketItem = observer(function BucketItem({item}) {
       mx={-1}
       lineHeight={1.25}
     >
-      <B.Tooltip text={item.id}>
-        <Text lineHeight={2} mx={1} colors={'dim'} fontSize={0}>
-          {item.id.slice(5, 8)}
-        </Text>
-      </B.Tooltip>
+      <FlexRow mx={1}>
+        <B.Tooltip text={item.id}>
+          <Text lineHeight={2} colors={'dim'} fontSize={0}>
+            {item.id.slice(5, 8)}
+          </Text>
+        </B.Tooltip>
+      </FlexRow>
       <FlexRow flex={'1'} py={1} mx={1}>
         {item.isEditing ? (
           <FocusTrap className={cn('flex-auto flex')}>
