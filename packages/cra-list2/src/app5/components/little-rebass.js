@@ -135,15 +135,6 @@ function createDarkTheme() {
         ...baseButton,
         backgroundColor: '#214283',
       },
-      icon: {
-        ...baseButton,
-        lineHeight: 0,
-        padding: 0,
-        '&:hover, &:focus': {
-          color: lighten(1, white),
-          backgroundColor: lighten(0.05, black),
-        },
-      },
     },
     fonts: {
       sans:
