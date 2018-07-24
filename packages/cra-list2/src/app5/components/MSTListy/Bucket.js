@@ -1,6 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React, {Fragment} from 'react'
-import {renderKeyedById} from '../utils'
+import {cn, renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
 import {
   B,
@@ -41,22 +41,22 @@ export const BucketItemLayout = styled(FlexRow).attrs({
 
 const BucketItem = observer(function BucketItem({item}) {
   return (
-    <FocusTrap>
-      <BucketItemLayout
-        id={item.id}
-        // colors={item.isEditing ? 'selected' : 'default'}
-        variant={item.isEditing ? 'selected' : 'default'}
-        onFocus={item.onFocus}
-        onBlur={item.onBlur}
-        onKeyDown={item.onLIKeydown}
-        mx={-1}
-      >
-        <B.Tooltip text={item.id}>
-          <Text lineHeight={2} mx={1} colors={'dim'} fontSize={0}>
-            {item.id.slice(5, 8)}
-          </Text>
-        </B.Tooltip>
-        {item.isEditing ? (
+    <BucketItemLayout
+      id={item.id}
+      // colors={item.isEditing ? 'selected' : 'default'}
+      variant={item.isEditing ? 'selected' : 'default'}
+      onFocus={item.onFocus}
+      onBlur={item.onBlur}
+      onKeyDown={item.onLIKeydown}
+      mx={-1}
+    >
+      <B.Tooltip text={item.id}>
+        <Text lineHeight={2} mx={1} colors={'dim'} fontSize={0}>
+          {item.id.slice(5, 8)}
+        </Text>
+      </B.Tooltip>
+      {item.isEditing ? (
+        <FocusTrap className={cn('flex-auto flex')}>
           <AutoSize>
             <TextArea
               id={item.inputDOMId}
@@ -66,19 +66,19 @@ const BucketItem = observer(function BucketItem({item}) {
               mx={1}
               colors={'selected'}
               value={item.name}
-              onBlur={item.onInputBlur}
+              // onBlur={item.onInputBlur}
               onFocus={item.onInputFocus}
               onChange={item.onInputChange}
               onKeyDown={item.onInputKeyDown}
             />
           </AutoSize>
-        ) : (
-          <Text lineHeight={1.25} py={1} mx={1}>
-            {item.name || 'I am a hard core TODo'}
-          </Text>
-        )}
-      </BucketItemLayout>
-    </FocusTrap>
+        </FocusTrap>
+      ) : (
+        <Text lineHeight={1.25} py={1} mx={1}>
+          {item.name || 'I am a hard core TODo'}
+        </Text>
+      )}
+    </BucketItemLayout>
   )
 })
 
