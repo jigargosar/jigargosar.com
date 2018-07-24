@@ -112,7 +112,7 @@ function createDarkTheme() {
         borderColor: transparentize(0.9, white),
       },
       dim: {
-        color: transparentize(0.5, white),
+        color: transparentize(0.3, white),
       },
     },
     textStyles: {
