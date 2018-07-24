@@ -68,7 +68,7 @@ export const FlexRow = styled(Flex).attrs({
 `
 export const Text = styled(B.Text).attrs({})`
   ${colorStyle};
-  white-space: pre-line;
+  white-space: pre-wrap;
 `
 
 export const TextArea = system({

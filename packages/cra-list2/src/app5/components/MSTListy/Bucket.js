@@ -68,6 +68,7 @@ const BucketItem = observer(function BucketItem({item}) {
                 rows={1}
                 colors={'selected'}
                 value={item.name}
+                lineHeight={1.25}
                 // onBlur={item.onInputBlur}
                 onFocus={item.onInputFocus}
                 onChange={item.onInputChange}
