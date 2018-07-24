@@ -23,6 +23,7 @@
     "@types/jest": "^23.3.0",
     "aproba": "^2.0.0",
     "auth0-js": "^9.7.2",
+    "autosize": "^4.0.2",
     "ava": "^0.25.0",
     "baobab": "^2.5.2",
     "cerebral": "^4.2.2",

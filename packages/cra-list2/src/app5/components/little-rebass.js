@@ -5,41 +5,27 @@ import system from 'system-components'
 import styled, {injectGlobal} from 'styled-components'
 import React, {Component} from 'react'
 import {
-  color,
+  border,
+  borders,
+  buttonStyle,
+  colorStyle,
+  display,
   flex,
-  fontSize,
-  fontWeight,
   lineHeight,
   space,
-  width,
-  display,
-  fontFamily,
-  border,
-  textAlign,
-  background,
-  buttonStyle,
-  alignContent,
-  alignItems,
-  colorStyle,
   textStyle,
-  minHeight,
-  borders,
-  borderColor,
 } from 'styled-system'
-
-import TextAreaAutoSize from 'react-autosize-textarea'
-// import TextArea from 'react-textarea-autosize'
-
-import {omit, Tag} from 'clean-tag'
 
 import {
   darken,
   lighten,
+  modularScale,
   opacify,
   transparentize,
-  modularScale,
 } from 'polished'
-import {R, tapLog} from '../little-ramda'
+import * as ReactDOM from 'react-dom'
+import autosize from 'autosize'
+// import TextArea from 'react-textarea-autosize'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
@@ -113,8 +99,26 @@ StyledTextArea.defaultProps = {
 }
 
 export class TextAreaAS extends Component {
+  inputRef = React.createRef()
+
+  get inputDOM() {
+    return ReactDOM.findDOMNode(this.inputRef.current)
+  }
+
+  componentDidMount() {
+    autosize(this.inputDOM)
+  }
+
+  componentDidUpdate() {
+    autosize.update(this.inputDOM)
+  }
+
+  componentWillUnmount() {
+    autosize.destroy(this.inputDOM)
+  }
+
   render() {
-    return <StyledTextArea {...this.props} />
+    return <StyledTextArea ref={this.inputRef} {...this.props} />
   }
 }
 // export class TextAreaAS extends Component {
