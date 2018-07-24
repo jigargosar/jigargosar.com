@@ -49,6 +49,7 @@ const BucketItem = observer(function BucketItem({item}) {
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
       mx={-1}
+      py={1}
       lineHeight={1.25}
     >
       <FlexRow mx={1}>
@@ -58,7 +59,7 @@ const BucketItem = observer(function BucketItem({item}) {
           </Text>
         </B.Tooltip>
       </FlexRow>
-      <FlexRow flex={'1'} py={1} mx={1}>
+      <FlexRow flex={'1'} mx={1}>
         {item.isEditing ? (
           <FocusTrap className={cn('flex-auto flex')}>
             <AutoSize>
