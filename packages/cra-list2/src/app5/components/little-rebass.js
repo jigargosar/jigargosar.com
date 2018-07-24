@@ -67,10 +67,6 @@ export const FlexRow = system({
   alignItems: 'center',
 })
 
-export const PreWrap = styled(Box)`
-  white-space: pre-wrap;
-`
-
 export const TextArea = system({
   is: 'textarea',
   display: 'block',

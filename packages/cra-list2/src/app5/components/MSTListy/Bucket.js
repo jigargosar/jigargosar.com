@@ -9,12 +9,15 @@ import {
   buttonStyle,
   FlexRow,
   modularScale,
-  PreWrap,
   AutoSize,
   TextArea,
 } from '../little-rebass'
 import styled from 'styled-components'
 import FocusTrap from 'focus-trap-react'
+
+export const PreWrap = styled(Box)`
+  white-space: pre-wrap;
+`
 
 export const BucketItemBtn = styled(Btn).attrs({
   pl: modularScale(0.5),
