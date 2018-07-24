@@ -16,6 +16,7 @@ import {defaultProps} from './little-recompose'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
+export {system}
 export {textStyle, buttonStyle, colorStyle}
 export {darken, lighten, opacify, transparentize, modularScale}
 

@@ -2,23 +2,21 @@
 import React, {Fragment} from 'react'
 import {renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
-import {Box, buttonStyle, FlexRow} from '../little-rebass'
-import styled from 'styled-components'
+import {Box, FlexRow, system} from '../little-rebass'
 import {BucketItem} from './BucketItem'
 
 const BucketItems = observer(function BucketItems({bucket}) {
   return renderKeyedById(BucketItem, 'item', bucket.items)
 })
 
-const Header = styled(FlexRow).attrs({
+const Header = system({
+  is: FlexRow,
   mb: 2,
   pl: 1,
   colors: 'dim',
   variant: 'default',
   tabIndex: 0,
-})`
-  ${buttonStyle};
-`
+})
 
 function Bucket({bucket}) {
   return (
