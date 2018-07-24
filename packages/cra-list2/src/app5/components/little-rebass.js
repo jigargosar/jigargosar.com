@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types'
 import * as rebass from 'rebass'
+import {Provider} from 'rebass'
 import system from 'system-components'
 import styled from 'styled-components'
 import React, {Component} from 'react'
@@ -44,9 +45,13 @@ export const Box = system(
   'lineHeight',
 )
 
-export const FlexRow = system({
+export const Flex = system({
   is: Box,
   display: 'flex',
+})
+
+export const FlexRow = system({
+  is: Flex,
   flexDirection: 'row',
   alignItems: 'center',
 })
@@ -186,4 +191,4 @@ function createDarkTheme() {
 }
 
 const theme = createDarkTheme()
-export const DarkThemeProvider = defaultProps({theme})(B.Provider)
+export const DarkThemeProvider = defaultProps({theme})(Provider)

@@ -3,17 +3,17 @@ import React from 'react'
 import {renderKeyedById} from '../utils'
 import {Bucket, BucketItemBtn} from './Bucket'
 import {observer} from 'mobx-react'
-import {B} from '../little-rebass'
+import {B, Box, Flex} from '../little-rebass'
 import {lifecycle, rc} from '../little-recompose'
 import system from 'system-components'
 
 const Layout = system({
-  is: B.Flex,
+  is: Flex,
   flexWrap: 'wrap',
 })
 
 const Panel = system({
-  is: B.Box,
+  is: Box,
   width: [1, 1, 1 / 2, 1 / 3, 1 / 4],
   p: 3,
   // mx: [0, 'auto', 0],
