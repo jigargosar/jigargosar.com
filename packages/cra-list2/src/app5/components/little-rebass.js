@@ -1,5 +1,6 @@
 /*eslint-disable*/
 
+import PropTypes from 'prop-types'
 import * as rebass from 'rebass'
 import system from 'system-components'
 import styled, {injectGlobal} from 'styled-components'
@@ -68,7 +69,7 @@ export const Text = styled(B.Text).attrs({})`
   white-space: pre-line;
 `
 
-export const StyledTextArea = system({
+export const TextArea = system({
   is: 'textarea',
   display: 'block',
   flex: 1,
@@ -77,11 +78,15 @@ export const StyledTextArea = system({
   spacing: null,
 })
 
-export class TextAreaAS extends Component {
-  inputRef = React.createRef()
+export class AutoSize extends Component {
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+  }
 
   get inputDOM() {
-    return ReactDOM.findDOMNode(this.inputRef.current)
+    return ReactDOM.findDOMNode(
+      React.Children.only(this.props.children),
+    )
   }
 
   componentDidMount() {
@@ -97,7 +102,7 @@ export class TextAreaAS extends Component {
   }
 
   render() {
-    return <StyledTextArea ref={this.inputRef} {...this.props} />
+    return this.props.children
   }
 }
 

@@ -10,7 +10,8 @@ import {
   FlexRow,
   modularScale,
   Text,
-  TextAreaAS,
+  AutoSize,
+  TextArea,
 } from '../little-rebass'
 import styled from 'styled-components'
 
@@ -54,19 +55,21 @@ const BucketItem = observer(function BucketItem({item}) {
         </Text>
       </B.Tooltip>
       {item.isEditing ? (
-        <TextAreaAS
-          id={item.inputDOMId}
-          rows={1}
-          lineHeight={1.25}
-          py={1}
-          mx={1}
-          colors={'selected'}
-          value={item.name}
-          // onBlur={item.onInputBlur}
-          onFocus={item.onInputFocus}
-          onChange={item.onInputChange}
-          onKeyDown={item.onInputKeyDown}
-        />
+        <AutoSize>
+          <TextArea
+            id={item.inputDOMId}
+            rows={1}
+            lineHeight={1.25}
+            py={1}
+            mx={1}
+            colors={'selected'}
+            value={item.name}
+            // onBlur={item.onInputBlur}
+            onFocus={item.onInputFocus}
+            onChange={item.onInputChange}
+            onKeyDown={item.onInputKeyDown}
+          />
+        </AutoSize>
       ) : (
         <Text lineHeight={1.25} py={1} mx={1}>
           {item.name || 'I am a hard core TODo'}
