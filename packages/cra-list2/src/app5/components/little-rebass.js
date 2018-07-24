@@ -77,11 +77,11 @@ export const Btn = system({
   lineHeight: null,
 })
 
-const breakpoints = ['32em', '40em', '52em', '64em']
-const fontSizes = [12, 14, 16, 20, 24, 32, 48, 64, 72]
-const space = [0, 4, 8, 16, 32, 64, 128, 256, 512]
-
-const defaultTheme = {breakpoints, fontSizes, space}
+const defaultTheme = {
+  breakpoints: ['32em', '40em', '52em', '64em'],
+  fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 72],
+  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
+}
 
 function createDarkTheme() {
   const white = '#d3d3d3'
