@@ -90,7 +90,7 @@ export class AutoSize extends Component {
 
   componentDidMount() {
     autosize(this.inputDOM)
-    autosize.update(this.inputDOM)
+    // autosize.update(this.inputDOM)
   }
 
   componentDidUpdate() {
