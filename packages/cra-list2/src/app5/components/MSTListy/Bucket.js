@@ -14,6 +14,7 @@ import {
   TextArea,
 } from '../little-rebass'
 import styled from 'styled-components'
+import FocusTrap from 'focus-trap-react'
 
 export const BucketItemBtn = styled(Btn).attrs({
   pl: modularScale(0.5),
@@ -40,42 +41,44 @@ export const BucketItemLayout = styled(FlexRow).attrs({
 
 const BucketItem = observer(function BucketItem({item}) {
   return (
-    <BucketItemLayout
-      id={item.id}
-      // colors={item.isEditing ? 'selected' : 'default'}
-      variant={item.isEditing ? 'selected' : 'default'}
-      onFocus={item.onFocus}
-      onBlur={item.onBlur}
-      onKeyDown={item.onLIKeydown}
-      mx={-1}
-    >
-      <B.Tooltip text={item.id}>
-        <Text lineHeight={2} mx={1} colors={'dim'} fontSize={0}>
-          {item.id.slice(5, 8)}
-        </Text>
-      </B.Tooltip>
-      {item.isEditing ? (
-        <AutoSize>
-          <TextArea
-            id={item.inputDOMId}
-            rows={1}
-            lineHeight={1.25}
-            py={1}
-            mx={1}
-            colors={'selected'}
-            value={item.name}
-            onBlur={item.onInputBlur}
-            onFocus={item.onInputFocus}
-            onChange={item.onInputChange}
-            onKeyDown={item.onInputKeyDown}
-          />
-        </AutoSize>
-      ) : (
-        <Text lineHeight={1.25} py={1} mx={1}>
-          {item.name || 'I am a hard core TODo'}
-        </Text>
-      )}
-    </BucketItemLayout>
+    <FocusTrap>
+      <BucketItemLayout
+        id={item.id}
+        // colors={item.isEditing ? 'selected' : 'default'}
+        variant={item.isEditing ? 'selected' : 'default'}
+        onFocus={item.onFocus}
+        onBlur={item.onBlur}
+        onKeyDown={item.onLIKeydown}
+        mx={-1}
+      >
+        <B.Tooltip text={item.id}>
+          <Text lineHeight={2} mx={1} colors={'dim'} fontSize={0}>
+            {item.id.slice(5, 8)}
+          </Text>
+        </B.Tooltip>
+        {item.isEditing ? (
+          <AutoSize>
+            <TextArea
+              id={item.inputDOMId}
+              rows={1}
+              lineHeight={1.25}
+              py={1}
+              mx={1}
+              colors={'selected'}
+              value={item.name}
+              onBlur={item.onInputBlur}
+              onFocus={item.onInputFocus}
+              onChange={item.onInputChange}
+              onKeyDown={item.onInputKeyDown}
+            />
+          </AutoSize>
+        ) : (
+          <Text lineHeight={1.25} py={1} mx={1}>
+            {item.name || 'I am a hard core TODo'}
+          </Text>
+        )}
+      </BucketItemLayout>
+    </FocusTrap>
   )
 })
 
