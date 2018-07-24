@@ -37,15 +37,21 @@ export const Box = system(
   'lineHeight',
 )
 
+export const dpFlex = {display: 'flex'}
+export const dpFlexRow = {
+  ...dpFlex,
+  flexDirection: 'row',
+  alignItems: 'center',
+}
+
 export const Flex = system({
   is: Box,
-  display: 'flex',
+  ...dpFlex,
 })
 
 export const FlexRow = system({
-  is: Flex,
-  flexDirection: 'row',
-  alignItems: 'center',
+  is: Box,
+  ...dpFlexRow,
 })
 
 export const TextArea = system({
