@@ -54,9 +54,9 @@ const BucketItem = observer(function BucketItem({item}) {
     >
       <FlexRow mx={1}>
         <B.Tooltip text={item.id}>
-          <Text lineHeight={2} colors={'dim'} fontSize={0}>
+          <Box lineHeight={2} colors={'dim'} fontSize={0}>
             {item.id.slice(5, 8)}
-          </Text>
+          </Box>
         </B.Tooltip>
       </FlexRow>
       <FlexRow flex={'1'} mx={1}>
