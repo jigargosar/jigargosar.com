@@ -75,7 +75,8 @@ export const TextArea = system({
   flex: 1,
   colors: 'selected',
   border: 'none',
-  spacing: null,
+  p: 0,
+  lineHeight: null,
 })
 
 export class AutoSize extends Component {
@@ -84,13 +85,12 @@ export class AutoSize extends Component {
   }
 
   get inputDOM() {
-    return ReactDOM.findDOMNode(
-      React.Children.only(this.props.children),
-    )
+    return ReactDOM.findDOMNode(this)
   }
 
   componentDidMount() {
     autosize(this.inputDOM)
+    autosize.update(this.inputDOM)
   }
 
   componentDidUpdate() {
