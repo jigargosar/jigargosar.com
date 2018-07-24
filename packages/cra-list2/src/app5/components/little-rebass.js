@@ -68,35 +68,14 @@ export const Text = styled(B.Text).attrs({})`
   white-space: pre-line;
 `
 
-export const StyledTextArea = styled.textarea`
-  ${lineHeight};
-  outline: none;
-  ${display};
-  ${flex};
-  ${colorStyle};
-  ${border};
-  ${borders};
-  ${space};
-  //line-height: 1.25;
-`
-
-StyledTextArea.propTypes = {
-  ...display.propTypes,
-  ...flex.propTypes,
-  ...colorStyle.propTypes,
-  ...borders.propTypes,
-  ...border.propTypes,
-  ...space.propTypes,
-  ...lineHeight.propTypes,
-}
-
-StyledTextArea.defaultProps = {
+export const StyledTextArea = system({
+  is: 'textarea',
   display: 'block',
   flex: 1,
   colors: 'selected',
   border: 'none',
-  rows: 1,
-}
+  spacing: null,
+})
 
 export class TextAreaAS extends Component {
   inputRef = React.createRef()
@@ -121,6 +100,7 @@ export class TextAreaAS extends Component {
     return <StyledTextArea ref={this.inputRef} {...this.props} />
   }
 }
+
 // export class TextAreaAS extends Component {
 //   render() {
 //     console.log(`r().props`, r())
