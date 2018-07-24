@@ -64,6 +64,7 @@ export const FlexRow = styled(Flex).attrs({
   alignItems: 'center',
 })`
   ${colorStyle};
+  ${lineHeight};
 `
 export const Text = styled(B.Text).attrs({})`
   ${colorStyle};
@@ -77,7 +78,7 @@ export const TextArea = system({
   colors: 'selected',
   border: 'none',
   p: 0,
-  lineHeight: null,
+  lineHeight: 'inherit',
 })
 
 export class AutoSize extends Component {

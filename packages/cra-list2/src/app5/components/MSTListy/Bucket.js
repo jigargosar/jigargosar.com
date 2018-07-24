@@ -49,6 +49,7 @@ const BucketItem = observer(function BucketItem({item}) {
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
       mx={-1}
+      lineHeight={1.25}
     >
       <B.Tooltip text={item.id}>
         <Text lineHeight={2} mx={1} colors={'dim'} fontSize={0}>
@@ -61,7 +62,6 @@ const BucketItem = observer(function BucketItem({item}) {
             <TextArea
               id={item.inputDOMId}
               rows={1}
-              lineHeight={1.25}
               py={1}
               mx={1}
               colors={'selected'}
@@ -74,7 +74,7 @@ const BucketItem = observer(function BucketItem({item}) {
           </AutoSize>
         </FocusTrap>
       ) : (
-        <Text lineHeight={1.25} py={1} mx={1}>
+        <Text py={1} mx={1}>
           {item.name || 'I am a hard core TODo'}
         </Text>
       )}
