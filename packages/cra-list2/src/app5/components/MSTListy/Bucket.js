@@ -18,22 +18,23 @@ const Header = system({
   tabIndex: 0,
 })
 
-function Bucket({bucket}) {
+const Title = system({
+  textStyle: 'bucketTitle',
+  flex: 1,
+})
+
+export const Bucket = observer(function Bucket({bucket}) {
   return (
     <Fragment>
       <Header
         id={bucket.headerDOMId}
         onKeyDown={bucket.onHeaderKeydown}
       >
-        <Box textStyle={'bucketTitle'} flex={1}>
+        <Title>
           {bucket.name || 'I am a Bucket Short and Stout'}
-        </Box>
+        </Title>
       </Header>
       <BucketItems bucket={bucket} />
     </Fragment>
   )
-}
-
-Bucket = observer(Bucket)
-
-export {Bucket}
+})
