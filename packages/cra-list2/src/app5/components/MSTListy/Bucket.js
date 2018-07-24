@@ -1,6 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React, {Fragment} from 'react'
-import {cn, renderKeyedById} from '../utils'
+import {renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
 import {
   Box,
@@ -8,15 +8,9 @@ import {
   buttonStyle,
   FlexRow,
   modularScale,
-  TextArea,
 } from '../little-rebass'
 import styled from 'styled-components'
-import FocusTrap from 'focus-trap-react'
-import {AutoSize} from '../lib/AutoSize'
-
-export const PreWrap = styled(Box)`
-  white-space: pre-wrap;
-`
+import {BucketItem} from './BucketItem'
 
 export const BucketItemBtn = styled(Btn).attrs({
   pl: modularScale(0.5),
@@ -32,57 +26,6 @@ export const BucketHeaderLayout = styled(FlexRow).attrs({
 })`
   ${buttonStyle};
 `
-
-export const BucketItemLayout = styled(FlexRow).attrs({
-  pl: modularScale(0.5),
-  width: 1,
-  tabIndex: 0,
-})`
-  ${buttonStyle};
-`
-
-const BucketItem = observer(function BucketItem({item}) {
-  return (
-    <BucketItemLayout
-      id={item.id}
-      // colors={item.isEditing ? 'selected' : 'default'}
-      variant={item.isEditing ? 'selected' : 'default'}
-      onFocus={item.onFocus}
-      onBlur={item.onBlur}
-      onKeyDown={item.onLIKeydown}
-      mx={-1}
-      py={1}
-      lineHeight={1.25}
-    >
-      <FlexRow mx={1}>
-        <Box lineHeight={2} colors={'dim'} fontSize={0}>
-          {item.id.slice(5, 8)}
-        </Box>
-      </FlexRow>
-      <FlexRow flex={'1'} mx={1}>
-        {item.isEditing ? (
-          <FocusTrap className={cn('flex-auto flex')}>
-            <AutoSize>
-              <TextArea
-                id={item.inputDOMId}
-                rows={1}
-                colors={'selected'}
-                value={item.name}
-                lineHeight={1.25}
-                // onBlur={item.onInputBlur}
-                onFocus={item.onInputFocus}
-                onChange={item.onInputChange}
-                onKeyDown={item.onInputKeyDown}
-              />
-            </AutoSize>
-          </FocusTrap>
-        ) : (
-          <PreWrap>{item.name || 'I am a hard core TODo'}</PreWrap>
-        )}
-      </FlexRow>
-    </BucketItemLayout>
-  )
-})
 
 const BucketItems = observer(function BucketItems({bucket}) {
   return renderKeyedById(BucketItem, 'item', bucket.items)
