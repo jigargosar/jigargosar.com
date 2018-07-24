@@ -46,6 +46,9 @@ export const BucketItem = observer(function BucketItem({item}) {
           <FocusTrap className={cn('flex-auto flex')}>
             <AutoSize>
               <TextArea
+                css={`
+                  outline: none;
+                `}
                 id={item.inputDOMId}
                 rows={1}
                 colors={'selected'}
