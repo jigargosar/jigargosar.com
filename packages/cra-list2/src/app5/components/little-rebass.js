@@ -1,10 +1,9 @@
 /*eslint-disable*/
 
-import PropTypes from 'prop-types'
 import {Provider} from 'rebass'
 import system from 'system-components'
 import styled from 'styled-components'
-import React, {Component} from 'react'
+import React from 'react'
 import {buttonStyle, colorStyle, textStyle} from 'styled-system'
 
 import {
@@ -14,9 +13,6 @@ import {
   opacify,
   transparentize,
 } from 'polished'
-
-import * as ReactDOM from 'react-dom'
-import autosize from 'autosize'
 import {defaultProps} from './little-recompose'
 // import TextArea from 'react-textarea-autosize'
 
@@ -63,33 +59,6 @@ export const TextArea = system({
   p: 0,
   lineHeight: 'inherit',
 })
-
-export class AutoSize extends Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-  }
-
-  get inputDOM() {
-    return ReactDOM.findDOMNode(this)
-  }
-
-  componentDidMount() {
-    autosize(this.inputDOM)
-    // autosize.update(this.inputDOM)
-  }
-
-  componentDidUpdate() {
-    autosize.update(this.inputDOM)
-  }
-
-  componentWillUnmount() {
-    autosize.destroy(this.inputDOM)
-  }
-
-  render() {
-    return this.props.children
-  }
-}
 
 export const Btn = system({
   is: 'button',

@@ -3,7 +3,6 @@ import React, {Fragment} from 'react'
 import {cn, renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
 import {
-  AutoSize,
   Box,
   Btn,
   buttonStyle,
@@ -13,6 +12,7 @@ import {
 } from '../little-rebass'
 import styled from 'styled-components'
 import FocusTrap from 'focus-trap-react'
+import {AutoSize} from '../lib/AutoSize'
 
 export const PreWrap = styled(Box)`
   white-space: pre-wrap;
