@@ -343,19 +343,13 @@ export const EditManager = modelNamed('EditManager')
     _editId: types.maybeNull(types.string),
   })
   .views(self => ({
-    get editRef() {
-      return S.toMaybe(self._editId)
-    },
-    set editRef(ref) {
-      self._editId = ref.id
-    },
     isEditing(ref) {
       return self._editId === ref.id
     },
   }))
   .actions(self => ({
-    startEditing(ref) {
-      self.editRef = ref
+    startEditing(model) {
+      self._editId = model.id
     },
     endEditing(ref) {
       if (self.isEditing(ref)) {
