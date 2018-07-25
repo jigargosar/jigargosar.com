@@ -386,17 +386,3 @@ export const Root = types
       }
     },
   }))
-
-if (module.hot) {
-  window.M = {
-    Item,
-    Bucket,
-    Dashboard,
-    Domain,
-    SelectionManager,
-    EditManager,
-    Root,
-  }
-
-  // console.log(modelIDUnionType)
-}
