@@ -10,6 +10,10 @@ import FocusTrap from 'focus-trap-react'
 import {cn} from '../utils'
 import {AutoSize} from '../lib/AutoSize'
 import React from 'react'
+import {
+  onModelBlur,
+  onModelFocus,
+} from '../../mst/listy-stores/view-helpers'
 
 const Row = system({
   ...dpFlexRow,
@@ -60,10 +64,8 @@ export const BucketItem = observer(function BucketItem({item}) {
     <Row
       id={item.id}
       variant={item.isEditing ? 'selected' : 'default'}
-      onFocus={item.onFocus}
-      onBlur={item.onBlur}
-      // onFocus={onModelFocus(item)}
-      // onBlur={onModelBlur(item)}
+      onFocus={onModelFocus(item)}
+      onBlur={onModelBlur(item)}
       onKeyDown={item.onItemKeydown}
     >
       <Col>
