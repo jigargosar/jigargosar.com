@@ -31,8 +31,6 @@ const Title = system({
 })
 
 const ID = system({
-  ...dpFlexRow,
-  px: 1,
   colors: 'dim',
   fontSize: 0,
 })
@@ -68,9 +66,11 @@ export const BucketItem = observer(function BucketItem({item}) {
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
     >
-      <ID>{item.id.slice(5, 8)}</ID>
+      <FlexRow px={1} py={1} css={{overflow: 'inherit'}}>
+        <ID>{item.id.slice(5, 8)}</ID>
+      </FlexRow>
       {item.isEditing ? (
-        <FlexRow flex={1} mx={1} css={{overflow: 'inherit'}}>
+        <FlexRow flex={1} px={1} py={1} css={{overflow: 'inherit'}}>
           <Editor
             id={item.inputDOMId}
             // rows={1}
@@ -82,7 +82,7 @@ export const BucketItem = observer(function BucketItem({item}) {
           />
         </FlexRow>
       ) : (
-        <FlexRow flex={1} px={1} css={{overflow: 'inherit'}}>
+        <FlexRow flex={1} px={1} py={1} css={{overflow: 'inherit'}}>
           <Box
             css={{
               whiteSpace: 'pre-wrap',
