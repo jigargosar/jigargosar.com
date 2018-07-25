@@ -1,10 +1,5 @@
 import {getIDTypeOfModel, Model} from '../Model'
-import {
-  getParentOfType,
-  getRoot,
-  getSnapshot,
-  types,
-} from 'mobx-state-tree'
+import {getRoot, getSnapshot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {applySnapshot2, optionalCollections} from '../../little-mst'
 import {
@@ -359,18 +354,20 @@ const Item = Model({
       getSelectionManager(self).onItemFocus(self)
     },
     onNavigatePrev() {
-      if (self.isFirst) {
-        self.bucket.navigateToHeader()
-      } else {
-        self.siblings[self.index - 1].navigateTo()
-      }
+      // if (self.isFirst) {
+      //   self.bucket.navigateToHeader()
+      // } else {
+      //   self.siblings[self.index - 1].navigateTo()
+      // }
+      onNavUp(self)
     },
     onNavigateNext() {
-      if (self.isLast) {
-        self.bucket.navigateToNextBucketHeader()
-      } else {
-        self.siblings[self.index + 1].navigateTo()
-      }
+      // if (self.isLast) {
+      //   self.bucket.navigateToNextBucketHeader()
+      // } else {
+      //   self.siblings[self.index + 1].navigateTo()
+      // }
+      onNavDown(self)
     },
     onAppendSibling() {
       self.bucket.onAddItem()
