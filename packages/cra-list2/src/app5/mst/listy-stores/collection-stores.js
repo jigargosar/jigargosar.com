@@ -11,7 +11,10 @@ import {
 import S from 'sanctuary'
 import {
   endEditing,
+  getBucketCollection,
+  getDashboardCollection,
   getDomain,
+  getItemCollection,
   isEditing,
   navigateNext,
   navigatePrev,
@@ -183,18 +186,6 @@ const collectionProps = {
   items: Collection(Item),
   buckets: Collection(Bucket),
   dashboards: Collection(Dashboard),
-}
-
-function getItemCollection(self) {
-  return getDomain(self).items
-}
-
-function getDashboardCollection(self) {
-  return getDomain(self).dashboards
-}
-
-function getBucketCollection(self) {
-  return getDomain(self).buckets
 }
 
 export const Domain = modelNamed('Domain')

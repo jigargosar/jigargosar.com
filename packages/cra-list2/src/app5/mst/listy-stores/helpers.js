@@ -35,3 +35,15 @@ export function endEditing(self) {
 export function isEditing(self) {
   return getEditManager(self).isEditing(self)
 }
+
+export function getItemCollection(self) {
+  return getDomain(self).items
+}
+
+export function getDashboardCollection(self) {
+  return getDomain(self).dashboards
+}
+
+export function getBucketCollection(self) {
+  return getDomain(self).buckets
+}
