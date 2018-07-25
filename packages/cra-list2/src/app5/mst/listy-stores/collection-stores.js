@@ -136,7 +136,7 @@ const Bucket = Model({
   attrs: {dashboard: types.reference(Dashboard)},
 })
   .views(self => ({
-    get onHeaderKeydown() {
+    get headerKeydownHandlers() {
       return withKeyEvent(
         whenKeyPD('up')(self.onHeaderNavigatePrev),
         whenKeyPD('down')(self.onHeaderNavigateNext),
@@ -158,6 +158,9 @@ const Bucket = Model({
     },
   }))
   .actions(self => ({
+    onHeaderKeydown(e) {
+      self.headerKeydownHandlers(e)
+    },
     addItem(model) {
       return getItemCollection(self).add({
         ...model,
