@@ -11,3 +11,7 @@ export function getDomain(self) {
 export function getEditManager(self) {
   return getRoot(self).editManager
 }
+
+export function setSelectionToModel(self) {
+  getSelectionManager(self).setSelectionToModel(self)
+}

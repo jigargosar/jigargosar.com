@@ -12,12 +12,8 @@ import S from 'sanctuary'
 import {
   getDomain,
   getEditManager,
-  getSelectionManager,
+  setSelectionToModel,
 } from './helpers'
-
-function setSelectionToModel(self) {
-  getSelectionManager(self).setSelectionToModel(self)
-}
 
 function getParentDashboard(model) {
   return Dashboard.is(model)
