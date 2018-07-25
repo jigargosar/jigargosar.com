@@ -1,17 +1,15 @@
 import {types} from 'mobx-state-tree'
-import {R, validate} from '../little-ramda'
 import {mValues} from '../mobx/little-mobx'
+import {modelNamed} from '../little-mst'
+import * as R from 'ramda'
+import validate from '../vendor/aproba'
 
 export function Collection(Model) {
-  return types
-    .model(`${Model.name}Collection`, {
+  return modelNamed(`${Model.name}Collection`)
+    .props({
       lookup: types.map(Model),
     })
-    .views(views)
-    .actions(actions)
-
-  function views(self) {
-    return {
+    .views(self => ({
       get list() {
         return mValues(self.lookup)
       },
@@ -30,15 +28,9 @@ export function Collection(Model) {
       find(pred = R.T) {
         return R.find(pred)(self.list)
       },
-    }
-  }
-
-  function actions(self) {
-    return {
-      add(model) {
-        validate('O', [model])
-        return self.lookup.put(Model.create(model))
-      },
+    }))
+    .actions(self => ({
+      add: model => self.lookup.put(Model.create(model)),
       addAll(models) {
         validate('A', [models])
         return R.map(self.add)(models)
@@ -49,6 +41,5 @@ export function Collection(Model) {
       deleteAll(models) {
         R.forEach(self.delete)(models)
       },
-    }
-  }
+    }))
 }

@@ -12,24 +12,16 @@ const collectionProps = {
 
 export const Domain = modelNamed('Domain')
   .props(optionalCollections(collectionProps))
-  .views(function(self) {
-    return {
-      get currentDashboard() {
-        return S.head(getDashboardCollection(self).list)
-      },
-    }
-  })
-  .actions(function(self) {
-    return {
-      addDashboard(model = {}) {
-        return getDashboardCollection(self).add(model)
-      },
-      deleteBucket(b) {
-        self.items.deleteAll(b.items)
-        self.buckets.delete(b)
-      },
-      deleteItem(i) {
-        self.items.delete(i)
-      },
-    }
-  })
+  .views(self => ({
+    get currentDashboard() {
+      return S.head(getDashboardCollection(self).list)
+    },
+  }))
+  .actions(self => ({
+    addDashboard: model => self.dashboards.add(model),
+    deleteBucket(b) {
+      self.items.deleteAll(b.items)
+      self.buckets.delete(b)
+    },
+    deleteItem: i => self.items.delete(i),
+  }))
