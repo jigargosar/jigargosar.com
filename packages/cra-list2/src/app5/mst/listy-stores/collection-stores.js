@@ -290,17 +290,8 @@ const modelIDUnionType = types.union({}, ...modelIDTypes)
 
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
-    _selectedItem: types.maybeNull(types.reference(Item)),
     _selectedModelId: types.maybeNull(modelIDUnionType),
   })
-  .views(self => ({
-    get selectedItem() {
-      return S.toMaybe(self._selectedItem)
-    },
-    set selectedItem(i) {
-      self._selectedItem = i
-    },
-  }))
   .actions(self => ({
     selectItem(i) {
       navigateToModel(i)
@@ -313,11 +304,9 @@ export const SelectionManager = modelNamed('SelectionManager')
       )(self._selectedModelId)
     },
     onItemFocus(item) {
-      self.selectedItem = item
       self.onModelFocus(item)
     },
     onItemBlur() {
-      self.selectedItem = null
       self.onModelBlur()
     },
     onModelFocus(m) {
