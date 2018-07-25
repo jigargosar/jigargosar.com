@@ -269,9 +269,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     _selectedModelId: types.maybeNull(modelIDUnionType),
   })
   .actions(self => ({
-    selectItem(i) {
-      navigateToModel(i)
-    },
     onDashboardMount(d) {
       R.compose(
         setFocusAndSelectionOnDOMId,
