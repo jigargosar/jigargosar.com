@@ -75,7 +75,15 @@ function navigateToModel(m) {
 function getFlatNavIds(model) {
   const d = Dashboard.is(model)
     ? model
-    : getParentOfType(Dashboard, model)
+    : Bucket.is(model)
+      ? model.dashboard
+      : Item.is(model)
+        ? model.bucket.dashboard
+        : (() => {
+            console.error('Invalid Model', model)
+            throw new Error('Invalid Model')
+          })()
+
   return d.flatNavIds
 }
 
@@ -160,13 +168,13 @@ const Dashboard = Model({
     },
   }))
 
-function navToLastItemOrHeadOfMaybeBucket(maybeBucket) {
-  return R.compose(
-    maybeOrElse(() => navigateToMaybeBucketHeader(maybeBucket)),
-    S.map(R.tap(i => i.navigateTo())),
-    S.chain(b => b.lastItem),
-  )(maybeBucket)
-}
+// function navToLastItemOrHeadOfMaybeBucket(maybeBucket) {
+//   return R.compose(
+//     maybeOrElse(() => navigateToMaybeBucketHeader(maybeBucket)),
+//     S.map(R.tap(i => i.navigateTo())),
+//     S.chain(b => b.lastItem),
+//   )(maybeBucket)
+// }
 
 const Bucket = Model({
   name: 'Bucket',
@@ -246,15 +254,17 @@ const Bucket = Model({
       getDomain(self).deleteBucket(self)
     },
     onHeaderNavigatePrev() {
-      maybeOrElse(() => self.dashboard.navigateToBtnAddList())(
-        navToLastItemOrHeadOfMaybeBucket(self.prevBucket),
-      )
+      onNavUp(self)
+      // maybeOrElse(() => self.dashboard.navigateToBtnAddList())(
+      //   navToLastItemOrHeadOfMaybeBucket(self.prevBucket),
+      // )
     },
     onHeaderNavigateNext() {
-      R.compose(
-        maybeOrElse(() => self.navigateToNextBucketHeader()),
-        S.map(R.tap(i => i.navigateTo())),
-      )(self.firstItem)
+      onNavDown(self)
+      // R.compose(
+      //   maybeOrElse(() => self.navigateToNextBucketHeader()),
+      //   S.map(R.tap(i => i.navigateTo())),
+      // )(self.firstItem)
     },
     navigateToNextBucketHeader() {
       maybeOrElse(() => self.dashboard.navigateToBtnAddList())(
