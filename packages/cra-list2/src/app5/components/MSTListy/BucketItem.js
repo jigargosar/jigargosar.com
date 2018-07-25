@@ -1,9 +1,5 @@
-import styled from 'styled-components'
 import {
-  Box,
-  Btn,
   dpFlexRow,
-  FlexRow,
   preWrapCSS,
   system,
   TextArea,
@@ -15,7 +11,7 @@ import {cn} from '../utils'
 import {AutoSize} from '../lib/AutoSize'
 import React from 'react'
 
-const Container = system({
+const Row = system({
   ...dpFlexRow,
   pl: modularScale(0.5),
   py: 1,
@@ -25,7 +21,14 @@ const Container = system({
   lineHeight: 1.25,
   css: {overflow: 'hidden'},
 })
-Container.displayName = 'Container'
+Row.displayName = 'Row'
+
+const Col = system({
+  ...dpFlexRow,
+  flex: null,
+  px: 1,
+  py: 1,
+})
 
 const Title = system({
   css: preWrapCSS,
@@ -36,11 +39,6 @@ const ID = system({
   fontSize: 0,
 })
 ID.displayName = 'ID'
-
-export const BucketItemBtn = styled(Btn).attrs({
-  pl: modularScale(0.5),
-  width: 1,
-})``
 
 const Input = system({
   is: TextArea,
@@ -61,18 +59,18 @@ const Editor = function Editor(props) {
 
 export const BucketItem = observer(function BucketItem({item}) {
   return (
-    <Container
+    <Row
       id={item.id}
       variant={item.isEditing ? 'selected' : 'default'}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
     >
-      <FlexRow px={1} py={1} css={{overflow: 'inherit'}}>
+      <Col>
         <ID>{item.id.slice(5, 8)}</ID>
-      </FlexRow>
+      </Col>
       {item.isEditing ? (
-        <FlexRow flex={1} px={1} py={1} css={{overflow: 'inherit'}}>
+        <Col flex={1}>
           <Editor
             id={item.inputDOMId}
             // rows={1}
@@ -82,20 +80,12 @@ export const BucketItem = observer(function BucketItem({item}) {
             onChange={item.onInputChange}
             onKeyDown={item.onInputKeyDown}
           />
-        </FlexRow>
+        </Col>
       ) : (
-        <FlexRow flex={1} px={1} py={1} css={{overflow: 'inherit'}}>
-          <Box
-            css={{
-              whiteSpace: 'pre-wrap',
-              overflow: 'hidden',
-              wordWrap: 'break-word',
-            }}
-          >
-            {item.name || 'I am a hard core TODo'}
-          </Box>
-        </FlexRow>
+        <Col flex={1}>
+          <Title>{item.name || 'I am a hard core TODo'}</Title>
+        </Col>
       )}
-    </Container>
+    </Row>
   )
 })

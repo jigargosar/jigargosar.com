@@ -3,10 +3,11 @@ import React from 'react'
 import {renderKeyedById} from '../utils'
 import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
-import {Box, Flex} from '../little-rebass'
+import {Box, Btn, Flex} from '../little-rebass'
 import {lifecycle, rc} from '../little-recompose'
 import system from 'system-components'
-import {BucketItemBtn} from './BucketItem'
+import styled from 'styled-components'
+import modularScale from 'polished/lib/helpers/modularScale'
 
 const Layout = system({
   is: Flex,
@@ -31,6 +32,11 @@ const focusItemOnMount = lifecycle({
     this.props.dashboard.onMount()
   },
 })
+
+const BucketItemBtn = styled(Btn).attrs({
+  pl: modularScale(0.5),
+  width: 1,
+})``
 
 const Dashboard = focusItemOnMount(
   observer(function Dashboard({dashboard}) {

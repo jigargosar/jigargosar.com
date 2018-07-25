@@ -148,7 +148,7 @@ export const DarkThemeProvider = defaultProps({
   theme: createDarkTheme(),
 })(ThemeProvider)
 export const preWrapCSS = {
-  whiteSpace: 'pre-wrap',
   overflow: 'hidden',
+  whiteSpace: 'pre-wrap',
   wordWrap: 'break-word',
 }
