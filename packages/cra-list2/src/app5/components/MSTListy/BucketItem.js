@@ -23,7 +23,7 @@ export const PreWrap = system({
   css: preWrapCSS,
 })
 
-export const BucketItemLayout = system({
+const Container = system({
   ...dpFlexRow,
   pl: modularScale(0.5),
   py: 1,
@@ -32,6 +32,13 @@ export const BucketItemLayout = system({
   variant: 'default',
   lineHeight: 1.25,
   css: preWrapCSS,
+})
+
+const ID = system({
+  ...dpFlexRow,
+  px: 1,
+  colors: 'dim',
+  fontSize: 0,
 })
 
 export const BucketItemBtn = styled(Btn).attrs({
@@ -48,16 +55,14 @@ const Input = system({
 
 export const BucketItem = observer(function BucketItem({item}) {
   return (
-    <BucketItemLayout
+    <Container
       id={item.id}
       variant={item.isEditing ? 'selected' : 'default'}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
     >
-      <FlexRow px={1} colors={'dim'} fontSize={0}>
-        {item.id.slice(5, 8)}
-      </FlexRow>
+      <ID>{item.id.slice(5, 8)}</ID>
       <FlexRow flex={1} mx={1} css={preWrapCSS}>
         {item.isEditing ? (
           <FocusTrap className={cn('flex-auto flex')}>
@@ -77,6 +82,6 @@ export const BucketItem = observer(function BucketItem({item}) {
           <PreWrap>{item.name || 'I am a hard core TODo'}</PreWrap>
         )}
       </FlexRow>
-    </BucketItemLayout>
+    </Container>
   )
 })
