@@ -49,6 +49,10 @@ function getDashboardCollection(self) {
   return getDomain(self).dashboards
 }
 
+function navigateToMaybeBucketHeader(maybeBucket) {
+  S.map(R.tap(b => b.navigateToHeader()))(maybeBucket)
+}
+
 const Dashboard = Model({
   name: 'Dashboard',
 })
@@ -61,13 +65,18 @@ const Dashboard = Model({
     get firstBucket() {
       return S.head(self.buckets)
     },
+    get lastBucket() {
+      return S.last(self.buckets)
+    },
     get btnAddListDOMId() {
       return `'add-list-button-${self.id}`
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent(
         whenKeyPD('up')(self.onHeaderNavigatePrev),
-        whenKeyPD('down')(self.onHeaderNavigateNext),
+        whenKeyPD('down')(() =>
+          navigateToMaybeBucketHeader(self.firstBucket),
+        ),
       )
     },
   }))
@@ -157,7 +166,9 @@ const Bucket = Model({
     },
     onHeaderNavigatePrev() {
       R.compose(
-        maybeOrElse(() => self.navigateToPrevBucketHeader()),
+        maybeOrElse(() =>
+          navigateToMaybeBucketHeader(self.prevBucket),
+        ),
         S.map(R.tap(i => i.navigateTo())),
         S.chain(b => b.lastItem),
       )(self.prevBucket)
@@ -169,10 +180,7 @@ const Bucket = Model({
       )(self.firstItem)
     },
     navigateToNextBucketHeader() {
-      S.map(R.tap(b => b.navigateToHeader()))(self.nextBucket)
-    },
-    navigateToPrevBucketHeader() {
-      S.map(R.tap(b => b.navigateToHeader()))(self.prevBucket)
+      navigateToMaybeBucketHeader(self.nextBucket)
     },
     navigateToHeader() {
       setFocusAndSelectionOnDOMId(self.headerDOMId)
