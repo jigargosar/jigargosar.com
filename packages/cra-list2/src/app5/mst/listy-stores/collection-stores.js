@@ -2,19 +2,12 @@ import {getIDTypeOfModel, Model} from '../Model'
 import {getRoot, getSnapshot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {applySnapshot2, optionalCollections} from '../../little-mst'
-import {
-  dotPath,
-  isIndexOutOfBounds,
-  isNotNil,
-  maybeOr_,
-  R,
-} from '../../little-ramda'
+import {dotPath, isNotNil, maybeOr_, R} from '../../little-ramda'
 import {
   setFocusAndSelectionOnDOMId,
   whenKeyPD,
   withKeyEvent,
 } from '../../components/utils'
-import assert from 'assert'
 import S from 'sanctuary'
 
 function getSelectionManager(self) {
