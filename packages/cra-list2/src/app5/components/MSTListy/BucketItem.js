@@ -68,8 +68,8 @@ export const BucketItem = observer(function BucketItem({item}) {
       onKeyDown={item.onLIKeydown}
     >
       <ID>{item.id.slice(5, 8)}</ID>
-      <FlexRow flex={1} mx={1} css={preWrapCSS}>
-        {item.isEditing ? (
+      {item.isEditing ? (
+        <FlexRow flex={1} mx={1} css={{overflow: 'inherit'}}>
           <Editor
             id={item.inputDOMId}
             // rows={1}
@@ -79,10 +79,12 @@ export const BucketItem = observer(function BucketItem({item}) {
             onChange={item.onInputChange}
             onKeyDown={item.onInputKeyDown}
           />
-        ) : (
+        </FlexRow>
+      ) : (
+        <FlexRow flex={1} mx={1} css={{overflow: 'inherit'}}>
           <Title>{item.name || 'I am a hard core TODo'}</Title>
-        )}
-      </FlexRow>
+        </FlexRow>
+      )}
     </Container>
   )
 })
