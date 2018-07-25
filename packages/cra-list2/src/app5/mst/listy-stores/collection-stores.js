@@ -362,9 +362,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     selectItem(i) {
       setFocusAndSelectionOnDOMId(i.id)
     },
-    selectModel(m) {
-      setFocusAndSelectionOnDOMId(m.id)
-    },
     onDashboardMount(d) {
       R.compose(
         S.map(R.tap(self.selectItem)),

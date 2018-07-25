@@ -62,6 +62,8 @@ export const BucketItem = observer(function BucketItem({item}) {
       variant={item.isEditing ? 'selected' : 'default'}
       onFocus={item.onFocus}
       onBlur={item.onBlur}
+      // onFocus={onModelFocus(item)}
+      // onBlur={onModelBlur(item)}
       onKeyDown={item.onLIKeydown}
     >
       <Col>

@@ -4,6 +4,10 @@ import {renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
 import {dpFlexRow, system} from '../little-rebass'
 import {BucketItem} from './BucketItem'
+import {
+  onModelBlur,
+  onModelFocus,
+} from '../../mst/listy-stores/collection-stores'
 
 const BucketItems = observer(function BucketItems({bucket}) {
   return renderKeyedById(BucketItem, 'item', bucket.items)
@@ -29,6 +33,8 @@ export const Bucket = observer(function Bucket({bucket}) {
       <Header
         id={bucket.headerDOMId}
         onKeyDown={bucket.onHeaderKeydown}
+        onFocus={onModelFocus(bucket)}
+        onBlur={onModelBlur(bucket)}
       >
         <Title>
           {bucket.name || 'I am a Bucket Short and Stout'}
