@@ -1,9 +1,13 @@
 import {getSelectionManager} from './helpers'
 
-export function onModelFocus(m) {
-  return () => getSelectionManager(m).onModelFocus(m)
+export function onModelFocus(model) {
+  return () => getSelectionManager(model).onModelFocus(model)
 }
 
-export function onModelBlur(m) {
-  return () => getSelectionManager(m).onModelBlur()
+export function onModelBlur(model) {
+  return () => getSelectionManager(model).onModelBlur()
+}
+
+export function onDashboardMount(dashboard) {
+  getSelectionManager(dashboard).onDashboardMount(dashboard)
 }

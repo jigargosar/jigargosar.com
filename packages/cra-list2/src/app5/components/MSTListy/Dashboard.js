@@ -28,7 +28,7 @@ const Panel = system({
 
 const BucketPanel = rc.nest(Panel, Bucket)
 
-const focusItemOnMount = lifecycle({
+const restoreFocusOnSelectedModelOnMount = lifecycle({
   componentDidMount() {
     console.debug('this.props.dashboard.onMount()')
     this.props.dashboard.onMount()
@@ -41,7 +41,7 @@ const BucketItemBtn = styled(Btn).attrs({
 })``
 
 const Dashboard = observer(
-  focusItemOnMount(
+  restoreFocusOnSelectedModelOnMount(
     observer(function Dashboard({dashboard}) {
       return (
         <Layout>
