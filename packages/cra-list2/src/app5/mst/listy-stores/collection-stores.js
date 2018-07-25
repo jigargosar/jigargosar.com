@@ -71,6 +71,13 @@ const Dashboard = Model({
         dashboard: self,
       })
     },
+    get navChildren() {
+      return self.buckets
+    },
+    get navParent() {
+      return null
+    },
+
     get firstBucket() {
       return S.head(self.buckets)
     },
@@ -138,6 +145,12 @@ const Bucket = Model({
     },
     get items() {
       return getItemCollection(self).whereEq({bucket: self})
+    },
+    get navChildren() {
+      return self.items
+    },
+    get navParent() {
+      return self.dashboard
     },
     get firstItem() {
       return S.head(self.items)
@@ -213,6 +226,13 @@ const Item = Model({
   attrs: {bucket: types.reference(Bucket)},
 })
   .views(self => ({
+    get navChildren() {
+      return []
+    },
+    get navParent() {
+      return self.bucket
+    },
+
     get inputDOMId() {
       return `input-${self.id}`
     },
