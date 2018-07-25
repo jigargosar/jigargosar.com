@@ -1,11 +1,28 @@
 import {types} from 'mobx-state-tree'
-import {modelId} from '../little-model'
 import {R} from '../little-ramda'
+import nanoid from 'nanoid'
+
+function idPrefixFromModelName(name) {
+  return `${name}_`
+}
+
+function newModelId(name) {
+  return `${idPrefixFromModelName(name)}${nanoid()}`
+}
+
+function createModelIDType(name) {
+  return types.refinement(
+    types.identifier,
+    R.startsWith(idPrefixFromModelName(name)),
+  )
+}
 
 export function Model({name, attrs = {}}) {
   const attrProps = R.merge(
     {
-      id: types.optional(types.identifier, () => modelId(name)),
+      id: types.optional(createModelIDType(name), () =>
+        newModelId(name),
+      ),
       name: '',
       deleted: false,
     },
