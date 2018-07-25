@@ -14,11 +14,14 @@ import {cn} from '../utils'
 import {AutoSize} from '../lib/AutoSize'
 import React from 'react'
 
-export const PreWrap = styled(Box)`
-  white-space: pre-wrap;
-  overflow: hidden;
-  word-wrap: break-word;
-`
+export const PreWrap = system({
+  css: {
+    whiteSpace: 'pre-wrap',
+    overflow: 'hidden',
+    wordWrap: 'break-word',
+  },
+})
+
 export const BucketItemLayout = system({
   ...dpFlexRow,
   pl: modularScale(0.5),
