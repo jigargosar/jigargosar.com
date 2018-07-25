@@ -1,5 +1,10 @@
 import {getIDTypeOfModel, Model} from '../Model'
-import {getRoot, getSnapshot, types} from 'mobx-state-tree'
+import {
+  getParentOfType,
+  getRoot,
+  getSnapshot,
+  types,
+} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {applySnapshot2, optionalCollections} from '../../little-mst'
 import {
@@ -65,26 +70,38 @@ function navigateToModel(m) {
   setFocusAndSelectionOnDOMId(m.id)
 }
 
-const tapNavigateToModel = R.tap(navigateToModel)
+// const tapNavigateToModel = R.tap(navigateToModel)
+
+function getFlatNavIds(model) {
+  const d = Dashboard.is(model)
+    ? model
+    : getParentOfType(Dashboard, model)
+  return d.flatNavIds
+}
 
 function onNavUp(model) {
-  if (Dashboard.is(model)) {
-    R.compose(
-      S.map(tapNavigateToModel),
-      maybeOrElse(() => S.last(model.navChildren)),
-      R.compose(S.chain(d => S.last(d.navChildren)), S.last),
-    )(model.navChildren)
-  } else {
-    debugger
-  }
+  const flatNavIds = getFlatNavIds(model)
+  const idx = R.indexOf(model.id)(flatNavIds)
+  const prevIdx = idx === 0 ? flatNavIds.length - 1 : idx - 1
+
+  setFocusAndSelectionOnDOMId(flatNavIds[prevIdx])
 }
 
 function onNavDown(model) {
-  if (Dashboard.is(model)) {
-    S.map(tapNavigateToModel)(S.head(model.navChildren))
-  } else {
-    debugger
-  }
+  const flatNavIds = getFlatNavIds(model)
+  const idx = R.indexOf(model.id)(flatNavIds)
+  const nextIdx = idx === flatNavIds.length - 1 ? 0 : idx + 1
+
+  setFocusAndSelectionOnDOMId(flatNavIds[nextIdx])
+}
+
+function computeFlatNavIds(navModel) {
+  return [
+    navModel.id,
+    ...R.compose(R.flatten, R.map(c => c.flatNavIds))(
+      navModel.navChildren,
+    ),
+  ]
 }
 
 const Dashboard = Model({
@@ -99,8 +116,8 @@ const Dashboard = Model({
     get navChildren() {
       return self.buckets
     },
-    get navParent() {
-      return null
+    get flatNavIds() {
+      return computeFlatNavIds(self)
     },
 
     get firstBucket() {
@@ -176,9 +193,10 @@ const Bucket = Model({
     get navChildren() {
       return self.items
     },
-    get navParent() {
-      return self.dashboard
+    get flatNavIds() {
+      return computeFlatNavIds(self)
     },
+
     get firstItem() {
       return S.head(self.items)
     },
@@ -256,8 +274,8 @@ const Item = Model({
     get navChildren() {
       return []
     },
-    get navParent() {
-      return self.bucket
+    get flatNavIds() {
+      return computeFlatNavIds(self)
     },
 
     get inputDOMId() {
