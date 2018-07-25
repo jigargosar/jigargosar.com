@@ -79,7 +79,6 @@ export const BucketItem = observer(function BucketItem({item}) {
               // rows={1}
               value={item.name}
               onBlur={item.onInputBlur}
-              onFocus={item.onInputFocus}
               onChange={item.onInputChange}
               onKeyDown={item.onInputKeyDown}
             />

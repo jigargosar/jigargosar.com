@@ -144,9 +144,6 @@ export const Item = Model({
     onInputBlur() {
       endEditing(self)
     },
-    onInputFocus() {
-      // setSelectionToModel(self)
-    },
     onAppendSibling() {
       self.bucket.onAddItem()
     },
