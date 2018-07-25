@@ -162,12 +162,6 @@ const Bucket = Model({
       return computeFlatNavIds(self, self.items)
     },
 
-    get firstItem() {
-      return S.head(self.items)
-    },
-    get lastItem() {
-      return S.last(self.items)
-    },
     get siblings() {
       return self.dashboard.buckets
     },
@@ -175,23 +169,6 @@ const Bucket = Model({
       const index = R.indexOf(self, self.siblings)
       assert(!isIndexOutOfBounds(index, self.siblings))
       return index
-    },
-    get isLast() {
-      return self.index === self.siblings.length - 1
-    },
-    get isFirst() {
-      return self.index === 0
-    },
-
-    get nextBucket() {
-      return S.toMaybe(
-        self.isLast ? null : self.siblings[self.index + 1],
-      )
-    },
-    get prevBucket() {
-      return S.toMaybe(
-        self.isFirst ? null : self.siblings[self.index - 1],
-      )
     },
   }))
   .actions(self => ({
@@ -262,12 +239,6 @@ const Item = Model({
       const index = R.indexOf(self, self.siblings)
       assert(!isIndexOutOfBounds(index, self.siblings))
       return index
-    },
-    get isLast() {
-      return self.index === self.siblings.length - 1
-    },
-    get isFirst() {
-      return self.index === 0
     },
   }))
   .actions(self => ({
