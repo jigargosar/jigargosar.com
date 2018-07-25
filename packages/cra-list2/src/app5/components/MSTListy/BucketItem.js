@@ -32,6 +32,12 @@ export const BucketItemBtn = styled(Btn).attrs({
   width: 1,
 })``
 
+const Input = system({
+  is: TextArea,
+  flex: 1,
+  colors: 'selected',
+})
+
 export const BucketItem = observer(function BucketItem({item}) {
   return (
     <BucketItemLayout
@@ -48,11 +54,10 @@ export const BucketItem = observer(function BucketItem({item}) {
         {item.isEditing ? (
           <FocusTrap className={cn('flex-auto flex')}>
             <AutoSize>
-              <TextArea
+              <Input
                 css={`
                   outline: none;
                 `}
-                colors={'selected'}
                 id={item.inputDOMId}
                 rows={1}
                 value={item.name}

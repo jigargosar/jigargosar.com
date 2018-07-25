@@ -57,10 +57,8 @@ export const FlexRow = system({
 export const TextArea = system({
   is: 'textarea',
   display: 'block',
-  flex: 1,
-  colors: 'selected',
-  border: 'none',
   p: 0,
+  border: 'none',
   lineHeight: 'inherit',
 })
 
