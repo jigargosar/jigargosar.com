@@ -1,8 +1,8 @@
-import {getIDTypeOfModel, Model} from '../Model'
+import {Model} from '../Model'
 import {types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {modelNamed, optionalCollections} from '../../little-mst'
-import {maybeOr_, R} from '../../little-ramda'
+import {R} from '../../little-ramda'
 import {
   setFocusAndSelectionOnDOMId,
   whenKeyPD,
@@ -55,7 +55,7 @@ function computeFlatNavIds(navModel, navChildren) {
   ]
 }
 
-const Dashboard = Model({
+export const Dashboard = Model({
   name: 'Dashboard',
 })
   .views(self => ({
@@ -89,7 +89,7 @@ const Dashboard = Model({
     },
   }))
 
-const Bucket = Model({
+export const Bucket = Model({
   name: 'Bucket',
   attrs: {dashboard: types.reference(Dashboard)},
 })
@@ -142,7 +142,7 @@ const Bucket = Model({
     },
   }))
 
-const Item = Model({
+export const Item = Model({
   name: 'Item',
   attrs: {bucket: types.reference(Bucket)},
 })
@@ -249,37 +249,6 @@ export const Domain = modelNamed('Domain')
       },
     }
   })
-
-const models = [Item, Bucket, Dashboard]
-const modelIDTypes = R.map(getIDTypeOfModel)(models)
-const modelIDUnionType = types.union({}, ...modelIDTypes)
-
-export const SelectionManager = modelNamed('SelectionManager')
-  .props({
-    _selectedModelId: types.maybeNull(modelIDUnionType),
-  })
-  .actions(self => ({
-    setSelectionToModel(model) {
-      self.setSelectionToModelId(model.id)
-    },
-    setSelectionToModelId(id) {
-      self._selectedModelId = id
-      setFocusAndSelectionOnDOMId(id)
-    },
-    onDashboardMount(d) {
-      R.compose(
-        setFocusAndSelectionOnDOMId,
-        maybeOr_(() => R.compose(R.last, R.take(3))(d.flatNavIds)),
-        S.toMaybe,
-      )(self._selectedModelId)
-    },
-    onModelFocus(m) {
-      self._selectedModelId = m.id
-    },
-    onModelBlur() {
-      self._selectedModelId = null
-    },
-  }))
 
 function startEditing(self) {
   getEditManager(self).startEditing(self)
