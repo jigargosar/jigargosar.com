@@ -168,7 +168,7 @@ const Bucket = Model({
       })
     },
     onAddItem() {
-      self.addItem().navigateTo()
+      navigateToModel(self.addItem())
     },
     onPrependItem() {
       self.onAddItem()
@@ -229,9 +229,6 @@ const Item = Model({
     onInputChange(e) {
       const text = e.target.value
       self.name = text
-    },
-    navigateTo() {
-      getSelectionManager(self).selectItem(self)
     },
     onDelete() {
       getDomain(self).deleteItem(self)
