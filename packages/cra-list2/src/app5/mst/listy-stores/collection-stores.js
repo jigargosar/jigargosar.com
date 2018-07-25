@@ -12,41 +12,10 @@ import S from 'sanctuary'
 import {
   getDomain,
   getEditManager,
+  navigateNext,
+  navigatePrev,
   setSelectionToModel,
 } from './helpers'
-
-function getParentDashboard(model) {
-  return Dashboard.is(model)
-    ? model
-    : Bucket.is(model)
-      ? model.dashboard
-      : Item.is(model)
-        ? model.bucket.dashboard
-        : (() => {
-            console.error('Invalid Model', model)
-            throw new Error('Invalid Model')
-          })()
-}
-
-function getFlatNavIds(model) {
-  return getParentDashboard(model).flatNavIds
-}
-
-function navigatePrev(model) {
-  const flatNavIds = getFlatNavIds(model)
-  const idx = R.indexOf(model.id)(flatNavIds)
-  const prevIdx = idx === 0 ? flatNavIds.length - 1 : idx - 1
-
-  setFocusAndSelectionOnDOMId(flatNavIds[prevIdx])
-}
-
-function navigateNext(model) {
-  const flatNavIds = getFlatNavIds(model)
-  const idx = R.indexOf(model.id)(flatNavIds)
-  const nextIdx = idx === flatNavIds.length - 1 ? 0 : idx + 1
-
-  setFocusAndSelectionOnDOMId(flatNavIds[nextIdx])
-}
 
 function computeFlatNavIds(navModel, navChildren) {
   return [
