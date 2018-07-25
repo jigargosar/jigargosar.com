@@ -177,9 +177,6 @@ const Bucket = Model({
     onHeaderNavigateNext() {
       navigateNext(self)
     },
-    navigateToHeader() {
-      setFocusAndSelectionOnDOMId(self.headerDOMId)
-    },
   }))
 
 const Item = Model({
@@ -190,11 +187,10 @@ const Item = Model({
     get flatNavIds() {
       return computeFlatNavIds(self, [])
     },
-
     get inputDOMId() {
       return `input-${self.id}`
     },
-    get onLIKeydown() {
+    get onItemKeydown() {
       return withKeyEvent(
         whenKeyPD('up')(self.onNavigatePrev),
         whenKeyPD('down')(self.onNavigateNext),
