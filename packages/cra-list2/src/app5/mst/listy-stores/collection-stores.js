@@ -118,16 +118,16 @@ const Dashboard = Model({
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent(
-        whenKeyPD('up')(self.onUp),
-        whenKeyPD('down')(self.onDown),
+        whenKeyPD('up')(self.onNavigatePrev),
+        whenKeyPD('down')(self.onNavigateNext),
       )
     },
   }))
   .actions(self => ({
-    onUp() {
+    onNavigatePrev() {
       navigatePrev(self)
     },
-    onDown() {
+    onNavigateNext() {
       navigateNext(self)
     },
     addBucket(model = {}) {
