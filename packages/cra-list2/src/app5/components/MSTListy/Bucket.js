@@ -4,8 +4,8 @@ import {renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
 import {dpFlexRow, system} from '../little-rebass'
 import {BucketItem} from './BucketItem'
-import {onModelBlur} from '../../mst/listy-stores/Root'
-import {onModelFocus} from '../../mst/listy-stores/Root'
+import {onModelBlur} from '../../mst/listy-stores/helpers'
+import {onModelFocus} from '../../mst/listy-stores/helpers'
 
 const BucketItems = observer(function BucketItems({bucket}) {
   return renderKeyedById(BucketItem, 'item', bucket.items)

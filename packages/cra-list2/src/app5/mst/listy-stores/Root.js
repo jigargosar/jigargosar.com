@@ -1,5 +1,5 @@
 import {applySnapshot2, modelNamed} from '../../little-mst'
-import {getRoot, getSnapshot, types} from 'mobx-state-tree'
+import {getSnapshot, types} from 'mobx-state-tree'
 import {dotPath, isNotNil} from '../../little-ramda'
 import * as R from 'ramda'
 import {
@@ -36,23 +36,3 @@ export const Root = modelNamed('Root')
       }
     },
   }))
-
-export function getSelectionManager(self) {
-  return getRoot(self).selectionManager
-}
-
-export function getDomain(self) {
-  return getRoot(self).domain
-}
-
-export function getEditManager(self) {
-  return getRoot(self).editManager
-}
-
-export function onModelFocus(m) {
-  return () => getRoot(m).selectionManager.onModelFocus(m)
-}
-
-export function onModelBlur(m) {
-  return () => getRoot(m).selectionManager.onModelBlur()
-}

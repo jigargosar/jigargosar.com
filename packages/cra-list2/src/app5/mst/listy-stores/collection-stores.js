@@ -9,7 +9,8 @@ import {
   withKeyEvent,
 } from '../../components/utils'
 import S from 'sanctuary'
-import {getDomain, getEditManager, getSelectionManager} from './Root'
+import {getEditManager} from './helpers'
+import {getDomain, getSelectionManager} from './helpers'
 
 function navigateToModel(m) {
   setFocusAndSelectionOnDOMId(m.id)
