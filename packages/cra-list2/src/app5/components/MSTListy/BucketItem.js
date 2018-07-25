@@ -47,12 +47,10 @@ const Input = system({
   css: {resize: 'none'},
 })
 
-const Editor = function Editor(props) {
+const InputWrapper = function InputWrapper({children}) {
   return (
     <FocusTrap className={cn('flex-auto flex')}>
-      <AutoSize>
-        <Input {...props} />
-      </AutoSize>
+      <AutoSize>{children}</AutoSize>
     </FocusTrap>
   )
 }
@@ -71,15 +69,17 @@ export const BucketItem = observer(function BucketItem({item}) {
       </Col>
       {item.isEditing ? (
         <Col flex={1}>
-          <Editor
-            id={item.inputDOMId}
-            // rows={1}
-            value={item.name}
-            // onBlur={item.onInputBlur}
-            onFocus={item.onInputFocus}
-            onChange={item.onInputChange}
-            onKeyDown={item.onInputKeyDown}
-          />
+          <InputWrapper>
+            <Input
+              id={item.inputDOMId}
+              // rows={1}
+              value={item.name}
+              // onBlur={item.onInputBlur}
+              onFocus={item.onInputFocus}
+              onChange={item.onInputChange}
+              onKeyDown={item.onInputKeyDown}
+            />
+          </InputWrapper>
         </Col>
       ) : (
         <Col flex={1}>
