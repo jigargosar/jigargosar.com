@@ -16,6 +16,7 @@ import {
 } from '../../components/utils'
 import assert from 'assert'
 import S from 'sanctuary'
+import {getIDTypeOfModel} from '../Model'
 
 function getSelectionManager(self) {
   return getRoot(self).selectionManager
@@ -69,7 +70,8 @@ const Dashboard = Model({
       return S.last(self.buckets)
     },
     get btnAddListDOMId() {
-      return `'add-list-button-${self.id}`
+      // return `'add-list-button-${self.id}`
+      return self.id
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent(
@@ -121,7 +123,8 @@ const Bucket = Model({
       )
     },
     get headerDOMId() {
-      return `bucket-header-${this.id}`
+      // return `bucket-header-${this.id}`
+      return self.id
     },
     get items() {
       return getItemCollection(self).whereEq({bucket: self})
@@ -410,3 +413,18 @@ export const Root = types
       }
     },
   }))
+
+if (module.hot) {
+  window.M = {
+    Item,
+    Bucket,
+    Dashboard,
+    Domain,
+    SelectionManager,
+    EditManager,
+    Root,
+  }
+  const models = [Item, Bucket, Dashboard]
+  const modelIDTypes = R.map(getIDTypeOfModel)(models)
+  console.log(types.union({}, ...modelIDTypes))
+}
