@@ -1,5 +1,5 @@
 import {getIDTypeOfModel, Model} from '../Model'
-import {getRoot, types} from 'mobx-state-tree'
+import {types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {modelNamed, optionalCollections} from '../../little-mst'
 import {maybeOr_, R} from '../../little-ramda'
@@ -10,14 +10,6 @@ import {
 } from '../../components/utils'
 import S from 'sanctuary'
 import {getDomain, getEditManager, getSelectionManager} from './Root'
-
-export function onModelFocus(m) {
-  return () => getRoot(m).selectionManager.onModelFocus(m)
-}
-
-export function onModelBlur(m) {
-  return () => getRoot(m).selectionManager.onModelBlur()
-}
 
 function navigateToModel(m) {
   setFocusAndSelectionOnDOMId(m.id)
