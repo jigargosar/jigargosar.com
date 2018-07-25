@@ -36,6 +36,9 @@ const Input = system({
   is: TextArea,
   flex: 1,
   colors: 'selected',
+  css: {
+    outline: 'none',
+  },
 })
 
 export const BucketItem = observer(function BucketItem({item}) {
@@ -55,9 +58,6 @@ export const BucketItem = observer(function BucketItem({item}) {
           <FocusTrap className={cn('flex-auto flex')}>
             <AutoSize>
               <Input
-                css={`
-                  outline: none;
-                `}
                 id={item.inputDOMId}
                 rows={1}
                 value={item.name}
