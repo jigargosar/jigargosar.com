@@ -19,12 +19,13 @@ const Container = system({
   ...dpFlexRow,
   pl: modularScale(0.5),
   py: 1,
-  width: 1,
+  // width: 1,
   tabIndex: 0,
   variant: 'default',
   lineHeight: 1.25,
   css: {overflow: 'hidden'},
 })
+Container.displayName = 'Container'
 
 const Title = system({
   css: preWrapCSS,
@@ -34,6 +35,7 @@ const ID = system({
   colors: 'dim',
   fontSize: 0,
 })
+ID.displayName = 'ID'
 
 export const BucketItemBtn = styled(Btn).attrs({
   pl: modularScale(0.5),
@@ -47,7 +49,7 @@ const Input = system({
   css: {resize: 'none'},
 })
 
-const Editor = function(props) {
+const Editor = function Editor(props) {
   return (
     <FocusTrap className={cn('flex-auto flex')}>
       <AutoSize>

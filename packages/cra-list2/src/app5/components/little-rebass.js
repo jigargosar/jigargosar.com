@@ -53,6 +53,7 @@ export const FlexRow = system({
   is: Box,
   ...dpFlexRow,
 })
+FlexRow.displayName = 'FlexRow'
 
 export const TextArea = system({
   is: 'textarea',
