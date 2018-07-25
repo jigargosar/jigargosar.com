@@ -9,10 +9,7 @@ import {
   withKeyEvent,
 } from '../../components/utils'
 import S from 'sanctuary'
-
-function getSelectionManager(self) {
-  return getRoot(self).selectionManager
-}
+import {getDomain, getEditManager, getSelectionManager} from './Root'
 
 export function onModelFocus(m) {
   return () => getRoot(m).selectionManager.onModelFocus(m)
@@ -234,10 +231,6 @@ const collectionProps = {
   dashboards: Collection(Dashboard),
 }
 
-function getDomain(self) {
-  return getRoot(self).domain
-}
-
 function getItemCollection(self) {
   return getDomain(self).items
 }
@@ -306,10 +299,6 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModelId = null
     },
   }))
-
-function getEditManager(self) {
-  return getRoot(self).editManager
-}
 
 function startEditing(self) {
   getEditManager(self).startEditing(self)
