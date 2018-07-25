@@ -16,6 +16,8 @@ import React from 'react'
 
 export const PreWrap = styled(Box)`
   white-space: pre-wrap;
+  overflow: hidden;
+  word-wrap: break-word;
 `
 export const BucketItemLayout = system({
   ...dpFlexRow,
@@ -25,6 +27,11 @@ export const BucketItemLayout = system({
   tabIndex: 0,
   variant: 'default',
   lineHeight: 1.25,
+  css: `
+  white-space: pre-wrap;
+  overflow: hidden;
+  word-wrap: break-word;
+`,
 })
 
 export const BucketItemBtn = styled(Btn).attrs({
@@ -36,6 +43,7 @@ const Input = system({
   is: TextArea,
   flex: 1,
   colors: 'selected',
+  css: {resize: 'none'},
 })
 
 export const BucketItem = observer(function BucketItem({item}) {
@@ -50,7 +58,15 @@ export const BucketItem = observer(function BucketItem({item}) {
       <FlexRow px={1} colors={'dim'} fontSize={0}>
         {item.id.slice(5, 8)}
       </FlexRow>
-      <FlexRow flex={'1'} mx={1}>
+      <FlexRow
+        flex={1}
+        mx={1}
+        css={`
+          overflow: hidden;
+          word-wrap: break-word;
+          white-space: pre-wrap;
+        `}
+      >
         {item.isEditing ? (
           <FocusTrap className={cn('flex-auto flex')}>
             <AutoSize>
