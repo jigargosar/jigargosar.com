@@ -41,6 +41,9 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
   }))
   .actions(self => ({
+    // afterCreate() {
+    //   addDisposer(self, onSnapshot(self, console.warn))
+    // },
     navigatePrev(model) {
       const flatNavIds = getFlatNavIds(model)
       const idx = R.indexOf(model.id)(flatNavIds)
