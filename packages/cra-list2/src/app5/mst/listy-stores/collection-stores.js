@@ -67,8 +67,10 @@ export const Bucket = Model({
   .views(self => ({
     get headerKeydownHandlers() {
       return withKeyEvent(
-        whenKeyPD('up')(self.onHeaderNavigatePrev),
-        whenKeyPD('down')(self.onHeaderNavigateNext),
+        ...[
+          whenKeyPD('up')(self.onHeaderNavigatePrev),
+          whenKeyPD('down')(self.onHeaderNavigateNext),
+        ],
         whenKeyPD('d')(self.onDelete),
         whenKeyPD('mod+enter')(self.onPrependItem),
         whenKeyPD('enter')(() => alert('enter')),
