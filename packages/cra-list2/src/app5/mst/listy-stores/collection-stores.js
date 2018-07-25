@@ -92,12 +92,10 @@ function navigateNext(model) {
   setFocusAndSelectionOnDOMId(flatNavIds[nextIdx])
 }
 
-function computeFlatNavIds(navModel) {
+function computeFlatNavIds(navModel, navChildren) {
   return [
     navModel.id,
-    ...R.compose(R.flatten, R.map(c => c.flatNavIds))(
-      navModel.navChildren,
-    ),
+    ...R.compose(R.flatten, R.map(c => c.flatNavIds))(navChildren),
   ]
 }
 
@@ -110,11 +108,8 @@ const Dashboard = Model({
         dashboard: self,
       })
     },
-    get navChildren() {
-      return self.buckets
-    },
     get flatNavIds() {
-      return computeFlatNavIds(self)
+      return computeFlatNavIds(self, self.buckets)
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent(
@@ -163,11 +158,8 @@ const Bucket = Model({
     get items() {
       return getItemCollection(self).whereEq({bucket: self})
     },
-    get navChildren() {
-      return self.items
-    },
     get flatNavIds() {
-      return computeFlatNavIds(self)
+      return computeFlatNavIds(self, self.items)
     },
 
     get firstItem() {
@@ -234,11 +226,8 @@ const Item = Model({
   attrs: {bucket: types.reference(Bucket)},
 })
   .views(self => ({
-    get navChildren() {
-      return []
-    },
     get flatNavIds() {
-      return computeFlatNavIds(self)
+      return computeFlatNavIds(self, [])
     },
 
     get inputDOMId() {
