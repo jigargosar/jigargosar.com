@@ -9,6 +9,7 @@ const collectionProps = {
   buckets: Collection(Bucket),
   dashboards: Collection(Dashboard),
 }
+
 export const Domain = modelNamed('Domain')
   .props(optionalCollections(collectionProps))
   .views(function(self) {
