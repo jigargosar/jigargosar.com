@@ -73,7 +73,9 @@ const Dashboard = Model({
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent(
-        whenKeyPD('up')(self.onHeaderNavigatePrev),
+        whenKeyPD('up')(() =>
+          navToLastItemOrHeadOfMaybeBucket(self.lastBucket),
+        ),
         whenKeyPD('down')(() =>
           navigateToMaybeBucketHeader(self.firstBucket),
         ),
@@ -94,6 +96,14 @@ const Dashboard = Model({
       setFocusAndSelectionOnDOMId(self.btnAddListDOMId)
     },
   }))
+
+function navToLastItemOrHeadOfMaybeBucket(bucket) {
+  return R.compose(
+    maybeOrElse(() => navigateToMaybeBucketHeader(bucket)),
+    S.map(R.tap(i => i.navigateTo())),
+    S.chain(b => b.lastItem),
+  )(bucket)
+}
 
 const Bucket = Model({
   name: 'Bucket',
@@ -165,13 +175,7 @@ const Bucket = Model({
       getDomain(self).deleteBucket(self)
     },
     onHeaderNavigatePrev() {
-      R.compose(
-        maybeOrElse(() =>
-          navigateToMaybeBucketHeader(self.prevBucket),
-        ),
-        S.map(R.tap(i => i.navigateTo())),
-        S.chain(b => b.lastItem),
-      )(self.prevBucket)
+      navToLastItemOrHeadOfMaybeBucket(self.prevBucket)
     },
     onHeaderNavigateNext() {
       R.compose(
