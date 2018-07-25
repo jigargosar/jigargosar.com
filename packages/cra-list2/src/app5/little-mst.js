@@ -50,3 +50,7 @@ export const mapSnapshot = _.map(getSnapshot)
 export const applySnapshot2 = _.curryN(2, applySnapshot)
 const optionalObj = T => types.optional(T, {})
 export const optionalCollections = R.map(optionalObj)
+
+if (module.hot) {
+  window.mst = require('mobx-state-tree')
+}
