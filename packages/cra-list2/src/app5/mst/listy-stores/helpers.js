@@ -23,3 +23,15 @@ export function navigatePrev(self) {
 export function navigateNext(self) {
   getSelectionManager(self).navigateNext(self)
 }
+
+export function startEditing(self) {
+  getEditManager(self).startEditing(self)
+}
+
+export function endEditing(self) {
+  getEditManager(self).endEditing(self)
+}
+
+export function isEditing(self) {
+  return getEditManager(self).isEditing(self)
+}

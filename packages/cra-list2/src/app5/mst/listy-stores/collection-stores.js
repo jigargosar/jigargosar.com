@@ -10,11 +10,13 @@ import {
 } from '../../components/utils'
 import S from 'sanctuary'
 import {
+  endEditing,
   getDomain,
-  getEditManager,
+  isEditing,
   navigateNext,
   navigatePrev,
   setSelectionToModel,
+  startEditing,
 } from './helpers'
 
 function computeFlatNavIds(navModel, navChildren) {
@@ -218,35 +220,3 @@ export const Domain = modelNamed('Domain')
       },
     }
   })
-
-function startEditing(self) {
-  getEditManager(self).startEditing(self)
-}
-
-function endEditing(self) {
-  getEditManager(self).endEditing(self)
-}
-
-function isEditing(self) {
-  return getEditManager(self).isEditing(self)
-}
-
-export const EditManager = modelNamed('EditManager')
-  .props({
-    _editId: types.maybeNull(types.string),
-  })
-  .views(self => ({
-    isEditing(ref) {
-      return self._editId === ref.id
-    },
-  }))
-  .actions(self => ({
-    startEditing(model) {
-      self._editId = model.id
-    },
-    endEditing(ref) {
-      if (self.isEditing(ref)) {
-        self._editId = null
-      }
-    },
-  }))
