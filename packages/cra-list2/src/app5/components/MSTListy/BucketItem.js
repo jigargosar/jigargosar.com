@@ -38,8 +38,6 @@ export const BucketItem = observer(function BucketItem({item}) {
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
-      // mx={-1}
-      // py={1}
       lineHeight={1.25}
     >
       <FlexRow mx={1}>
