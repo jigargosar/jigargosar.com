@@ -1,18 +1,14 @@
 import {Model} from '../Model'
 import {types} from 'mobx-state-tree'
-import {Collection} from '../Collection'
-import {modelNamed, optionalCollections} from '../../little-mst'
 import {R} from '../../little-ramda'
 import {
   setFocusAndSelectionOnDOMId,
   whenKeyPD,
   withKeyEvent,
 } from '../../components/utils'
-import S from 'sanctuary'
 import {
   endEditing,
   getBucketCollection,
-  getDashboardCollection,
   getDomain,
   getItemCollection,
   isEditing,
@@ -181,33 +177,3 @@ export const Item = Model({
       self.bucket.onAddItem()
     },
   }))
-
-const collectionProps = {
-  items: Collection(Item),
-  buckets: Collection(Bucket),
-  dashboards: Collection(Dashboard),
-}
-
-export const Domain = modelNamed('Domain')
-  .props(optionalCollections(collectionProps))
-  .views(function(self) {
-    return {
-      get currentDashboard() {
-        return S.head(getDashboardCollection(self).list)
-      },
-    }
-  })
-  .actions(function(self) {
-    return {
-      addDashboard(model = {}) {
-        return getDashboardCollection(self).add(model)
-      },
-      deleteBucket(b) {
-        self.items.deleteAll(b.items)
-        self.buckets.delete(b)
-      },
-      deleteItem(i) {
-        self.items.delete(i)
-      },
-    }
-  })
