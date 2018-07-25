@@ -36,9 +36,6 @@ const Input = system({
   is: TextArea,
   flex: 1,
   colors: 'selected',
-  css: {
-    outline: 'none',
-  },
 })
 
 export const BucketItem = observer(function BucketItem({item}) {
@@ -59,7 +56,7 @@ export const BucketItem = observer(function BucketItem({item}) {
             <AutoSize>
               <Input
                 id={item.inputDOMId}
-                rows={1}
+                // rows={1}
                 value={item.name}
                 // onBlur={item.onInputBlur}
                 onFocus={item.onInputFocus}

@@ -60,6 +60,10 @@ export const TextArea = system({
   p: 0,
   border: 'none',
   lineHeight: 'inherit',
+  css: {
+    outline: 'none',
+  },
+  rows: 1,
 })
 
 export const Btn = system({
