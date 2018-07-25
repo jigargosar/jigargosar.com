@@ -22,6 +22,14 @@ function getSelectionManager(self) {
   return getRoot(self).selectionManager
 }
 
+export function onModelFocus(m) {
+  return () => getRoot(m).selectionManager.onModelFocus(m)
+}
+
+export function onModelBlur(m) {
+  return () => getRoot(m).selectionManager.onModelBlur()
+}
+
 function getEditManager(self) {
   return getRoot(self).editManager
 }
@@ -75,16 +83,18 @@ const Dashboard = Model({
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent(
-        whenKeyPD('up')(() =>
-          navToLastItemOrHeadOfMaybeBucket(self.lastBucket),
-        ),
-        whenKeyPD('down')(() =>
-          navigateToMaybeBucketHeader(self.firstBucket),
-        ),
+        whenKeyPD('up')(self.onUp),
+        whenKeyPD('down')(self.onDown),
       )
     },
   }))
   .actions(self => ({
+    onUp() {
+      navToLastItemOrHeadOfMaybeBucket(self.lastBucket)
+    },
+    onDown() {
+      navigateToMaybeBucketHeader(self.firstBucket)
+    },
     addBucket(model = {}) {
       return getDomain(self).buckets.add({
         ...model,

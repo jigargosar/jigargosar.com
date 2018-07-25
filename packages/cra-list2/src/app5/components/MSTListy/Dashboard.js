@@ -8,6 +8,10 @@ import {lifecycle, rc} from '../little-recompose'
 import system from 'system-components'
 import styled from 'styled-components'
 import modularScale from 'polished/lib/helpers/modularScale'
+import {
+  onModelBlur,
+  onModelFocus,
+} from '../../mst/listy-stores/collection-stores'
 
 const Layout = system({
   is: Flex,
@@ -38,22 +42,26 @@ const BucketItemBtn = styled(Btn).attrs({
   width: 1,
 })``
 
-const Dashboard = focusItemOnMount(
-  observer(function Dashboard({dashboard}) {
-    return (
-      <Layout>
-        {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
-        <Panel>
-          <BucketItemBtn
-            id={dashboard.btnAddListDOMId}
-            onClick={() => dashboard.addBucket()}
-            children={'Add List'}
-            onKeyDown={dashboard.onBtnAddListKeyDown}
-          />
-        </Panel>
-      </Layout>
-    )
-  }),
+const Dashboard = observer(
+  focusItemOnMount(
+    observer(function Dashboard({dashboard}) {
+      return (
+        <Layout>
+          {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
+          <Panel>
+            <BucketItemBtn
+              id={dashboard.btnAddListDOMId}
+              onClick={() => dashboard.addBucket()}
+              children={'Add List'}
+              onKeyDown={dashboard.onBtnAddListKeyDown}
+              onFocus={onModelFocus(dashboard)}
+              onBlur={onModelBlur(dashboard)}
+            />
+          </Panel>
+        </Layout>
+      )
+    }),
+  ),
 )
 
 export {Dashboard}
