@@ -22,22 +22,6 @@ export function onModelBlur(m) {
   return () => getRoot(m).selectionManager.onModelBlur()
 }
 
-function getEditManager(self) {
-  return getRoot(self).editManager
-}
-
-function startEditing(self) {
-  getEditManager(self).startEditing(self)
-}
-
-function endEditing(self) {
-  getEditManager(self).endEditing(self)
-}
-
-function isEditing(self) {
-  return getEditManager(self).isEditing(self)
-}
-
 function navigateToModel(m) {
   setFocusAndSelectionOnDOMId(m.id)
 }
@@ -343,6 +327,22 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModelId = null
     },
   }))
+
+function getEditManager(self) {
+  return getRoot(self).editManager
+}
+
+function startEditing(self) {
+  getEditManager(self).startEditing(self)
+}
+
+function endEditing(self) {
+  getEditManager(self).endEditing(self)
+}
+
+function isEditing(self) {
+  return getEditManager(self).isEditing(self)
+}
 
 export const EditManager = modelNamed('EditManager')
   .props({
