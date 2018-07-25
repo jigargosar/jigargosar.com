@@ -52,11 +52,10 @@ export const BucketItem = observer(function BucketItem({item}) {
                 css={`
                   outline: none;
                 `}
+                colors={'selected'}
                 id={item.inputDOMId}
                 rows={1}
-                colors={'selected'}
                 value={item.name}
-                // lineHeight={1.25}
                 // onBlur={item.onInputBlur}
                 onFocus={item.onInputFocus}
                 onChange={item.onInputChange}
