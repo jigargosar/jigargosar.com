@@ -76,7 +76,7 @@ function getFlatNavIds(model) {
   return d.flatNavIds
 }
 
-function onNavUp(model) {
+function navigatePrev(model) {
   const flatNavIds = getFlatNavIds(model)
   const idx = R.indexOf(model.id)(flatNavIds)
   const prevIdx = idx === 0 ? flatNavIds.length - 1 : idx - 1
@@ -84,7 +84,7 @@ function onNavUp(model) {
   setFocusAndSelectionOnDOMId(flatNavIds[prevIdx])
 }
 
-function onNavDown(model) {
+function navigateNext(model) {
   const flatNavIds = getFlatNavIds(model)
   const idx = R.indexOf(model.id)(flatNavIds)
   const nextIdx = idx === flatNavIds.length - 1 ? 0 : idx + 1
@@ -116,17 +116,6 @@ const Dashboard = Model({
     get flatNavIds() {
       return computeFlatNavIds(self)
     },
-
-    get firstBucket() {
-      return S.head(self.buckets)
-    },
-    get lastBucket() {
-      return S.last(self.buckets)
-    },
-    get btnAddListDOMId() {
-      // return `'add-list-button-${self.id}`
-      return self.id
-    },
     get onBtnAddListKeyDown() {
       return withKeyEvent(
         whenKeyPD('up')(self.onUp),
@@ -136,11 +125,10 @@ const Dashboard = Model({
   }))
   .actions(self => ({
     onUp() {
-      onNavUp(self)
-      // navToLastItemOrHeadOfMaybeBucket(self.lastBucket)
+      navigatePrev(self)
     },
     onDown() {
-      onNavDown(self)
+      navigateNext(self)
     },
     addBucket(model = {}) {
       return getDomain(self).buckets.add({
@@ -150,9 +138,6 @@ const Dashboard = Model({
     },
     onMount() {
       getSelectionManager(self).onDashboardMount(self)
-    },
-    navigateToBtnAddList() {
-      setFocusAndSelectionOnDOMId(self.btnAddListDOMId)
     },
   }))
 
@@ -234,10 +219,10 @@ const Bucket = Model({
       getDomain(self).deleteBucket(self)
     },
     onHeaderNavigatePrev() {
-      onNavUp(self)
+      navigatePrev(self)
     },
     onHeaderNavigateNext() {
-      onNavDown(self)
+      navigateNext(self)
     },
     navigateToHeader() {
       setFocusAndSelectionOnDOMId(self.headerDOMId)
@@ -327,10 +312,10 @@ const Item = Model({
       getSelectionManager(self).onItemFocus(self)
     },
     onNavigatePrev() {
-      onNavUp(self)
+      navigatePrev(self)
     },
     onNavigateNext() {
-      onNavDown(self)
+      navigateNext(self)
     },
     onAppendSibling() {
       self.bucket.onAddItem()

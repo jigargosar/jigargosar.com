@@ -50,7 +50,7 @@ const Dashboard = observer(
           {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
           <Panel>
             <BucketItemBtn
-              id={dashboard.btnAddListDOMId}
+              id={dashboard.id}
               onClick={() => dashboard.addBucket()}
               children={'Add List'}
               onKeyDown={dashboard.onBtnAddListKeyDown}
