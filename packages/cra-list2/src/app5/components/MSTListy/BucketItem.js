@@ -2,8 +2,9 @@ import styled from 'styled-components'
 import {
   Box,
   Btn,
-  buttonStyle,
+  dpFlexRow,
   FlexRow,
+  system,
   TextArea,
 } from '../little-rebass'
 import modularScale from 'polished/lib/helpers/modularScale'
@@ -16,13 +17,19 @@ import React from 'react'
 export const PreWrap = styled(Box)`
   white-space: pre-wrap;
 `
-export const BucketItemLayout = styled(FlexRow).attrs({
+export const BucketItemLayout = system({
+  ...dpFlexRow,
   pl: modularScale(0.5),
+  py: 1,
   width: 1,
   tabIndex: 0,
-})`
-  ${buttonStyle};
-`
+})
+
+export const BucketItemBtn = styled(Btn).attrs({
+  pl: modularScale(0.5),
+  width: 1,
+})``
+
 export const BucketItem = observer(function BucketItem({item}) {
   return (
     <BucketItemLayout
@@ -31,8 +38,8 @@ export const BucketItem = observer(function BucketItem({item}) {
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
-      mx={-1}
-      py={1}
+      // mx={-1}
+      // py={1}
       lineHeight={1.25}
     >
       <FlexRow mx={1}>
@@ -67,7 +74,3 @@ export const BucketItem = observer(function BucketItem({item}) {
     </BucketItemLayout>
   )
 })
-export const BucketItemBtn = styled(Btn).attrs({
-  pl: modularScale(0.5),
-  width: 1,
-})``
