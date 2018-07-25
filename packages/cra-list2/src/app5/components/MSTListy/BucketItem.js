@@ -41,10 +41,8 @@ export const BucketItem = observer(function BucketItem({item}) {
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
     >
-      <FlexRow mx={1}>
-        <Box colors={'dim'} fontSize={0}>
-          {item.id.slice(5, 8)}
-        </Box>
+      <FlexRow px={1} colors={'dim'} fontSize={0}>
+        {item.id.slice(5, 8)}
       </FlexRow>
       <FlexRow flex={'1'} mx={1}>
         {item.isEditing ? (
