@@ -332,9 +332,13 @@ function modelNamed(name) {
   return types.model(name)
 }
 
+const models = [Item, Bucket, Dashboard]
+const modelIDTypes = R.map(getIDTypeOfModel)(models)
+const modelIDUnionType = types.union({}, ...modelIDTypes)
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedItem: types.maybeNull(types.reference(Item)),
+    _selectedModelId: types.maybeNull(modelIDUnionType),
   })
   .views(self => ({
     get selectedItem() {
@@ -356,9 +360,17 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     onItemFocus(item) {
       self.selectedItem = item
+      self.onModelFocus(item)
     },
     onItemBlur() {
       self.selectedItem = null
+      self.onModelBlur()
+    },
+    onModelFocus(m) {
+      self._selectedModelId = m.id
+    },
+    onModelBlur() {
+      self._selectedModelId = null
     },
   }))
 
@@ -424,7 +436,6 @@ if (module.hot) {
     EditManager,
     Root,
   }
-  const models = [Item, Bucket, Dashboard]
-  const modelIDTypes = R.map(getIDTypeOfModel)(models)
-  console.log(types.union({}, ...modelIDTypes))
+
+  // console.log(modelIDUnionType)
 }
