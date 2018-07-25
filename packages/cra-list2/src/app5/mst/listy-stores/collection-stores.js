@@ -161,15 +161,6 @@ const Bucket = Model({
     get flatNavIds() {
       return computeFlatNavIds(self, self.items)
     },
-
-    get siblings() {
-      return self.dashboard.buckets
-    },
-    get index() {
-      const index = R.indexOf(self, self.siblings)
-      assert(!isIndexOutOfBounds(index, self.siblings))
-      return index
-    },
   }))
   .actions(self => ({
     addItem(model) {
@@ -231,14 +222,6 @@ const Item = Model({
     },
     get isEditing() {
       return isEditing(self)
-    },
-    get siblings() {
-      return self.bucket.items
-    },
-    get index() {
-      const index = R.indexOf(self, self.siblings)
-      assert(!isIndexOutOfBounds(index, self.siblings))
-      return index
     },
   }))
   .actions(self => ({
