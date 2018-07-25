@@ -54,8 +54,8 @@ function navigateToModel(m) {
   setFocusAndSelectionOnDOMId(m.id)
 }
 
-function getFlatNavIds(model) {
-  const d = Dashboard.is(model)
+function getParentDashboard(model) {
+  return Dashboard.is(model)
     ? model
     : Bucket.is(model)
       ? model.dashboard
@@ -65,8 +65,10 @@ function getFlatNavIds(model) {
             console.error('Invalid Model', model)
             throw new Error('Invalid Model')
           })()
+}
 
-  return d.flatNavIds
+function getFlatNavIds(model) {
+  return getParentDashboard(model).flatNavIds
 }
 
 function navigatePrev(model) {
