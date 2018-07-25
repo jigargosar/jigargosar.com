@@ -1,7 +1,11 @@
 import {getIDTypeOfModel, Model} from '../Model'
 import {getRoot, getSnapshot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
-import {applySnapshot2, optionalCollections} from '../../little-mst'
+import {
+  applySnapshot2,
+  modelNamed,
+  optionalCollections,
+} from '../../little-mst'
 import {dotPath, isNotNil, maybeOr_, R} from '../../little-ramda'
 import {
   setFocusAndSelectionOnDOMId,
@@ -271,18 +275,8 @@ export const Domain = modelNamed('Domain')
       deleteItem(i) {
         self.items.delete(i)
       },
-      addMockData() {
-        self
-          .addDashboard()
-          .addBucket()
-          .addItem()
-      },
     }
   })
-
-function modelNamed(name) {
-  return types.model(name)
-}
 
 const models = [Item, Bucket, Dashboard]
 const modelIDTypes = R.map(getIDTypeOfModel)(models)
@@ -353,28 +347,30 @@ export const EditManager = modelNamed('EditManager')
     },
   }))
 
-export const Root = types
-  .model('Root')
+export const Root = modelNamed('Root')
   .props({
     domain: types.optional(Domain, {}),
     selectionManager: types.optional(SelectionManager, {}),
     editManager: types.optional(EditManager, {}),
   })
   .actions(self => ({
+    addMockData() {
+      self.domain
+        .addDashboard()
+        .addBucket()
+        .addItem()
+    },
     initModule(module) {
       if (module.hot) {
-        const root = self
-        window.r = root
-        const domain = getDomain(self)
-
+        window.r = self
         const snapKey = Root.name
         const snap = dotPath(`hot.data.${snapKey}`)(module)
-        R.ifElse(isNotNil)(applySnapshot2(root))(domain.addMockData)(
+        R.ifElse(isNotNil)(applySnapshot2(self))(self.addMockData)(
           snap,
         )
 
         module.hot.dispose(
-          data => (data[snapKey] = getSnapshot(root)),
+          data => (data[snapKey] = getSnapshot(self)),
         )
       }
     },

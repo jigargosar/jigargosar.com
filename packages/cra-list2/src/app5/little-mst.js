@@ -54,3 +54,7 @@ export const optionalCollections = R.map(optionalObj)
 if (module.hot) {
   window.mst = require('mobx-state-tree')
 }
+
+export function modelNamed(name) {
+  return types.model(name)
+}
