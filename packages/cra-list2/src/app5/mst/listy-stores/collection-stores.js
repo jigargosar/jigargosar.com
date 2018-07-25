@@ -1,4 +1,4 @@
-import {Model} from '../Model'
+import {getIDTypeOfModel, Model} from '../Model'
 import {getRoot, getSnapshot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
 import {applySnapshot2, optionalCollections} from '../../little-mst'
@@ -16,7 +16,6 @@ import {
 } from '../../components/utils'
 import assert from 'assert'
 import S from 'sanctuary'
-import {getIDTypeOfModel} from '../Model'
 
 function getSelectionManager(self) {
   return getRoot(self).selectionManager
@@ -62,6 +61,32 @@ function navigateToMaybeBucketHeader(maybeBucket) {
   return S.map(R.tap(b => b.navigateToHeader()))(maybeBucket)
 }
 
+function navigateToModel(m) {
+  setFocusAndSelectionOnDOMId(m.id)
+}
+
+const tapNavigateToModel = R.tap(navigateToModel)
+
+function onNavUp(model) {
+  if (Dashboard.is(model)) {
+    R.compose(
+      S.map(tapNavigateToModel),
+      maybeOrElse(() => S.last(model.navChildren)),
+      R.compose(S.chain(d => S.last(d.navChildren)), S.last),
+    )(model.navChildren)
+  } else {
+    debugger
+  }
+}
+
+function onNavDown(model) {
+  if (Dashboard.is(model)) {
+    S.map(tapNavigateToModel)(S.head(model.navChildren))
+  } else {
+    debugger
+  }
+}
+
 const Dashboard = Model({
   name: 'Dashboard',
 })
@@ -97,10 +122,12 @@ const Dashboard = Model({
   }))
   .actions(self => ({
     onUp() {
-      navToLastItemOrHeadOfMaybeBucket(self.lastBucket)
+      onNavUp(self)
+      // navToLastItemOrHeadOfMaybeBucket(self.lastBucket)
     },
     onDown() {
-      navigateToMaybeBucketHeader(self.firstBucket)
+      onNavDown(self)
+      // navigateToMaybeBucketHeader(self.firstBucket)
     },
     addBucket(model = {}) {
       return getDomain(self).buckets.add({
@@ -365,6 +392,7 @@ function modelNamed(name) {
 const models = [Item, Bucket, Dashboard]
 const modelIDTypes = R.map(getIDTypeOfModel)(models)
 const modelIDUnionType = types.union({}, ...modelIDTypes)
+
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedItem: types.maybeNull(types.reference(Item)),
@@ -380,7 +408,7 @@ export const SelectionManager = modelNamed('SelectionManager')
   }))
   .actions(self => ({
     selectItem(i) {
-      setFocusAndSelectionOnDOMId(i.id)
+      navigateToModel(i)
     },
     onDashboardMount(d) {
       R.compose(
