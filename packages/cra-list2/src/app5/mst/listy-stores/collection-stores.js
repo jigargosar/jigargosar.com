@@ -38,22 +38,6 @@ function isEditing(self) {
   return getEditManager(self).isEditing(self)
 }
 
-function getDomain(self) {
-  return getRoot(self).domain
-}
-
-function getItemCollection(self) {
-  return getDomain(self).items
-}
-
-function getDashboardCollection(self) {
-  return getDomain(self).dashboards
-}
-
-function getBucketCollection(self) {
-  return getDomain(self).buckets
-}
-
 function navigateToModel(m) {
   setFocusAndSelectionOnDOMId(m.id)
 }
@@ -264,6 +248,22 @@ const collectionProps = {
   items: Collection(Item),
   buckets: Collection(Bucket),
   dashboards: Collection(Dashboard),
+}
+
+function getDomain(self) {
+  return getRoot(self).domain
+}
+
+function getItemCollection(self) {
+  return getDomain(self).items
+}
+
+function getDashboardCollection(self) {
+  return getDomain(self).dashboards
+}
+
+function getBucketCollection(self) {
+  return getDomain(self).buckets
 }
 
 export const Domain = modelNamed('Domain')
