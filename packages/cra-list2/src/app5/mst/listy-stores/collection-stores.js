@@ -1,12 +1,8 @@
 import {getIDTypeOfModel, Model} from '../Model'
-import {getRoot, getSnapshot, types} from 'mobx-state-tree'
+import {getRoot, types} from 'mobx-state-tree'
 import {Collection} from '../Collection'
-import {
-  applySnapshot2,
-  modelNamed,
-  optionalCollections,
-} from '../../little-mst'
-import {dotPath, isNotNil, maybeOr_, R} from '../../little-ramda'
+import {modelNamed, optionalCollections} from '../../little-mst'
+import {maybeOr_, R} from '../../little-ramda'
 import {
   setFocusAndSelectionOnDOMId,
   whenKeyPD,
@@ -343,35 +339,6 @@ export const EditManager = modelNamed('EditManager')
     endEditing(ref) {
       if (self.isEditing(ref)) {
         self._editId = null
-      }
-    },
-  }))
-
-export const Root = modelNamed('Root')
-  .props({
-    domain: types.optional(Domain, {}),
-    selectionManager: types.optional(SelectionManager, {}),
-    editManager: types.optional(EditManager, {}),
-  })
-  .actions(self => ({
-    addMockData() {
-      self.domain
-        .addDashboard()
-        .addBucket()
-        .addItem()
-    },
-    initModule(module) {
-      if (module.hot) {
-        window.r = self
-        const snapKey = Root.name
-        const snap = dotPath(`hot.data.${snapKey}`)(module)
-        R.ifElse(isNotNil)(applySnapshot2(self))(self.addMockData)(
-          snap,
-        )
-
-        module.hot.dispose(
-          data => (data[snapKey] = getSnapshot(self)),
-        )
       }
     },
   }))

@@ -1,4 +1,4 @@
-import {Root} from './collection-stores'
+import {Root} from './Root'
 import {setLivelynessChecking} from 'mobx-state-tree'
 
 setLivelynessChecking('warn')
