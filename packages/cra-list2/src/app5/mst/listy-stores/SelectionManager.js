@@ -35,6 +35,11 @@ export const SelectionManager = modelNamed('SelectionManager')
       types.union(...R.map(m => types.reference(m))(models)),
     ),
   })
+  .views(self => ({
+    get selectedModel() {
+      return S.toMaybe(self._selectedModelRef)
+    },
+  }))
   .actions(self => ({
     navigatePrev(model) {
       const flatNavIds = getFlatNavIds(model)
@@ -49,6 +54,13 @@ export const SelectionManager = modelNamed('SelectionManager')
       const nextIdx = idx === flatNavIds.length - 1 ? 0 : idx + 1
 
       self.setSelectionToModelId(flatNavIds[nextIdx])
+    },
+
+    maybeNavigateNext() {
+      S.map(self.navigateNext)(self.selectedModel)
+    },
+    maybeNavigatePrev() {
+      S.map(self.navigatePrev)(self.selectedModel)
     },
 
     setSelectionToModel(model) {

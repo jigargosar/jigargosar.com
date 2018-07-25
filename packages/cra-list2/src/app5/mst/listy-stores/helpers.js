@@ -17,11 +17,11 @@ export function setSelectionToModel(self) {
 }
 
 export function navigatePrev(self) {
-  getSelectionManager(self).navigatePrev(self)
+  // getSelectionManager(self).navigatePrev(self)
 }
 
 export function navigateNext(self) {
-  getSelectionManager(self).navigateNext(self)
+  // getSelectionManager(self).navigateNext(self)
 }
 
 export function startEditing(self) {
