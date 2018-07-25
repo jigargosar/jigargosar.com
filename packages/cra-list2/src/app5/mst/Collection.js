@@ -7,7 +7,6 @@ import {
   filter,
   reject,
   find,
-  compose,
   map,
   forEach,
 } from 'ramda'
