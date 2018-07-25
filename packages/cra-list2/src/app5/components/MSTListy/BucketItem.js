@@ -14,12 +14,13 @@ import {cn} from '../utils'
 import {AutoSize} from '../lib/AutoSize'
 import React from 'react'
 
+const preWrapCSS = {
+  whiteSpace: 'pre-wrap',
+  overflow: 'hidden',
+  wordWrap: 'break-word',
+}
 export const PreWrap = system({
-  css: {
-    whiteSpace: 'pre-wrap',
-    overflow: 'hidden',
-    wordWrap: 'break-word',
-  },
+  css: preWrapCSS,
 })
 
 export const BucketItemLayout = system({
@@ -30,11 +31,7 @@ export const BucketItemLayout = system({
   tabIndex: 0,
   variant: 'default',
   lineHeight: 1.25,
-  css: `
-  white-space: pre-wrap;
-  overflow: hidden;
-  word-wrap: break-word;
-`,
+  css: preWrapCSS,
 })
 
 export const BucketItemBtn = styled(Btn).attrs({
@@ -61,15 +58,7 @@ export const BucketItem = observer(function BucketItem({item}) {
       <FlexRow px={1} colors={'dim'} fontSize={0}>
         {item.id.slice(5, 8)}
       </FlexRow>
-      <FlexRow
-        flex={1}
-        mx={1}
-        css={`
-          overflow: hidden;
-          word-wrap: break-word;
-          white-space: pre-wrap;
-        `}
-      >
+      <FlexRow flex={1} mx={1} css={preWrapCSS}>
         {item.isEditing ? (
           <FocusTrap className={cn('flex-auto flex')}>
             <AutoSize>
