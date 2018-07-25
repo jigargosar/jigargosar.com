@@ -14,7 +14,6 @@ import {
   getEditManager,
   getSelectionManager,
 } from './helpers'
-import {onDashboardMount} from './view-helpers'
 
 function setSelectionToModel(self) {
   getSelectionManager(self).setSelectionToModel(self)
@@ -91,9 +90,6 @@ const Dashboard = Model({
         ...model,
         dashboard: self,
       })
-    },
-    onMount() {
-      onDashboardMount(self)
     },
   }))
 

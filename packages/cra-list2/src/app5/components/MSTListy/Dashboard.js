@@ -8,8 +8,11 @@ import {lifecycle, rc} from '../little-recompose'
 import system from 'system-components'
 import styled from 'styled-components'
 import modularScale from 'polished/lib/helpers/modularScale'
-import {onModelBlur} from '../../mst/listy-stores/view-helpers'
-import {onModelFocus} from '../../mst/listy-stores/view-helpers'
+import {
+  onModelBlur,
+  onModelFocus,
+  restoreFocusOnSelectedModelOnDashboardMount,
+} from '../../mst/listy-stores/view-helpers'
 
 const Layout = system({
   is: Flex,
@@ -30,8 +33,7 @@ const BucketPanel = rc.nest(Panel, Bucket)
 
 const restoreFocusOnSelectedModelOnMount = lifecycle({
   componentDidMount() {
-    console.debug('this.props.dashboard.onMount()')
-    this.props.dashboard.onMount()
+    restoreFocusOnSelectedModelOnDashboardMount(this.props.dashboard)
   },
 })
 
@@ -40,26 +42,24 @@ const BucketItemBtn = styled(Btn).attrs({
   width: 1,
 })``
 
-const Dashboard = observer(
-  restoreFocusOnSelectedModelOnMount(
-    observer(function Dashboard({dashboard}) {
-      return (
-        <Layout>
-          {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
-          <Panel>
-            <BucketItemBtn
-              id={dashboard.id}
-              onClick={() => dashboard.addBucket()}
-              children={'Add List'}
-              onKeyDown={dashboard.onBtnAddListKeyDown}
-              onFocus={onModelFocus(dashboard)}
-              onBlur={onModelBlur(dashboard)}
-            />
-          </Panel>
-        </Layout>
-      )
-    }),
-  ),
+const Dashboard = restoreFocusOnSelectedModelOnMount(
+  observer(function Dashboard({dashboard}) {
+    return (
+      <Layout>
+        {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
+        <Panel>
+          <BucketItemBtn
+            id={dashboard.id}
+            onClick={() => dashboard.addBucket()}
+            children={'Add List'}
+            onKeyDown={dashboard.onBtnAddListKeyDown}
+            onFocus={onModelFocus(dashboard)}
+            onBlur={onModelBlur(dashboard)}
+          />
+        </Panel>
+      </Layout>
+    )
+  }),
 )
 
 export {Dashboard}

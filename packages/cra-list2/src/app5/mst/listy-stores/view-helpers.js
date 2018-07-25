@@ -8,6 +8,8 @@ export function onModelBlur(model) {
   return () => getSelectionManager(model).onModelBlur()
 }
 
-export function onDashboardMount(dashboard) {
+export function restoreFocusOnSelectedModelOnDashboardMount(
+  dashboard,
+) {
   getSelectionManager(dashboard).onDashboardMount(dashboard)
 }
