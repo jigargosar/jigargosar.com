@@ -27,7 +27,6 @@ export const BucketItem = observer(function BucketItem({item}) {
   return (
     <BucketItemLayout
       id={item.id}
-      // colors={item.isEditing ? 'selected' : 'default'}
       variant={item.isEditing ? 'selected' : 'default'}
       onFocus={item.onFocus}
       onBlur={item.onBlur}

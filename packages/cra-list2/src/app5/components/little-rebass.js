@@ -92,6 +92,7 @@ function createDarkTheme() {
     outline: 'none',
   }
 
+  const selectedBGColor = '#214283'
   const theme = {
     ...defaultTheme,
     colorStyles: {
@@ -101,11 +102,7 @@ function createDarkTheme() {
       },
       selected: {
         color: white,
-        backgroundColor: '#214283',
-      },
-      default: {
-        color: white,
-        outline: 'none',
+        backgroundColor: selectedBGColor,
       },
       dimBorder: {
         borderColor: transparentize(0.9, white),
@@ -127,12 +124,12 @@ function createDarkTheme() {
           backgroundColor: lighten(0.05, black),
         },
         '&:focus': {
-          backgroundColor: '#214283',
+          backgroundColor: selectedBGColor,
         },
       },
       selected: {
         ...baseButton,
-        backgroundColor: '#214283',
+        backgroundColor: selectedBGColor,
       },
     },
     fonts: {
