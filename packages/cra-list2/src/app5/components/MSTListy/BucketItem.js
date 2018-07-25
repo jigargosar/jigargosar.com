@@ -23,6 +23,7 @@ export const BucketItemLayout = system({
   py: 1,
   width: 1,
   tabIndex: 0,
+  variant: 'default',
 })
 
 export const BucketItemBtn = styled(Btn).attrs({
