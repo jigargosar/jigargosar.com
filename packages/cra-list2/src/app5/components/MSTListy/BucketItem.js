@@ -24,6 +24,7 @@ export const BucketItemLayout = system({
   width: 1,
   tabIndex: 0,
   variant: 'default',
+  lineHeight: 1.25,
 })
 
 export const BucketItemBtn = styled(Btn).attrs({
@@ -39,10 +40,9 @@ export const BucketItem = observer(function BucketItem({item}) {
       onFocus={item.onFocus}
       onBlur={item.onBlur}
       onKeyDown={item.onLIKeydown}
-      lineHeight={1.25}
     >
       <FlexRow mx={1}>
-        <Box lineHeight={2} colors={'dim'} fontSize={0}>
+        <Box colors={'dim'} fontSize={0}>
           {item.id.slice(5, 8)}
         </Box>
       </FlexRow>
