@@ -2,9 +2,16 @@ import {types} from 'mobx-state-tree'
 import {mValues} from '../mobx/little-mobx'
 import {modelNamed} from '../little-mst'
 import * as R from 'ramda'
-import validate from '../vendor/aproba'
+
+const deleteKey = R.curry((key, map) => map.delete(key))
 
 export function Collection(Model) {
+  function createModel(snap) {
+    return Model.create(snap)
+  }
+
+  const put = R.curry((model, map) => map.put(model))
+
   return modelNamed(`${Model.name}Collection`)
     .props({
       lookup: types.map(Model),
@@ -30,16 +37,10 @@ export function Collection(Model) {
       },
     }))
     .actions(self => ({
-      add: model => self.lookup.put(Model.create(model)),
-      addAll(models) {
-        validate('A', [models])
-        return R.map(self.add)(models)
-      },
-      delete(model) {
-        self.lookup.delete(model.id)
-      },
-      deleteAll(models) {
-        R.forEach(self.delete)(models)
-      },
+      add: R.compose(put(R.__, self.lookup), createModel),
+      addAll: R.map(self.add),
+      deleteId: deleteKey(R.__, self.lookup),
+      delete: R.compose(self.deleteId, R.prop('id')),
+      deleteAll: R.forEach(self.delete),
     }))
 }
