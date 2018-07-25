@@ -12,8 +12,8 @@ import S from 'sanctuary'
 import {getEditManager} from './helpers'
 import {getDomain, getSelectionManager} from './helpers'
 
-function navigateToModel(m) {
-  setFocusAndSelectionOnDOMId(m.id)
+function setSelectionToModel(self) {
+  getSelectionManager(self).setSelectionToModel(self)
 }
 
 function getParentDashboard(model) {
@@ -130,7 +130,7 @@ const Bucket = Model({
       })
     },
     onAddItem() {
-      navigateToModel(self.addItem())
+      setSelectionToModel(self.addItem())
     },
     onPrependItem() {
       self.onAddItem()
@@ -199,7 +199,7 @@ const Item = Model({
       endEditing(self)
     },
     onInputFocus() {
-      getSelectionManager(self).onItemFocus(self)
+      setSelectionToModel(self)
     },
     onNavigatePrev() {
       navigatePrev(self)
@@ -263,18 +263,19 @@ export const SelectionManager = modelNamed('SelectionManager')
     _selectedModelId: types.maybeNull(modelIDUnionType),
   })
   .actions(self => ({
+    setSelectionToModel(model) {
+      self.setSelectionToModelId(model.id)
+    },
+    setSelectionToModelId(id) {
+      self._selectedModelId = id
+      setFocusAndSelectionOnDOMId(id)
+    },
     onDashboardMount(d) {
       R.compose(
         setFocusAndSelectionOnDOMId,
         maybeOr_(() => R.compose(R.last, R.take(3))(d.flatNavIds)),
         S.toMaybe,
       )(self._selectedModelId)
-    },
-    onItemFocus(item) {
-      self.onModelFocus(item)
-    },
-    onItemBlur() {
-      self.onModelBlur()
     },
     onModelFocus(m) {
       self._selectedModelId = m.id
