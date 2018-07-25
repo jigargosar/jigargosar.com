@@ -61,6 +61,12 @@ const Dashboard = Model({
     get addListButtonDOMId() {
       return `'add-list-button-${self.id}`
     },
+    get onAddListBtnKeyDown() {
+      return withKeyEvent(
+        whenKeyPD('up')(self.onHeaderNavigatePrev),
+        whenKeyPD('down')(self.onHeaderNavigateNext),
+      )
+    },
   }))
   .actions(self => ({
     addBucket(model = {}) {
@@ -108,6 +114,9 @@ const Bucket = Model({
     get firstItem() {
       return S.head(self.items)
     },
+    get lastItem() {
+      return S.last(self.items)
+    },
     get siblings() {
       return self.dashboard.buckets
     },
@@ -151,7 +160,11 @@ const Bucket = Model({
       getDomain(self).deleteBucket(self)
     },
     onHeaderNavigatePrev() {
-      S.map(R.tap(b => b.navigateToHeader()))(self.prevBucket)
+      R.compose(
+        maybeOrElse(() => self.navigateToPrevBucketHeader()),
+        S.map(R.tap(i => i.navigateTo())),
+        S.chain(b => b.lastItem),
+      )(self.prevBucket)
     },
     onHeaderNavigateNext() {
       R.compose(
@@ -161,6 +174,9 @@ const Bucket = Model({
     },
     navigateToNextBucketHeader() {
       S.map(R.tap(b => b.navigateToHeader()))(self.nextBucket)
+    },
+    navigateToPrevBucketHeader() {
+      S.map(R.tap(b => b.navigateToHeader()))(self.prevBucket)
     },
     navigateToHeader() {
       setFocusAndSelectionOnDOMId(self.headerDOMId)
