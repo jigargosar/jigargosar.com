@@ -195,12 +195,6 @@ const Item = Model({
     onDelete() {
       getDomain(self).deleteItem(self)
     },
-    onFocus() {
-      getSelectionManager(self).onItemFocus(self)
-    },
-    onBlur() {
-      getSelectionManager(self).onItemBlur()
-    },
     onInputBlur() {
       endEditing(self)
     },
