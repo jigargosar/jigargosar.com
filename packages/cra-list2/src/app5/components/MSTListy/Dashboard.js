@@ -8,8 +8,8 @@ import {lifecycle, rc} from '../little-recompose'
 import system from 'system-components'
 import styled from 'styled-components'
 import modularScale from 'polished/lib/helpers/modularScale'
-import {onModelBlur} from '../../mst/listy-stores/helpers'
-import {onModelFocus} from '../../mst/listy-stores/helpers'
+import {onModelBlur} from '../../mst/listy-stores/view-helpers'
+import {onModelFocus} from '../../mst/listy-stores/view-helpers'
 
 const Layout = system({
   is: Flex,
