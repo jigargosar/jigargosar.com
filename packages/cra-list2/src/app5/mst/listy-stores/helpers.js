@@ -16,14 +16,6 @@ export function setSelectionToModel(self) {
   getSelectionManager(self).setSelectionToModel(self)
 }
 
-export function navigatePrev(self) {
-  // getSelectionManager(self).navigatePrev(self)
-}
-
-export function navigateNext(self) {
-  // getSelectionManager(self).navigateNext(self)
-}
-
 export function startEditing(self) {
   getEditManager(self).startEditing(self)
 }

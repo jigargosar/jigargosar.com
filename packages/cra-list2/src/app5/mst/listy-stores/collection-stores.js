@@ -12,8 +12,6 @@ import {
   getDomain,
   getItemCollection,
   isEditing,
-  navigateNext,
-  navigatePrev,
   setSelectionToModel,
   startEditing,
 } from './helpers'
@@ -39,19 +37,10 @@ export const Dashboard = Model({
       return computeFlatNavIds(self, self.buckets)
     },
     get onBtnAddListKeyDown() {
-      return withKeyEvent(
-        whenKeyPD('up')(self.onNavigatePrev),
-        whenKeyPD('down')(self.onNavigateNext),
-      )
+      return withKeyEvent()
     },
   }))
   .actions(self => ({
-    onNavigatePrev() {
-      navigatePrev(self)
-    },
-    onNavigateNext() {
-      navigateNext(self)
-    },
     addBucket(model = {}) {
       return getBucketCollection(self).add({
         ...model,
@@ -67,10 +56,6 @@ export const Bucket = Model({
   .views(self => ({
     get headerKeydownHandlers() {
       return withKeyEvent(
-        ...[
-          whenKeyPD('up')(() => navigatePrev(self)),
-          whenKeyPD('down')(() => navigateNext(self)),
-        ],
         whenKeyPD('d')(self.onDelete),
         whenKeyPD('mod+enter')(self.onPrependItem),
         whenKeyPD('enter')(() => alert('enter')),
@@ -107,12 +92,6 @@ export const Bucket = Model({
     onDelete() {
       getDomain(self).deleteBucket(self)
     },
-    onHeaderNavigatePrev() {
-      navigatePrev(self)
-    },
-    onHeaderNavigateNext() {
-      navigateNext(self)
-    },
   }))
 
 export const Item = Model({
@@ -128,8 +107,6 @@ export const Item = Model({
     },
     get onItemKeydown() {
       return withKeyEvent(
-        whenKeyPD('up')(self.onNavigatePrev),
-        whenKeyPD('down')(self.onNavigateNext),
         whenKeyPD('mod+enter')(self.onAppendSibling),
         whenKeyPD('d')(self.onDelete),
         whenKeyPD('enter')(self.onStartEditing),
@@ -168,13 +145,7 @@ export const Item = Model({
       endEditing(self)
     },
     onInputFocus() {
-      setSelectionToModel(self)
-    },
-    onNavigatePrev() {
-      navigatePrev(self)
-    },
-    onNavigateNext() {
-      navigateNext(self)
+      // setSelectionToModel(self)
     },
     onAppendSibling() {
       self.bucket.onAddItem()
