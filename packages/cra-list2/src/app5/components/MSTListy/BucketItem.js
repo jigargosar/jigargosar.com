@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import {
-  Box,
   Btn,
   dpFlexRow,
   FlexRow,
+  preWrapCSS,
   system,
   TextArea,
 } from '../little-rebass'
@@ -14,15 +14,6 @@ import {cn} from '../utils'
 import {AutoSize} from '../lib/AutoSize'
 import React from 'react'
 
-const preWrapCSS = {
-  whiteSpace: 'pre-wrap',
-  overflow: 'hidden',
-  wordWrap: 'break-word',
-}
-export const PreWrap = system({
-  css: preWrapCSS,
-})
-
 const Container = system({
   ...dpFlexRow,
   pl: modularScale(0.5),
@@ -31,6 +22,10 @@ const Container = system({
   tabIndex: 0,
   variant: 'default',
   lineHeight: 1.25,
+  css: preWrapCSS,
+})
+
+const Title = system({
   css: preWrapCSS,
 })
 
@@ -53,6 +48,16 @@ const Input = system({
   css: {resize: 'none'},
 })
 
+const Editor = function(props) {
+  return (
+    <FocusTrap className={cn('flex-auto flex')}>
+      <AutoSize>
+        <Input {...props} />
+      </AutoSize>
+    </FocusTrap>
+  )
+}
+
 export const BucketItem = observer(function BucketItem({item}) {
   return (
     <Container
@@ -65,21 +70,17 @@ export const BucketItem = observer(function BucketItem({item}) {
       <ID>{item.id.slice(5, 8)}</ID>
       <FlexRow flex={1} mx={1} css={preWrapCSS}>
         {item.isEditing ? (
-          <FocusTrap className={cn('flex-auto flex')}>
-            <AutoSize>
-              <Input
-                id={item.inputDOMId}
-                // rows={1}
-                value={item.name}
-                // onBlur={item.onInputBlur}
-                onFocus={item.onInputFocus}
-                onChange={item.onInputChange}
-                onKeyDown={item.onInputKeyDown}
-              />
-            </AutoSize>
-          </FocusTrap>
+          <Editor
+            id={item.inputDOMId}
+            // rows={1}
+            value={item.name}
+            // onBlur={item.onInputBlur}
+            onFocus={item.onInputFocus}
+            onChange={item.onInputChange}
+            onKeyDown={item.onInputKeyDown}
+          />
         ) : (
-          <PreWrap>{item.name || 'I am a hard core TODo'}</PreWrap>
+          <Title>{item.name || 'I am a hard core TODo'}</Title>
         )}
       </FlexRow>
     </Container>
