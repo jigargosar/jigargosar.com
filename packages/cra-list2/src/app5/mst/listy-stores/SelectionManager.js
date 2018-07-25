@@ -31,6 +31,9 @@ function getFlatNavIds(model) {
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedModelId: types.maybeNull(modelIDUnionType),
+    _selectedModelRef: types.maybeNull(
+      types.union(...R.map(m => types.reference(m))(models)),
+    ),
   })
   .actions(self => ({
     navigatePrev(model) {
@@ -49,6 +52,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
 
     setSelectionToModel(model) {
+      self._selectedModelRef = model
       self.setSelectionToModelId(model.id)
     },
     setSelectionToModelId(id) {
@@ -64,8 +68,10 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     onModelFocus(m) {
       self._selectedModelId = m.id
+      self._selectedModelRef = m
     },
     onModelBlur() {
       self._selectedModelId = null
+      self._selectedModelRef = null
     },
   }))
