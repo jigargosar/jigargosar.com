@@ -50,6 +50,10 @@ function getDashboardCollection(self) {
   return getDomain(self).dashboards
 }
 
+function getBucketCollection(self) {
+  return getDomain(self).buckets
+}
+
 function navigateToModel(m) {
   setFocusAndSelectionOnDOMId(m.id)
 }
@@ -121,7 +125,7 @@ const Dashboard = Model({
       navigateNext(self)
     },
     addBucket(model = {}) {
-      return getDomain(self).buckets.add({
+      return getBucketCollection(self).add({
         ...model,
         dashboard: self,
       })
