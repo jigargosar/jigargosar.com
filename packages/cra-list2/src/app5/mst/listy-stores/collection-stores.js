@@ -6,7 +6,7 @@ import {
   dotPath,
   isIndexOutOfBounds,
   isNotNil,
-  maybeOrElse,
+  maybeOr_,
   R,
 } from '../../little-ramda'
 import {
@@ -57,15 +57,9 @@ function getDashboardCollection(self) {
   return getDomain(self).dashboards
 }
 
-function navigateToMaybeBucketHeader(maybeBucket) {
-  return S.map(R.tap(b => b.navigateToHeader()))(maybeBucket)
-}
-
 function navigateToModel(m) {
   setFocusAndSelectionOnDOMId(m.id)
 }
-
-// const tapNavigateToModel = R.tap(navigateToModel)
 
 function getFlatNavIds(model) {
   const d = Dashboard.is(model)
@@ -147,7 +141,6 @@ const Dashboard = Model({
     },
     onDown() {
       onNavDown(self)
-      // navigateToMaybeBucketHeader(self.firstBucket)
     },
     addBucket(model = {}) {
       return getDomain(self).buckets.add({
@@ -162,14 +155,6 @@ const Dashboard = Model({
       setFocusAndSelectionOnDOMId(self.btnAddListDOMId)
     },
   }))
-
-// function navToLastItemOrHeadOfMaybeBucket(maybeBucket) {
-//   return R.compose(
-//     maybeOrElse(() => navigateToMaybeBucketHeader(maybeBucket)),
-//     S.map(R.tap(i => i.navigateTo())),
-//     S.chain(b => b.lastItem),
-//   )(maybeBucket)
-// }
 
 const Bucket = Model({
   name: 'Bucket',
@@ -250,21 +235,9 @@ const Bucket = Model({
     },
     onHeaderNavigatePrev() {
       onNavUp(self)
-      // maybeOrElse(() => self.dashboard.navigateToBtnAddList())(
-      //   navToLastItemOrHeadOfMaybeBucket(self.prevBucket),
-      // )
     },
     onHeaderNavigateNext() {
       onNavDown(self)
-      // R.compose(
-      //   maybeOrElse(() => self.navigateToNextBucketHeader()),
-      //   S.map(R.tap(i => i.navigateTo())),
-      // )(self.firstItem)
-    },
-    navigateToNextBucketHeader() {
-      maybeOrElse(() => self.dashboard.navigateToBtnAddList())(
-        navigateToMaybeBucketHeader(self.nextBucket),
-      )
     },
     navigateToHeader() {
       setFocusAndSelectionOnDOMId(self.headerDOMId)
@@ -354,19 +327,9 @@ const Item = Model({
       getSelectionManager(self).onItemFocus(self)
     },
     onNavigatePrev() {
-      // if (self.isFirst) {
-      //   self.bucket.navigateToHeader()
-      // } else {
-      //   self.siblings[self.index - 1].navigateTo()
-      // }
       onNavUp(self)
     },
     onNavigateNext() {
-      // if (self.isLast) {
-      //   self.bucket.navigateToNextBucketHeader()
-      // } else {
-      //   self.siblings[self.index + 1].navigateTo()
-      // }
       onNavDown(self)
     },
     onAppendSibling() {
@@ -437,9 +400,10 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     onDashboardMount(d) {
       R.compose(
-        S.map(R.tap(self.selectItem)),
-        maybeOrElse(() => S.chain(b => b.firstItem)(d.firstBucket)),
-      )(self.selectedItem)
+        setFocusAndSelectionOnDOMId,
+        maybeOr_(() => R.compose(R.last, R.take(3))(d.flatNavIds)),
+        S.toMaybe,
+      )(self._selectedModelId)
     },
     onItemFocus(item) {
       self.selectedItem = item
@@ -494,6 +458,7 @@ export const Root = types
     initModule(module) {
       if (module.hot) {
         const root = self
+        window.r = root
         const domain = getDomain(self)
 
         const snapKey = Root.name
