@@ -266,18 +266,18 @@ const Item = Model({
     onInputFocus() {
       getSelectionManager(self).onItemFocus(self)
     },
-    onNavigateNext() {
-      if (self.isLast) {
-        self.bucket.navigateToNextBucketHeader()
-      } else {
-        self.siblings[self.index + 1].navigateTo()
-      }
-    },
     onNavigatePrev() {
       if (self.isFirst) {
         self.bucket.navigateToHeader()
       } else {
         self.siblings[self.index - 1].navigateTo()
+      }
+    },
+    onNavigateNext() {
+      if (self.isLast) {
+        self.bucket.navigateToNextBucketHeader()
+      } else {
+        self.siblings[self.index + 1].navigateTo()
       }
     },
     onAppendSibling() {
