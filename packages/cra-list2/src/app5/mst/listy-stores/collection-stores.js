@@ -50,7 +50,7 @@ function getDashboardCollection(self) {
 }
 
 function navigateToMaybeBucketHeader(maybeBucket) {
-  S.map(R.tap(b => b.navigateToHeader()))(maybeBucket)
+  return S.map(R.tap(b => b.navigateToHeader()))(maybeBucket)
 }
 
 const Dashboard = Model({
@@ -92,7 +92,7 @@ const Dashboard = Model({
     onMount() {
       getSelectionManager(self).onDashboardMount(self)
     },
-    navigateToAddListButton() {
+    navigateToBtnAddList() {
       setFocusAndSelectionOnDOMId(self.btnAddListDOMId)
     },
   }))
@@ -184,7 +184,9 @@ const Bucket = Model({
       )(self.firstItem)
     },
     navigateToNextBucketHeader() {
-      navigateToMaybeBucketHeader(self.nextBucket)
+      maybeOrElse(() => self.dashboard.navigateToBtnAddList())(
+        navigateToMaybeBucketHeader(self.nextBucket),
+      )
     },
     navigateToHeader() {
       setFocusAndSelectionOnDOMId(self.headerDOMId)
