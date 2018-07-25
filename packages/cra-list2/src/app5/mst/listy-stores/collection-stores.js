@@ -19,10 +19,11 @@ import {
 } from './helpers'
 
 function computeFlatNavIds(navModel, navChildren) {
-  return [
-    navModel.id,
-    ...R.compose(R.flatten, R.map(c => c.flatNavIds))(navChildren),
-  ]
+  return R.compose(
+    R.prepend(navModel.id),
+    R.flatten,
+    R.map(R.prop('flatNavIds')),
+  )(navChildren)
 }
 
 export const Dashboard = Model({
