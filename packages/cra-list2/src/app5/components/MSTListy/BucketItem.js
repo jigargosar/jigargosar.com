@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import {
+  Box,
   Btn,
   dpFlexRow,
   FlexRow,
@@ -22,7 +23,7 @@ const Container = system({
   tabIndex: 0,
   variant: 'default',
   lineHeight: 1.25,
-  css: preWrapCSS,
+  css: {overflow: 'hidden'},
 })
 
 const Title = system({
@@ -81,8 +82,16 @@ export const BucketItem = observer(function BucketItem({item}) {
           />
         </FlexRow>
       ) : (
-        <FlexRow flex={1} mx={1} css={{overflow: 'inherit'}}>
-          <Title>{item.name || 'I am a hard core TODo'}</Title>
+        <FlexRow flex={1} px={1} css={{overflow: 'inherit'}}>
+          <Box
+            css={{
+              whiteSpace: 'pre-wrap',
+              overflow: 'hidden',
+              wordWrap: 'break-word',
+            }}
+          >
+            {item.name || 'I am a hard core TODo'}
+          </Box>
         </FlexRow>
       )}
     </Container>
