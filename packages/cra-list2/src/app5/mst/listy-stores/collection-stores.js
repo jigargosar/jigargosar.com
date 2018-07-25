@@ -58,10 +58,13 @@ const Dashboard = Model({
         dashboard: self,
       })
     },
-    get addListButtonDOMId() {
+    get firstBucket() {
+      return S.head(self.buckets)
+    },
+    get btnAddListDOMId() {
       return `'add-list-button-${self.id}`
     },
-    get onAddListBtnKeyDown() {
+    get onBtnAddListKeyDown() {
       return withKeyEvent(
         whenKeyPD('up')(self.onHeaderNavigatePrev),
         whenKeyPD('down')(self.onHeaderNavigateNext),
@@ -75,18 +78,11 @@ const Dashboard = Model({
         dashboard: self,
       })
     },
-  }))
-  .views(self => ({
-    get firstBucket() {
-      return S.head(self.buckets)
-    },
-  }))
-  .actions(self => ({
     onMount() {
       getSelectionManager(self).onDashboardMount(self)
     },
     navigateToAddListButton() {
-      setFocusAndSelectionOnDOMId(self.addListButtonDOMId)
+      setFocusAndSelectionOnDOMId(self.btnAddListDOMId)
     },
   }))
 
