@@ -12,6 +12,7 @@ function newModelId(name) {
 
 function createModelIDType(name) {
   return types.refinement(
+    `${name}ID`,
     types.identifier,
     R.startsWith(idPrefixFromModelName(name)),
   )
@@ -32,4 +33,8 @@ export function Model({name, attrs = {}}) {
   //   attrs: types.model(`${name}Attrs`, attrProps),
   // }
   return types.model(name, attrProps)
+}
+
+export function getIDTypeOfModel(modelType) {
+  return modelType.properties.id.type
 }
