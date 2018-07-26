@@ -1,4 +1,4 @@
-import {Model} from '../Model'
+import {CollectionModel} from '../CollectionModel'
 import {getParent, types} from 'mobx-state-tree'
 import {R} from '../../little-ramda'
 import {
@@ -28,7 +28,7 @@ function deleteFromParentCollection(m) {
   getParent(m, 2).delete(m)
 }
 
-export const Dashboard = Model({
+export const Dashboard = CollectionModel({
   name: 'Dashboard',
 })
   .views(self => ({
@@ -53,7 +53,7 @@ export const Dashboard = Model({
     },
   }))
 
-export const Bucket = Model({
+export const Bucket = CollectionModel({
   name: 'Bucket',
   attrs: {dashboard: types.reference(Dashboard)},
 })
@@ -75,6 +75,9 @@ export const Bucket = Model({
     },
     get flatNavIds() {
       return computeFlatNavIds(self, self.items)
+    },
+    get children() {
+      return self.items
     },
   }))
   .actions(self => ({
@@ -99,7 +102,7 @@ export const Bucket = Model({
     },
   }))
 
-export const Item = Model({
+export const Item = CollectionModel({
   name: 'Item',
   attrs: {bucket: types.reference(Bucket)},
 })

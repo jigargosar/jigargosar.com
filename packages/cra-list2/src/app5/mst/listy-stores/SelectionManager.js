@@ -4,7 +4,7 @@ import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import * as R from 'ramda'
 import {maybeOr_} from '../../little-ramda'
 import S from 'sanctuary'
-import {getIDTypeOfModel} from '../Model'
+import {getIDTypeOfModel} from '../CollectionModel'
 import {Bucket, Dashboard, Item} from './DatabaseModels'
 
 const models = [Item, Bucket, Dashboard]

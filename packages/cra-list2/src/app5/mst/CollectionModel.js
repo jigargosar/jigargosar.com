@@ -1,6 +1,9 @@
-import {types} from 'mobx-state-tree'
+import {getParent, hasParent, types} from 'mobx-state-tree'
 import {R} from '../little-ramda'
 import nanoid from 'nanoid'
+import {modelNamed} from '../little-mst'
+
+const a = require('nanoassert')
 
 function idPrefixFromModelName(name) {
   return `${name}_`
@@ -18,7 +21,7 @@ function createModelIDType(name) {
   )
 }
 
-export function Model({name, attrs = {}}) {
+export function CollectionModel({name, attrs = {}}) {
   const attrProps = R.merge(
     {
       id: types.optional(createModelIDType(name), () =>
@@ -32,7 +35,16 @@ export function Model({name, attrs = {}}) {
   // const props = {
   //   attrs: types.model(`${name}Attrs`, attrProps),
   // }
-  return types.model(name, attrProps)
+  return modelNamed(name)
+    .props(attrProps)
+    .views(self => ({
+      get collection() {
+        a(hasParent(self, 2))
+        const c = getParent(self, 2)
+        a(R.has('delete')(c))
+        return c
+      },
+    }))
 }
 
 export function getIDTypeOfModel(modelType) {
