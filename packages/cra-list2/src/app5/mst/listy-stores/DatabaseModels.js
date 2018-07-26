@@ -1,11 +1,7 @@
 import {CollectionModel} from '../CollectionModel'
-import {getParent, types} from 'mobx-state-tree'
+import {types} from 'mobx-state-tree'
 import {R} from '../../little-ramda'
-import {
-  setFocusAndSelectionOnDOMId,
-  whenKeyPD,
-  withKeyEvent,
-} from '../../components/utils'
+import {whenKeyPD, withKeyEvent} from '../../components/utils'
 import {
   endEditing,
   getBucketCollection,
@@ -134,7 +130,6 @@ export const Item = CollectionModel({
   .actions(self => ({
     onStartEditing() {
       startEditing(self)
-      setFocusAndSelectionOnDOMId(self.inputDOMId)
     },
     onEndEditing() {
       endEditing(self)
@@ -144,7 +139,7 @@ export const Item = CollectionModel({
       self.name = text
     },
     onDelete() {
-      self.delete()
+      self.deleteTree()
     },
     onInputBlur() {
       endEditing(self)
