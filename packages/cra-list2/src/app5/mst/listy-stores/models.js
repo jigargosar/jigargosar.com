@@ -5,7 +5,6 @@ import {whenKeyPD, withKeyEvent} from '../../components/utils'
 import {
   endEditing,
   getBucketCollection,
-  getDomain,
   getItemCollection,
   isEditing,
   setSelectionToModel,
@@ -25,7 +24,7 @@ export const Dashboard = CollectionModel({
 })
   .views(self => ({
     get buckets() {
-      return getDomain(self).buckets.whereEq({
+      return getBucketCollection(self).whereEq({
         dashboard: self,
       })
     },

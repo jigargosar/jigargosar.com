@@ -4,10 +4,6 @@ export function getSelectionManager(self) {
   return getRoot(self).selectionManager
 }
 
-export function getDomain(self) {
-  return getRoot(self).domain
-}
-
 export function getEditManager(self) {
   return getRoot(self).editManager
 }
@@ -29,13 +25,13 @@ export function isEditing(self) {
 }
 
 export function getItemCollection(self) {
-  return getDomain(self).items
+  return getRoot(self).items
 }
 
 export function getDashboardCollection(self) {
-  return getDomain(self).dashboards
+  return getRoot(self).dashboards
 }
 
 export function getBucketCollection(self) {
-  return getDomain(self).buckets
+  return getRoot(self).buckets
 }

@@ -24,13 +24,10 @@ const collectionProps = {
   buckets: Collection(Bucket),
   dashboards: Collection(Dashboard),
 }
-export const Database = modelNamed('Database').props(
-  optionalCollections(collectionProps),
-)
 
 export const Root = modelNamed('Root')
   .props({
-    domain: types.optional(Database, {}),
+    ...optionalCollections(collectionProps),
     selectionManager: types.optional(SelectionManager, {}),
     editManager: types.optional(EditManager, {}),
   })
