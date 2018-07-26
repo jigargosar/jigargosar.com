@@ -39,3 +39,7 @@ export function getBucketCollection(self) {
 export function onDelete(self) {
   getRoot(self).onModelDelete(self)
 }
+
+export function getCurrentDashboard(self) {
+  return getRoot(self).currentDashboard
+}
