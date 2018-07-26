@@ -95,10 +95,8 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
 
     onBeforeModelDelete(m) {
-      self.tapSelectedModel(sm => {
-        if (sm === m) {
-          self.clearSelection()
-        }
-      })
+      if (self.isSelected(m)) {
+        self.clearSelection()
+      }
     },
   }))
