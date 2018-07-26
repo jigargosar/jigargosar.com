@@ -1,5 +1,5 @@
 import {Model} from '../Model'
-import {types} from 'mobx-state-tree'
+import {getParent, types} from 'mobx-state-tree'
 import {R} from '../../little-ramda'
 import {
   setFocusAndSelectionOnDOMId,
@@ -22,6 +22,10 @@ function computeFlatNavIds(navModel, navChildren) {
     R.flatten,
     R.map(R.prop('flatNavIds')),
   )(navChildren)
+}
+
+function deleteFromParentCollection(m) {
+  getParent(m, 2).delete(m)
 }
 
 export const Dashboard = Model({
@@ -90,8 +94,8 @@ export const Bucket = Model({
       self.onAddItem()
     },
     onDelete() {
-      getItemCollection(self).deleteAll(self.items)
-      getDomain(self).deleteBucket(self)
+      R.forEach(R.invoker(0, 'onDelete'))(self.items)
+      deleteFromParentCollection(self)
     },
   }))
 
@@ -140,7 +144,7 @@ export const Item = Model({
       self.name = text
     },
     onDelete() {
-      getDomain(self).deleteItem(self)
+      deleteFromParentCollection(self)
     },
     onInputBlur() {
       endEditing(self)
