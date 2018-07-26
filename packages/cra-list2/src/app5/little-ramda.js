@@ -167,3 +167,7 @@ export function overProp(name) {
 
 export const whenNotNil = _.when(isNotNil)
 export const unlessNil = _.unless(_.isNil)
+export const invoke0 = R.invoker(0)
+export const C = R.compose
+export const nullableOr = R.defaultTo
+export const tapEach = R.forEach

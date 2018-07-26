@@ -1,6 +1,6 @@
 import {CollectionModel} from '../CollectionModel'
 import {getParent, types} from 'mobx-state-tree'
-import {R} from '../../little-ramda'
+import {invoke0, R} from '../../little-ramda'
 import {
   setFocusAndSelectionOnDOMId,
   whenKeyPD,
@@ -97,8 +97,9 @@ export const Bucket = CollectionModel({
       self.onAddItem()
     },
     onDelete() {
-      R.forEach(R.invoker(0, 'onDelete'))(self.items)
-      deleteFromParentCollection(self)
+      // R.forEach(invoke0('onDelete'))(self.items)
+      // deleteFromParentCollection(self)
+      self.deleteTree()
     },
   }))
 
