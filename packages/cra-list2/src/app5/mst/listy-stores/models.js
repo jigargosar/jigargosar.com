@@ -12,11 +12,11 @@ import {
   startEditing,
 } from './helpers'
 
-function computeFlatNavIds(navModel, navChildren) {
+function computeFlatNavModels(navModel, navChildren) {
   return R.compose(
     R.prepend(navModel),
     R.flatten,
-    R.map(R.prop('flatNavIds')),
+    R.map(R.prop('flatNavModels')),
   )(navChildren)
 }
 
@@ -29,8 +29,8 @@ export const Dashboard = CollectionModel({
         dashboard: self,
       })
     },
-    get flatNavIds() {
-      return computeFlatNavIds(self, self.buckets)
+    get flatNavModels() {
+      return computeFlatNavModels(self, self.buckets)
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent()
@@ -68,8 +68,8 @@ export const Bucket = CollectionModel({
     get items() {
       return getItemCollection(self).whereEq({bucket: self})
     },
-    get flatNavIds() {
-      return computeFlatNavIds(self, self.items)
+    get flatNavModels() {
+      return computeFlatNavModels(self, self.items)
     },
     get children() {
       return self.items
@@ -104,8 +104,8 @@ export const Item = CollectionModel({
   attrs: {bucket: types.reference(Bucket)},
 })
   .views(self => ({
-    get flatNavIds() {
-      return computeFlatNavIds(self, [])
+    get flatNavModels() {
+      return computeFlatNavModels(self, [])
     },
     get inputDOMId() {
       return `input-${self.id}`

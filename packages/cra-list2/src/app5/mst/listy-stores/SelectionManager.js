@@ -23,7 +23,7 @@ function getParentDashboard(model) {
 }
 
 function getFlatNavModels(model) {
-  return getParentDashboard(model).flatNavIds
+  return getParentDashboard(model).flatNavModels
 }
 
 export const SelectionManager = modelNamed('SelectionManager')
@@ -76,7 +76,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     onDashboardMount(d) {
       R.compose(
         self.setSelectionToModel,
-        maybeOr_(() => R.compose(R.last, R.take(3))(d.flatNavIds)),
+        maybeOr_(() => R.compose(R.last, R.take(3))(d.flatNavModels)),
       )(self.selectedModel)
     },
     onModelFocus(m) {
