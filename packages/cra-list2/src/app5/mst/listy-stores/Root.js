@@ -6,6 +6,7 @@ import {
 import {
   addDisposer,
   addMiddleware,
+  getEnv,
   getSnapshot,
   types,
 } from 'mobx-state-tree'
@@ -39,6 +40,11 @@ export const Root = modelNamed('Root')
   .actions(self => ({
     afterCreate() {
       addDisposer(self, addMiddleware(self, actionLogger))
+      if (dotPath('module.hot')(getEnv(self))) {
+        self.initModule()
+      } else {
+        self.addMockData()
+      }
     },
     addDashboard(snap) {
       return getDashboardCollection(self).add(snap)
@@ -49,7 +55,7 @@ export const Root = modelNamed('Root')
         .addBucket()
         .addItem()
     },
-    initModule(module) {
+    initModule(module = getEnv(self).module) {
       if (module.hot) {
         window.r = self
         const snapKey = Root.name
