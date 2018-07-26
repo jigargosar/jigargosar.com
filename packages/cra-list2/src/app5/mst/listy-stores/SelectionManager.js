@@ -4,13 +4,12 @@ import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import * as R from 'ramda'
 import {C, maybeOr_, maybeOrElse} from '../../little-ramda'
 import S from 'sanctuary'
-import {getIDTypeOfModel} from '../CollectionModel'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
 
 const models = [Item, Bucket, Dashboard]
-const modelIDTypes = R.map(getIDTypeOfModel)(models)
-const modelIDUnionType = types.union({}, ...modelIDTypes)
+// const modelIDTypes = R.map(getIDTypeOfModel)(models)
+// const modelIDUnionType = types.union({}, ...modelIDTypes)
 
 function getParentDashboard(model) {
   return Dashboard.is(model)
