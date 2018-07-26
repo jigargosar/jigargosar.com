@@ -40,23 +40,17 @@ export const Root = modelNamed('Root')
   .actions(self => ({
     afterCreate() {
       addDisposer(self, addMiddleware(self, actionLogger))
-      if (dotPath('module.hot')(getEnv(self))) {
-        self.initModule()
-      } else {
-        self.addMockData()
-      }
-    },
-    addDashboard(snap) {
-      return getDashboardCollection(self).add(snap)
+      self.initModule()
     },
     addMockData() {
-      self
-        .addDashboard()
+      getDashboardCollection(self)
+        .add()
         .addBucket()
         .addItem()
     },
-    initModule(module = getEnv(self).module) {
-      if (module.hot) {
+    initModule() {
+      const module = getEnv(self).module
+      if (module && module.hot) {
         window.r = self
         const snapKey = Root.name
         const snap = dotPath(`hot.data.${snapKey}`)(module)
@@ -67,6 +61,8 @@ export const Root = modelNamed('Root')
         module.hot.dispose(
           data => (data[snapKey] = getSnapshot(self)),
         )
+      } else {
+        self.addMockData()
       }
     },
   }))

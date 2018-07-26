@@ -7,5 +7,3 @@ const root = Root.create({}, {module})
 const domain = root.domain
 
 export {domain, root}
-
-root.initModule(module)
