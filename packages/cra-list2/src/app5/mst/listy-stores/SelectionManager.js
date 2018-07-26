@@ -90,10 +90,14 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModel = null
     },
 
+    isSelected(m) {
+      return self._selectedModel === m
+    },
+
     onBeforeModelDelete(m) {
       self.tapSelectedModel(sm => {
         if (sm === m) {
-          // self.maybeNavigateNext()
+          self.navigatePrev()
           self.clearSelection()
         }
       })
