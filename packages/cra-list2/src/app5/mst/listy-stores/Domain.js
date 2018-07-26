@@ -18,10 +18,7 @@ export const Domain = modelNamed('Domain')
     },
   }))
   .actions(self => ({
-    addDashboard: model => self.dashboards.add(model),
-    deleteBucket(b) {
-      self.items.deleteAll(b.items)
-      self.buckets.delete(b)
-    },
-    deleteItem: i => self.items.delete(i),
+    addDashboard: snap => self.dashboards.add(snap),
+    deleteBucket: m => self.buckets.delete(m),
+    deleteItem: m => self.items.delete(m),
   }))

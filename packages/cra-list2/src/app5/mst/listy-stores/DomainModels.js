@@ -90,6 +90,7 @@ export const Bucket = Model({
       self.onAddItem()
     },
     onDelete() {
+      getItemCollection(self).deleteAll(self.items)
       getDomain(self).deleteBucket(self)
     },
   }))
