@@ -57,7 +57,6 @@ export const SelectionManager = modelNamed('SelectionManager')
         model,
       )
     },
-
     navigateNext(model) {
       self.navigateBy(
         (idx, models) => (idx === models.length - 1 ? 0 : idx + 1),
@@ -70,7 +69,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     maybeNavigatePrev() {
       self.tapSelectedModel(self.navigatePrev)
     },
-
     setSelectionToModel(m) {
       self._selectedModel = m
       self.setSelectionToModelId(m.id)
