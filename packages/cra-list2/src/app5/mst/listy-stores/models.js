@@ -7,6 +7,7 @@ import {
   getBucketCollection,
   getItemCollection,
   isEditing,
+  onDelete,
   setSelectionToModel,
   startEditing,
 } from './helpers'
@@ -51,7 +52,7 @@ export const Bucket = CollectionModel({
   .views(self => ({
     get headerKeydownHandlers() {
       return withKeyEvent(
-        whenKeyPD('d')(self.onDelete),
+        whenKeyPD('d')(() => onDelete(self)),
         whenKeyPD('mod+enter')(self.onPrependItem),
         whenKeyPD('enter')(() => alert('enter')),
         whenKeyPD('space')(() => alert('space')),
@@ -87,11 +88,6 @@ export const Bucket = CollectionModel({
     onPrependItem() {
       self.onAddItem()
     },
-    onDelete() {
-      // R.forEach(invoke0('onDelete'))(self.items)
-      // deleteFromParentCollection(self)
-      self.deleteTree()
-    },
   }))
 
 function updateAttrFromEvent(attr, self) {
@@ -114,7 +110,7 @@ export const Item = CollectionModel({
     get onItemKeydown() {
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onAppendSibling),
-        whenKeyPD('d')(self.onDelete),
+        whenKeyPD('d')(() => onDelete(self)),
         whenKeyPD('enter')(() => startEditing(self)),
         whenKeyPD('space')(() => alert('space')),
       )
@@ -133,9 +129,6 @@ export const Item = CollectionModel({
     },
   }))
   .actions(self => ({
-    onDelete() {
-      self.deleteTree()
-    },
     onNameChange: updateAttrFromEvent('name', self),
     onInputBlur() {
       endEditing(self)

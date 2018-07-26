@@ -35,3 +35,7 @@ export function getDashboardCollection(self) {
 export function getBucketCollection(self) {
   return getRoot(self).buckets
 }
+
+export function onDelete(self) {
+  self.deleteTree()
+}
