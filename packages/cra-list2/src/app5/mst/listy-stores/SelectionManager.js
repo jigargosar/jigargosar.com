@@ -7,9 +7,7 @@ import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
 
-const models = [Item, Bucket, Dashboard]
-// const modelIDTypes = R.map(getIDTypeOfModel)(models)
-// const modelIDUnionType = types.union({}, ...modelIDTypes)
+const modelTypes = [Item, Bucket, Dashboard]
 
 function getParentDashboard(model) {
   return Dashboard.is(model)
@@ -24,14 +22,14 @@ function getParentDashboard(model) {
           })()
 }
 
-function getFlatNavIds(model) {
+function getFlatNavModels(model) {
   return getParentDashboard(model).flatNavIds
 }
 
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedModel: types.maybeNull(
-      types.union(...R.map(types.reference)(models)),
+      types.union(...R.map(types.reference)(modelTypes)),
     ),
   })
   .views(self => ({
@@ -46,20 +44,25 @@ export const SelectionManager = modelNamed('SelectionManager')
     tapSelectedModel(fn) {
       return S.map(fn)(self.selectedModel)
     },
-    navigatePrev(model) {
-      const flatNavIds = getFlatNavIds(model)
-      const idx = R.indexOf(model)(flatNavIds)
-      const prevIdx = idx === 0 ? flatNavIds.length - 1 : idx - 1
+    navigateBy(getNewIdx, model) {
+      const flatNavModels = getFlatNavModels(model)
+      const idx = R.indexOf(model)(flatNavModels)
+      const prevIdx = getNewIdx(idx, flatNavModels)
 
-      self.setSelectionToModel(flatNavIds[prevIdx])
+      self.setSelectionToModel(flatNavModels[prevIdx])
+    },
+    navigatePrev(model) {
+      self.navigateBy(
+        (idx, models) => (idx === 0 ? models.length - 1 : idx - 1),
+        model,
+      )
     },
 
     navigateNext(model) {
-      const flatNavIds = getFlatNavIds(model)
-      const idx = R.indexOf(model)(flatNavIds)
-      const nextIdx = idx === flatNavIds.length - 1 ? 0 : idx + 1
-
-      self.setSelectionToModel(flatNavIds[nextIdx])
+      self.navigateBy(
+        (idx, models) => (idx === models.length - 1 ? 0 : idx + 1),
+        model,
+      )
     },
     maybeNavigateNext() {
       self.tapSelectedModel(self.navigateNext)
