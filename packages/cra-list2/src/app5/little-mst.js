@@ -44,6 +44,10 @@ export {
   unescapeJsonPath,
   unprotect,
   walk,
+  recordActions,
+  recordPatches,
+  resolveIdentifier,
+  resolvePath,
 } from 'mobx-state-tree'
 
 export {

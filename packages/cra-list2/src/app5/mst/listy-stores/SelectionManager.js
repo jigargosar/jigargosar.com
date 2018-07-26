@@ -1,8 +1,8 @@
 import {modelNamed} from '../../little-mst'
-import {isAlive, types} from 'mobx-state-tree'
+import {getRelativePath, tryResolve, types} from 'mobx-state-tree'
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import * as R from 'ramda'
-import {C, maybeOr_, whenNotNil} from '../../little-ramda'
+import {C, maybeOr_} from '../../little-ramda'
 import S from 'sanctuary'
 import {getIDTypeOfModel} from '../CollectionModel'
 import {Bucket, Dashboard, Item} from './DatabaseModels'
@@ -31,24 +31,16 @@ function getFlatNavIds(model) {
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedModelId: types.maybeNull(modelIDUnionType),
-    _selectedModelRef: types.maybeNull(
-      types.union(...R.map(m => types.reference(m))(models)),
-    ),
+    _selectedModelPath: types.maybeNull(types.string),
+    // _selectedModelRef: types.maybeNull(
+    //   types.union(...R.map(m => types.reference(m))(models)),
+    // ),
   })
   .actions(self => ({
     getSelectedModel() {
-      return C(
-        S.toMaybe,
-        whenNotNil(m => {
-          if (isAlive(m)) {
-            return m
-          } else {
-            self._selectedModelId = null
-            self._selectedModelRef = null
-            return null
-          }
-        }),
-      )(self._selectedModelRef)
+      return C(S.map(path => tryResolve(self, path)), S.toMaybe)(
+        self._selectedModelPath,
+      )
     },
     tapSelectedModel(fn) {
       return S.map(fn)(self.getSelectedModel())
@@ -76,7 +68,8 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
 
     setSelectionToModel(model) {
-      self._selectedModelRef = model
+      // self._selectedModelRef = model
+      self._selectedModelPath = getRelativePath(self, model)
       self.setSelectionToModelId(model.id)
     },
     setSelectionToModelId(id) {
@@ -92,10 +85,12 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     onModelFocus(m) {
       self._selectedModelId = m.id
-      self._selectedModelRef = m
+      self._selectedModelPath = getRelativePath(self, m)
+      // self._selectedModelRef = m
     },
     onModelBlur() {
       self._selectedModelId = null
-      self._selectedModelRef = null
+      self._selectedModelPath = null
+      // self._selectedModelRef = null
     },
   }))
