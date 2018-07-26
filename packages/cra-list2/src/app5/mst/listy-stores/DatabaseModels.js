@@ -1,6 +1,6 @@
 import {CollectionModel} from '../CollectionModel'
 import {getParent, types} from 'mobx-state-tree'
-import {invoke0, R} from '../../little-ramda'
+import {R} from '../../little-ramda'
 import {
   setFocusAndSelectionOnDOMId,
   whenKeyPD,
@@ -22,10 +22,6 @@ function computeFlatNavIds(navModel, navChildren) {
     R.flatten,
     R.map(R.prop('flatNavIds')),
   )(navChildren)
-}
-
-function deleteFromParentCollection(m) {
-  getParent(m, 2).delete(m)
 }
 
 export const Dashboard = CollectionModel({
@@ -148,7 +144,7 @@ export const Item = CollectionModel({
       self.name = text
     },
     onDelete() {
-      deleteFromParentCollection(self)
+      self.delete()
     },
     onInputBlur() {
       endEditing(self)

@@ -1,5 +1,5 @@
 import {getParent, hasParent, types} from 'mobx-state-tree'
-import {C, invoke0, nullableOr, R, tapEach} from '../little-ramda'
+import {invoke0, R, tapEach} from '../little-ramda'
 import nanoid from 'nanoid'
 import {modelNamed} from '../little-mst'
 
@@ -47,13 +47,13 @@ export function CollectionModel({name, attrs = {}}) {
         a(R.has('delete')(c))
         return c
       },
-      get childrenOrEmptyArray() {
-        return R.propOr([])('children')(self)
+      get children() {
+        return []
       },
     }))
     .actions(self => ({
       deleteTree() {
-        tapEach(invoke0('deleteTree'))(self.childrenOrEmptyArray)
+        tapEach(invoke0('deleteTree'))(self.children)
         self.collection.delete(self)
       },
     }))
