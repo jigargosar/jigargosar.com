@@ -32,9 +32,6 @@ export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedModelId: types.maybeNull(modelIDUnionType),
     _selectedModelPath: types.maybeNull(types.string),
-    // _selectedModelRef: types.maybeNull(
-    //   types.union(...R.map(m => types.reference(m))(models)),
-    // ),
   })
   .actions(self => ({
     getSelectedModel() {
@@ -68,7 +65,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
 
     setSelectionToModel(model) {
-      // self._selectedModelRef = model
       self._selectedModelPath = getRelativePath(self, model)
       self.setSelectionToModelId(model.id)
     },
@@ -86,11 +82,9 @@ export const SelectionManager = modelNamed('SelectionManager')
     onModelFocus(m) {
       self._selectedModelId = m.id
       self._selectedModelPath = getRelativePath(self, m)
-      // self._selectedModelRef = m
     },
     onModelBlur() {
       self._selectedModelId = null
       self._selectedModelPath = null
-      // self._selectedModelRef = null
     },
   }))
