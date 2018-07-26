@@ -37,6 +37,9 @@ export const Dashboard = CollectionModel({
     },
   }))
   .actions(self => ({
+    onAddBucket() {
+      setSelectionToModel(self.addBucket())
+    },
     addBucket(model = {}) {
       return getBucketCollection(self).add({
         ...model,
