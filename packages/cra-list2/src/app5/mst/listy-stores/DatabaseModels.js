@@ -134,7 +134,7 @@ export const Item = CollectionModel({
     },
   }))
   .actions(self => ({
-    onInputChange: updateAttrFromEvent('name', self),
+    onNameChange: updateAttrFromEvent('name', self),
     onDelete() {
       self.deleteTree()
     },
