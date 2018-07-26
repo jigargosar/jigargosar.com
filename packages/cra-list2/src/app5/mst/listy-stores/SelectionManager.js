@@ -31,7 +31,6 @@ function getFlatNavIds(model) {
 
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
-    _selectedModelId: types.maybeNull(modelIDUnionType),
     _selectedModel: types.maybeNull(
       types.union(...R.map(types.reference)(models)),
     ),
@@ -75,18 +74,15 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.setSelectionToModelId(m.id)
     },
     setSelectionToModelId(id) {
-      self._selectedModelId = id
       setFocusAndSelectionOnDOMId(id)
     },
     onDashboardMount(d) {
       R.compose(
         self.setSelectionToModel,
         maybeOr_(() => R.compose(R.last, R.take(3))(d.flatNavIds)),
-        S.toMaybe,
-      )(self._selectedModelId)
+      )(self.selectedModel)
     },
     onModelFocus(m) {
-      self._selectedModelId = m.id
       self._selectedModel = m
     },
     onModelBlur() {
@@ -94,7 +90,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
 
     clearSelection() {
-      self._selectedModelId = null
       self._selectedModel = null
     },
 
