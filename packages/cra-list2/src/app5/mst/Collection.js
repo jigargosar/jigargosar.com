@@ -1,15 +1,7 @@
 import {types} from 'mobx-state-tree'
 import {mValues} from '../mobx/little-mobx'
 import {modelNamed} from '../little-mst'
-import {
-  T,
-  whereEq,
-  filter,
-  reject,
-  find,
-  map,
-  forEach,
-} from 'ramda'
+import {T, whereEq, filter, reject, find, map, forEach} from 'ramda'
 
 export function Collection(Model) {
   return modelNamed(`${Model.name}Collection`)
@@ -30,6 +22,7 @@ export function Collection(Model) {
       add: m => self.lookup.put(Model.create(m)),
       addAll: map(self.add),
       delete: m => self.lookup.delete(m.id),
-      deleteAll: forEach(self.delete),
+      remove: m => self.lookup.delete(m.id),
+      deleteAll: l => forEach(self.remove)(l),
     }))
 }

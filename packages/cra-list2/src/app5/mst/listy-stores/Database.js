@@ -2,7 +2,8 @@ import {Collection} from '../Collection'
 import {modelNamed, optionalCollections} from '../../little-mst'
 import S from 'sanctuary'
 import {getDashboardCollection} from './helpers'
-import {Bucket, Dashboard, Item} from './DomainModels'
+import {Bucket, Dashboard, Item} from './DatabaseModels'
+import {getParent} from 'mobx-state-tree'
 
 const collectionProps = {
   items: Collection(Item),
@@ -10,7 +11,7 @@ const collectionProps = {
   dashboards: Collection(Dashboard),
 }
 
-export const Domain = modelNamed('Domain')
+export const Database = modelNamed('Database')
   .props(optionalCollections(collectionProps))
   .views(self => ({
     get currentDashboard() {
@@ -19,6 +20,8 @@ export const Domain = modelNamed('Domain')
   }))
   .actions(self => ({
     addDashboard: snap => self.dashboards.add(snap),
-    deleteBucket: m => self.buckets.delete(m),
+    deleteBucket: m => {
+      getParent(m, 2).delete(m)
+    },
     deleteItem: m => self.items.delete(m),
   }))

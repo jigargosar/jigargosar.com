@@ -2,13 +2,13 @@ import {applySnapshot2, modelNamed} from '../../little-mst'
 import {getSnapshot, types} from 'mobx-state-tree'
 import {dotPath, isNotNil} from '../../little-ramda'
 import * as R from 'ramda'
-import {Domain} from './Domain'
+import {Database} from './Database'
 import {SelectionManager} from './SelectionManager'
 import {EditManager} from './EditManager'
 
 export const Root = modelNamed('Root')
   .props({
-    domain: types.optional(Domain, {}),
+    domain: types.optional(Database, {}),
     selectionManager: types.optional(SelectionManager, {}),
     editManager: types.optional(EditManager, {}),
   })
