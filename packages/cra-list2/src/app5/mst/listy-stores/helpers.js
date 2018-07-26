@@ -37,5 +37,5 @@ export function getBucketCollection(self) {
 }
 
 export function onDelete(self) {
-  self.deleteTree()
+  getRoot(self).onModelDelete(self)
 }

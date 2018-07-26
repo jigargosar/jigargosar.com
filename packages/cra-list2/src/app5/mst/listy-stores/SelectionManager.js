@@ -84,7 +84,19 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModelPath = getRelativePath(self, m)
     },
     onModelBlur() {
+      self.clearSelection()
+    },
+
+    clearSelection() {
       self._selectedModelId = null
       self._selectedModelPath = null
+    },
+
+    onBeforeModelDelete(m) {
+      self.tapSelectedModel(sm => {
+        if (sm === m) {
+          self.clearSelection()
+        }
+      })
     },
   }))
