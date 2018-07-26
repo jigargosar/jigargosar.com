@@ -46,6 +46,16 @@ export {
   walk,
 } from 'mobx-state-tree'
 
+export {
+  simpleActionLogger,
+  actionLogger,
+  asReduxStore,
+  atomic,
+  connectReduxDevtools,
+  TimeTraveller,
+  UndoManager,
+} from 'mst-middlewares'
+
 export const mapSnapshot = _.map(getSnapshot)
 export const applySnapshot2 = _.curryN(2, applySnapshot)
 const optionalObj = T => types.optional(T, {})

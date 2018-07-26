@@ -1,8 +1,8 @@
 import {modelNamed} from '../../little-mst'
-import {types} from 'mobx-state-tree'
+import {isAlive, types} from 'mobx-state-tree'
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import * as R from 'ramda'
-import {maybeOr_} from '../../little-ramda'
+import {C, maybeOr_, whenNotNil} from '../../little-ramda'
 import S from 'sanctuary'
 import {getIDTypeOfModel} from '../CollectionModel'
 import {Bucket, Dashboard, Item} from './DatabaseModels'
@@ -35,12 +35,24 @@ export const SelectionManager = modelNamed('SelectionManager')
       types.union(...R.map(m => types.reference(m))(models)),
     ),
   })
-  .views(self => ({
-    get selectedModel() {
-      return S.toMaybe(self._selectedModelRef)
-    },
-  }))
   .actions(self => ({
+    getSelectedModel() {
+      return C(
+        S.toMaybe,
+        whenNotNil(m => {
+          if (isAlive(m)) {
+            return m
+          } else {
+            self._selectedModelId = null
+            self._selectedModelRef = null
+            return null
+          }
+        }),
+      )(self._selectedModelRef)
+    },
+    tapSelectedModel(fn) {
+      return S.map(fn)(self.getSelectedModel())
+    },
     navigatePrev(model) {
       const flatNavIds = getFlatNavIds(model)
       const idx = R.indexOf(model.id)(flatNavIds)
@@ -48,6 +60,7 @@ export const SelectionManager = modelNamed('SelectionManager')
 
       self.setSelectionToModelId(flatNavIds[prevIdx])
     },
+
     navigateNext(model) {
       const flatNavIds = getFlatNavIds(model)
       const idx = R.indexOf(model.id)(flatNavIds)
@@ -55,12 +68,11 @@ export const SelectionManager = modelNamed('SelectionManager')
 
       self.setSelectionToModelId(flatNavIds[nextIdx])
     },
-
     maybeNavigateNext() {
-      S.map(self.navigateNext)(self.selectedModel)
+      self.tapSelectedModel(self.navigateNext)
     },
     maybeNavigatePrev() {
-      S.map(self.navigatePrev)(self.selectedModel)
+      self.tapSelectedModel(self.navigatePrev)
     },
 
     setSelectionToModel(model) {

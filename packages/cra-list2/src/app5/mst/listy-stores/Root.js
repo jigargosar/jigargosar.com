@@ -1,10 +1,16 @@
 import {applySnapshot2, modelNamed} from '../../little-mst'
-import {getSnapshot, types} from 'mobx-state-tree'
+import {
+  addDisposer,
+  addMiddleware,
+  getSnapshot,
+  types,
+} from 'mobx-state-tree'
 import {dotPath, isNotNil} from '../../little-ramda'
 import * as R from 'ramda'
 import {Database} from './Database'
 import {SelectionManager} from './SelectionManager'
 import {EditManager} from './EditManager'
+import {actionLogger} from 'mst-middlewares'
 
 export const Root = modelNamed('Root')
   .props({
@@ -13,6 +19,10 @@ export const Root = modelNamed('Root')
     editManager: types.optional(EditManager, {}),
   })
   .actions(self => ({
+    afterCreate() {
+      // addDisposer(self, addMiddleware(self, simpleActionLogger))
+      addDisposer(self, addMiddleware(self, actionLogger))
+    },
     addMockData() {
       self.domain
         .addDashboard()
