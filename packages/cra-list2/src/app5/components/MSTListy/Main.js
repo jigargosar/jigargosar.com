@@ -14,22 +14,18 @@ import {getSelectionManager} from '../../mst/listy-stores/helpers'
 /* eslint-disable no-func-assign*/
 
 class K extends React.Component {
-  kd = e =>
-    withKeyEvent(
-      whenKeyPD('up')(() => this.selectionManager.navigatePrev()),
-      whenKeyPD('down')(() => this.selectionManager.navigateNext()),
-    )(e)
-
-  get selectionManager() {
-    return getSelectionManager(this.props.root)
-  }
-
   componentDidMount() {
-    window.addEventListener('keydown', this.kd)
+    window.addEventListener(
+      'keydown',
+      this.props.root.onGlobalKeyDown,
+    )
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.kd)
+    window.removeEventListener(
+      'keydown',
+      this.props.root.onGlobalKeyDown,
+    )
   }
 
   render() {

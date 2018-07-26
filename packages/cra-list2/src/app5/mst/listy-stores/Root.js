@@ -19,6 +19,7 @@ import {getDashboardCollection, getSelectionManager} from './helpers'
 import S from 'sanctuary'
 import {Collection} from '../Collection'
 import {Bucket, Dashboard, Item} from './models'
+import {whenKeyPD, withKeyEvent} from '../../components/utils'
 
 const collectionProps = {
   items: Collection(Item),
@@ -35,6 +36,16 @@ export const Root = modelNamed('Root')
   .views(self => ({
     get currentDashboard() {
       return S.head(getDashboardCollection(self).list)
+    },
+    get onGlobalKeyDown() {
+      return withKeyEvent(
+        whenKeyPD('up')(() =>
+          getSelectionManager(self).navigatePrev(),
+        ),
+        whenKeyPD('down')(() =>
+          getSelectionManager(self).navigateNext(),
+        ),
+      )
     },
   }))
   .actions(self => ({
