@@ -16,12 +16,8 @@ import {getSelectionManager} from '../../mst/listy-stores/helpers'
 class K extends React.Component {
   kd = e =>
     withKeyEvent(
-      whenKeyPD('up')(() =>
-        this.selectionManager.maybeNavigatePrev(),
-      ),
-      whenKeyPD('down')(() =>
-        this.selectionManager.maybeNavigateNext(),
-      ),
+      whenKeyPD('up')(() => this.selectionManager.navigatePrev()),
+      whenKeyPD('down')(() => this.selectionManager.navigateNext()),
     )(e)
 
   get selectionManager() {

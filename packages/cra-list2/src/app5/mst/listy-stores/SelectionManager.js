@@ -51,21 +51,19 @@ export const SelectionManager = modelNamed('SelectionManager')
 
       self.setSelectionToModel(flatNavModels[prevIdx])
     }),
-    navigatePrev(model) {
-      self.navigateBy(
-        (idx, models) => (idx === 0 ? models.length - 1 : idx - 1),
-        model,
-      )
-    },
-    maybeNavigateNext() {
+    navigateNext() {
       self.tapSelectedModel(
         self.navigateBy(
           (idx, models) => (idx === models.length - 1 ? 0 : idx + 1),
         ),
       )
     },
-    maybeNavigatePrev() {
-      self.tapSelectedModel(self.navigatePrev)
+    navigatePrev() {
+      self.tapSelectedModel(
+        self.navigateBy(
+          (idx, models) => (idx === 0 ? models.length - 1 : idx - 1),
+        ),
+      )
     },
     setSelectionToModel(m) {
       self._selectedModel = m
