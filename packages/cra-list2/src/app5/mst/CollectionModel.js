@@ -59,6 +59,6 @@ export function CollectionModel({name, attrs = {}}) {
     }))
 }
 
-export function getIDTypeOfModel(modelType) {
-  return modelType.properties.id.type
+export function getIDTypeOfModel(Model) {
+  return Model.properties.id.type
 }
