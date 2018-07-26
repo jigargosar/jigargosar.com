@@ -14,7 +14,7 @@ import {
 
 function computeFlatNavIds(navModel, navChildren) {
   return R.compose(
-    R.prepend(navModel.id),
+    R.prepend(navModel),
     R.flatten,
     R.map(R.prop('flatNavIds')),
   )(navChildren)

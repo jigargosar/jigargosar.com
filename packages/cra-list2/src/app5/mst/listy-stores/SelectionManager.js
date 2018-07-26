@@ -50,18 +50,18 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     navigatePrev(model) {
       const flatNavIds = getFlatNavIds(model)
-      const idx = R.indexOf(model.id)(flatNavIds)
+      const idx = R.indexOf(model)(flatNavIds)
       const prevIdx = idx === 0 ? flatNavIds.length - 1 : idx - 1
 
-      self.setSelectionToModelId(flatNavIds[prevIdx])
+      self.setSelectionToModel(flatNavIds[prevIdx])
     },
 
     navigateNext(model) {
       const flatNavIds = getFlatNavIds(model)
-      const idx = R.indexOf(model.id)(flatNavIds)
+      const idx = R.indexOf(model)(flatNavIds)
       const nextIdx = idx === flatNavIds.length - 1 ? 0 : idx + 1
 
-      self.setSelectionToModelId(flatNavIds[nextIdx])
+      self.setSelectionToModel(flatNavIds[nextIdx])
     },
     maybeNavigateNext() {
       self.tapSelectedModel(self.navigateNext)
@@ -80,7 +80,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     onDashboardMount(d) {
       R.compose(
-        setFocusAndSelectionOnDOMId,
+        self.setSelectionToModel,
         maybeOr_(() => R.compose(R.last, R.take(3))(d.flatNavIds)),
         S.toMaybe,
       )(self._selectedModelId)
