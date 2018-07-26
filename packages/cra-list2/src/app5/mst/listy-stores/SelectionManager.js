@@ -5,7 +5,7 @@ import * as R from 'ramda'
 import {maybeOr_} from '../../little-ramda'
 import S from 'sanctuary'
 import {getIDTypeOfModel} from '../Model'
-import {Bucket, Dashboard, Item} from './collection-stores'
+import {Bucket, Dashboard, Item} from './DomainModels'
 
 const models = [Item, Bucket, Dashboard]
 const modelIDTypes = R.map(getIDTypeOfModel)(models)
