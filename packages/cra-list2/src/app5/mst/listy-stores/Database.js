@@ -3,7 +3,6 @@ import {modelNamed, optionalCollections} from '../../little-mst'
 import S from 'sanctuary'
 import {getDashboardCollection} from './helpers'
 import {Bucket, Dashboard, Item} from './DatabaseModels'
-import {getParent} from 'mobx-state-tree'
 
 const collectionProps = {
   items: Collection(Item),
@@ -17,7 +16,4 @@ export const Database = modelNamed('Database')
     get currentDashboard() {
       return S.head(getDashboardCollection(self).list)
     },
-  }))
-  .actions(self => ({
-    addDashboard: snap => self.dashboards.add(snap),
   }))

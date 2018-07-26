@@ -6,6 +6,6 @@ setLivelynessChecking('warn')
 const root = Root.create()
 const domain = root.domain
 
-export {domain}
+export {domain, root}
 
 root.initModule(module)

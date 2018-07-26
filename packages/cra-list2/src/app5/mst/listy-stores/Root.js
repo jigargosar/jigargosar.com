@@ -11,6 +11,8 @@ import {Database} from './Database'
 import {SelectionManager} from './SelectionManager'
 import {EditManager} from './EditManager'
 import {actionLogger} from 'mst-middlewares'
+import {getDashboardCollection} from './helpers'
+import S from 'sanctuary'
 
 export const Root = modelNamed('Root')
   .props({
@@ -18,13 +20,21 @@ export const Root = modelNamed('Root')
     selectionManager: types.optional(SelectionManager, {}),
     editManager: types.optional(EditManager, {}),
   })
+  .views(self => ({
+    get currentDashboard() {
+      return S.head(getDashboardCollection(self).list)
+    },
+  }))
   .actions(self => ({
     afterCreate() {
       // addDisposer(self, addMiddleware(self, simpleActionLogger))
       addDisposer(self, addMiddleware(self, actionLogger))
     },
+    addDashboard(snap) {
+      return getDashboardCollection(self).add(snap)
+    },
     addMockData() {
-      self.domain
+      self
         .addDashboard()
         .addBucket()
         .addItem()

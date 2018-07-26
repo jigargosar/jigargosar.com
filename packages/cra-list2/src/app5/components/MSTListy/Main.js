@@ -25,7 +25,7 @@ class K extends React.Component {
     )(e)
 
   get selectionManager() {
-    return getSelectionManager(this.props.domain)
+    return getSelectionManager(this.props.root)
   }
 
   componentDidMount() {
@@ -41,15 +41,15 @@ class K extends React.Component {
   }
 }
 
-function ListyMain({domain}) {
+function ListyMain({root}) {
   return (
     <FocusTrap>
-      <K domain={domain} />
+      <K root={root} />
       <DarkThemeProvider>
         <Box colors={'root'} minHeight={'100vh'} fontFamily={'mono'}>
           {maybeOrNil(dashboard => (
             <Dashboard dashboard={dashboard} />
-          ))(domain.currentDashboard)}
+          ))(root.currentDashboard)}
           {/*<DomainPatches />*/}
           {/*<DebugStores />*/}
         </Box>
@@ -58,4 +58,4 @@ function ListyMain({domain}) {
   )
 }
 
-export default oInjectNamed('store', 'domain')(ListyMain)
+export default oInjectNamed('root')(ListyMain)
