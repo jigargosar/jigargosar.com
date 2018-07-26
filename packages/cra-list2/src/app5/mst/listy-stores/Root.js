@@ -38,7 +38,6 @@ export const Root = modelNamed('Root')
   }))
   .actions(self => ({
     afterCreate() {
-      // addDisposer(self, addMiddleware(self, simpleActionLogger))
       addDisposer(self, addMiddleware(self, actionLogger))
     },
     addDashboard(snap) {
