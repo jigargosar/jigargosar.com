@@ -71,10 +71,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     setSelectionToModel(m) {
       self._selectedModel = m
-      self.setSelectionToModelId(m.id)
-    },
-    setSelectionToModelId(id) {
-      setFocusAndSelectionOnDOMId(id)
+      setFocusAndSelectionOnDOMId(m.id)
     },
     onDashboardMount(d) {
       R.compose(
