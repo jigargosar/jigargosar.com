@@ -95,6 +95,12 @@ export const Bucket = CollectionModel({
     },
   }))
 
+function updateAttrFromEvent(attr, self) {
+  return function(e) {
+    self.updateAttrs({[attr]: e.target.value})
+  }
+}
+
 export const Item = CollectionModel({
   name: 'Item',
   attrs: {bucket: types.reference(Bucket)},
@@ -110,7 +116,7 @@ export const Item = CollectionModel({
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onAppendSibling),
         whenKeyPD('d')(self.onDelete),
-        whenKeyPD('enter')(self.onStartEditing),
+        whenKeyPD('enter')(() => startEditing(self)),
         whenKeyPD('space')(() => alert('space')),
       )
     },
@@ -119,7 +125,7 @@ export const Item = CollectionModel({
         e.stopPropagation()
         return withKeyEvent(
           // whenKeyPD('shift+enter')(self.onAppendSibling),
-          whenKeyPD('enter')(self.onEndEditing),
+          whenKeyPD('enter')(() => endEditing(self)),
         )(e)
       }
     },
@@ -128,16 +134,7 @@ export const Item = CollectionModel({
     },
   }))
   .actions(self => ({
-    onStartEditing() {
-      startEditing(self)
-    },
-    onEndEditing() {
-      endEditing(self)
-    },
-    onInputChange(e) {
-      const text = e.target.value
-      self.name = text
-    },
+    onInputChange: updateAttrFromEvent('name', self),
     onDelete() {
       self.deleteTree()
     },
