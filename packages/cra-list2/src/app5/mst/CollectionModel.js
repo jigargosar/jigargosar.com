@@ -35,8 +35,11 @@ export function CollectionModel({name, attrs = {}}) {
   // const props = {
   //   attrs: types.model(`${name}Attrs`, attrProps),
   // }
-  return modelNamed(name)
+  return modelNamed(`${name}Model`)
     .props(attrProps)
+    .volatile(self => ({
+      __type: CollectionModel,
+    }))
     .views(self => ({
       get collection() {
         a(hasParent(self, 2))
