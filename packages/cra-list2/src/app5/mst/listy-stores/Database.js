@@ -20,8 +20,4 @@ export const Database = modelNamed('Database')
   }))
   .actions(self => ({
     addDashboard: snap => self.dashboards.add(snap),
-    deleteBucket: m => {
-      getParent(m, 2).delete(m)
-    },
-    deleteItem: m => self.items.delete(m),
   }))
