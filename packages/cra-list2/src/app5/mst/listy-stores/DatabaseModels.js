@@ -115,7 +115,7 @@ export const Item = CollectionModel({
     get onItemKeydown() {
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onAppendSibling),
-        whenKeyPD('d')(self.onDelete),
+        whenKeyPD('d')(() => self.deleteTree()),
         whenKeyPD('enter')(() => startEditing(self)),
         whenKeyPD('space')(() => alert('space')),
       )
@@ -135,9 +135,6 @@ export const Item = CollectionModel({
   }))
   .actions(self => ({
     onNameChange: updateAttrFromEvent('name', self),
-    onDelete() {
-      self.deleteTree()
-    },
     onInputBlur() {
       endEditing(self)
     },
