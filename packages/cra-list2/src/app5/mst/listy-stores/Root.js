@@ -1,4 +1,8 @@
-import {applySnapshot2, modelNamed} from '../../little-mst'
+import {
+  applySnapshot2,
+  modelNamed,
+  optionalCollections,
+} from '../../little-mst'
 import {
   addDisposer,
   addMiddleware,
@@ -7,12 +11,22 @@ import {
 } from 'mobx-state-tree'
 import {dotPath, isNotNil} from '../../little-ramda'
 import * as R from 'ramda'
-import {Database} from './Database'
 import {SelectionManager} from './SelectionManager'
 import {EditManager} from './EditManager'
 import {actionLogger} from 'mst-middlewares'
 import {getDashboardCollection} from './helpers'
 import S from 'sanctuary'
+import {Collection} from '../Collection'
+import {Bucket, Dashboard, Item} from './models'
+
+const collectionProps = {
+  items: Collection(Item),
+  buckets: Collection(Bucket),
+  dashboards: Collection(Dashboard),
+}
+export const Database = modelNamed('Database').props(
+  optionalCollections(collectionProps),
+)
 
 export const Root = modelNamed('Root')
   .props({
