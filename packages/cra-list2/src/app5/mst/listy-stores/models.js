@@ -10,17 +10,23 @@ import {
   startEditing,
 } from './helpers'
 import * as R from 'ramda'
-import {dotPath, maybeOr, nothingWhen} from '../../little-sanctuary'
+import {
+  dotPath,
+  pOr,
+  maybeOr,
+  nothingWhen,
+} from '../../little-sanctuary'
+import {C} from '../../little-ramda'
 
 function asTreeNode(self) {
   return {
     views: {
       get flattenedTree() {
-        return R.compose(
+        return C(
           R.prepend(self),
           R.flatten,
-          R.map(R.prop('flattenedTree')),
-          R.propOr([], 'children'),
+          R.map(pOr([])('flattenedTree')),
+          pOr([])('children'),
         )(self)
       },
       get isFirst() {
@@ -46,7 +52,7 @@ function asTreeNode(self) {
         )
       },
       get siblings() {
-        return maybeOr([])(dotPath('parent.children')(self))
+        return pOr([])('parent.children')(self)
       },
       get isRoot() {
         return !R.has('parent')(self)

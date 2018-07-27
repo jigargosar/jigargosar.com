@@ -45,3 +45,5 @@ export const dotPathIf = pred => strPath =>
 export const dotPath = strPath => S.gets(S.I)(strPath.split('.'))
 export const nothingWhen = pred => elseFn =>
   R.ifElse(pred)(alwaysNothing)(C(Just, elseFn))
+
+export const pOr = dv => pathStr => maybeOr(dv)(dotPath(pathStr))
