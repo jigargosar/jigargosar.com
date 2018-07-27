@@ -42,8 +42,9 @@ export const toMaybe = S.toMaybe
 export const dotPathIf = pred => strPath =>
   S.gets(pred)(strPath.split('.'))
 
-export const dotPath = strPath => S.gets(S.I)(strPath.split('.'))
+export const dotPath = strPath => S.gets(R.T)(strPath.split('.'))
 export const nothingWhen = pred => elseFn =>
   R.ifElse(pred)(alwaysNothing)(C(Just, elseFn))
 
-export const pOr = dv => pathStr => maybeOr(dv)(dotPath(pathStr))
+export const pOr = dv => pathStr => C(maybeOr(dv), dotPath(pathStr))
+export const unlessPath = p => o => pOr(o)(p)(o)

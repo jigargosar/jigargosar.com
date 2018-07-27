@@ -10,18 +10,14 @@ import {
   startEditing,
 } from './helpers'
 import * as R from 'ramda'
-import {
-  dotPath,
-  pOr,
-  maybeOr,
-  nothingWhen,
-} from '../../little-sanctuary'
+import {nothingWhen, pOr, unlessPath} from '../../little-sanctuary'
 import {C} from '../../little-ramda'
 
 function asTreeNode(self) {
   return {
     views: {
       get flattenedTree() {
+        console.log(`self.root`, self.root)
         return C(
           R.prepend(self),
           R.flatten,
@@ -62,7 +58,7 @@ function asTreeNode(self) {
         return R.indexOf(self)(self.siblings)
       },
       get root() {
-        return self.isRoot ? self : self.parent.root
+        return unlessPath('parent.root')(self)
       },
     },
   }
