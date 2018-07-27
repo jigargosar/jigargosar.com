@@ -1,5 +1,5 @@
 import S from 'sanctuary'
-import {findById, R} from './little-ramda'
+import {C, findById, R} from './little-ramda'
 
 if (module.hot) {
   window.S = S
@@ -36,9 +36,12 @@ export const findByMaybeId = R.curry(function findByMaybeId(
 })
 
 export const Nothing = S.Nothing
+export const Just = S.Just
 export const toMaybe = S.toMaybe
 
-export const pathIf = pred => strPath =>
+export const dotPathIf = pred => strPath =>
   S.gets(pred)(strPath.split('.'))
 
-export const atPath = strPath => S.gets(S.I)(strPath.split('.'))
+export const dotPath = strPath => S.gets(S.I)(strPath.split('.'))
+export const nothingWhen = pred => elseFn =>
+  R.ifElse(pred)(alwaysNothing)(C(Just, elseFn))

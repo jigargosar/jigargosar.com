@@ -11,7 +11,7 @@ import {
 } from './helpers'
 import * as R from 'ramda'
 import {dotPathOr} from '../../little-ramda'
-import {toMaybe} from '../../little-sanctyary'
+import {nothingWhen, toMaybe} from '../../little-sanctyary'
 
 function asTreeNode(self) {
   return {
@@ -25,32 +25,34 @@ function asTreeNode(self) {
         )(self)
       },
       get isFirst() {
-        return R.head(self.sibling) === self
+        return R.head(self.siblings) === self
       },
       get isLast() {
-        return R.last(self.sibling) === self
+        return R.last(self.siblings) === self
+      },
+      get _nextSibling() {
+        return self.siblings[self.index + 1]
       },
       get nextSibling() {
-        const nullable = self.isLast
-          ? null
-          : self.sibling[self.index + 1]
-        return toMaybe(nullable)
+        return nothingWhen(R.prop('isLast'))(R.prop('_nextSibling'))(
+          self,
+        )
       },
       get prevSibling() {
         const nullable = self.isFirst
           ? null
-          : self.sibling[self.index - 1]
+          : self.siblings[self.index - 1]
         return toMaybe(nullable)
       },
       get siblings() {
         return dotPathOr([], 'parent.children')(self)
       },
       get isRoot() {
-        return !R.has('parent')
+        return !R.has('parent')(self)
       },
       get index() {
         console.assert(!self.isRoot)
-        return R.indexOf(self)(self.sibling)
+        return R.indexOf(self)(self.siblings)
       },
       get root() {
         return self.isRoot ? self : self.parent.root
