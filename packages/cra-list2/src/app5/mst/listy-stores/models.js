@@ -24,6 +24,9 @@ export const Dashboard = CollectionModel({
 })
   .views(self => ({
     get buckets() {
+      return self.children
+    },
+    get children() {
       return getBucketCollection(self).whereEq({
         dashboard: self,
       })
@@ -64,13 +67,13 @@ export const Bucket = CollectionModel({
       return self.id
     },
     get items() {
-      return getItemCollection(self).whereEq({bucket: self})
+      return self.children
     },
     get flatNavModels() {
       return computeFlatNavModels(self, self.items)
     },
     get children() {
-      return self.items
+      return getItemCollection(self).whereEq({bucket: self})
     },
   }))
   .actions(self => ({
