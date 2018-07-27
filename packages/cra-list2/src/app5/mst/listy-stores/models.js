@@ -11,13 +11,13 @@ import {
   startEditing,
 } from './helpers'
 
-function computeFlatNavModels(navModel) {
+function computeFlattenedTree(model) {
   return R.compose(
-    R.prepend(navModel),
+    R.prepend(model),
     R.flatten,
     R.map(R.prop('flatNavModels')),
     R.propOr([], 'children'),
-  )(navModel)
+  )(model)
 }
 
 export const Dashboard = CollectionModel({
@@ -30,7 +30,7 @@ export const Dashboard = CollectionModel({
       })
     },
     get flatNavModels() {
-      return computeFlatNavModels(self)
+      return computeFlattenedTree(self)
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent()
@@ -65,7 +65,7 @@ export const Bucket = CollectionModel({
       return self.id
     },
     get flatNavModels() {
-      return computeFlatNavModels(self)
+      return computeFlattenedTree(self)
     },
     get children() {
       return getItemCollection(self).whereEq({parent: self})
@@ -101,7 +101,7 @@ export const Item = CollectionModel({
 })
   .views(self => ({
     get flatNavModels() {
-      return computeFlatNavModels(self)
+      return computeFlattenedTree(self)
     },
     get inputDOMId() {
       return `input-${self.id}`
