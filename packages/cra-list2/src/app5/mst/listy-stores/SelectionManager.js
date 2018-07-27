@@ -110,14 +110,14 @@ function getPrevNode(m) {
 }
 
 function getLeftNode(m) {
-  if (m.isRoot) {
-    return maybeOr_(() => m)(m.lastChild)
-  }
   return C(
-    maybeOr_(() => m.root),
-    maybeOrElse(() => m.prevSibling),
-    sChain(m => m.prevSibling),
-    m => m.maybeParent,
+    maybeOr(m.root),
+    S.join,
+    R.cond([
+      [typeIs(Item), dotPath('parent.prevSibling')],
+      [typeIs(Bucket), dotPath('prevSibling')],
+      [typeIs(Dashboard), dotPath('lastChild')],
+    ]),
   )(m)
 }
 
