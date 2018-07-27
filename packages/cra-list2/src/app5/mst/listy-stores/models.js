@@ -10,6 +10,7 @@ import {
   startEditing,
 } from './helpers'
 import * as R from 'ramda'
+import {dotPathOr} from '../../little-ramda'
 
 function asTreeNode(self) {
   return {
@@ -21,6 +22,12 @@ function asTreeNode(self) {
           R.map(R.prop('flattenedTree')),
           R.propOr([], 'children'),
         )(self)
+      },
+      get siblings() {
+        return dotPathOr([], 'parent.children')(self)
+      },
+      get isRoot() {
+        return !R.has('parent')
       },
     },
   }
