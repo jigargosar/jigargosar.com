@@ -12,10 +12,11 @@ import {
 import * as R from 'ramda'
 import {
   elemAt,
+  maybeOr,
   nothingWhen,
   sChain,
   sGets,
-  sMaybeToNullable,
+  toMaybe,
   unlessPath,
 } from '../../little-sanctuary'
 import {C} from '../../little-ramda'
@@ -31,6 +32,12 @@ function asTreeNode(self) {
           R.prop('children'),
         )(self)
       },
+      get maybeParent() {
+        return toMaybe(self.parent)
+      },
+      get firstChild() {
+        return sGets(R.T)(['children', '0'])(self)
+      },
       get nextSibling() {
         return sChain(idx => elemAt(idx + 1)(self.siblings))(
           self.index,
@@ -42,9 +49,7 @@ function asTreeNode(self) {
         )
       },
       get siblings() {
-        return sMaybeToNullable(
-          sGets(R.T)(['parent', 'children'])(self),
-        )
+        return maybeOr([])(sGets(R.T)(['parent', 'children'])(self))
       },
       get isRoot() {
         return !R.has('parent')(self)

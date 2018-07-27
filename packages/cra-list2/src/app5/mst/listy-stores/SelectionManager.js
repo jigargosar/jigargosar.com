@@ -5,7 +5,8 @@ import * as R from 'ramda'
 import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
-import {maybeOr_, maybeOrElse} from '../../little-sanctuary'
+import {maybeOr_, maybeOrElse, sChain} from '../../little-sanctuary'
+import {C} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
 
@@ -57,6 +58,9 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModel = m
       setFocusAndSelectionOnDOMId(m.id)
     },
+    setSelectionToMaybeModel(mm) {
+      S.map(R.tap(self.setSelectionToModel))(mm)
+    },
     onDashboardMount(d) {
       R.compose(
         self.setSelectionToModel,
@@ -77,21 +81,34 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.setSelectionToModel(flattenedTree[newIdx])
     }),
     navigateNext() {
-      S.map(self.navigateBy(getPrevIndex))(
-        self.selectedModelOrCurrentDashboard,
-      )
+      function nextSiblingOrThatOfFirstAncestor(m) {
+        return C(
+          maybeOrElse(() =>
+            sChain(nextSiblingOrThatOfFirstAncestor)(m.maybeParent),
+          ),
+        )(m.nextSibling)
+      }
+
+      const next = S.map(m =>
+        C(
+          maybeOr_(() => m.root),
+          maybeOrElse(() => nextSiblingOrThatOfFirstAncestor(m)),
+        )(m.firstChild),
+      )(self.selectedModelOrCurrentDashboard)
+
+      self.setSelectionToMaybeModel(next)
+
+      // S.map(self.navigateBy(getNextIdx))(
+      //   self.selectedModelOrCurrentDashboard,
+      // )
     },
     navigatePrev() {
-      S.map(self.navigateBy(getNextIdx))(
+      S.map(self.navigateBy(getPrevIndex))(
         self.selectedModelOrCurrentDashboard,
       )
     },
   }))
 
 function getPrevIndex(idx, models) {
-  return idx === models.length - 1 ? 0 : idx + 1
-}
-
-function getNextIdx(idx, models) {
   return idx === 0 ? models.length - 1 : idx - 1
 }
