@@ -3,6 +3,9 @@ import {C, findById, isIndexOutOfBounds, R} from './little-ramda'
 export {
   chain as sChain,
   maybeToNullable as sMaybeToNullable,
+  gets as sGets,
+  get as sGet,
+  I as SI,
 } from 'sanctuary'
 
 // export const maybeToNullable = S.maybeToNullable
@@ -53,10 +56,10 @@ export const nothingWhenElse = pred => elseFn =>
   R.ifElse(pred)(alwaysNothing)(C(Just, elseFn))
 
 export const nothingWhen = pred => nothingWhenElse(pred)(S.I)
-export const pathOr = dv => pathStr =>
+export const dotPathOr = dv => pathStr =>
   C(maybeOr(dv), dotPath(pathStr))
 
-export const unlessPath = p => o => pathOr(o)(p)(o)
+export const unlessPath = p => o => dotPathOr(o)(p)(o)
 
 export const elemAt = idx =>
   C(S.join, nothingWhenElse(isIndexOutOfBounds(idx))(S.at(idx)))

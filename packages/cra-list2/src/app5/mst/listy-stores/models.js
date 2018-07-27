@@ -13,8 +13,9 @@ import * as R from 'ramda'
 import {
   elemAt,
   nothingWhen,
-  pathOr,
   sChain,
+  sGets,
+  sMaybeToNullable,
   unlessPath,
 } from '../../little-sanctuary'
 import {C} from '../../little-ramda'
@@ -41,7 +42,9 @@ function asTreeNode(self) {
         )
       },
       get siblings() {
-        return pathOr([])('parent.children')(self)
+        return sMaybeToNullable(
+          sGets(R.T)(['parent', 'children'])(self),
+        )
       },
       get isRoot() {
         return !R.has('parent')(self)
