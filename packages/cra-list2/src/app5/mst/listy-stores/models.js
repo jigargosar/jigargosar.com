@@ -1,6 +1,5 @@
 import {CollectionModel} from '../CollectionModel'
 import {types} from 'mobx-state-tree'
-import {R} from '../../little-ramda'
 import {whenKeyPD, withKeyEvent} from '../../components/utils'
 import {
   endEditing,
@@ -10,21 +9,18 @@ import {
   setSelectionToModel,
   startEditing,
 } from './helpers'
-
-function computeFlattenedTree(model) {
-  return R.compose(
-    R.prepend(model),
-    R.flatten,
-    R.map(R.prop('flattenedTree')),
-    R.propOr([], 'children'),
-  )(model)
-}
+import * as R from 'ramda'
 
 function asTreeNode(self) {
   return {
     views: {
       get flattenedTree() {
-        return computeFlattenedTree(self)
+        return R.compose(
+          R.prepend(self),
+          R.flatten,
+          R.map(R.prop('flattenedTree')),
+          R.propOr([], 'children'),
+        )(self)
       },
     },
   }
