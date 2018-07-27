@@ -11,8 +11,10 @@ import {
   maybeOr_,
   maybeOrElse,
   sChain,
+  tapShow,
+  toMaybe,
 } from '../../little-sanctuary'
-import {C} from '../../little-ramda'
+import {C, tapDebug} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
 
@@ -130,6 +132,7 @@ function getRightNode(m) {
         typeIs(Item),
         m =>
           C(
+            toMaybe,
             S.map(p => p.childAtIdxOrLastOrSelf(m.index)),
             S.join,
             dotPath('parent.nextSibling'),
