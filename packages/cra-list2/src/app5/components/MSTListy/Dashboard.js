@@ -1,6 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React from 'react'
-import {renderKeyedById} from '../utils'
+import {PropTypes, renderKeyedById} from '../utils'
 import {Bucket} from './Bucket'
 import {observer} from 'mobx-react'
 import {Box, Btn, Flex} from '../little-rebass'
@@ -46,7 +46,7 @@ const Dashboard = restoreFocusOnSelectedModelOnMount(
   observer(function Dashboard({dashboard}) {
     return (
       <Layout>
-        {renderKeyedById(BucketPanel, 'bucket', dashboard.buckets)}
+        {renderKeyedById(BucketPanel, 'bucket', dashboard.children)}
         <Panel>
           <BucketItemBtn
             id={dashboard.id}
@@ -61,5 +61,10 @@ const Dashboard = restoreFocusOnSelectedModelOnMount(
     )
   }),
 )
+
+Dashboard.propTypes = {
+  dashboard: PropTypes.shape({children: PropTypes.array.isRequired})
+    .isRequired,
+}
 
 export {Dashboard}

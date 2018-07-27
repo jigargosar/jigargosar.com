@@ -23,16 +23,13 @@ export const Dashboard = CollectionModel({
   name: 'Dashboard',
 })
   .views(self => ({
-    get buckets() {
-      return self.children
-    },
     get children() {
       return getBucketCollection(self).whereEq({
         parent: self,
       })
     },
     get flatNavModels() {
-      return computeFlatNavModels(self, self.buckets)
+      return computeFlatNavModels(self, self.children)
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent()
