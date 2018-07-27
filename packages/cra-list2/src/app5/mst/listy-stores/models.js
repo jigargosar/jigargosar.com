@@ -187,25 +187,10 @@ export const Item = CollectionModel({
         whenKeyPD('space')(() => alert('space')),
       )
     },
-    get onInputKeyDown() {
-      return e => {
-        e.stopPropagation()
-        return withKeyEvent(
-          // whenKeyPD('shift+enter')(self.onAppendSibling),
-          whenKeyPD('enter')(() => endEditing(self)),
-        )(e)
-      }
-    },
-    get isEditing() {
-      return isEditing(self)
-    },
   }))
   .actions(self => ({
-    onNameChange: updateAttrFromEvent('name', self),
-    onInputBlur() {
-      endEditing(self)
-    },
     onAppendSibling() {
       self.parent.onAddItem()
     },
   }))
+  .extend(asEditable)
