@@ -60,39 +60,42 @@ export const SelectionManager = modelNamed('SelectionManager')
       const next = S.map(getNextNode)(
         self.selectedModelOrCurrentDashboard,
       )
-
       self.setSelectionToMaybeModel(next)
     },
     navigatePrev() {
-      function lastLeafOrSelf(m) {
-        return C(maybeOr_(() => m), S.map(lastLeafOrSelf), S.last)(
-          m.children,
-        )
-      }
-
-      const prev = S.map(m =>
-        C(
-          maybeOr_(() => lastLeafOrSelf(m.root)),
-          maybeOrElse(() => m.maybeParent),
-          S.map(lastLeafOrSelf),
-        )(m.prevSibling),
-      )(self.selectedModelOrCurrentDashboard)
+      const prev = S.map(getPrevNode)(
+        self.selectedModelOrCurrentDashboard,
+      )
 
       self.setSelectionToMaybeModel(prev)
     },
   }))
-
-function getNextSiblingOrThatOfFirstAncestor(m) {
-  return C(
-    maybeOrElse(() =>
-      sChain(getNextSiblingOrThatOfFirstAncestor)(m.maybeParent),
-    ),
-  )(m.nextSibling)
-}
 
 function getNextNode(m) {
   return C(
     maybeOr_(() => m.root),
     maybeOrElse(() => getNextSiblingOrThatOfFirstAncestor(m)),
   )(m.firstChild)
+
+  function getNextSiblingOrThatOfFirstAncestor(m) {
+    return C(
+      maybeOrElse(() =>
+        sChain(getNextSiblingOrThatOfFirstAncestor)(m.maybeParent),
+      ),
+    )(m.nextSibling)
+  }
+}
+
+function getPrevNode(m) {
+  return C(
+    maybeOr_(() => lastLeafOrSelf(m.root)),
+    maybeOrElse(() => m.maybeParent),
+    S.map(lastLeafOrSelf),
+  )(m.prevSibling)
+
+  function lastLeafOrSelf(m) {
+    return C(maybeOr_(() => m), S.map(lastLeafOrSelf), S.last)(
+      m.children,
+    )
+  }
 }
