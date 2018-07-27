@@ -142,7 +142,7 @@ export const Bucket = CollectionModel({
   .extend(asTreeNode)
   .extend(asEditable)
   .views(self => ({
-    get headerKeydownHandlers() {
+    get onHeaderKeydown() {
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onPrependItem),
         whenKeyPD('enter')(self.startEditing),
@@ -158,9 +158,6 @@ export const Bucket = CollectionModel({
     },
   }))
   .actions(self => ({
-    onHeaderKeydown(e) {
-      self.headerKeydownHandlers(e)
-    },
     addItem(model) {
       return getItemCollection(self).add({
         ...model,
