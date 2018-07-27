@@ -114,7 +114,7 @@ function getPrevNode(m) {
 
 function getLeftNode(m) {
   return C(
-    maybeOr_(() => m),
+    maybeOr_(() => m.root),
     maybeOrElse(() => m.prevSibling),
     sChain(m => m.prevSibling),
     m => m.maybeParent,
@@ -122,7 +122,7 @@ function getLeftNode(m) {
 }
 function getRightNode(m) {
   return C(
-    maybeOr_(() => m),
+    maybeOr_(() => m.root),
     maybeOrElse(() => m.nextSibling),
     sChain(m => m.nextSibling),
     m => m.maybeParent,
