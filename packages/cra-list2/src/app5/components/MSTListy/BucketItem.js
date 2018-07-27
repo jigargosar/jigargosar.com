@@ -75,8 +75,6 @@ export const BucketItem = observer(function BucketItem({item}) {
         <Col flex={1}>
           <InputWrapper>
             <Input
-              id={item.inputDOMId}
-              // rows={1}
               value={item.name}
               onBlur={item.onInputBlur}
               onChange={item.onNameChange}

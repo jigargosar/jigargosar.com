@@ -155,9 +155,6 @@ export const Item = CollectionModel({
 })
   .extend(asTreeNode)
   .views(self => ({
-    get inputDOMId() {
-      return `input-${self.id}`
-    },
     get onItemKeydown() {
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onAppendSibling),
