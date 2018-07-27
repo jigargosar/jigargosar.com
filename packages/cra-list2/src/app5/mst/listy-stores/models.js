@@ -29,6 +29,12 @@ function asTreeNode(self) {
       get isLast() {
         return R.last(self.sibling) === self
       },
+      get nextSiblingOrSelf() {
+        return self.isLast ? self : self.sibling[self.index + 1]
+      },
+      get prevSiblingOrSelf() {
+        return self.isFirst ? self : self.sibling[self.index - 1]
+      },
       get siblings() {
         return dotPathOr([], 'parent.children')(self)
       },
