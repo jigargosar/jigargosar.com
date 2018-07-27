@@ -14,7 +14,7 @@ import {
   elemAt,
   maybeToNullable,
   nothingWhenElse,
-  pOr,
+  pathOr,
   sChain,
   SI,
   tapShow,
@@ -34,8 +34,8 @@ function asTreeNode(self) {
         return C(
           R.prepend(self),
           R.flatten,
-          R.map(pOr([])('flattenedTree')),
-          pOr([])('children'),
+          R.map(pathOr([])('flattenedTree')),
+          pathOr([])('children'),
         )(self)
       },
       get isFirst() {
@@ -56,7 +56,7 @@ function asTreeNode(self) {
         )
       },
       get siblings() {
-        return pOr([])('parent.children')(self)
+        return pathOr([])('parent.children')(self)
       },
       get isRoot() {
         return !R.has('parent')(self)

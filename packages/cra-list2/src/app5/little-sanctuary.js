@@ -58,8 +58,9 @@ export const nothingWhenElse = pred => elseFn =>
   R.ifElse(pred)(alwaysNothing)(C(Just, elseFn))
 
 export const nothingWhen = pred => nothingWhenElse(pred)(S.I)
-export const pOr = dv => pathStr => C(maybeOr(dv), dotPath(pathStr))
-export const unlessPath = p => o => pOr(o)(p)(o)
+export const pathOr = dv => pathStr =>
+  C(maybeOr(dv), dotPath(pathStr))
+export const unlessPath = p => o => pathOr(o)(p)(o)
 
 export const elemAt = idx =>
   C(S.join, nothingWhenElse(isIndexOutOfBounds(idx))(S.at(idx)))
