@@ -171,3 +171,5 @@ export const invoke0 = R.invoker(0)
 export const C = R.compose
 export const nullableOr = R.defaultTo
 export const tapEach = R.forEach
+export const Nothing = S.Nothing
+export const toMaybe = S.toMaybe

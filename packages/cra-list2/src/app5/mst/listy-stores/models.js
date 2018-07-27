@@ -10,7 +10,7 @@ import {
   startEditing,
 } from './helpers'
 import * as R from 'ramda'
-import {dotPathOr} from '../../little-ramda'
+import {dotPathOr, toMaybe} from '../../little-ramda'
 
 function asTreeNode(self) {
   return {
@@ -29,11 +29,17 @@ function asTreeNode(self) {
       get isLast() {
         return R.last(self.sibling) === self
       },
-      get nextSiblingOrSelf() {
-        return self.isLast ? self : self.sibling[self.index + 1]
+      get nextSibling() {
+        const nullable = self.isLast
+          ? null
+          : self.sibling[self.index + 1]
+        return toMaybe(nullable)
       },
-      get prevSiblingOrSelf() {
-        return self.isFirst ? self : self.sibling[self.index - 1]
+      get prevSibling() {
+        const nullable = self.isFirst
+          ? null
+          : self.sibling[self.index - 1]
+        return toMaybe(nullable)
       },
       get siblings() {
         return dotPathOr([], 'parent.children')(self)
