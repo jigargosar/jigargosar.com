@@ -70,7 +70,7 @@ export const Bucket = CollectionModel({
       return computeFlatNavModels(self, self.items)
     },
     get children() {
-      return getItemCollection(self).whereEq({bucket: self})
+      return getItemCollection(self).whereEq({parent: self})
     },
   }))
   .actions(self => ({
@@ -80,7 +80,7 @@ export const Bucket = CollectionModel({
     addItem(model) {
       return getItemCollection(self).add({
         ...model,
-        bucket: self,
+        parent: self,
       })
     },
     onAddItem() {
@@ -99,7 +99,7 @@ function updateAttrFromEvent(attr, self) {
 
 export const Item = CollectionModel({
   name: 'Item',
-  attrs: {bucket: types.reference(Bucket)},
+  attrs: {parent: types.reference(Bucket)},
 })
   .views(self => ({
     get flatNavModels() {
@@ -134,6 +134,6 @@ export const Item = CollectionModel({
       endEditing(self)
     },
     onAppendSibling() {
-      self.bucket.onAddItem()
+      self.parent.onAddItem()
     },
   }))
