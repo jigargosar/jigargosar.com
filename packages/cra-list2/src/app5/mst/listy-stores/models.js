@@ -83,6 +83,13 @@ function asTreeNode(self) {
   }
 }
 
+function asEditable(self) {
+  return {
+    views: {},
+    actions: {},
+  }
+}
+
 export const Dashboard = CollectionModel({
   name: 'Dashboard',
 })
