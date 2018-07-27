@@ -20,17 +20,25 @@ function computeFlattenedTree(model) {
   )(model)
 }
 
+function navigatable(self) {
+  return {
+    views: {
+      get flatNavModels() {
+        return computeFlattenedTree(self)
+      },
+    },
+  }
+}
+
 export const Dashboard = CollectionModel({
   name: 'Dashboard',
 })
+  .extend(navigatable)
   .views(self => ({
     get children() {
       return getBucketCollection(self).whereEq({
         parent: self,
       })
-    },
-    get flatNavModels() {
-      return computeFlattenedTree(self)
     },
     get onBtnAddListKeyDown() {
       return withKeyEvent()
@@ -52,6 +60,7 @@ export const Bucket = CollectionModel({
   name: 'Bucket',
   attrs: {parent: types.reference(Dashboard)},
 })
+  .extend(navigatable)
   .views(self => ({
     get headerKeydownHandlers() {
       return withKeyEvent(
@@ -63,9 +72,6 @@ export const Bucket = CollectionModel({
     get headerDOMId() {
       // return `bucket-header-${this.id}`
       return self.id
-    },
-    get flatNavModels() {
-      return computeFlattenedTree(self)
     },
     get children() {
       return getItemCollection(self).whereEq({parent: self})
@@ -99,10 +105,8 @@ export const Item = CollectionModel({
   name: 'Item',
   attrs: {parent: types.reference(Bucket)},
 })
+  .extend(navigatable)
   .views(self => ({
-    get flatNavModels() {
-      return computeFlattenedTree(self)
-    },
     get inputDOMId() {
       return `input-${self.id}`
     },
