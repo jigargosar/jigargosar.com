@@ -17,7 +17,6 @@ import {
   pathOr,
   sChain,
   SI,
-  tapShow,
   unlessPath,
 } from '../../little-sanctuary'
 import {C} from '../../little-ramda'
@@ -38,14 +37,7 @@ function asTreeNode(self) {
           pathOr([])('children'),
         )(self)
       },
-      get isFirst() {
-        return R.head(self.siblings) === self
-      },
-      get isLast() {
-        return R.last(self.siblings) === self
-      },
       get nextSibling() {
-        tapShow(self.index)
         return sChain(idx => elemAt(idx + 1)(self.siblings))(
           self.index,
         )
