@@ -13,10 +13,9 @@ import * as R from 'ramda'
 import {
   elemAt,
   maybeToNullable,
-  nothingWhenElse,
+  nothingWhen,
   pathOr,
   sChain,
-  SI,
   unlessPath,
 } from '../../little-sanctuary'
 import {C} from '../../little-ramda'
@@ -25,11 +24,6 @@ function asTreeNode(self) {
   return {
     views: {
       get flattenedTree() {
-        console.debug(`self.root`, self.root)
-        console.debug(
-          `self.nextSibling`,
-          maybeToNullable(self.nextSibling),
-        )
         return C(
           R.prepend(self),
           R.flatten,
@@ -54,9 +48,8 @@ function asTreeNode(self) {
         return !R.has('parent')(self)
       },
       get index() {
-        // console.assert(!self.isRoot)
         const idx = R.indexOf(self)(self.siblings)
-        return nothingWhenElse(R.equals(-1))(SI)(idx)
+        return nothingWhen(R.equals(-1))(idx)
       },
       get root() {
         return unlessPath('parent.root')(self)
