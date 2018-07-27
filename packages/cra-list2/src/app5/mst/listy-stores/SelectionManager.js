@@ -57,20 +57,9 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.clearSelection()
     },
     navigateNext() {
-      function nextSiblingOrThatOfFirstAncestor(m) {
-        return C(
-          maybeOrElse(() =>
-            sChain(nextSiblingOrThatOfFirstAncestor)(m.maybeParent),
-          ),
-        )(m.nextSibling)
-      }
-
-      const next = S.map(m =>
-        C(
-          maybeOr_(() => m.root),
-          maybeOrElse(() => nextSiblingOrThatOfFirstAncestor(m)),
-        )(m.firstChild),
-      )(self.selectedModelOrCurrentDashboard)
+      const next = S.map(getNextNode)(
+        self.selectedModelOrCurrentDashboard,
+      )
 
       self.setSelectionToMaybeModel(next)
     },
@@ -92,3 +81,18 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.setSelectionToMaybeModel(prev)
     },
   }))
+
+function getNextSiblingOrThatOfFirstAncestor(m) {
+  return C(
+    maybeOrElse(() =>
+      sChain(getNextSiblingOrThatOfFirstAncestor)(m.maybeParent),
+    ),
+  )(m.nextSibling)
+}
+
+function getNextNode(m) {
+  return C(
+    maybeOr_(() => m.root),
+    maybeOrElse(() => getNextSiblingOrThatOfFirstAncestor(m)),
+  )(m.firstChild)
+}
