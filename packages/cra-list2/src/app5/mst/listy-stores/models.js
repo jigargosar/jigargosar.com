@@ -84,12 +84,6 @@ function asTreeNode(self) {
 }
 
 function asEditable(self) {
-  function updateAttrFromEvent(attr, self) {
-    return function(e) {
-      self.updateAttrs({[attr]: e.target.value})
-    }
-  }
-
   return {
     views: {
       get isEditing() {
@@ -111,6 +105,12 @@ function asEditable(self) {
       endEditing: () => endEditing(self),
       startEditing: () => startEditing(self),
     },
+  }
+
+  function updateAttrFromEvent(attr, self) {
+    return function(e) {
+      self.updateAttrs({[attr]: e.target.value})
+    }
   }
 }
 
