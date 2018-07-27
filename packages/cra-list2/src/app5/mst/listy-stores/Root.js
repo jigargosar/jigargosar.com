@@ -40,11 +40,11 @@ export const Root = modelNamed('Root')
     get onGlobalKeyDown() {
       const sm = getSelectionManager(self)
       return withKeyEvent(
-        whenKeyPD('up')(() => sm.navigatePrev()),
-        whenKeyPD('down')(() => sm.navigateNext()),
-        whenKeyPD('left')(() => sm.navigateLeft()),
-        whenKeyPD('right')(() => sm.navigateRight()),
-        whenKeyPD('d')(() => sm.deleteSelectionTree()),
+        whenKeyPD('up')(sm.navigatePrev),
+        whenKeyPD('down')(sm.navigateNext),
+        whenKeyPD('left')(sm.navigateLeft),
+        whenKeyPD('right')(sm.navigateRight),
+        whenKeyPD('d')(sm.deleteSelectionTree),
       )
     },
   }))
