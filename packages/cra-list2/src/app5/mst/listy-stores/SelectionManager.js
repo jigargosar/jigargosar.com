@@ -75,7 +75,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.navigate(getLeftNode)
     },
     navigateRight() {
-      self.navigate(getRightNode())
+      self.navigate(getRightNode)
     },
   }))
 
