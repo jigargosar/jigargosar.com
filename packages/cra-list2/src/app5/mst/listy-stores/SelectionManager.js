@@ -6,7 +6,6 @@ import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
 import {
-  sDotPath,
   maybeOr,
   maybeOr_,
   maybeOrElse,
@@ -112,11 +111,16 @@ function getPrevNode(m) {
 function getLeftNode(m) {
   return C(
     maybeOr(m.root),
-    S.join,
     R.cond([
-      [typeIs(Item), sDotPath('parent.prevSibling')],
-      [typeIs(Bucket), sDotPath('prevSibling')],
-      [typeIs(Dashboard), sDotPath('lastChild')],
+      [
+        typeIs(Item),
+        m =>
+          S.map(p => p.childAtIdxOrLastOrSelf(m.index))(
+            m.parent.prevSibling,
+          ),
+      ],
+      [typeIs(Bucket), m => m.prevSibling],
+      [typeIs(Dashboard), m => m.lastChild],
     ]),
   )(m)
 }
