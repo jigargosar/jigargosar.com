@@ -146,7 +146,6 @@ export const Bucket = CollectionModel({
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onPrependItem),
         whenKeyPD('enter')(self.startEditing),
-
         whenKeyPD('space')(() => alert('space')),
       )
     },
