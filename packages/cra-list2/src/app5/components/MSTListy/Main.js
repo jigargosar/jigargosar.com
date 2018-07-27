@@ -24,8 +24,6 @@ function ListyMain({root}) {
               focusTrapOptions={{
                 escapeDeactivates: false,
                 clickOutsideDeactivates: false,
-                onActivate: (...a) => console.warn(a),
-                onDeactivate: (...a) => console.warn(a),
               }}
             >
               <Dashboard dashboard={dashboard} />
