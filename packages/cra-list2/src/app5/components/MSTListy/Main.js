@@ -8,29 +8,7 @@ import FocusTrap from 'focus-trap-react'
 import {maybeOrNil} from '../../little-sanctuary'
 import EventListener, {withOptions} from 'react-event-listener'
 
-/*eslint-enable, eslint-disable no-empty-pattern*/
-
-/* eslint-disable no-func-assign*/
-
-class K extends React.Component {
-  componentDidMount() {
-    window.addEventListener(
-      'keydown',
-      this.props.root.onGlobalKeyDown,
-    )
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener(
-      'keydown',
-      this.props.root.onGlobalKeyDown,
-    )
-  }
-
-  render() {
-    return null
-  }
-}
+/*eslint-enable*/
 
 function ListyMain({root}) {
   return (
