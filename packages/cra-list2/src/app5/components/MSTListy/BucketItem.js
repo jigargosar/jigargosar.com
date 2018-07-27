@@ -1,19 +1,13 @@
-import {
-  dpFlexRow,
-  preWrapCSS,
-  system,
-  TextArea,
-} from '../little-rebass'
+import {dpFlexRow, preWrapCSS, system} from '../little-rebass'
 import modularScale from 'polished/lib/helpers/modularScale'
 import {observer} from 'mobx-react'
-import FocusTrap from 'focus-trap-react'
-import {cn} from '../utils'
-import {AutoSize} from '../lib/AutoSize'
 import React from 'react'
 import {
   onModelBlur,
   onModelFocus,
 } from '../../mst/listy-stores/view-helpers'
+import {InputWrapper} from './InputWrapper'
+import {Input} from './Input'
 
 const Row = system({
   ...dpFlexRow,
@@ -43,21 +37,6 @@ const ID = system({
   fontSize: 0,
 })
 ID.displayName = 'ID'
-
-const Input = system({
-  is: TextArea,
-  flex: 1,
-  colors: 'selected',
-  css: {resize: 'none'},
-})
-
-const InputWrapper = function InputWrapper({children}) {
-  return (
-    <FocusTrap className={cn('flex-auto flex')}>
-      <AutoSize>{children}</AutoSize>
-    </FocusTrap>
-  )
-}
 
 export const BucketItem = observer(function BucketItem({item}) {
   return (
