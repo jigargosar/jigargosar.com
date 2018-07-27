@@ -6,7 +6,7 @@ import {oInjectNamed} from '../little-mobx-react'
 import {Box, DarkThemeProvider} from '../little-rebass'
 import FocusTrap from 'focus-trap-react'
 import {maybeOrNil} from '../../little-sanctuary'
-import EventListener, {withOptions} from 'react-event-listener'
+import EventListener from 'react-event-listener'
 
 /*eslint-enable*/
 
