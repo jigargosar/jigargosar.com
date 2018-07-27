@@ -24,7 +24,7 @@ import {
 import {C} from '../../little-ramda'
 
 function asTreeNode(self) {
-  const computeChildren = dotPathOr([])('children')
+  const computeChildren = self => dotPathOr([])('children')(self)
 
   return {
     views: {
@@ -40,7 +40,7 @@ function asTreeNode(self) {
         return toMaybe(self.parent)
       },
       get firstChild() {
-        return C(S.first, computeChildren)(self)
+        return C(S.head, computeChildren)(self)
       },
 
       get lastChild() {

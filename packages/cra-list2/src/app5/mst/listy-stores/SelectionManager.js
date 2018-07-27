@@ -5,7 +5,12 @@ import * as R from 'ramda'
 import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
-import {maybeOr_, maybeOrElse, sChain} from '../../little-sanctuary'
+import {
+  maybeOr_,
+  maybeOrElse,
+  sChain,
+  tapShow,
+} from '../../little-sanctuary'
 import {C} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
@@ -114,7 +119,7 @@ function getPrevNode(m) {
 
 function getLeftNode(m) {
   if (m.isRoot) {
-    return maybeOr_(m)(m.lastChild)
+    return maybeOr_(() => m)(m.lastChild)
   }
   return C(
     maybeOr_(() => m.root),
@@ -125,7 +130,7 @@ function getLeftNode(m) {
 }
 function getRightNode(m) {
   if (m.isRoot) {
-    return maybeOr_(m)(m.firstChild)
+    return maybeOr_(() => m)(m.firstChild)
   }
   return C(
     maybeOr_(() => m.root),
