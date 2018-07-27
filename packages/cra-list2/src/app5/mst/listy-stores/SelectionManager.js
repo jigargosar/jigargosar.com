@@ -113,6 +113,9 @@ function getPrevNode(m) {
 }
 
 function getLeftNode(m) {
+  if (m.isRoot) {
+    return maybeOr_(m)(m.lastChild)
+  }
   return C(
     maybeOr_(() => m.root),
     maybeOrElse(() => m.prevSibling),
@@ -121,6 +124,9 @@ function getLeftNode(m) {
   )(m)
 }
 function getRightNode(m) {
+  if (m.isRoot) {
+    return maybeOr_(m)(m.firstChild)
+  }
   return C(
     maybeOr_(() => m.root),
     maybeOrElse(() => m.nextSibling),

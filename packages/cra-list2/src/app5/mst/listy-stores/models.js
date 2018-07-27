@@ -11,9 +11,11 @@ import {
 } from './helpers'
 import * as R from 'ramda'
 import {
+  dotPathOr,
   elemAt,
   maybeOr,
   nothingWhen,
+  S,
   sChain,
   sGets,
   toMaybe,
@@ -22,6 +24,8 @@ import {
 import {C} from '../../little-ramda'
 
 function asTreeNode(self) {
+  const computeChildren = dotPathOr([])('children')
+
   return {
     views: {
       get flattenedTree() {
@@ -36,7 +40,11 @@ function asTreeNode(self) {
         return toMaybe(self.parent)
       },
       get firstChild() {
-        return sGets(R.T)(['children', '0'])(self)
+        return C(S.first, computeChildren)(self)
+      },
+
+      get lastChild() {
+        return C(S.last, computeChildren)(self)
       },
       get nextSibling() {
         return sChain(idx => elemAt(idx + 1)(self.siblings))(

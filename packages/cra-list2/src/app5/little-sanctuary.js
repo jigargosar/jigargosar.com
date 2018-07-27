@@ -9,6 +9,7 @@ export {
 } from 'sanctuary'
 
 // export const maybeToNullable = S.maybeToNullable
+export {S}
 
 if (module.hot) {
   window.S = S
