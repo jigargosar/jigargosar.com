@@ -12,10 +12,12 @@ import {
 import * as R from 'ramda'
 import {
   elemAt,
+  maybeToNullable,
   nothingWhenElse,
   pOr,
   sChain,
   SI,
+  tapShow,
   unlessPath,
 } from '../../little-sanctuary'
 import {C} from '../../little-ramda'
@@ -24,8 +26,11 @@ function asTreeNode(self) {
   return {
     views: {
       get flattenedTree() {
-        console.log(`self.root`, self.root)
-        console.log(`self.nextSibling`, self.nextSibling)
+        console.debug(`self.root`, self.root)
+        console.debug(
+          `self.nextSibling`,
+          maybeToNullable(self.nextSibling),
+        )
         return C(
           R.prepend(self),
           R.flatten,
@@ -40,6 +45,7 @@ function asTreeNode(self) {
         return R.last(self.siblings) === self
       },
       get nextSibling() {
+        tapShow(self.index)
         return sChain(idx => elemAt(idx + 1)(self.siblings))(
           self.index,
         )

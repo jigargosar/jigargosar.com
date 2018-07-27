@@ -4,10 +4,17 @@ import {C, findById, isIndexOutOfBounds, R} from './little-ramda'
 if (module.hot) {
   window.S = S
 }
-export const elem = S.elem
-export const sChain = S.chain
-export const sMap = S.map
-export const SI = S.I
+
+export {
+  elem,
+  chain,
+  chain as sChain,
+  map,
+  map as sMap,
+  I,
+  I as SI,
+  maybeToNullable,
+} from 'sanctuary'
 
 export function tapShowWith(msg) {
   return R.tap(args => console.warn(msg, S.show(args)))
@@ -50,9 +57,9 @@ export const dotPath = strPath => S.gets(R.T)(strPath.split('.'))
 export const nothingWhenElse = pred => elseFn =>
   R.ifElse(pred)(alwaysNothing)(C(Just, elseFn))
 
-export const nothingWhen = pred => nothingWhenElse(pred)(SI)
+export const nothingWhen = pred => nothingWhenElse(pred)(S.I)
 export const pOr = dv => pathStr => C(maybeOr(dv), dotPath(pathStr))
 export const unlessPath = p => o => pOr(o)(p)(o)
 
 export const elemAt = idx =>
-  nothingWhenElse(isIndexOutOfBounds(idx))(elem(idx))
+  C(S.join, nothingWhenElse(isIndexOutOfBounds(idx))(S.at(idx)))
