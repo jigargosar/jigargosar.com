@@ -1,6 +1,6 @@
 /*eslint-disable*/
 
-import React from 'react'
+import React, {Fragment} from 'react'
 import {Dashboard} from './Dashboard'
 import {oInjectNamed} from '../little-mobx-react'
 import {Box, DarkThemeProvider} from '../little-rebass'
@@ -12,7 +12,7 @@ import EventListener from 'react-event-listener'
 
 function ListyMain({root}) {
   return (
-    <FocusTrap>
+    <Fragment>
       <EventListener
         target={window}
         onKeyDown={root.onGlobalKeyDown}
@@ -20,13 +20,22 @@ function ListyMain({root}) {
       <DarkThemeProvider>
         <Box colors={'root'} minHeight={'100vh'} fontFamily={'mono'}>
           {maybeOrNil(dashboard => (
-            <Dashboard dashboard={dashboard} />
+            <FocusTrap
+              focusTrapOptions={{
+                escapeDeactivates: false,
+                clickOutsideDeactivates: true,
+                onActivate: console.warn,
+                onDeactivate: console.warn,
+              }}
+            >
+              ><Dashboard dashboard={dashboard} />
+            </FocusTrap>
           ))(root.currentDashboard)}
           {/*<DomainPatches />*/}
           {/*<DebugStores />*/}
         </Box>
       </DarkThemeProvider>
-    </FocusTrap>
+    </Fragment>
   )
 }
 
