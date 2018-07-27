@@ -64,7 +64,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       )(self.selectedModel)
     },
     onModelFocus(m) {
-      self.setSelectionToModel(m)
+      self._selectedModel = m
     },
     onModelBlur() {
       self.clearSelection()
