@@ -84,6 +84,12 @@ function asTreeNode(self) {
 }
 
 function asEditable(self) {
+  function updateAttrFromEvent(attr, self) {
+    return function(e) {
+      self.updateAttrs({[attr]: e.target.value})
+    }
+  }
+
   return {
     views: {
       get isEditing() {
@@ -134,6 +140,7 @@ export const Bucket = CollectionModel({
   attrs: {parent: types.reference(Dashboard)},
 })
   .extend(asTreeNode)
+  .extend(asEditable)
   .views(self => ({
     get headerKeydownHandlers() {
       return withKeyEvent(
@@ -168,17 +175,12 @@ export const Bucket = CollectionModel({
     },
   }))
 
-function updateAttrFromEvent(attr, self) {
-  return function(e) {
-    self.updateAttrs({[attr]: e.target.value})
-  }
-}
-
 export const Item = CollectionModel({
   name: 'Item',
   attrs: {parent: types.reference(Bucket)},
 })
   .extend(asTreeNode)
+  .extend(asEditable)
   .views(self => ({
     get onItemKeydown() {
       return withKeyEvent(
@@ -193,4 +195,3 @@ export const Item = CollectionModel({
       self.parent.onAddItem()
     },
   }))
-  .extend(asEditable)
