@@ -114,13 +114,5 @@ export const SelectionManager = modelNamed('SelectionManager')
       )(self.selectedModelOrCurrentDashboard)
 
       self.setSelectionToMaybeModel(prev)
-
-      // S.map(self.navigateBy(getPrevIndex))(
-      //   self.selectedModelOrCurrentDashboard,
-      // )
     },
   }))
-
-// function getPrevIndex(idx, models) {
-//   return idx === 0 ? models.length - 1 : idx - 1
-// }
