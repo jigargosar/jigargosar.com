@@ -21,7 +21,9 @@ export function tapShowWith(msg) {
 
 export const tapShow = tapShowWith('tapShow')
 
-export const maybeHead = S.head
+export const sHead = S.head
+export const sFirst = S.head
+export const sLast = S.last
 
 // maybeOrElse :: (_ -> b) -> Maybe a -> Maybe b
 export const maybeOrElse = R.when(S.isNothing)
