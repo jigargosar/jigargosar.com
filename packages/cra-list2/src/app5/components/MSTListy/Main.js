@@ -5,7 +5,7 @@ import {Dashboard} from './Dashboard'
 import {oInjectNamed} from '../little-mobx-react'
 import {Box, DarkThemeProvider} from '../little-rebass'
 import FocusTrap from 'focus-trap-react'
-import {maybeOrNil} from '../../little-sanctyary'
+import {maybeOrNil} from '../../little-sanctuary'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 

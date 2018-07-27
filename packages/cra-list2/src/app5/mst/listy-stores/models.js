@@ -10,8 +10,7 @@ import {
   startEditing,
 } from './helpers'
 import * as R from 'ramda'
-import {dotPathOr} from '../../little-ramda'
-import {nothingWhen, toMaybe} from '../../little-sanctyary'
+import {dotPath, maybeOr, nothingWhen} from '../../little-sanctuary'
 
 function asTreeNode(self) {
   return {
@@ -33,19 +32,21 @@ function asTreeNode(self) {
       get _nextSibling() {
         return self.siblings[self.index + 1]
       },
+      get _prevSibling() {
+        return self.siblings[self.index - 1]
+      },
       get nextSibling() {
         return nothingWhen(R.prop('isLast'))(R.prop('_nextSibling'))(
           self,
         )
       },
       get prevSibling() {
-        const nullable = self.isFirst
-          ? null
-          : self.siblings[self.index - 1]
-        return toMaybe(nullable)
+        return nothingWhen(R.prop('isLast'))(R.prop('_prevSibling'))(
+          self,
+        )
       },
       get siblings() {
-        return dotPathOr([], 'parent.children')(self)
+        return maybeOr([])(dotPath('parent.children')(self))
       },
       get isRoot() {
         return !R.has('parent')(self)
