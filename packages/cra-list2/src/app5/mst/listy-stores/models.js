@@ -29,6 +29,13 @@ function asTreeNode(self) {
       get isRoot() {
         return !R.has('parent')
       },
+      get index() {
+        console.assert(!self.isRoot)
+        return R.indexOf(self)(self.sibling)
+      },
+      get root() {
+        return self.isRoot ? self : self.parent.root
+      },
     },
   }
 }
