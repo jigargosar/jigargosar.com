@@ -63,11 +63,8 @@ export const Bucket = CollectionModel({
       // return `bucket-header-${this.id}`
       return self.id
     },
-    get items() {
-      return self.children
-    },
     get flatNavModels() {
-      return computeFlatNavModels(self, self.items)
+      return computeFlatNavModels(self, self.children)
     },
     get children() {
       return getItemCollection(self).whereEq({parent: self})

@@ -1,6 +1,6 @@
 /* eslint-disable no-func-assign*/
 import React, {Fragment} from 'react'
-import {renderKeyedById} from '../utils'
+import {PropTypes, renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
 import {dpFlexRow, system} from '../little-rebass'
 import {BucketItem} from './BucketItem'
@@ -8,8 +8,14 @@ import {onModelBlur} from '../../mst/listy-stores/view-helpers'
 import {onModelFocus} from '../../mst/listy-stores/view-helpers'
 
 const BucketItems = observer(function BucketItems({bucket}) {
-  return renderKeyedById(BucketItem, 'item', bucket.items)
+  return renderKeyedById(BucketItem, 'item', bucket.children)
 })
+
+BucketItems.propTypes = {
+  bucket: PropTypes.shape({
+    children: PropTypes.array.isRequired,
+  }).isRequired,
+}
 
 const Header = system({
   ...dpFlexRow,
