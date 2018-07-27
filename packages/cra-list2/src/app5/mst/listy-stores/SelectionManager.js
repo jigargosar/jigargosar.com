@@ -65,16 +65,16 @@ export const SelectionManager = modelNamed('SelectionManager')
       const next = S.map(fn)(self.selectedModelOrCurrentDashboard)
       self.setSelectionToMaybeModel(next)
     },
-    navigateNext() {
+    onNavigateNext() {
       self.navigate(getNextNode)
     },
-    navigatePrev() {
+    onNavigatePrev() {
       self.navigate(getPrevNode)
     },
-    navigateLeft() {
+    onNavigateLeft() {
       self.navigate(getLeftNode)
     },
-    navigateRight() {
+    onNavigateRight() {
       self.navigate(getRightNode)
     },
   }))
