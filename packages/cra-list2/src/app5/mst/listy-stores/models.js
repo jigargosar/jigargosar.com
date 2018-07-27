@@ -23,6 +23,12 @@ function asTreeNode(self) {
           R.propOr([], 'children'),
         )(self)
       },
+      get isFirst() {
+        return R.head(self.sibling) === self
+      },
+      get isLast() {
+        return R.last(self.sibling) === self
+      },
       get siblings() {
         return dotPathOr([], 'parent.children')(self)
       },
