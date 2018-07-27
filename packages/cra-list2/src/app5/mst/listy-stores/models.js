@@ -14,6 +14,7 @@ import {
   dotPathOr,
   elemAt,
   maybeOr,
+  maybeOrElse,
   nothingWhen,
   S,
   sChain,
@@ -36,6 +37,7 @@ function asTreeNode(self) {
           R.prop('children'),
         )(self)
       },
+
       get maybeParent() {
         return toMaybe(self.parent)
       },
@@ -68,6 +70,15 @@ function asTreeNode(self) {
       },
       get root() {
         return unlessPath('parent.root')(self)
+      },
+    },
+    actions: {
+      childAtIdxOrLastOrSelf(index) {
+        return C(
+          maybeOr(self),
+          maybeOrElse(() => self.lastChild),
+          sChain(idx => elemAt(idx)(computeChildren(self))),
+        )(index)
       },
     },
   }

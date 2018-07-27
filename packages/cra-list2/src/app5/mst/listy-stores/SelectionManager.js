@@ -126,7 +126,15 @@ function getRightNode(m) {
     maybeOr(m.root),
     S.join,
     R.cond([
-      [typeIs(Item), dotPath('parent.nextSibling')],
+      [
+        typeIs(Item),
+        m =>
+          C(
+            S.map(p => p.childAtIdxOrLastOrSelf(m.index)),
+            S.join,
+            dotPath('parent.nextSibling'),
+          )(m),
+      ],
       [typeIs(Bucket), dotPath('nextSibling')],
       [typeIs(Dashboard), dotPath('firstChild')],
     ]),
