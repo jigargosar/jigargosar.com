@@ -38,22 +38,13 @@ export const Root = modelNamed('Root')
       return S.head(getDashboardCollection(self).list)
     },
     get onGlobalKeyDown() {
+      const sm = getSelectionManager(self)
       return withKeyEvent(
-        whenKeyPD('up')(() =>
-          getSelectionManager(self).navigatePrev(),
-        ),
-        whenKeyPD('down')(() =>
-          getSelectionManager(self).navigateNext(),
-        ),
-        whenKeyPD('left')(() =>
-          getSelectionManager(self).navigateLeft(),
-        ),
-        whenKeyPD('right')(() =>
-          getSelectionManager(self).navigateRight(),
-        ),
-        whenKeyPD('d')(() =>
-          getSelectionManager(self).deleteSelectionTree(),
-        ),
+        whenKeyPD('up')(() => sm.navigatePrev()),
+        whenKeyPD('down')(() => sm.navigateNext()),
+        whenKeyPD('left')(() => sm.navigateLeft()),
+        whenKeyPD('right')(() => sm.navigateRight()),
+        whenKeyPD('d')(() => sm.deleteSelectionTree()),
       )
     },
   }))
