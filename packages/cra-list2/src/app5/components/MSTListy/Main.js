@@ -3,11 +3,9 @@
 import React from 'react'
 import {Dashboard} from './Dashboard'
 import {oInjectNamed} from '../little-mobx-react'
-import {maybeOrNil} from '../../little-ramda'
 import {Box, DarkThemeProvider} from '../little-rebass'
 import FocusTrap from 'focus-trap-react'
-import {whenKeyPD, withKeyEvent} from '../utils'
-import {getSelectionManager} from '../../mst/listy-stores/helpers'
+import {maybeOrNil} from '../../little-sanctyary'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 

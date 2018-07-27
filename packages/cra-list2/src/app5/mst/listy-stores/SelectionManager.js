@@ -2,10 +2,10 @@ import {modelNamed} from '../../little-mst'
 import {types} from 'mobx-state-tree'
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import * as R from 'ramda'
-import {maybeOr_, maybeOrElse} from '../../little-ramda'
 import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
+import {maybeOr_, maybeOrElse} from '../../little-sanctyary'
 
 const modelTypes = [Item, Bucket, Dashboard]
 

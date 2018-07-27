@@ -10,7 +10,8 @@ import {
   startEditing,
 } from './helpers'
 import * as R from 'ramda'
-import {dotPathOr, toMaybe} from '../../little-ramda'
+import {dotPathOr} from '../../little-ramda'
+import {toMaybe} from '../../little-sanctyary'
 
 function asTreeNode(self) {
   return {

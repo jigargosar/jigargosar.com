@@ -3,7 +3,6 @@ import * as RX from 'ramda-extension'
 import validate from './vendor/aproba'
 import * as RA from 'ramda-adjunct'
 import assert from 'assert'
-import S from 'sanctuary'
 import debounce from 'lodash/debounce'
 import throttle from 'lodash/throttle'
 
@@ -11,7 +10,7 @@ export {default as fp} from 'lodash/fp'
 
 const _ = R
 
-export {_, R, RX, RA, validate, S, debounce, throttle}
+export {_, R, RX, RA, validate, debounce, throttle}
 
 if (module.hot) {
   Object.assign(window, require('ramda'))
@@ -67,12 +66,6 @@ export function tapLogWith(msg) {
 
 export const tapLog = tapLogWith('tapLog')
 
-export function tapShowWith(msg) {
-  return _.tap(args => console.warn(msg, S.show(args)))
-}
-
-export const tapShow = tapShowWith('tapShow')
-
 export function wrapLog(fn) {
   const fnName = _.defaultTo('wrapTapLog fn', fn.name)
   return _.curryN(_.length(fn), (...args) => {
@@ -116,26 +109,9 @@ export const idEq = _.curry(function idEq(id, obj) {
 
 export const eqIds = _.eqProps('id')
 
-export const maybeHead = S.head
-
-// maybeOrElse :: (_ -> b) -> Maybe a -> Maybe b
-export const maybeOrElse = _.when(S.isNothing)
-
-export function maybeOr(defaultValue) {
-  return S.maybe(defaultValue)(S.I)
-}
-
-export function maybeOr_(fn) {
-  return S.maybe_(fn)(S.I)
-}
-
-export const maybeOrNil = S.maybe_(() => null)
-
 export const isNotEmpty = _.complement(_.isEmpty)
 
 export const mergeWithDefaults = _.mergeWith(_.defaultTo)
-
-export const alwaysNothing = constant(S.Nothing)
 
 export const modelsToIds = _.map(_.prop('id'))
 
@@ -154,13 +130,6 @@ export const findIndexById = _.curry(function findIndexById(id, arr) {
   return _.findIndex(idEq(id))(arr)
 })
 
-export const findByMaybeId = _.curry(function findByMaybeId(
-  maybeId,
-  arr,
-) {
-  return S.map(_.flip(findById)(arr))(maybeId)
-})
-
 export function overProp(name) {
   return _.over(_.lensProp(name))
 }
@@ -171,5 +140,3 @@ export const invoke0 = R.invoker(0)
 export const C = R.compose
 export const nullableOr = R.defaultTo
 export const tapEach = R.forEach
-export const Nothing = S.Nothing
-export const toMaybe = S.toMaybe
