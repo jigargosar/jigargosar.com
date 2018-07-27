@@ -85,8 +85,26 @@ function asTreeNode(self) {
 
 function asEditable(self) {
   return {
-    views: {},
-    actions: {},
+    views: {
+      get isEditing() {
+        return isEditing(self)
+      },
+      get isEditable() {
+        return true
+      },
+      get onInputKeyDown() {
+        return e => {
+          e.stopPropagation()
+          return withKeyEvent(whenKeyPD('enter')(self.endEditing))(e)
+        }
+      },
+    },
+    actions: {
+      onNameChange: updateAttrFromEvent('name', self),
+      onInputBlur: self.endEditing,
+      endEditing: () => endEditing(self),
+      startEditing: () => startEditing(self),
+    },
   }
 }
 
