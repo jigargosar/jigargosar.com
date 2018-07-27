@@ -13,9 +13,9 @@ function getParentDashboard(model) {
   return Dashboard.is(model)
     ? model
     : Bucket.is(model)
-      ? model.dashboard
+      ? model.parent
       : Item.is(model)
-        ? model.bucket.dashboard
+        ? model.bucket.parent
         : (() => {
             console.error('Invalid Model', model)
             throw new Error('Invalid Model')

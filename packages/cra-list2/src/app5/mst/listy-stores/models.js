@@ -28,7 +28,7 @@ export const Dashboard = CollectionModel({
     },
     get children() {
       return getBucketCollection(self).whereEq({
-        dashboard: self,
+        parent: self,
       })
     },
     get flatNavModels() {
@@ -45,14 +45,14 @@ export const Dashboard = CollectionModel({
     addBucket(model = {}) {
       return getBucketCollection(self).add({
         ...model,
-        dashboard: self,
+        parent: self,
       })
     },
   }))
 
 export const Bucket = CollectionModel({
   name: 'Bucket',
-  attrs: {dashboard: types.reference(Dashboard)},
+  attrs: {parent: types.reference(Dashboard)},
 })
   .views(self => ({
     get headerKeydownHandlers() {
