@@ -12,7 +12,6 @@ import {
 import * as R from 'ramda'
 import {
   elemAt,
-  maybeToNullable,
   nothingWhen,
   pathOr,
   sChain,
@@ -27,8 +26,8 @@ function asTreeNode(self) {
         return C(
           R.prepend(self),
           R.flatten,
-          R.map(pathOr([])('flattenedTree')),
-          pathOr([])('children'),
+          R.map(R.prop('flattenedTree')),
+          R.prop('children'),
         )(self)
       },
       get nextSibling() {

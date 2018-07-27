@@ -1,20 +1,15 @@
 import S from 'sanctuary'
 import {C, findById, isIndexOutOfBounds, R} from './little-ramda'
+export {
+  chain as sChain,
+  maybeToNullable as sMaybeToNullable,
+} from 'sanctuary'
+
+// export const maybeToNullable = S.maybeToNullable
 
 if (module.hot) {
   window.S = S
 }
-
-export {
-  elem,
-  chain,
-  chain as sChain,
-  map,
-  map as sMap,
-  I,
-  I as SI,
-  maybeToNullable,
-} from 'sanctuary'
 
 export function tapShowWith(msg) {
   return R.tap(args => console.warn(msg, S.show(args)))
@@ -60,6 +55,7 @@ export const nothingWhenElse = pred => elseFn =>
 export const nothingWhen = pred => nothingWhenElse(pred)(S.I)
 export const pathOr = dv => pathStr =>
   C(maybeOr(dv), dotPath(pathStr))
+
 export const unlessPath = p => o => pathOr(o)(p)(o)
 
 export const elemAt = idx =>
