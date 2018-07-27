@@ -23,12 +23,12 @@ function ListyMain({root}) {
             <FocusTrap
               focusTrapOptions={{
                 escapeDeactivates: false,
-                clickOutsideDeactivates: true,
-                onActivate: console.warn,
-                onDeactivate: console.warn,
+                clickOutsideDeactivates: false,
+                onActivate: (...a) => console.warn(a),
+                onDeactivate: (...a) => console.warn(a),
               }}
             >
-              ><Dashboard dashboard={dashboard} />
+              <Dashboard dashboard={dashboard} />
             </FocusTrap>
           ))(root.currentDashboard)}
           {/*<DomainPatches />*/}
