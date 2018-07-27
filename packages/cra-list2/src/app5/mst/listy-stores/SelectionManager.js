@@ -23,10 +23,6 @@ function getParentDashboard(model) {
           })()
 }
 
-function getFlatNavModels(model) {
-  return getParentDashboard(model).flattenedTree
-}
-
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedModel: types.maybeNull(
@@ -73,13 +69,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     onModelBlur() {
       self.clearSelection()
     },
-    navigateBy: R.curry((getNewIdx, model) => {
-      const flattenedTree = getFlatNavModels(model)
-      const idx = R.indexOf(model)(flattenedTree)
-      const newIdx = getNewIdx(idx, flattenedTree)
-
-      self.setSelectionToModel(flattenedTree[newIdx])
-    }),
     navigateNext() {
       function nextSiblingOrThatOfFirstAncestor(m) {
         return C(
