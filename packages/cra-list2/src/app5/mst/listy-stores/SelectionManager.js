@@ -69,28 +69,29 @@ export const SelectionManager = modelNamed('SelectionManager')
     onModelBlur() {
       self.clearSelection()
     },
-    tapSelectedModel(fn) {
-      return S.map(fn)(self.selectedModel)
-    },
     navigateBy: R.curry((getNewIdx, model) => {
       const flatNavModels = getFlatNavModels(model)
       const idx = R.indexOf(model)(flatNavModels)
-      const prevIdx = getNewIdx(idx, flatNavModels)
+      const newIdx = getNewIdx(idx, flatNavModels)
 
-      self.setSelectionToModel(flatNavModels[prevIdx])
+      self.setSelectionToModel(flatNavModels[newIdx])
     }),
     navigateNext() {
-      self.tapSelectedModel(
-        self.navigateBy(
-          (idx, models) => (idx === models.length - 1 ? 0 : idx + 1),
-        ),
+      S.map(self.navigateBy(getPrevIndex))(
+        self.selectedModelOrCurrentDashboard,
       )
     },
     navigatePrev() {
-      self.tapSelectedModel(
-        self.navigateBy(
-          (idx, models) => (idx === 0 ? models.length - 1 : idx - 1),
-        ),
+      S.map(self.navigateBy(getNextIdx))(
+        self.selectedModelOrCurrentDashboard,
       )
     },
   }))
+
+function getPrevIndex(idx, models) {
+  return idx === models.length - 1 ? 0 : idx + 1
+}
+
+function getNextIdx(idx, models) {
+  return idx === 0 ? models.length - 1 : idx - 1
+}
