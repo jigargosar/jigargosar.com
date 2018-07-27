@@ -52,7 +52,6 @@ const Dashboard = restoreFocusOnSelectedModelOnMount(
             id={dashboard.id}
             onClick={dashboard.onAddBucket}
             children={'Add List'}
-            onKeyDown={dashboard.onBtnAddListKeyDown}
             onFocus={onModelFocus(dashboard)}
             onBlur={onModelBlur(dashboard)}
           />

@@ -94,9 +94,6 @@ export const Dashboard = CollectionModel({
         parent: self,
       })
     },
-    get onBtnAddListKeyDown() {
-      return withKeyEvent()
-    },
   }))
   .actions(self => ({
     onAddBucket() {
