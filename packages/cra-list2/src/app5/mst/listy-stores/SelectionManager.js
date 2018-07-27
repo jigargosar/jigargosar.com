@@ -69,6 +69,18 @@ export const SelectionManager = modelNamed('SelectionManager')
 
       self.setSelectionToMaybeModel(prev)
     },
+    navigateLeft() {
+      const next = S.map(getLeftNode)(
+        self.selectedModelOrCurrentDashboard,
+      )
+      self.setSelectionToMaybeModel(next)
+    },
+    navigateRight() {
+      const next = S.map(getRightNode)(
+        self.selectedModelOrCurrentDashboard,
+      )
+      self.setSelectionToMaybeModel(next)
+    },
   }))
 
 function getNextNode(m) {
@@ -98,4 +110,19 @@ function getPrevNode(m) {
       m.children,
     )
   }
+}
+
+function getLeftNode(m) {
+  return C(
+    maybeOrElse(() => m.prevSibling),
+    sChain(m => m.prevSibling),
+    m => m.maybeParent,
+  )(m)
+}
+function getRightNode(m) {
+  return C(
+    maybeOrElse(() => m.nextSibling),
+    sChain(m => m.nextSibling),
+    m => m.maybeParent,
+  )(m)
 }
