@@ -45,6 +45,12 @@ export const Root = modelNamed('Root')
         whenKeyPD('down')(() =>
           getSelectionManager(self).navigateNext(),
         ),
+        whenKeyPD('left')(() =>
+          getSelectionManager(self).navigateLeft(),
+        ),
+        whenKeyPD('right')(() =>
+          getSelectionManager(self).navigateRight(),
+        ),
         whenKeyPD('d')(() =>
           getSelectionManager(self).deleteSelectionTree(),
         ),
