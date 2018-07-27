@@ -1,11 +1,16 @@
 import {modelNamed} from '../../little-mst'
-import {types} from 'mobx-state-tree'
+import {getType, types} from 'mobx-state-tree'
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import * as R from 'ramda'
 import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
-import {maybeOr_, maybeOrElse, sChain} from '../../little-sanctuary'
+import {
+  maybeOr,
+  maybeOr_,
+  maybeOrElse,
+  sChain,
+} from '../../little-sanctuary'
 import {C} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
@@ -116,16 +121,11 @@ function getLeftNode(m) {
 }
 
 function getRightNode(m) {
-  return C(
-    maybeOrElse(() => m.firstChild),
-    S.map(findNextSiblingOrThatOfFirstAncestor),
-  )(m.maybeParent)
-
-  function findNextSiblingOrThatOfFirstAncestor(m) {
-    return C(
-      maybeOrElse(() =>
-        sChain(findNextSiblingOrThatOfFirstAncestor)(m.maybeParent),
-      ),
-    )(m.nextSibling)
-  }
+  const typeIs = type => C(R.equals(type), getType)
+  const next = R.cond([
+    [typeIs(Item), C(R.prop('nextSibling'), R.prop('parent'))],
+    [typeIs(Bucket), R.prop('nextSibling')],
+    [typeIs(Dashboard), R.prop('firstChild')],
+  ])(m)
+  return maybeOr(m.root)(next)
 }
