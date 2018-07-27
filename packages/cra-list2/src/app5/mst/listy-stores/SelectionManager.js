@@ -61,30 +61,21 @@ export const SelectionManager = modelNamed('SelectionManager')
     onModelBlur() {
       self.clearSelection()
     },
-    navigateNext() {
-      const next = S.map(getNextNode)(
-        self.selectedModelOrCurrentDashboard,
-      )
+    navigate(fn) {
+      const next = S.map(fn)(self.selectedModelOrCurrentDashboard)
       self.setSelectionToMaybeModel(next)
+    },
+    navigateNext() {
+      self.navigate(getNextNode)
     },
     navigatePrev() {
-      const prev = S.map(getPrevNode)(
-        self.selectedModelOrCurrentDashboard,
-      )
-
-      self.setSelectionToMaybeModel(prev)
+      self.navigate(getPrevNode)
     },
     navigateLeft() {
-      const next = S.map(getLeftNode)(
-        self.selectedModelOrCurrentDashboard,
-      )
-      self.setSelectionToMaybeModel(next)
+      self.navigate(getLeftNode)
     },
     navigateRight() {
-      const next = S.map(getRightNode)(
-        self.selectedModelOrCurrentDashboard,
-      )
-      self.setSelectionToMaybeModel(next)
+      self.navigate(getRightNode())
     },
   }))
 
