@@ -1,5 +1,5 @@
-import {modelNamed} from '../../little-mst'
-import {getType, types} from 'mobx-state-tree'
+import {modelNamed, typeIs} from '../../little-mst'
+import {types} from 'mobx-state-tree'
 import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import * as R from 'ramda'
 import S from 'sanctuary'
@@ -122,11 +122,13 @@ function getLeftNode(m) {
 }
 
 function getRightNode(m) {
-  const typeIs = type => C(R.equals(type), getType)
-  const next = R.cond([
-    [typeIs(Item), dotPath('parent.nextSibling')],
-    [typeIs(Bucket), dotPath('nextSibling')],
-    [typeIs(Dashboard), dotPath('firstChild')],
-  ])(m)
-  return C(maybeOr(m.root), S.join)(next)
+  return C(
+    maybeOr(m.root),
+    S.join,
+    R.cond([
+      [typeIs(Item), dotPath('parent.nextSibling')],
+      [typeIs(Bucket), dotPath('nextSibling')],
+      [typeIs(Dashboard), dotPath('firstChild')],
+    ]),
+  )(m)
 }

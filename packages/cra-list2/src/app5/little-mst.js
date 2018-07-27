@@ -1,5 +1,10 @@
-import {_} from './little-ramda'
-import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
+import {_, C} from './little-ramda'
+import {
+  applySnapshot,
+  getSnapshot,
+  getType,
+  types,
+} from 'mobx-state-tree'
 import * as R from 'ramda'
 
 export {
@@ -72,3 +77,5 @@ if (module.hot) {
 export function modelNamed(name) {
   return types.model(name)
 }
+
+export const typeIs = type => C(R.equals(type), getType)
