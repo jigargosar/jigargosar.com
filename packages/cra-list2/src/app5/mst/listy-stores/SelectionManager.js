@@ -6,6 +6,7 @@ import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
 import {
+  dotPath,
   maybeOr,
   maybeOr_,
   maybeOrElse,
@@ -123,9 +124,9 @@ function getLeftNode(m) {
 function getRightNode(m) {
   const typeIs = type => C(R.equals(type), getType)
   const next = R.cond([
-    [typeIs(Item), C(R.prop('nextSibling'), R.prop('parent'))],
-    [typeIs(Bucket), R.prop('nextSibling')],
-    [typeIs(Dashboard), R.prop('firstChild')],
+    [typeIs(Item), dotPath('parent.nextSibling')],
+    [typeIs(Bucket), dotPath('nextSibling')],
+    [typeIs(Dashboard), dotPath('firstChild')],
   ])(m)
-  return maybeOr(m.root)(next)
+  return C(maybeOr(m.root), S.join)(next)
 }
