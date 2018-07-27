@@ -26,9 +26,8 @@ export const maybeHead = S.head
 // maybeOrElse :: (_ -> b) -> Maybe a -> Maybe b
 export const maybeOrElse = R.when(S.isNothing)
 
-export function maybeOr(defaultValue) {
-  // return S.maybe(defaultValue)(S.I)
-  return S.maybe(defaultValue)(S.I)
+export function maybeOr(dv) {
+  return C(R.defaultTo(dv), S.maybeToNullable)
 }
 
 export function maybeOr_(fn) {
