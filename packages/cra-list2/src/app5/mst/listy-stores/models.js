@@ -7,7 +7,6 @@ import {
   getBucketCollection,
   getItemCollection,
   isEditing,
-  onDelete,
   setSelectionToModel,
   startEditing,
 } from './helpers'
@@ -55,7 +54,6 @@ export const Bucket = CollectionModel({
   .views(self => ({
     get headerKeydownHandlers() {
       return withKeyEvent(
-        whenKeyPD('d')(() => onDelete(self)),
         whenKeyPD('mod+enter')(self.onPrependItem),
         whenKeyPD('enter')(() => alert('enter')),
         whenKeyPD('space')(() => alert('space')),
@@ -113,7 +111,6 @@ export const Item = CollectionModel({
     get onItemKeydown() {
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onAppendSibling),
-        whenKeyPD('d')(() => onDelete(self)),
         whenKeyPD('enter')(() => startEditing(self)),
         whenKeyPD('space')(() => alert('space')),
       )

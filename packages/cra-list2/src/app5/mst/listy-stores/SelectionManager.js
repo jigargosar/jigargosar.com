@@ -5,7 +5,7 @@ import * as R from 'ramda'
 import {C, maybeOr_, maybeOrElse} from '../../little-ramda'
 import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
-import {getCurrentDashboard, onDelete} from './helpers'
+import {getCurrentDashboard} from './helpers'
 
 const modelTypes = [Item, Bucket, Dashboard]
 
@@ -81,23 +81,14 @@ export const SelectionManager = modelNamed('SelectionManager')
     onModelBlur() {
       self.clearSelection()
     },
-
     clearSelection() {
       self._selectedModel = null
     },
-
-    isSelected(m) {
-      return self._selectedModel === m
-    },
     deleteSelectionTree() {
-      if (self._selectedModel) {
-        onDelete(self._selectedModel)
+      const _selectedModel = self._selectedModel
+      if (_selectedModel) {
         self.clearSelection()
-      }
-    },
-    onBeforeModelDelete(m) {
-      if (self.isSelected(m)) {
-        self.clearSelection()
+        _selectedModel.deleteTree()
       }
     },
   }))

@@ -52,10 +52,7 @@ export const Root = modelNamed('Root')
     },
   }))
   .actions(self => ({
-    onModelDelete(m) {
-      getSelectionManager(self).onBeforeModelDelete(m)
-      m.deleteTree()
-    },
+    onModelDelete(m) {},
   }))
   .actions(self => ({
     afterCreate() {
