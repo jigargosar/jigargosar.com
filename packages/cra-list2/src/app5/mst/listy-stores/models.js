@@ -10,7 +10,14 @@ import {
   startEditing,
 } from './helpers'
 import * as R from 'ramda'
-import {nothingWhen, pOr, unlessPath} from '../../little-sanctuary'
+import {
+  elemAt,
+  nothingWhenElse,
+  pOr,
+  sChain,
+  SI,
+  unlessPath,
+} from '../../little-sanctuary'
 import {C} from '../../little-ramda'
 
 function asTreeNode(self) {
@@ -18,6 +25,7 @@ function asTreeNode(self) {
     views: {
       get flattenedTree() {
         console.log(`self.root`, self.root)
+        console.log(`self.nextSibling`, self.nextSibling)
         return C(
           R.prepend(self),
           R.flatten,
@@ -31,20 +39,14 @@ function asTreeNode(self) {
       get isLast() {
         return R.last(self.siblings) === self
       },
-      get _nextSibling() {
-        return self.siblings[self.index + 1]
-      },
-      get _prevSibling() {
-        return self.siblings[self.index - 1]
-      },
       get nextSibling() {
-        return nothingWhen(R.prop('isLast'))(R.prop('_nextSibling'))(
-          self,
+        return sChain(idx => elemAt(idx + 1)(self.siblings))(
+          self.index,
         )
       },
       get prevSibling() {
-        return nothingWhen(R.prop('isLast'))(R.prop('_prevSibling'))(
-          self,
+        return sChain(idx => elemAt(idx - 1)(self.siblings))(
+          self.index,
         )
       },
       get siblings() {
@@ -54,8 +56,9 @@ function asTreeNode(self) {
         return !R.has('parent')(self)
       },
       get index() {
-        console.assert(!self.isRoot)
-        return R.indexOf(self)(self.siblings)
+        // console.assert(!self.isRoot)
+        const idx = R.indexOf(self)(self.siblings)
+        return nothingWhenElse(R.equals(-1))(SI)(idx)
       },
       get root() {
         return unlessPath('parent.root')(self)
