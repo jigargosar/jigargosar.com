@@ -99,12 +99,28 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.setSelectionToMaybeModel(next)
     },
     navigatePrev() {
-      S.map(self.navigateBy(getPrevIndex))(
-        self.selectedModelOrCurrentDashboard,
-      )
+      function lastLeafOrSelf(m) {
+        return C(maybeOr_(() => m), S.map(lastLeafOrSelf), S.last)(
+          m.children,
+        )
+      }
+
+      const prev = S.map(m =>
+        C(
+          maybeOr_(() => lastLeafOrSelf(m.root)),
+          maybeOrElse(() => m.maybeParent),
+          S.map(lastLeafOrSelf),
+        )(m.prevSibling),
+      )(self.selectedModelOrCurrentDashboard)
+
+      self.setSelectionToMaybeModel(prev)
+
+      // S.map(self.navigateBy(getPrevIndex))(
+      //   self.selectedModelOrCurrentDashboard,
+      // )
     },
   }))
 
-function getPrevIndex(idx, models) {
-  return idx === 0 ? models.length - 1 : idx - 1
-}
+// function getPrevIndex(idx, models) {
+//   return idx === 0 ? models.length - 1 : idx - 1
+// }
