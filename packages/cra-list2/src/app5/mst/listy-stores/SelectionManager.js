@@ -114,14 +114,18 @@ function getLeftNode(m) {
     m => m.maybeParent,
   )(m)
 }
+
 function getRightNode(m) {
-  if (m.isRoot) {
-    return maybeOr_(() => m)(m.firstChild)
-  }
   return C(
-    maybeOr_(() => m.root),
-    maybeOrElse(() => m.nextSibling),
-    sChain(m => m.nextSibling),
-    m => m.maybeParent,
-  )(m)
+    maybeOrElse(() => m.firstChild),
+    S.map(findNextSiblingOrThatOfFirstAncestor),
+  )(m.maybeParent)
+
+  function findNextSiblingOrThatOfFirstAncestor(m) {
+    return C(
+      maybeOrElse(() =>
+        sChain(findNextSiblingOrThatOfFirstAncestor)(m.maybeParent),
+      ),
+    )(m.nextSibling)
+  }
 }
