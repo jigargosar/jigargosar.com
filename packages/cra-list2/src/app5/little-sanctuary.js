@@ -27,6 +27,7 @@ export const maybeHead = S.head
 export const maybeOrElse = R.when(S.isNothing)
 
 export function maybeOr(defaultValue) {
+  // return S.maybe(defaultValue)(S.I)
   return S.maybe(defaultValue)(S.I)
 }
 

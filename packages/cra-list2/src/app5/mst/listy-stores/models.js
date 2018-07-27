@@ -71,8 +71,6 @@ function asTreeNode(self) {
       get root() {
         return unlessPath('parent.root')(self)
       },
-    },
-    actions: {
       childAtIdxOrLastOrSelf(index) {
         return C(
           maybeOr(self),
@@ -81,6 +79,7 @@ function asTreeNode(self) {
         )(index)
       },
     },
+    actions: {},
   }
 }
 
@@ -90,9 +89,7 @@ export const Dashboard = CollectionModel({
   .extend(asTreeNode)
   .views(self => ({
     get children() {
-      return getBucketCollection(self).whereEq({
-        parent: self,
-      })
+      return getBucketCollection(self).whereEq({parent: self})
     },
   }))
   .actions(self => ({
