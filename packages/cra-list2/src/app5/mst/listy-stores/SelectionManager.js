@@ -5,12 +5,7 @@ import * as R from 'ramda'
 import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
-import {
-  maybeOr_,
-  maybeOrElse,
-  sChain,
-  tapShow,
-} from '../../little-sanctuary'
+import {maybeOr_, maybeOrElse, sChain} from '../../little-sanctuary'
 import {C} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
