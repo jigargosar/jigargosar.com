@@ -15,15 +15,15 @@ function computeFlattenedTree(model) {
   return R.compose(
     R.prepend(model),
     R.flatten,
-    R.map(R.prop('flatNavModels')),
+    R.map(R.prop('flattenedTree')),
     R.propOr([], 'children'),
   )(model)
 }
 
-function navigatable(self) {
+function asTreeNode(self) {
   return {
     views: {
-      get flatNavModels() {
+      get flattenedTree() {
         return computeFlattenedTree(self)
       },
     },
@@ -33,7 +33,7 @@ function navigatable(self) {
 export const Dashboard = CollectionModel({
   name: 'Dashboard',
 })
-  .extend(navigatable)
+  .extend(asTreeNode)
   .views(self => ({
     get children() {
       return getBucketCollection(self).whereEq({
@@ -60,7 +60,7 @@ export const Bucket = CollectionModel({
   name: 'Bucket',
   attrs: {parent: types.reference(Dashboard)},
 })
-  .extend(navigatable)
+  .extend(asTreeNode)
   .views(self => ({
     get headerKeydownHandlers() {
       return withKeyEvent(
@@ -105,7 +105,7 @@ export const Item = CollectionModel({
   name: 'Item',
   attrs: {parent: types.reference(Bucket)},
 })
-  .extend(navigatable)
+  .extend(asTreeNode)
   .views(self => ({
     get inputDOMId() {
       return `input-${self.id}`

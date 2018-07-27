@@ -23,7 +23,7 @@ function getParentDashboard(model) {
 }
 
 function getFlatNavModels(model) {
-  return getParentDashboard(model).flatNavModels
+  return getParentDashboard(model).flattenedTree
 }
 
 export const SelectionManager = modelNamed('SelectionManager')
@@ -60,7 +60,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     onDashboardMount(d) {
       R.compose(
         self.setSelectionToModel,
-        maybeOr_(() => R.compose(R.last, R.take(3))(d.flatNavModels)),
+        maybeOr_(() => R.compose(R.last, R.take(3))(d.flattenedTree)),
       )(self.selectedModel)
     },
     onModelFocus(m) {
@@ -70,11 +70,11 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.clearSelection()
     },
     navigateBy: R.curry((getNewIdx, model) => {
-      const flatNavModels = getFlatNavModels(model)
-      const idx = R.indexOf(model)(flatNavModels)
-      const newIdx = getNewIdx(idx, flatNavModels)
+      const flattenedTree = getFlatNavModels(model)
+      const idx = R.indexOf(model)(flattenedTree)
+      const newIdx = getNewIdx(idx, flattenedTree)
 
-      self.setSelectionToModel(flatNavModels[newIdx])
+      self.setSelectionToModel(flattenedTree[newIdx])
     }),
     navigateNext() {
       S.map(self.navigateBy(getPrevIndex))(
