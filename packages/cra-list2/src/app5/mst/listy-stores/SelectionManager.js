@@ -10,19 +10,6 @@ import {C} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
 
-function getParentDashboard(model) {
-  return Dashboard.is(model)
-    ? model
-    : Bucket.is(model)
-      ? model.parent
-      : Item.is(model)
-        ? model.parent.parent
-        : (() => {
-            console.error('Invalid Model', model)
-            throw new Error('Invalid Model')
-          })()
-}
-
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedModel: types.maybeNull(

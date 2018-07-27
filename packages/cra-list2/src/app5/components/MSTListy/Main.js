@@ -6,6 +6,7 @@ import {oInjectNamed} from '../little-mobx-react'
 import {Box, DarkThemeProvider} from '../little-rebass'
 import FocusTrap from 'focus-trap-react'
 import {maybeOrNil} from '../../little-sanctuary'
+import EventListener, {withOptions} from 'react-event-listener'
 
 /*eslint-enable, eslint-disable no-empty-pattern*/
 
@@ -34,7 +35,10 @@ class K extends React.Component {
 function ListyMain({root}) {
   return (
     <FocusTrap>
-      <K root={root} />
+      <EventListener
+        target={window}
+        onKeyDown={root.onGlobalKeyDown}
+      />
       <DarkThemeProvider>
         <Box colors={'root'} minHeight={'100vh'} fontFamily={'mono'}>
           {maybeOrNil(dashboard => (
