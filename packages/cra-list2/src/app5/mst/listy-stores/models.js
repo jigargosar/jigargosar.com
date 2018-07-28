@@ -128,7 +128,7 @@ export const Item = CollectionModel({
   }))
   .actions(self => ({
     onAppendSibling() {
-      self.parent.onAddItem()
+      self.parent.onAddChild()
     },
   }))
 
@@ -155,17 +155,8 @@ export const Bucket = CollectionModel({
     },
   }))
   .actions(self => ({
-    addItem(model) {
-      return getCollectionOfModelType(self, Item).add({
-        ...model,
-        parent: self,
-      })
-    },
-    onAddItem() {
-      setSelectionToModel(self.addItem())
-    },
     onPrependItem() {
-      self.onAddItem()
+      self.onAddChild()
     },
   }))
 

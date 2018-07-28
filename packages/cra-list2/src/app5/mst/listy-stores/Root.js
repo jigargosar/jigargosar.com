@@ -53,7 +53,7 @@ export const Root = modelNamed('Root')
       getCollectionOfModelType(self, Dashboard)
         .add()
         .addBucket()
-        .addItem()
+        .addChild()
     },
     initModule() {
       const module = getEnv(self).module
