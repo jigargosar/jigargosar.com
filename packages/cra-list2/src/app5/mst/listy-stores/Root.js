@@ -31,9 +31,9 @@ const Database = modelNamed('Database')
   .props(R.map(optionalObj)(collectionProps))
   .views(self => ({
     getCollection: R.cond([
-      [typeIs(Item), () => self.items],
-      [typeIs(Bucket), () => self.buckets],
-      [typeIs(Dashboard), () => self.dashboards],
+      [R.equals(Item), () => self.items],
+      [R.equals(Bucket), () => self.buckets],
+      [R.equals(Dashboard), () => self.dashboards],
     ]),
   }))
 

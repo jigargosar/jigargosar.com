@@ -4,7 +4,7 @@ import {whenKeyPD, withKeyEvent} from '../../components/utils'
 import {
   endEditing,
   getBucketCollection,
-  getItemCollection,
+  getCollection,
   isEditing,
   setSelectionToModel,
   startEditing,
@@ -154,12 +154,12 @@ export const Bucket = CollectionModel({
       return self.id
     },
     get children() {
-      return getItemCollection(self).whereEq({parent: self})
+      return getCollection(self, Item).whereEq({parent: self})
     },
   }))
   .actions(self => ({
     addItem(model) {
-      return getItemCollection(self).add({
+      return getCollection(self, Item).add({
         ...model,
         parent: self,
       })

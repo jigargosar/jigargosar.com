@@ -28,6 +28,10 @@ function getDatabase(self) {
   return getRoot(self).database
 }
 
+export function getCollection(self, modelType) {
+  return getDatabase(self).getCollection(modelType)
+}
+
 export function getItemCollection(self) {
   return getDatabase(self).items
 }
