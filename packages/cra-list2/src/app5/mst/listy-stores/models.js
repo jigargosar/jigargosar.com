@@ -102,15 +102,11 @@ function asEditable(self) {
 export const Item = CollectionModel({
   name: 'Item',
   attrs: {
-    parent: types.reference(types.late('Bucket', () => Bucket)),
+    parent: bucketRef(),
   },
 })
   .extend(asTreeNode)
   .extend(asEditable)
-
-function dashboardRef() {
-  return types.reference(types.late('Dashboard', () => Dashboard))
-}
 
 export const Bucket = CollectionModel({
   name: 'Bucket',
@@ -124,6 +120,14 @@ export const Dashboard = C(
   extend(hasManyChildren(() => Buckets)),
   extendAsTreeNode,
 )(CollectionModel({name: 'Dashboard'}))
+
+function bucketRef() {
+  return types.reference(types.late('Bucket', () => Bucket))
+}
+
+function dashboardRef() {
+  return types.reference(types.late('Dashboard', () => Dashboard))
+}
 
 export const Items = Collection(Item)
 export const Buckets = Collection(Bucket)
