@@ -53,11 +53,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
   }))
   .actions(self => ({
-    endEditing(ref) {
-      if (self.isEditingModel(ref)) {
-        self._isEditing = false
-      }
-    },
     onEndEditSelected() {
       console.assert(self._isEditing === true)
       self._isEditing = false

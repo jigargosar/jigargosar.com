@@ -51,12 +51,7 @@ export const BucketItem = observer(function BucketItem({item}) {
       {item.isEditing ? (
         <Col flex={1}>
           <InputWrapper>
-            <Input
-              value={item.name}
-              onBlur={item.onInputBlur}
-              onChange={item.onInputChange}
-              onKeyDown={item.onInputKeyDown}
-            />
+            <Input value={item.name} onChange={item.onInputChange} />
           </InputWrapper>
         </Col>
       ) : (

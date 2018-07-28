@@ -12,10 +12,6 @@ export function setSelectionToModel(self) {
   getSelectionManager(self).setSelectionToModel(self)
 }
 
-export function endEditingModel(self) {
-  getEditManager(self).endEditing(self)
-}
-
 export function isEditingModel(self) {
   return getEditManager(self).isEditingModel(self)
 }

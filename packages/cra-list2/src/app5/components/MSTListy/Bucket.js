@@ -47,9 +47,7 @@ export const Bucket = observer(function Bucket({bucket}) {
           <InputWrapper>
             <Input
               value={bucket.name}
-              onBlur={bucket.onInputBlur}
               onChange={bucket.onInputChange}
-              onKeyDown={bucket.onInputKeyDown}
             />
           </InputWrapper>
         ) : (
