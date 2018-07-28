@@ -23,6 +23,19 @@ export const SelectionManager = modelNamed('SelectionManager')
     _isEditing: false,
   })
   .views(self => ({
+    get onKeyDown() {
+      return self._isEditing
+        ? self.onEditModeKeyDown
+        : self.onSelectionModeKeyDown
+    },
+    get onEditModeKeyDown() {
+      return {}
+    },
+    get onSelectionModeKeyDown() {
+      return {}
+    },
+  }))
+  .views(self => ({
     isEditingModel(model) {
       return self._isEditing && self._selectedModel === model
     },
