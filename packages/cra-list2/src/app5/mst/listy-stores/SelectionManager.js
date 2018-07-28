@@ -65,7 +65,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       }
     },
     startEditingModel(model) {
-      self.setSelectionToModel(model)
+      self.setSelectionTo(model)
       requestAnimationFrame(() => self.onEditSelected())
     },
     onModEnter() {
@@ -108,16 +108,13 @@ export const SelectionManager = modelNamed('SelectionManager')
         _selectedModel.deleteTree()
       }
     },
-    setSelectionToModel(m) {
+    setSelectionTo(m) {
       self._selectedModel = m
       setFocusAndSelectionOnDOMId(m.id)
     },
-    setSelectionToMaybeModel(mm) {
-      S.map(R.tap(self.setSelectionToModel))(mm)
-    },
     onDashboardMount(d) {
       C(
-        self.setSelectionToModel,
+        self.setSelectionTo,
         maybeOr_(() => C(R.last, R.take(3))(d.flattenedTree)),
       )(self.selectedModel)
     },
@@ -126,7 +123,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     navigate(fn) {
       const next = S.map(fn)(self.navModel)
-      self.setSelectionToMaybeModel(next)
+      S.map(self.setSelectionTo)(next)
     },
     onNavigateNext: () => self.navigate(getNextNode),
     onNavigatePrev: () => self.navigate(getPrevNode),
