@@ -4,7 +4,7 @@ import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import * as R from 'ramda'
 import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
-import {getCurrentDashboard, isEditing, startEditing} from './helpers'
+import {getCurrentDashboard, isEditing} from './helpers'
 import {
   maybeOr,
   maybeOr_,
@@ -21,19 +21,24 @@ export const SelectionManager = modelNamed('SelectionManager')
       types.union(...R.map(types.reference)(modelTypes)),
     ),
     _editId: types.maybeNull(types.string),
+    _isEditing: false,
   })
   .views(self => ({
-    isEditing(ref) {
-      return self._editId === ref.id
+    isEditing(model) {
+      return self._isEditing && self._selectedModel === model
     },
   }))
   .actions(self => ({
-    startEditing(model) {
-      self._editId = model.id
-    },
     endEditing(ref) {
       if (self.isEditing(ref)) {
-        self._editId = null
+        self._isEditing = false
+      }
+    },
+    onEditSelected(e) {
+      const _selectedModel = self._selectedModel
+      if (_selectedModel && _selectedModel.isEditable) {
+        e.preventDefault()
+        self._isEditing = true
       }
     },
   }))
@@ -56,13 +61,6 @@ export const SelectionManager = modelNamed('SelectionManager')
       if (_selectedModel && !isEditing(_selectedModel)) {
         self.clearSelection()
         _selectedModel.deleteTree()
-      }
-    },
-    onEditSelected(e) {
-      const _selectedModel = self._selectedModel
-      if (_selectedModel && _selectedModel.isEditable) {
-        e.preventDefault()
-        startEditing(_selectedModel)
       }
     },
     setSelectionToModel(m) {
