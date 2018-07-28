@@ -19,7 +19,7 @@ import {hasManyChildren} from './hasManyChildren'
 import {Collection} from '../Collection'
 import {extend} from '../../little-mst'
 
-function asTreeNode(self) {
+const asTreeNode = extend(self => {
   const computeChildren = self => dotPathOr([])('children')(self)
 
   return {
@@ -76,26 +76,23 @@ function asTreeNode(self) {
     },
     actions: {},
   }
-}
-
-const extendAsTreeNode = extend(asTreeNode)
-
-const asEditable = extend(function asEditable(self) {
-  return {
-    views: {
-      get isEditable() {
-        return true
-      },
-      get isEditing() {
-        return isEditingModel(self)
-      },
-    },
-    actions: {
-      onInputChange: e => self.updateAttrFromEvent('name', e),
-    },
-  }
 })
-export const Item = C(asEditable, extendAsTreeNode)(
+
+const asEditable = extend(self => ({
+  views: {
+    get isEditable() {
+      return true
+    },
+    get isEditing() {
+      return isEditingModel(self)
+    },
+  },
+  actions: {
+    onInputChange: e => self.updateAttrFromEvent('name', e),
+  },
+}))
+
+export const Item = C(asEditable, asTreeNode)(
   CollectionModel({
     name: 'Item',
     attrs: {parent: bucketRef()},
@@ -105,7 +102,7 @@ export const Item = C(asEditable, extendAsTreeNode)(
 export const Bucket = C(
   hasManyChildren(() => Items),
   asEditable,
-  extendAsTreeNode,
+  asTreeNode,
 )(
   CollectionModel({
     name: 'Bucket',
@@ -115,7 +112,7 @@ export const Bucket = C(
 
 export const Dashboard = C(
   hasManyChildren(() => Buckets),
-  extendAsTreeNode,
+  asTreeNode,
 )(CollectionModel({name: 'Dashboard'}))
 
 function bucketRef() {
