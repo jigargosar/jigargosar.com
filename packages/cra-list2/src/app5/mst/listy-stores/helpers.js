@@ -4,16 +4,12 @@ export function getSelectionManager(self) {
   return getRoot(self).selectionManager
 }
 
-export function getEditManager(self) {
-  return getRoot(self).selectionManager
-}
-
 export function startEditingModel(self) {
   getSelectionManager(self).startEditingModel(self)
 }
 
 export function isEditingModel(self) {
-  return getEditManager(self).isEditingModel(self)
+  return getSelectionManager(self).isEditingModel(self)
 }
 
 function getDatabase(self) {
