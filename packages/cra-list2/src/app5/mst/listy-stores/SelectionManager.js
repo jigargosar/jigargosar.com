@@ -79,7 +79,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModel = m
     },
     onModelBlur() {
-      self.clearSelection()
+      // self.clearSelection()
     },
     navigate(fn) {
       const next = S.map(fn)(self.selectedModelOrCurrentDashboard)
