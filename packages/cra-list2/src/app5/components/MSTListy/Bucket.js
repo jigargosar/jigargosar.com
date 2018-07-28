@@ -37,8 +37,8 @@ export const Bucket = observer(function Bucket({bucket}) {
   return (
     <Fragment>
       <Header
-        id={bucket.headerDOMId}
-        onKeyDown={bucket.onHeaderKeydown}
+        id={bucket.id}
+        onKeyDown={bucket.onKeydown}
         onFocus={onModelFocus(bucket)}
         onBlur={onModelBlur(bucket)}
         variant={bucket.isEditing ? 'selected' : 'default'}

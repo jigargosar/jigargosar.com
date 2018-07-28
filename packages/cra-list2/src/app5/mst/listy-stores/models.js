@@ -136,16 +136,12 @@ export const Bucket = CollectionModel({
   .extend(asEditable)
   .extend(hasManyChildren(() => ItemsCollection))
   .views(self => ({
-    get onHeaderKeydown() {
+    get onKeydown() {
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onPrependChild),
         whenKeyPD('enter')(self.startEditing),
         whenKeyPD('space')(() => alert('space')),
       )
-    },
-    get headerDOMId() {
-      // return `bucket-header-${this.id}`
-      return self.id
     },
   }))
 
