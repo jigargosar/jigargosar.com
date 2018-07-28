@@ -6,6 +6,8 @@ import {dpFlexRow, system} from '../little-rebass'
 import {BucketItem} from './BucketItem'
 import {onModelBlur} from '../../mst/listy-stores/view-helpers'
 import {onModelFocus} from '../../mst/listy-stores/view-helpers'
+import {InputWrapper} from './InputWrapper'
+import {Input} from './Input'
 
 const BucketItems = observer(function BucketItems({bucket}) {
   return renderKeyedById(BucketItem, 'item', bucket.children)
@@ -40,9 +42,20 @@ export const Bucket = observer(function Bucket({bucket}) {
         onFocus={onModelFocus(bucket)}
         onBlur={onModelBlur(bucket)}
       >
-        <Title>
-          {bucket.name || 'I am a Bucket Short and Stout'}
-        </Title>
+        {bucket.isEditing ? (
+          <InputWrapper>
+            <Input
+              value={bucket.name}
+              onBlur={bucket.onInputBlur}
+              onChange={bucket.onNameChange}
+              onKeyDown={bucket.onInputKeyDown}
+            />
+          </InputWrapper>
+        ) : (
+          <Title>
+            {bucket.name || 'I am a Bucket Short and Stout'}
+          </Title>
+        )}
       </Header>
       <BucketItems bucket={bucket} />
     </Fragment>
