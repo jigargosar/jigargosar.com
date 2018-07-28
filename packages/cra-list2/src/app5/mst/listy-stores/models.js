@@ -99,20 +99,23 @@ function asEditable(self) {
   }
 }
 
-export const Item = CollectionModel({
-  name: 'Item',
-  attrs: {parent: bucketRef()},
-})
-  .extend(asTreeNode)
-  .extend(asEditable)
+export const Item = C(extend(asEditable), extendAsTreeNode)(
+  CollectionModel({
+    name: 'Item',
+    attrs: {parent: bucketRef()},
+  }),
+)
 
-export const Bucket = CollectionModel({
-  name: 'Bucket',
-  attrs: {parent: dashboardRef()},
-})
-  .extend(asTreeNode)
-  .extend(asEditable)
-  .extend(hasManyChildren(() => Items))
+export const Bucket = C(
+  extend(hasManyChildren(() => Items)),
+  extend(asEditable),
+  extendAsTreeNode,
+)(
+  CollectionModel({
+    name: 'Bucket',
+    attrs: {parent: dashboardRef()},
+  }),
+)
 
 export const Dashboard = C(
   extend(hasManyChildren(() => Buckets)),
