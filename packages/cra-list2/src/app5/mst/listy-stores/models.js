@@ -22,7 +22,7 @@ import {
   unlessPath,
 } from '../../little-sanctuary'
 import {C} from '../../little-ramda'
-import {hasMany} from './hasMany'
+import {hasManyChildren} from './hasManyChildren'
 
 function asTreeNode(self) {
   const computeChildren = self => dotPathOr([])('children')(self)
@@ -135,7 +135,7 @@ export const Bucket = CollectionModel({
 })
   .extend(asTreeNode)
   .extend(asEditable)
-  .extend(hasMany(Item))
+  .extend(hasManyChildren(Item))
   .views(self => ({
     get onHeaderKeydown() {
       return withKeyEvent(
@@ -168,7 +168,7 @@ export const Dashboard = CollectionModel({
   name: 'Dashboard',
 })
   .extend(asTreeNode)
-  .extend(hasMany(Bucket))
+  .extend(hasManyChildren(Bucket))
   .actions(self => ({
     onAddBucket() {
       setSelectionToModel(self.addBucket())
