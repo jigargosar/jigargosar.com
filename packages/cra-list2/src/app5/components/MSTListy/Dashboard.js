@@ -9,7 +9,6 @@ import system from 'system-components'
 import styled from 'styled-components'
 import modularScale from 'polished/lib/helpers/modularScale'
 import {
-  onModelBlur,
   onModelFocus,
   restoreFocusOnSelectedModelOnDashboardMount,
 } from '../../mst/listy-stores/view-helpers'
@@ -53,7 +52,6 @@ const Dashboard = restoreFocusOnSelectedModelOnMount(
             onClick={dashboard.onAddChild}
             children={'Add List'}
             onFocus={onModelFocus(dashboard)}
-            onBlur={onModelBlur(dashboard)}
           />
         </Panel>
       </Layout>

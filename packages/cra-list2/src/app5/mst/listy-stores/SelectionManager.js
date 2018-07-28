@@ -113,9 +113,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     onModelFocus(m) {
       self._selectedModel = m
     },
-    onModelBlur() {
-      // self.clearSelection()
-    },
     navigate(fn) {
       const next = S.map(fn)(self.selectedModelOrCurrentDashboard)
       self.setSelectionToMaybeModel(next)

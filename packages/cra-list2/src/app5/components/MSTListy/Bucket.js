@@ -4,7 +4,6 @@ import {PropTypes, renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
 import {dpFlexRow, preWrapCSS, system} from '../little-rebass'
 import {BucketItem} from './BucketItem'
-import {onModelBlur} from '../../mst/listy-stores/view-helpers'
 import {onModelFocus} from '../../mst/listy-stores/view-helpers'
 import {InputWrapper} from './InputWrapper'
 import {Input} from './Input'
@@ -38,9 +37,7 @@ export const Bucket = observer(function Bucket({bucket}) {
     <Fragment>
       <Header
         id={bucket.id}
-        onKeyDown={bucket.onKeydown}
         onFocus={onModelFocus(bucket)}
-        onBlur={onModelBlur(bucket)}
         variant={bucket.isEditing ? 'selected' : 'default'}
       >
         {bucket.isEditing ? (

@@ -2,10 +2,7 @@ import {dpFlexRow, preWrapCSS, system} from '../little-rebass'
 import modularScale from 'polished/lib/helpers/modularScale'
 import {observer} from 'mobx-react'
 import React from 'react'
-import {
-  onModelBlur,
-  onModelFocus,
-} from '../../mst/listy-stores/view-helpers'
+import {onModelFocus} from '../../mst/listy-stores/view-helpers'
 import {InputWrapper} from './InputWrapper'
 import {Input} from './Input'
 
@@ -42,8 +39,6 @@ export const BucketItem = observer(function BucketItem({item}) {
       id={item.id}
       variant={item.isEditing ? 'selected' : 'default'}
       onFocus={onModelFocus(item)}
-      onBlur={onModelBlur(item)}
-      onKeyDown={item.onKeydown}
     >
       <Col>
         <ID>{item.id.slice(5, 8)}</ID>
