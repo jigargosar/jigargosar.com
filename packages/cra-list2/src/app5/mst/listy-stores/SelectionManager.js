@@ -66,11 +66,24 @@ export const SelectionManager = modelNamed('SelectionManager')
         self._isEditing = true
       }
     },
+    startEditingModel(model) {
+      self.setSelectionToModel(model)
+      self._isEditing = true
+    },
     onModEnter() {
       if (self._selectedModel) {
         _cond([
-          [typeIs(Item), i => i.parent.onAddChildAfterSibling(i)],
-          [typeIs(Bucket), b => b.onPrependChild()],
+          [
+            typeIs(Item),
+            i =>
+              self.startEditingModel(
+                i.parent.onAddChildAfterSibling(i),
+              ),
+          ],
+          [
+            typeIs(Bucket),
+            b => self.startEditingModel(b.onPrependChild()),
+          ],
         ])(self._selectedModel)
       }
     },
