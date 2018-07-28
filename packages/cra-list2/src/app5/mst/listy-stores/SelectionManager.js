@@ -71,7 +71,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     onModEnter() {
       const afterAdd = self.startEditingModel
       const whenTypeIs = C(_cond, mapFst(typeIs))
-      self.tapSelected(
+      self.mapSelected(
         whenTypeIs([
           [Item, i => afterAdd(i.parent.onAddChildAfterSibling(i))],
           [Bucket, b => afterAdd(b.onPrependChild())],
@@ -94,11 +94,11 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModel = null
       self._isEditing = false
     },
-    tapSelected(fn) {
-      S.map(R.tap(fn))(self.selectedModel)
+    mapSelected(fn) {
+      S.map(fn)(self.selectedModel)
     },
     onDeleteSelectionTree() {
-      self.tapSelected(m => {
+      self.mapSelected(m => {
         self.clearSelection()
         m.deleteTree()
       })
