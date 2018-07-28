@@ -59,6 +59,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       }
     },
     onEditSelected(e) {
+      console.assert(self._isEditing === false)
       const _selectedModel = self._selectedModel
       if (_selectedModel && _selectedModel.isEditable) {
         e.preventDefault()
