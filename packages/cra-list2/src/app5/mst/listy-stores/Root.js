@@ -12,7 +12,6 @@ import {
 import {dotPath, isNotNil} from '../../little-ramda'
 import * as R from 'ramda'
 import {SelectionManager} from './SelectionManager'
-import {EditManager} from './EditManager'
 import {actionLogger} from 'mst-middlewares'
 import {
   getCollectionOfModelType,
