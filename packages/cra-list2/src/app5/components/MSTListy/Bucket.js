@@ -45,6 +45,7 @@ export const Bucket = observer(function Bucket({bucket}) {
         {bucket.isEditing ? (
           <InputWrapper>
             <Input
+              textStyle={'bucketTitle'}
               value={bucket.name}
               onBlur={bucket.onInputBlur}
               onChange={bucket.onNameChange}

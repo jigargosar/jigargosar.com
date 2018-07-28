@@ -6,4 +6,5 @@ export const Input = system({
   flex: 1,
   colors: 'selected',
   css: {resize: 'none'},
+  textStyle: null,
 })
