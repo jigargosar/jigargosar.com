@@ -66,7 +66,7 @@ export const SelectionManager = modelNamed('SelectionManager')
         self._isEditing = true
       }
     },
-    onModEnter(e) {
+    onModEnter() {
       if (self._selectedModel) {
         _cond([
           [typeIs(Item), i => i.parent.onAddChild()],
