@@ -135,15 +135,21 @@ export const Bucket = CollectionModel({
   .extend(asTreeNode)
   .extend(asEditable)
   .extend(hasManyChildren(() => ItemsCollection))
-  .views(self => ({
-    get onKeydown() {
-      return withKeyEvent(
-        whenKeyPD('mod+enter')(self.onPrependChild),
-        whenKeyPD('enter')(self.startEditing),
-        whenKeyPD('space')(() => alert('space')),
-      )
-    },
-  }))
+  .views(self => {
+    const onSuperKeydown = R.defaultTo(R.identity)(self.onKeydown)
+    return {
+      get onKeydown() {
+        return C(
+          onSuperKeydown,
+          withKeyEvent(
+            whenKeyPD('mod+enter')(self.onPrependChild),
+            whenKeyPD('enter')(self.startEditing),
+            whenKeyPD('space')(() => alert('space')),
+          ),
+        )
+      },
+    }
+  })
 
 export const Dashboard = CollectionModel({
   name: 'Dashboard',
