@@ -80,7 +80,7 @@ function asTreeNode(self) {
 
 const extendAsTreeNode = extend(asTreeNode)
 
-function asEditable(self) {
+const asEditable = extend(function asEditable(self) {
   return {
     views: {
       get isEditable() {
@@ -94,9 +94,8 @@ function asEditable(self) {
       onInputChange: e => self.updateAttrFromEvent('name', e),
     },
   }
-}
-
-export const Item = C(extend(asEditable), extendAsTreeNode)(
+})
+export const Item = C(asEditable, extendAsTreeNode)(
   CollectionModel({
     name: 'Item',
     attrs: {parent: bucketRef()},
@@ -105,7 +104,7 @@ export const Item = C(extend(asEditable), extendAsTreeNode)(
 
 export const Bucket = C(
   hasManyChildren(() => Items),
-  extend(asEditable),
+  asEditable,
   extendAsTreeNode,
 )(
   CollectionModel({
