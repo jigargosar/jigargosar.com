@@ -14,9 +14,9 @@ export function hasManyChildren(childType) {
       onAddChild() {
         setSelectionToModel(self.addChild())
       },
-      addChild(model = {}) {
+      addChild(attrs = {}) {
         return getCollection(self, childType).add({
-          ...model,
+          ...attrs,
           parent: self,
         })
       },
