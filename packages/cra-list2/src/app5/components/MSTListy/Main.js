@@ -16,9 +16,16 @@ function ListyMain({root}) {
       <EventListener
         target={window}
         onKeyDown={root.onGlobalKeyDown}
+        onChange={console.warn}
       />
       <DarkThemeProvider>
-        <Box colors={'root'} minHeight={'100vh'} fontFamily={'mono'}>
+        <Box
+          colors={'root'}
+          minHeight={'100vh'}
+          fontFamily={'mono'}
+          onChange={console.warn}
+          onKeyDown={root.onGlobalKeyDown}
+        >
           {maybeOrNil(dashboard => (
             <FocusTrap
               focusTrapOptions={{
