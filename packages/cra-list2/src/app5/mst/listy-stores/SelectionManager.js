@@ -117,9 +117,9 @@ export const SelectionManager = modelNamed('SelectionManager')
       S.map(R.tap(self.setSelectionToModel))(mm)
     },
     onDashboardMount(d) {
-      R.compose(
+      C(
         self.setSelectionToModel,
-        maybeOr_(() => R.compose(R.last, R.take(3))(d.flattenedTree)),
+        maybeOr_(() => C(R.last, R.take(3))(d.flattenedTree)),
       )(self.selectedModel)
     },
     onModelFocus(m) {
