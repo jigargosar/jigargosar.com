@@ -3,7 +3,6 @@ import {types} from 'mobx-state-tree'
 import {whenKeyPD, withKeyEvent} from '../../components/utils'
 import {
   endEditing,
-  getBucketCollection,
   getCollection,
   isEditing,
   setSelectionToModel,
@@ -120,7 +119,7 @@ export const Dashboard = CollectionModel({
   .extend(asTreeNode)
   .views(self => ({
     get children() {
-      return getBucketCollection(self).whereEq({parent: self})
+      return getCollection(self, Bucket).whereEq({parent: self})
     },
   }))
   .actions(self => ({
@@ -128,7 +127,7 @@ export const Dashboard = CollectionModel({
       setSelectionToModel(self.addBucket())
     },
     addBucket(model = {}) {
-      return getBucketCollection(self).add({
+      return getCollection(self, Bucket).add({
         ...model,
         parent: self,
       })

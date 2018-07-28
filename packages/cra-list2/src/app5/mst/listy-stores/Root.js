@@ -2,7 +2,6 @@ import {
   applySnapshot2,
   modelNamed,
   optionalObj,
-  typeIs,
 } from '../../little-mst'
 import {
   addDisposer,
@@ -15,7 +14,7 @@ import * as R from 'ramda'
 import {SelectionManager} from './SelectionManager'
 import {EditManager} from './EditManager'
 import {actionLogger} from 'mst-middlewares'
-import {getDashboardCollection, getSelectionManager} from './helpers'
+import {getCollection, getSelectionManager} from './helpers'
 import S from 'sanctuary'
 import {Collection} from '../Collection'
 import {Bucket, Dashboard, Item} from './models'
@@ -45,7 +44,7 @@ export const Root = modelNamed('Root')
   })
   .views(self => ({
     get currentDashboard() {
-      return S.head(getDashboardCollection(self).list)
+      return S.head(getCollection(self, Dashboard).list)
     },
     get onGlobalKeyDown() {
       const sm = getSelectionManager(self)
@@ -64,7 +63,7 @@ export const Root = modelNamed('Root')
       self.initModule()
     },
     addMockData() {
-      getDashboardCollection(self)
+      getCollection(self, Dashboard)
         .add()
         .addBucket()
         .addItem()

@@ -32,18 +32,6 @@ export function getCollection(self, modelType) {
   return getDatabase(self).getCollection(modelType)
 }
 
-export function getItemCollection(self) {
-  return getDatabase(self).items
-}
-
-export function getDashboardCollection(self) {
-  return getDatabase(self).dashboards
-}
-
-export function getBucketCollection(self) {
-  return getDatabase(self).buckets
-}
-
 export function getCurrentDashboard(self) {
   return getRoot(self).currentDashboard
 }
