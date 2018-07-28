@@ -34,7 +34,7 @@ export const SelectionManager = modelNamed('SelectionManager')
         : self.onSelectionModeKeyDown
     },
     get onEditModeKeyDown() {
-      return {}
+      return withKeyEvent(whenKey('enter')(self.onEndEditSelected))
     },
     get onSelectionModeKeyDown() {
       return withKeyEvent(
