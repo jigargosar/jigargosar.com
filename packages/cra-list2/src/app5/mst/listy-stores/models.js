@@ -1,13 +1,7 @@
 import {CollectionModel} from '../CollectionModel'
 import {types} from 'mobx-state-tree'
 import {whenKeyPD, withKeyEvent} from '../../components/utils'
-import {
-  endEditing,
-  getCollectionOfModelType,
-  isEditing,
-  setSelectionToModel,
-  startEditing,
-} from './helpers'
+import {endEditing, isEditing, startEditing} from './helpers'
 import * as R from 'ramda'
 import {
   dotPathOr,
@@ -160,17 +154,6 @@ export const Dashboard = CollectionModel({
 })
   .extend(asTreeNode)
   .extend(hasManyChildren(() => BucketsCollection))
-  .actions(self => ({
-    onAddChild() {
-      setSelectionToModel(self.addChild())
-    },
-    addChild(model = {}) {
-      return getCollectionOfModelType(self, Bucket).add({
-        ...model,
-        parent: self,
-      })
-    },
-  }))
 
 export const ItemsCollection = Collection(Item)
 export const BucketsCollection = Collection(Bucket)
