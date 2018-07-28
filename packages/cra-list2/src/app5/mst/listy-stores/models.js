@@ -144,7 +144,7 @@ export const Bucket = CollectionModel({
   .views(self => ({
     get onHeaderKeydown() {
       return withKeyEvent(
-        whenKeyPD('mod+enter')(self.onPrependItem),
+        whenKeyPD('mod+enter')(self.onPrependChild),
         whenKeyPD('enter')(self.startEditing),
         whenKeyPD('space')(() => alert('space')),
       )
@@ -152,11 +152,6 @@ export const Bucket = CollectionModel({
     get headerDOMId() {
       // return `bucket-header-${this.id}`
       return self.id
-    },
-  }))
-  .actions(self => ({
-    onPrependItem() {
-      self.onAddChild()
     },
   }))
 

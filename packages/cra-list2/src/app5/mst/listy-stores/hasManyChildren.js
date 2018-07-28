@@ -14,6 +14,7 @@ export function hasManyChildren(lazyCollection) {
       onAddChild: () => setSelectionToModel(self.addChild({})),
       addChild: attrs =>
         self.childCollection.add({...attrs, parent: self}),
+      onPrependChild: () => self.onAddChild(),
     },
   })
 }
