@@ -118,15 +118,19 @@ export const Item = CollectionModel({
 })
   .extend(asTreeNode)
   .extend(asEditable)
-  .views(self => ({
-    get onKeydown() {
-      return withKeyEvent(
-        whenKeyPD('mod+enter')(self.onAppendSibling),
-        whenKeyPD('enter')(self.startEditing),
-        whenKeyPD('space')(() => alert('space')),
-      )
-    },
-  }))
+  .views(self => {
+    const onSuperKeydown = R.defaultTo(R.identity)(self.onKeydown)
+    return {
+      get onKeydown() {
+        const handler = withKeyEvent(
+          whenKeyPD('mod+enter')(self.onAppendSibling),
+          whenKeyPD('enter')(self.startEditing),
+          whenKeyPD('space')(() => alert('space')),
+        )
+        return C(onSuperKeydown, handler)
+      },
+    }
+  })
   .actions(self => ({
     onAppendSibling() {
       self.parent.onAddChild()
@@ -146,13 +150,11 @@ export const Bucket = CollectionModel({
     const onSuperKeydown = R.defaultTo(R.identity)(self.onKeydown)
     return {
       get onKeydown() {
-        return C(
-          onSuperKeydown,
-          withKeyEvent(
-            whenKeyPD('mod+enter')(self.onPrependChild),
-            whenKeyPD('space')(() => alert('space')),
-          ),
+        const handler = withKeyEvent(
+          whenKeyPD('mod+enter')(self.onPrependChild),
+          whenKeyPD('space')(() => alert('space')),
         )
+        return C(onSuperKeydown, handler)
       },
     }
   })
