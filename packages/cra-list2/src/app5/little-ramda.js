@@ -145,3 +145,4 @@ export const M = R.map
 export const _cond = R.cond
 export const EQ = R.equals
 export const _tap = R.tap
+export const PO = R.propOr

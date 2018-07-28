@@ -15,7 +15,7 @@ import {
   toMaybe,
   unlessPath,
 } from '../../little-sanctuary'
-import {C} from '../../little-ramda'
+import {C, PO} from '../../little-ramda'
 import {hasManyChildren} from './hasManyChildren'
 import {Collection} from '../Collection'
 
@@ -79,7 +79,7 @@ function asTreeNode(self) {
 }
 
 function asEditable(self) {
-  const onSuperKeydown = R.propOr(R.identity)('onKeydown')(self)
+  const onSuperKeydown = PO(R.identity)('onKeydown')(self)
   return {
     views: {
       get onKeydown() {
@@ -116,7 +116,7 @@ export const Item = CollectionModel({
   .extend(asTreeNode)
   .extend(asEditable)
   .views(self => {
-    const onSuperKeydown = R.defaultTo(R.identity)(self.onKeydown)
+    const onSuperKeydown = PO(R.identity)('onKeydown')(self)
     return {
       get onKeydown() {
         const handler = withKeyEvent(
@@ -143,7 +143,7 @@ export const Bucket = CollectionModel({
   .extend(asEditable)
   .extend(hasManyChildren(() => ItemsCollection))
   .views(self => {
-    const onSuperKeydown = R.defaultTo(R.identity)(self.onKeydown)
+    const onSuperKeydown = PO(R.identity)('onKeydown')(self)
     return {
       get onKeydown() {
         const handler = withKeyEvent(
