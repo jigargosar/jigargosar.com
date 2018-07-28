@@ -1,12 +1,18 @@
 import {modelNamed, optionalObj} from '../../little-mst'
 import * as R from 'ramda'
-import {Bucket, Dashboard, Item} from './models'
-import {Collection} from '../Collection'
+import {
+  Bucket,
+  Buckets,
+  Dashboard,
+  Dashboards,
+  Item,
+  Items,
+} from './models'
 
 const collectionProps = {
-  items: Collection(Item),
-  buckets: Collection(Bucket),
-  dashboards: Collection(Dashboard),
+  items: Items,
+  buckets: Buckets,
+  dashboards: Dashboards,
 }
 
 export const Database = modelNamed('Database')

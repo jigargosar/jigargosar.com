@@ -23,6 +23,7 @@ import {
 } from '../../little-sanctuary'
 import {C} from '../../little-ramda'
 import {hasManyChildren} from './hasManyChildren'
+import {Collection} from '../Collection'
 
 function asTreeNode(self) {
   const computeChildren = self => dotPathOr([])('children')(self)
@@ -110,7 +111,9 @@ function asEditable(self) {
 
 export const Item = CollectionModel({
   name: 'Item',
-  attrs: {parent: types.reference(types.late(() => Bucket))},
+  attrs: {
+    parent: types.reference(types.late('Bucket', () => Bucket)),
+  },
 })
   .extend(asTreeNode)
   .extend(asEditable)
@@ -131,7 +134,9 @@ export const Item = CollectionModel({
 
 export const Bucket = CollectionModel({
   name: 'Bucket',
-  attrs: {parent: types.reference(types.late(() => Dashboard))},
+  attrs: {
+    parent: types.reference(types.late('Dashboard', () => Dashboard)),
+  },
 })
   .extend(asTreeNode)
   .extend(asEditable)
@@ -180,3 +185,11 @@ export const Dashboard = CollectionModel({
       })
     },
   }))
+
+const ItemsCollection = Collection(Item)
+const BucketsCollection = Collection(Bucket)
+const DashboardsCollection = Collection(Dashboard)
+
+export const Items = ItemsCollection.type
+export const Buckets = BucketsCollection.type
+export const Dashboards = DashboardsCollection.type
