@@ -34,8 +34,6 @@ export const Root = modelNamed('Root')
   .actions(self => ({
     afterCreate() {
       addDisposer(self, addMiddleware(self, actionLogger))
-      setImmediate(self.initModule)
-      // self.initModule()
     },
     addMockData() {
       getCollectionInstance(self, Dashboards)
@@ -43,8 +41,7 @@ export const Root = modelNamed('Root')
         .addChild({})
         .addChild({})
     },
-    initModule() {
-      const module = getEnv(self).module
+    initModule(module) {
       if (module && module.hot) {
         window.r = self
         const snapKey = Root.name
@@ -56,8 +53,6 @@ export const Root = modelNamed('Root')
         module.hot.dispose(
           data => (data[snapKey] = getSnapshot(self)),
         )
-      } else {
-        self.addMockData()
       }
     },
   }))

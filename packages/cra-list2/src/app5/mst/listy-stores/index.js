@@ -3,7 +3,6 @@ import {setLivelynessChecking} from 'mobx-state-tree'
 
 setLivelynessChecking('warn')
 
-const root = Root.create({}, {module})
-const domain = root.domain
-
-export {domain, root}
+const root = Root.create({})
+root.initModule(module)
+export {root}

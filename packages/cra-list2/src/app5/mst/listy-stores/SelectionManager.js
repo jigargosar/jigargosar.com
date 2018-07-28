@@ -19,12 +19,11 @@ import {
 import {_cond, C} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
+const modelRefs = R.map(types.reference)(modelTypes)
 
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
-    _selectedModel: types.maybeNull(
-      types.union(...R.map(types.reference)(modelTypes)),
-    ),
+    _selectedModel: types.maybeNull(types.union(...modelRefs)),
     _isEditing: false,
   })
   .views(self => ({
@@ -91,7 +90,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     get selectedModel() {
       return S.toMaybe(self._selectedModel)
     },
-    get selectedModelOrCurrentDashboard() {
+    get navModel() {
       return maybeOrElse(() => getCurrentDashboard(self))(
         self.selectedModel,
       )
@@ -126,7 +125,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModel = m
     },
     navigate(fn) {
-      const next = S.map(fn)(self.selectedModelOrCurrentDashboard)
+      const next = S.map(fn)(self.navModel)
       self.setSelectionToMaybeModel(next)
     },
     onNavigateNext: () => self.navigate(getNextNode),
