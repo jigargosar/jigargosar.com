@@ -43,7 +43,7 @@ export const BucketItem = observer(function BucketItem({item}) {
       variant={item.isEditing ? 'selected' : 'default'}
       onFocus={onModelFocus(item)}
       onBlur={onModelBlur(item)}
-      onKeyDown={item.onItemKeydown}
+      onKeyDown={item.onKeydown}
     >
       <Col>
         <ID>{item.id.slice(5, 8)}</ID>

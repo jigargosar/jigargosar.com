@@ -112,7 +112,7 @@ export const Item = CollectionModel({
   .extend(asTreeNode)
   .extend(asEditable)
   .views(self => ({
-    get onItemKeydown() {
+    get onKeydown() {
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onAppendSibling),
         whenKeyPD('enter')(self.startEditing),
