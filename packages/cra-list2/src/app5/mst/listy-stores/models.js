@@ -130,6 +130,27 @@ function hasMany(modelType) {
   })
 }
 
+export const Item = CollectionModel({
+  name: 'Item',
+  attrs: {parent: types.reference(types.late(() => Bucket))},
+})
+  .extend(asTreeNode)
+  .extend(asEditable)
+  .views(self => ({
+    get onItemKeydown() {
+      return withKeyEvent(
+        whenKeyPD('mod+enter')(self.onAppendSibling),
+        whenKeyPD('enter')(self.startEditing),
+        whenKeyPD('space')(() => alert('space')),
+      )
+    },
+  }))
+  .actions(self => ({
+    onAppendSibling() {
+      self.parent.onAddItem()
+    },
+  }))
+
 export const Bucket = CollectionModel({
   name: 'Bucket',
   attrs: {parent: types.reference(types.late(() => Dashboard))},
@@ -167,37 +188,11 @@ export const Bucket = CollectionModel({
     },
   }))
 
-export const Item = CollectionModel({
-  name: 'Item',
-  attrs: {parent: types.reference(Bucket)},
-})
-  .extend(asTreeNode)
-  .extend(asEditable)
-  .views(self => ({
-    get onItemKeydown() {
-      return withKeyEvent(
-        whenKeyPD('mod+enter')(self.onAppendSibling),
-        whenKeyPD('enter')(self.startEditing),
-        whenKeyPD('space')(() => alert('space')),
-      )
-    },
-  }))
-  .actions(self => ({
-    onAppendSibling() {
-      self.parent.onAddItem()
-    },
-  }))
-
 export const Dashboard = CollectionModel({
   name: 'Dashboard',
 })
   .extend(asTreeNode)
   .extend(hasMany(Bucket))
-  .views(self => ({
-    get children() {
-      return getCollection(self, Bucket).whereEq({parent: self})
-    },
-  }))
   .actions(self => ({
     onAddBucket() {
       setSelectionToModel(self.addBucket())
