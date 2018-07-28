@@ -24,16 +24,19 @@ const modelRefs = R.map(types.reference)(modelTypes)
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedModel: types.maybeNull(types.union(...modelRefs)),
-    _isEditing: false,
+    isEditing: false,
   })
   .views(self => ({
     get onKeyDown() {
-      return self._isEditing
+      return self.isEditing
         ? self.onEditModeKeyDown
         : self.onSelectionModeKeyDown
     },
     get onEditModeKeyDown() {
-      return withKeyEvent(whenKey('enter')(self.onEndEditSelected))
+      return withKeyEvent(
+        whenKey('enter')(self.onEndEditSelected),
+        whenKey('mod+enter')(self.onModEnter),
+      )
     },
     get onSelectionModeKeyDown() {
       return withKeyEvent(
@@ -49,22 +52,25 @@ export const SelectionManager = modelNamed('SelectionManager')
   }))
   .views(self => ({
     isEditingModel(model) {
-      return self._isEditing && self._selectedModel === model
+      return self.isEditing && self._selectedModel === model
     },
   }))
   .actions(self => ({
     onEndEditSelected() {
-      console.assert(self._isEditing === true)
-      self._isEditing = false
+      console.assert(self.isEditing === true)
+      self.isEditing = false
     },
     onEditSelected() {
-      console.assert(self._isEditing === false)
+      console.assert(self.isEditing === false)
       const _selectedModel = self._selectedModel
       if (_selectedModel && _selectedModel.isEditable) {
-        self._isEditing = true
+        self.isEditing = true
       }
     },
     startEditingModel(model) {
+      if (self.isEditing) {
+        self.onEndEditSelected()
+      }
       self.setSelectionTo(model)
       requestAnimationFrame(() => self.onEditSelected())
     },
@@ -88,7 +94,7 @@ export const SelectionManager = modelNamed('SelectionManager')
   .actions(self => ({
     clearSelection() {
       self._selectedModel = null
-      self._isEditing = false
+      self.isEditing = false
     },
     mapSelected(fn) {
       S.map(fn)(self.selectedModel)
