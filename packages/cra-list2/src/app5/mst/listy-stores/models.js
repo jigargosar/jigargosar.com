@@ -82,6 +82,8 @@ function asTreeNode(self) {
   }
 }
 
+const extendAsTreeNode = extend(asTreeNode)
+
 function asEditable(self) {
   const onSuperKeydown = PO(R.identity)('onKeydown')(self)
   return {
@@ -160,7 +162,7 @@ export const Bucket = CollectionModel({
 
 export const Dashboard = C(
   extend(hasManyChildren(() => BucketsCollection)),
-  extend(asTreeNode),
+  extendAsTreeNode,
 )(
   CollectionModel({
     name: 'Dashboard',
