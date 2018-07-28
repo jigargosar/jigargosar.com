@@ -12,7 +12,7 @@ export function setSelectionToModel(self) {
   getSelectionManager(self).setSelectionToModel(self)
 }
 
-export function endEditing(self) {
+export function endEditingModel(self) {
   getEditManager(self).endEditing(self)
 }
 
