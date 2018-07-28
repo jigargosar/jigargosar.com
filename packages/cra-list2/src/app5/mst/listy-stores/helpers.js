@@ -8,8 +8,8 @@ export function getEditManager(self) {
   return getRoot(self).selectionManager
 }
 
-export function setSelectionToModel(self) {
-  getSelectionManager(self).setSelectionToModel(self)
+export function startEditingModel(self) {
+  getSelectionManager(self).startEditingModel(self)
 }
 
 export function isEditingModel(self) {

@@ -1,4 +1,4 @@
-import {getCollectionInstance, setSelectionToModel} from './helpers'
+import {getCollectionInstance, startEditingModel} from './helpers'
 
 export function hasManyChildren(lazyCollection) {
   return self => ({
@@ -11,7 +11,7 @@ export function hasManyChildren(lazyCollection) {
       },
     },
     actions: {
-      onAddChild: () => setSelectionToModel(self.addChild({})),
+      onAddChild: () => startEditingModel(self.addChild({})),
       addChild: attrs =>
         self.childCollection.add({...attrs, parent: self}),
       onPrependChild: () => self.addChild({}),
