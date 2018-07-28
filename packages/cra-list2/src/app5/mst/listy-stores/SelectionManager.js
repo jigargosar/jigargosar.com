@@ -1,6 +1,11 @@
 import {modelNamed, typeIs} from '../../little-mst'
 import {types} from 'mobx-state-tree'
-import {setFocusAndSelectionOnDOMId} from '../../components/utils'
+import {
+  setFocusAndSelectionOnDOMId,
+  whenKey,
+  whenKeyPD,
+  withKeyEvent,
+} from '../../components/utils'
 import * as R from 'ramda'
 import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
@@ -32,7 +37,14 @@ export const SelectionManager = modelNamed('SelectionManager')
       return {}
     },
     get onSelectionModeKeyDown() {
-      return {}
+      return withKeyEvent(
+        whenKeyPD('up')(self.onNavigatePrev),
+        whenKeyPD('down')(self.onNavigateNext),
+        whenKeyPD('left')(self.onNavigateLeft),
+        whenKeyPD('right')(self.onNavigateRight),
+        whenKeyPD('d')(self.onDeleteSelectionTree),
+        whenKey('enter')(self.onEditSelected),
+      )
     },
   }))
   .views(self => ({
