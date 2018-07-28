@@ -16,7 +16,7 @@ function ListyMain({root}) {
         colors={'root'}
         minHeight={'100vh'}
         fontFamily={'mono'}
-        onChange={console.warn}
+        // onChange={console.warn}
         onKeyDown={root.onGlobalKeyDown}
       >
         {maybeOrNil(dashboard => (
