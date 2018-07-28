@@ -99,17 +99,11 @@ function asEditable(self) {
       },
     },
     actions: {
-      onNameChange: updateAttrFromEvent('name', self),
+      onNameChange: self.updateAttrFromEvent('name'),
       onInputBlur: self.endEditing,
       endEditing: () => endEditing(self),
       startEditing: () => startEditing(self),
     },
-  }
-
-  function updateAttrFromEvent(attr, self) {
-    return function(e) {
-      self.updateAttrs({[attr]: e.target.value})
-    }
   }
 }
 

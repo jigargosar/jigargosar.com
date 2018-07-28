@@ -49,6 +49,12 @@ export function CollectionModel({name, attrs = {}}) {
       updateAttrs(attrs) {
         Object.assign(self, attrs)
       },
+      updateAttrFromEvent(attr) {
+        return function(e) {
+          self.updateAttrs({[attr]: e.target.value})
+        }
+      },
+
       deleteTree() {
         tapEach(invoke0('deleteTree'))(self.children)
         self.collection.delete(self)
