@@ -2,13 +2,13 @@ import {
   applySnapshot2,
   modelNamed,
   optionalCollections,
+  optionalObj,
 } from '../../little-mst'
 import {
   addDisposer,
   addMiddleware,
   getEnv,
   getSnapshot,
-  types,
 } from 'mobx-state-tree'
 import {dotPath, isNotNil} from '../../little-ramda'
 import * as R from 'ramda'
@@ -27,11 +27,16 @@ const collectionProps = {
   dashboards: Collection(Dashboard),
 }
 
+const Database = modelNamed('Database').props(
+  optionalCollections(collectionProps),
+)
+
 export const Root = modelNamed('Root')
   .props({
+    database: optionalObj(Database),
     ...optionalCollections(collectionProps),
-    selectionManager: types.optional(SelectionManager, {}),
-    editManager: types.optional(EditManager, {}),
+    selectionManager: optionalObj(SelectionManager),
+    editManager: optionalObj(EditManager),
   })
   .views(self => ({
     get currentDashboard() {
