@@ -108,23 +108,22 @@ export const Item = CollectionModel({
   .extend(asTreeNode)
   .extend(asEditable)
 
+function dashboardRef() {
+  return types.reference(types.late('Dashboard', () => Dashboard))
+}
+
 export const Bucket = CollectionModel({
   name: 'Bucket',
-  attrs: {
-    parent: types.reference(types.late('Dashboard', () => Dashboard)),
-  },
+  attrs: {parent: dashboardRef()},
 })
   .extend(asTreeNode)
   .extend(asEditable)
   .extend(hasManyChildren(() => Items))
+
 export const Dashboard = C(
   extend(hasManyChildren(() => Buckets)),
   extendAsTreeNode,
-)(
-  CollectionModel({
-    name: 'Dashboard',
-  }),
-)
+)(CollectionModel({name: 'Dashboard'}))
 
 export const Items = Collection(Item)
 export const Buckets = Collection(Bucket)
