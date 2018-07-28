@@ -40,7 +40,8 @@ export const Root = modelNamed('Root')
         whenKeyPD('down')(sm.onNavigateNext),
         whenKeyPD('left')(sm.onNavigateLeft),
         whenKeyPD('right')(sm.onNavigateRight),
-        whenKeyPD('d')(sm.deleteSelectionTree),
+        whenKeyPD('d')(sm.onDeleteSelectionTree),
+        whenKeyPD('enter')(sm.onEditSelected),
       )
     },
   }))
