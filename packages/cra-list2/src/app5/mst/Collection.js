@@ -2,11 +2,17 @@ import {types} from 'mobx-state-tree'
 import {mValues} from '../mobx/little-mobx'
 import {modelNamed} from '../little-mst'
 import {T, whereEq, filter, reject, find, map, forEach} from 'ramda'
+import {C, R} from '../little-ramda'
+import Sugar from 'sugar'
 import {pluralize} from '../little-model'
+
+const spacify = Sugar.String.spacify
 
 export function Collection(Model) {
   return {
-    tableName: pluralize(Model.name),
+    tableName: C(pluralize, R.head, R.split(' '), spacify)(
+      Model.name,
+    ),
     Model,
     type: modelNamed(`${Model.name}Collection`)
       .props({

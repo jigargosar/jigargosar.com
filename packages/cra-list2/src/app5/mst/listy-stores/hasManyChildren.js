@@ -1,16 +1,10 @@
-import {
-  getCollectionOfModelType,
-  setSelectionToModel,
-} from './helpers'
+import {getCollectionInstance, setSelectionToModel} from './helpers'
 
-export function hasManyChildren(collectionContainer) {
+export function hasManyChildren(lazyCollection) {
   return self => ({
     views: {
       get childCollection() {
-        return getCollectionOfModelType(
-          self,
-          collectionContainer().Model,
-        )
+        return getCollectionInstance(self, lazyCollection())
       },
       get children() {
         return self.childCollection.whereEq({parent: self})

@@ -11273,6 +11273,16 @@ stylis@^3.5.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-3.5.1.tgz#fd341d59f57f9aeb412bc14c9d8a8670b438e03b"
 
+sugar-core@^2.0.0:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/sugar-core/-/sugar-core-2.0.4.tgz#9db0730e6c47eb7d28184a79c4ab18b2b7946ca0"
+
+sugar@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/sugar/-/sugar-2.0.4.tgz#79a6fa4dabc587fb855a52ee7176dd042bf757b0"
+  dependencies:
+    sugar-core "^2.0.0"
+
 superagent@^3.8.2:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/superagent/-/superagent-3.8.3.tgz#460ea0dbdb7d5b11bc4f78deba565f86a178e128"

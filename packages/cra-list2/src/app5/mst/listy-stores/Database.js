@@ -1,5 +1,4 @@
 import {modelNamed, optionalObj} from '../../little-mst'
-import * as R from 'ramda'
 import {
   Bucket,
   BucketsCollection,
@@ -8,20 +7,25 @@ import {
   Item,
   ItemsCollection,
 } from './models'
-import {C} from '../../little-ramda'
+import {_cond, C, EQ, M, P, R} from '../../little-ramda'
 
-const collectionProps = {
-  items: ItemsCollection,
-  buckets: BucketsCollection,
-  dashboards: DashboardsCollection,
-}
+const tables = [
+  ItemsCollection,
+  BucketsCollection,
+  DashboardsCollection,
+]
 
+const collectionToOptionalType = M(C(optionalObj, P('type')))
+
+const databaseProps = R.zipObj(R.pluck('tableName')(tables))(
+  collectionToOptionalType(tables),
+)
 export const Database = modelNamed('Database')
-  .props(R.map(C(optionalObj, R.prop('type')))(collectionProps))
+  .props(databaseProps)
   .views(self => ({
-    getCollection: R.cond([
-      [R.equals(Item), () => self.items],
-      [R.equals(Bucket), () => self.buckets],
-      [R.equals(Dashboard), () => self.dashboards],
+    getCollection: _cond([
+      [EQ(Item), () => self.items],
+      [EQ(Bucket), () => self.buckets],
+      [EQ(Dashboard), () => self.dashboards],
     ]),
   }))

@@ -140,3 +140,7 @@ export const invoke0 = R.invoker(0)
 export const C = R.compose
 export const nullableOr = R.defaultTo
 export const tapEach = R.forEach
+export const P = R.prop
+export const M = R.map
+export const _cond = R.cond
+export const EQ = R.equals

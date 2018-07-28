@@ -32,6 +32,10 @@ export function getCollectionOfModelType(self, modelType) {
   return getDatabase(self).getCollection(modelType)
 }
 
+export function getCollectionInstance(self, collection) {
+  return getDatabase(self)[collection.tableName]
+}
+
 export function getCurrentDashboard(self) {
   return getRoot(self).currentDashboard
 }
