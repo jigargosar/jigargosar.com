@@ -157,6 +157,7 @@ export const Bucket = CollectionModel({
 })
   .extend(asTreeNode)
   .extend(asEditable)
+  .extend(hasMany(Item))
   .views(self => ({
     get onHeaderKeydown() {
       return withKeyEvent(
@@ -168,9 +169,6 @@ export const Bucket = CollectionModel({
     get headerDOMId() {
       // return `bucket-header-${this.id}`
       return self.id
-    },
-    get children() {
-      return getCollection(self, Item).whereEq({parent: self})
     },
   }))
   .actions(self => ({
