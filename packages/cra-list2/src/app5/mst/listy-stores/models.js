@@ -1,7 +1,7 @@
 import {CollectionModel} from '../CollectionModel'
 import {types} from 'mobx-state-tree'
 import {whenKeyPD, withKeyEvent} from '../../components/utils'
-import {endEditing, isEditing, startEditing} from './helpers'
+import {endEditing, isEditing} from './helpers'
 import * as R from 'ramda'
 import {
   dotPathOr,
@@ -85,15 +85,8 @@ function asTreeNode(self) {
 const extendAsTreeNode = extend(asTreeNode)
 
 function asEditable(self) {
-  const onSuperKeydown = PO(R.identity)('onKeydown')(self)
   return {
     views: {
-      get onKeydown() {
-        return C(
-          onSuperKeydown,
-          withKeyEvent(whenKeyPD('enter')(self.startEditing)),
-        )
-      },
       get isEditing() {
         return isEditing(self)
       },
@@ -108,7 +101,6 @@ function asEditable(self) {
       onInputChange: e => self.updateAttrFromEvent('name', e),
       onInputBlur: () => self.endEditing(),
       endEditing: () => endEditing(self),
-      startEditing: () => startEditing(self),
     },
   }
 }
