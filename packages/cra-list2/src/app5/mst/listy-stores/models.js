@@ -15,7 +15,7 @@ import {
   unlessPath,
 } from '../../little-sanctuary'
 import {C} from '../../little-ramda'
-import {hasChildren} from './relations'
+import {hasManyChildren, belongsToParent} from './relations'
 import {Collection} from '../Collection'
 import {extend} from '../../little-mst'
 
@@ -92,7 +92,7 @@ const asEditable = extend(self => ({
   },
 }))
 
-export const Item = C(asEditable, asTreeNode)(
+export const Item = C(belongsToParent(), asEditable, asTreeNode)(
   CollectionModel({
     name: 'Item',
     attrs: {parent: bucketRef()},
@@ -100,7 +100,8 @@ export const Item = C(asEditable, asTreeNode)(
 )
 
 export const Bucket = C(
-  hasChildren(() => Items),
+  hasManyChildren(() => Items),
+  belongsToParent(),
   asEditable,
   asTreeNode,
 )(
@@ -110,9 +111,10 @@ export const Bucket = C(
   }),
 )
 
-export const Dashboard = C(hasChildren(() => Buckets), asTreeNode)(
-  CollectionModel({name: 'Dashboard'}),
-)
+export const Dashboard = C(
+  hasManyChildren(() => Buckets),
+  asTreeNode,
+)(CollectionModel({name: 'Dashboard'}))
 
 function bucketRef() {
   return types.reference(types.late('Bucket', () => Bucket))

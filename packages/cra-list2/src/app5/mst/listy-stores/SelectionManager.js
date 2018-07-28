@@ -72,7 +72,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       const afterAdd = self.startEditingModel
 
       self.whenSelectedTypeIs(
-        [Item, i => afterAdd(i.parent.onAddChildAfterSibling(i))],
+        [Item, i => afterAdd(i.onAppendSibling())],
         [Bucket, b => afterAdd(b.onPrependChild())],
       )
     },

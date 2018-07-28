@@ -1,7 +1,7 @@
 import {getCollectionInstance, startEditingModel} from './helpers'
 import {extend} from '../../little-mst'
 
-export function hasChildren(lazyCollection) {
+export function hasManyChildren(lazyCollection) {
   return extend(self => ({
     views: {
       get childCollection() {
@@ -15,8 +15,19 @@ export function hasChildren(lazyCollection) {
       onAddChild: () => startEditingModel(self.addChild({})),
       addChild: attrs =>
         self.childCollection.add({...attrs, parent: self}),
-      onPrependChild: () => self.addChild({}),
-      onAddChildAfterSibling: s => self.addChild({}),
+      onPrependChild: () => startEditingModel(self.prependChild()),
+      prependChild: () => self.addChild({}),
+      addChildAfter: s => self.addChild({}),
+    },
+  }))
+}
+
+export function belongsToParent() {
+  return extend(self => ({
+    views: {
+      onAppendSibling() {
+        startEditingModel(self.parent.addChildAfter(self))
+      },
     },
   }))
 }
