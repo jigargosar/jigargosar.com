@@ -79,7 +79,7 @@ function asTreeNode(self) {
 }
 
 function asEditable(self) {
-  const onSuperKeydown = R.defaultTo(R.identity)(self.onKeydown)
+  const onSuperKeydown = R.propOr(R.identity)('onKeydown')(self)
   return {
     views: {
       get onKeydown() {
