@@ -1,7 +1,7 @@
 import {getCollectionInstance, startEditingModel} from './helpers'
 import {extend} from '../../little-mst'
 
-export function hasManyChildren(lazyCollection) {
+export function hasChildren(lazyCollection) {
   return extend(self => ({
     views: {
       get childCollection() {

@@ -71,11 +71,9 @@ export const SelectionManager = modelNamed('SelectionManager')
     onModEnter() {
       const afterAdd = self.startEditingModel
 
-      self.mapSelected(
-        whenTypeIs([
-          [Item, i => afterAdd(i.parent.onAddChildAfterSibling(i))],
-          [Bucket, b => afterAdd(b.onPrependChild())],
-        ]),
+      self.whenSelectedTypeIs(
+        [Item, i => afterAdd(i.parent.onAddChildAfterSibling(i))],
+        [Bucket, b => afterAdd(b.onPrependChild())],
       )
     },
   }))
@@ -96,6 +94,9 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     mapSelected(fn) {
       S.map(fn)(self.selectedModel)
+    },
+    whenSelectedTypeIs(...conditions) {
+      self.mapSelected(whenTypeIs(conditions))
     },
     onDeleteSelectionTree() {
       self.mapSelected(m => {
