@@ -122,8 +122,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModel = m
     },
     navigate(fn) {
-      const next = S.map(fn)(self.navModel)
-      S.map(self.setSelectionTo)(next)
+      C(S.map(self.setSelectionTo), S.map(fn))(self.navModel)
     },
     onNavigateNext: () => self.navigate(getNextNode),
     onNavigatePrev: () => self.navigate(getPrevNode),
