@@ -19,9 +19,9 @@ import {C, PO} from '../../little-ramda'
 import {hasManyChildren} from './hasManyChildren'
 import {Collection} from '../Collection'
 
-const extend = modelType => fn => modelType.extend(fn)
-const actions = modelType => fn => modelType.actions(fn)
-const views = modelType => fn => modelType.views(fn)
+export const extend = fn => modelType => modelType.extend(fn)
+export const actions = fn => modelType => modelType.actions(fn)
+export const views = fn => modelType => modelType.views(fn)
 
 function asTreeNode(self) {
   const computeChildren = self => dotPathOr([])('children')(self)
@@ -158,11 +158,14 @@ export const Bucket = CollectionModel({
     }
   })
 
-export const Dashboard = CollectionModel({
-  name: 'Dashboard',
-})
-  .extend(asTreeNode)
-  .extend(hasManyChildren(() => BucketsCollection))
+export const Dashboard = C(
+  extend(hasManyChildren(() => BucketsCollection)),
+  extend(asTreeNode),
+)(
+  CollectionModel({
+    name: 'Dashboard',
+  }),
+)
 
 export const ItemsCollection = Collection(Item)
 export const BucketsCollection = Collection(Bucket)
