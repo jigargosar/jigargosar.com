@@ -1,7 +1,7 @@
 import {CollectionModel} from '../CollectionModel'
 import {types} from 'mobx-state-tree'
 import {whenKeyPD, withKeyEvent} from '../../components/utils'
-import {endEditing, isEditing} from './helpers'
+import {endEditing, isEditingModel} from './helpers'
 import * as R from 'ramda'
 import {
   dotPathOr,
@@ -91,7 +91,7 @@ function asEditable(self) {
         return true
       },
       get isEditing() {
-        return isEditing(self)
+        return isEditingModel(self)
       },
       get onInputKeyDown() {
         return e => {

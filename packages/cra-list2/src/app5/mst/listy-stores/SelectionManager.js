@@ -4,7 +4,7 @@ import {setFocusAndSelectionOnDOMId} from '../../components/utils'
 import * as R from 'ramda'
 import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
-import {getCurrentDashboard, isEditing} from './helpers'
+import {getCurrentDashboard, isEditingModel} from './helpers'
 import {
   maybeOr,
   maybeOr_,
@@ -54,10 +54,11 @@ export const SelectionManager = modelNamed('SelectionManager')
   .actions(self => ({
     clearSelection() {
       self._selectedModel = null
+      self._isEditing = false
     },
     onDeleteSelectionTree() {
       const _selectedModel = self._selectedModel
-      if (_selectedModel && !isEditing(_selectedModel)) {
+      if (_selectedModel && !isEditingModel(_selectedModel)) {
         self.clearSelection()
         _selectedModel.deleteTree()
       }

@@ -16,7 +16,7 @@ export function endEditing(self) {
   getEditManager(self).endEditing(self)
 }
 
-export function isEditing(self) {
+export function isEditingModel(self) {
   return getEditManager(self).isEditingModel(self)
 }
 
