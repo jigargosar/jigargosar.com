@@ -16,7 +16,7 @@ import {
   maybeOrElse,
   sChain,
 } from '../../little-sanctuary'
-import {C} from '../../little-ramda'
+import {_cond, C} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
 
@@ -44,6 +44,7 @@ export const SelectionManager = modelNamed('SelectionManager')
         whenKeyPD('right')(self.onNavigateRight),
         whenKeyPD('d')(self.onDeleteSelectionTree),
         whenKey('enter')(self.onEditSelected),
+        whenKey('mod+enter')(self.onModEnter),
       )
     },
   }))
@@ -63,6 +64,14 @@ export const SelectionManager = modelNamed('SelectionManager')
       if (_selectedModel && _selectedModel.isEditable) {
         e.preventDefault()
         self._isEditing = true
+      }
+    },
+    onModEnter(e) {
+      if (self._selectedModel) {
+        _cond([
+          [typeIs(Item), i => i.parent.onAddChild()],
+          [typeIs(Bucket), b => b.onAddChild()],
+        ])(self._selectedModel)
       }
     },
   }))
