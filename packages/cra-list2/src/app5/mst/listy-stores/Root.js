@@ -15,7 +15,7 @@ import {SelectionManager} from './SelectionManager'
 import {actionLogger} from 'mst-middlewares'
 import {getCollectionInstance, getSelectionManager} from './helpers'
 import S from 'sanctuary'
-import {DashboardsCollection} from './models'
+import {Dashboards} from './models'
 import {Database} from './Database'
 
 export const Root = modelNamed('Root')
@@ -25,9 +25,7 @@ export const Root = modelNamed('Root')
   })
   .views(self => ({
     get currentDashboard() {
-      return S.head(
-        getCollectionInstance(self, DashboardsCollection).list,
-      )
+      return S.head(getCollectionInstance(self, Dashboards).list)
     },
     get onGlobalKeyDown() {
       return getSelectionManager(self).onKeyDown
@@ -40,7 +38,7 @@ export const Root = modelNamed('Root')
       // self.initModule()
     },
     addMockData() {
-      getCollectionInstance(self, DashboardsCollection)
+      getCollectionInstance(self, Dashboards)
         .add()
         .addChild({})
         .addChild({})

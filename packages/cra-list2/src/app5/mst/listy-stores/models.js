@@ -116,9 +116,9 @@ export const Bucket = CollectionModel({
 })
   .extend(asTreeNode)
   .extend(asEditable)
-  .extend(hasManyChildren(() => ItemsCollection))
+  .extend(hasManyChildren(() => Items))
 export const Dashboard = C(
-  extend(hasManyChildren(() => BucketsCollection)),
+  extend(hasManyChildren(() => Buckets)),
   extendAsTreeNode,
 )(
   CollectionModel({
@@ -126,6 +126,6 @@ export const Dashboard = C(
   }),
 )
 
-export const ItemsCollection = Collection(Item)
-export const BucketsCollection = Collection(Bucket)
-export const DashboardsCollection = Collection(Dashboard)
+export const Items = Collection(Item)
+export const Buckets = Collection(Bucket)
+export const Dashboards = Collection(Dashboard)

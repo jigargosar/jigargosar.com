@@ -1,19 +1,15 @@
 import {modelNamed, optionalObj} from '../../little-mst'
 import {
   Bucket,
-  BucketsCollection,
+  Buckets,
   Dashboard,
-  DashboardsCollection,
+  Dashboards,
   Item,
-  ItemsCollection,
+  Items,
 } from './models'
 import {_cond, C, EQ, M, P, R} from '../../little-ramda'
 
-const tables = [
-  ItemsCollection,
-  BucketsCollection,
-  DashboardsCollection,
-]
+const tables = [Items, Buckets, Dashboards]
 
 const collectionToOptionalType = M(C(optionalObj, P('type')))
 
