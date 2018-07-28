@@ -58,17 +58,16 @@ export const SelectionManager = modelNamed('SelectionManager')
       console.assert(self._isEditing === true)
       self._isEditing = false
     },
-    onEditSelected(e) {
+    onEditSelected() {
       console.assert(self._isEditing === false)
       const _selectedModel = self._selectedModel
       if (_selectedModel && _selectedModel.isEditable) {
-        e.preventDefault()
         self._isEditing = true
       }
     },
     startEditingModel(model) {
       self.setSelectionToModel(model)
-      self._isEditing = true
+      requestAnimationFrame(() => self.onEditSelected())
     },
     onModEnter() {
       if (self._selectedModel) {
