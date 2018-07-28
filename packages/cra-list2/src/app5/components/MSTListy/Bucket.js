@@ -26,10 +26,10 @@ const Header = system({
   colors: 'dim',
   variant: 'default',
   tabIndex: 0,
+  textStyle: 'bucketTitle',
 })
 
 const Title = system({
-  textStyle: 'bucketTitle',
   flex: 1,
 })
 
@@ -46,7 +46,6 @@ export const Bucket = observer(function Bucket({bucket}) {
         {bucket.isEditing ? (
           <InputWrapper>
             <Input
-              textStyle={'bucketTitle'}
               value={bucket.name}
               onBlur={bucket.onInputBlur}
               onChange={bucket.onNameChange}
