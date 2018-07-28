@@ -69,8 +69,8 @@ export const SelectionManager = modelNamed('SelectionManager')
     onModEnter() {
       if (self._selectedModel) {
         _cond([
-          [typeIs(Item), i => i.parent.onAddChild()],
-          [typeIs(Bucket), b => b.onAddChild()],
+          [typeIs(Item), i => i.parent.onAddChildAfterSibling(i)],
+          [typeIs(Bucket), b => b.onPrependChild()],
         ])(self._selectedModel)
       }
     },

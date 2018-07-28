@@ -108,22 +108,6 @@ export const Item = CollectionModel({
 })
   .extend(asTreeNode)
   .extend(asEditable)
-  .views(self => ({
-    get onKeydown() {
-      if (self.isEditing) {
-        return null
-      }
-      return withKeyEvent(
-        whenKeyPD('mod+enter')(self.onAppendSibling),
-        whenKeyPD('space')(() => alert('space')),
-      )
-    },
-  }))
-  .actions(self => ({
-    onAppendSibling() {
-      self.parent.onAddChild()
-    },
-  }))
 
 export const Bucket = CollectionModel({
   name: 'Bucket',

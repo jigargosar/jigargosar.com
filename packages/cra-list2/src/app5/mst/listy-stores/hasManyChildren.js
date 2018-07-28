@@ -15,6 +15,7 @@ export function hasManyChildren(lazyCollection) {
       addChild: attrs =>
         self.childCollection.add({...attrs, parent: self}),
       onPrependChild: () => self.onAddChild(),
+      onAddChildAfterSibling: s => self.onAddChild(),
     },
   })
 }
