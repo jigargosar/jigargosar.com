@@ -46,12 +46,6 @@ export function CollectionModel({name, attrs = {}}) {
       },
     }))
     .actions(self => ({
-      beforeDetach() {
-        console.debug(`beforeDetach`, self)
-      },
-      beforeDestroy() {
-        console.debug(`beforeDestroy`, self)
-      },
       updateAttrs(attrs) {
         Object.assign(self, attrs)
       },
