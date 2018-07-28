@@ -47,13 +47,14 @@ export const Root = modelNamed('Root')
   .actions(self => ({
     afterCreate() {
       addDisposer(self, addMiddleware(self, actionLogger))
+      // setImmediate(self.initModule)
       self.initModule()
     },
     addMockData() {
       getCollectionOfModelType(self, Dashboard)
         .add()
-        .addChild()
-        .addChild()
+        .addChild({})
+        .addChild({})
     },
     initModule() {
       const module = getEnv(self).module
