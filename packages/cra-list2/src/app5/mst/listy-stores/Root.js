@@ -19,11 +19,6 @@ import {
 } from './helpers'
 import S from 'sanctuary'
 import {Dashboard} from './models'
-import {
-  whenKey,
-  whenKeyPD,
-  withKeyEvent,
-} from '../../components/utils'
 import {Database} from './Database'
 
 export const Root = modelNamed('Root')
@@ -36,15 +31,7 @@ export const Root = modelNamed('Root')
       return S.head(getCollectionOfModelType(self, Dashboard).list)
     },
     get onGlobalKeyDown() {
-      const sm = getSelectionManager(self)
-      return withKeyEvent(
-        whenKeyPD('up')(sm.onNavigatePrev),
-        whenKeyPD('down')(sm.onNavigateNext),
-        whenKeyPD('left')(sm.onNavigateLeft),
-        whenKeyPD('right')(sm.onNavigateRight),
-        whenKeyPD('d')(sm.onDeleteSelectionTree),
-        whenKey('enter')(sm.onEditSelected),
-      )
+      return getSelectionManager(self).onKeyDown
     },
   }))
   .actions(self => ({
