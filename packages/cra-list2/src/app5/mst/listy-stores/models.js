@@ -101,9 +101,7 @@ function asEditable(self) {
 
 export const Item = CollectionModel({
   name: 'Item',
-  attrs: {
-    parent: bucketRef(),
-  },
+  attrs: {parent: bucketRef()},
 })
   .extend(asTreeNode)
   .extend(asEditable)
