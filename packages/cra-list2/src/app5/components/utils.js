@@ -54,6 +54,7 @@ export function withKeyEvent(...conditions) {
 export const wrapPD = fn => e => {
   e.preventDefault()
   fn(e)
+  return e
 }
 
 /**

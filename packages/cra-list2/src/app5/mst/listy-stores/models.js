@@ -124,7 +124,6 @@ export const Item = CollectionModel({
       get onKeydown() {
         const handler = withKeyEvent(
           whenKeyPD('mod+enter')(self.onAppendSibling),
-          whenKeyPD('enter')(self.startEditing),
           whenKeyPD('space')(() => alert('space')),
         )
         return C(onSuperKeydown, handler)
@@ -152,7 +151,6 @@ export const Bucket = CollectionModel({
       get onKeydown() {
         const handler = withKeyEvent(
           whenKeyPD('mod+enter')(self.onPrependChild),
-          whenKeyPD('space')(() => alert('space')),
         )
         return C(onSuperKeydown, handler)
       },
