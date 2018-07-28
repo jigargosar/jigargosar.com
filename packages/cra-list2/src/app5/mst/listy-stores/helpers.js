@@ -24,20 +24,20 @@ export function isEditing(self) {
   return getEditManager(self).isEditing(self)
 }
 
+function getDatabase(self) {
+  return getRoot(self).database
+}
+
 export function getItemCollection(self) {
-  return getRoot(self).items
+  return getDatabase(self).items
 }
 
 export function getDashboardCollection(self) {
-  return getRoot(self).dashboards
+  return getDatabase(self).dashboards
 }
 
 export function getBucketCollection(self) {
-  return getRoot(self).buckets
-}
-
-export function onDelete(self) {
-  getRoot(self).onModelDelete(self)
+  return getDatabase(self).buckets
 }
 
 export function getCurrentDashboard(self) {

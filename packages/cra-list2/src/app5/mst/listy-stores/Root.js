@@ -33,7 +33,6 @@ const Database = modelNamed('Database').props(
 export const Root = modelNamed('Root')
   .props({
     database: optionalObj(Database),
-    ...R.map(optionalObj)(collectionProps),
     selectionManager: optionalObj(SelectionManager),
     editManager: optionalObj(EditManager),
   })
