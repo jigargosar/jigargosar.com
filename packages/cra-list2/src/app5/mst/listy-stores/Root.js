@@ -20,7 +20,11 @@ import {
 } from './helpers'
 import S from 'sanctuary'
 import {Dashboard} from './models'
-import {whenKeyPD, withKeyEvent} from '../../components/utils'
+import {
+  whenKey,
+  whenKeyPD,
+  withKeyEvent,
+} from '../../components/utils'
 import {Database} from './Database'
 
 export const Root = modelNamed('Root')
@@ -41,7 +45,7 @@ export const Root = modelNamed('Root')
         whenKeyPD('left')(sm.onNavigateLeft),
         whenKeyPD('right')(sm.onNavigateRight),
         whenKeyPD('d')(sm.onDeleteSelectionTree),
-        whenKeyPD('enter')(sm.onEditSelected),
+        whenKey('enter')(sm.onEditSelected),
       )
     },
   }))

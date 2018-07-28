@@ -42,9 +42,10 @@ export const SelectionManager = modelNamed('SelectionManager')
         _selectedModel.deleteTree()
       }
     },
-    onEditSelected() {
+    onEditSelected(e) {
       const _selectedModel = self._selectedModel
       if (_selectedModel && _selectedModel.isEditable) {
+        e.preventDefault()
         startEditing(_selectedModel)
       }
     },
