@@ -118,15 +118,6 @@ export const Bucket = CollectionModel({
   .extend(asTreeNode)
   .extend(asEditable)
   .extend(hasManyChildren(() => ItemsCollection))
-  .views(self => ({
-    get onKeydown() {
-      if (self.isEditing) {
-        return null
-      }
-      return withKeyEvent(whenKeyPD('mod+enter')(self.onPrependChild))
-    },
-  }))
-
 export const Dashboard = C(
   extend(hasManyChildren(() => BucketsCollection)),
   extendAsTreeNode,
