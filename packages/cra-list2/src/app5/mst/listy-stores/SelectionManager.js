@@ -70,7 +70,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       requestAnimationFrame(() => self.onEditSelected())
     },
     onModEnter() {
-      if (self._selectedModel) {
+      S.map(
         _cond([
           [
             typeIs(Item),
@@ -83,8 +83,8 @@ export const SelectionManager = modelNamed('SelectionManager')
             typeIs(Bucket),
             b => self.startEditingModel(b.onPrependChild()),
           ],
-        ])(self._selectedModel)
-      }
+        ]),
+      )(self.selectedModel)
     },
   }))
   .views(self => ({
