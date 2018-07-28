@@ -12,8 +12,6 @@ import {Input} from './Input'
 const Row = system({
   ...dpFlexRow,
   pl: modularScale(0.5),
-  py: 1,
-  // width: 1,
   tabIndex: 0,
   variant: 'default',
   lineHeight: 1.25,
