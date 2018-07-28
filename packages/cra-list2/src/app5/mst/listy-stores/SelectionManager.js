@@ -58,6 +58,10 @@ export const SelectionManager = modelNamed('SelectionManager')
         self._isEditing = false
       }
     },
+    onEndEditSelected() {
+      console.assert(self._isEditing === true)
+      self._isEditing = false
+    },
     onEditSelected(e) {
       console.assert(self._isEditing === false)
       const _selectedModel = self._selectedModel
