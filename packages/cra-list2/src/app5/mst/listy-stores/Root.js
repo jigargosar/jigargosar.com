@@ -14,7 +14,10 @@ import * as R from 'ramda'
 import {SelectionManager} from './SelectionManager'
 import {EditManager} from './EditManager'
 import {actionLogger} from 'mst-middlewares'
-import {getCollection, getSelectionManager} from './helpers'
+import {
+  getCollectionOfModelType,
+  getSelectionManager,
+} from './helpers'
 import S from 'sanctuary'
 import {Dashboard} from './models'
 import {whenKeyPD, withKeyEvent} from '../../components/utils'
@@ -28,7 +31,7 @@ export const Root = modelNamed('Root')
   })
   .views(self => ({
     get currentDashboard() {
-      return S.head(getCollection(self, Dashboard).list)
+      return S.head(getCollectionOfModelType(self, Dashboard).list)
     },
     get onGlobalKeyDown() {
       const sm = getSelectionManager(self)
@@ -47,7 +50,7 @@ export const Root = modelNamed('Root')
       self.initModule()
     },
     addMockData() {
-      getCollection(self, Dashboard)
+      getCollectionOfModelType(self, Dashboard)
         .add()
         .addBucket()
         .addItem()

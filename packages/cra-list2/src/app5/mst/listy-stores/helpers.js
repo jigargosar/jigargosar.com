@@ -28,7 +28,7 @@ function getDatabase(self) {
   return getRoot(self).database
 }
 
-export function getCollection(self, modelType) {
+export function getCollectionOfModelType(self, modelType) {
   return getDatabase(self).getCollection(modelType)
 }
 

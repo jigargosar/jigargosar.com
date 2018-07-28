@@ -3,7 +3,7 @@ import {types} from 'mobx-state-tree'
 import {whenKeyPD, withKeyEvent} from '../../components/utils'
 import {
   endEditing,
-  getCollection,
+  getCollectionOfModelType,
   isEditing,
   setSelectionToModel,
   startEditing,
@@ -140,7 +140,7 @@ export const Bucket = CollectionModel({
 })
   .extend(asTreeNode)
   .extend(asEditable)
-  .extend(hasManyChildren(Item))
+  .extend(hasManyChildren(() => ItemsCollection))
   .views(self => ({
     get onHeaderKeydown() {
       return withKeyEvent(
@@ -156,7 +156,7 @@ export const Bucket = CollectionModel({
   }))
   .actions(self => ({
     addItem(model) {
-      return getCollection(self, Item).add({
+      return getCollectionOfModelType(self, Item).add({
         ...model,
         parent: self,
       })
@@ -173,13 +173,13 @@ export const Dashboard = CollectionModel({
   name: 'Dashboard',
 })
   .extend(asTreeNode)
-  .extend(hasManyChildren(Bucket))
+  .extend(hasManyChildren(() => BucketsCollection))
   .actions(self => ({
     onAddBucket() {
       setSelectionToModel(self.addBucket())
     },
     addBucket(model = {}) {
-      return getCollection(self, Bucket).add({
+      return getCollectionOfModelType(self, Bucket).add({
         ...model,
         parent: self,
       })
