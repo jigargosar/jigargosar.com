@@ -52,7 +52,7 @@ export const Root = modelNamed('Root')
     addMockData() {
       getCollectionOfModelType(self, Dashboard)
         .add()
-        .addBucket()
+        .addChild()
         .addChild()
     },
     initModule() {

@@ -161,10 +161,10 @@ export const Dashboard = CollectionModel({
   .extend(asTreeNode)
   .extend(hasManyChildren(() => BucketsCollection))
   .actions(self => ({
-    onAddBucket() {
-      setSelectionToModel(self.addBucket())
+    onAddChild() {
+      setSelectionToModel(self.addChild())
     },
-    addBucket(model = {}) {
+    addChild(model = {}) {
       return getCollectionOfModelType(self, Bucket).add({
         ...model,
         parent: self,

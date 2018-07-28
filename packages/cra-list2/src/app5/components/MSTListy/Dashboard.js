@@ -50,7 +50,7 @@ const Dashboard = restoreFocusOnSelectedModelOnMount(
         <Panel>
           <BucketItemBtn
             id={dashboard.id}
-            onClick={dashboard.onAddBucket}
+            onClick={dashboard.onAddChild}
             children={'Add List'}
             onFocus={onModelFocus(dashboard)}
             onBlur={onModelBlur(dashboard)}
