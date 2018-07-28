@@ -16,7 +16,7 @@ import {
   maybeOrElse,
   sChain,
 } from '../../little-sanctuary'
-import {_cond, C, M} from '../../little-ramda'
+import {_cond, C, mapFst} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
 const modelRefs = R.map(types.reference)(modelTypes)
@@ -70,7 +70,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     onModEnter() {
       const afterAdd = self.startEditingModel
-      const mapFst = fn => M(([a, b]) => [fn(a), b])
       const whenTypeIs = C(_cond, mapFst(typeIs))
       self.tapSelected(
         whenTypeIs([

@@ -146,3 +146,5 @@ export const _cond = R.cond
 export const EQ = R.equals
 export const _tap = R.tap
 export const PO = R.propOr
+export const overFst = fn => ([a, b]) => [fn(a), b]
+export const mapFst = fn => M(overFst(fn))
