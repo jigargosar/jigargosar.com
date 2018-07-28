@@ -13,12 +13,9 @@ import {dotPath, isNotNil} from '../../little-ramda'
 import * as R from 'ramda'
 import {SelectionManager} from './SelectionManager'
 import {actionLogger} from 'mst-middlewares'
-import {
-  getCollectionOfModelType,
-  getSelectionManager,
-} from './helpers'
+import {getCollectionInstance, getSelectionManager} from './helpers'
 import S from 'sanctuary'
-import {Dashboard} from './models'
+import {DashboardsCollection} from './models'
 import {Database} from './Database'
 
 export const Root = modelNamed('Root')
@@ -28,7 +25,9 @@ export const Root = modelNamed('Root')
   })
   .views(self => ({
     get currentDashboard() {
-      return S.head(getCollectionOfModelType(self, Dashboard).list)
+      return S.head(
+        getCollectionInstance(self, DashboardsCollection).list,
+      )
     },
     get onGlobalKeyDown() {
       return getSelectionManager(self).onKeyDown
@@ -41,7 +40,7 @@ export const Root = modelNamed('Root')
       // self.initModule()
     },
     addMockData() {
-      getCollectionOfModelType(self, Dashboard)
+      getCollectionInstance(self, DashboardsCollection)
         .add()
         .addChild({})
         .addChild({})
