@@ -1,7 +1,6 @@
 import {
   applySnapshot2,
   modelNamed,
-  optionalCollections,
   optionalObj,
 } from '../../little-mst'
 import {
@@ -28,13 +27,13 @@ const collectionProps = {
 }
 
 const Database = modelNamed('Database').props(
-  optionalCollections(collectionProps),
+  R.map(optionalObj)(collectionProps),
 )
 
 export const Root = modelNamed('Root')
   .props({
     database: optionalObj(Database),
-    ...optionalCollections(collectionProps),
+    ...R.map(optionalObj)(collectionProps),
     selectionManager: optionalObj(SelectionManager),
     editManager: optionalObj(EditManager),
   })
