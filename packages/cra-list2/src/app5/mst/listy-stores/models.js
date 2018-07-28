@@ -110,6 +110,9 @@ export const Item = CollectionModel({
   .extend(asEditable)
   .views(self => ({
     get onKeydown() {
+      if (self.isEditing) {
+        return null
+      }
       return withKeyEvent(
         whenKeyPD('mod+enter')(self.onAppendSibling),
         whenKeyPD('space')(() => alert('space')),
@@ -133,6 +136,9 @@ export const Bucket = CollectionModel({
   .extend(hasManyChildren(() => ItemsCollection))
   .views(self => ({
     get onKeydown() {
+      if (self.isEditing) {
+        return null
+      }
       return withKeyEvent(whenKeyPD('mod+enter')(self.onPrependChild))
     },
   }))
