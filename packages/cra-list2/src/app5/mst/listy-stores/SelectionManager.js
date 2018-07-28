@@ -112,14 +112,14 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModel = m
       setFocusAndSelectionOnDOMId(m.id)
     },
+    onModelFocus(m) {
+      self._selectedModel = m
+    },
     onDashboardMount(d) {
       C(
         self.setSelectionTo,
         maybeOr_(() => C(R.last, R.take(3))(d.flattenedTree)),
       )(self.selectedModel)
-    },
-    onModelFocus(m) {
-      self._selectedModel = m
     },
     navigate(fn) {
       C(S.map(self.setSelectionTo), S.map(fn))(self.navModel)
