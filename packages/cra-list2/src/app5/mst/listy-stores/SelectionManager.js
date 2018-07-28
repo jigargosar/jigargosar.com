@@ -102,11 +102,12 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._isEditing = false
     },
     onDeleteSelectionTree() {
-      const _selectedModel = self._selectedModel
-      if (_selectedModel) {
-        self.clearSelection()
-        _selectedModel.deleteTree()
-      }
+      S.map(
+        R.tap(m => {
+          self.clearSelection()
+          m.deleteTree()
+        }),
+      )(self.selectedModel)
     },
     setSelectionTo(m) {
       self._selectedModel = m
