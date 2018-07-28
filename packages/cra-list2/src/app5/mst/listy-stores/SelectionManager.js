@@ -69,11 +69,9 @@ export const SelectionManager = modelNamed('SelectionManager')
       requestAnimationFrame(() => self.onEditSelected())
     },
     onModEnter() {
-      const afterAdd = self.startEditingModel
-
       self.whenSelectedTypeIs(
-        [Item, i => afterAdd(i.onAppendSibling())],
-        [Bucket, b => afterAdd(b.onPrependChild())],
+        [Item, i => i.onAppendSibling()],
+        [Bucket, b => b.onPrependChild()],
       )
     },
   }))
