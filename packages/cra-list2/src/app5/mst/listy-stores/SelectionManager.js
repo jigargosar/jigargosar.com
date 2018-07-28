@@ -1,4 +1,4 @@
-import {modelNamed, typeIs} from '../../little-mst'
+import {modelNamed, typeIs, whenTypeIs} from '../../little-mst'
 import {types} from 'mobx-state-tree'
 import {
   setFocusAndSelectionOnDOMId,
@@ -16,7 +16,7 @@ import {
   maybeOrElse,
   sChain,
 } from '../../little-sanctuary'
-import {_cond, C, mapFst} from '../../little-ramda'
+import {C} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
 const modelRefs = R.map(types.reference)(modelTypes)
@@ -70,7 +70,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     onModEnter() {
       const afterAdd = self.startEditingModel
-      const whenTypeIs = C(_cond, mapFst(typeIs))
+
       self.mapSelected(
         whenTypeIs([
           [Item, i => afterAdd(i.parent.onAddChildAfterSibling(i))],

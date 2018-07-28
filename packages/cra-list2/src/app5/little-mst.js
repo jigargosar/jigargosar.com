@@ -1,4 +1,4 @@
-import {_, C} from './little-ramda'
+import {_, _cond, C, mapFst} from './little-ramda'
 import {
   applySnapshot,
   getSnapshot,
@@ -82,3 +82,4 @@ export const typeIs = type => C(R.equals(type), getType)
 export const extend = fn => modelType => modelType.extend(fn)
 export const actions = fn => modelType => modelType.actions(fn)
 export const views = fn => modelType => modelType.views(fn)
+export const whenTypeIs = C(_cond, mapFst(typeIs))
