@@ -30,7 +30,6 @@ const Header = system({
 })
 
 const Title = system({
-  flex: 1,
   css: preWrapCSS,
 })
 
