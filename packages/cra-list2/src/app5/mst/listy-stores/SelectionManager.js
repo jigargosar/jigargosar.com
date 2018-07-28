@@ -23,13 +23,13 @@ export const SelectionManager = modelNamed('SelectionManager')
     _isEditing: false,
   })
   .views(self => ({
-    isEditing(model) {
+    isEditingModel(model) {
       return self._isEditing && self._selectedModel === model
     },
   }))
   .actions(self => ({
     endEditing(ref) {
-      if (self.isEditing(ref)) {
+      if (self.isEditingModel(ref)) {
         self._isEditing = false
       }
     },

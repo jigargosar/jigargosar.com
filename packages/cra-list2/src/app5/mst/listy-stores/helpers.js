@@ -17,7 +17,7 @@ export function endEditing(self) {
 }
 
 export function isEditing(self) {
-  return getEditManager(self).isEditing(self)
+  return getEditManager(self).isEditingModel(self)
 }
 
 function getDatabase(self) {
