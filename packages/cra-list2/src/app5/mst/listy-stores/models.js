@@ -22,6 +22,7 @@ import {
   unlessPath,
 } from '../../little-sanctuary'
 import {C} from '../../little-ramda'
+import {hasMany} from './hasMany'
 
 function asTreeNode(self) {
   const computeChildren = self => dotPathOr([])('children')(self)
@@ -105,29 +106,6 @@ function asEditable(self) {
       startEditing: () => startEditing(self),
     },
   }
-}
-
-function hasMany(modelType) {
-  return self => ({
-    views: {
-      get children() {
-        return getCollection(self, modelType).whereEq({
-          parent: self,
-        })
-      },
-    },
-    actions: {
-      onAddChild() {
-        setSelectionToModel(self.addChild())
-      },
-      addChild(model = {}) {
-        return getCollection(self, modelType).add({
-          ...model,
-          parent: self,
-        })
-      },
-    },
-  })
 }
 
 export const Item = CollectionModel({

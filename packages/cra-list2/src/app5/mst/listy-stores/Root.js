@@ -16,25 +16,9 @@ import {EditManager} from './EditManager'
 import {actionLogger} from 'mst-middlewares'
 import {getCollection, getSelectionManager} from './helpers'
 import S from 'sanctuary'
-import {Collection} from '../Collection'
-import {Bucket, Dashboard, Item} from './models'
+import {Dashboard} from './models'
 import {whenKeyPD, withKeyEvent} from '../../components/utils'
-
-const collectionProps = {
-  items: Collection(Item),
-  buckets: Collection(Bucket),
-  dashboards: Collection(Dashboard),
-}
-
-const Database = modelNamed('Database')
-  .props(R.map(optionalObj)(collectionProps))
-  .views(self => ({
-    getCollection: R.cond([
-      [R.equals(Item), () => self.items],
-      [R.equals(Bucket), () => self.buckets],
-      [R.equals(Dashboard), () => self.dashboards],
-    ]),
-  }))
+import {Database} from './Database'
 
 export const Root = modelNamed('Root')
   .props({
