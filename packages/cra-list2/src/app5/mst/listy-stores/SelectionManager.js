@@ -16,7 +16,7 @@ import {
   maybeOrElse,
   sChain,
 } from '../../little-sanctuary'
-import {C} from '../../little-ramda'
+import {C, invoke0} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
 const modelRefs = R.map(types.reference)(modelTypes)
@@ -70,8 +70,8 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     onModEnter() {
       self.whenSelectedTypeIs(
-        [Item, i => i.onAppendSibling()],
-        [Bucket, b => b.onPrependChild()],
+        [Item, invoke0('onAppendSibling')],
+        [Bucket, invoke0('onPrependChild')],
       )
     },
   }))
