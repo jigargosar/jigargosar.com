@@ -58,7 +58,3 @@ export function CollectionModel({name, attrs = {}}) {
       },
     }))
 }
-
-export function getIDTypeOfModel(Model) {
-  return Model.properties.id.type
-}

@@ -79,8 +79,15 @@ function asTreeNode(self) {
 }
 
 function asEditable(self) {
+  const onSuperKeydown = R.defaultTo(R.identity)(self.onKeydown)
   return {
     views: {
+      get onKeydown() {
+        return C(
+          onSuperKeydown,
+          withKeyEvent(whenKeyPD('enter')(self.startEditing)),
+        )
+      },
       get isEditing() {
         return isEditing(self)
       },
@@ -143,7 +150,6 @@ export const Bucket = CollectionModel({
           onSuperKeydown,
           withKeyEvent(
             whenKeyPD('mod+enter')(self.onPrependChild),
-            whenKeyPD('enter')(self.startEditing),
             whenKeyPD('space')(() => alert('space')),
           ),
         )
