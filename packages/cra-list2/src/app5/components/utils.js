@@ -3,6 +3,7 @@ import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import {
   _,
+  _cond,
   mapIndexed,
   R,
   RX,
@@ -46,16 +47,14 @@ export function whenKeyPD(...keys) {
 }
 
 export function withKeyEvent(...conditions) {
-  return function(keyEvent) {
-    return _.cond(conditions)(keyEvent)
-  }
+  return R.tap(_cond(conditions))
 }
 
-export const wrapPD = fn => e => {
-  e.preventDefault()
-  fn(e)
-  return e
-}
+export const wrapPD = fn =>
+  R.tap(e => {
+    e.preventDefault()
+    fn(e)
+  })
 
 /**
  * @return {null}
