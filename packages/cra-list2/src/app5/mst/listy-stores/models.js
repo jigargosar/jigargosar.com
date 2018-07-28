@@ -1,6 +1,5 @@
 import {CollectionModel} from '../CollectionModel'
 import {types} from 'mobx-state-tree'
-import {whenKeyPD, withKeyEvent} from '../../components/utils'
 import {isEditingModel} from './helpers'
 import * as R from 'ramda'
 import {
