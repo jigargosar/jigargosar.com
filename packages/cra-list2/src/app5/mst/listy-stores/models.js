@@ -113,30 +113,32 @@ function asEditable(self) {
   }
 }
 
-export const Dashboard = CollectionModel({
-  name: 'Dashboard',
-})
-  .extend(asTreeNode)
-  .views(self => ({
-    get children() {
-      return getCollection(self, Bucket).whereEq({parent: self})
+function hasMany(modelType) {
+  return self => ({
+    views: {
+      get children() {
+        return getCollection(self, modelType).whereEq({
+          parent: self,
+        })
+      },
     },
-  }))
-  .actions(self => ({
-    onAddBucket() {
-      setSelectionToModel(self.addBucket())
+    actions: {
+      onAddChild() {
+        setSelectionToModel(self.addChild())
+      },
+      addChild(model = {}) {
+        return getCollection(self, modelType).add({
+          ...model,
+          parent: self,
+        })
+      },
     },
-    addBucket(model = {}) {
-      return getCollection(self, Bucket).add({
-        ...model,
-        parent: self,
-      })
-    },
-  }))
+  })
+}
 
 export const Bucket = CollectionModel({
   name: 'Bucket',
-  attrs: {parent: types.reference(Dashboard)},
+  attrs: {parent: types.reference(types.late(() => Dashboard))},
 })
   .extend(asTreeNode)
   .extend(asEditable)
@@ -189,5 +191,27 @@ export const Item = CollectionModel({
   .actions(self => ({
     onAppendSibling() {
       self.parent.onAddItem()
+    },
+  }))
+
+export const Dashboard = CollectionModel({
+  name: 'Dashboard',
+})
+  .extend(asTreeNode)
+  .extend(hasMany(Bucket))
+  .views(self => ({
+    get children() {
+      return getCollection(self, Bucket).whereEq({parent: self})
+    },
+  }))
+  .actions(self => ({
+    onAddBucket() {
+      setSelectionToModel(self.addBucket())
+    },
+    addBucket(model = {}) {
+      return getCollection(self, Bucket).add({
+        ...model,
+        parent: self,
+      })
     },
   }))
