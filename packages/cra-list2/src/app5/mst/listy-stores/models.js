@@ -19,6 +19,10 @@ import {C, PO} from '../../little-ramda'
 import {hasManyChildren} from './hasManyChildren'
 import {Collection} from '../Collection'
 
+const extend = modelType => fn => modelType.extend(fn)
+const actions = modelType => fn => modelType.actions(fn)
+const views = modelType => fn => modelType.views(fn)
+
 function asTreeNode(self) {
   const computeChildren = self => dotPathOr([])('children')(self)
 
