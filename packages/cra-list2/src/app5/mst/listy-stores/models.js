@@ -87,6 +87,9 @@ const extendAsTreeNode = extend(asTreeNode)
 function asEditable(self) {
   return {
     views: {
+      get isEditable() {
+        return true
+      },
       get isEditing() {
         return isEditing(self)
       },
