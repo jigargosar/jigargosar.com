@@ -1,6 +1,6 @@
 import {getCollection, setSelectionToModel} from './helpers'
 
-export function hasMany(modelType) {
+export function hasMany(modelType, {isParent = true} = {}) {
   return self => ({
     views: {
       get children() {
@@ -13,10 +13,10 @@ export function hasMany(modelType) {
       onAddChild() {
         setSelectionToModel(self.addChild())
       },
-      addChild(model = {}) {
+      addChild(attrs = {}) {
         return getCollection(self, modelType).add({
-          ...model,
-          parent: self,
+          ...attrs,
+          ...(isParent ? {parent: self} : {}),
         })
       },
     },
