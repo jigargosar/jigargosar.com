@@ -15,7 +15,7 @@ import {
   toMaybe,
   unlessPath,
 } from '../../little-sanctuary'
-import {C, PO} from '../../little-ramda'
+import {C} from '../../little-ramda'
 import {hasManyChildren} from './hasManyChildren'
 import {Collection} from '../Collection'
 
@@ -113,18 +113,14 @@ export const Item = CollectionModel({
 })
   .extend(asTreeNode)
   .extend(asEditable)
-  .views(self => {
-    const onSuperKeydown = PO(R.identity)('onKeydown')(self)
-    return {
-      get onKeydown() {
-        const handler = withKeyEvent(
-          whenKeyPD('mod+enter')(self.onAppendSibling),
-          whenKeyPD('space')(() => alert('space')),
-        )
-        return C(onSuperKeydown, handler)
-      },
-    }
-  })
+  .views(self => ({
+    get onKeydown() {
+      return withKeyEvent(
+        whenKeyPD('mod+enter')(self.onAppendSibling),
+        whenKeyPD('space')(() => alert('space')),
+      )
+    },
+  }))
   .actions(self => ({
     onAppendSibling() {
       self.parent.onAddChild()
@@ -140,17 +136,11 @@ export const Bucket = CollectionModel({
   .extend(asTreeNode)
   .extend(asEditable)
   .extend(hasManyChildren(() => ItemsCollection))
-  .views(self => {
-    const onSuperKeydown = PO(R.identity)('onKeydown')(self)
-    return {
-      get onKeydown() {
-        const handler = withKeyEvent(
-          whenKeyPD('mod+enter')(self.onPrependChild),
-        )
-        return C(onSuperKeydown, handler)
-      },
-    }
-  })
+  .views(self => ({
+    get onKeydown() {
+      return withKeyEvent(whenKeyPD('mod+enter')(self.onPrependChild))
+    },
+  }))
 
 export const Dashboard = C(
   extend(hasManyChildren(() => BucketsCollection)),
