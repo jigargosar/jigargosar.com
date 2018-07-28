@@ -4,6 +4,7 @@ import isHotKey from 'is-hotkey'
 import {
   _,
   _cond,
+  _tap,
   mapIndexed,
   R,
   RX,
@@ -47,7 +48,7 @@ export function whenKeyPD(...keys) {
 }
 
 export function withKeyEvent(...conditions) {
-  return R.tap(_cond(conditions))
+  return _tap(_cond(conditions))
 }
 
 export const wrapPD = fn =>
