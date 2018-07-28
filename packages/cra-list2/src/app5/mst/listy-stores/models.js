@@ -91,9 +91,6 @@ function asEditable(self) {
       get isEditing() {
         return isEditing(self)
       },
-      get isEditable() {
-        return true
-      },
       get onInputKeyDown() {
         return e => {
           e.stopPropagation()
