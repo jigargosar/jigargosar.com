@@ -95,7 +95,7 @@ function asEditable(self) {
       },
       get onInputKeyDown() {
         return e => {
-          e.stopPropagation()
+          // e.stopPropagation()
           return withKeyEvent(whenKeyPD('enter')(self.endEditing))(e)
         }
       },
@@ -103,7 +103,9 @@ function asEditable(self) {
     actions: {
       onInputChange: e => self.updateAttrFromEvent('name', e),
       onInputBlur: () => self.endEditing(),
-      endEditing: () => endEditingModel(self),
+      endEditing: () => {
+        // return endEditingModel(self)
+      },
     },
   }
 }
