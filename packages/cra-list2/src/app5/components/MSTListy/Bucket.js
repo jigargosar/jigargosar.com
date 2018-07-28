@@ -2,7 +2,7 @@
 import React, {Fragment} from 'react'
 import {PropTypes, renderKeyedById} from '../utils'
 import {observer} from 'mobx-react'
-import {dpFlexRow, system} from '../little-rebass'
+import {dpFlexRow, preWrapCSS, system} from '../little-rebass'
 import {BucketItem} from './BucketItem'
 import {onModelBlur} from '../../mst/listy-stores/view-helpers'
 import {onModelFocus} from '../../mst/listy-stores/view-helpers'
@@ -31,6 +31,7 @@ const Header = system({
 
 const Title = system({
   flex: 1,
+  css: preWrapCSS,
 })
 
 export const Bucket = observer(function Bucket({bucket}) {
