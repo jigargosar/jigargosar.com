@@ -41,6 +41,7 @@ export const Bucket = observer(function Bucket({bucket}) {
         onKeyDown={bucket.onHeaderKeydown}
         onFocus={onModelFocus(bucket)}
         onBlur={onModelBlur(bucket)}
+        variant={bucket.isEditing ? 'selected' : 'default'}
       >
         {bucket.isEditing ? (
           <InputWrapper>
