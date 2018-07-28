@@ -79,3 +79,6 @@ export function modelNamed(name) {
 }
 
 export const typeIs = type => C(R.equals(type), getType)
+export const extend = fn => modelType => modelType.extend(fn)
+export const actions = fn => modelType => modelType.actions(fn)
+export const views = fn => modelType => modelType.views(fn)
