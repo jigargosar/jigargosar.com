@@ -69,21 +69,16 @@ export const SelectionManager = modelNamed('SelectionManager')
       requestAnimationFrame(() => self.onEditSelected())
     },
     onModEnter() {
-      S.map(
+      const afterAdd = self.startEditingModel
+      self.tapSelected(
         _cond([
           [
             typeIs(Item),
-            i =>
-              self.startEditingModel(
-                i.parent.onAddChildAfterSibling(i),
-              ),
+            i => afterAdd(i.parent.onAddChildAfterSibling(i)),
           ],
-          [
-            typeIs(Bucket),
-            b => self.startEditingModel(b.onPrependChild()),
-          ],
+          [typeIs(Bucket), b => afterAdd(b.onPrependChild())],
         ]),
-      )(self.selectedModel)
+      )
     },
   }))
   .views(self => ({
@@ -101,13 +96,14 @@ export const SelectionManager = modelNamed('SelectionManager')
       self._selectedModel = null
       self._isEditing = false
     },
+    tapSelected(fn) {
+      S.map(R.tap(fn))(self.selectedModel)
+    },
     onDeleteSelectionTree() {
-      S.map(
-        R.tap(m => {
-          self.clearSelection()
-          m.deleteTree()
-        }),
-      )(self.selectedModel)
+      self.tapSelected(m => {
+        self.clearSelection()
+        m.deleteTree()
+      })
     },
     setSelectionTo(m) {
       self._selectedModel = m
