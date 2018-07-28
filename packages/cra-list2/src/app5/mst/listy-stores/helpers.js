@@ -12,12 +12,8 @@ export function isEditingModel(self) {
   return getSelectionManager(self).isEditingModel(self)
 }
 
-function getDatabase(self) {
-  return getRoot(self).database
-}
-
 export function getCollectionInstance(self, collection) {
-  return getDatabase(self)[collection.tableName]
+  return getRoot(self).database[collection.tableName]
 }
 
 export function getCurrentDashboard(self) {
