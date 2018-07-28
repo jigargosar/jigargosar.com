@@ -95,7 +95,7 @@ function asEditable(self) {
       },
     },
     actions: {
-      onNameChange: e => self.updateAttrFromEvent('name', e),
+      onInputChange: e => self.updateAttrFromEvent('name', e),
       onInputBlur: self.endEditing,
       endEditing: () => endEditing(self),
       startEditing: () => startEditing(self),

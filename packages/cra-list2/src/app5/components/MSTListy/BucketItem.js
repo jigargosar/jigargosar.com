@@ -54,7 +54,7 @@ export const BucketItem = observer(function BucketItem({item}) {
             <Input
               value={item.name}
               onBlur={item.onInputBlur}
-              onChange={item.onNameChange}
+              onChange={item.onInputChange}
               onKeyDown={item.onInputKeyDown}
             />
           </InputWrapper>
