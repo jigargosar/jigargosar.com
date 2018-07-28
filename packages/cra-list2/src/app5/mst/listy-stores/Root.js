@@ -31,7 +31,6 @@ export const Root = modelNamed('Root')
   .props({
     database: optionalObj(Database),
     selectionManager: optionalObj(SelectionManager),
-    editManager: optionalObj(EditManager),
   })
   .views(self => ({
     get currentDashboard() {

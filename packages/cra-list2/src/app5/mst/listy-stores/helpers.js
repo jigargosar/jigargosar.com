@@ -5,7 +5,7 @@ export function getSelectionManager(self) {
 }
 
 export function getEditManager(self) {
-  return getRoot(self).editManager
+  return getRoot(self).selectionManager
 }
 
 export function setSelectionToModel(self) {

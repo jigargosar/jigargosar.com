@@ -20,7 +20,23 @@ export const SelectionManager = modelNamed('SelectionManager')
     _selectedModel: types.maybeNull(
       types.union(...R.map(types.reference)(modelTypes)),
     ),
+    _editId: types.maybeNull(types.string),
   })
+  .views(self => ({
+    isEditing(ref) {
+      return self._editId === ref.id
+    },
+  }))
+  .actions(self => ({
+    startEditing(model) {
+      self._editId = model.id
+    },
+    endEditing(ref) {
+      if (self.isEditing(ref)) {
+        self._editId = null
+      }
+    },
+  }))
   .views(self => ({
     get selectedModel() {
       return S.toMaybe(self._selectedModel)
