@@ -2,21 +2,22 @@ import {modelNamed, optionalObj} from '../../little-mst'
 import * as R from 'ramda'
 import {
   Bucket,
-  Buckets,
+  BucketsCollection,
   Dashboard,
-  Dashboards,
+  DashboardsCollection,
   Item,
-  Items,
+  ItemsCollection,
 } from './models'
+import {C} from '../../little-ramda'
 
 const collectionProps = {
-  items: Items,
-  buckets: Buckets,
-  dashboards: Dashboards,
+  items: ItemsCollection,
+  buckets: BucketsCollection,
+  dashboards: DashboardsCollection,
 }
 
 export const Database = modelNamed('Database')
-  .props(R.map(optionalObj)(collectionProps))
+  .props(R.map(C(optionalObj, R.prop('type')))(collectionProps))
   .views(self => ({
     getCollection: R.cond([
       [R.equals(Item), () => self.items],

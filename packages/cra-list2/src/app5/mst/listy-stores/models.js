@@ -101,7 +101,7 @@ function asEditable(self) {
       },
     },
     actions: {
-      onNameChange: self.updateAttrFromEvent('name'),
+      onNameChange: e => self.updateAttrFromEvent('name', e),
       onInputBlur: self.endEditing,
       endEditing: () => endEditing(self),
       startEditing: () => startEditing(self),
@@ -186,10 +186,6 @@ export const Dashboard = CollectionModel({
     },
   }))
 
-const ItemsCollection = Collection(Item)
-const BucketsCollection = Collection(Bucket)
-const DashboardsCollection = Collection(Dashboard)
-
-export const Items = ItemsCollection.type
-export const Buckets = BucketsCollection.type
-export const Dashboards = DashboardsCollection.type
+export const ItemsCollection = Collection(Item)
+export const BucketsCollection = Collection(Bucket)
+export const DashboardsCollection = Collection(Dashboard)

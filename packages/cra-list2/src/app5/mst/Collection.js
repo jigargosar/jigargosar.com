@@ -2,9 +2,11 @@ import {types} from 'mobx-state-tree'
 import {mValues} from '../mobx/little-mobx'
 import {modelNamed} from '../little-mst'
 import {T, whereEq, filter, reject, find, map, forEach} from 'ramda'
+import {pluralize} from '../little-model'
 
 export function Collection(Model) {
   return {
+    tableName: pluralize(Model.name),
     Model,
     type: modelNamed(`${Model.name}Collection`)
       .props({
