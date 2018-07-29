@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react'
 import {NumberValue} from 'react-values'
-import CFP from './components/CFP'
 
 class App extends Component {
   state = {
@@ -35,7 +34,6 @@ class App extends Component {
             </Fragment>
           )}
         </NumberValue>
-        <CFP comp={NumberValue}> </CFP>
       </div>
     )
   }
