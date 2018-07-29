@@ -1,4 +1,5 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
+import {NumberValue} from 'react-values'
 
 class App extends Component {
   state = {
@@ -7,20 +8,21 @@ class App extends Component {
     counter: 0,
   }
 
-  inc = () => {
-    this.setState({
-      counter: this.state.counter + 1,
-    })
-  }
-
   render() {
     return (
       <div>
         <header>
           <h1>{this.state.title}</h1>
         </header>
-        <p>{this.state.counter}</p>
-        <button onClick={this.inc}>inc</button>
+        <NumberValue>
+          {ct => (
+            <Fragment>
+              <p>{ct.value}</p>
+              <button onClick={() => ct.increment(10)}>inc</button>
+              <button onClick={() => ct.set(10)}>set 10</button>
+            </Fragment>
+          )}
+        </NumberValue>
       </div>
     )
   }
