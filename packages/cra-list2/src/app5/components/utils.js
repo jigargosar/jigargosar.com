@@ -8,7 +8,6 @@ import {
   mapIndexed,
   R,
   RX,
-  throttle,
   tryCatchLog,
   validate,
 } from '../little-ramda'
@@ -183,16 +182,15 @@ export function createSelection(start, end = start) {
   return {start, end}
 }
 
-export const setFocusAndSelectionOnDOMId = throttle(
-  (domId, selection) =>
-    requestAnimationFrame(() => {
-      const el = document.getElementById(domId)
-      el.focus()
-      if (selection) {
-        el.setSelectionRange(selection.start, selection.end)
-      }
-    }),
-)
+export const setFocusAndSelectionOnDOMId = (domId, selection) =>
+  requestAnimationFrame(() => {
+    const el = document.getElementById(domId)
+    el.focus()
+    if (selection) {
+      el.setSelectionRange(selection.start, selection.end)
+    }
+  })
+
 export function cnWith(...cnArgs) {
   return cls => cn(...cnArgs, cls)
 }

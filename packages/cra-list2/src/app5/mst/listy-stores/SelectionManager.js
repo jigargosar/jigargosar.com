@@ -53,7 +53,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       actions: {
         afterCreate() {
           const pdThrottle = C(wrapPD, fn =>
-            throttle(fn, 50, {leading: true, trailing: false}),
+            throttle(fn, 50, {leading: false, trailing: true}),
           )
           selectionModeKeyMap.set([
             ['up', pdThrottle(self.onNavigatePrev)],
