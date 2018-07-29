@@ -61,9 +61,9 @@ export const SelectionManager = modelNamed('SelectionManager')
     get selectionModeKeyMap() {
       return [
         ['up', wrapPD(self.onNavigatePrev)],
-        ['down', self.onNavigateNext],
-        ['left', self.onNavigateLeft],
-        ['right', self.onNavigateRight],
+        ['down', wrapPD(self.onNavigateNext)],
+        ['left', wrapPD(self.onNavigateLeft)],
+        ['right', wrapPD(self.onNavigateRight)],
         ['d', self.onDeleteSelectionTree],
         ['enter', self.onEditSelected],
         ['mod+enter', self.onModEnter],
