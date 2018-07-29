@@ -35,14 +35,20 @@ class App extends Component {
   renderState(state, setState) {
     return (
       <div>
-        <header>
-          <h1>Fun React Notes</h1>
-        </header>
+        {renderHeader()}
 
         <button onClick={() => setState(appendNote(state))}>Add</button>
         {this.renderNotes(state.notes)}
       </div>
     )
+
+    function renderHeader() {
+      return (
+        <header>
+          <h1>Fun React Notes</h1>
+        </header>
+      )
+    }
   }
 
   renderNotes(notes) {
