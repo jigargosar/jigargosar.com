@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, {Component, Fragment} from 'react'
 import {ArrayValue} from 'react-values'
 import * as _ from 'ramda'
@@ -31,12 +32,22 @@ class App extends Component {
 
 export default App
 
-const Log = p => {
-  _.forEachObjIndexed((v, k) => {
-    console.log('Log', k, v)
-    if (_.contains(_.type(v))(['Object', 'Array'])) {
-      console.table(v)
-    }
-  })(p)
-  return null
+class Log extends Component {
+  static defaultProps = {
+    children: null,
+  }
+
+  static propTypes = {
+    children: PropTypes.any,
+  }
+
+  render() {
+    _.forEachObjIndexed((v, k) => {
+      console.log('Log', k, v)
+      if (_.contains(_.type(v))(['Object', 'Array'])) {
+        console.table(v)
+      }
+    })(this.props)
+    return this.props.children
+  }
 }
