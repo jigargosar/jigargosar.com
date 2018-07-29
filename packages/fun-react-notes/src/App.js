@@ -11,6 +11,11 @@ function createNote(idx) {
 }
 
 const initialState = {notes: _.times(createNote)(5)}
+
+function addNote(state) {
+  return state.value.notes.push(createNote(state.value.notes.length))
+}
+
 class App extends Component {
   render() {
     return (
@@ -22,6 +27,7 @@ class App extends Component {
             </header>
             <Log comp={'App'} state={state.value} />
             {_.map(renderNote(state))(state.value.notes)}
+            <button onClick={e => addNote(state)}>Add</button>
           </div>
         )}
       </AnyValue>
