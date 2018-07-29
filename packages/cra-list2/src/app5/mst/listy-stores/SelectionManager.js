@@ -32,6 +32,7 @@ const onModEnter = whenSelectedTypeIs([
   [Item, invoke0('onAppendSibling')],
   [Bucket, invoke0('onPrependChild')],
 ])
+
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedModel: types.maybeNull(types.union(...modelRefs)),
