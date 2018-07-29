@@ -36,13 +36,11 @@ class Note extends Component {
   render() {
     const {note} = this.props
     return (
-      <Fragment>
+      <div>
         {/*<Log note={note} />*/}
-        <div>
-          <small>{note.id}</small>
-        </div>
-        <div>{note.text}</div>
-      </Fragment>
+        <small>{note.id}: </small>
+        <span>{note.text}</span>
+      </div>
     )
   }
 }
