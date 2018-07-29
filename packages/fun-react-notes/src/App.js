@@ -36,13 +36,19 @@ class App extends Component {
       <header>
         <h1>Fun React Notes</h1>
       </header>
-      <Log comp={'App'} state={state} />
-      {_map(this.renderNote)(state.notes)}
+
+      {this.renderNotes(state.notes)}
       <button onClick={() => setState(appendNote(state))}>Add</button>
     </div>
   )
 
-  renderNote = note => <Note key={note.id} note={note} />
+  renderNotes(notes) {
+    return _map(renderNote)(notes)
+
+    function renderNote(note) {
+      return <Note key={note.id} note={note} />
+    }
+  }
 }
 
 export default App
