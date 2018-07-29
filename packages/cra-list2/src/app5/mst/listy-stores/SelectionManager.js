@@ -28,6 +28,10 @@ const pSelModel = P('selectedModel')
 const mapSelected = fn => C(M(fn), pSelModel)
 const whenSelectedTypeIs = C(mapSelected, whenTypeIs)
 
+const onModEnter = whenSelectedTypeIs([
+  [Item, invoke0('onAppendSibling')],
+  [Bucket, invoke0('onPrependChild')],
+])
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
     _selectedModel: types.maybeNull(types.union(...modelRefs)),
@@ -45,7 +49,7 @@ export const SelectionManager = modelNamed('SelectionManager')
         whenKey('mod+enter')(self.onModEnter),
       )
     },
-    get onSelectionModeKeyDown() {
+    get selectionModeKeyDownHandler() {
       return withKeyEvent(
         whenKeyPD('up')(self.onNavigatePrev),
         whenKeyPD('down')(self.onNavigateNext),
@@ -63,6 +67,9 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
   }))
   .actions(self => ({
+    onSelectionModeKeyDown(e) {
+      self.selectionModeKeyDownHandler(e)
+    },
     onEndEditSelected() {
       console.assert(self.isEditing === true)
       self.isEditing = false
@@ -81,12 +88,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.setSelectionTo(model)
       requestAnimationFrame(() => self.onEditSelected())
     },
-    onModEnter() {
-      whenSelectedTypeIs([
-        [Item, invoke0('onAppendSibling')],
-        [Bucket, invoke0('onPrependChild')],
-      ])(self)
-    },
+    onModEnter: () => onModEnter(self),
   }))
   .views(self => ({
     get selectedModel() {
