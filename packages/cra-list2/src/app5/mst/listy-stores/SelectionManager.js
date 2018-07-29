@@ -37,17 +37,7 @@ const onModEnter = whenSelectedTypeIs([
   [Bucket, invoke0('onPrependChild')],
 ])
 
-const selectionModeKeyMap = [
-  ['up', 'onNavigatePrev'],
-  ['down', 'onNavigateNext'],
-  ['left', 'onNavigateLeft'],
-  ['right', 'onNavigateRight'],
-  ['d', 'onDeleteSelectionTree'],
-  ['enter', 'onEditSelected'],
-  ['mod+enter', 'onModEnter'],
-]
-
-const findHotKeyActionName = e => keymap =>
+const findHotKeyAction = e => keymap =>
   C(M(snd), S.find(C(isEventHotKey(e), fst)))(keymap)
 
 export const SelectionManager = modelNamed('SelectionManager')
@@ -67,6 +57,17 @@ export const SelectionManager = modelNamed('SelectionManager')
         whenKey('mod+enter')(self.onModEnter),
       )
     },
+    get selectionModeKeyMap() {
+      return [
+        ['up', self.onNavigatePrev],
+        ['down', self.onNavigateNext],
+        ['left', self.onNavigateLeft],
+        ['right', self.onNavigateRight],
+        ['d', self.onDeleteSelectionTree],
+        ['enter', self.onEditSelected],
+        ['mod+enter', self.onModEnter],
+      ]
+    },
   }))
   .views(self => ({
     isEditingModel(model) {
@@ -78,8 +79,8 @@ export const SelectionManager = modelNamed('SelectionManager')
       self[name]()
     },
     onSelectionModeKeyDown(e) {
-      const actionName = findHotKeyActionName(e)(selectionModeKeyMap)
-      M(self.executeActionNamed)(actionName)
+      const action = findHotKeyAction(e)(self.selectionModeKeyMap)
+      M(a => a())(action)
     },
     onEndEditSelected() {
       console.assert(self.isEditing === true)
