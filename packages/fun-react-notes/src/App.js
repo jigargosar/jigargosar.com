@@ -53,7 +53,7 @@ function renderNote(note) {
 
 class Log extends Component {
   render() {
-    console.groupCollapsed('Log', this.props)
+    console.groupCollapsed('Props', this.props)
     _.forEachObjIndexed((v, k) => {
       console.log('Log', k, v)
       if (_.contains(_.type(v))(['Object', 'Array'])) {
