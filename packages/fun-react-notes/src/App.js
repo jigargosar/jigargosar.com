@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react'
+import React, {Component} from 'react'
 import {ArrayValue} from 'react-values'
 import * as _ from 'ramda'
 
@@ -36,7 +36,7 @@ class Note extends Component {
     return (
       <div>
         <Log comp={'Note'} note={note} />
-        <small>{note.id}: </small>
+        <small>{note.id} : </small>
         <span>{note.text}</span>
       </div>
     )
@@ -56,6 +56,7 @@ class Log extends Component {
         console.table(v)
       }
     })(this.props)
+    console.groupEnd('end')
     return null
   }
 }
