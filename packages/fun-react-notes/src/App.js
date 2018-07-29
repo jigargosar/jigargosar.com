@@ -13,7 +13,10 @@ function createNote(idx) {
 const initialState = {notes: _.times(createNote)(5)}
 
 function addNote(state) {
-  return state.value.notes.push(createNote(state.value.notes.length))
+  const notes = state.value.notes
+  state.set({
+    notes: _.prepend(createNote(notes.length))(notes),
+  })
 }
 
 class App extends Component {
