@@ -3,14 +3,6 @@ import React, {Component, Fragment} from 'react'
 import {ArrayValue} from 'react-values'
 import * as _ from 'ramda'
 
-function createNote(idx) {
-  const id = `${idx}`
-  return {
-    id,
-    text: `Note text ${id}`,
-  }
-}
-
 class App extends Component {
   render() {
     return (
@@ -22,7 +14,8 @@ class App extends Component {
           {notes => (
             <Fragment>
               <Log notes={notes.value} />
-              <Log {...notes} />
+              {/*<Log {...notes} />*/}
+              {_.map(renderNote)(notes.value)}
             </Fragment>
           )}
         </ArrayValue>
@@ -32,6 +25,18 @@ class App extends Component {
 }
 
 export default App
+
+function createNote(idx) {
+  const id = `${idx}`
+  return {
+    id,
+    text: `Note text ${id}`,
+  }
+}
+
+function renderNote(note) {
+  return <Note key={note.id} note={note} />
+}
 
 class Log extends Component {
   static defaultProps = {
