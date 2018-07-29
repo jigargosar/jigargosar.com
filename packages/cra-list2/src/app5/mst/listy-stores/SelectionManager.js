@@ -5,6 +5,7 @@ import {
   setFocusAndSelectionOnDOMId,
   whenKey,
   withKeyEvent,
+  wrapPD,
 } from '../../components/utils'
 import * as R from 'ramda'
 import S from 'sanctuary'
@@ -59,7 +60,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     get selectionModeKeyMap() {
       return [
-        ['up', self.onNavigatePrev],
+        ['up', wrapPD(self.onNavigatePrev)],
         ['down', self.onNavigateNext],
         ['left', self.onNavigateLeft],
         ['right', self.onNavigateRight],
@@ -80,7 +81,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
     onSelectionModeKeyDown(e) {
       const action = findHotKeyAction(e)(self.selectionModeKeyMap)
-      M(a => a())(action)
+      M(S.T(e))(action)
     },
     onEndEditSelected() {
       console.assert(self.isEditing === true)
