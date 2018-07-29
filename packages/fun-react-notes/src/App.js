@@ -37,7 +37,9 @@ class App extends Component {
             </header>
             <Log comp={'App'} state={state} />
             {_map(renderNote)(state.notes)}
-            <button onClick={() => setState(appendNote(state))}>Add</button>
+            <button onClick={() => setState(appendNote(state))}>
+              Add
+            </button>
           </div>
         )}
       </State>
