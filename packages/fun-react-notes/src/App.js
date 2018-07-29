@@ -27,6 +27,8 @@ function appendNote(state) {
 class App extends Component {
   state = {notes: _times(createNote)(5)}
 
+  setState = this.setState.bind(this)
+
   render() {
     return this.renderState(this.state, this.setState)
   }
@@ -37,8 +39,8 @@ class App extends Component {
         <h1>Fun React Notes</h1>
       </header>
 
-      {this.renderNotes(state.notes)}
       <button onClick={() => setState(appendNote(state))}>Add</button>
+      {this.renderNotes(state.notes)}
     </div>
   )
 
