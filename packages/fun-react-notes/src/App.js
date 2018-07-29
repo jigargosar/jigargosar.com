@@ -13,19 +13,19 @@ function createNote(idx) {
 class App extends Component {
   render() {
     return (
-      <div>
-        <header>
-          <h1>Fun React Notes</h1>
-        </header>
-        <ArrayValue defaultValue={_.times(createNote)(5)}>
-          {notes => (
+      <ArrayValue defaultValue={_.times(createNote)(5)}>
+        {notes => (
+          <div>
+            <header>
+              <h1>Fun React Notes</h1>
+            </header>
             <Fragment>
               <Log comp={'App'} notes={notes.value} />
               {_.map(renderNote)(notes.value)}
             </Fragment>
-          )}
-        </ArrayValue>
-      </div>
+          </div>
+        )}
+      </ArrayValue>
     )
   }
 }
