@@ -30,23 +30,19 @@ class App extends Component {
 
   render() {
     const {state, setState} = this
+    const {notes} = state
 
-    return this.renderState(state, onAddNote)
+    return (
+      <div>
+        {renderHeader()}
+        <button onClick={onAddNote}>Add</button>
+        {_map(renderNote)(notes)}
+      </div>
+    )
 
     function onAddNote() {
       return setState(appendNote(state))
     }
-  }
-
-  renderState(state, onAddNote) {
-    return (
-      <div>
-        {renderHeader()}
-
-        <button onClick={onAddNote}>Add</button>
-        {this.renderNotes(state.notes)}
-      </div>
-    )
 
     function renderHeader() {
       return (
@@ -55,10 +51,6 @@ class App extends Component {
         </header>
       )
     }
-  }
-
-  renderNotes(notes) {
-    return _map(renderNote)(notes)
 
     function renderNote(note) {
       return <Note key={note.id} note={note} />
