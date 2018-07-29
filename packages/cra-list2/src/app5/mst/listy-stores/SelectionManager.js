@@ -11,15 +11,23 @@ import S from 'sanctuary'
 import {Bucket, Dashboard, Item} from './models'
 import {getCurrentDashboard} from './helpers'
 import {
+  M,
   maybeOr,
   maybeOr_,
   maybeOrElse,
+  P,
   sChain,
 } from '../../little-sanctuary'
 import {C, invoke0} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
 const modelRefs = R.map(types.reference)(modelTypes)
+
+const pSelModel = P('selectedModel')
+
+function mapSelected(fn, self) {
+  return C(M(fn), pSelModel)(self)
+}
 
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
@@ -97,7 +105,7 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.isEditing = false
     },
     mapSelected(fn) {
-      S.map(fn)(self.selectedModel)
+      mapSelected(fn, self)
     },
     whenSelectedTypeIs(...conditions) {
       self.mapSelected(whenTypeIs(conditions))

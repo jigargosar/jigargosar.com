@@ -1,5 +1,6 @@
 import S from 'sanctuary'
 import {C, findById, isIndexOutOfBounds, R} from './little-ramda'
+
 export {
   chain as sChain,
   maybeToNullable as sMaybeToNullable,
@@ -67,3 +68,5 @@ export const unlessPath = p => o => dotPathOr(o)(p)(o)
 
 export const elemAt = idx =>
   C(S.join, nothingWhenElse(isIndexOutOfBounds(idx))(S.at(idx)))
+export const P = S.prop
+export const M = S.map
