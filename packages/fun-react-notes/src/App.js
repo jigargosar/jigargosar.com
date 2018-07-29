@@ -19,11 +19,11 @@ function createNote(idx) {
 
 const initialState = {notes: _times(createNote)(5)}
 
-function addNote({state, setState}) {
+function addNote(state) {
   const notes = state.notes
-  setState({
+  return {
     notes: _append(createNote(notes.length))(notes),
-  })
+  }
 }
 
 class App extends Component {
@@ -37,7 +37,7 @@ class App extends Component {
             </header>
             <Log comp={'App'} state={state} />
             {_map(renderNote)(state.notes)}
-            <button onClick={() => addNote({state, setState})}>Add</button>
+            <button onClick={() => setState(addNote(state))}>Add</button>
           </div>
         )}
       </State>
