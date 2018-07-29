@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {ObjectValue} from 'react-values'
 import * as _ from 'ramda'
+import {State} from 'react-powerplug'
 
 function createNote(idx) {
   const id = `${idx + 1}`
@@ -22,8 +22,8 @@ function addNote({state, setState}) {
 class App extends Component {
   render() {
     return (
-      <ObjectValue defaultValue={initialState}>
-        {({value: state, assign: setState}) => (
+      <State initial={initialState}>
+        {({state, setState}) => (
           <div>
             <header>
               <h1>Fun React Notes</h1>
@@ -33,7 +33,7 @@ class App extends Component {
             <button onClick={() => addNote({state, setState})}>Add</button>
           </div>
         )}
-      </ObjectValue>
+      </State>
     )
   }
 }
