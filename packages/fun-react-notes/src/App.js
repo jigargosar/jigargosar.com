@@ -19,10 +19,8 @@ class App extends Component {
             <header>
               <h1>Fun React Notes</h1>
             </header>
-            <Fragment>
-              <Log comp={'App'} notes={notes.value} />
-              {_.map(renderNote)(notes.value)}
-            </Fragment>
+            <Log comp={'App'} notes={notes.value} />
+            {_.map(renderNote)(notes.value)}
           </div>
         )}
       </ArrayValue>
