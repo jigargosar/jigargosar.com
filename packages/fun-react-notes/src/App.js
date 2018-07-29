@@ -32,16 +32,18 @@ class App extends Component {
     return this.renderState(this.state, this.setState)
   }
 
-  renderState = (state, setState) => (
-    <div>
-      <header>
-        <h1>Fun React Notes</h1>
-      </header>
+  renderState(state, setState) {
+    return (
+      <div>
+        <header>
+          <h1>Fun React Notes</h1>
+        </header>
 
-      <button onClick={() => setState(appendNote(state))}>Add</button>
-      {this.renderNotes(state.notes)}
-    </div>
-  )
+        <button onClick={() => setState(appendNote(state))}>Add</button>
+        {this.renderNotes(state.notes)}
+      </div>
+    )
+  }
 
   renderNotes(notes) {
     return _map(renderNote)(notes)
