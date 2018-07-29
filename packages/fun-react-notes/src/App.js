@@ -17,8 +17,6 @@ function createNote(idx) {
   }
 }
 
-const initialState = {notes: _times(createNote)(5)}
-
 function appendNote(state) {
   const notes = state.notes
   return {
@@ -27,25 +25,29 @@ function appendNote(state) {
 }
 
 class App extends Component {
+  initialState = {notes: _times(createNote)(5)}
+
+  render() {
+    return <State initial={this.initialState}>{this.renderState}</State>
+  }
+
   renderState = ({state, setState}) => (
     <div>
       <header>
         <h1>Fun React Notes</h1>
       </header>
       <Log comp={'App'} state={state} />
-      {_map(renderNote)(state.notes)}
+      {_map(this.renderNote)(state.notes)}
       <button onClick={() => setState(appendNote(state))}>Add</button>
     </div>
   )
 
-  render() {
-    return <State initial={initialState}>{this.renderState}</State>
-  }
+  renderNote = note => <Note key={note.id} note={note} />
 }
 
 export default App
 
-class Note extends Component {
+class Note extends React.PureComponent {
   render() {
     const {note} = this.props
     return (
@@ -58,9 +60,6 @@ class Note extends Component {
   }
 }
 
-function renderNote(note) {
-  return <Note key={note.id} note={note} />
-}
 class Log extends Component {
   render() {
     console.groupCollapsed('Props', this.props)
