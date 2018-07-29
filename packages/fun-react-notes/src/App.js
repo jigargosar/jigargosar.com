@@ -26,6 +26,20 @@ class App extends Component {
 
 export default App
 
+class Note extends Component {
+  render() {
+    const {note} = this.props
+    return (
+      <Fragment>
+        <div>
+          <small>{note.id}</small>
+        </div>
+        <div>{note.text}</div>
+      </Fragment>
+    )
+  }
+}
+
 function createNote(idx) {
   const id = `${idx}`
   return {
