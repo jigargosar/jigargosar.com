@@ -3,7 +3,7 @@ import {ArrayValue} from 'react-values'
 import * as _ from 'ramda'
 
 function createNote(idx) {
-  const id = `${idx}`
+  const id = `${idx + 1}`
   return {
     id,
     text: `Note text ${id}`,
