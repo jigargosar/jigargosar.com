@@ -26,8 +26,7 @@ const modelRefs = R.map(types.reference)(modelTypes)
 const pSelModel = P('selectedModel')
 
 const mapSelected = fn => C(M(fn), pSelModel)
-const whenSelectedTypeIs = conditions =>
-  mapSelected(whenTypeIs(conditions))
+const whenSelectedTypeIs = C(mapSelected, whenTypeIs)
 
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
