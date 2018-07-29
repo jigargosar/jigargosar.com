@@ -25,13 +25,13 @@ function appendNote(state) {
 }
 
 class App extends Component {
-  initialState = {notes: _times(createNote)(5)}
+  state = {notes: _times(createNote)(5)}
 
   render() {
-    return <State initial={this.initialState}>{this.renderState}</State>
+    return this.renderState(this.state, this.setState)
   }
 
-  renderState = ({state, setState}) => (
+  renderState = (state, setState) => (
     <div>
       <header>
         <h1>Fun React Notes</h1>
