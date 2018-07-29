@@ -1,9 +1,9 @@
 import {modelNamed, typeIs, whenTypeIs} from '../../little-mst'
 import {types} from 'mobx-state-tree'
 import {
+  isHotKey,
   setFocusAndSelectionOnDOMId,
   whenKey,
-  whenKeyPD,
   withKeyEvent,
 } from '../../components/utils'
 import * as R from 'ramda'
@@ -20,6 +20,10 @@ import {
 } from '../../little-sanctuary'
 import {C, invoke0, isNotNil} from '../../little-ramda'
 
+const isEventHotKey = e => k => isHotKey(k, e)
+const fst = P('0')
+const snd = P('1')
+
 const modelTypes = [Item, Bucket, Dashboard]
 const modelRefs = R.map(types.reference)(modelTypes)
 
@@ -32,6 +36,19 @@ const onModEnter = whenSelectedTypeIs([
   [Item, invoke0('onAppendSibling')],
   [Bucket, invoke0('onPrependChild')],
 ])
+
+const selectionModeKeyMap = [
+  ['up', 'onNavigatePrev'],
+  ['down', 'onNavigateNext'],
+  ['left', 'onNavigateLeft'],
+  ['right', 'onNavigateRight'],
+  ['d', 'onDeleteSelectionTree'],
+  ['enter', 'onEditSelected'],
+  ['mod+enter', 'onModEnter'],
+]
+
+const findHotKeyActionName = e =>
+  C(snd, S.find(C(isEventHotKey(e), fst)))
 
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
@@ -50,16 +67,8 @@ export const SelectionManager = modelNamed('SelectionManager')
         whenKey('mod+enter')(self.onModEnter),
       )
     },
-    get selectionModeKeyDownHandler() {
-      return withKeyEvent(
-        whenKeyPD('up')(self.onNavigatePrev),
-        whenKeyPD('down')(self.onNavigateNext),
-        whenKeyPD('left')(self.onNavigateLeft),
-        whenKeyPD('right')(self.onNavigateRight),
-        whenKeyPD('d')(self.onDeleteSelectionTree),
-        whenKey('enter')(self.onEditSelected),
-        whenKey('mod+enter')(() => onModEnter(self)),
-      )
+    get selectionModeKeyMap() {
+      return selectionModeKeyMap
     },
   }))
   .views(self => ({
@@ -68,8 +77,12 @@ export const SelectionManager = modelNamed('SelectionManager')
     },
   }))
   .actions(self => ({
+    executeActionNamed(name) {
+      self[name]()
+    },
     onSelectionModeKeyDown(e) {
-      self.selectionModeKeyDownHandler(e)
+      const actionName = findHotKeyActionName(e)(selectionModeKeyMap)
+      M(self.executeActionNamed)(actionName)
     },
     onEndEditSelected() {
       console.assert(self.isEditing === true)
