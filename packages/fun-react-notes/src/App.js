@@ -12,9 +12,9 @@ function createNote(idx) {
 
 const initialState = {notes: _.times(createNote)(5)}
 
-function addNote(state) {
-  const notes = state.value.notes
-  state.assign({
+function addNote({state, setState}) {
+  const notes = state.notes
+  setState({
     notes: _.append(createNote(notes.length))(notes),
   })
 }
@@ -23,14 +23,14 @@ class App extends Component {
   render() {
     return (
       <ObjectValue defaultValue={initialState}>
-        {state => (
+        {({value: state, assign: setState}) => (
           <div>
             <header>
               <h1>Fun React Notes</h1>
             </header>
-            <Log comp={'App'} stateValue={state.value} state={state} />
-            {_.map(renderNote(state))(state.value.notes)}
-            <button onClick={e => addNote(state)}>Add</button>
+            <Log comp={'App'} state={state} />
+            {_.map(renderNote)(state.notes)}
+            <button onClick={() => addNote({state, setState})}>Add</button>
           </div>
         )}
       </ObjectValue>
@@ -53,8 +53,8 @@ class Note extends Component {
   }
 }
 
-function renderNote(state) {
-  return note => <Note key={note.id} note={note} state={state} />
+function renderNote(note) {
+  return <Note key={note.id} note={note} />
 }
 class Log extends Component {
   render() {

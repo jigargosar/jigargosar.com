@@ -16,7 +16,9 @@
     "prop-types": "^15.6.2",
     "ramda": "^0.25.0",
     "react": "^16.4.1",
+    "react-adopt": "^0.6.0",
     "react-dom": "^16.4.1",
+    "react-powerplug": "^1.0.0-rc.1",
     "react-scripts": "1.1.4",
     "react-values": "^0.2.4",
     "recompose": "^0.27.1"
