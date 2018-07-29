@@ -58,7 +58,7 @@ export const SelectionManager = modelNamed('SelectionManager')
         whenKeyPD('right')(self.onNavigateRight),
         whenKeyPD('d')(self.onDeleteSelectionTree),
         whenKey('enter')(self.onEditSelected),
-        whenKey('mod+enter')(self.onModEnter),
+        whenKey('mod+enter')(() => onModEnter(self)),
       )
     },
   }))
@@ -115,9 +115,11 @@ export const SelectionManager = modelNamed('SelectionManager')
         m.deleteTree()
       })
     },
+    focusSelected: () =>
+      setFocusAndSelectionOnDOMId(self._selectedModel.id),
     setSelectionTo(m) {
       self._selectedModel = m
-      setFocusAndSelectionOnDOMId(m.id)
+      self.focusSelected()
     },
     onModelFocus(m) {
       self._selectedModel = m
