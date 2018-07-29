@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {State} from 'react-powerplug'
 import {
-  _,
   _append,
   _contains,
   _forEachObjIndexed,
@@ -20,7 +19,7 @@ function createNote(idx) {
 
 const initialState = {notes: _times(createNote)(5)}
 
-function addNote(state) {
+function appendNote(state) {
   const notes = state.notes
   return {
     notes: _append(createNote(notes.length))(notes),
@@ -38,7 +37,7 @@ class App extends Component {
             </header>
             <Log comp={'App'} state={state} />
             {_map(renderNote)(state.notes)}
-            <button onClick={() => setState(addNote(state))}>Add</button>
+            <button onClick={() => setState(appendNote(state))}>Add</button>
           </div>
         )}
       </State>
