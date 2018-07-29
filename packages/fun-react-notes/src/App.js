@@ -6,6 +6,15 @@ class App extends Component {
     title: 'Welcome to React',
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(`nextProps,nextState`, nextProps, nextState)
+    return true
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(`prevProps,prevState`, prevProps, prevState)
+  }
+
   render() {
     return (
       <div>
@@ -16,8 +25,12 @@ class App extends Component {
           {ct => (
             <Fragment>
               <p>{ct.value}</p>
-              <button onClick={() => ct.increment(10)}>inc</button>
-              <button onClick={() => ct.set(10)}>set 10</button>
+              <button onClick={() => ct.increment(10)}>
+                <b>INC</b>
+              </button>
+              <button onClick={() => ct.decrement(10)}>
+                <b>DEC</b>
+              </button>
             </Fragment>
           )}
         </NumberValue>
