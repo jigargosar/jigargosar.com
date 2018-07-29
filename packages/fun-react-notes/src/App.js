@@ -35,7 +35,7 @@ class Note extends Component {
     const {note} = this.props
     return (
       <div>
-        <Log comp={'Note'} note={note} />
+        <Log comp={'Note'} {...note} />
         <small>{note.id} : </small>
         <span>{note.text}</span>
       </div>
