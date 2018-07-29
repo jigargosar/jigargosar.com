@@ -29,15 +29,21 @@ class App extends Component {
   setState = this.setState.bind(this)
 
   render() {
-    return this.renderState(this.state, this.setState)
+    const {state, setState} = this
+
+    return this.renderState(state, onAddNote)
+
+    function onAddNote() {
+      return setState(appendNote(state))
+    }
   }
 
-  renderState(state, setState) {
+  renderState(state, onAddNote) {
     return (
       <div>
         {renderHeader()}
 
-        <button onClick={() => setState(appendNote(state))}>Add</button>
+        <button onClick={onAddNote}>Add</button>
         {this.renderNotes(state.notes)}
       </div>
     )
