@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {State} from 'react-powerplug'
 import {
   _append,
   _contains,
