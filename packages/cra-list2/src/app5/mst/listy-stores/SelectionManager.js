@@ -19,7 +19,8 @@ import {
   P,
   sChain,
 } from '../../little-sanctuary'
-import {C, invoke0, isNotNil} from '../../little-ramda'
+import {C, invoke0, isNotNil, throttle} from '../../little-ramda'
+import {oBox} from '../../mobx/little-mobx'
 
 const isEventHotKey = e => k => isHotKey(k, e)
 const fst = P('0')
@@ -46,6 +47,33 @@ export const SelectionManager = modelNamed('SelectionManager')
     _selectedModel: types.maybeNull(types.union(...modelRefs)),
     isEditing: false,
   })
+  .extend(self => {
+    const selectionModeKeyMap = oBox([])
+    return {
+      actions: {
+        afterCreate() {
+          console.warn('selectionModeKeyMap')
+          const pdThrottle = C(wrapPD, fn =>
+            throttle(fn, 50, {leading: true, trailing: false}),
+          )
+          selectionModeKeyMap.set([
+            ['up', pdThrottle(self.onNavigatePrev)],
+            ['down', pdThrottle(self.onNavigateNext)],
+            ['left', pdThrottle(self.onNavigateLeft)],
+            ['right', pdThrottle(self.onNavigateRight)],
+            ['d', self.onDeleteSelectionTree],
+            ['enter', self.onEditSelected],
+            ['mod+enter', self.onModEnter],
+          ])
+        },
+      },
+      views: {
+        get selectionModeKeyMap() {
+          return selectionModeKeyMap.get()
+        },
+      },
+    }
+  })
   .views(self => ({
     get onKeyDown() {
       return self.isEditing
@@ -57,17 +85,6 @@ export const SelectionManager = modelNamed('SelectionManager')
         whenKey('enter')(self.onEndEditSelected),
         whenKey('mod+enter')(self.onModEnter),
       )
-    },
-    get selectionModeKeyMap() {
-      return [
-        ['up', wrapPD(self.onNavigatePrev)],
-        ['down', wrapPD(self.onNavigateNext)],
-        ['left', wrapPD(self.onNavigateLeft)],
-        ['right', wrapPD(self.onNavigateRight)],
-        ['d', self.onDeleteSelectionTree],
-        ['enter', self.onEditSelected],
-        ['mod+enter', self.onModEnter],
-      ]
     },
   }))
   .views(self => ({
