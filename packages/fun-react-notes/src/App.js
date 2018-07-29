@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {ArrayValue} from 'react-values'
+import {AnyValue} from 'react-values'
 import * as _ from 'ramda'
 
 function createNote(idx) {
@@ -10,20 +10,21 @@ function createNote(idx) {
   }
 }
 
+const initialState = {notes: _.times(createNote)(5)}
 class App extends Component {
   render() {
     return (
-      <ArrayValue defaultValue={_.times(createNote)(5)}>
-        {notes => (
+      <AnyValue defaultValue={initialState}>
+        {state => (
           <div>
             <header>
               <h1>Fun React Notes</h1>
             </header>
-            <Log comp={'App'} notes={notes.value} />
-            {_.map(renderNote)(notes.value)}
+            <Log comp={'App'} state={state.value} />
+            {_.map(renderNote)(state.value.notes)}
           </div>
         )}
-      </ArrayValue>
+      </AnyValue>
     )
   }
 }
