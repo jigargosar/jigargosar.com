@@ -45,7 +45,7 @@ class Note extends Component {
 }
 
 function renderNote(state) {
-  return note => <Note key={note.id} note={note} />
+  return note => <Note key={note.id} note={note} state={state} />
 }
 class Log extends Component {
   render() {
