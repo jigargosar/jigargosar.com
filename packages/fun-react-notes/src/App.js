@@ -22,6 +22,7 @@ class App extends Component {
           {notes => (
             <Fragment>
               <Log notes={notes.value} />
+              <Log {...notes} />
             </Fragment>
           )}
         </ArrayValue>
