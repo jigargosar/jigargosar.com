@@ -1,6 +1,6 @@
 import * as _ from 'ramda'
-
 export {_}
+
 export {
   map as _map,
   forEachObjIndexed as _forEachObjIndexed,
