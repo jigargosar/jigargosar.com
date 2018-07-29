@@ -1,5 +1,14 @@
 import React, {Component, Fragment} from 'react'
 import {ArrayValue} from 'react-values'
+import * as _ from 'ramda'
+
+function createNote(idx) {
+  const id = `${idx}`
+  return {
+    id,
+    text: `Note text ${id}`,
+  }
+}
 
 class App extends Component {
   render() {
@@ -8,7 +17,7 @@ class App extends Component {
         <header>
           <h1>Fun React Notes</h1>
         </header>
-        <ArrayValue>
+        <ArrayValue defaultValue={_.times(createNote)(5)}>
           {notes => (
             <Fragment>
               <Log notes={notes.value} />
@@ -23,7 +32,11 @@ class App extends Component {
 export default App
 
 const Log = p => {
-  console.log('Log', p)
-  console.table(p)
+  _.forEachObjIndexed((v, k) => {
+    console.log('Log', k, v)
+    if (_.contains(_.type(v))(['Object', 'Array'])) {
+      console.table(v)
+    }
+  })(p)
   return null
 }
