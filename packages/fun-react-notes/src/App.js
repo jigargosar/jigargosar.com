@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React, {Component, Fragment} from 'react'
 import {ArrayValue} from 'react-values'
 import * as _ from 'ramda'
@@ -22,7 +21,6 @@ class App extends Component {
           {notes => (
             <Fragment>
               <Log notes={notes.value} />
-              {/*<Log {...notes} />*/}
               {_.map(renderNote)(notes.value)}
             </Fragment>
           )}
@@ -39,6 +37,7 @@ class Note extends Component {
     const {note} = this.props
     return (
       <Fragment>
+        {/*<Log note={note} />*/}
         <div>
           <small>{note.id}</small>
         </div>
@@ -53,21 +52,14 @@ function renderNote(note) {
 }
 
 class Log extends Component {
-  static defaultProps = {
-    children: null,
-  }
-
-  static propTypes = {
-    children: PropTypes.any,
-  }
-
   render() {
+    console.groupCollapsed('Log', this.props)
     _.forEachObjIndexed((v, k) => {
       console.log('Log', k, v)
       if (_.contains(_.type(v))(['Object', 'Array'])) {
         console.table(v)
       }
     })(this.props)
-    return this.props.children
+    return null
   }
 }
