@@ -52,7 +52,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     return {
       actions: {
         afterCreate() {
-          console.warn('selectionModeKeyMap')
           const pdThrottle = C(wrapPD, fn =>
             throttle(fn, 50, {leading: true, trailing: false}),
           )
