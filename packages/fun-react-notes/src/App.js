@@ -1,42 +1,29 @@
 import React, {Component, Fragment} from 'react'
-import {NumberValue} from 'react-values'
+import {ArrayValue} from 'react-values'
 
 class App extends Component {
-  state = {
-    title: 'Welcome to React',
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(`nextProps,nextState`, nextProps, nextState)
-    return true
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log(`prevProps,prevState`, prevProps, prevState)
-  }
-
   render() {
     return (
       <div>
         <header>
-          <h1>{this.state.title}</h1>
+          <h1>Fun React Notes</h1>
         </header>
-        <NumberValue>
-          {ct => (
+        <ArrayValue>
+          {notes => (
             <Fragment>
-              <p>{ct.value}</p>
-              <button onClick={() => ct.increment(10)}>
-                <b>INC</b>
-              </button>
-              <button onClick={() => ct.decrement(10)}>
-                <b>DEC</b>
-              </button>
+              <Log notes={notes.value} />
             </Fragment>
           )}
-        </NumberValue>
+        </ArrayValue>
       </div>
     )
   }
 }
 
 export default App
+
+const Log = p => {
+  console.log('Log', p)
+  console.table(p)
+  return null
+}
