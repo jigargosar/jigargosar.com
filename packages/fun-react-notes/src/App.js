@@ -4,8 +4,6 @@ import {NumberValue} from 'react-values'
 class App extends Component {
   state = {
     title: 'Welcome to React',
-    content: `To get started, edit <code>src/App.js</code> and save to reload.`,
-    counter: 0,
   }
 
   render() {
