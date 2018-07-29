@@ -1,9 +1,11 @@
 import * as _ from 'ramda'
 
 export {_}
-export const _map = _.map
-export const _forEachObjIndexed = _.forEachObjIndexed
-export const _type = _.type
-export const _contains = _.contains
-export const _times = _.times
-export const _append = _.append
+export {
+  map as _map,
+  forEachObjIndexed as _forEachObjIndexed,
+  type as _type,
+  contains as _contains,
+  times as _times,
+  append as _append,
+} from 'ramda'
