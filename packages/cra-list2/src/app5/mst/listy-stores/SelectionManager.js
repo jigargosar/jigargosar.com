@@ -18,7 +18,7 @@ import {
   P,
   sChain,
 } from '../../little-sanctuary'
-import {C, invoke0} from '../../little-ramda'
+import {C, invoke0, isNotNil} from '../../little-ramda'
 
 const modelTypes = [Item, Bucket, Dashboard]
 const modelRefs = R.map(types.reference)(modelTypes)
@@ -74,20 +74,19 @@ export const SelectionManager = modelNamed('SelectionManager')
     onEndEditSelected() {
       console.assert(self.isEditing === true)
       self.isEditing = false
+      self.focusSelected()
     },
     onEditSelected() {
       console.assert(self.isEditing === false)
+      self.editSelected()
+    },
+    editSelected() {
       const _selectedModel = self._selectedModel
-      if (_selectedModel && _selectedModel.isEditable) {
-        self.isEditing = true
-      }
+      self.isEditing = !!(_selectedModel && _selectedModel.isEditable)
     },
     startEditingModel(model) {
-      if (self.isEditing) {
-        self.onEndEditSelected()
-      }
-      self.setSelectionTo(model)
-      requestAnimationFrame(() => self.onEditSelected())
+      self._selectedModel = model
+      self.editSelected()
     },
     onModEnter: () => onModEnter(self),
   }))
@@ -115,8 +114,10 @@ export const SelectionManager = modelNamed('SelectionManager')
         m.deleteTree()
       })
     },
-    focusSelected: () =>
-      setFocusAndSelectionOnDOMId(self._selectedModel.id),
+    focusSelected: () => {
+      console.assert(isNotNil(self._selectedModel))
+      return setFocusAndSelectionOnDOMId(self._selectedModel.id)
+    },
     setSelectionTo(m) {
       self._selectedModel = m
       self.focusSelected()
