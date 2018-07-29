@@ -35,7 +35,7 @@ class App extends Component {
             </Fragment>
           )}
         </NumberValue>
-        <CFP comp={CFP}>a</CFP>
+        <CFP comp={NumberValue}> </CFP>
       </div>
     )
   }

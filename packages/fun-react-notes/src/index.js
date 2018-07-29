@@ -13,6 +13,7 @@ registerServiceWorker()
 
 if (module.hot) {
   module.hot.accept(['./App'], () => {
+    console.clear()
     render(require('./App').default)
   })
 }
