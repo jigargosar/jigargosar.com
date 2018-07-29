@@ -81,10 +81,10 @@ export const SelectionManager = modelNamed('SelectionManager')
       requestAnimationFrame(() => self.onEditSelected())
     },
     onModEnter() {
-      self.whenSelectedTypeIs(
+      self.whenSelectedTypeIs([
         [Item, invoke0('onAppendSibling')],
         [Bucket, invoke0('onPrependChild')],
-      )
+      ])
     },
   }))
   .views(self => ({
@@ -105,7 +105,7 @@ export const SelectionManager = modelNamed('SelectionManager')
     mapSelected(fn) {
       mapSelected(fn)(self)
     },
-    whenSelectedTypeIs(...conditions) {
+    whenSelectedTypeIs(conditions) {
       self.mapSelected(whenTypeIs(conditions))
     },
     onDeleteSelectionTree() {
