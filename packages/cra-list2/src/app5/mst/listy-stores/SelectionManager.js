@@ -83,7 +83,6 @@ export const SelectionManager = modelNamed('SelectionManager')
     editSelected() {
       const _selectedModel = self._selectedModel
       self.isEditing = !!(_selectedModel && _selectedModel.isEditable)
-      console.log(`self.isEditing`, self.isEditing)
     },
     startEditingModel(model) {
       self._selectedModel = model
