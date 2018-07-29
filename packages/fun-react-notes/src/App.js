@@ -20,7 +20,7 @@ class App extends Component {
         <ArrayValue defaultValue={_.times(createNote)(5)}>
           {notes => (
             <Fragment>
-              <Log notes={notes.value} />
+              <Log comp={'App'} notes={notes.value} />
               {_.map(renderNote)(notes.value)}
             </Fragment>
           )}
