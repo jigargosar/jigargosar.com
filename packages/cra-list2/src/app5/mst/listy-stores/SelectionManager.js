@@ -48,7 +48,7 @@ const selectionModeKeyMap = [
 ]
 
 const findHotKeyActionName = e => keymap =>
-  C(snd, S.find(C(isEventHotKey(e), fst)))(keymap)
+  C(M(snd), S.find(C(isEventHotKey(e), fst)))(keymap)
 
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
@@ -66,9 +66,6 @@ export const SelectionManager = modelNamed('SelectionManager')
         whenKey('enter')(self.onEndEditSelected),
         whenKey('mod+enter')(self.onModEnter),
       )
-    },
-    get selectionModeKeyMap() {
-      return selectionModeKeyMap
     },
   }))
   .views(self => ({
