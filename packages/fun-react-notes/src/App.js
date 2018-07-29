@@ -27,23 +27,19 @@ function appendNote(state) {
 }
 
 class App extends Component {
+  renderState = ({state, setState}) => (
+    <div>
+      <header>
+        <h1>Fun React Notes</h1>
+      </header>
+      <Log comp={'App'} state={state} />
+      {_map(renderNote)(state.notes)}
+      <button onClick={() => setState(appendNote(state))}>Add</button>
+    </div>
+  )
+
   render() {
-    return (
-      <State initial={initialState}>
-        {({state, setState}) => (
-          <div>
-            <header>
-              <h1>Fun React Notes</h1>
-            </header>
-            <Log comp={'App'} state={state} />
-            {_map(renderNote)(state.notes)}
-            <button onClick={() => setState(appendNote(state))}>
-              Add
-            </button>
-          </div>
-        )}
-      </State>
-    )
+    return <State initial={initialState}>{this.renderState}</State>
   }
 }
 
