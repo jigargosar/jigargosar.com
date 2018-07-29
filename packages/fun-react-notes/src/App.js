@@ -1,6 +1,13 @@
 import React, {Component} from 'react'
-import * as _ from 'ramda'
 import {State} from 'react-powerplug'
+import {
+  _append,
+  _contains,
+  _forEachObjIndexed,
+  _map,
+  _times,
+  _type,
+} from './little-ramda'
 
 function createNote(idx) {
   const id = `${idx + 1}`
@@ -10,12 +17,12 @@ function createNote(idx) {
   }
 }
 
-const initialState = {notes: _.times(createNote)(5)}
+const initialState = {notes: _times(createNote)(5)}
 
 function addNote({state, setState}) {
   const notes = state.notes
   setState({
-    notes: _.append(createNote(notes.length))(notes),
+    notes: _append(createNote(notes.length))(notes),
   })
 }
 
@@ -29,7 +36,7 @@ class App extends Component {
               <h1>Fun React Notes</h1>
             </header>
             <Log comp={'App'} state={state} />
-            {_.map(renderNote)(state.notes)}
+            {_map(renderNote)(state.notes)}
             <button onClick={() => addNote({state, setState})}>Add</button>
           </div>
         )}
@@ -59,9 +66,9 @@ function renderNote(note) {
 class Log extends Component {
   render() {
     console.groupCollapsed('Props', this.props)
-    _.forEachObjIndexed((v, k) => {
+    _forEachObjIndexed((v, k) => {
       console.log('Log', k, v)
-      if (_.contains(_.type(v))(['Object', 'Array'])) {
+      if (_contains(_type(v))(['Object', 'Array'])) {
         console.table(v)
       }
     })(this.props)
