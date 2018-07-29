@@ -21,7 +21,7 @@ class App extends Component {
               <h1>Fun React Notes</h1>
             </header>
             <Log comp={'App'} state={state.value} />
-            {_.map(renderNote)(state.value.notes)}
+            {_.map(renderNote(state))(state.value.notes)}
           </div>
         )}
       </AnyValue>
@@ -44,10 +44,9 @@ class Note extends Component {
   }
 }
 
-function renderNote(note) {
-  return <Note key={note.id} note={note} />
+function renderNote(state) {
+  return note => <Note key={note.id} note={note} />
 }
-
 class Log extends Component {
   render() {
     console.groupCollapsed('Props', this.props)
