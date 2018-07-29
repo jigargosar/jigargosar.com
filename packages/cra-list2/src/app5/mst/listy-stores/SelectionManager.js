@@ -77,14 +77,17 @@ export const SelectionManager = modelNamed('SelectionManager')
       self.focusSelected()
     },
     onEditSelected() {
+      console.warn('onEditSelected')
       console.assert(self.isEditing === false)
       self.editSelected()
     },
     editSelected() {
       const _selectedModel = self._selectedModel
       self.isEditing = !!(_selectedModel && _selectedModel.isEditable)
+      console.log(`self.isEditing`, self.isEditing)
     },
     startEditingModel(model) {
+      console.warn('startEditingModel', model.id)
       self._selectedModel = model
       self.editSelected()
     },

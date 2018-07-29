@@ -12,7 +12,10 @@ export function hasManyChildren(lazyCollection) {
       },
     },
     actions: {
-      onAddChild: () => startEditingModel(self.addChild({})),
+      onAddChild: e => {
+        e.stopPropagation()
+        return startEditingModel(self.addChild({}))
+      },
       addChild: attrs =>
         self.childCollection.add({...attrs, parent: self}),
       onPrependChild: () => startEditingModel(self.prependChild()),
