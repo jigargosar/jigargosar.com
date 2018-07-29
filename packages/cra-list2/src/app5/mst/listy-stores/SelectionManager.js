@@ -47,8 +47,8 @@ const selectionModeKeyMap = [
   ['mod+enter', 'onModEnter'],
 ]
 
-const findHotKeyActionName = e =>
-  C(snd, S.find(C(isEventHotKey(e), fst)))
+const findHotKeyActionName = e => keymap =>
+  C(snd, S.find(C(isEventHotKey(e), fst)))(keymap)
 
 export const SelectionManager = modelNamed('SelectionManager')
   .props({
