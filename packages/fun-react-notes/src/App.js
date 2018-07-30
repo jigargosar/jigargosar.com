@@ -49,6 +49,8 @@ class Note extends Component {
     root.updateSelectedOnFocus(this.props.note)
   }
 
+  onChangeUpdateText = e => this.props.note.update({text: e.target.value})
+
   render({note} = this.props) {
     return (
       <div onFocus={this.onFocusSetSelected}>
@@ -65,8 +67,6 @@ class Note extends Component {
       </div>
     )
   }
-
-  onChangeUpdateText = e => this.props.note.update({text: e.target.value})
 }
 
 export default App
