@@ -16,7 +16,7 @@ class App extends Component {
 
     return (
       <FocusTrap
-        onKeyDown={withKeyEvent(whenKey('mod+enter')(root.addNote))}
+        onKeyDown={withKeyEvent(whenKey('mod+enter')(root.onAddNote))}
       >
         {renderHeader()}
         <button onClick={root.onAddNote}>Add</button>
@@ -46,6 +46,7 @@ class Note extends Component {
       <div onFocus={note.onFocusSetSelected}>
         <AutoSize>
           <textarea
+            id={note.id}
             style={{display: 'block', width: '100%'}}
             rows={1}
             value={note.text}
