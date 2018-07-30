@@ -20,13 +20,6 @@ const NoteM = _compose(
   modelNamed,
 )('Note')
 
-setImmediate(() => {
-  const n = NoteM.create({})
-  console.log(`n`, n.toJSON())
-  n.update({text: 'foo'})
-  console.log(`n`, n.toJSON())
-})
-
 function createNote() {
   return NoteM.create({text: 'Note Text'})
 }
