@@ -21,6 +21,8 @@ export {
   sortWith,
   ascend,
   descend,
+  insert,
+  insertAll,
 } from 'ramda'
 export {default as validate} from './vendor/aproba'
 export const mapIndexed = _.addIndex(_.map)

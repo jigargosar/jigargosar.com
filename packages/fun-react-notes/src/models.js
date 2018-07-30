@@ -1,11 +1,11 @@
 import {
   _compose,
   _pipe,
-  _prepend,
   _prop,
   _tap,
   ascend,
   forEachIndexed,
+  insert,
   sortWith,
 } from './little-ramda'
 import {
@@ -53,17 +53,21 @@ const Root = _pipe(
   actions(self => {
     return {
       onAddNote: onAddNote(self),
+      onAddNoteAfterSelected: onAddNote(self),
+      onAddNoteBeforeSelected: onAddNote(self),
       updateSelectedOnFocus: updateSelectedOnFocus(self),
     }
 
-    function addNote(self) {
-      const note = createNote()
-      _compose(
-        forEachIndexed((n, sortIdx) => n.update({sortIdx})),
-        _prepend(note),
-        notesList,
-      )(self)
-      return self.notes.put(note)
+    function addNoteAt(idx) {
+      return self => {
+        const note = createNote()
+        _compose(
+          forEachIndexed((n, sortIdx) => n.update({sortIdx})),
+          insert(idx)(note),
+          notesList,
+        )(self)
+        return self.notes.put(note)
+      }
     }
 
     function focusModelId(m) {
@@ -74,8 +78,8 @@ const Root = _pipe(
       return sel => (self._sel = sel)
     }
 
-    function onAddNote(self) {
-      return () => _compose(_tap(focusModelId), addNote)(self)
+    function onAddNote(self, idx = 0) {
+      return () => _compose(_tap(focusModelId), addNoteAt(idx))(self)
     }
   }),
 )(modelNamed('Root'))
