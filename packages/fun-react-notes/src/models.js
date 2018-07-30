@@ -2,6 +2,7 @@ import {_compose} from './little-ramda'
 import {
   actions,
   applySnapshot,
+  getRoot,
   hotSnapshot,
   modelAttrs,
   modelNamed,
@@ -27,6 +28,10 @@ const createNote = () => Note.create({text: 'Note Text'})
 const addNote = self => () => self.notes.put(createNote())
 const notesList = self => values(self.notes)
 
+const onFocusSetSelected = self => getRoot(self).onFocusSetSelected(self)
+
+const nullRef = _compose(types.maybeNull, types.reference)
+
 const Root = _compose(
   views(self => ({
     get notesList() {
@@ -35,8 +40,12 @@ const Root = _compose(
   })),
   actions(self => ({
     addNote: addNote(self),
+    onFocusSetSelected: onFocusSetSelected(self),
   })),
-  modelProps({notes: types.map(Note)}),
+  modelProps({
+    notes: types.map(Note),
+    _sel: nullRef(Note),
+  }),
   modelNamed,
 )('Root')
 

@@ -43,7 +43,7 @@ class App extends Component {
 class Note extends Component {
   render({note} = this.props) {
     return (
-      <div>
+      <div onFocus={note.onFocusSetSelected}>
         <AutoSize>
           <textarea
             style={{display: 'block', width: '100%'}}
