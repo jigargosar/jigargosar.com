@@ -1,6 +1,6 @@
-import {types} from 'mobx-state-tree'
+import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
-import {_startsWith} from './little-ramda'
+import {_path, _startsWith} from './little-ramda'
 
 export {observer} from 'mobx-react'
 export {
@@ -70,3 +70,16 @@ function identifierFor(prefix) {
 }
 
 export const updateAttrs = m => attrs => Object.assign(m, attrs)
+
+export function hotSnapshot(root, module) {
+  if (module.hot) {
+    const snap = _path(['hot', 'data', 'snap'])(module)
+    if (snap) {
+      applySnapshot(root, snap)
+    }
+
+    module.hot.dispose(data => {
+      data.snap = getSnapshot(root)
+    })
+  }
+}

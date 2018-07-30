@@ -1,6 +1,7 @@
-import {_compose, _path} from './little-ramda'
+import {_compose} from './little-ramda'
 import {
   actions,
+  hotSnapshot,
   idProp,
   modelNamed,
   modelProps,
@@ -8,7 +9,6 @@ import {
   updateAttrs,
   views,
 } from './little-mst'
-import {applySnapshot, getSnapshot} from 'mobx-state-tree'
 
 const Note = _compose(
   actions(self => ({
@@ -37,15 +37,6 @@ const Root = _compose(
 
 const root = Root.create()
 
-if (module.hot) {
-  const snap = _path(['hot', 'data', 'snap'])(module)
-  if (snap) {
-    applySnapshot(root, snap)
-  }
-
-  module.hot.dispose(data => {
-    data.snap = getSnapshot(root)
-  })
-}
+hotSnapshot(root, module)
 
 export default root
