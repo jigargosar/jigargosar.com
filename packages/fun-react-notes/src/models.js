@@ -7,9 +7,9 @@ import {
   modelProps,
   types,
   updateAttrs,
+  values,
   views,
 } from './little-mst'
-import {values} from 'mobx'
 
 const Note = _compose(
   actions(self => ({
