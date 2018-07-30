@@ -5,7 +5,7 @@ import {whenKey, withKeyEvent} from './utils'
 import root from '../models'
 
 class Note extends Component {
-  render({note}) {
+  render({note} = this.props) {
     return (
       <div>
         <AutoSize>
