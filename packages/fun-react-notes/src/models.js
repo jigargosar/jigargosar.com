@@ -37,6 +37,8 @@ const Root = _compose(
 
 const root = Root.create()
 
+localStorage.get('rootSnapshot')
+
 hotSnapshot(root, module)
 
 export default root
