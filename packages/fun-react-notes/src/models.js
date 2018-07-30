@@ -60,6 +60,7 @@ const Root = _compose(
     }
 
     const onAddNote = _compose(_tap(focusModelId), addNote)
+
     const onFocusSetSelected = self => sel => (self._sel = sel)
     return {
       onAddNote: () => onAddNote(self),
