@@ -10,4 +10,5 @@ export {
   append as _append,
   compose as _compose,
   startsWith as _startsWith,
+  path as _path,
 } from 'ramda'
