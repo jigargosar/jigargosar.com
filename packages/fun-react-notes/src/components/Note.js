@@ -10,7 +10,7 @@ class Note extends Component {
     const {note} = this.props
     return (
       <div>
-        <Log comp={'Note'} {...note} />
+        {/*<Log comp={'Note'} {...note} />*/}
 
         {/*<div>{note.text}</div>*/}
         <AutoSize>
@@ -29,16 +29,16 @@ class Note extends Component {
 
 export default observer(Note)
 
-class Log extends Component {
-  render() {
-    console.groupCollapsed('Props', this.props)
-    _forEachObjIndexed((v, k) => {
-      console.log('Log', k, v)
-      if (_contains(_type(v))(['Object', 'Array'])) {
-        console.table(v)
-      }
-    })(this.props)
-    console.groupEnd('end')
-    return null
-  }
-}
+// class Log extends Component {
+//   render() {
+//     console.groupCollapsed('Props', this.props)
+//     _forEachObjIndexed((v, k) => {
+//       console.log('Log', k, v)
+//       if (_contains(_type(v))(['Object', 'Array'])) {
+//         console.table(v)
+//       }
+//     })(this.props)
+//     console.groupEnd('end')
+//     return null
+//   }
+// }
