@@ -1,6 +1,12 @@
 import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
-import {_merge, _path, _startsWith, forEachIndexed} from './little-ramda'
+import {
+  _compose,
+  _merge,
+  _path,
+  _startsWith,
+  forEachIndexed,
+} from './little-ramda'
 
 export {
   addDisposer,
@@ -72,8 +78,6 @@ function identifierFor(prefix) {
   )
 }
 
-export const updateAttrs = m => attrs => Object.assign(m, attrs)
-
 export const hotSnapshot = module => root => {
   if (module.hot) {
     const snap = _path(['hot', 'data', 'snap'])(module)
@@ -90,3 +94,4 @@ export const hotSnapshot = module => root => {
 export const updateSortIdx = forEachIndexed((m, sortIdx) =>
   m.update({sortIdx}),
 )
+export const nullRef = _compose(types.maybeNull, types.reference)

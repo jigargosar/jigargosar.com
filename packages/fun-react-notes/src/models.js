@@ -14,9 +14,9 @@ import {
   modelAttrs,
   modelNamed,
   modelProps,
+  nullRef,
   onSnapshot,
   types,
-  updateAttrs,
   updateSortIdx,
   values,
   views,
@@ -26,14 +26,14 @@ import {setFocusAndSelectionOnDOMId} from './components/utils'
 
 const Note = _compose(
   actions(self => ({
-    update: updateAttrs(self),
+    update(attrs) {
+      return Object.assign(self, attrs)
+    },
     onFocusSetSelected: () => root.updateSelectedOnFocus(self),
   })),
   modelAttrs({text: '', sortIdx: 0}),
   modelNamed,
 )('Note')
-
-const nullRef = _compose(types.maybeNull, types.reference)
 
 const Root = _pipe(
   modelProps({
