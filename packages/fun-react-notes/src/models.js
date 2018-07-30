@@ -42,6 +42,8 @@ const Root = _compose(
 
 const root = Root.create()
 
+export const resetRoot = () => applySnapshot(root, {})
+
 const rootSnap = StorageItem({name: 'rootSnapshot'})
 
 applySnapshot(root, rootSnap.load())
