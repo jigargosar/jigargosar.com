@@ -48,6 +48,7 @@ class Note extends Component {
   render({note} = this.props) {
     return (
       <div onFocus={note.onFocusSetSelected}>
+        <div>{note.sortIdx}</div>
         <AutoSize>
           <textarea
             id={note.id}

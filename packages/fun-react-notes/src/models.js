@@ -1,5 +1,6 @@
 import {
   _compose,
+  _merge,
   _pipe,
   _prop,
   _tap,
@@ -34,7 +35,7 @@ const Note = _compose(
   modelNamed,
 )('Note')
 
-const createNote = () => Note.create({text: 'Note Text'})
+const createNote = attrs => Note.create(_merge({text: 'Note Text'}, attrs))
 
 const notesList = self =>
   _compose(sortWith([ascend(_prop('sortIdx'))]), values)(self.notes)
@@ -65,12 +66,12 @@ const Root = _pipe(
       updateSelectedOnFocus: updateSelectedOnFocus(self),
     }
 
-    function addNoteAt(idx) {
+    function addNoteAt(sortIdx) {
       return self => {
-        const note = createNote()
+        const note = createNote({sortIdx})
         _compose(
           forEachIndexed((n, sortIdx) => n.update({sortIdx})),
-          insert(idx)(note),
+          insert(sortIdx)(note),
           notesList,
         )(self)
         return self.notes.put(note)
@@ -90,11 +91,11 @@ const Root = _pipe(
     }
 
     function onAddNoteAfterSelected(self) {
-      return onAddNoteAt(self, self.selIdxOrZero)
+      return () => onAddNoteAt(self, self.selIdxOrZero + 1)()
     }
 
     function onAddNoteBeforeSelected(self) {
-      return onAddNoteAt(self, self.selIdx + 1)
+      return e => onAddNoteAt(self, self.selIdxOrZero)(e)
     }
   }),
 )(modelNamed('Root'))
@@ -108,3 +109,7 @@ applySnapshot(root, rootSnap.load())
 onSnapshot(root, rootSnap.save)
 
 export default hotSnapshot(module)(root)
+
+if (module.hot) {
+  window.r = root
+}
