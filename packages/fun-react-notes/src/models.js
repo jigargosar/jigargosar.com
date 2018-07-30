@@ -18,9 +18,7 @@ const Note = _compose(
   modelNamed,
 )('Note')
 
-export function createNote() {
-  return Note.create({text: 'Note Text'})
-}
+const createNote = () => Note.create({text: 'Note Text'})
 
 const addNote = self => () => self.notesMap.put(createNote())
 
