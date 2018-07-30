@@ -1,5 +1,5 @@
 import React, {Component as RC, Fragment as F} from 'react'
-import {inject, observer, Observer} from 'mobx-preact'
+import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import * as R from 'ramda'
 import {_, _cond, _tap, mapIndexed} from '../little-ramda'
