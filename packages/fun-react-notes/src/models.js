@@ -27,7 +27,7 @@ import {setFocusAndSelectionOnDOMId} from './components/utils'
 const Note = _compose(
   actions(self => ({
     update: updateAttrs(self),
-    onFocusSetSelected: () => root.onFocusSetSelected(self),
+    onFocusSetSelected: () => root.updateSelectedOnFocus(self),
   })),
   modelAttrs({text: '', sortIdx: 0}),
   modelNamed,
@@ -53,7 +53,7 @@ const Root = _pipe(
   actions(self => {
     return {
       onAddNote: () => onAddNote(self),
-      onFocusSetSelected: onFocusSetSelected(self),
+      updateSelectedOnFocus: onFocusSetSelected(self),
     }
 
     function addNote(self) {
