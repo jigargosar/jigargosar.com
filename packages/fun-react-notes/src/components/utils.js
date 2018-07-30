@@ -6,7 +6,7 @@ import {_, _cond, _tap, mapIndexed} from '../little-ramda'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
-
+export {default as autobind} from 'autobind'
 export {F, RC, observer, Observer, inject, isHotKey}
 
 export {PropTypes}
