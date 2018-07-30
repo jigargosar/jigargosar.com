@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {_contains, _forEachObjIndexed, _type} from '../little-ramda'
 import {observer} from 'mobx-react'
+import {AutoSize} from './lib/AutoSize'
 
 class Note extends Component {
   render() {
@@ -8,8 +9,16 @@ class Note extends Component {
     return (
       <div>
         <Log comp={'Note'} {...note} />
-        <small>{note.id} :</small>
-        <span>{note.text}</span>
+
+        {/*<div>{note.text}</div>*/}
+        <AutoSize>
+          <textarea
+            style={{display: 'block', width: '100%'}}
+            rows={1}
+            value={note.text}
+            onChange={e => note.update({text: e.target.value})}
+          />
+        </AutoSize>
       </div>
     )
   }
