@@ -69,7 +69,7 @@ const Root = _pipe(
       },
       onAddNoteAfterSelected() {
         const oldIdx = indexOf(self._sel)(self.notesList)
-        const idx = (oldIdx < 0 ? 0 : oldIdx) + 1
+        const idx = oldIdx < 0 ? 0 : oldIdx + 1
         const note = createNote()
 
         updateSortIdx(insert(idx)(note)(self.notesList))
