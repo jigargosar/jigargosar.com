@@ -8,15 +8,15 @@ export const extend = fn => modelType => modelType.extend(fn)
 export const actions = fn => modelType => modelType.actions(fn)
 export const views = fn => modelType => modelType.views(fn)
 export const tId = types.identifier
-export const idProp = name => ({
-  id: types.optional(identifierFor(name), () => `${name}_${nanoid()}`),
+export const idProp = prefix => ({
+  id: types.optional(identifierFor(prefix), () => `${prefix}_${nanoid()}`),
 })
 
-function identifierFor(name) {
+function identifierFor(prefix) {
   return types.refinement(
-    `${name}Id`,
+    `${prefix}Id`,
     types.identifier,
-    _startsWith(`${name}_`),
+    _startsWith(`${prefix}_`),
   )
 }
 
