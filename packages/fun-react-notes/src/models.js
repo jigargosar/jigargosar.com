@@ -51,39 +51,37 @@ const Root = _pipe(
       return notesList(self)
     },
   })),
-  actions(self => {
-    return {
-      onAddNote() {
-        const idx = 0
-        const note = createNote()
+  actions(self => ({
+    onAddNote() {
+      const idx = 0
+      const note = createNote()
 
-        updateSortIdx(insert(idx)(note)(self.notesList))
-        self.notes.put(note)
-        setFocusAndSelectionOnDOMId(note.id)
-      },
-      onAddNoteAfterSelected() {
-        const oldIdx = indexOf(self._sel)(self.notesList)
-        const idx = oldIdx < 0 ? 0 : oldIdx + 1
-        const note = createNote()
+      updateSortIdx(insert(idx)(note)(self.notesList))
+      self.notes.put(note)
+      setFocusAndSelectionOnDOMId(note.id)
+    },
+    onAddNoteAfterSelected() {
+      const oldIdx = indexOf(self._sel)(self.notesList)
+      const idx = oldIdx < 0 ? 0 : oldIdx + 1
+      const note = createNote()
 
-        updateSortIdx(insert(idx)(note)(self.notesList))
-        self.notes.put(note)
-        setFocusAndSelectionOnDOMId(note.id)
-      },
-      onAddNoteBeforeSelected() {
-        const oldIdx = indexOf(self._sel)(self.notesList)
-        const idx = oldIdx < 0 ? 0 : oldIdx
-        const note = createNote()
+      updateSortIdx(insert(idx)(note)(self.notesList))
+      self.notes.put(note)
+      setFocusAndSelectionOnDOMId(note.id)
+    },
+    onAddNoteBeforeSelected() {
+      const oldIdx = indexOf(self._sel)(self.notesList)
+      const idx = oldIdx < 0 ? 0 : oldIdx
+      const note = createNote()
 
-        updateSortIdx(insert(idx)(note)(self.notesList))
-        self.notes.put(note)
-        setFocusAndSelectionOnDOMId(note.id)
-      },
-      updateSelectedOnFocus(sel) {
-        self._sel = sel
-      },
-    }
-  }),
+      updateSortIdx(insert(idx)(note)(self.notesList))
+      self.notes.put(note)
+      setFocusAndSelectionOnDOMId(note.id)
+    },
+    updateSelectedOnFocus(sel) {
+      self._sel = sel
+    },
+  })),
 )(modelNamed('Root'))
 
 const root = Root.create()
