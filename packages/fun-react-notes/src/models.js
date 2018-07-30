@@ -1,6 +1,5 @@
 import {
   _compose,
-  _pipe,
   _prop,
   ascend,
   indexOf,
@@ -8,18 +7,14 @@ import {
   sortWith,
 } from './little-ramda'
 import {
-  actions,
   applySnapshot,
   hotSnapshot,
   idProp,
-  modelNamed,
-  modelProps,
   nullRef,
   onSnapshot,
   types,
   updateSortIdx,
   values,
-  views,
 } from './little-mst'
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
@@ -37,19 +32,19 @@ const Note = types
     onFocusSetSelected: () => root.updateSelectedOnFocus(self),
   }))
 
-const Root = _pipe(
-  modelProps({
+const Root = types
+  .model('Root', {
     notes: types.map(Note),
     _sel: nullRef(Note),
-  }),
-  views(self => ({
+  })
+  .views(self => ({
     get notesList() {
       return _compose(sortWith([ascend(_prop('sortIdx'))]), values)(
         self.notes,
       )
     },
-  })),
-  actions(self => ({
+  }))
+  .actions(self => ({
     onAddNote() {
       const idx = 0
       const note = Note.create()
@@ -79,8 +74,7 @@ const Root = _pipe(
     updateSelectedOnFocus(sel) {
       self._sel = sel
     },
-  })),
-)(modelNamed('Root'))
+  }))
 
 const root = Root.create()
 
