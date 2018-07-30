@@ -38,9 +38,7 @@ const Root = types
   })
   .views(self => ({
     get notesList() {
-      return _compose(sortWith([ascend(_prop('sortIdx'))]), values)(
-        self.notes,
-      )
+      return sortWith([ascend(_prop('sortIdx'))])(values(self.notes))
     },
   }))
   .actions(self => ({
