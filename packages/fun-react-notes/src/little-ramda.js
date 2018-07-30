@@ -15,5 +15,5 @@ export {
   cond as _cond,
   merge as _merge,
 } from 'ramda'
-
+export {default as validate} from './vendor/aproba'
 export const mapIndexed = _.addIndex(_.map)

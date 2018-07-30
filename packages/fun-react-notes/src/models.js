@@ -1,6 +1,7 @@
 import {_compose} from './little-ramda'
 import {
   actions,
+  applySnapshot,
   hotSnapshot,
   idProp,
   modelAttrs,
@@ -11,6 +12,7 @@ import {
   values,
   views,
 } from './little-mst'
+import {StorageItem} from './services/storage'
 
 const Note = _compose(
   actions(self => ({
@@ -40,7 +42,8 @@ const Root = _compose(
 
 const root = Root.create()
 
-localStorage.getItem('rootSnapshot')
+const rootSnap = StorageItem({name: 'rootSnapshot'})
+applySnapshot(root, rootSnap.load())
 
 hotSnapshot(root, module)
 
