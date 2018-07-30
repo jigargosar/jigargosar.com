@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
-import {_contains, _forEachObjIndexed, _map, _type} from './little-ramda'
+import {_map} from './little-ramda'
 import root from './models'
 import {observer} from 'mobx-react'
+import Note from './components/Note'
 
 class App extends Component {
   render() {
@@ -30,30 +31,3 @@ class App extends Component {
 }
 
 export default observer(App)
-
-class Note extends React.PureComponent {
-  render() {
-    const {note} = this.props
-    return (
-      <div>
-        <Log comp={'Note'} {...note} />
-        <small>{note.id} : </small>
-        <span>{note.text}</span>
-      </div>
-    )
-  }
-}
-
-class Log extends Component {
-  render() {
-    console.groupCollapsed('Props', this.props)
-    _forEachObjIndexed((v, k) => {
-      console.log('Log', k, v)
-      if (_contains(_type(v))(['Object', 'Array'])) {
-        console.table(v)
-      }
-    })(this.props)
-    console.groupEnd('end')
-    return null
-  }
-}
