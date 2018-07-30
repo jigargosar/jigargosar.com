@@ -20,10 +20,12 @@ const NoteM = _compose(
   modelNamed,
 )('Note')
 
-const n = NoteM.create({})
-console.log(`n`, n.toJSON())
-n.update({text: 'foo'})
-console.log(`n`, n.toJSON())
+setImmediate(() => {
+  const n = NoteM.create({})
+  console.log(`n`, n.toJSON())
+  n.update({text: 'foo'})
+  console.log(`n`, n.toJSON())
+})
 
 function createNote(idx) {
   const id = `${idx + 1}`

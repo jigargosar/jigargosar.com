@@ -9,22 +9,14 @@ export const actions = fn => modelType => modelType.actions(fn)
 export const views = fn => modelType => modelType.views(fn)
 export const tId = types.identifier
 export const idProp = name => ({
-  id: types.optional(identifierFor(name), () => newModelId(name)),
+  id: types.optional(identifierFor(name), () => `${name}_${nanoid()}`),
 })
-
-function idPrefixFromModelName(name) {
-  return `${name}_`
-}
-
-function newModelId(name) {
-  return `${idPrefixFromModelName(name)}${nanoid()}`
-}
 
 function identifierFor(name) {
   return types.refinement(
     `${name}Id`,
     types.identifier,
-    _startsWith(idPrefixFromModelName(name)),
+    _startsWith(`${name}_`),
   )
 }
 
