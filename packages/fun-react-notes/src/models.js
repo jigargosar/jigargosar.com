@@ -60,10 +60,18 @@ const Root = _pipe(
   })),
   actions(self => {
     return {
-      onAddNote: onAddNoteAt(self, 0),
-      onAddNoteAfterSelected: onAddNoteAfterSelected(self),
-      onAddNoteBeforeSelected: onAddNoteBeforeSelected(self),
-      updateSelectedOnFocus: updateSelectedOnFocus(self),
+      onAddNote() {
+        return addNoteAndFocus(self, 0)
+      },
+      onAddNoteAfterSelected() {
+        return addNoteAndFocus(self, self.selIdxOrZero + 1)
+      },
+      onAddNoteBeforeSelected() {
+        return addNoteAndFocus(self, self.selIdxOrZero)
+      },
+      updateSelectedOnFocus(sel) {
+        return (self._sel = sel)
+      },
     }
 
     function addNoteAt(sortIdx) {
@@ -78,28 +86,12 @@ const Root = _pipe(
       }
     }
 
-    function updateSelectedOnFocus(self) {
-      return sel => (self._sel = sel)
-    }
-
     function tapFocusModelId() {
       return _tap(m => setFocusAndSelectionOnDOMId(m.id))
     }
 
     function addNoteAndFocus(self, idx) {
       return _compose(tapFocusModelId(), addNoteAt(idx))(self)
-    }
-
-    function onAddNoteAt(self, idx = 0) {
-      return () => addNoteAndFocus(self, idx)
-    }
-
-    function onAddNoteAfterSelected(self) {
-      return () => addNoteAndFocus(self, self.selIdxOrZero + 1)
-    }
-
-    function onAddNoteBeforeSelected(self) {
-      return () => addNoteAndFocus(self, self.selIdxOrZero)
     }
   }),
 )(modelNamed('Root'))
