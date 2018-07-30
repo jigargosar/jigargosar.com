@@ -9,6 +9,7 @@ import {
   updateAttrs,
   views,
 } from './little-mst'
+import {values} from 'mobx'
 
 const Note = _compose(
   actions(self => ({
@@ -21,7 +22,7 @@ const Note = _compose(
 const createNote = () => Note.create({text: 'Note Text'})
 
 const addNote = self => () => self.notesMap.put(createNote())
-const notesList = self => Array.from(self.notesMap.values())
+const notesList = self => Array.from(values(self.notesMap))
 
 const Root = _compose(
   views(self => ({
