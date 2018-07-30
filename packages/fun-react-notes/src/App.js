@@ -45,9 +45,12 @@ class App extends Component {
 
 @observer
 class Note extends Component {
+  onFocus = () => {
+    root.updateSelectedOnFocus(this.prop.note)
+  }
   render({note} = this.props) {
     return (
-      <div onFocus={note.onFocusSetSelected}>
+      <div onFocus={this.onFocus}>
         <div>{note.sortIdx}</div>
         <AutoSize>
           <textarea
