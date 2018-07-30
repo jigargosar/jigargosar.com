@@ -86,12 +86,10 @@ const Root = _pipe(
       }
     }
 
-    function tapFocusModelId() {
-      return _tap(m => setFocusAndSelectionOnDOMId(m.id))
-    }
+    const tapFocusModelId = _tap(m => setFocusAndSelectionOnDOMId(m.id))
 
     function addNoteAndFocus(self, idx) {
-      return _compose(tapFocusModelId(), addNoteAt(idx))(self)
+      return _compose(tapFocusModelId, addNoteAt(idx))(self)
     }
   }),
 )(modelNamed('Root'))
