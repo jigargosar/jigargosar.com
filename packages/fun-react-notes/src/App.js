@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import {_map} from './little-ramda'
-import root from './models'
+import root, {resetRoot} from './models'
 import {observer, whenKey, withKeyEvent} from './components/utils'
 import {AutoSize} from './components/lib/AutoSize'
 
@@ -13,6 +13,7 @@ class App extends Component {
       <Fragment>
         {renderHeader()}
         <button onClick={root.addNote}>Add</button>
+        <button onClick={resetRoot}>Add</button>
         {_map(renderNote)(notes)}
       </Fragment>
     )
