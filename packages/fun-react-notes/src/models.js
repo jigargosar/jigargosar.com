@@ -52,7 +52,7 @@ const Root = _pipe(
   })),
   actions(self => {
     return {
-      onAddNote: () => onAddNote(self),
+      onAddNote: onAddNote(self),
       updateSelectedOnFocus: updateSelectedOnFocus(self),
     }
 
@@ -75,7 +75,7 @@ const Root = _pipe(
     }
 
     function onAddNote(self) {
-      return _compose(_tap(focusModelId), addNote)(self)
+      return () => _compose(_tap(focusModelId), addNote)(self)
     }
   }),
 )(modelNamed('Root'))
