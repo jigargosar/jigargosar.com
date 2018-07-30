@@ -89,6 +89,7 @@ const Root = _pipe(
       })
 
       updateSortIdx(list)
+      self.notes.put(el)
       focusModel(el)
     }
   }),
