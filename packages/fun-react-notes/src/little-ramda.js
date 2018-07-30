@@ -14,6 +14,9 @@ export {
   tap as _tap,
   cond as _cond,
   merge as _merge,
+  prepend as _prepend,
+  forEach as _forEach,
 } from 'ramda'
 export {default as validate} from './vendor/aproba'
 export const mapIndexed = _.addIndex(_.map)
+export const forEachIndexed = _.addIndex(_.forEach)

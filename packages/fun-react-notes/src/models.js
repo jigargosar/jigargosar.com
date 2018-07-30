@@ -1,4 +1,4 @@
-import {_compose} from './little-ramda'
+import {_compose, _prepend, forEachIndexed} from './little-ramda'
 import {
   actions,
   applySnapshot,
@@ -19,13 +19,21 @@ const Note = _compose(
     update: updateAttrs(self),
     onFocusSetSelected: () => root.onFocusSetSelected(self),
   })),
-  modelAttrs({text: ''}),
+  modelAttrs({text: '', sortIdx: 0}),
   modelNamed,
 )('Note')
 
 const createNote = () => Note.create({text: 'Note Text'})
 
-const addNote = self => () => self.notes.put(createNote())
+const addNote = self => () => {
+  const note = createNote()
+  _compose(
+    forEachIndexed((n, sortIdx) => n.update({sortIdx})),
+    _prepend(note),
+    notesList,
+  )(self)
+  return self.notes.put(note)
+}
 const notesList = self => values(self.notes)
 const onFocusSetSelected = self => sel => (self._sel = sel)
 const nullRef = _compose(types.maybeNull, types.reference)
