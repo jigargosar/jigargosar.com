@@ -45,10 +45,9 @@ const root = Root.create()
 export const resetRoot = () => applySnapshot(root, {})
 
 const rootSnap = StorageItem({name: 'rootSnapshot'})
-
 applySnapshot(root, rootSnap.load())
 onSnapshot(root, rootSnap.save)
 
-hotSnapshot(root, module)
-
 export default root
+
+hotSnapshot(root, module)
