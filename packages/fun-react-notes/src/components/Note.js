@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {_contains, _forEachObjIndexed, _type} from '../little-ramda'
 import {observer} from 'mobx-react'
 import {AutoSize} from './lib/AutoSize'
+import {whenKey, withKeyEvent} from './utils'
+import root from '../models'
 
 class Note extends Component {
   render() {
@@ -17,6 +19,7 @@ class Note extends Component {
             rows={1}
             value={note.text}
             onChange={e => note.update({text: e.target.value})}
+            onKeyDown={withKeyEvent(whenKey('mod+enter')(root.addNote))}
           />
         </AutoSize>
       </div>

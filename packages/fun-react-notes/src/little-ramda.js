@@ -11,4 +11,8 @@ export {
   compose as _compose,
   startsWith as _startsWith,
   path as _path,
+  tap as _tap,
+  cond as _cond,
 } from 'ramda'
+
+export const mapIndexed = _.addIndex(_.map)
