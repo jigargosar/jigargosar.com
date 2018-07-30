@@ -22,10 +22,14 @@ const createNote = () => Note.create({text: 'Note Text'})
 
 const addNote = self => () => self.notesMap.put(createNote())
 
+function notesList(self) {
+  return Array.from(self.notesMap.values())
+}
+
 const Root = _compose(
   views(self => ({
     get notesList() {
-      return Array.from(self.notesMap.values())
+      return notesList(self)
     },
   })),
   actions(self => ({
