@@ -45,12 +45,13 @@ class App extends Component {
 
 @observer
 class Note extends Component {
-  onFocus = () => {
+  onFocusSetSelected = () => {
     root.updateSelectedOnFocus(this.prop.note)
   }
+
   render({note} = this.props) {
     return (
-      <div onFocus={this.onFocus}>
+      <div onFocus={this.onFocusSetSelected}>
         <div>{note.sortIdx}</div>
         <AutoSize>
           <textarea
@@ -58,12 +59,14 @@ class Note extends Component {
             style={{display: 'block', width: '100%'}}
             rows={1}
             value={note.text}
-            onChange={e => note.update({text: e.target.value})}
+            onChange={this.onChangeUpdateText}
           />
         </AutoSize>
       </div>
     )
   }
+
+  onChangeUpdateText = e => this.props.note.update({text: e.target.value})
 }
 
 export default App
