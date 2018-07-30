@@ -3,7 +3,6 @@ import {_map} from './little-ramda'
 import root from './models'
 import {observer} from 'mobx-preact'
 import Note from './components/Note'
-import {hot} from 'react-hot-loader'
 
 class App extends Component {
   render() {
@@ -31,4 +30,4 @@ class App extends Component {
   }
 }
 
-export default hot(module)(observer(App))
+export default observer(App)
