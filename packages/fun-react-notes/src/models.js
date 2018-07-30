@@ -60,7 +60,7 @@ const Root = _pipe(
   })),
   actions(self => {
     return {
-      onAddNote: onAddNoteAt(self),
+      onAddNote: onAddNoteAt(self, 0),
       onAddNoteAfterSelected: onAddNoteAfterSelected(self),
       onAddNoteBeforeSelected: onAddNoteBeforeSelected(self),
       updateSelectedOnFocus: updateSelectedOnFocus(self),
@@ -91,7 +91,7 @@ const Root = _pipe(
     }
 
     function onAddNoteAt(self, idx = 0) {
-      return () => addNoteAndFocus(idx, self)
+      return () => addNoteAndFocus(self, idx)
     }
 
     function onAddNoteAfterSelected(self) {
