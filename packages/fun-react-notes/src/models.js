@@ -4,6 +4,7 @@ import {
   idProp,
   modelNamed,
   modelProps,
+  types,
   updateAttrs,
 } from './little-mst'
 
@@ -18,3 +19,8 @@ const Note = _compose(
 export function createNote() {
   return Note.create({text: 'Note Text'})
 }
+
+const Root = _compose(
+  modelProps({notesMap: types.map(Note)}),
+  modelNamed('Root'),
+)
