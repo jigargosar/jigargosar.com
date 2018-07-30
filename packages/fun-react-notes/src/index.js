@@ -18,10 +18,10 @@ render(App)
 registerServiceWorker()
 
 if (module.hot) {
-  console.log('CMR')
+  console.log('Cold Boot')
   module.hot.accept(['./App'], () => {
     console.clear()
-    console.log('HMR')
+    console.log('Hot Reload')
     render(require('./App').default)
   })
 }
