@@ -1,11 +1,4 @@
-import {
-  _compose,
-  _prop,
-  ascend,
-  indexOf,
-  insert,
-  sortWith,
-} from './little-ramda'
+import {_prop, ascend, indexOf, insert, sortWith} from './little-ramda'
 import {
   applySnapshot,
   hotSnapshot,
