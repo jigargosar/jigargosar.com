@@ -1,4 +1,11 @@
-import {_compose, _prepend, forEachIndexed} from './little-ramda'
+import {
+  _compose,
+  _prepend,
+  _prop,
+  ascend,
+  forEachIndexed,
+  sortWith,
+} from './little-ramda'
 import {
   actions,
   applySnapshot,
@@ -34,7 +41,9 @@ const addNote = self => () => {
   )(self)
   return self.notes.put(note)
 }
-const notesList = self => values(self.notes)
+const notesList = self =>
+  _compose(sortWith([ascend(_prop('sortIdx'))]), values)(self.notes)
+
 const onFocusSetSelected = self => sel => (self._sel = sel)
 const nullRef = _compose(types.maybeNull, types.reference)
 

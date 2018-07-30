@@ -16,6 +16,10 @@ export {
   merge as _merge,
   prepend as _prepend,
   forEach as _forEach,
+  prop as _prop,
+  sortWith,
+  ascend,
+  descend,
 } from 'ramda'
 export {default as validate} from './vendor/aproba'
 export const mapIndexed = _.addIndex(_.map)
