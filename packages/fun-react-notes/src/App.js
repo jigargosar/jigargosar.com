@@ -1,12 +1,5 @@
 import React, {Component} from 'react'
-import {
-  _append,
-  _contains,
-  _forEachObjIndexed,
-  _map,
-  _times,
-  _type,
-} from './little-ramda'
+import {_contains, _forEachObjIndexed, _map, _type} from './little-ramda'
 import root from './models'
 
 class App extends Component {
