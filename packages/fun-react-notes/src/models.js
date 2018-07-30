@@ -37,7 +37,7 @@ const Root = _compose(
 
 const root = Root.create()
 
-localStorage.get('rootSnapshot')
+localStorage.getItem('rootSnapshot')
 
 hotSnapshot(root, module)
 
