@@ -13,6 +13,7 @@
     "jsxBracketSameLine": false
   },
   "dependencies": {
+    "autobind": "^1.0.3",
     "autosize": "^4.0.2",
     "classnames": "^2.2.6",
     "is-hotkey": "^0.1.2",

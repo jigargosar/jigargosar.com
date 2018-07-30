@@ -311,6 +311,10 @@ atob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
 
+autobind@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/autobind/-/autobind-1.0.3.tgz#c0d82ed2f6f12fb1331da388b89ad51a3bf968fa"
+
 autoprefixer@7.1.6:
   version "7.1.6"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-7.1.6.tgz#fb933039f74af74a83e71225ce78d9fd58ba84d7"

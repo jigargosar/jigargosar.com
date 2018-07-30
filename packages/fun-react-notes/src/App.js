@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {_map} from './little-ramda'
 import root from './models'
-import {observer} from 'mobx-preact'
 import Note from './components/Note'
+import {observer} from './components/utils'
 
 @observer
 class App extends Component {
