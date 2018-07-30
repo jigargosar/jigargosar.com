@@ -85,4 +85,5 @@ export const hotSnapshot = module => root => {
       data.snap = getSnapshot(root)
     })
   }
+  return root
 }

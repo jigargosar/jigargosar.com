@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react'
+import React, {Component} from 'react'
 import {_map} from './little-ramda'
 import root, {resetRoot} from './models'
 import {observer, whenKey, withKeyEvent} from './components/utils'
@@ -10,12 +10,12 @@ class App extends Component {
     const notes = root.notesList
 
     return (
-      <Fragment>
+      <div onKeyDown={withKeyEvent(whenKey('mod+enter')(root.addNote))}>
         {renderHeader()}
         <button onClick={root.addNote}>Add</button>
         <button onClick={resetRoot}>Reset Root</button>
         {_map(renderNote)(notes)}
-      </Fragment>
+      </div>
     )
 
     function renderHeader() {
@@ -43,7 +43,6 @@ class Note extends Component {
             rows={1}
             value={note.text}
             onChange={e => note.update({text: e.target.value})}
-            onKeyDown={withKeyEvent(whenKey('mod+enter')(root.addNote))}
           />
         </AutoSize>
       </div>
