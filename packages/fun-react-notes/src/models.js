@@ -53,7 +53,7 @@ const Root = _pipe(
   actions(self => {
     return {
       onAddNote: () => onAddNote(self),
-      updateSelectedOnFocus: onFocusSetSelected(self),
+      updateSelectedOnFocus: updateSelectedOnFocus(self),
     }
 
     function addNote(self) {
@@ -70,7 +70,7 @@ const Root = _pipe(
       return setFocusAndSelectionOnDOMId(m.id)
     }
 
-    function onFocusSetSelected(self) {
+    function updateSelectedOnFocus(self) {
       return sel => (self._sel = sel)
     }
 
