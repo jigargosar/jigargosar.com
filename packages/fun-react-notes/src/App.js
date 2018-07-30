@@ -7,35 +7,20 @@ import {
   _times,
   _type,
 } from './little-ramda'
-import {createNote} from './models'
-
-function appendNote(state) {
-  const notes = state.notes
-  return {
-    notes: _append(createNote())(notes),
-  }
-}
+import root from './models'
 
 class App extends Component {
-  state = {notes: _times(createNote)(5)}
-
-  setState = this.setState.bind(this)
-
   render() {
     const {state, setState} = this
-    const {notes} = state
+    const notes = root.notesList
 
     return (
       <div>
         {renderHeader()}
-        <button onClick={onAddNote}>Add</button>
+        <button onClick={root.addNote}>Add</button>
         {_map(renderNote)(notes)}
       </div>
     )
-
-    function onAddNote() {
-      return setState(appendNote(state))
-    }
 
     function renderHeader() {
       return (

@@ -6,6 +6,7 @@ import {
   modelProps,
   types,
   updateAttrs,
+  views,
 } from './little-mst'
 
 const Note = _compose(
@@ -20,7 +21,21 @@ export function createNote() {
   return Note.create({text: 'Note Text'})
 }
 
+const addNote = self => () => self.notesMap.put(createNote())
+
 const Root = _compose(
+  views(self => ({
+    get notesList() {
+      return Array.from(self.notesMap.values())
+    },
+  })),
+  actions(self => ({
+    addNote: addNote(self),
+  })),
   modelProps({notesMap: types.map(Note)}),
-  modelNamed('Root'),
-)
+  modelNamed,
+)('Root')
+
+const root = Root.create()
+
+export default root
