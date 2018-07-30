@@ -7,7 +7,7 @@ import {
   updateAttrs,
 } from './little-mst'
 
-const NoteM = _compose(
+const Note = _compose(
   actions(self => ({
     update: updateAttrs(self),
   })),
@@ -16,5 +16,5 @@ const NoteM = _compose(
 )('Note')
 
 export function createNote() {
-  return NoteM.create({text: 'Note Text'})
+  return Note.create({text: 'Note Text'})
 }
