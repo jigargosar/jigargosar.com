@@ -2,7 +2,6 @@ import {_compose} from './little-ramda'
 import {
   actions,
   applySnapshot,
-  getRoot,
   hotSnapshot,
   modelAttrs,
   modelNamed,
@@ -18,6 +17,7 @@ import {StorageItem} from './services/storage'
 const Note = _compose(
   actions(self => ({
     update: updateAttrs(self),
+    onFocusSetSelected: () => root.onFocusSetSelected(self),
   })),
   modelAttrs({text: ''}),
   modelNamed,
@@ -27,9 +27,7 @@ const createNote = () => Note.create({text: 'Note Text'})
 
 const addNote = self => () => self.notes.put(createNote())
 const notesList = self => values(self.notes)
-
-const onFocusSetSelected = self => getRoot(self).onFocusSetSelected(self)
-
+const onFocusSetSelected = self => sel => (self._sel = sel)
 const nullRef = _compose(types.maybeNull, types.reference)
 
 const Root = _compose(
