@@ -41,10 +41,6 @@ const notesList = self =>
 
 const nullRef = _compose(types.maybeNull, types.reference)
 
-function insertElAtIdx({idx, el, list}) {
-  return {idx, el, list: insert(idx)(el)(list)}
-}
-
 const Root = _pipe(
   modelProps({
     notes: types.map(Note),
@@ -65,43 +61,32 @@ const Root = _pipe(
     return {
       onAddNote() {
         const idx = 0
-        const {el, list} = insertElAtIdx({
-          idx,
-          el: createNote(),
-          list: self.notesList,
-        })
 
-        updateSortIdx(list)
-        self.notes.put(el)
-        focusModel(el)
+        const note = createNote()
+        updateSortIdx(insert(idx)(note)(self.notesList))
+
+        self.notes.put(note)
+        focusModel(note)
       },
       onAddNoteAfterSelected() {
         const oldIdx = indexOf(self._sel)(self.notesList)
         const idx = (oldIdx < 0 ? 0 : oldIdx) + 1
 
-        const {el, list} = insertElAtIdx({
-          idx,
-          el: createNote(),
-          list: self.notesList,
-        })
+        const note = createNote()
+        updateSortIdx(insert(idx)(note)(self.notesList))
 
-        updateSortIdx(list)
-        self.notes.put(el)
-        focusModel(el)
+        self.notes.put(note)
+        focusModel(note)
       },
       onAddNoteBeforeSelected() {
         const oldIdx = indexOf(self._sel)(self.notesList)
         const idx = oldIdx < 0 ? 0 : oldIdx
 
-        const {el, list} = insertElAtIdx({
-          idx,
-          el: createNote(),
-          list: self.notesList,
-        })
+        const note = createNote()
+        updateSortIdx(insert(idx)(note)(self.notesList))
 
-        updateSortIdx(list)
-        self.notes.put(el)
-        focusModel(el)
+        self.notes.put(note)
+        focusModel(note)
       },
       updateSelectedOnFocus(sel) {
         return (self._sel = sel)
