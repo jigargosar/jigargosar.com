@@ -47,14 +47,14 @@ function insertElAtIdx({idx, el, list}) {
 
 function insertAfterIdx(el, list) {
   const oldIdx = indexOf(el)(list)
-  const newIdx = (oldIdx < 0 ? 0 : oldIdx) + 1
-  return newIdx
+  const idx = (oldIdx < 0 ? 0 : oldIdx) + 1
+  return idx
 }
 
 function insertBeforeIdx(el, list) {
   const oldIdx = indexOf(el)(list)
-  const newIdx = oldIdx < 0 ? 0 : oldIdx
-  return newIdx
+  const idx = oldIdx < 0 ? 0 : oldIdx
+  return idx
 }
 
 const Root = _pipe(
