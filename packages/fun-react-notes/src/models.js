@@ -1,6 +1,5 @@
 import {
   _compose,
-  _merge,
   _pipe,
   _prop,
   ascend,
@@ -34,11 +33,6 @@ const Note = _compose(
   modelNamed,
 )('Note')
 
-const createNote = attrs => Note.create(_merge({text: 'Note Text'}, attrs))
-
-const notesList = self =>
-  _compose(sortWith([ascend(_prop('sortIdx'))]), values)(self.notes)
-
 const nullRef = _compose(types.maybeNull, types.reference)
 
 const Root = _pipe(
@@ -48,13 +42,15 @@ const Root = _pipe(
   }),
   views(self => ({
     get notesList() {
-      return notesList(self)
+      return _compose(sortWith([ascend(_prop('sortIdx'))]), values)(
+        self.notes,
+      )
     },
   })),
   actions(self => ({
     onAddNote() {
       const idx = 0
-      const note = createNote()
+      const note = Note.create()
 
       updateSortIdx(insert(idx)(note)(self.notesList))
       self.notes.put(note)
@@ -63,7 +59,7 @@ const Root = _pipe(
     onAddNoteAfterSelected() {
       const oldIdx = indexOf(self._sel)(self.notesList)
       const idx = oldIdx < 0 ? 0 : oldIdx + 1
-      const note = createNote()
+      const note = Note.create()
 
       updateSortIdx(insert(idx)(note)(self.notesList))
       self.notes.put(note)
@@ -72,7 +68,7 @@ const Root = _pipe(
     onAddNoteBeforeSelected() {
       const oldIdx = indexOf(self._sel)(self.notesList)
       const idx = oldIdx < 0 ? 0 : oldIdx
-      const note = createNote()
+      const note = Note.create()
 
       updateSortIdx(insert(idx)(note)(self.notesList))
       self.notes.put(note)
