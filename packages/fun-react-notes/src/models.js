@@ -63,7 +63,7 @@ const Root = _compose(
     },
   })),
   actions(self => ({
-    addNote: onAddNote(self),
+    onAddNote: onAddNote(self),
     onFocusSetSelected: onFocusSetSelected(self),
   })),
   modelProps({

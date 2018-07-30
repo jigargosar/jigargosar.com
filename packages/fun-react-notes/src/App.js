@@ -19,7 +19,7 @@ class App extends Component {
         onKeyDown={withKeyEvent(whenKey('mod+enter')(root.addNote))}
       >
         {renderHeader()}
-        <button onClick={root.addNote}>Add</button>
+        <button onClick={root.onAddNote}>Add</button>
         <button onClick={resetRoot}>Reset Root</button>
         {_map(renderNote)(notes)}
       </FocusTrap>
