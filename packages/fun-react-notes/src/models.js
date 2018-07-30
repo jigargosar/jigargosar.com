@@ -3,9 +3,7 @@ import {
   _merge,
   _pipe,
   _prop,
-  _tap,
   ascend,
-  forEachIndexed,
   indexOf,
   insert,
   sortWith,
@@ -20,6 +18,7 @@ import {
   onSnapshot,
   types,
   updateAttrs,
+  updateSortIdx,
   values,
   views,
 } from './little-mst'
@@ -41,6 +40,10 @@ const notesList = self =>
   _compose(sortWith([ascend(_prop('sortIdx'))]), values)(self.notes)
 
 const nullRef = _compose(types.maybeNull, types.reference)
+
+function insertElAtIdx({idx, el, list}) {
+  return {idx, el, list: insert(idx)(el)(list)}
+}
 
 const Root = _pipe(
   modelProps({
@@ -74,24 +77,19 @@ const Root = _pipe(
       },
     }
 
-    function addNoteAt(sortIdx) {
-      return self => {
-        const note = createNote({sortIdx})
-        _compose(
-          forEachIndexed((n, sortIdx) => n.update({sortIdx})),
-          insert(sortIdx)(note),
-          notesList,
-        )(self)
-        return self.notes.put(note)
-      }
-    }
-
     function focusModelId(m) {
       return setFocusAndSelectionOnDOMId(m.id)
     }
 
     function addNoteAndFocus(self, idx) {
-      return _compose(_tap(focusModelId), addNoteAt(idx))(self)
+      const {el, list} = insertElAtIdx({
+        idx,
+        el: createNote(),
+        list: notesList(self),
+      })
+
+      updateSortIdx(list)
+      focusModelId(el)
     }
   }),
 )(modelNamed('Root'))

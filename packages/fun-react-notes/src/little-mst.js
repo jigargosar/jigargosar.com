@@ -1,6 +1,6 @@
 import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
-import {_merge, _path, _startsWith} from './little-ramda'
+import {_merge, _path, _startsWith, forEachIndexed} from './little-ramda'
 
 export {
   addDisposer,
@@ -87,3 +87,6 @@ export const hotSnapshot = module => root => {
   }
   return root
 }
+export const updateSortIdx = forEachIndexed((m, sortIdx) =>
+  m.update({sortIdx}),
+)
