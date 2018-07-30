@@ -3,7 +3,6 @@ import {
   actions,
   applySnapshot,
   hotSnapshot,
-  idProp,
   modelAttrs,
   modelNamed,
   modelProps,
@@ -19,7 +18,7 @@ const Note = _compose(
   actions(self => ({
     update: updateAttrs(self),
   })),
-  modelAttrs({...idProp('Note'), text: ''}),
+  modelAttrs({text: ''}),
   modelNamed,
 )('Note')
 
