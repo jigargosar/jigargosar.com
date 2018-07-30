@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {_contains, _forEachObjIndexed, _map, _type} from './little-ramda'
 import root from './models'
+import {observer} from 'mobx-react'
 
 class App extends Component {
   render() {
-    const {state, setState} = this
     const notes = root.notesList
 
     return (
@@ -29,7 +29,7 @@ class App extends Component {
   }
 }
 
-export default App
+export default observer(App)
 
 class Note extends React.PureComponent {
   render() {

@@ -2,6 +2,7 @@ import {types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
 import {_startsWith} from './little-ramda'
 
+export {observer} from 'mobx-react'
 export {
   addDisposer,
   addMiddleware,
