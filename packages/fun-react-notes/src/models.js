@@ -5,6 +5,7 @@ import {
   _tap,
   ascend,
   forEachIndexed,
+  indexOf,
   insert,
   sortWith,
 } from './little-ramda'
@@ -49,12 +50,18 @@ const Root = _pipe(
     get notesList() {
       return notesList(self)
     },
+    get selIdx() {
+      return indexOf(self._sel)(self.notesList)
+    },
+    get selIdxOrZero() {
+      return self.selIdx < 0 ? 0 : self.selIdx
+    },
   })),
   actions(self => {
     return {
       onAddNote: onAddNoteAt(self),
-      onAddNoteAfterSelected: onAddNoteAt(self),
-      onAddNoteBeforeSelected: onAddNoteAt(self),
+      onAddNoteAfterSelected: onAddNoteAfterSelected(self),
+      onAddNoteBeforeSelected: onAddNoteBeforeSelected(self),
       updateSelectedOnFocus: updateSelectedOnFocus(self),
     }
 
@@ -80,6 +87,14 @@ const Root = _pipe(
 
     function onAddNoteAt(self, idx = 0) {
       return () => _compose(tapFocusModelId(), addNoteAt(idx))(self)
+    }
+
+    function onAddNoteAfterSelected(self) {
+      return onAddNoteAt(self, self.selIdxOrZero)
+    }
+
+    function onAddNoteBeforeSelected(self) {
+      return onAddNoteAt(self, self.selIdx + 1)
     }
   }),
 )(modelNamed('Root'))
