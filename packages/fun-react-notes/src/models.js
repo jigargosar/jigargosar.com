@@ -59,7 +59,7 @@ const Root = _pipe(
 
         updateSortIdx(insert(idx)(note)(self.notesList))
         self.notes.put(note)
-        focusModel(note)
+        setFocusAndSelectionOnDOMId(note.id)
       },
       onAddNoteAfterSelected() {
         const oldIdx = indexOf(self._sel)(self.notesList)
@@ -68,7 +68,7 @@ const Root = _pipe(
 
         updateSortIdx(insert(idx)(note)(self.notesList))
         self.notes.put(note)
-        focusModel(note)
+        setFocusAndSelectionOnDOMId(note.id)
       },
       onAddNoteBeforeSelected() {
         const oldIdx = indexOf(self._sel)(self.notesList)
@@ -77,15 +77,11 @@ const Root = _pipe(
 
         updateSortIdx(insert(idx)(note)(self.notesList))
         self.notes.put(note)
-        focusModel(note)
+        setFocusAndSelectionOnDOMId(note.id)
       },
       updateSelectedOnFocus(sel) {
         return (self._sel = sel)
       },
-    }
-
-    function focusModel(m) {
-      return setFocusAndSelectionOnDOMId(m.id)
     }
   }),
 )(modelNamed('Root'))
