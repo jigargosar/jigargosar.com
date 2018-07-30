@@ -1,32 +1,13 @@
 import React, {Component} from 'react'
 import {
   _append,
-  _compose,
   _contains,
   _forEachObjIndexed,
   _map,
   _times,
   _type,
 } from './little-ramda'
-import {
-  actions,
-  idProp,
-  modelNamed,
-  modelProps,
-  updateAttrs,
-} from './little-mst'
-
-const NoteM = _compose(
-  actions(self => ({
-    update: updateAttrs(self),
-  })),
-  modelProps({...idProp('Note'), text: ''}),
-  modelNamed,
-)('Note')
-
-function createNote() {
-  return NoteM.create({text: 'Note Text'})
-}
+import {createNote} from './models'
 
 function appendNote(state) {
   const notes = state.notes
