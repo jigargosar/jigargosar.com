@@ -8,14 +8,22 @@ import {
   _times,
   _type,
 } from './little-ramda'
-import {idProp, modelNamed, modelProps} from './little-mst'
+import {actions, idProp, modelNamed, modelProps} from './little-mst'
+
+const update = m => attrs => Object.assign(m, attrs)
 
 const NoteM = _compose(
+  actions(self => ({
+    update: update(self),
+  })),
   modelProps({...idProp('Note'), text: ''}),
   modelNamed,
 )('Note')
 
-NoteM.create({})
+const n = NoteM.create({})
+console.log(`n`, n.toJSON())
+n.update({text: 'foo'})
+console.log(`n`, n.toJSON())
 
 function createNote(idx) {
   const id = `${idx + 1}`
