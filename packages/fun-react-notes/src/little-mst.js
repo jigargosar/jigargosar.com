@@ -66,9 +66,8 @@ export const extend = fn => modelType => modelType.extend(fn)
 export const actions = fn => modelType => modelType.actions(fn)
 export const views = fn => modelType => modelType.views(fn)
 export const tId = types.identifier
-export const idProp = prefix => ({
-  id: types.optional(identifierFor(prefix), () => `${prefix}_${nanoid()}`),
-})
+export const idProp = prefix =>
+  types.optional(identifierFor(prefix), () => `${prefix}_${nanoid()}`)
 
 function identifierFor(prefix) {
   return types.refinement(

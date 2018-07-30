@@ -11,7 +11,7 @@ import {
   actions,
   applySnapshot,
   hotSnapshot,
-  modelAttrs,
+  idProp,
   modelNamed,
   modelProps,
   nullRef,
@@ -24,16 +24,18 @@ import {
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
 
-const Note = _compose(
-  actions(self => ({
+const Note = types
+  .model('Note', {
+    id: idProp('Note'),
+    text: '',
+    sortIdx: 0,
+  })
+  .actions(self => ({
     update(attrs) {
       return Object.assign(self, attrs)
     },
     onFocusSetSelected: () => root.updateSelectedOnFocus(self),
-  })),
-  modelAttrs({text: '', sortIdx: 0}),
-  modelNamed,
-)('Note')
+  }))
 
 const Root = _pipe(
   modelProps({
