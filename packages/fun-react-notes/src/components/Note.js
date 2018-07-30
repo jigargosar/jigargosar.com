@@ -4,6 +4,7 @@ import {AutoSize} from './lib/AutoSize'
 import {whenKey, withKeyEvent} from './utils'
 import root from '../models'
 
+@observer
 class Note extends Component {
   render({note} = this.props) {
     return (
@@ -22,4 +23,4 @@ class Note extends Component {
   }
 }
 
-export default observer(Note)
+export default Note

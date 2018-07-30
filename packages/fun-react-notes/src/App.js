@@ -4,6 +4,7 @@ import root from './models'
 import {observer} from 'mobx-preact'
 import Note from './components/Note'
 
+@observer
 class App extends Component {
   render() {
     const notes = root.notesList
@@ -30,4 +31,4 @@ class App extends Component {
   }
 }
 
-export default observer(App)
+export default App
