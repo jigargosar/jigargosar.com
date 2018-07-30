@@ -21,8 +21,8 @@ const Note = _compose(
 
 const createNote = () => Note.create({text: 'Note Text'})
 
-const addNote = self => () => self.notesMap.put(createNote())
-const notesList = self => values(self.notesMap)
+const addNote = self => () => self.notes.put(createNote())
+const notesList = self => values(self.notes)
 
 const Root = _compose(
   views(self => ({
@@ -33,7 +33,7 @@ const Root = _compose(
   actions(self => ({
     addNote: addNote(self),
   })),
-  modelProps({notesMap: types.map(Note)}),
+  modelProps({notes: types.map(Note)}),
   modelNamed,
 )('Root')
 
