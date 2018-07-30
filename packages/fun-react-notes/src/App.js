@@ -13,7 +13,7 @@ class App extends Component {
       <Fragment>
         {renderHeader()}
         <button onClick={root.addNote}>Add</button>
-        <button onClick={resetRoot}>Add</button>
+        <button onClick={resetRoot}>Reset Root</button>
         {_map(renderNote)(notes)}
       </Fragment>
     )
