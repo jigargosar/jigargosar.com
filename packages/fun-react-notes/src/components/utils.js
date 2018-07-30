@@ -6,9 +6,10 @@ import {_, _cond, _tap, mapIndexed} from '../little-ramda'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
+
 export {default as autobind} from 'autobind'
 export {F, RC, observer, Observer, inject, isHotKey}
-
+export {default as FocusTrap} from 'focus-trap-react'
 export {PropTypes}
 
 export const isAnyHotKey = R.compose(

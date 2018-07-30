@@ -1,7 +1,12 @@
 import React, {Component} from 'react'
 import {_map} from './little-ramda'
 import root, {resetRoot} from './models'
-import {observer, whenKey, withKeyEvent} from './components/utils'
+import {
+  FocusTrap,
+  observer,
+  whenKey,
+  withKeyEvent,
+} from './components/utils'
 import {AutoSize} from './components/lib/AutoSize'
 
 @observer
@@ -10,12 +15,14 @@ class App extends Component {
     const notes = root.notesList
 
     return (
-      <div onKeyDown={withKeyEvent(whenKey('mod+enter')(root.addNote))}>
+      <FocusTrap
+        onKeyDown={withKeyEvent(whenKey('mod+enter')(root.addNote))}
+      >
         {renderHeader()}
         <button onClick={root.addNote}>Add</button>
         <button onClick={resetRoot}>Reset Root</button>
         {_map(renderNote)(notes)}
-      </div>
+      </FocusTrap>
     )
 
     function renderHeader() {
