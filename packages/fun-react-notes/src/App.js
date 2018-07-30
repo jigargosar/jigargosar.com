@@ -27,18 +27,14 @@ setImmediate(() => {
   console.log(`n`, n.toJSON())
 })
 
-function createNote(idx) {
-  const id = `${idx + 1}`
-  return {
-    id,
-    text: `Note text ${id}`,
-  }
+function createNote() {
+  return NoteM.create({text: 'Note Text'})
 }
 
 function appendNote(state) {
   const notes = state.notes
   return {
-    notes: _append(createNote(notes.length))(notes),
+    notes: _append(createNote())(notes),
   }
 }
 
