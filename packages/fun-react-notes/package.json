@@ -13,6 +13,7 @@
     "jsxBracketSameLine": false
   },
   "dependencies": {
+    "mobx-state-tree": "^3.0.2",
     "prop-types": "^15.6.2",
     "ramda": "^0.25.0",
     "react": "^16.4.1",
