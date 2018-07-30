@@ -45,6 +45,16 @@ function insertElAtIdx({idx, el, list}) {
   return {idx, el, list: insert(idx)(el)(list)}
 }
 
+function insertAfterIdx(el, list) {
+  const idx = indexOf(el)(list)
+  return (idx < 0 ? 0 : idx) + 1
+}
+
+function insertBeforeIdx(el, list) {
+  const idx = indexOf(el)(list)
+  return idx < 0 ? 0 : idx
+}
+
 const Root = _pipe(
   modelProps({
     notes: types.map(Note),
@@ -64,14 +74,40 @@ const Root = _pipe(
   actions(self => {
     return {
       onAddNote() {
-        return addNoteAndFocus(self, 0)
+        const idx = 0
+        const {el, list} = insertElAtIdx({
+          idx,
+          el: createNote(),
+          list: self.notesList,
+        })
+
+        updateSortIdx(list)
+        self.notes.put(el)
+        focusModel(el)
       },
       onAddNoteAfterSelected() {
-        const insertAfterIdx = (self.selIdx < 0 ? 0 : self.selIdx) + 1
-        return addNoteAndFocus(self, insertAfterIdx)
+        const idx = insertAfterIdx(self._sel, self.notesList)
+        const {el, list} = insertElAtIdx({
+          idx,
+          el: createNote(),
+          list: self.notesList,
+        })
+
+        updateSortIdx(list)
+        self.notes.put(el)
+        focusModel(el)
       },
       onAddNoteBeforeSelected() {
-        return addNoteAndFocus(self, self.selIdxOrZero)
+        const idx = insertBeforeIdx(self._sel, self.notesList)
+        const {el, list} = insertElAtIdx({
+          idx,
+          el: createNote(),
+          list: self.notesList,
+        })
+
+        updateSortIdx(list)
+        self.notes.put(el)
+        focusModel(el)
       },
       updateSelectedOnFocus(sel) {
         return (self._sel = sel)
@@ -80,18 +116,6 @@ const Root = _pipe(
 
     function focusModel(m) {
       return setFocusAndSelectionOnDOMId(m.id)
-    }
-
-    function addNoteAndFocus(self, idx) {
-      const {el, list} = insertElAtIdx({
-        idx,
-        el: createNote(),
-        list: self.notesList,
-      })
-
-      updateSortIdx(list)
-      self.notes.put(el)
-      focusModel(el)
     }
   }),
 )(modelNamed('Root'))
