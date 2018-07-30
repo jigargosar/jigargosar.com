@@ -52,9 +52,9 @@ const Root = _pipe(
   })),
   actions(self => {
     return {
-      onAddNote: onAddNote(self),
-      onAddNoteAfterSelected: onAddNote(self),
-      onAddNoteBeforeSelected: onAddNote(self),
+      onAddNote: onAddNoteAt(self),
+      onAddNoteAfterSelected: onAddNoteAt(self),
+      onAddNoteBeforeSelected: onAddNoteAt(self),
       updateSelectedOnFocus: updateSelectedOnFocus(self),
     }
 
@@ -70,16 +70,16 @@ const Root = _pipe(
       }
     }
 
-    function focusModelId(m) {
-      return setFocusAndSelectionOnDOMId(m.id)
-    }
-
     function updateSelectedOnFocus(self) {
       return sel => (self._sel = sel)
     }
 
-    function onAddNote(self, idx = 0) {
-      return () => _compose(_tap(focusModelId), addNoteAt(idx))(self)
+    function tapFocusModelId() {
+      return _tap(m => setFocusAndSelectionOnDOMId(m.id))
+    }
+
+    function onAddNoteAt(self, idx = 0) {
+      return () => _compose(tapFocusModelId(), addNoteAt(idx))(self)
     }
   }),
 )(modelNamed('Root'))
