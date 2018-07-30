@@ -55,8 +55,7 @@ const Root = _compose(
         _prepend(note),
         notesList,
       )(self)
-      self.notes.put(note)
-      return note
+      return self.notes.put(note)
     }
 
     const onAddNote = _compose(_tap(focusModelId), addNote)
