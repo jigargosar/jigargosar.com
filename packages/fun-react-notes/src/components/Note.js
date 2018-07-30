@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {observer} from 'mobx-react'
+import {observer} from 'mobx-preact'
 import {AutoSize} from './lib/AutoSize'
 import {whenKey, withKeyEvent} from './utils'
 import root from '../models'

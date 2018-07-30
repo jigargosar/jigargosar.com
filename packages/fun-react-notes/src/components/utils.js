@@ -1,11 +1,10 @@
 import React, {Component as RC, Fragment as F} from 'react'
-import {inject, observer, Observer} from 'mobx-react'
+import {inject, observer, Observer} from 'mobx-preact'
 import isHotKey from 'is-hotkey'
 import * as R from 'ramda'
 import {_, _cond, _tap, mapIndexed} from '../little-ramda'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import {setDisplayName, wrapDisplayName} from './little-recompose'
 import cn from 'classnames'
 
 export {F, RC, observer, Observer, inject, isHotKey}
@@ -92,36 +91,36 @@ export class C extends RC {
 
 export const OC = observer(C)
 
-const StateContext = React.createContext(null)
+// const StateContext = React.createContext(null)
 
-export const StateProvider = StateContext.Provider
+// export const StateProvider = StateContext.Provider
 
-const StateContextConsumer = StateContext.Consumer
+// const StateContextConsumer = StateContext.Consumer
 
-export const WithState = function WithState({children}) {
-  return (
-    <StateContextConsumer>
-      {s => <Observer render={() => children(s)} />}
-    </StateContextConsumer>
-  )
-}
+// export const WithState = function WithState({children}) {
+//   return (
+//     <StateContextConsumer>
+//       {s => <Observer render={() => children(s)} />}
+//     </StateContextConsumer>
+//   )
+// }
+//
+// const withStateToProps = _.curry((stateToProps, BC) => {
+//   const hoc = ({children, ...rest}) => {
+//     const OBC = observer(BC)
+//     return (
+//       <StateContextConsumer>
+//         {states => <OBC {...stateToProps(states, rest)}>{children}</OBC>}
+//       </StateContextConsumer>
+//     )
+//   }
+//   if (process.env.NODE_ENV !== 'production') {
+//     return setDisplayName(wrapDisplayName(BC, 'inject'))(hoc)
+//   }
+//   return hoc
+// })
 
-const withStateToProps = _.curry((stateToProps, BC) => {
-  const hoc = ({children, ...rest}) => {
-    const OBC = observer(BC)
-    return (
-      <StateContextConsumer>
-        {states => <OBC {...stateToProps(states, rest)}>{children}</OBC>}
-      </StateContextConsumer>
-    )
-  }
-  if (process.env.NODE_ENV !== 'production') {
-    return setDisplayName(wrapDisplayName(BC, 'inject'))(hoc)
-  }
-  return hoc
-})
-
-export const withStateMergedIntoProps = withStateToProps(R.merge)
+// export const withStateMergedIntoProps = withStateToProps(R.merge)
 
 export const mrInjectAll = _.compose(
   inject(({appState}, props) => ({

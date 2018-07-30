@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {_map} from './little-ramda'
 import root from './models'
-import {observer} from 'mobx-react'
+import {observer} from 'mobx-preact'
 import Note from './components/Note'
+import {hot} from 'react-hot-loader'
 
 class App extends Component {
   render() {
@@ -30,4 +31,4 @@ class App extends Component {
   }
 }
 
-export default observer(App)
+export default hot(module)(observer(App))

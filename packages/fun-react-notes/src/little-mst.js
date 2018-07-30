@@ -2,7 +2,8 @@ import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
 import {_path, _startsWith} from './little-ramda'
 
-export {observer} from 'mobx-react'
+// export {observer} from 'mobx-preact'
+export {observer} from 'mobx-preact'
 export {
   addDisposer,
   addMiddleware,
