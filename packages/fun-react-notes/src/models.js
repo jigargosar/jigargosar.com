@@ -80,7 +80,7 @@ const Root = _pipe(
         setFocusAndSelectionOnDOMId(note.id)
       },
       updateSelectedOnFocus(sel) {
-        return (self._sel = sel)
+        self._sel = sel
       },
     }
   }),
