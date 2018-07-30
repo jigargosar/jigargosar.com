@@ -10,11 +10,11 @@ import {
 } from './little-ramda'
 import {actions, idProp, modelNamed, modelProps} from './little-mst'
 
-const update = m => attrs => Object.assign(m, attrs)
+const updateAttrs = m => attrs => Object.assign(m, attrs)
 
 const NoteM = _compose(
   actions(self => ({
-    update: update(self),
+    update: updateAttrs(self),
   })),
   modelProps({...idProp('Note'), text: ''}),
   modelNamed,
