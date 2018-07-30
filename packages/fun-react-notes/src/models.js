@@ -67,7 +67,8 @@ const Root = _pipe(
         return addNoteAndFocus(self, 0)
       },
       onAddNoteAfterSelected() {
-        return addNoteAndFocus(self, self.selIdxOrZero + 1)
+        const insertAfterIdx = (self.selIdx < 0 ? 0 : self.selIdx) + 1
+        return addNoteAndFocus(self, insertAfterIdx)
       },
       onAddNoteBeforeSelected() {
         return addNoteAndFocus(self, self.selIdxOrZero)
