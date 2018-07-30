@@ -46,7 +46,7 @@ class App extends Component {
 @observer
 class Note extends Component {
   onFocusSetSelected = () => {
-    root.updateSelectedOnFocus(this.prop.note)
+    root.updateSelectedOnFocus(this.props.note)
   }
 
   render({note} = this.props) {
