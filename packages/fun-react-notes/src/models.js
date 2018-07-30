@@ -62,8 +62,8 @@ const Root = _pipe(
       onAddNote() {
         const idx = 0
         const note = createNote()
-        updateSortIdx(insert(idx)(note)(self.notesList))
 
+        updateSortIdx(insert(idx)(note)(self.notesList))
         self.notes.put(note)
         focusModel(note)
       },
@@ -73,7 +73,6 @@ const Root = _pipe(
         const note = createNote()
 
         updateSortIdx(insert(idx)(note)(self.notesList))
-
         self.notes.put(note)
         focusModel(note)
       },
@@ -83,7 +82,6 @@ const Root = _pipe(
         const note = createNote()
 
         updateSortIdx(insert(idx)(note)(self.notesList))
-
         self.notes.put(note)
         focusModel(note)
       },
