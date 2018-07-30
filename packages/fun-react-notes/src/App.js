@@ -8,9 +8,13 @@ import {
   _times,
   _type,
 } from './little-ramda'
-import {actions, idProp, modelNamed, modelProps} from './little-mst'
-
-const updateAttrs = m => attrs => Object.assign(m, attrs)
+import {
+  actions,
+  idProp,
+  modelNamed,
+  modelProps,
+  updateAttrs,
+} from './little-mst'
 
 const NoteM = _compose(
   actions(self => ({

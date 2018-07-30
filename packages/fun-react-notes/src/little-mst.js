@@ -2,24 +2,6 @@ import {types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
 import {_startsWith} from './little-ramda'
 
-export const modelNamed = name => types.model(name)
-export const modelProps = props => modelType => modelType.props(props)
-export const extend = fn => modelType => modelType.extend(fn)
-export const actions = fn => modelType => modelType.actions(fn)
-export const views = fn => modelType => modelType.views(fn)
-export const tId = types.identifier
-export const idProp = prefix => ({
-  id: types.optional(identifierFor(prefix), () => `${prefix}_${nanoid()}`),
-})
-
-function identifierFor(prefix) {
-  return types.refinement(
-    `${prefix}Id`,
-    types.identifier,
-    _startsWith(`${prefix}_`),
-  )
-}
-
 export {
   addDisposer,
   addMiddleware,
@@ -67,3 +49,23 @@ export {
   resolveIdentifier,
   resolvePath,
 } from 'mobx-state-tree'
+
+export const modelNamed = name => types.model(name)
+export const modelProps = props => modelType => modelType.props(props)
+export const extend = fn => modelType => modelType.extend(fn)
+export const actions = fn => modelType => modelType.actions(fn)
+export const views = fn => modelType => modelType.views(fn)
+export const tId = types.identifier
+export const idProp = prefix => ({
+  id: types.optional(identifierFor(prefix), () => `${prefix}_${nanoid()}`),
+})
+
+function identifierFor(prefix) {
+  return types.refinement(
+    `${prefix}Id`,
+    types.identifier,
+    _startsWith(`${prefix}_`),
+  )
+}
+
+export const updateAttrs = m => attrs => Object.assign(m, attrs)
