@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {_map} from './little-ramda'
 import root from './models'
 import {observer, whenKey, withKeyEvent} from './components/utils'
@@ -10,11 +10,11 @@ class App extends Component {
     const notes = root.notesList
 
     return (
-      <div>
+      <Fragment>
         {renderHeader()}
         <button onClick={root.addNote}>Add</button>
         {_map(renderNote)(notes)}
-      </div>
+      </Fragment>
     )
 
     function renderHeader() {
