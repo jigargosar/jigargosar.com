@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {_contains, _forEachObjIndexed, _type} from '../little-ramda'
 import {observer} from 'mobx-react'
 import {AutoSize} from './lib/AutoSize'
 import {whenKey, withKeyEvent} from './utils'
