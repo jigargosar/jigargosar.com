@@ -48,6 +48,4 @@ const rootSnap = StorageItem({name: 'rootSnapshot'})
 applySnapshot(root, rootSnap.load())
 onSnapshot(root, rootSnap.save)
 
-export default root
-
-hotSnapshot(root, module)
+export default hotSnapshot(module)(root)

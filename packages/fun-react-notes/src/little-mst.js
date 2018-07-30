@@ -74,7 +74,7 @@ function identifierFor(prefix) {
 
 export const updateAttrs = m => attrs => Object.assign(m, attrs)
 
-export function hotSnapshot(root, module) {
+export const hotSnapshot = module => root => {
   if (module.hot) {
     const snap = _path(['hot', 'data', 'snap'])(module)
     if (snap) {
