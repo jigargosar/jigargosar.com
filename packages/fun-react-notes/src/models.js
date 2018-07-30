@@ -50,12 +50,6 @@ const Root = _pipe(
     get notesList() {
       return notesList(self)
     },
-    get selIdx() {
-      return indexOf(self._sel)(self.notesList)
-    },
-    get selIdxOrZero() {
-      return self.selIdx < 0 ? 0 : self.selIdx
-    },
   })),
   actions(self => {
     return {
