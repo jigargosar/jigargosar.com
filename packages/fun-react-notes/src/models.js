@@ -7,6 +7,7 @@ import {
   modelAttrs,
   modelNamed,
   modelProps,
+  onSnapshot,
   types,
   updateAttrs,
   values,
@@ -43,7 +44,9 @@ const Root = _compose(
 const root = Root.create()
 
 const rootSnap = StorageItem({name: 'rootSnapshot'})
+
 applySnapshot(root, rootSnap.load())
+onSnapshot(root, rootSnap.save)
 
 hotSnapshot(root, module)
 
