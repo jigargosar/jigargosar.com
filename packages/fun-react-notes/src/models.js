@@ -51,9 +51,12 @@ const Root = _pipe(
     },
   })),
   actions(self => {
-    const focusModelId = m => setFocusAndSelectionOnDOMId(m.id)
+    return {
+      onAddNote: () => onAddNote(self),
+      onFocusSetSelected: onFocusSetSelected(self),
+    }
 
-    const addNote = self => {
+    function addNote(self) {
       const note = createNote()
       _compose(
         forEachIndexed((n, sortIdx) => n.update({sortIdx})),
@@ -63,9 +66,8 @@ const Root = _pipe(
       return self.notes.put(note)
     }
 
-    return {
-      onAddNote: () => onAddNote(self),
-      onFocusSetSelected: onFocusSetSelected(self),
+    function focusModelId(m) {
+      return setFocusAndSelectionOnDOMId(m.id)
     }
 
     function onFocusSetSelected(self) {
