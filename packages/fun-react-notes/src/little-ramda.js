@@ -9,6 +9,7 @@ export {
   times as _times,
   append as _append,
   compose as _compose,
+  pipe as _pipe,
   startsWith as _startsWith,
   path as _path,
   tap as _tap,

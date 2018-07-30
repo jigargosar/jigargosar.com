@@ -1,5 +1,6 @@
 import {
   _compose,
+  _pipe,
   _prepend,
   _prop,
   _tap,
@@ -39,7 +40,11 @@ const notesList = self =>
 
 const nullRef = _compose(types.maybeNull, types.reference)
 
-const Root = _compose(
+const Root = _pipe(
+  modelProps({
+    notes: types.map(Note),
+    _sel: nullRef(Note),
+  }),
   views(self => ({
     get notesList() {
       return notesList(self)
@@ -58,20 +63,20 @@ const Root = _compose(
       return self.notes.put(note)
     }
 
-    const onAddNote = _compose(_tap(focusModelId), addNote)
-
-    const onFocusSetSelected = self => sel => (self._sel = sel)
     return {
       onAddNote: () => onAddNote(self),
       onFocusSetSelected: onFocusSetSelected(self),
     }
+
+    function onFocusSetSelected(self) {
+      return sel => (self._sel = sel)
+    }
+
+    function onAddNote(self) {
+      return _compose(_tap(focusModelId), addNote)(self)
+    }
   }),
-  modelProps({
-    notes: types.map(Note),
-    _sel: nullRef(Note),
-  }),
-  modelNamed,
-)('Root')
+)(modelNamed('Root'))
 
 const root = Root.create()
 
