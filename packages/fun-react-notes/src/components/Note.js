@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {_contains, _forEachObjIndexed, _type} from '../little-ramda'
 import {observer} from 'mobx-react'
 
-class Note extends React.PureComponent {
+class Note extends Component {
   render() {
     const {note} = this.props
     return (
