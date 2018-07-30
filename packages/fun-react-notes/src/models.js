@@ -77,7 +77,7 @@ const Root = _pipe(
       },
     }
 
-    function focusModelId(m) {
+    function focusModel(m) {
       return setFocusAndSelectionOnDOMId(m.id)
     }
 
@@ -89,7 +89,7 @@ const Root = _pipe(
       })
 
       updateSortIdx(list)
-      focusModelId(el)
+      focusModel(el)
     }
   }),
 )(modelNamed('Root'))
