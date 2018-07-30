@@ -85,7 +85,7 @@ const Root = _pipe(
       const {el, list} = insertElAtIdx({
         idx,
         el: createNote(),
-        list: notesList(self),
+        list: self.notesList,
       })
 
       updateSortIdx(list)
