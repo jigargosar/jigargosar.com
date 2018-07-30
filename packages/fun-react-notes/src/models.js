@@ -61,7 +61,6 @@ const Root = _pipe(
     return {
       onAddNote() {
         const idx = 0
-
         const note = createNote()
         updateSortIdx(insert(idx)(note)(self.notesList))
 
@@ -71,8 +70,8 @@ const Root = _pipe(
       onAddNoteAfterSelected() {
         const oldIdx = indexOf(self._sel)(self.notesList)
         const idx = (oldIdx < 0 ? 0 : oldIdx) + 1
-
         const note = createNote()
+
         updateSortIdx(insert(idx)(note)(self.notesList))
 
         self.notes.put(note)
@@ -81,8 +80,8 @@ const Root = _pipe(
       onAddNoteBeforeSelected() {
         const oldIdx = indexOf(self._sel)(self.notesList)
         const idx = oldIdx < 0 ? 0 : oldIdx
-
         const note = createNote()
+
         updateSortIdx(insert(idx)(note)(self.notesList))
 
         self.notes.put(note)
