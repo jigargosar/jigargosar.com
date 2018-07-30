@@ -1,8 +1,27 @@
 import React, {Component} from 'react'
 import {_map} from './little-ramda'
 import root from './models'
-import Note from './components/Note'
-import {observer} from './components/utils'
+import {observer, whenKey, withKeyEvent} from './components/utils'
+import {AutoSize} from './components/lib/AutoSize'
+
+@observer
+class Note extends Component {
+  render({note} = this.props) {
+    return (
+      <div>
+        <AutoSize>
+          <textarea
+            style={{display: 'block', width: '100%'}}
+            rows={1}
+            value={note.text}
+            onChange={e => note.update({text: e.target.value})}
+            onKeyDown={withKeyEvent(whenKey('mod+enter')(root.addNote))}
+          />
+        </AutoSize>
+      </div>
+    )
+  }
+}
 
 @observer
 class App extends Component {
