@@ -50,6 +50,8 @@ export {
   resolvePath,
 } from 'mobx-state-tree'
 
+export {values, has, get, set} from 'mobx'
+
 export const modelNamed = name => types.model(name)
 export const modelProps = props => modelType => modelType.props(props)
 export const extend = fn => modelType => modelType.extend(fn)
