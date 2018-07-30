@@ -36,7 +36,6 @@ const createNote = () => Note.create({text: 'Note Text'})
 
 const notesList = self =>
   _compose(sortWith([ascend(_prop('sortIdx'))]), values)(self.notes)
-const onFocusSetSelected = self => sel => (self._sel = sel)
 
 const nullRef = _compose(types.maybeNull, types.reference)
 
@@ -63,7 +62,7 @@ const Root = _compose(
     function onAddNote(self) {
       return _compose(_tap(focusModelId), addNote)(self)
     }
-
+    const onFocusSetSelected = self => sel => (self._sel = sel)
     return {
       onAddNote: () => onAddNote(self),
       onFocusSetSelected: onFocusSetSelected(self),
