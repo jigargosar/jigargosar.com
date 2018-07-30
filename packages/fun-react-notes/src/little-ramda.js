@@ -8,4 +8,6 @@ export {
   contains as _contains,
   times as _times,
   append as _append,
+  compose as _compose,
+  startsWith as _startsWith,
 } from 'ramda'

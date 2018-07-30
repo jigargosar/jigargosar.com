@@ -1,12 +1,21 @@
 import React, {Component} from 'react'
 import {
   _append,
+  _compose,
   _contains,
   _forEachObjIndexed,
   _map,
   _times,
   _type,
 } from './little-ramda'
+import {idProp, modelNamed, modelProps} from './little-mst'
+
+const NoteM = _compose(
+  modelProps({...idProp('Note'), text: ''}),
+  modelNamed,
+)('Note')
+
+NoteM.create({})
 
 function createNote(idx) {
   const id = `${idx + 1}`
