@@ -45,18 +45,6 @@ function insertElAtIdx({idx, el, list}) {
   return {idx, el, list: insert(idx)(el)(list)}
 }
 
-function insertAfterIdx(el, list) {
-  const oldIdx = indexOf(el)(list)
-  const idx = (oldIdx < 0 ? 0 : oldIdx) + 1
-  return idx
-}
-
-function insertBeforeIdx(el, list) {
-  const oldIdx = indexOf(el)(list)
-  const idx = oldIdx < 0 ? 0 : oldIdx
-  return idx
-}
-
 const Root = _pipe(
   modelProps({
     notes: types.map(Note),
@@ -88,7 +76,9 @@ const Root = _pipe(
         focusModel(el)
       },
       onAddNoteAfterSelected() {
-        const idx = insertAfterIdx(self._sel, self.notesList)
+        const oldIdx = indexOf(self._sel)(self.notesList)
+        const idx = (oldIdx < 0 ? 0 : oldIdx) + 1
+
         const {el, list} = insertElAtIdx({
           idx,
           el: createNote(),
@@ -100,7 +90,9 @@ const Root = _pipe(
         focusModel(el)
       },
       onAddNoteBeforeSelected() {
-        const idx = insertBeforeIdx(self._sel, self.notesList)
+        const oldIdx = indexOf(self._sel)(self.notesList)
+        const idx = oldIdx < 0 ? 0 : oldIdx
+
         const {el, list} = insertElAtIdx({
           idx,
           el: createNote(),
