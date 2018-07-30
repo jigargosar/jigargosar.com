@@ -16,7 +16,11 @@ class App extends Component {
 
     return (
       <FocusTrap
-        onKeyDown={withKeyEvent(whenKey('mod+enter')(root.onAddNote))}
+        onKeyDown={withKeyEvent(
+          //
+          whenKey('mod+enter')(root.onAddNoteAfterSelected),
+          whenKey('shift+mod+enter')(root.onAddNoteBeforeSelected),
+        )}
       >
         {renderHeader()}
         <button onClick={root.onAddNote}>Add</button>
