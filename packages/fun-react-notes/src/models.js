@@ -2,6 +2,7 @@ import {
   _compose,
   _prepend,
   _prop,
+  _tap,
   ascend,
   forEachIndexed,
   sortWith,
@@ -20,6 +21,7 @@ import {
   views,
 } from './little-mst'
 import {StorageItem} from './services/storage'
+import {setFocusAndSelectionOnDOMId} from './components/utils'
 
 const Note = _compose(
   actions(self => ({
@@ -39,7 +41,8 @@ const addNote = self => () => {
     _prepend(note),
     notesList,
   )(self)
-  return self.notes.put(note)
+  self.notes.put(note)
+  return note
 }
 const notesList = self =>
   _compose(sortWith([ascend(_prop('sortIdx'))]), values)(self.notes)
@@ -47,6 +50,7 @@ const notesList = self =>
 const onFocusSetSelected = self => sel => (self._sel = sel)
 const nullRef = _compose(types.maybeNull, types.reference)
 
+const focusModelId = m => setFocusAndSelectionOnDOMId(m.id)
 const Root = _compose(
   views(self => ({
     get notesList() {
@@ -54,7 +58,7 @@ const Root = _compose(
     },
   })),
   actions(self => ({
-    addNote: addNote(self),
+    addNote: _compose(_tap(focusModelId), addNote)(self),
     onFocusSetSelected: onFocusSetSelected(self),
   })),
   modelProps({
