@@ -29,9 +29,6 @@ const Note = types
     update(attrs) {
       return Object.assign(self, attrs)
     },
-    onFocusSetSelected() {
-      return root.updateSelectedOnFocus(self)
-    },
   }))
 
 const Root = types
