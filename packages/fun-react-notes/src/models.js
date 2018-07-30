@@ -34,7 +34,14 @@ const Note = _compose(
 
 const createNote = () => Note.create({text: 'Note Text'})
 
-const addNote = self => () => {
+const notesList = self =>
+  _compose(sortWith([ascend(_prop('sortIdx'))]), values)(self.notes)
+const onFocusSetSelected = self => sel => (self._sel = sel)
+
+const nullRef = _compose(types.maybeNull, types.reference)
+const focusModelId = m => setFocusAndSelectionOnDOMId(m.id)
+
+const addNote = self => {
   const note = createNote()
   _compose(
     forEachIndexed((n, sortIdx) => n.update({sortIdx})),
@@ -44,13 +51,11 @@ const addNote = self => () => {
   self.notes.put(note)
   return note
 }
-const notesList = self =>
-  _compose(sortWith([ascend(_prop('sortIdx'))]), values)(self.notes)
 
-const onFocusSetSelected = self => sel => (self._sel = sel)
-const nullRef = _compose(types.maybeNull, types.reference)
+function onAddNote(self) {
+  return () => _compose(_tap(focusModelId), addNote)(self)
+}
 
-const focusModelId = m => setFocusAndSelectionOnDOMId(m.id)
 const Root = _compose(
   views(self => ({
     get notesList() {
@@ -58,7 +63,7 @@ const Root = _compose(
     },
   })),
   actions(self => ({
-    addNote: _compose(_tap(focusModelId), addNote)(self),
+    addNote: onAddNote(self),
     onFocusSetSelected: onFocusSetSelected(self),
   })),
   modelProps({
