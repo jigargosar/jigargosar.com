@@ -13,6 +13,7 @@ export {
   path as _path,
   tap as _tap,
   cond as _cond,
+  merge as _merge,
 } from 'ramda'
 
 export const mapIndexed = _.addIndex(_.map)

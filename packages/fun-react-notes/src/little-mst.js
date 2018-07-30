@@ -1,6 +1,6 @@
 import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
-import {_path, _startsWith} from './little-ramda'
+import {_merge, _path, _startsWith} from './little-ramda'
 
 export {
   addDisposer,
@@ -54,6 +54,8 @@ export {values, has, get, set} from 'mobx'
 
 export const modelNamed = name => types.model(name)
 export const modelProps = props => modelType => modelType.props(props)
+export const modelAttrs = attrs => modelType =>
+  modelType.props(_merge({...idProp(modelType.name)}, attrs))
 export const extend = fn => modelType => modelType.extend(fn)
 export const actions = fn => modelType => modelType.actions(fn)
 export const views = fn => modelType => modelType.views(fn)
