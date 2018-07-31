@@ -38,6 +38,7 @@
     "react-scripts": "1.1.4",
     "react-values": "^0.2.4",
     "recompose": "^0.27.1",
+    "sugar": "^2.0.4",
     "tachyons": "^4.11.1"
   },
   "scripts": {

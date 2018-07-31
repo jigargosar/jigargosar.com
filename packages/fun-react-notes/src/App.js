@@ -86,9 +86,9 @@ class Note extends Component {
             id={note.id}
             style={{display: 'block', width: '100%', resize: 'none'}}
             rows={1}
-            value={text}
+            value={text.truncateOnWord(30)}
             onChange={onTextChange}
-            placeholder={`${sortIdx} ${id}`}
+            placeholder={`${sortIdx} ${id.slice(6, 6 + 6)}`}
           />
         </AutoSize>
       </div>
