@@ -27,7 +27,7 @@ const NoteModel = types
 
 const RootStore = types
   .model('RootStore', {
-    noteMap: types.map(NoteModel),
+    _noteMap: types.map(NoteModel),
     _sel: nullRef(NoteModel),
   })
   .actions(self => {
@@ -46,7 +46,7 @@ const RootStore = types
   })
   .views(self => ({
     get notesList() {
-      return sortWith([ascend(_prop('sortIdx'))])(values(self.noteMap))
+      return sortWith([ascend(_prop('sortIdx'))])(values(self._noteMap))
     },
   }))
   .actions(self => ({
@@ -55,7 +55,7 @@ const RootStore = types
       const note = NoteModel.create()
 
       updateSortIdx(insert(idx)(note)(self.notesList))
-      self.noteMap.put(note)
+      self._noteMap.put(note)
       setFocusAndSelectionOnDOMId(note.id)
     },
     onAddNoteAfterSelected() {
@@ -64,7 +64,7 @@ const RootStore = types
       const note = NoteModel.create()
 
       updateSortIdx(insert(idx)(note)(self.notesList))
-      self.noteMap.put(note)
+      self._noteMap.put(note)
       setFocusAndSelectionOnDOMId(note.id)
     },
     onAddNoteBeforeSelected() {
@@ -73,7 +73,7 @@ const RootStore = types
       const note = NoteModel.create()
 
       updateSortIdx(insert(idx)(note)(self.notesList))
-      self.noteMap.put(note)
+      self._noteMap.put(note)
       setFocusAndSelectionOnDOMId(note.id)
     },
     updateSelectedOnFocus(sel) {
