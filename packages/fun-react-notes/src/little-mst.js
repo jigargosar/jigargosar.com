@@ -85,3 +85,4 @@ export const hotSnapshot = module => root => {
   return root
 }
 export const nullRef = _compose(types.maybeNull, types.reference)
+export const nullString = _compose(types.maybeNull, types.string)

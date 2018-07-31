@@ -58,6 +58,7 @@ const RootStore = types
   .model('RootStore', {
     _notesCollection: types.optional(NoteCollection, {}),
     _sel: nullRef(NoteModel),
+    nullString: null,
   })
   .extend(self => ({
     views: {
