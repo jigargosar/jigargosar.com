@@ -28,7 +28,9 @@ class App extends Component {
             <button onClick={store.onAddNote}>Add</button>
             <button onClick={store.reset}>Reset Store</button>
           </div>
-          {_map(renderNote)(notes)}
+          <div className={cn('w-33 flex flex-wrap')}>
+            {_map(renderNote)(notes)}
+          </div>
         </div>
       </FocusTrap>
     )
