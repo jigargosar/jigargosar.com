@@ -81,20 +81,26 @@ class Note extends Component {
 
   render({note} = this.props) {
     const {sortIdx, id, text, onTextChange} = note
+    const displayText = (text || 'empty').truncate(30)
     return (
-      <div className={cn('w-100')}>
-        <AutoSize>
-          <textarea
-            onFocus={this.onFocusSetSelected}
-            id={note.id}
-            className={cn('input-reset dib w-100')}
-            style={{resize: 'none'}}
-            rows={1}
-            value={text.truncateOnWord(30)}
-            onChange={onTextChange}
-            placeholder={`${sortIdx} ${id.slice(6, 6 + 6)}`}
-          />
-        </AutoSize>
+      <div
+        className={cn('')}
+        id={note.id}
+        onClick={this.onFocusSetSelected}
+      >
+        {/*<AutoSize>*/}
+        {/*<textarea*/}
+        {/*onFocus={this.onFocusSetSelected}*/}
+        {/*id={note.id}*/}
+        {/*className={cn('input-reset w-100 db pa2 m0 b')}*/}
+        {/*style={{resize: 'none'}}*/}
+        {/*rows={1}*/}
+        {/*value={text.truncateOnWord(30)}*/}
+        {/*onChange={onTextChange}*/}
+        {/*placeholder={`${sortIdx} ${id.slice(6, 6 + 6)}`}*/}
+        {/*/>*/}
+        {/*</AutoSize>*/}
+        <div className={cn('pa2 bb b--moon-gray')}>{displayText}</div>
       </div>
     )
   }
