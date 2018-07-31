@@ -30,6 +30,13 @@ const RootStore = types
     _noteMap: types.map(NoteModel),
     _sel: nullRef(NoteModel),
   })
+  .extend(self => ({
+    views: {
+      get _notes() {
+        return values(self._noteMap)
+      },
+    },
+  }))
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
