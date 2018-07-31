@@ -88,7 +88,7 @@ const RootStore = types
       forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
         insert(idx)(note)(self.notesList),
       )
-      self._noteMap.put(note)
+      self.addNote.put(note)
       setFocusAndSelectionOnDOMId(note.id)
     },
     onAddNoteAfterSelected() {
@@ -99,7 +99,7 @@ const RootStore = types
       forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
         insert(idx)(note)(self.notesList),
       )
-      self._noteMap.put(note)
+      self.addNote(note)
       setFocusAndSelectionOnDOMId(note.id)
     },
     onAddNoteBeforeSelected() {
@@ -110,7 +110,7 @@ const RootStore = types
       forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
         insert(idx)(note)(self.notesList),
       )
-      self._noteMap.put(note)
+      self.addNote(note)
       setFocusAndSelectionOnDOMId(note.id)
     },
     updateSelectedOnFocus(sel) {
