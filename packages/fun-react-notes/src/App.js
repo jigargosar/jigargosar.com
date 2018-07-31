@@ -25,8 +25,10 @@ class App extends Component {
         <div className={cn('flex flex-wrap')}>
           <div className={cn('w-100')}>
             <h1>Fun React Notes</h1>
-            <button onClick={store.onAddNote}>Add</button>
-            <button onClick={store.reset}>Reset Store</button>
+            <h4>
+              <button onClick={store.onAddNote}>Add</button>
+              <button onClick={store.reset}>Reset Store</button>
+            </h4>
           </div>
           <div className={cn('w-33 flex flex-wrap')}>
             {_map(renderNote)(notes)}
