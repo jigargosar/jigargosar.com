@@ -83,15 +83,20 @@ const RootStore = types
     addNote(note) {
       self._notesCollection.addAll([note])
     },
-    onAddNote() {
-      const idx = 0
+    addNewNote(fn) {
       const note = NoteModel.create()
-
-      forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
-        insert(idx)(note)(self.notesList),
-      )
-      self.addNote(note)
+      fn(note)
+      self._notesCollection.addAll([note])
       setFocusAndSelectionOnDOMId(note.id)
+    },
+    onAddNote() {
+      self.addNewNote(note => {
+        const idx = 0
+
+        forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
+          insert(idx)(note)(self.notesList),
+        )
+      })
     },
     onAddNoteAfterSelected() {
       const oldIdx = indexOf(self._sel)(self.notesList)
