@@ -57,12 +57,10 @@ class App extends Component {
     return (
       <textarea
         id={id}
+        className={cn('input-reset w-100 db pa2 m0 b--moon-gray')}
         style={{
-          display: 'block',
-          // width: '100%',
           resize: 'none',
           minHeight: 300,
-          // padding: 10,
         }}
         rows={1}
         value={text}
