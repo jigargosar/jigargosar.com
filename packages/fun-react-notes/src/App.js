@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {_map} from './little-ramda'
 import store from './store'
 import {
+  cn,
   FocusTrap,
   observer,
   whenKey,
@@ -21,10 +22,14 @@ class App extends Component {
           whenKey('shift+mod+enter')(store.onAddNoteBeforeSelected),
         )}
       >
-        <h1>Fun React Notes</h1>
-        <button onClick={store.onAddNote}>Add</button>
-        <button onClick={store.reset}>Reset Store</button>
-        {_map(renderNote)(notes)}
+        <div className={cn('flex flex-wrap')}>
+          <div className={cn('w-100')}>
+            <h1>Fun React Notes</h1>
+            <button onClick={store.onAddNote}>Add</button>
+            <button onClick={store.reset}>Reset Store</button>
+          </div>
+          {_map(renderNote)(notes)}
+        </div>
       </FocusTrap>
     )
 
