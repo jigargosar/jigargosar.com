@@ -1,4 +1,11 @@
-import {_prop, ascend, indexOf, insert, sortWith} from './little-ramda'
+import {
+  _prop,
+  ascend,
+  forEachIndexed,
+  indexOf,
+  insert,
+  sortWith,
+} from './little-ramda'
 import {
   addDisposer,
   applySnapshot,
@@ -7,7 +14,6 @@ import {
   nullRef,
   onSnapshot,
   types,
-  updateSortIdx,
   values,
 } from './little-mst'
 import {StorageItem} from './services/storage'
@@ -61,7 +67,9 @@ const RootStore = types
       const idx = 0
       const note = NoteModel.create()
 
-      updateSortIdx(insert(idx)(note)(self.notesList))
+      forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
+        insert(idx)(note)(self.notesList),
+      )
       self._noteMap.put(note)
       setFocusAndSelectionOnDOMId(note.id)
     },
@@ -70,7 +78,9 @@ const RootStore = types
       const idx = oldIdx < 0 ? 0 : oldIdx + 1
       const note = NoteModel.create()
 
-      updateSortIdx(insert(idx)(note)(self.notesList))
+      forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
+        insert(idx)(note)(self.notesList),
+      )
       self._noteMap.put(note)
       setFocusAndSelectionOnDOMId(note.id)
     },
@@ -79,7 +89,9 @@ const RootStore = types
       const idx = oldIdx < 0 ? 0 : oldIdx
       const note = NoteModel.create()
 
-      updateSortIdx(insert(idx)(note)(self.notesList))
+      forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
+        insert(idx)(note)(self.notesList),
+      )
       self._noteMap.put(note)
       setFocusAndSelectionOnDOMId(note.id)
     },

@@ -90,7 +90,4 @@ export const hotSnapshot = module => root => {
   }
   return root
 }
-export const updateSortIdx = forEachIndexed((m, sortIdx) =>
-  m.update({sortIdx}),
-)
 export const nullRef = _compose(types.maybeNull, types.reference)
