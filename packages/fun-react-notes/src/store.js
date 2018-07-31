@@ -1,5 +1,6 @@
 import {_prop, ascend, indexOf, insert, sortWith} from './little-ramda'
 import {
+  addDisposer,
   applySnapshot,
   hotSnapshot,
   idProp,
@@ -32,14 +33,14 @@ const RootStore = types
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
-      load() {
+      loadFromLS() {
         applySnapshot(self, ls.load())
       },
       reset() {
         applySnapshot(self, {})
       },
       saveToLSOnSnapshotChange() {
-        onSnapshot(self, ls.save)
+        addDisposer(self, onSnapshot(self, ls.save))
       },
     }
   })
@@ -82,9 +83,8 @@ const RootStore = types
 
 const store = RootStore.create()
 
-const rootSnap = StorageItem({name: 'rootSnapshot'})
-applySnapshot(store, rootSnap.load())
-onSnapshot(store, rootSnap.save)
+store.loadFromLS()
+store.saveToLSOnSnapshotChange()
 
 export default hotSnapshot(module)(store)
 
