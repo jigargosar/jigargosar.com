@@ -35,8 +35,7 @@ class App extends Component {
             {_map(renderNote)(notes)}
           </div>
           <div className={cn('')}>
-            {store.currentNote &&
-              this.renderCurrentNote(store.currentNote)}
+            {currentNote && this.renderCurrentNote(currentNote)}
           </div>
         </div>
       </FocusTrap>
@@ -52,7 +51,17 @@ class App extends Component {
   }
 
   renderCurrentNote(note) {
-    return <div>{note.text}</div>
+    const {sortIdx, id, text, onTextChange} = note
+    return (
+      <textarea
+        id={id}
+        style={{display: 'block', width: '100%', resize: 'none'}}
+        rows={1}
+        value={text}
+        onChange={onTextChange}
+        placeholder={`${sortIdx} ${id}`}
+      />
+    )
   }
 }
 
@@ -62,10 +71,8 @@ class Note extends Component {
     store.updateSelectedOnFocus(this.props.note)
   }
 
-  onChangeUpdateText = e => this.props.note.update({text: e.target.value})
-
   render({note} = this.props) {
-    const {sortIdx, id} = note
+    const {sortIdx, id, text, onTextChange} = note
     return (
       <div onFocus={this.onFocusSetSelected}>
         <AutoSize>
@@ -73,8 +80,8 @@ class Note extends Component {
             id={note.id}
             style={{display: 'block', width: '100%', resize: 'none'}}
             rows={1}
-            value={note.text}
-            onChange={this.onChangeUpdateText}
+            value={text}
+            onChange={onTextChange}
             placeholder={`${sortIdx} ${id}`}
           />
         </AutoSize>
