@@ -29,11 +29,20 @@ const RootStore = types
     notes: types.map(NoteModel),
     _sel: nullRef(NoteModel),
   })
-  .actions(self => ({
-    reset() {
-      applySnapshot(self, {})
-    },
-  }))
+  .actions(self => {
+    const ls = StorageItem({name: 'rootSnapshot'})
+    return {
+      load() {
+        applySnapshot(self, ls.load())
+      },
+      reset() {
+        applySnapshot(self, {})
+      },
+      saveToLSOnSnapshotChange() {
+        onSnapshot(self, ls.save)
+      },
+    }
+  })
   .views(self => ({
     get notesList() {
       return sortWith([ascend(_prop('sortIdx'))])(values(self.notes))
