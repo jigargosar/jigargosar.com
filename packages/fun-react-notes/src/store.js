@@ -41,7 +41,7 @@ const NoteCollection = types
   }))
   .actions(self => ({
     addAll(notes) {
-      self._notes.push(notes)
+      self._notes.push(...notes)
     },
   }))
 
@@ -88,7 +88,7 @@ const RootStore = types
       forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
         insert(idx)(note)(self.notesList),
       )
-      self.addNote.put(note)
+      self.addNote(note)
       setFocusAndSelectionOnDOMId(note.id)
     },
     onAddNoteAfterSelected() {
