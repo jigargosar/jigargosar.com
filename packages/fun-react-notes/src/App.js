@@ -39,7 +39,7 @@ class App extends Component {
 
     function renderNote(note) {
       return (
-        <div key={note.id}>
+        <div className={cn('w-100')} key={note.id}>
           <Note note={note} />
         </div>
       )
