@@ -47,7 +47,6 @@ const NoteCollection = types
 
 const RootStore = types
   .model('RootStore', {
-    _noteMap: types.map(NoteModel),
     _sel: nullRef(NoteModel),
     _notesCollection: types.optional(NoteCollection, {}),
   })
