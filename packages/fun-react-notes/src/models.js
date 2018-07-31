@@ -12,7 +12,7 @@ import {
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
 
-const Note = types
+const NoteModel = types
   .model('Note', {
     id: idProp('Note'),
     text: '',
@@ -26,8 +26,8 @@ const Note = types
 
 const RootStore = types
   .model('RootStore', {
-    notes: types.map(Note),
-    _sel: nullRef(Note),
+    notes: types.map(NoteModel),
+    _sel: nullRef(NoteModel),
   })
   .views(self => ({
     get notesList() {
@@ -37,7 +37,7 @@ const RootStore = types
   .actions(self => ({
     onAddNote() {
       const idx = 0
-      const note = Note.create()
+      const note = NoteModel.create()
 
       updateSortIdx(insert(idx)(note)(self.notesList))
       self.notes.put(note)
@@ -46,7 +46,7 @@ const RootStore = types
     onAddNoteAfterSelected() {
       const oldIdx = indexOf(self._sel)(self.notesList)
       const idx = oldIdx < 0 ? 0 : oldIdx + 1
-      const note = Note.create()
+      const note = NoteModel.create()
 
       updateSortIdx(insert(idx)(note)(self.notesList))
       self.notes.put(note)
@@ -55,7 +55,7 @@ const RootStore = types
     onAddNoteBeforeSelected() {
       const oldIdx = indexOf(self._sel)(self.notesList)
       const idx = oldIdx < 0 ? 0 : oldIdx
-      const note = Note.create()
+      const note = NoteModel.create()
 
       updateSortIdx(insert(idx)(note)(self.notesList))
       self.notes.put(note)
