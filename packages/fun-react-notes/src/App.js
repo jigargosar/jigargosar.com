@@ -58,7 +58,7 @@ class Note extends Component {
         <AutoSize>
           <textarea
             id={note.id}
-            style={{display: 'block', width: '100%'}}
+            style={{display: 'block', width: '100%', resize: 'none'}}
             rows={1}
             value={note.text}
             onChange={this.onChangeUpdateText}
