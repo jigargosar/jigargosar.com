@@ -89,7 +89,6 @@ const RootStore = types
     onAddNote() {
       self.addNewNote(note => {
         const idx = 0
-
         forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
           insert(idx)(note)(self.notesList),
         )
@@ -99,7 +98,6 @@ const RootStore = types
       self.addNewNote(note => {
         const oldIdx = indexOf(self._sel)(self.notesList)
         const idx = oldIdx < 0 ? 0 : oldIdx + 1
-
         forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
           insert(idx)(note)(self.notesList),
         )
@@ -109,7 +107,6 @@ const RootStore = types
       self.addNewNote(note => {
         const oldIdx = indexOf(self._sel)(self.notesList)
         const idx = oldIdx < 0 ? 0 : oldIdx
-
         forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
           insert(idx)(note)(self.notesList),
         )
