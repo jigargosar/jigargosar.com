@@ -14,7 +14,6 @@ import {
   nullRef,
   onSnapshot,
   types,
-  values,
 } from './little-mst'
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
@@ -31,15 +30,31 @@ const NoteModel = types
     },
   }))
 
+const NoteCollection = types
+  .model('NotesCollection', {
+    _notes: types.array(NoteModel),
+  })
+  .views(self => ({
+    get all() {
+      return sortWith([ascend(_prop('sortIdx'))])(self._notes)
+    },
+  }))
+  .actions(self => ({
+    addAll(notes) {
+      self._notes.push(notes)
+    },
+  }))
+
 const RootStore = types
   .model('RootStore', {
     _noteMap: types.map(NoteModel),
     _sel: nullRef(NoteModel),
+    _notesCollection: types.optional(NoteCollection, {}),
   })
   .extend(self => ({
     views: {
       get _notes() {
-        return values(self._noteMap)
+        return self._notesCollection.all
       },
     },
   }))
@@ -59,10 +74,13 @@ const RootStore = types
   })
   .views(self => ({
     get notesList() {
-      return sortWith([ascend(_prop('sortIdx'))])(self._notes)
+      return self._notes
     },
   }))
   .actions(self => ({
+    addNote(note) {
+      self._notesCollection.addAll([note])
+    },
     onAddNote() {
       const idx = 0
       const note = NoteModel.create()
