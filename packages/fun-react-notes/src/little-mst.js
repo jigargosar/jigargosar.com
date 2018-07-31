@@ -1,12 +1,6 @@
 import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
-import {
-  _compose,
-  _merge,
-  _path,
-  _startsWith,
-  forEachIndexed,
-} from './little-ramda'
+import {_compose, _merge, _path, _startsWith} from './little-ramda'
 
 export {
   addDisposer,
