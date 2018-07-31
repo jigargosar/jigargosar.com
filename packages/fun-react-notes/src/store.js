@@ -2,6 +2,7 @@ import {
   _prop,
   ascend,
   forEachIndexed,
+  head,
   indexOf,
   insert,
   sortWith,
@@ -74,6 +75,9 @@ const RootStore = types
   .views(self => ({
     get allNotes() {
       return self._notes
+    },
+    get currentNote() {
+      return self._sel || head(self.allNotes)
     },
   }))
   .actions(self => ({

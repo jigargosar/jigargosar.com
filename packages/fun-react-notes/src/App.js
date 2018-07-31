@@ -14,6 +14,7 @@ import {AutoSize} from './components/lib/AutoSize'
 class App extends Component {
   render() {
     const notes = store.allNotes
+    const currentNote = store.currentNote
 
     return (
       <FocusTrap
@@ -33,6 +34,10 @@ class App extends Component {
           <div className={cn('w-33 flex flex-wrap')}>
             {_map(renderNote)(notes)}
           </div>
+          <div className={cn('')}>
+            {store.currentNote &&
+              this.renderCurrentNote(store.currentNote)}
+          </div>
         </div>
       </FocusTrap>
     )
@@ -44,6 +49,10 @@ class App extends Component {
         </div>
       )
     }
+  }
+
+  renderCurrentNote(note) {
+    return <div>{note.text}</div>
   }
 }
 
