@@ -99,26 +99,24 @@ const RootStore = types
       })
     },
     onAddNoteAfterSelected() {
-      const oldIdx = indexOf(self._sel)(self.notesList)
-      const idx = oldIdx < 0 ? 0 : oldIdx + 1
-      const note = NoteModel.create()
+      self.addNewNote(note => {
+        const oldIdx = indexOf(self._sel)(self.notesList)
+        const idx = oldIdx < 0 ? 0 : oldIdx + 1
 
-      forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
-        insert(idx)(note)(self.notesList),
-      )
-      self.addNote(note)
-      setFocusAndSelectionOnDOMId(note.id)
+        forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
+          insert(idx)(note)(self.notesList),
+        )
+      })
     },
     onAddNoteBeforeSelected() {
-      const oldIdx = indexOf(self._sel)(self.notesList)
-      const idx = oldIdx < 0 ? 0 : oldIdx
-      const note = NoteModel.create()
+      self.addNewNote(note => {
+        const oldIdx = indexOf(self._sel)(self.notesList)
+        const idx = oldIdx < 0 ? 0 : oldIdx
 
-      forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
-        insert(idx)(note)(self.notesList),
-      )
-      self.addNote(note)
-      setFocusAndSelectionOnDOMId(note.id)
+        forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
+          insert(idx)(note)(self.notesList),
+        )
+      })
     },
   }))
 
