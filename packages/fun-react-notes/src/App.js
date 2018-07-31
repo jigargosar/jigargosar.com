@@ -84,18 +84,6 @@ class Note extends Component {
         id={note.id}
         onClick={this.onFocusSetSelected}
       >
-        {/*<AutoSize>*/}
-        {/*<textarea*/}
-        {/*onFocus={this.onFocusSetSelected}*/}
-        {/*id={note.id}*/}
-        {/*className={cn('input-reset w-100 db pa2 m0 b')}*/}
-        {/*style={{resize: 'none'}}*/}
-        {/*rows={1}*/}
-        {/*value={text.truncateOnWord(30)}*/}
-        {/*onChange={onTextChange}*/}
-        {/*placeholder={`${sortIdx} ${id.slice(6, 6 + 6)}`}*/}
-        {/*/>*/}
-        {/*</AutoSize>*/}
         <div
           className={cn(
             //
