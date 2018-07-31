@@ -17,25 +17,16 @@ class App extends Component {
     return (
       <FocusTrap
         onKeyDown={withKeyEvent(
-          //
           whenKey('mod+enter')(root.onAddNoteAfterSelected),
           whenKey('shift+mod+enter')(root.onAddNoteBeforeSelected),
         )}
       >
-        {renderHeader()}
+        <h1>Fun React Notes</h1>
         <button onClick={root.onAddNote}>Add</button>
         <button onClick={resetRoot}>Reset Root</button>
         {_map(renderNote)(notes)}
       </FocusTrap>
     )
-
-    function renderHeader() {
-      return (
-        <header>
-          <h1>Fun React Notes</h1>
-        </header>
-      )
-    }
 
     function renderNote(note) {
       return <Note key={note.id} note={note} />
