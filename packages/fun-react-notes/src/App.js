@@ -14,7 +14,7 @@ function renderCurrentNote(note) {
   return (
     <textarea
       id={id}
-      className={cn('input-reset w-100 db pa2 m0 b--moon-gray')}
+      className={cn('input-reset w-100 pa2 m0 b--moon-gray')}
       style={{
         resize: 'none',
         minHeight: 300,
