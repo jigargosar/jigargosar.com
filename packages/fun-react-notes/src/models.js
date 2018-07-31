@@ -24,8 +24,8 @@ const Note = types
     },
   }))
 
-const Root = types
-  .model('Root', {
+const RootStore = types
+  .model('RootStore', {
     notes: types.map(Note),
     _sel: nullRef(Note),
   })
@@ -66,7 +66,7 @@ const Root = types
     },
   }))
 
-const root = Root.create()
+const root = RootStore.create()
 
 export const resetRoot = () => applySnapshot(root, {})
 
