@@ -52,9 +52,9 @@ class Note extends Component {
   onChangeUpdateText = e => this.props.note.update({text: e.target.value})
 
   render({note} = this.props) {
+    const {sortIdx, id} = note
     return (
       <div onFocus={this.onFocusSetSelected}>
-        <div>{note.sortIdx}</div>
         <AutoSize>
           <textarea
             id={note.id}
@@ -62,6 +62,7 @@ class Note extends Component {
             rows={1}
             value={note.text}
             onChange={this.onChangeUpdateText}
+            placeholder={`${sortIdx} ${id}`}
           />
         </AutoSize>
       </div>
