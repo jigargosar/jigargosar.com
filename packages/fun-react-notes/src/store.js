@@ -80,9 +80,6 @@ const RootStore = types
     updateSelectedOnFocus(sel) {
       self._sel = sel
     },
-    addNote(note) {
-      self._notesCollection.addAll([note])
-    },
     addNewNote(fn) {
       const note = NoteModel.create()
       fn(note)
