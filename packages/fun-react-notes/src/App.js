@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {_map} from './little-ramda'
-import store, {reset} from './store'
+import store from './store'
 import {
   FocusTrap,
   observer,
@@ -23,7 +23,7 @@ class App extends Component {
       >
         <h1>Fun React Notes</h1>
         <button onClick={store.onAddNote}>Add</button>
-        <button onClick={reset}>Reset Store</button>
+        <button onClick={store.reset}>Reset Store</button>
         {_map(renderNote)(notes)}
       </FocusTrap>
     )

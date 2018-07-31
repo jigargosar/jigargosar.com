@@ -29,6 +29,11 @@ const RootStore = types
     notes: types.map(NoteModel),
     _sel: nullRef(NoteModel),
   })
+  .actions(self => ({
+    reset() {
+      applySnapshot(self, {})
+    },
+  }))
   .views(self => ({
     get notesList() {
       return sortWith([ascend(_prop('sortIdx'))])(values(self.notes))
@@ -67,8 +72,6 @@ const RootStore = types
   }))
 
 const store = RootStore.create()
-
-export const reset = () => applySnapshot(store, {})
 
 const rootSnap = StorageItem({name: 'rootSnapshot'})
 applySnapshot(store, rootSnap.load())
