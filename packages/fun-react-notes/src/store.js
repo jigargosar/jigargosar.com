@@ -77,6 +77,9 @@ const RootStore = types
     },
   }))
   .actions(self => ({
+    updateSelectedOnFocus(sel) {
+      self._sel = sel
+    },
     addNote(note) {
       self._notesCollection.addAll([note])
     },
@@ -111,9 +114,6 @@ const RootStore = types
       )
       self.addNote(note)
       setFocusAndSelectionOnDOMId(note.id)
-    },
-    updateSelectedOnFocus(sel) {
-      self._sel = sel
     },
   }))
 
