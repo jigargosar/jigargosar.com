@@ -34,7 +34,7 @@ class App extends Component {
           <div className={cn('w-33 flex flex-wrap')}>
             {_map(renderNote)(notes)}
           </div>
-          <div className={cn('')}>
+          <div className={cn('flex-auto flex')}>
             {currentNote && this.renderCurrentNote(currentNote)}
           </div>
         </div>
@@ -59,7 +59,8 @@ class App extends Component {
           display: 'block',
           width: '100%',
           resize: 'none',
-          minHeight: '300px',
+          minHeight: 300,
+          padding: 10,
         }}
         rows={1}
         value={text}
