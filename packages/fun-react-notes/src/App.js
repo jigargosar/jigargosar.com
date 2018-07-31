@@ -28,8 +28,10 @@ class App extends Component {
             </h4>
           </div>
           <div className={cn('flex-auto flex')}>
-            <div className={cn('w-33 flex flex-column')}>
-              {_map(renderNote)(store.allNotes)}
+            <div className={cn('w-33')}>
+              <div className={cn('flex flex-column')}>
+                {_map(renderNote)(store.allNotes)}
+              </div>
             </div>
             <div className={cn('flex-auto flex')}>
               {store.currentNote && (
