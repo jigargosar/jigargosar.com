@@ -72,7 +72,7 @@ const RootStore = types
     }
   })
   .views(self => ({
-    get notesList() {
+    get allNotes() {
       return self._notes
     },
   }))
@@ -90,25 +90,25 @@ const RootStore = types
       self.addNewNote(note => {
         const idx = 0
         forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
-          insert(idx)(note)(self.notesList),
+          insert(idx)(note)(self.allNotes),
         )
       })
     },
     onAddNoteAfterSelected() {
       self.addNewNote(note => {
-        const oldIdx = indexOf(self._sel)(self.notesList)
+        const oldIdx = indexOf(self._sel)(self.allNotes)
         const idx = oldIdx < 0 ? 0 : oldIdx + 1
         forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
-          insert(idx)(note)(self.notesList),
+          insert(idx)(note)(self.allNotes),
         )
       })
     },
     onAddNoteBeforeSelected() {
       self.addNewNote(note => {
-        const oldIdx = indexOf(self._sel)(self.notesList)
+        const oldIdx = indexOf(self._sel)(self.allNotes)
         const idx = oldIdx < 0 ? 0 : oldIdx
         forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
-          insert(idx)(note)(self.notesList),
+          insert(idx)(note)(self.allNotes),
         )
       })
     },

@@ -12,7 +12,7 @@ import {AutoSize} from './components/lib/AutoSize'
 @observer
 class App extends Component {
   render() {
-    const notes = store.notesList
+    const notes = store.allNotes
 
     return (
       <FocusTrap
