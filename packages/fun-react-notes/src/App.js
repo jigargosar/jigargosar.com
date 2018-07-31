@@ -9,24 +9,6 @@ import {
   withKeyEvent,
 } from './components/utils'
 
-function renderCurrentNote(note) {
-  const {sortIdx, id, text, onTextChange} = note
-  return (
-    <textarea
-      id={id}
-      className={cn('input-reset w-100 pa2 m0 b--moon-gray')}
-      style={{
-        resize: 'none',
-        minHeight: 300,
-      }}
-      rows={1}
-      value={text}
-      onChange={onTextChange}
-      placeholder={`${sortIdx} ${id}`}
-    />
-  )
-}
-
 @observer
 class App extends Component {
   render() {
@@ -53,7 +35,7 @@ class App extends Component {
               {_map(renderNote)(notes)}
             </div>
             <div className={cn('flex-auto flex')}>
-              {currentNote && renderCurrentNote(currentNote)}
+              {currentNote && <NoteEditor note={currentNote} />}
             </div>
           </div>
         </div>
@@ -67,6 +49,28 @@ class App extends Component {
         </Fragment>
       )
     }
+  }
+}
+
+@observer
+class NoteEditor extends Component {
+  render() {
+    let {note} = this.props
+    const {sortIdx, id, text, onTextChange} = note
+    return (
+      <textarea
+        id={id}
+        className={cn('input-reset w-100 pa2 m0 b--moon-gray')}
+        style={{
+          resize: 'none',
+          minHeight: 300,
+        }}
+        rows={1}
+        value={text}
+        onChange={onTextChange}
+        placeholder={`${sortIdx} ${id}`}
+      />
+    )
   }
 }
 
