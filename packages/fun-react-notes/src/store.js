@@ -53,7 +53,7 @@ const RootStore = types
   })
   .views(self => ({
     get notesList() {
-      return sortWith([ascend(_prop('sortIdx'))])(values(self._noteMap))
+      return sortWith([ascend(_prop('sortIdx'))])(self._notes)
     },
   }))
   .actions(self => ({
