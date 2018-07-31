@@ -55,7 +55,12 @@ class App extends Component {
     return (
       <textarea
         id={id}
-        style={{display: 'block', width: '100%', resize: 'none'}}
+        style={{
+          display: 'block',
+          width: '100%',
+          resize: 'none',
+          minHeight: '300px',
+        }}
         rows={1}
         value={text}
         onChange={onTextChange}
