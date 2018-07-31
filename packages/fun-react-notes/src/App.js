@@ -12,9 +12,6 @@ import {
 @observer
 class App extends Component {
   render() {
-    const notes = store.allNotes
-    const currentNote = store.currentNote
-
     return (
       <FocusTrap
         onKeyDown={withKeyEvent(
@@ -32,10 +29,12 @@ class App extends Component {
           </div>
           <div className={cn('flex-auto flex')}>
             <div className={cn('w-33 flex flex-column flex-wrap')}>
-              {_map(renderNote)(notes)}
+              {_map(renderNote)(store.allNotes)}
             </div>
             <div className={cn('flex-auto flex')}>
-              {currentNote && <NoteEditor note={currentNote} />}
+              {store.currentNote && (
+                <NoteEditor note={store.currentNote} />
+              )}
             </div>
           </div>
         </div>
