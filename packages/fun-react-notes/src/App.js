@@ -100,7 +100,16 @@ class Note extends Component {
         {/*placeholder={`${sortIdx} ${id.slice(6, 6 + 6)}`}*/}
         {/*/>*/}
         {/*</AutoSize>*/}
-        <div className={cn('pa2 bb b--moon-gray')}>{displayText}</div>
+        <div
+          className={cn(
+            //
+            'pa2',
+            'bb b--moon-gray',
+            {'blue bg-black-05': note.isSelected},
+          )}
+        >
+          {displayText}
+        </div>
       </div>
     )
   }

@@ -25,6 +25,11 @@ const NoteModel = types
     text: '',
     sortIdx: 0,
   })
+  .views(self => ({
+    get isSelected() {
+      return store.isNoteSelected(self)
+    },
+  }))
   .actions(self => ({
     update(attrs) {
       return Object.assign(self, attrs)
@@ -81,6 +86,9 @@ const RootStore = types
     },
     get currentNote() {
       return self._sel || head(self.allNotes)
+    },
+    isNoteSelected(m) {
+      return self._sel.id === m.id
     },
   }))
   .actions(self => ({
