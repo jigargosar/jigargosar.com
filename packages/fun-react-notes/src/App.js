@@ -8,7 +8,24 @@ import {
   whenKey,
   withKeyEvent,
 } from './components/utils'
-import {AutoSize} from './components/lib/AutoSize'
+
+function renderCurrentNote(note) {
+  const {sortIdx, id, text, onTextChange} = note
+  return (
+    <textarea
+      id={id}
+      className={cn('input-reset w-100 db pa2 m0 b--moon-gray')}
+      style={{
+        resize: 'none',
+        minHeight: 300,
+      }}
+      rows={1}
+      value={text}
+      onChange={onTextChange}
+      placeholder={`${sortIdx} ${id}`}
+    />
+  )
+}
 
 @observer
 class App extends Component {
@@ -36,7 +53,7 @@ class App extends Component {
               {_map(renderNote)(notes)}
             </div>
             <div className={cn('flex-auto flex')}>
-              {currentNote && this.renderCurrentNote(currentNote)}
+              {currentNote && renderCurrentNote(currentNote)}
             </div>
           </div>
         </div>
@@ -50,24 +67,6 @@ class App extends Component {
         </Fragment>
       )
     }
-  }
-
-  renderCurrentNote(note) {
-    const {sortIdx, id, text, onTextChange} = note
-    return (
-      <textarea
-        id={id}
-        className={cn('input-reset w-100 db pa2 m0 b--moon-gray')}
-        style={{
-          resize: 'none',
-          minHeight: 300,
-        }}
-        rows={1}
-        value={text}
-        onChange={onTextChange}
-        placeholder={`${sortIdx} ${id}`}
-      />
-    )
   }
 }
 
