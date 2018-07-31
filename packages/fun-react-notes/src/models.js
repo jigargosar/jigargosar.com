@@ -66,16 +66,16 @@ const RootStore = types
     },
   }))
 
-const root = RootStore.create()
+const store = RootStore.create()
 
-export const resetRoot = () => applySnapshot(root, {})
+export const resetRoot = () => applySnapshot(store, {})
 
 const rootSnap = StorageItem({name: 'rootSnapshot'})
-applySnapshot(root, rootSnap.load())
-onSnapshot(root, rootSnap.save)
+applySnapshot(store, rootSnap.load())
+onSnapshot(store, rootSnap.save)
 
-export default hotSnapshot(module)(root)
+export default hotSnapshot(module)(store)
 
 if (module.hot) {
-  window.r = root
+  window.s = store
 }
