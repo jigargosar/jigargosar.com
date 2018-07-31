@@ -77,8 +77,7 @@ class Note extends Component {
   }
 
   render({note} = this.props) {
-    const {sortIdx, id, text, onTextChange} = note
-    const displayText = (text || 'empty').truncate(30)
+    const displayText = (note.text || 'empty').truncate(30)
     return (
       <div
         className={cn('')}
