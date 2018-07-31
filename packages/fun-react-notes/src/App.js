@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {_map} from './little-ramda'
 import store from './store'
 import {
@@ -23,7 +23,7 @@ class App extends Component {
           whenKey('shift+mod+enter')(store.onAddNoteBeforeSelected),
         )}
       >
-        <div className={cn('flex flex-wrap')}>
+        <div className={cn('flex flex-column')}>
           <div className={cn('w-100')}>
             <h1>Fun React Notes</h1>
             <h4>
@@ -31,11 +31,13 @@ class App extends Component {
               <button onClick={store.reset}>Reset Store</button>
             </h4>
           </div>
-          <div className={cn('w-33 flex flex-wrap')}>
-            {_map(renderNote)(notes)}
-          </div>
           <div className={cn('flex-auto flex')}>
-            {currentNote && this.renderCurrentNote(currentNote)}
+            <div className={cn('w-33 flex flex-column flex-wrap')}>
+              {_map(renderNote)(notes)}
+            </div>
+            <div className={cn('flex-auto flex')}>
+              {currentNote && this.renderCurrentNote(currentNote)}
+            </div>
           </div>
         </div>
       </FocusTrap>
@@ -43,9 +45,9 @@ class App extends Component {
 
     function renderNote(note) {
       return (
-        <div className={cn('w-100')} key={note.id}>
+        <Fragment key={note.id}>
           <Note note={note} />
-        </div>
+        </Fragment>
       )
     }
   }
@@ -57,10 +59,10 @@ class App extends Component {
         id={id}
         style={{
           display: 'block',
-          width: '100%',
+          // width: '100%',
           resize: 'none',
           minHeight: 300,
-          padding: 10,
+          // padding: 10,
         }}
         rows={1}
         value={text}
@@ -80,11 +82,13 @@ class Note extends Component {
   render({note} = this.props) {
     const {sortIdx, id, text, onTextChange} = note
     return (
-      <div onFocus={this.onFocusSetSelected}>
+      <div className={cn('w-100')}>
         <AutoSize>
           <textarea
+            onFocus={this.onFocusSetSelected}
             id={note.id}
-            style={{display: 'block', width: '100%', resize: 'none'}}
+            className={cn('input-reset dib w-100')}
+            style={{resize: 'none'}}
             rows={1}
             value={text.truncateOnWord(30)}
             onChange={onTextChange}
