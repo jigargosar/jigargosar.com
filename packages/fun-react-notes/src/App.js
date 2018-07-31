@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {_map} from './little-ramda'
-import root, {resetRoot} from './models'
+import store, {resetRoot} from './store'
 import {
   FocusTrap,
   observer,
@@ -12,17 +12,17 @@ import {AutoSize} from './components/lib/AutoSize'
 @observer
 class App extends Component {
   render() {
-    const notes = root.notesList
+    const notes = store.notesList
 
     return (
       <FocusTrap
         onKeyDown={withKeyEvent(
-          whenKey('mod+enter')(root.onAddNoteAfterSelected),
-          whenKey('shift+mod+enter')(root.onAddNoteBeforeSelected),
+          whenKey('mod+enter')(store.onAddNoteAfterSelected),
+          whenKey('shift+mod+enter')(store.onAddNoteBeforeSelected),
         )}
       >
         <h1>Fun React Notes</h1>
-        <button onClick={root.onAddNote}>Add</button>
+        <button onClick={store.onAddNote}>Add</button>
         <button onClick={resetRoot}>Reset Root</button>
         {_map(renderNote)(notes)}
       </FocusTrap>
@@ -37,7 +37,7 @@ class App extends Component {
 @observer
 class Note extends Component {
   onFocusSetSelected = () => {
-    root.updateSelectedOnFocus(this.props.note)
+    store.updateSelectedOnFocus(this.props.note)
   }
 
   onChangeUpdateText = e => this.props.note.update({text: e.target.value})
