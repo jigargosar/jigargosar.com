@@ -68,7 +68,7 @@ const RootStore = types
 
 const store = RootStore.create()
 
-export const resetRoot = () => applySnapshot(store, {})
+export const reset = () => applySnapshot(store, {})
 
 const rootSnap = StorageItem({name: 'rootSnapshot'})
 applySnapshot(store, rootSnap.load())
