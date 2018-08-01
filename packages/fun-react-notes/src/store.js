@@ -90,7 +90,7 @@ const RootStore = types
       return self._sel || head(self.allNotes)
     },
     isNoteSelected(m) {
-      return self._sel.id === m.id
+      return self.currentNote === m
     },
   }))
   .actions(self => ({
