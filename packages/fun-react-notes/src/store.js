@@ -13,6 +13,7 @@ import {
   hotSnapshot,
   idProp,
   nullRef,
+  nullString,
   onSnapshot,
   types,
 } from './little-mst'
@@ -58,7 +59,7 @@ const RootStore = types
   .model('RootStore', {
     _notesCollection: types.optional(NoteCollection, {}),
     _sel: nullRef(NoteModel),
-    nullString: null,
+    _selId: nullString,
   })
   .extend(self => ({
     views: {
@@ -112,7 +113,7 @@ const RootStore = types
     },
     onAddNoteAfterSelected() {
       self.addNewNote(note => {
-        const oldIdx = indexOf(self._sel)(self.allNotes)
+        const oldIdx = indexOf(self.currentNote)(self.allNotes)
         const idx = oldIdx < 0 ? 0 : oldIdx + 1
         forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
           insert(idx)(note)(self.allNotes),
@@ -121,7 +122,7 @@ const RootStore = types
     },
     onAddNoteBeforeSelected() {
       self.addNewNote(note => {
-        const oldIdx = indexOf(self._sel)(self.allNotes)
+        const oldIdx = indexOf(self.currentNote)(self.allNotes)
         const idx = oldIdx < 0 ? 0 : oldIdx
         forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
           insert(idx)(note)(self.allNotes),
