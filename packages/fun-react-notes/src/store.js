@@ -10,11 +10,12 @@ import {
 import {
   addDisposer,
   applySnapshot,
+  getRoot,
   hotSnapshot,
   idProp,
-  nullRef,
   nullString,
   onSnapshot,
+  resolveIdentifier,
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
@@ -58,7 +59,6 @@ const NoteCollection = types
 const RootStore = types
   .model('RootStore', {
     _notesCollection: types.optional(NoteCollection, {}),
-    _sel: nullRef(NoteModel),
     _selId: nullString,
   })
   .extend(self => ({
@@ -87,7 +87,9 @@ const RootStore = types
       return self._notes
     },
     get currentNote() {
-      return self._sel || head(self.allNotes)
+      return self._selId
+        ? resolveIdentifier(NoteModel, getRoot(self), self._selId)
+        : head(self.allNotes)
     },
     isNoteSelected(m) {
       return self.currentNote === m
@@ -95,7 +97,7 @@ const RootStore = types
   }))
   .actions(self => ({
     updateSelectedOnFocus(sel) {
-      self._sel = sel
+      self._selId = sel.id
     },
     addNewNote(fn) {
       const note = NoteModel.create()
