@@ -80,7 +80,7 @@ class Note extends Component {
       <div
         className={cn('')}
         id={note.id}
-        onClick={() => store.updateSelectedOnFocus(this.props.note)}
+        onClick={() => store.updateSelectedOnFocus(note)}
       >
         <div
           className={cn('pa2', 'bb b--moon-gray', {

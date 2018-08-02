@@ -11,7 +11,6 @@ import {
   addDisposer,
   applySnapshot,
   getRoot,
-  hotSnapshot,
   idProp,
   nullString,
   onSnapshot,
@@ -21,17 +20,19 @@ import {
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
 
-const NoteModel = types
-  .model('Note', {
+const model = n => types.model(n)
+
+const NoteModel = model('Note')
+  .props({
     id: idProp('Note'),
     text: '',
     sortIdx: 0,
   })
   .views(self => {
-    const root = getRoot(self)
+    const root = () => getRoot(self)
     return {
       get isSelected() {
-        return root.isNoteSelected(self)
+        return root().isNoteSelected(self)
       },
     }
   })
@@ -42,8 +43,6 @@ const NoteModel = types
       onTextChange: e => update({text: e.target.value}),
     }
   })
-
-const model = types.model
 
 const NoteCollection = model('NotesCollection')
   .props({
