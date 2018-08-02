@@ -20,7 +20,7 @@ import {
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
 
-const model = n => types.model(n)
+const model = (n, p = null) => types.model(n, p)
 
 const NoteModel = model('Note')
   .props({
