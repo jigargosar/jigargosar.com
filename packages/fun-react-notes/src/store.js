@@ -95,43 +95,46 @@ const RootStore = types
       return self.currentNote === m
     },
   }))
-  .actions(self => ({
-    updateSelectedOnFocus(sel) {
-      self._selId = sel.id
-    },
-    addNewNote(fn) {
+  .actions(self => {
+    function updateSortIdx(idx, note, allNotes) {
+      forEachIndexed((n, sortIdx) => n.update({sortIdx}))(
+        insert(idx)(note)(allNotes),
+      )
+    }
+
+    function addNewNote(fn) {
       const note = NoteModel.create()
       fn(note)
       self._notesCollection.addAll([note])
       setFocusAndSelectionOnDOMId(note.id)
-    },
-    onAddNote() {
-      self.addNewNote(note => {
-        const idx = 0
-        forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
-          insert(idx)(note)(self.allNotes),
-        )
-      })
-    },
-    onAddNoteAfterSelected() {
-      self.addNewNote(note => {
-        const oldIdx = indexOf(self.currentNote)(self.allNotes)
-        const idx = oldIdx < 0 ? 0 : oldIdx + 1
-        forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
-          insert(idx)(note)(self.allNotes),
-        )
-      })
-    },
-    onAddNoteBeforeSelected() {
-      self.addNewNote(note => {
-        const oldIdx = indexOf(self.currentNote)(self.allNotes)
-        const idx = oldIdx < 0 ? 0 : oldIdx
-        forEachIndexed((m, sortIdx) => m.update({sortIdx}))(
-          insert(idx)(note)(self.allNotes),
-        )
-      })
-    },
-  }))
+    }
+
+    return {
+      updateSelectedOnFocus(sel) {
+        self._selId = sel.id
+      },
+      onAddNote() {
+        addNewNote(note => {
+          const idx = 0
+          updateSortIdx(idx, note, self.allNotes)
+        })
+      },
+      onAddNoteAfterSelected() {
+        addNewNote(note => {
+          const oldIdx = indexOf(self.currentNote)(self.allNotes)
+          const idx = oldIdx < 0 ? 0 : oldIdx + 1
+          updateSortIdx(idx, note, self.allNotes)
+        })
+      },
+      onAddNoteBeforeSelected() {
+        addNewNote(note => {
+          const oldIdx = indexOf(self.currentNote)(self.allNotes)
+          const idx = oldIdx < 0 ? 0 : oldIdx
+          updateSortIdx(idx, note, self.allNotes)
+        })
+      },
+    }
+  })
 
 const store = RootStore.create()
 
