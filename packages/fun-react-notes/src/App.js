@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react'
+import React, {Component} from 'react'
 import {_map} from './little-ramda'
 import store from './store'
 import {
@@ -8,6 +8,7 @@ import {
   whenKey,
   withKeyEvent,
 } from './components/utils'
+import {SelectionContainer} from '@zendeskgarden/react-selection'
 
 @observer
 class App extends Component {
@@ -65,39 +66,56 @@ class NoteEditor extends Component {
 
 @observer
 class NoteList extends Component {
+  state = {}
   render() {
     return (
-      <div className={cn('flex flex-column')}>
-        {_map(renderNote)(store.allNotes)}
-      </div>
+      <SelectionContainer
+        direction="vertical"
+        focusedKey={this.state.focusedKey}
+        selectedKey={store.currentNoteId}
+        onStateChange={newState => {
+          console.log(`SelectionContainer: newState`, newState)
+          if (newState.selectedKey) {
+            store.updateSelectedIdOnFocus(newState.selectedKey)
+          }
+          return this.setState(newState)
+        }}
+      >
+        {({getContainerProps, getItemProps, focusedKey, selectedKey}) => (
+          <div
+            // className={cn('flex flex-column')}
+            {...getContainerProps()}
+          >
+            {_map(note => (
+              <Note
+                {...getItemProps({
+                  key: note.id,
+                  selected: selectedKey === note.id,
+                  focused: focusedKey === note.id,
+                  note,
+                })}
+              />
+            ))(store.allNotes)}
+          </div>
+        )}
+      </SelectionContainer>
     )
-
-    function renderNote(note) {
-      return (
-        <Fragment key={note.id}>
-          <Note note={note} />
-        </Fragment>
-      )
-    }
   }
 }
 
 @observer
 class Note extends Component {
-  render({note} = this.props) {
+  render({note, focused, selected} = this.props) {
     return (
       <div
-        className={cn('')}
         id={note.id}
         onClick={() => store.updateSelectedOnFocus(note)}
+        className={cn('pa2', 'bb b--moon-gray', {
+          'blue bg-black-05': note.isSelected,
+          outline: focused,
+        })}
       >
-        <div
-          className={cn('pa2', 'bb b--moon-gray', {
-            'blue bg-black-05': note.isSelected,
-          })}
-        >
-          {(note.text || 'empty').truncate(30)}
-        </div>
+        {(note.text || 'empty').truncate(30)}
       </div>
     )
   }

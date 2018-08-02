@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@zendeskgarden/react-selection": "^4.3.2",
+    "@zendeskgarden/react-theming": "^3.1.1",
     "autobind": "^1.0.3",
     "autosize": "^4.0.2",
     "classnames": "^2.2.6",
@@ -39,6 +40,7 @@
     "react-scripts": "1.1.4",
     "react-values": "^0.2.4",
     "recompose": "^0.27.1",
+    "styled-components": "^3.3.3",
     "sugar": "^2.0.4",
     "tachyons": "^4.11.1"
   },

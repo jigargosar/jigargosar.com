@@ -5,6 +5,7 @@ import {
   head,
   indexOf,
   insert,
+  pathOr,
   sortWith,
 } from './little-ramda'
 import {
@@ -94,6 +95,9 @@ const RootStore = types
         ? resolveIdentifier(NoteModel, getRoot(self), self._selId)
         : head(self.allNotes)
     },
+    get currentNoteId() {
+      return pathOr(null)(['id', 'currentNote'])(self)
+    },
     isNoteSelected(m) {
       return self.currentNote === m
     },
@@ -115,6 +119,9 @@ const RootStore = types
     return {
       updateSelectedOnFocus(sel) {
         self._selId = sel.id
+      },
+      updateSelectedIdOnFocus(id) {
+        self._selId = id
       },
       onAddNote() {
         addNewNote(note => {

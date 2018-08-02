@@ -25,6 +25,8 @@ export {
   insertAll,
   indexOf,
   head,
+  propOr,
+  pathOr,
 } from 'ramda'
 export {default as validate} from './vendor/aproba'
 export const mapIndexed = _.addIndex(_.map)
