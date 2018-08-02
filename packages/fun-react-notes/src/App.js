@@ -55,21 +55,19 @@ class App extends Component {
 
 @observer
 class NoteEditor extends Component {
-  render() {
-    let {note} = this.props
-    const {sortIdx, id, text, onTextChange} = note
+  render({note} = this.props) {
     return (
       <textarea
-        id={id}
+        id={note.id}
         className={cn('input-reset w-100 pa2 m0 b--moon-gray')}
         style={{
           resize: 'none',
           minHeight: 300,
         }}
         rows={1}
-        value={text}
-        onChange={onTextChange}
-        placeholder={`${sortIdx} ${id}`}
+        value={note.text}
+        onChange={note.onTextChange}
+        placeholder={`${note.sortIdx} ${note.id}`}
       />
     )
   }
