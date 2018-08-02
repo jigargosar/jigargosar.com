@@ -39,9 +39,7 @@ const NoteModel = types
     update(attrs) {
       return Object.assign(self, attrs)
     },
-    onTextChange(e) {
-      self.update({text: e.target.value})
-    },
+    onTextChange: e => self.update({text: e.target.value}),
   }))
 
 const NoteCollection = types
