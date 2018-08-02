@@ -76,7 +76,6 @@ class NoteEditor extends Component {
 @observer
 class Note extends Component {
   render({note} = this.props) {
-    const displayText = (note.text || 'empty').truncate(30)
     return (
       <div
         className={cn('')}
@@ -84,14 +83,11 @@ class Note extends Component {
         onClick={() => store.updateSelectedOnFocus(this.props.note)}
       >
         <div
-          className={cn(
-            //
-            'pa2',
-            'bb b--moon-gray',
-            {'blue bg-black-05': note.isSelected},
-          )}
+          className={cn('pa2', 'bb b--moon-gray', {
+            'blue bg-black-05': note.isSelected,
+          })}
         >
-          {displayText}
+          {(note.text || 'empty').truncate(30)}
         </div>
       </div>
     )
