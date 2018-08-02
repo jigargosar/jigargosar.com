@@ -43,8 +43,10 @@ const NoteModel = types
     }
   })
 
-const NoteCollection = types
-  .model('NotesCollection', {
+const model = types.model
+
+const NoteCollection = model('NotesCollection')
+  .props({
     _notes: types.array(NoteModel),
   })
   .views(self => ({
