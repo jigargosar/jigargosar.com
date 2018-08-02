@@ -9,6 +9,13 @@
     core-js "^2.5.6"
     regenerator-runtime "^0.11.1"
 
+"@zendeskgarden/react-selection@^4.3.2":
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/@zendeskgarden/react-selection/-/react-selection-4.3.2.tgz#92ad73b1cfebbd1ee4b7e90d74d5409df017c773"
+  dependencies:
+    classnames "^2.2.5"
+    dom-helpers "^3.3.1"
+
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -1458,7 +1465,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.6:
+classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
 
@@ -2077,6 +2084,10 @@ dom-converter@~0.1:
   resolved "https://registry.yarnpkg.com/dom-converter/-/dom-converter-0.1.4.tgz#a45ef5727b890c9bffe6d7c876e7b19cb0e17f3b"
   dependencies:
     utila "~0.3"
+
+dom-helpers@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.3.1.tgz#fc1a4e15ffdf60ddde03a480a9c0fece821dd4a6"
 
 dom-serializer@0:
   version "0.1.0"

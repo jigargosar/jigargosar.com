@@ -13,6 +13,7 @@
     "jsxBracketSameLine": false
   },
   "dependencies": {
+    "@zendeskgarden/react-selection": "^4.3.2",
     "autobind": "^1.0.3",
     "autosize": "^4.0.2",
     "classnames": "^2.2.6",

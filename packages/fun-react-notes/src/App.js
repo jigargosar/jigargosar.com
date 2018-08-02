@@ -29,9 +29,7 @@ class App extends Component {
           </div>
           <div className={cn('flex-auto flex')}>
             <div className={cn('w-33')}>
-              <div className={cn('flex flex-column')}>
-                {_map(renderNote)(store.allNotes)}
-              </div>
+              <NoteList />
             </div>
             <div className={cn('flex-auto flex')}>
               {store.currentNote && (
@@ -42,14 +40,6 @@ class App extends Component {
         </div>
       </FocusTrap>
     )
-
-    function renderNote(note) {
-      return (
-        <Fragment key={note.id}>
-          <Note note={note} />
-        </Fragment>
-      )
-    }
   }
 }
 
@@ -70,6 +60,25 @@ class NoteEditor extends Component {
         placeholder={`${note.sortIdx} ${note.id}`}
       />
     )
+  }
+}
+
+@observer
+class NoteList extends Component {
+  render() {
+    return (
+      <div className={cn('flex flex-column')}>
+        {_map(renderNote)(store.allNotes)}
+      </div>
+    )
+
+    function renderNote(note) {
+      return (
+        <Fragment key={note.id}>
+          <Note note={note} />
+        </Fragment>
+      )
+    }
   }
 }
 
