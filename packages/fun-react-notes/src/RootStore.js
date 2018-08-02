@@ -35,12 +35,13 @@ const NoteModel = types
       },
     }
   })
-  .actions(self => ({
-    update(attrs) {
-      return Object.assign(self, attrs)
-    },
-    onTextChange: e => self.update({text: e.target.value}),
-  }))
+  .actions(self => {
+    const update = attrs => Object.assign(self, attrs)
+    return {
+      update,
+      onTextChange: e => update({text: e.target.value}),
+    }
+  })
 
 const NoteCollection = types
   .model('NotesCollection', {
