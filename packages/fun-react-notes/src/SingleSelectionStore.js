@@ -1,16 +1,27 @@
 import {model, nullString} from './little-mst'
-import {_compose, _merge, defaultTo, isNil, mathMod} from './little-ramda'
+import {
+  _compose,
+  _merge,
+  _when,
+  defaultTo,
+  head,
+  isNil,
+  mathMod,
+} from './little-ramda'
 import {whenKeyPD, withKeyEvent} from './components/utils'
 
 export const SingleSelectionStore = model('SingleSelectionStore')
   .props({
-    selectedKey: nullString,
+    _selectedKey: nullString,
     // keys: optional(stringArray, []),
   })
   .volatile(self => ({
     keys: [],
   }))
   .views(self => ({
+    get selectedKey() {
+      return _when(isNil)(() => head(self.keys))(self._selectedKey)
+    },
     get selectedKeyIdx() {
       if (self.keys.length === 0) {
         return NaN
