@@ -53,16 +53,16 @@ const NoteModel = model('Note')
 
 const NoteCollection = model('NotesCollection')
   .props({
-    _notes: types.array(NoteModel),
+    notes: types.array(NoteModel),
   })
   .views(self => ({
     get all() {
-      return sortWith([ascend(_prop('sortIdx'))])(self._notes)
+      return sortWith([ascend(_prop('sortIdx'))])(self.notes)
     },
   }))
   .actions(self => ({
     addAll(notes) {
-      self._notes.push(...notes)
+      self.notes.push(...notes)
     },
   }))
 
