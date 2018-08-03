@@ -66,20 +66,13 @@ class NoteEditor extends Component {
 
 @observer
 class NoteList extends Component {
-  state = {}
   render() {
     return (
       <SelectionContainer
         direction="vertical"
-        focusedKey={this.state.focusedKey}
-        selectedKey={store.currentNoteId}
-        onStateChange={newState => {
-          console.log(`SelectionContainer: newState`, newState)
-          if (newState.selectedKey) {
-            store.updateSelectedIdOnFocus(newState.selectedKey)
-          }
-          return this.setState(newState)
-        }}
+        focusedKey={store.focusedKey}
+        selectedKey={store.selectedKey}
+        onStateChange={store.setSelectionState}
       >
         {({getContainerProps, getItemProps, focusedKey, selectedKey}) => (
           <div
@@ -90,8 +83,6 @@ class NoteList extends Component {
               <Note
                 {...getItemProps({
                   key: note.id,
-                  selected: selectedKey === note.id,
-                  focused: focusedKey === note.id,
                   note,
                 })}
               />
@@ -105,14 +96,15 @@ class NoteList extends Component {
 
 @observer
 class Note extends Component {
-  render({note, focused, selected} = this.props) {
+  render({note, ...other} = this.props) {
     return (
       <div
+        {...other}
         id={note.id}
-        onClick={() => store.updateSelectedOnFocus(note)}
+        // onClick={() => store.updateSelectedOnFocus(note)}
         className={cn('pa2', 'bb b--moon-gray', {
-          'blue bg-black-05': selected,
-          outline: focused,
+          'blue bg-black-05': note.isSelected,
+          outline: note.isFocused,
         })}
       >
         {(note.text || 'empty').truncate(30)}

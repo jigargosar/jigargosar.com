@@ -35,6 +35,9 @@ const NoteModel = model('Note')
       get isSelected() {
         return root().isNoteSelected(self)
       },
+      get isFocused() {
+        return root().isNoteFocused(self)
+      },
     }
   })
   .actions(self => {
@@ -63,10 +66,14 @@ const NoteCollection = model('NotesCollection')
 const RootStore = types
   .model('RootStore', {
     _notesCollection: types.optional(NoteCollection, {}),
-    _selId: nullString,
+    selectedKey: nullString,
+    focusedKey: nullString,
   })
   .extend(self => ({
     views: {
+      get _selId() {
+        return self.selectedKey
+      },
       get _notes() {
         return self._notesCollection.all
       },
@@ -99,7 +106,10 @@ const RootStore = types
       return pathOr(null)(['id', 'currentNote'])(self)
     },
     isNoteSelected(m) {
-      return self.currentNote === m
+      return self._selId === m.id
+    },
+    isNoteFocused(m) {
+      return self.focusedKey === m.id
     },
   }))
   .actions(self => {
@@ -117,11 +127,14 @@ const RootStore = types
     }
 
     return {
-      updateSelectedOnFocus(sel) {
-        self._selId = sel.id
-      },
-      updateSelectedIdOnFocus(id) {
-        self._selId = id
+      // updateSelectedOnFocus(sel) {
+      //   self._selId = sel.id
+      // },
+      // updateSelectedIdOnFocus(id) {
+      //   self._selId = id
+      // },
+      setSelectionState(selectionState) {
+        Object.assign(self, selectionState)
       },
       onAddNote() {
         addNewNote(note => {
