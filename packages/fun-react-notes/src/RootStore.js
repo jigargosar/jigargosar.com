@@ -11,6 +11,7 @@ import {
 import {
   addDisposer,
   applySnapshot,
+  autorun,
   getRoot,
   idProp,
   nullString,
@@ -64,18 +65,14 @@ const NoteCollection = model('NotesCollection')
   }))
 
 const optional = (t, dv = {}) => types.optional(t, dv)
+const stringArray = types.array(types.string)
 
 const SingleSelectionController = model('SingleSelectionController')
   //
   .props({
     selectedKey: nullString,
     focusedKey: nullString,
-    state: optional(
-      types.model({
-        selectedKey: nullString,
-        focusedKey: nullString,
-      }),
-    ),
+    keys: optional(stringArray, []),
   })
   .views(self => ({
     getContainerProps(props = {}) {
@@ -105,6 +102,9 @@ const SingleSelectionController = model('SingleSelectionController')
     setSelectedKey(key) {
       self.selectedKey = key
     },
+    setKeys(keys) {
+      self.keys = keys
+    },
   }))
 
 const RootStore = types
@@ -123,6 +123,16 @@ const RootStore = types
       get selectedKey() {
         return self.ns.selectedKey
       },
+    },
+  }))
+  .actions(self => ({
+    afterCreate() {
+      addDisposer(
+        self,
+        autorun(() => {
+          self.ns.setKeys(self.allNotes.map(_prop('id')))
+        }),
+      )
     },
   }))
   .actions(self => {
