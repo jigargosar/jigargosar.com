@@ -88,19 +88,19 @@ const SingleSelectionController = model('SingleSelectionController')
       return idx === -1 ? NaN : idx
     },
     getContainerProps(props = {}) {
-      return _merge(
-        {
-          onBlur: () => {},
-          onFocus: () => {},
-          onKeyDown: withKeyEvent(
-            whenKeyPD('down')(self.selectNext),
-            whenKeyPD('up')(self.selectPrev),
-          ),
-          onMouseDown: () => {},
-          tabIndex: 0,
-        },
-        props,
-      )
+      return _merge(self.containerProps, props)
+    },
+    get containerProps() {
+      return {
+        onBlur: () => {},
+        onFocus: () => {},
+        onKeyDown: withKeyEvent(
+          whenKeyPD('down')(self.selectNext),
+          whenKeyPD('up')(self.selectPrev),
+        ),
+        onMouseDown: () => {},
+        tabIndex: 0,
+      }
     },
     getItemProps(props = {}) {
       return _merge(
