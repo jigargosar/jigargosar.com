@@ -88,6 +88,14 @@ const SingleSelectionController = model('SingleSelectionController')
         props,
       )
     },
+    getItemProps(props = {}) {
+      return _merge(
+        {
+          onClick: () => {},
+        },
+        props,
+      )
+    },
   }))
 
 const RootStore = types
