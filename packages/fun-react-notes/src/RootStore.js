@@ -86,8 +86,11 @@ const SingleSelectionController = model('SingleSelectionController')
   })
   .views(self => ({
     get selectedKeyIdx() {
+      if (self.keys.length === 0) {
+        return NaN
+      }
       const idx = self.keys.indexOf(self.selectedKey)
-      return idx === -1 ? NaN : idx
+      return idx === -1 ? 0 : idx
     },
     getContainerProps(props = {}) {
       return _merge(self.containerProps, props)
