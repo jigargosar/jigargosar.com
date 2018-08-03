@@ -1,4 +1,5 @@
 import {
+  _merge,
   _prop,
   ascend,
   forEachIndexed,
@@ -74,6 +75,20 @@ const SingleSelectionController = model('SingleSelectionController')
       }),
     ),
   })
+  .views(self => ({
+    geContainerProps(props = {}) {
+      return _merge(
+        {
+          onBlur: () => {},
+          onFocus: () => {},
+          onKeyDown: () => {},
+          onMouseDown: () => {},
+          tabIndex: 0,
+        },
+        props,
+      )
+    },
+  }))
 
 const RootStore = types
   .model('RootStore', {
