@@ -76,7 +76,7 @@ const SingleSelectionController = model('SingleSelectionController')
     ),
   })
   .views(self => ({
-    geContainerProps(props = {}) {
+    getContainerProps(props = {}) {
       return _merge(
         {
           onBlur: () => {},
