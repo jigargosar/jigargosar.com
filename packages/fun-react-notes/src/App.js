@@ -76,33 +76,6 @@ class NoteList extends Component {
   }
 }
 
-// @observer
-// class NoteList extends Component {
-//   render() {
-//     return (
-//       <SelectionContainer
-//         direction="vertical"
-//         focusedKey={store.focusedKey}
-//         selectedKey={store.selectedKey}
-//         onStateChange={store.setSelectionState}
-//       >
-//         {({getContainerProps, getItemProps}) => (
-//           <div {...getContainerProps()}>
-//             {_map(note => (
-//               <Note
-//                 {...getItemProps({
-//                   key: note.id,
-//                   note,
-//                 })}
-//               />
-//             ))(store.allNotes)}
-//           </div>
-//         )}
-//       </SelectionContainer>
-//     )
-//   }
-// }
-//
 @observer
 class Note extends Component {
   render({note, ...other} = this.props) {
