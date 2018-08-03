@@ -45,11 +45,10 @@ const NoteModel = model('Note')
         return root().isNoteSelected(self)
       },
       get isFocused() {
-        // return root().isNoteFocused(self)
-        return false
+        return root().isNoteFocused(self)
       },
       get listItemProps() {
-        return root()._sel.getItemProps({key: self.id, note: self})
+        return root().getNoteListItemProps(self)
       },
     }
   })
@@ -183,6 +182,12 @@ const RootStore = types
     },
     isNoteSelected(m) {
       return self.selectedNoteId === m.id
+    },
+    isNoteFocused(m) {
+      return false
+    },
+    getNoteListItemProps(note) {
+      return self._sel.getItemProps({key: note.id, note})
     },
   }))
   .actions(self => {
