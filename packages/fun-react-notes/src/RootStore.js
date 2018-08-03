@@ -89,7 +89,10 @@ const SingleSelectionController = model('SingleSelectionController')
         {
           onBlur: () => {},
           onFocus: () => {},
-          onKeyDown: withKeyEvent(whenKeyPD('down')(self.selectNext)),
+          onKeyDown: withKeyEvent(
+            whenKeyPD('down')(self.selectNext),
+            whenKeyPD('up')(self.selectPrev),
+          ),
           onMouseDown: () => {},
           tabIndex: 0,
         },
