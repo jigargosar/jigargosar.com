@@ -1,5 +1,4 @@
 import {
-  _,
   _prop,
   ascend,
   forEachIndexed,
@@ -71,12 +70,10 @@ const RootStore = types
   })
   .extend(self => ({
     views: {
-      get _selId() {
-        return self.selectedKey
-      },
       get _notes() {
         return self._notesCollection.all
       },
+      get defaultFocusedIndex() {},
     },
   }))
   .actions(self => {
@@ -110,7 +107,7 @@ const RootStore = types
       return self.focusedKey
     },
     isNoteSelected(m) {
-      return _.equals(self.selectedNoteId, m.id)
+      return self.selectedNoteId === m.id
     },
     isNoteFocused(m) {
       return self.focusedNoteId === m.id
@@ -131,12 +128,6 @@ const RootStore = types
     }
 
     return {
-      // updateSelectedOnFocus(sel) {
-      //   self._selId = sel.id
-      // },
-      // updateSelectedIdOnFocus(id) {
-      //   self._selId = id
-      // },
       setSelectionState(selectionState) {
         Object.assign(self, selectionState)
       },
