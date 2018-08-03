@@ -33,9 +33,7 @@ class App extends Component {
               <NoteList />
             </div>
             <div className={cn('flex-auto flex')}>
-              {store.selectedNote && (
-                <NoteEditor note={store.selectedNote} />
-              )}
+              <NoteEditor />
             </div>
           </div>
         </div>
@@ -46,7 +44,10 @@ class App extends Component {
 
 @observer
 class NoteEditor extends Component {
-  render({note} = this.props) {
+  render({note} = store.selectedNote) {
+    if (!note) {
+      return null
+    }
     return (
       <textarea
         id={note.id}
