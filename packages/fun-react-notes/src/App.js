@@ -44,7 +44,7 @@ class App extends Component {
 
 @observer
 class NoteEditor extends Component {
-  render({note} = store.selectedNote) {
+  render(note = store.selectedNote) {
     if (!note) {
       return null
     }
