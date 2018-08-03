@@ -1,11 +1,14 @@
 import {
+  _compose,
   _merge,
   _prop,
   ascend,
+  defaultTo,
   forEachIndexed,
   head,
   indexOf,
   insert,
+  isNil,
   mathMod,
   sortWith,
 } from './little-ramda'
@@ -118,12 +121,18 @@ const SingleSelectionController = model('SingleSelectionController')
       self.keys = keys
     },
     selectNext() {
-      const nextIdx = mathMod(self.selectedKeyIdx + 1, self.keys.length)
-      self.selectedKey = nextIdx ? self.keys[nextIdx] : null
+      const nextIdx = _compose(defaultTo(null), mathMod)(
+        self.selectedKeyIdx + 1,
+        self.keys.length,
+      )
+      self.selectedKey = isNil(nextIdx) ? null : self.keys[nextIdx]
     },
     selectPrev() {
-      const nextIdx = mathMod(self.selectedKeyIdx - 1, self.keys.length)
-      self.selectedKey = nextIdx ? self.keys[nextIdx] : null
+      const nextIdx = _compose(defaultTo(null), mathMod)(
+        self.selectedKeyIdx - 1,
+        self.keys.length,
+      )
+      self.selectedKey = isNil(nextIdx) ? null : self.keys[nextIdx]
     },
   }))
 

@@ -29,6 +29,7 @@ export {
   pathOr,
   mathMod,
   defaultTo,
+  isNil,
 } from 'ramda'
 export {default as validate} from './vendor/aproba'
 export const mapIndexed = _.addIndex(_.map)
