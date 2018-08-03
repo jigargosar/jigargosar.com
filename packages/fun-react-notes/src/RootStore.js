@@ -68,6 +68,8 @@ const optional = (t, dv = {}) => types.optional(t, dv)
 const SingleSelectionController = model('SingleSelectionController')
   //
   .props({
+    selectedKey: nullString,
+    focusedKey: nullString,
     state: optional(
       types.model({
         selectedKey: nullString,
@@ -76,24 +78,39 @@ const SingleSelectionController = model('SingleSelectionController')
     ),
   })
   .views(self => ({
-    get containerProps() {
-      return {
-        onBlur: () => {},
-        onFocus: () => {},
-        onKeyDown: () => {},
-        onMouseDown: () => {},
-        tabIndex: 0,
-      }
+    getContainerProps(props = {}) {
+      return _merge(
+        {
+          onBlur: () => {},
+          onFocus: () => {},
+          onKeyDown: () => {},
+          onMouseDown: () => {},
+          tabIndex: 0,
+        },
+        props,
+      )
     },
     getItemProps(props = {}) {
-      return {onClick: () => {}}
+      return _merge(
+        {
+          onClick: () => {
+            self.setSelectedKey(props.key)
+          },
+        },
+        props,
+      )
+    },
+  }))
+  .actions(self => ({
+    setSelectedKey(key) {
+      self.selectedKey = key
     },
   }))
 
 const RootStore = types
   .model('RootStore', {
     _notesCollection: optional(NoteCollection),
-    selectedKey: nullString,
+    // selectedKey: nullString,
     focusedKey: nullString,
     ns: optional(SingleSelectionController),
   })
@@ -101,6 +118,10 @@ const RootStore = types
     views: {
       get _notes() {
         return self._notesCollection.all
+      },
+      set selectedKey(v) {},
+      get selectedKey() {
+        return self.ns.selectedKey
       },
     },
   }))
