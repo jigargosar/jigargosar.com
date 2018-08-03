@@ -48,6 +48,9 @@ const NoteModel = model('Note')
         // return root().isNoteFocused(self)
         return false
       },
+      get listItemProps() {
+        return root()._sel.getItemProps({key: self.id, note: self})
+      },
     }
   })
   .actions(self => {
@@ -174,6 +177,9 @@ const RootStore = types
     },
     get selectedNoteId() {
       return self.selectedNote ? self.selectedNote.id : null
+    },
+    get noteListProps() {
+      return self._sel.getContainerProps()
     },
     isNoteSelected(m) {
       return self.selectedNoteId === m.id

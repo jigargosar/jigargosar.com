@@ -69,15 +69,8 @@ class NoteEditor extends Component {
 class NoteList extends Component {
   render() {
     return (
-      <div {...store.ns.containerProps}>
-        {_map(note => (
-          <Note
-            {...store.ns.getItemProps({
-              key: note.id,
-              note,
-            })}
-          />
-        ))(store.allNotes)}
+      <div {...store.noteListProps}>
+        {_map(note => <Note {...note.listItemProps} />)(store.allNotes)}
       </div>
     )
   }
