@@ -76,25 +76,17 @@ const SingleSelectionController = model('SingleSelectionController')
     ),
   })
   .views(self => ({
-    getContainerProps(props = {}) {
-      return _merge(
-        {
-          onBlur: () => {},
-          onFocus: () => {},
-          onKeyDown: () => {},
-          onMouseDown: () => {},
-          tabIndex: 0,
-        },
-        props,
-      )
+    get containerProps() {
+      return {
+        onBlur: () => {},
+        onFocus: () => {},
+        onKeyDown: () => {},
+        onMouseDown: () => {},
+        tabIndex: 0,
+      }
     },
     getItemProps(props = {}) {
-      return _merge(
-        {
-          onClick: () => {},
-        },
-        props,
-      )
+      return {onClick: () => {}}
     },
   }))
 
