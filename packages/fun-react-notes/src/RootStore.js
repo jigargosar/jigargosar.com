@@ -71,16 +71,6 @@ const RootStore = types
     _notesCollection: optional(NoteCollection),
     _sel: optional(SingleSelectionStore),
   })
-  .actions(self => ({
-    afterCreate() {
-      addDisposer(
-        self,
-        autorun(() => {
-          self._sel.setKeys(self.allNotes.map(_prop('id')))
-        }),
-      )
-    },
-  }))
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
@@ -95,6 +85,16 @@ const RootStore = types
       },
     }
   })
+  .actions(self => ({
+    afterCreate() {
+      addDisposer(
+        self,
+        autorun(() => {
+          self._sel.setKeys(self.allNotes.map(_prop('id')))
+        }),
+      )
+    },
+  }))
   .views(self => ({
     get allNotes() {
       return self._notesCollection.all
