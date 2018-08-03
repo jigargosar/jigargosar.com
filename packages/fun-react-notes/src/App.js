@@ -33,8 +33,8 @@ class App extends Component {
               <NoteList />
             </div>
             <div className={cn('flex-auto flex')}>
-              {store.currentNote && (
-                <NoteEditor note={store.currentNote} />
+              {store.selectedNote && (
+                <NoteEditor note={store.selectedNote} />
               )}
             </div>
           </div>

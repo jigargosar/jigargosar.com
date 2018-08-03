@@ -1,11 +1,11 @@
 import {
+  _,
   _prop,
   ascend,
   forEachIndexed,
   head,
   indexOf,
   insert,
-  pathOr,
   sortWith,
 } from './little-ramda'
 import {
@@ -97,19 +97,23 @@ const RootStore = types
     get allNotes() {
       return self._notes
     },
-    get currentNote() {
-      return self._selId
-        ? resolveIdentifier(NoteModel, getRoot(self), self._selId)
+    get selectedNote() {
+      const id = self.selectedKey
+      return id
+        ? resolveIdentifier(NoteModel, getRoot(self), id)
         : head(self.allNotes)
     },
-    get currentNoteId() {
-      return pathOr(null)(['id', 'currentNote'])(self)
+    get selectedNoteId() {
+      return self.selectedNote ? self.selectedNote.id : null
+    },
+    get focusedNoteId() {
+      return self.focusedKey
     },
     isNoteSelected(m) {
-      return self._selId === m.id
+      return _.equals(self.selectedNoteId, m.id)
     },
     isNoteFocused(m) {
-      return self.focusedKey === m.id
+      return self.focusedNoteId === m.id
     },
   }))
   .actions(self => {
@@ -144,14 +148,14 @@ const RootStore = types
       },
       onAddNoteAfterSelected() {
         addNewNote(note => {
-          const oldIdx = indexOf(self.currentNote)(self.allNotes)
+          const oldIdx = indexOf(self.selectedNote)(self.allNotes)
           const idx = oldIdx < 0 ? 0 : oldIdx + 1
           updateSortIdx(idx, note, self.allNotes)
         })
       },
       onAddNoteBeforeSelected() {
         addNewNote(note => {
-          const oldIdx = indexOf(self.currentNote)(self.allNotes)
+          const oldIdx = indexOf(self.selectedNote)(self.allNotes)
           const idx = oldIdx < 0 ? 0 : oldIdx
           updateSortIdx(idx, note, self.allNotes)
         })
