@@ -62,19 +62,30 @@ const NoteCollection = model('NotesCollection')
     },
   }))
 
+const optional = (t, dv = {}) => types.optional(t, dv)
+
+const SingleSelectionController = model('SingleSelectionController')
+  //
+  .props({
+    state: optional(
+      types.model({
+        selectedKey: nullString,
+        focusedKey: nullString,
+      }),
+    ),
+  })
+
 const RootStore = types
   .model('RootStore', {
-    _notesCollection: types.optional(NoteCollection, {}),
+    _notesCollection: optional(NoteCollection),
     selectedKey: nullString,
     focusedKey: nullString,
+    ns: optional(SingleSelectionController),
   })
   .extend(self => ({
     views: {
       get _notes() {
         return self._notesCollection.all
-      },
-      get defaultFocusedIndex() {
-        return self.allNotes.indexOf(self.selectedNote)
       },
     },
   }))
