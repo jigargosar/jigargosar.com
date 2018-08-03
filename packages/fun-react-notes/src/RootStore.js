@@ -6,6 +6,7 @@ import {
   head,
   indexOf,
   insert,
+  mathMod,
   sortWith,
 } from './little-ramda'
 import {
@@ -20,7 +21,11 @@ import {
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
-import {setFocusAndSelectionOnDOMId} from './components/utils'
+import {
+  setFocusAndSelectionOnDOMId,
+  whenKeyPD,
+  withKeyEvent,
+} from './components/utils'
 
 const model = (n, p = null) => types.model(n, p)
 
@@ -75,12 +80,16 @@ const SingleSelectionController = model('SingleSelectionController')
     keys: optional(stringArray, []),
   })
   .views(self => ({
+    get selectedKeyIdx() {
+      const idx = self.keys.indexOf(self.selectedKey)
+      return idx === -1 ? NaN : idx
+    },
     getContainerProps(props = {}) {
       return _merge(
         {
           onBlur: () => {},
           onFocus: () => {},
-          onKeyDown: () => {},
+          onKeyDown: withKeyEvent(whenKeyPD('down')(self.selectNext)),
           onMouseDown: () => {},
           tabIndex: 0,
         },
@@ -104,6 +113,22 @@ const SingleSelectionController = model('SingleSelectionController')
     },
     setKeys(keys) {
       self.keys = keys
+    },
+    selectNext() {
+      if (self.keys.length === 0 || !self.selectedKeyIdx) {
+        self.selectedKey = null
+        return
+      }
+      const nextIdx =
+        self.selectedKeyIdx + 1 >= self.keys.length
+          ? 0
+          : self.selectedKeyIdx + 1
+
+      self.selectedKey = self.keys[nextIdx]
+    },
+    selectPrev() {
+      const nextIdx = mathMod(self.selectedKeyIdx - 1, self.keys.length)
+      self.selectedKey = nextIdx ? self.keys[nextIdx] : null
     },
   }))
 

@@ -27,7 +27,13 @@ export {
   head,
   propOr,
   pathOr,
+  mathMod,
+  defaultTo,
 } from 'ramda'
 export {default as validate} from './vendor/aproba'
 export const mapIndexed = _.addIndex(_.map)
 export const forEachIndexed = _.addIndex(_.forEach)
+
+if (module.hot) {
+  window._ = _
+}
