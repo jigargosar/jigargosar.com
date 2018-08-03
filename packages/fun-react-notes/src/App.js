@@ -72,6 +72,7 @@ class NoteList extends Component {
         direction="vertical"
         focusedKey={store.focusedKey}
         selectedKey={store.selectedKey}
+        defaultFocusedIndex={store.defaultFocusedIndex}
         onStateChange={store.setSelectionState}
       >
         {({getContainerProps, getItemProps, focusedKey, selectedKey}) => (

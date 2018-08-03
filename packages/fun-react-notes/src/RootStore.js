@@ -73,7 +73,9 @@ const RootStore = types
       get _notes() {
         return self._notesCollection.all
       },
-      get defaultFocusedIndex() {},
+      get defaultFocusedIndex() {
+        return self.allNotes.indexOf(self.selectedNote)
+      },
     },
   }))
   .actions(self => {
