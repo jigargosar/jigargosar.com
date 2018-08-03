@@ -22,7 +22,6 @@ import {
   onSnapshot,
   optional,
   resolveIdentifier,
-  stringArray,
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'

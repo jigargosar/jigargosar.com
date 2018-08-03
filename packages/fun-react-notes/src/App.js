@@ -8,7 +8,6 @@ import {
   whenKey,
   withKeyEvent,
 } from './components/utils'
-import {SelectionContainer} from '@zendeskgarden/react-selection'
 
 @observer
 class App extends Component {
