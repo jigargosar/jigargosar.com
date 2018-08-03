@@ -54,7 +54,7 @@ export const SingleSelectionStore = model('SingleSelectionStore')
   }))
   .actions(self => ({
     setSelectedKey(key) {
-      self.selectedKey = key
+      self._selectedKey = key
     },
     setKeys(keys) {
       self.keys = keys
@@ -64,13 +64,13 @@ export const SingleSelectionStore = model('SingleSelectionStore')
         self.selectedKeyIdx + 1,
         self.keys.length,
       )
-      self.selectedKey = isNil(nextIdx) ? null : self.keys[nextIdx]
+      self.setSelectedKey(isNil(nextIdx) ? null : self.keys[nextIdx])
     },
     selectPrev() {
       const nextIdx = _compose(defaultTo(null), mathMod)(
         self.selectedKeyIdx - 1,
         self.keys.length,
       )
-      self.selectedKey = isNil(nextIdx) ? null : self.keys[nextIdx]
+      self.setSelectedKey(isNil(nextIdx) ? null : self.keys[nextIdx])
     },
   }))
