@@ -45,7 +45,8 @@ const NoteModel = model('Note')
         return root().isNoteSelected(self)
       },
       get isFocused() {
-        return root().isNoteFocused(self)
+        // return root().isNoteFocused(self)
+        return false
       },
     }
   })
@@ -79,7 +80,6 @@ const SingleSelectionController = model('SingleSelectionController')
   //
   .props({
     selectedKey: nullString,
-    focusedKey: nullString,
     keys: optional(stringArray, []),
   })
   .views(self => ({
@@ -92,13 +92,10 @@ const SingleSelectionController = model('SingleSelectionController')
     },
     get containerProps() {
       return {
-        onBlur: () => {},
-        onFocus: () => {},
         onKeyDown: withKeyEvent(
           whenKeyPD('down')(self.selectNext),
           whenKeyPD('up')(self.selectPrev),
         ),
-        onMouseDown: () => {},
         tabIndex: 0,
       }
     },
@@ -139,27 +136,14 @@ const SingleSelectionController = model('SingleSelectionController')
 const RootStore = types
   .model('RootStore', {
     _notesCollection: optional(NoteCollection),
-    // selectedKey: nullString,
-    focusedKey: nullString,
-    ns: optional(SingleSelectionController),
+    _sel: optional(SingleSelectionController),
   })
-  .extend(self => ({
-    views: {
-      get _notes() {
-        return self._notesCollection.all
-      },
-      set selectedKey(v) {},
-      get selectedKey() {
-        return self.ns.selectedKey
-      },
-    },
-  }))
   .actions(self => ({
     afterCreate() {
       addDisposer(
         self,
         autorun(() => {
-          self.ns.setKeys(self.allNotes.map(_prop('id')))
+          self._sel.setKeys(self.allNotes.map(_prop('id')))
         }),
       )
     },
@@ -180,10 +164,10 @@ const RootStore = types
   })
   .views(self => ({
     get allNotes() {
-      return self._notes
+      return self._notesCollection.all
     },
     get selectedNote() {
-      const id = self.selectedKey
+      const id = self._sel.selectedKey
       return id
         ? resolveIdentifier(NoteModel, getRoot(self), id)
         : head(self.allNotes)
@@ -191,14 +175,8 @@ const RootStore = types
     get selectedNoteId() {
       return self.selectedNote ? self.selectedNote.id : null
     },
-    get focusedNoteId() {
-      return self.focusedKey
-    },
     isNoteSelected(m) {
       return self.selectedNoteId === m.id
-    },
-    isNoteFocused(m) {
-      return self.focusedNoteId === m.id
     },
   }))
   .actions(self => {
@@ -216,9 +194,6 @@ const RootStore = types
     }
 
     return {
-      setSelectionState(selectionState) {
-        Object.assign(self, selectionState)
-      },
       onAddNote() {
         addNewNote(note => {
           const idx = 0
