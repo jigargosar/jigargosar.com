@@ -76,7 +76,7 @@ const NoteCollection = model('NotesCollection')
     },
   }))
 
-const SingleSelectionController = model('SingleSelectionController')
+const SingleSelectionStore = model('SingleSelectionStore')
   .props({
     selectedKey: nullString,
     // keys: optional(stringArray, []),
@@ -141,7 +141,7 @@ const SingleSelectionController = model('SingleSelectionController')
 const RootStore = types
   .model('RootStore', {
     _notesCollection: optional(NoteCollection),
-    _sel: optional(SingleSelectionController),
+    _sel: optional(SingleSelectionStore),
   })
   .actions(self => ({
     afterCreate() {
