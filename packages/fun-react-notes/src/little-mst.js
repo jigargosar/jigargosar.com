@@ -86,3 +86,5 @@ export const hotSnapshot = module => root => {
 }
 export const nullRef = _compose(types.maybeNull, types.reference)
 export const nullString = types.maybeNull(types.string)
+export const optional = (t, dv = {}) => types.optional(t, dv)
+export const stringArray = types.array(types.string)

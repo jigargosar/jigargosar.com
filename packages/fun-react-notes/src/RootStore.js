@@ -20,7 +20,9 @@ import {
   idProp,
   nullString,
   onSnapshot,
+  optional,
   resolveIdentifier,
+  stringArray,
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
@@ -75,11 +77,7 @@ const NoteCollection = model('NotesCollection')
     },
   }))
 
-const optional = (t, dv = {}) => types.optional(t, dv)
-const stringArray = types.array(types.string)
-
 const SingleSelectionController = model('SingleSelectionController')
-  //
   .props({
     selectedKey: nullString,
     keys: optional(stringArray, []),
