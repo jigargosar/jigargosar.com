@@ -115,16 +115,8 @@ const SingleSelectionController = model('SingleSelectionController')
       self.keys = keys
     },
     selectNext() {
-      if (self.keys.length === 0 || !self.selectedKeyIdx) {
-        self.selectedKey = null
-        return
-      }
-      const nextIdx =
-        self.selectedKeyIdx + 1 >= self.keys.length
-          ? 0
-          : self.selectedKeyIdx + 1
-
-      self.selectedKey = self.keys[nextIdx]
+      const nextIdx = mathMod(self.selectedKeyIdx + 1, self.keys.length)
+      self.selectedKey = nextIdx ? self.keys[nextIdx] : null
     },
     selectPrev() {
       const nextIdx = mathMod(self.selectedKeyIdx - 1, self.keys.length)
