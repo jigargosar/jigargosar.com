@@ -80,8 +80,11 @@ const NoteCollection = model('NotesCollection')
 const SingleSelectionController = model('SingleSelectionController')
   .props({
     selectedKey: nullString,
-    keys: optional(stringArray, []),
+    // keys: optional(stringArray, []),
   })
+  .volatile(self => ({
+    keys: [],
+  }))
   .views(self => ({
     get selectedKeyIdx() {
       if (self.keys.length === 0) {
