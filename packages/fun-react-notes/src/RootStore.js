@@ -1,15 +1,10 @@
 import {
-  _compose,
-  _merge,
   _prop,
   ascend,
-  defaultTo,
   forEachIndexed,
   head,
   indexOf,
   insert,
-  isNil,
-  mathMod,
   sortWith,
 } from './little-ramda'
 import {
@@ -18,20 +13,15 @@ import {
   autorun,
   getRoot,
   idProp,
-  nullString,
+  model,
   onSnapshot,
   optional,
   resolveIdentifier,
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
-import {
-  setFocusAndSelectionOnDOMId,
-  whenKeyPD,
-  withKeyEvent,
-} from './components/utils'
-
-const model = (n, p = null) => types.model(n, p)
+import {setFocusAndSelectionOnDOMId} from './components/utils'
+import {SingleSelectionStore} from './SingleSelectionStore'
 
 const NoteModel = model('Note')
   .props({
@@ -73,68 +63,6 @@ const NoteCollection = model('NotesCollection')
   .actions(self => ({
     addAll(notes) {
       self._notes.push(...notes)
-    },
-  }))
-
-const SingleSelectionStore = model('SingleSelectionStore')
-  .props({
-    selectedKey: nullString,
-    // keys: optional(stringArray, []),
-  })
-  .volatile(self => ({
-    keys: [],
-  }))
-  .views(self => ({
-    get selectedKeyIdx() {
-      if (self.keys.length === 0) {
-        return NaN
-      }
-      const idx = self.keys.indexOf(self.selectedKey)
-      return idx === -1 ? 0 : idx
-    },
-    getContainerProps(props = {}) {
-      return _merge(self.containerProps, props)
-    },
-    get containerProps() {
-      return {
-        onKeyDown: withKeyEvent(
-          whenKeyPD('down')(self.selectNext),
-          whenKeyPD('up')(self.selectPrev),
-        ),
-        tabIndex: 0,
-      }
-    },
-    getItemProps(props = {}) {
-      return _merge(
-        {
-          onClick: () => {
-            self.setSelectedKey(props.key)
-          },
-        },
-        props,
-      )
-    },
-  }))
-  .actions(self => ({
-    setSelectedKey(key) {
-      self.selectedKey = key
-    },
-    setKeys(keys) {
-      self.keys = keys
-    },
-    selectNext() {
-      const nextIdx = _compose(defaultTo(null), mathMod)(
-        self.selectedKeyIdx + 1,
-        self.keys.length,
-      )
-      self.selectedKey = isNil(nextIdx) ? null : self.keys[nextIdx]
-    },
-    selectPrev() {
-      const nextIdx = _compose(defaultTo(null), mathMod)(
-        self.selectedKeyIdx - 1,
-        self.keys.length,
-      )
-      self.selectedKey = isNil(nextIdx) ? null : self.keys[nextIdx]
     },
   }))
 
