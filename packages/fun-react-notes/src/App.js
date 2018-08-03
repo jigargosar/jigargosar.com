@@ -64,13 +64,11 @@ class NoteEditor extends Component {
   }
 }
 
-const OSelectionContainer = observer(SelectionContainer)
-
 @observer
 class NoteList extends Component {
   render() {
     return (
-      <OSelectionContainer
+      <SelectionContainer
         direction="vertical"
         focusedKey={store.focusedKey}
         selectedKey={store.selectedKey}
@@ -91,7 +89,7 @@ class NoteList extends Component {
             ))(store.allNotes)}
           </div>
         )}
-      </OSelectionContainer>
+      </SelectionContainer>
     )
   }
 }
