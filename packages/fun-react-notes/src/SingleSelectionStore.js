@@ -55,7 +55,6 @@ export const SingleSelectionStore = model('SingleSelectionStore')
         self.selectedKeyIdx + 1,
         self.keys.length,
       )
-      // self.setSelectedKey(isNil(newIdx) ? null : self.keys[newIdx])
       self.setSelectedIdx(newIdx)
     },
     selectPrev() {
@@ -63,7 +62,6 @@ export const SingleSelectionStore = model('SingleSelectionStore')
         self.selectedKeyIdx - 1,
         self.keys.length,
       )
-      // self.setSelectedKey(isNil(newIdx) ? null : self.keys[newIdx])
       self.setSelectedIdx(newIdx)
     },
   }))
