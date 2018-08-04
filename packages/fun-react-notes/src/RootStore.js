@@ -12,6 +12,7 @@ import {
   addDisposer,
   applySnapshot,
   autorun,
+  extend,
   getRoot,
   idProp,
   model,
@@ -19,7 +20,6 @@ import {
   optional,
   resolveIdentifier,
   types,
-  views,
 } from './little-mst'
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
@@ -27,17 +27,19 @@ import {SingleSelectionStore} from './SingleSelectionStore'
 import {forEachIndexed} from './little-ramda'
 
 const NoteModel = _compose(
-  views(self => {
+  extend(self => {
     const root = () => getRoot(self)
     return {
-      get isSelected() {
-        return root().isNoteSelected(self)
-      },
-      get isFocused() {
-        return root().isNoteFocused(self)
-      },
-      get listItemProps() {
-        return root().getNoteListItemProps(self)
+      views: {
+        get isSelected() {
+          return root().isNoteSelected(self)
+        },
+        get isFocused() {
+          return root().isNoteFocused(self)
+        },
+        get listItemProps() {
+          return root().getNoteListItemProps(self)
+        },
       },
     }
   }),
