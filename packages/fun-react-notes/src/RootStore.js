@@ -8,7 +8,6 @@ import {
   sortWith,
 } from './ramda'
 import {
-  actions,
   addDisposer,
   applySnapshot,
   autorun,
@@ -29,6 +28,8 @@ import {forEachIndexed} from './little-ramda'
 const NoteModel = _compose(
   extend(self => {
     const root = () => getRoot(self)
+    const update = attrs => Object.assign(self, attrs)
+
     return {
       views: {
         get isSelected() {
@@ -41,13 +42,10 @@ const NoteModel = _compose(
           return root().getNoteListItemProps(self)
         },
       },
-    }
-  }),
-  actions(self => {
-    const update = attrs => Object.assign(self, attrs)
-    return {
-      update,
-      onTextChange: e => update({text: e.target.value}),
+      actions: {
+        update,
+        onTextChange: e => update({text: e.target.value}),
+      },
     }
   }),
 )(
