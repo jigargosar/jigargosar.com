@@ -7,6 +7,7 @@ import {
   insert,
   mergeAll,
   sortWith,
+  tap,
 } from './little-ramda'
 import {
   addDisposer,
@@ -84,7 +85,15 @@ function e2(self) {
   }
 }
 
-const e3 = self => mergeAll([e1(self), e2(self)])
+export function tapLog2(msg) {
+  return tap(args => console.warn(msg, args))
+}
+
+export const tapLog = tapLog2('tapLog')
+
+const e3 = function(self) {
+  return mergeAll([e1(self), e2(self)])
+}.l()
 
 const RootStore = types
   .model('RootStore', {
