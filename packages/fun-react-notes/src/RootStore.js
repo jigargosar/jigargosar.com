@@ -91,9 +91,7 @@ export function tapLog2(msg) {
 
 export const tapLog = tapLog2('tapLog')
 
-const e3 = function(self) {
-  return mergeAll([e1(self), e2(self)])
-}.l()
+const e3 = (self => mergeAll([e1(self), e2(self)])).l('e3')
 
 const RootStore = types
   .model('RootStore', {
