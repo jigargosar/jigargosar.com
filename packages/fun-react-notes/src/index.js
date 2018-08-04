@@ -7,8 +7,11 @@ import {hmrBoot, sugarExtend} from './little-ramda'
 
 sugarExtend()
 
-function render(App = require('./App').default) {
-  ReactDOM.render(<App />, document.getElementById('root'))
+function render(type = require('./App').default) {
+  ReactDOM.render(
+    React.createElement(type),
+    document.getElementById('root'),
+  )
 }
 
 hmrBoot(module, render, ['./App'])
