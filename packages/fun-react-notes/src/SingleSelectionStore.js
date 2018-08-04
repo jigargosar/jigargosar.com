@@ -1,4 +1,4 @@
-import {model, nullString} from './little-mst'
+import {model, nullNumber, nullString} from './little-mst'
 import {
   _compose,
   _merge,
@@ -13,7 +13,7 @@ import {whenKeyPD, withKeyEvent} from './components/utils'
 export const SingleSelectionStore = model('SingleSelectionStore')
   .props({
     _selectedKey: nullString,
-    _selectedIdx: NaN,
+    _selectedIdx: nullNumber,
     // keys: optional(stringArray, []),
   })
   .volatile(self => ({
@@ -24,6 +24,13 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       return _when(isNil)(() => head(self.keys))(self._selectedKey)
     },
     get selectedKeyIdx() {
+      if (self.keys.length === 0) {
+        return NaN
+      }
+      const idx = self.keys.indexOf(self.selectedKey)
+      return idx === -1 ? 0 : idx
+    },
+    get selectedKeyIdx2() {
       if (self.keys.length === 0) {
         return NaN
       }
