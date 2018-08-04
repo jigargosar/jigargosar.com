@@ -7,6 +7,7 @@ import {
   observer,
   whenKey,
   withKeyEvent,
+  wrapSP,
 } from './components/utils'
 
 @observer
@@ -100,7 +101,7 @@ class Note extends Component {
           <div
             role={'button'}
             className={cn('input-reset')}
-            onClick={note.onDelete}
+            onClick={wrapSP(note.onDelete)}
           >
             X
           </div>

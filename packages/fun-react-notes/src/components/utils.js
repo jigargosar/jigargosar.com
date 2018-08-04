@@ -58,6 +58,12 @@ export const wrapPD = fn =>
     fn(e)
   })
 
+export const wrapSP = fn =>
+  R.tap(e => {
+    e.stopPropagation()
+    fn(e)
+  })
+
 /**
  * @return {null}
  */
