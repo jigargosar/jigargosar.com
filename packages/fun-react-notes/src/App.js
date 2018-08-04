@@ -97,7 +97,9 @@ class Note extends Component {
           {(note.text || 'empty').split('\n')[0]}
         </div>
         <div className={cn({dn: !note.isSelected})}>
-          <button className={cn('input-reset')}>X</button>
+          <div role={'button'} className={cn('input-reset')}>
+            X
+          </div>
         </div>
       </div>
     )
