@@ -29,7 +29,6 @@ const NoteModel = _compose(
   extend(self => {
     const root = () => getRoot(self)
     const update = attrs => Object.assign(self, attrs)
-
     return {
       views: {
         get isSelected() {

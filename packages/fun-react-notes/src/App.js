@@ -8,7 +8,6 @@ import {
   whenKey,
   withKeyEvent,
 } from './components/utils'
-import {trace} from './little-mst'
 
 @observer
 class App extends Component {
@@ -79,7 +78,6 @@ class NoteList extends Component {
 @observer
 class Note extends Component {
   render({note, ...other} = this.props) {
-    trace()
     return (
       <div
         {...other}
