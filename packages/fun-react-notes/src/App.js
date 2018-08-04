@@ -93,10 +93,10 @@ class Note extends Component {
           'flex',
         )}
       >
-        <div className={cn('flex-auto')}>
+        <div className={cn('flex-auto truncate')}>
           {(note.text || 'empty').split('\n')[0]}
         </div>
-        <div>
+        <div className={cn({dn: !note.isSelected})}>
           <button className={cn('input-reset')}>X</button>
         </div>
       </div>
