@@ -44,6 +44,7 @@ const NoteModel = _compose(
       actions: {
         update,
         onTextChange: e => update({text: e.target.value}),
+        onDelete: () => root().deleteNote(self),
       },
     }
   }),
@@ -122,10 +123,11 @@ const RootStore = types
     },
   }))
   .actions(self => {
-    function updateSortIdx(idx, note, allNotes) {
-      forEachIndexed((n, sortIdx) => n.update({sortIdx}))(
-        insert(idx)(note)(allNotes),
-      )
+    const updateSortIdx = forEachIndexed((n, sortIdx) =>
+      n.update({sortIdx}),
+    )
+    function updateSortIdxWithNoteAt(idx, note, allNotes) {
+      updateSortIdx(insert(idx)(note)(allNotes))
     }
 
     function addNewNote(fn) {
@@ -136,24 +138,25 @@ const RootStore = types
     }
 
     return {
+      deleteNote(note) {},
       onAddNote() {
         addNewNote(note => {
           const idx = 0
-          updateSortIdx(idx, note, self.allNotes)
+          updateSortIdxWithNoteAt(idx, note, self.allNotes)
         })
       },
       onAddNoteAfterSelected() {
         addNewNote(note => {
           const oldIdx = indexOf(self.selectedNote)(self.allNotes)
           const idx = oldIdx < 0 ? 0 : oldIdx + 1
-          updateSortIdx(idx, note, self.allNotes)
+          updateSortIdxWithNoteAt(idx, note, self.allNotes)
         })
       },
       onAddNoteBeforeSelected() {
         addNewNote(note => {
           const oldIdx = indexOf(self.selectedNote)(self.allNotes)
           const idx = oldIdx < 0 ? 0 : oldIdx
-          updateSortIdx(idx, note, self.allNotes)
+          updateSortIdxWithNoteAt(idx, note, self.allNotes)
         })
       },
     }
