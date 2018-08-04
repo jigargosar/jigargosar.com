@@ -68,6 +68,10 @@ const NoteCollection = model('NotesCollection')
     addAll(notes) {
       self.notes.push(...notes)
     },
+    deleteNote(note) {
+      const idx = self.notes.indexOf(note)
+      self.notes.splice(idx, 1)
+    },
   }))
 
 const RootStore = types
@@ -138,7 +142,9 @@ const RootStore = types
     }
 
     return {
-      deleteNote(note) {},
+      deleteNote(note) {
+        self._notesCollection.deleteNote(note)
+      },
       onAddNote() {
         addNewNote(note => {
           const idx = 0
