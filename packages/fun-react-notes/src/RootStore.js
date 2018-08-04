@@ -84,7 +84,7 @@ function e2(self) {
   }
 }
 
-const e3 = (self => mergeAll([e1(self), e2(self)])).l('e3')
+const e3 = self => mergeAll([e1(self), e2(self)])
 
 const RootStore = types
   .model('RootStore', {
