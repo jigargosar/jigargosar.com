@@ -1,9 +1,11 @@
 import {
+  _compose,
   _prop,
   ascend,
   head,
   indexOf,
   insert,
+  map,
   mergeAll,
   sortWith,
 } from './ramda'
@@ -22,7 +24,7 @@ import {
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
 import {SingleSelectionStore} from './SingleSelectionStore'
-import {forEachIndexed} from './little-ramda'
+import {forEachIndexed, T1} from './little-ramda'
 
 const NoteModel = model('Note')
   .props({
@@ -77,6 +79,7 @@ function e1(self) {
     views: {},
   }
 }
+
 function e2(self) {
   return {
     actions: {},
@@ -84,14 +87,15 @@ function e2(self) {
   }
 }
 
-const e3 = self => mergeAll([e1(self), e2(self)])
+const mergeExtensions = (...ext) => self =>
+  _compose(mergeAll, map(T1(self)))(ext)
 
 const RootStore = types
   .model('RootStore', {
     _notesCollection: optional(NoteCollection),
     _sel: optional(SingleSelectionStore),
   })
-  .extend(e3)
+  .extend(mergeExtensions(e1, e2))
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {

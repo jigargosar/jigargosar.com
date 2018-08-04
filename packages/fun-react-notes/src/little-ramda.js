@@ -65,3 +65,4 @@ export const hmrBoot = (module, render, acceptModules) => {
     })
   }
 }
+export const T1 = obj => fn => fn(obj)
