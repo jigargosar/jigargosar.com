@@ -5,6 +5,7 @@ import {
   head,
   indexOf,
   insert,
+  mergeAll,
   sortWith,
 } from './little-ramda'
 import {
@@ -66,11 +67,35 @@ const NoteCollection = model('NotesCollection')
     },
   }))
 
+function e1(self) {
+  return {
+    actions: {
+      afterCreate() {
+        console.log('e1', self)
+      },
+    },
+    views: {},
+  }
+}
+function e2(self) {
+  return {
+    actions: {},
+    views: {},
+  }
+}
+
+const e3 = self => {
+  const result = mergeAll([e1(self), e2(self)])
+  console.log(`result`, result)
+  return result
+}
+
 const RootStore = types
   .model('RootStore', {
     _notesCollection: optional(NoteCollection),
     _sel: optional(SingleSelectionStore),
   })
+  .extend(e3)
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {

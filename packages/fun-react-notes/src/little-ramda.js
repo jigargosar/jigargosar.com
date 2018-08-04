@@ -31,6 +31,7 @@ export {
   defaultTo,
   isNil,
   when as _when,
+  mergeAll,
 } from 'ramda'
 export {default as validate} from './vendor/aproba'
 export const mapIndexed = _.addIndex(_.map)
