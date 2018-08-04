@@ -111,11 +111,8 @@ const RootStore = types
     get noteListProps() {
       return self._sel.getContainerProps()
     },
-    get selectedNoteId() {
-      return self.selectedNote && self.selectedNote.id
-    },
     isNoteSelected(m) {
-      return self.selectedNoteId === m.id
+      return self.selectedNote === m
     },
     isNoteFocused(m) {
       return false
