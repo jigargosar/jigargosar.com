@@ -54,3 +54,14 @@ export function sugarExtend() {
     }),
   })
 }
+
+export const hmrBoot = (module, render, acceptModules) => {
+  if (module.hot) {
+    console.log('Cold Boot')
+    module.hot.accept(acceptModules, () => {
+      console.clear()
+      console.log('Hot Reload')
+      render()
+    })
+  }
+}
