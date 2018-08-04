@@ -9,6 +9,7 @@ import {
   isEmpty,
   length,
   map,
+  mergeAll,
   nAry,
   tap,
 } from './ramda'
@@ -66,3 +67,5 @@ export const hmrBoot = (module, render, acceptModules) => {
   }
 }
 export const T1 = obj => fn => fn(obj)
+export const composeExt = (...ext) => self =>
+  _compose(mergeAll, map(T1(self)))(ext)

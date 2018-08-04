@@ -1,14 +1,4 @@
-import {
-  _compose,
-  _prop,
-  ascend,
-  head,
-  indexOf,
-  insert,
-  map,
-  mergeAll,
-  sortWith,
-} from './ramda'
+import {_prop, ascend, head, indexOf, insert, sortWith} from './ramda'
 import {
   addDisposer,
   applySnapshot,
@@ -24,7 +14,7 @@ import {
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
 import {SingleSelectionStore} from './SingleSelectionStore'
-import {forEachIndexed, T1} from './little-ramda'
+import {composeExt, forEachIndexed} from './little-ramda'
 
 const NoteModel = model('Note')
   .props({
@@ -87,15 +77,12 @@ function e2(self) {
   }
 }
 
-const mergeExtensions = (...ext) => self =>
-  _compose(mergeAll, map(T1(self)))(ext)
-
 const RootStore = types
   .model('RootStore', {
     _notesCollection: optional(NoteCollection),
     _sel: optional(SingleSelectionStore),
   })
-  .extend(mergeExtensions(e1, e2))
+  .extend(composeExt(e1, e2))
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
