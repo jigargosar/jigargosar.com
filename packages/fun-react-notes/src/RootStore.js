@@ -55,6 +55,7 @@ const NoteModel = _compose(
     sortIdx: 0,
   }),
 )
+
 const NoteCollection = model('NotesCollection')
   .props({
     notes: types.array(NoteModel),
