@@ -84,7 +84,7 @@ class Note extends Component {
         id={note.id}
         // onClick={() => store.updateSelectedOnFocus(note)}
         className={cn('pa2', 'bb b--moon-gray', {
-          'blue bg-black-05': note.isSelected,
+          'blue bg-black-05': note.isSelected(),
           outline: note.isFocused,
         })}
       >
