@@ -1,5 +1,5 @@
 import {model, nullNumber} from './little-mst'
-import {_compose, _merge, clamp, defaultTo, mathMod} from './ramda'
+import {_merge, clamp, mathMod} from './ramda'
 import {whenKeyPD, withKeyEvent} from './components/utils'
 
 export const SingleSelectionStore = model('SingleSelectionStore')
@@ -51,17 +51,11 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       self.keys = keys
     },
     selectNext() {
-      const newIdx = _compose(defaultTo(null), mathMod)(
-        self.selectedKeyIdx + 1,
-        self.keys.length,
-      )
+      const newIdx = mathMod(self.selectedKeyIdx + 1, self.keys.length)
       self.setSelectedIdx(newIdx)
     },
     selectPrev() {
-      const newIdx = _compose(defaultTo(null), mathMod)(
-        self.selectedKeyIdx - 1,
-        self.keys.length,
-      )
+      const newIdx = mathMod(self.selectedKeyIdx - 1, self.keys.length)
       self.setSelectedIdx(newIdx)
     },
   }))
