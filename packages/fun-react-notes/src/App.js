@@ -83,12 +83,22 @@ class Note extends Component {
         {...other}
         id={note.id}
         // onClick={() => store.updateSelectedOnFocus(note)}
-        className={cn('pa2', 'bb b--moon-gray', {
-          'blue bg-black-05': note.isSelected,
-          outline: note.isFocused,
-        })}
+        className={cn(
+          'pa2',
+          'bb b--moon-gray',
+          {
+            'blue bg-black-05': note.isSelected,
+            outline: note.isFocused,
+          },
+          'flex',
+        )}
       >
-        {(note.text || 'empty').truncate(30)}
+        <div className={cn('flex-auto')}>
+          {(note.text || 'empty').split('\n')[0]}
+        </div>
+        <div>
+          <button className={cn('input-reset')}>X</button>
+        </div>
       </div>
     )
   }
