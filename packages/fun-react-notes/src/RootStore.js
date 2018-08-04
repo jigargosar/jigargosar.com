@@ -32,7 +32,7 @@ const NoteModel = _compose(
 
     return {
       views: {
-        isSelected() {
+        get isSelected() {
           return root().isNoteSelected(self)
         },
         get isFocused() {

@@ -50,7 +50,7 @@ export {
   resolvePath,
 } from 'mobx-state-tree'
 
-export {values, has, get, set, autorun} from 'mobx'
+export {values, has, get, set, autorun, trace, reaction} from 'mobx'
 
 export const modelNamed = name => types.model(name)
 export const modelProps = props => modelType => modelType.props(props)

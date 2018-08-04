@@ -8,6 +8,7 @@ import {
   whenKey,
   withKeyEvent,
 } from './components/utils'
+import {trace} from './little-mst'
 
 @observer
 class App extends Component {
@@ -78,13 +79,14 @@ class NoteList extends Component {
 @observer
 class Note extends Component {
   render({note, ...other} = this.props) {
+    trace()
     return (
       <div
         {...other}
         id={note.id}
         // onClick={() => store.updateSelectedOnFocus(note)}
         className={cn('pa2', 'bb b--moon-gray', {
-          'blue bg-black-05': note.isSelected(),
+          'blue bg-black-05': note.isSelected,
           outline: note.isFocused,
         })}
       >

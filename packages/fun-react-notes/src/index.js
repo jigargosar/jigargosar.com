@@ -17,7 +17,7 @@ function render(type = require('./App').default) {
 if (module.hot) {
   console.log('Cold Boot')
   module.hot.accept(['./App'], () => {
-    // console.clear()
+    console.clear()
     console.log('Hot Reload')
     render()
   })
