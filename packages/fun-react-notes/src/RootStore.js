@@ -6,7 +6,6 @@ import {
   insert,
   mergeAll,
   sortWith,
-  tap,
 } from './ramda'
 import {
   addDisposer,
@@ -84,12 +83,6 @@ function e2(self) {
     views: {},
   }
 }
-
-export function tapLog2(msg) {
-  return tap(args => console.warn(msg, args))
-}
-
-export const tapLog = tapLog2('tapLog')
 
 const e3 = (self => mergeAll([e1(self), e2(self)])).l('e3')
 
