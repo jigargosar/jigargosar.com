@@ -7,7 +7,7 @@ import {
   head,
   isNil,
   mathMod,
-} from './little-ramda'
+} from './ramda'
 import {whenKeyPD, withKeyEvent} from './components/utils'
 
 export const SingleSelectionStore = model('SingleSelectionStore')

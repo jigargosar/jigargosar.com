@@ -1,4 +1,5 @@
-import {_, validate} from '../little-ramda'
+import {validate} from '../little-ramda'
+import {compose, identity, isNil} from '../ramda'
 
 export const storage = Storage()
 
@@ -34,19 +35,19 @@ if (module.hot) {
 export const StorageItem = ({
   name,
   getInitial = () => ({}),
-  postLoad = _.identity,
+  postLoad = identity,
 }) => {
   validate('SFF', [name, getInitial, postLoad])
 
   const getItem = () => storage.get(name)
   const setItem = val => storage.set(name, val)
 
-  if (_.isNil(getItem())) {
+  if (isNil(getItem())) {
     setItem(getInitial())
   }
 
   return {
     save: setItem,
-    load: _.compose(postLoad, getItem),
+    load: compose(postLoad, getItem),
   }
 }

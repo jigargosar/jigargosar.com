@@ -2,10 +2,20 @@ import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import * as R from 'ramda'
-import {_, _cond, _tap, mapIndexed} from '../little-ramda'
+import {
+  _compose,
+  _cond,
+  _tap,
+  curry,
+  prop,
+  reduce,
+  reduced,
+} from '../ramda'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
+import {mapIndexed} from '../little-ramda'
+
 export {cn}
 
 export {default as autobind} from 'autobind'
@@ -20,8 +30,8 @@ export const isAnyHotKey = R.compose(
 
 function isKey(...keys) {
   return function(keyEvent) {
-    return _.reduce(
-      (acc, key) => (isHotKey(key, keyEvent) ? _.reduced(true) : acc),
+    return reduce(
+      (acc, key) => (isHotKey(key, keyEvent) ? reduced(true) : acc),
     )(false)(keys)
   }
 }
@@ -78,7 +88,7 @@ export function renderIndexed(Component, propName, list) {
 }
 
 export function renderKeyedByProp(Component, propName, keyName, models) {
-  return renderKeyed(Component, propName, _.prop(keyName), models)
+  return renderKeyed(Component, propName, prop(keyName), models)
 }
 
 export class C extends RC {
@@ -124,7 +134,7 @@ export const OC = observer(C)
 
 // export const withStateMergedIntoProps = withStateToProps(R.merge)
 
-export const mrInjectAll = _.compose(
+export const mrInjectAll = _compose(
   inject(({appState}, props) => ({
     ...appState,
     ...props,
@@ -139,7 +149,7 @@ export function elFocus(el) {
   el.focus()
   return el
 }
-export const elSetSelectionRange = _.curry(function elSetSelectionRange(
+export const elSetSelectionRange = curry(function elSetSelectionRange(
   {start, end, direction},
   el,
 ) {

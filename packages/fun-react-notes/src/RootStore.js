@@ -1,14 +1,13 @@
 import {
   _prop,
   ascend,
-  forEachIndexed,
   head,
   indexOf,
   insert,
   mergeAll,
   sortWith,
   tap,
-} from './little-ramda'
+} from './ramda'
 import {
   addDisposer,
   applySnapshot,
@@ -24,6 +23,7 @@ import {
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
 import {SingleSelectionStore} from './SingleSelectionStore'
+import {forEachIndexed} from './little-ramda'
 
 const NoteModel = model('Note')
   .props({

@@ -14,7 +14,7 @@ import {
   isEmpty,
   length,
   nAry,
-} from './little-ramda'
+} from './ramda'
 
 Sugar.extend()
 

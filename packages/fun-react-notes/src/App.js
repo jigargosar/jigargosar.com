@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {_map} from './little-ramda'
+import {_map} from './ramda'
 import store from './store'
 import {
   cn,
