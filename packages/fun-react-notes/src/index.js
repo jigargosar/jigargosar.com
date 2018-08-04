@@ -3,18 +3,12 @@ import ReactDOM from 'react-dom'
 import 'tachyons/css/tachyons.min.css'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
-// import {AppContainer} from 'react-hot-loader' import {sugarExtend} from './little-ramda'
+import {sugarExtend} from './little-ramda'
 
 sugarExtend()
 
 function render(App = require('./App').default) {
-  ReactDOM.render(
-    <App />,
-    // <AppContainer>
-    //   <App />
-    // </AppContainer>,
-    document.getElementById('root'),
-  )
+  ReactDOM.render(<App />, document.getElementById('root'))
 }
 
 if (module.hot) {
