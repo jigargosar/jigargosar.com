@@ -2,7 +2,6 @@ import {
   _compose,
   _prop,
   ascend,
-  head,
   indexOf,
   insert,
   mathMod,
@@ -18,7 +17,6 @@ import {
   model,
   onSnapshot,
   optional,
-  resolveIdentifier,
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
@@ -108,12 +106,6 @@ const RootStore = types
   .views(self => ({
     get allNotes() {
       return self._notesCollection.all
-    },
-    get selectedNote1() {
-      const id = self._sel.selectedKey
-      return id
-        ? resolveIdentifier(NoteModel, getRoot(self), id)
-        : head(self.allNotes)
     },
     get selectedNote() {
       const idx = mathMod(self._sel.selectedKeyIdx)(self.allNotes.length)

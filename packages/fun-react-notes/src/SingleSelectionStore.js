@@ -13,6 +13,7 @@ import {whenKeyPD, withKeyEvent} from './components/utils'
 export const SingleSelectionStore = model('SingleSelectionStore')
   .props({
     _selectedKey: nullString,
+    _selectedIdx: NaN,
     // keys: optional(stringArray, []),
   })
   .volatile(self => ({
