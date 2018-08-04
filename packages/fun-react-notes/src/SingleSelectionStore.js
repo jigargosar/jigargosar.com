@@ -8,9 +8,12 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     // keys: optional(stringArray, []),
   })
   .volatile(self => ({
-    keys: [],
+    computedKeys: null,
   }))
   .views(self => ({
+    get keys() {
+      return self.computedKeys.get()
+    },
     get selectedKeyIdx() {
       if (self.keys.length === 0) {
         return NaN
@@ -49,8 +52,8 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     setSelectedIdx(idx) {
       self._selectedIdx = mathMod(idx, self.keys.length)
     },
-    setKeys(keys) {
-      self.keys = keys
+    setComputedKeys(computedKeys) {
+      self.computedKeys = computedKeys
     },
     selectNext() {
       const newIdx = mathMod(self.selectedKeyIdx + 1, self.keys.length)

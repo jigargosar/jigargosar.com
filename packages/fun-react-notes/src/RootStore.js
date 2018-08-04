@@ -10,7 +10,7 @@ import {
 import {
   addDisposer,
   applySnapshot,
-  autorun,
+  computed,
   extend,
   getRoot,
   idProp,
@@ -20,7 +20,6 @@ import {
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
-import {setFocusAndSelectionOnDOMId} from './components/utils'
 import {SingleSelectionStore} from './SingleSelectionStore'
 import {forEachIndexed} from './little-ramda'
 
@@ -95,11 +94,8 @@ const RootStore = types
   })
   .actions(self => ({
     afterCreate() {
-      addDisposer(
-        self,
-        autorun(() => {
-          self._sel.setKeys(self.allNotes.map(_prop('id')))
-        }),
+      self._sel.setComputedKeys(
+        computed(() => self.allNotes.map(_prop('id'))),
       )
     },
   }))
@@ -136,7 +132,7 @@ const RootStore = types
       const note = NoteModel.create()
       fn(note)
       self._notesCollection.addAll([note])
-      setFocusAndSelectionOnDOMId(note.id)
+      self._sel.setSelectedKey(note.id)
     }
 
     return {
