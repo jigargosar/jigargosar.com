@@ -13,7 +13,7 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     get keys() {
       return self.computedKeys.get()
     },
-    get selectedKeyIdx() {
+    get selectedIdx() {
       if (self.keys.length === 0) {
         return NaN
       }
@@ -24,11 +24,6 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     set selectedIdx(idx) {
       self._selectedIdx = mathMod(idx, self.keys.length)
     },
-
-    get selectedIdx() {
-      return self.selectedKeyIdx
-    },
-
     getContainerProps(props = {}) {
       return _merge(
         {
@@ -60,9 +55,9 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       self.computedKeys = computedKeys
     },
     selectNext() {
-      self.selectedIdx = self.selectedKeyIdx + 1
+      self.selectedIdx = self.selectedIdx + 1
     },
     selectPrev() {
-      self.selectedIdx = self.selectedKeyIdx - 1
+      self.selectedIdx = self.selectedIdx - 1
     },
   }))

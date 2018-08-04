@@ -89,7 +89,7 @@ const RootStore = types
       return self.notesCollection.all
     },
     get selectedNote() {
-      return self.allNotes[self._sel.selectedKeyIdx]
+      return self.allNotes[self._sel.selectedIdx]
     },
     get noteListProps() {
       return self._sel.getContainerProps()
