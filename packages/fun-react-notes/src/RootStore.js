@@ -75,7 +75,7 @@ const NoteCollection = model('NotesCollection')
 
 const RootStore = types
   .model('RootStore', {
-    _notesCollection: optional(NoteCollection),
+    notesCollection: optional(NoteCollection),
     _sel: optional(SingleSelectionStore),
   })
   .actions(self => {
@@ -92,16 +92,9 @@ const RootStore = types
       },
     }
   })
-  .actions(self => ({
-    afterCreate() {
-      self._sel.setComputedKeys(
-        computed(() => self.allNotes.map(_prop('id'))),
-      )
-    },
-  }))
   .views(self => ({
     get allNotes() {
-      return self._notesCollection.all
+      return self.notesCollection.all
     },
     get selectedNote() {
       const idx = mathMod(self._sel.selectedKeyIdx)(self.allNotes.length)
@@ -131,13 +124,18 @@ const RootStore = types
     function addNewNote(fn) {
       const note = NoteModel.create()
       fn(note)
-      self._notesCollection.addAll([note])
+      self.notesCollection.addAll([note])
       self._sel.setSelectedKey(note.id)
     }
 
     return {
+      afterCreate() {
+        self._sel.setComputedKeys(
+          computed(() => self.allNotes.map(_prop('id'))),
+        )
+      },
       deleteNote(note) {
-        self._notesCollection.deleteNote(note)
+        self.notesCollection.deleteNote(note)
       },
       onAddNote() {
         addNewNote(note => {
