@@ -5,6 +5,7 @@ import {
   head,
   indexOf,
   insert,
+  mathMod,
   sortWith,
 } from './ramda'
 import {
@@ -108,11 +109,15 @@ const RootStore = types
     get allNotes() {
       return self._notesCollection.all
     },
-    get selectedNote() {
+    get selectedNote1() {
       const id = self._sel.selectedKey
       return id
         ? resolveIdentifier(NoteModel, getRoot(self), id)
         : head(self.allNotes)
+    },
+    get selectedNote() {
+      const idx = mathMod(self._sel.selectedKeyIdx)(self.allNotes.length)
+      return self.allNotes[idx]
     },
     get noteListProps() {
       return self._sel.getContainerProps()
