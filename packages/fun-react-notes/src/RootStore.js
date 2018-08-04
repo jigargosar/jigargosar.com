@@ -1,12 +1,4 @@
-import {
-  _compose,
-  _prop,
-  ascend,
-  indexOf,
-  insert,
-  mathMod,
-  sortWith,
-} from './ramda'
+import {_compose, _prop, ascend, indexOf, insert, sortWith} from './ramda'
 import {
   addDisposer,
   applySnapshot,
@@ -97,8 +89,7 @@ const RootStore = types
       return self.notesCollection.all
     },
     get selectedNote() {
-      const idx = mathMod(self._sel.selectedKeyIdx)(self.allNotes.length)
-      return self.allNotes[idx]
+      return self.allNotes[self._sel.selectedKeyIdx]
     },
     get noteListProps() {
       return self._sel.getContainerProps()

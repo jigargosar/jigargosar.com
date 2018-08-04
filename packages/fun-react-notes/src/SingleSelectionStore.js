@@ -5,7 +5,6 @@ import {whenKeyPD, withKeyEvent} from './components/utils'
 export const SingleSelectionStore = model('SingleSelectionStore')
   .props({
     _selectedIdx: nullNumber,
-    // keys: optional(stringArray, []),
   })
   .volatile(self => ({
     computedKeys: null,
@@ -23,16 +22,16 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       )
     },
     getContainerProps(props = {}) {
-      return _merge(self.containerProps, props)
-    },
-    get containerProps() {
-      return {
-        onKeyDown: withKeyEvent(
-          whenKeyPD('down')(self.selectNext),
-          whenKeyPD('up')(self.selectPrev),
-        ),
-        tabIndex: 0,
-      }
+      return _merge(
+        {
+          onKeyDown: withKeyEvent(
+            whenKeyPD('down')(self.selectNext),
+            whenKeyPD('up')(self.selectPrev),
+          ),
+          tabIndex: 0,
+        },
+        props,
+      )
     },
     getItemProps(props = {}) {
       return _merge(
@@ -56,11 +55,9 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       self.computedKeys = computedKeys
     },
     selectNext() {
-      const newIdx = mathMod(self.selectedKeyIdx + 1, self.keys.length)
-      self.setSelectedIdx(newIdx)
+      self.setSelectedIdx(self.selectedKeyIdx + 1)
     },
     selectPrev() {
-      const newIdx = mathMod(self.selectedKeyIdx - 1, self.keys.length)
-      self.setSelectedIdx(newIdx)
+      self.setSelectedIdx(self.selectedKeyIdx - 1)
     },
   }))
