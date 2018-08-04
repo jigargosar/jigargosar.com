@@ -1,5 +1,5 @@
 import {model, nullNumber} from './little-mst'
-import {_compose, _merge, clamp, defaultTo, isNil, mathMod} from './ramda'
+import {_compose, _merge, clamp, defaultTo, mathMod} from './ramda'
 import {whenKeyPD, withKeyEvent} from './components/utils'
 
 export const SingleSelectionStore = model('SingleSelectionStore')
@@ -42,23 +42,28 @@ export const SingleSelectionStore = model('SingleSelectionStore')
   }))
   .actions(self => ({
     setSelectedKey(key) {
-      self._selectedIdx = self.keys.indexOf(key)
+      self.setSelectedIdx(self.keys.indexOf(key))
+    },
+    setSelectedIdx(idx) {
+      self._selectedIdx = idx
     },
     setKeys(keys) {
       self.keys = keys
     },
     selectNext() {
-      const nextIdx = _compose(defaultTo(null), mathMod)(
+      const newIdx = _compose(defaultTo(null), mathMod)(
         self.selectedKeyIdx + 1,
         self.keys.length,
       )
-      self.setSelectedKey(isNil(nextIdx) ? null : self.keys[nextIdx])
+      // self.setSelectedKey(isNil(newIdx) ? null : self.keys[newIdx])
+      self.setSelectedIdx(newIdx)
     },
     selectPrev() {
-      const nextIdx = _compose(defaultTo(null), mathMod)(
+      const newIdx = _compose(defaultTo(null), mathMod)(
         self.selectedKeyIdx - 1,
         self.keys.length,
       )
-      self.setSelectedKey(isNil(nextIdx) ? null : self.keys[nextIdx])
+      // self.setSelectedKey(isNil(newIdx) ? null : self.keys[newIdx])
+      self.setSelectedIdx(newIdx)
     },
   }))
