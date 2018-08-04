@@ -85,9 +85,7 @@ function e2(self) {
 }
 
 const e3 = self => {
-  const result = mergeAll([e1(self), e2(self)])
-  console.log(`result`, result)
-  return result
+  return mergeAll([e1(self), e2(self)])
 }
 
 const RootStore = types
