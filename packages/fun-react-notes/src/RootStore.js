@@ -1,5 +1,14 @@
-import {_prop, ascend, head, indexOf, insert, sortWith} from './ramda'
 import {
+  _compose,
+  _prop,
+  ascend,
+  head,
+  indexOf,
+  insert,
+  sortWith,
+} from './ramda'
+import {
+  actions,
   addDisposer,
   applySnapshot,
   autorun,
@@ -10,19 +19,15 @@ import {
   optional,
   resolveIdentifier,
   types,
+  views,
 } from './little-mst'
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
 import {SingleSelectionStore} from './SingleSelectionStore'
 import {forEachIndexed} from './little-ramda'
 
-const NoteModel = model('Note')
-  .props({
-    id: idProp('Note'),
-    text: '',
-    sortIdx: 0,
-  })
-  .views(self => {
+const NoteModel = _compose(
+  views(self => {
     const root = () => getRoot(self)
     return {
       get isSelected() {
@@ -35,15 +40,21 @@ const NoteModel = model('Note')
         return root().getNoteListItemProps(self)
       },
     }
-  })
-  .actions(self => {
+  }),
+  actions(self => {
     const update = attrs => Object.assign(self, attrs)
     return {
       update,
       onTextChange: e => update({text: e.target.value}),
     }
-  })
-
+  }),
+)(
+  model('Note', {
+    id: idProp('Note'),
+    text: '',
+    sortIdx: 0,
+  }),
+)
 const NoteCollection = model('NotesCollection')
   .props({
     notes: types.array(NoteModel),
