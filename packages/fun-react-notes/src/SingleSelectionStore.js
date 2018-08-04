@@ -1,18 +1,9 @@
-import {model, nullNumber, nullString} from './little-mst'
-import {
-  _compose,
-  _merge,
-  _when,
-  defaultTo,
-  head,
-  isNil,
-  mathMod,
-} from './ramda'
+import {model, nullNumber} from './little-mst'
+import {_compose, _merge, clamp, defaultTo, isNil, mathMod} from './ramda'
 import {whenKeyPD, withKeyEvent} from './components/utils'
 
 export const SingleSelectionStore = model('SingleSelectionStore')
   .props({
-    _selectedKey: nullString,
     _selectedIdx: nullNumber,
     // keys: optional(stringArray, []),
   })
@@ -20,22 +11,11 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     keys: [],
   }))
   .views(self => ({
-    get selectedKey() {
-      return _when(isNil)(() => head(self.keys))(self._selectedKey)
-    },
     get selectedKeyIdx() {
       if (self.keys.length === 0) {
         return NaN
       }
-      const idx = self.keys.indexOf(self.selectedKey)
-      return idx === -1 ? 0 : idx
-    },
-    get selectedKeyIdx2() {
-      if (self.keys.length === 0) {
-        return NaN
-      }
-      const idx = self.keys.indexOf(self.selectedKey)
-      return idx === -1 ? 0 : idx
+      return clamp(0, self.keys.length - 1)(self._selectedIdx)
     },
     getContainerProps(props = {}) {
       return _merge(self.containerProps, props)
@@ -62,7 +42,7 @@ export const SingleSelectionStore = model('SingleSelectionStore')
   }))
   .actions(self => ({
     setSelectedKey(key) {
-      self._selectedKey = key
+      self._selectedIdx = self.keys.indexOf(key)
     },
     setKeys(keys) {
       self.keys = keys
