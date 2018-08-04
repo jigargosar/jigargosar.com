@@ -1,4 +1,4 @@
-import {model, nullNumber} from './little-mst'
+import {computed, model, nullNumber} from './little-mst'
 import {_compose, _merge, clamp, defaultTo, mathMod} from './ramda'
 import {whenKeyPD, withKeyEvent} from './components/utils'
 
@@ -7,7 +7,7 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     _selectedIdx: nullNumber,
   })
   .volatile(self => ({
-    computedKeys: null,
+    computedKeys: computed(() => []),
   }))
   .views(self => ({
     get keys() {
@@ -21,6 +21,14 @@ export const SingleSelectionStore = model('SingleSelectionStore')
         self._selectedIdx,
       )
     },
+    set selectedIdx(idx) {
+      self._selectedIdx = mathMod(idx, self.keys.length)
+    },
+
+    get selectedIdx() {
+      return self.selectedKeyIdx
+    },
+
     getContainerProps(props = {}) {
       return _merge(
         {
@@ -46,18 +54,15 @@ export const SingleSelectionStore = model('SingleSelectionStore')
   }))
   .actions(self => ({
     setSelectedKey(key) {
-      self.setSelectedIdx(self.keys.indexOf(key))
-    },
-    setSelectedIdx(idx) {
-      self._selectedIdx = mathMod(idx, self.keys.length)
+      self.selectedIdx = self.keys.indexOf(key)
     },
     setComputedKeys(computedKeys) {
       self.computedKeys = computedKeys
     },
     selectNext() {
-      self.setSelectedIdx(self.selectedKeyIdx + 1)
+      self.selectedIdx = self.selectedKeyIdx + 1
     },
     selectPrev() {
-      self.setSelectedIdx(self.selectedKeyIdx - 1)
+      self.selectedIdx = self.selectedKeyIdx - 1
     },
   }))

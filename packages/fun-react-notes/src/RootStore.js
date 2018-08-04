@@ -122,7 +122,7 @@ const RootStore = types
     return {
       afterCreate() {
         self._sel.setComputedKeys(
-          computed(() => self.allNotes.map(_prop('id'))),
+          computed(() => self.allNotes.map(_prop('id')), {name: 'allni'}),
         )
       },
       deleteNote(note) {
