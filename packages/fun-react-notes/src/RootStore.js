@@ -14,7 +14,7 @@ import {
 import {StorageItem} from './services/storage'
 import {setFocusAndSelectionOnDOMId} from './components/utils'
 import {SingleSelectionStore} from './SingleSelectionStore'
-import {composeExt, forEachIndexed} from './little-ramda'
+import {forEachIndexed} from './little-ramda'
 
 const NoteModel = model('Note')
   .props({
@@ -59,30 +59,11 @@ const NoteCollection = model('NotesCollection')
     },
   }))
 
-function e1(self) {
-  return {
-    actions: {
-      afterCreate() {
-        console.log('e1', self)
-      },
-    },
-    views: {},
-  }
-}
-
-function e2(self) {
-  return {
-    actions: {},
-    views: {},
-  }
-}
-
 const RootStore = types
   .model('RootStore', {
     _notesCollection: optional(NoteCollection),
     _sel: optional(SingleSelectionStore),
   })
-  .extend(composeExt(e1, e2))
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
