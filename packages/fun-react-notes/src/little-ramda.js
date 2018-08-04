@@ -9,8 +9,9 @@ import {
   isEmpty,
   length,
   map,
-  mergeAll,
+  mergeDeepRight,
   nAry,
+  reduce,
   tap,
 } from './ramda'
 import Sugar from 'sugar'
@@ -56,16 +57,6 @@ export function sugarExtend() {
   })
 }
 
-export const hmrBoot = (module, render, acceptModules) => {
-  if (module.hot) {
-    console.log('Cold Boot')
-    module.hot.accept(acceptModules, () => {
-      console.clear()
-      console.log('Hot Reload')
-      render()
-    })
-  }
-}
 export const T1 = obj => fn => fn(obj)
 export const composeExt = (...ext) => self =>
-  _compose(mergeAll, map(T1(self)))(ext)
+  _compose(reduce(mergeDeepRight)({}), map(T1(self)))(ext)

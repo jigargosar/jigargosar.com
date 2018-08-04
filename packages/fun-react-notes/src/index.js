@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import 'tachyons/css/tachyons.min.css'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
-import {hmrBoot, sugarExtend} from './little-ramda'
+import {sugarExtend} from './little-ramda'
 
 sugarExtend()
 
@@ -14,7 +14,14 @@ function render(type = require('./App').default) {
   )
 }
 
-hmrBoot(module, render, ['./App'])
+if (module.hot) {
+  console.log('Cold Boot')
+  module.hot.accept(['./App'], () => {
+    // console.clear()
+    console.log('Hot Reload')
+    render()
+  })
+}
 
 render()
 registerServiceWorker()
