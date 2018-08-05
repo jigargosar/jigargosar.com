@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import {_map, F} from './ramda'
+import {_map} from './ramda'
 import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
 import {autorun, computed, Disposers} from './little-mst'
 import ReactDOM from 'react-dom'
-import EventListener, {withOptions} from 'react-event-listener'
+import EventListener from 'react-event-listener'
 
 @observer
 class Btn extends Component {
@@ -19,6 +19,21 @@ class Btn extends Component {
         {children}
       </button>
     )
+  }
+}
+
+function disposable(Comp) {
+  return class Disposable extends Component {
+    disposers = Disposers()
+    addDisposer = disposer => this.disposers.push([disposer])
+
+    componentWillUnmount() {
+      this.disposers.dispose()
+    }
+
+    render() {
+      return <Comp addDisposer={this.addDisposer} {...this.props} />
+    }
   }
 }
 
@@ -103,9 +118,9 @@ class NoteList extends Component {
   }
 }
 
+@disposable
 @observer
 class NoteListItem extends Component {
-  disposers = Disposers()
   @computed
   get itemProps() {
     return store.notesSelection.getItemProps({key: this.note.id})
@@ -133,7 +148,7 @@ class NoteListItem extends Component {
   }
 
   componentDidMount() {
-    this.disposers.push(
+    this.props.addDisposer(
       autorun(() => {
         if (this.isSelected) {
           requestAnimationFrame(() => {
@@ -142,10 +157,6 @@ class NoteListItem extends Component {
         }
       }),
     )
-  }
-
-  componentWillUnmount() {
-    this.disposers.dispose()
   }
 
   onDelete = wrapSP(() => store.deleteNote(this.note))
