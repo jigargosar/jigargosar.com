@@ -114,16 +114,18 @@ class NoteListItem extends Component {
     return (note.text || 'empty').trim().split('\n')[0]
   }
 
-  componentDidMount() {
+  focusIfNeeded = () => {
     if (this.isSelected) {
       ReactDOM.findDOMNode(this).focus()
     }
   }
 
+  componentDidMount() {
+    this.focusIfNeeded()
+  }
+
   componentDidUpdate() {
-    if (this.isSelected) {
-      ReactDOM.findDOMNode(this).focus()
-    }
+    this.focusIfNeeded()
   }
 
   render({note} = this.props) {
