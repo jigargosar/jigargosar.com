@@ -30,6 +30,7 @@ const disposable = BaseComponent =>
       static displayName = wrapDisplayName(BaseComponent, 'Disposable')
       disposers = Disposers()
       addDisposer = disposer => this.disposers.push(disposer)
+      autorun = (view, opts = {}) => this.addDisposer(autorun(view, opts))
 
       componentWillUnmount() {
         this.disposers.dispose()
@@ -37,7 +38,11 @@ const disposable = BaseComponent =>
 
       render() {
         return (
-          <BaseComponent addDisposer={this.addDisposer} {...this.props} />
+          <BaseComponent
+            addDisposer={this.addDisposer}
+            autorun={this.autorun}
+            {...this.props}
+          />
         )
       }
     },
@@ -143,9 +148,14 @@ class NoteList extends Component {
     this.selection.setComputedKeys(
       computed(() => this.notes.map(_prop('id'))),
     )
-    this.props.addDisposer(
-      autorun(() => store.setSelectedNoteIdx(this.selection.selectedIdx)),
+    this.props.autorun(() =>
+      store.setSelectedNoteIdx(this.selection.selectedIdx),
     )
+    this.props.autorun(() => {
+      if (store.selectedNote) {
+        this.selection.setSelectedKey(store.selectedNote.id)
+      }
+    })
   }
 
   render() {

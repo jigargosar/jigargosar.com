@@ -140,6 +140,7 @@ const RootStore = types
       updateSortIdxWithNoteAt(idx, note, self.allNotes)
       self.notesCollection.addAll([note])
       self._sel.setSelectedKey(note.id)
+      self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
     }
 
     return {
