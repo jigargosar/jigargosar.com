@@ -21,7 +21,7 @@ export const SingleSelectionStore = model('SingleSelectionStore')
         mathMod(__, self.keys.length),
         defaultTo(0),
       )(idx)
-      self.focusSelected()
+      self.rafFocusSelected()
     },
     get selectedIdx() {
       if (self.keys.length === 0) {
@@ -65,6 +65,7 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       const elementId = self.selectedKey
       const el = document.getElementById(elementId)
       console.log(`el`, el)
+      el.scrollIntoView()
     },
     setSelectedKey(key) {
       self.selectedIdx = self.keys.indexOf(key)
