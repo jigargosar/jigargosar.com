@@ -205,13 +205,11 @@ class NoteListItem extends Component {
   }
 
   componentDidMount() {
-    this.props.addDisposer(
-      autorun(() => {
-        if (this.isSelected) {
-          requestAnimationFrame(() => ReactDOM.findDOMNode(this).focus())
-        }
-      }),
-    )
+    this.props.autorun(() => {
+      if (this.isSelected) {
+        requestAnimationFrame(() => ReactDOM.findDOMNode(this).focus())
+      }
+    })
   }
 
   onDelete = wrapSP(() => store.deleteNote(this.note))
