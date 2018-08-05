@@ -77,14 +77,14 @@ class NoteList extends Component {
   render() {
     return (
       <div {...this.containerProps}>
-        {_map(note => <Note key={note.id} note={note} />)(store.allNotes)}
+        {_map(note => <NoteListItem key={note.id} note={note} />)(store.allNotes)}
       </div>
     )
   }
 }
 
 @observer
-class Note extends Component {
+class NoteListItem extends Component {
   @computed
   get itemProps() {
     return store.notesSelection.getItemProps({key: this.note.id})
