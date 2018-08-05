@@ -7,7 +7,6 @@ import {
   getRoot,
   idProp,
   model,
-  observable,
   onSnapshot,
   optional,
   types,
@@ -16,7 +15,6 @@ import {StorageItem} from './services/storage'
 import {SingleSelectionStore} from './SingleSelectionStore'
 import {forEachIndexed} from './little-ramda'
 import {whenKey, withKeyEvent} from './components/utils'
-import store from './store'
 
 const NoteModel = _compose(
   extend(self => {
@@ -125,12 +123,13 @@ const RootStore = types
           ['mod+enter', 'onAddNoteAfterSelected'],
           ['shift+mod+enter', 'onAddNoteBeforeSelected'],
         ],
+        editing: [],
       }
-      return keyBindings['default']
+      return keyBindings[self.mode]
     },
     get onKeyDown() {
       return withKeyEvent(
-        self.keyBindings.map(([key, cmdName]) =>
+        ...self.keyBindings.map(([key, cmdName]) =>
           whenKey(key)(self.on(cmdName)),
         ),
       )
