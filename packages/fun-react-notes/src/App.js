@@ -121,11 +121,13 @@ class NoteEditor extends Component {
 }
 
 @withSelectionHandler
+@disposable
 @observer
 class NoteList extends Component {
   @computed
   get containerProps() {
-    return store.notesSelection.getContainerProps()
+    // return store.notesSelection.getContainerProps()
+    return this.selection.getContainerProps()
   }
 
   @computed
@@ -133,30 +135,44 @@ class NoteList extends Component {
     return store.allNotes
   }
 
+  @computed
+  get selection() {
+    return this.props.selection
+  }
+
   componentDidMount() {
-    this.props.selection.setComputedKeys(
+    this.selection.setComputedKeys(
       computed(() => this.notes.map(_prop('id'))),
+    )
+    this.props.addDisposer(
+      autorun(() => store.setSelectedNoteIdx(this.selection.selectedIdx)),
     )
   }
 
   render() {
     return (
       <div {...this.containerProps}>
-        {_map(NoteList.renderNote)(this.notes)}
+        {_map(this.renderNote)(this.notes)}
       </div>
     )
   }
-  static renderNote(note) {
-    return <NoteListItem key={note.id} note={note} />
-  }
+  renderNote = note => (
+    <NoteListItem key={note.id} note={note} selection={this.selection} />
+  )
 }
 
 @disposable
 @observer
 class NoteListItem extends Component {
   @computed
+  get selection() {
+    return this.props.selection
+  }
+
+  @computed
   get itemProps() {
-    return store.notesSelection.getItemProps({key: this.note.id})
+    // return store.notesSelection.getItemProps({key: this.note.id})
+    return this.selection.getItemProps({key: this.note.id})
   }
 
   @computed
