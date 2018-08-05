@@ -41,7 +41,13 @@ const disposable = BaseComponent => {
   }
 }
 
-function withSingleSelectionHandler() {}
+const withSelectionHandler = BaseComponent =>
+  class SelectionHandler extends Component {
+    static displayName = wrapDisplayName(BaseComponent, 'SelectionHandler')
+    render() {
+      return <BaseComponent {...this.props} />
+    }
+  }
 
 @observer
 class App extends Component {
