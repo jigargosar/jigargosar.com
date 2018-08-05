@@ -14,7 +14,6 @@ import {
   applySnapshot,
   computed,
   extend,
-  getRoot,
   idProp,
   model,
   onSnapshot,

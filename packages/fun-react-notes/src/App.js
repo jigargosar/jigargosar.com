@@ -3,13 +3,13 @@ import {_map, F} from './ramda'
 import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
-import {computed} from './little-mst'
+import {autorun, computed} from './little-mst'
 import ReactDOM from 'react-dom'
-import EventListener from 'react-event-listener'
+import EventListener, {withOptions} from 'react-event-listener'
 
 @observer
 class Btn extends Component {
-  render({children, other} = this.props) {
+  render({children, ...other} = this.props) {
     return (
       <button
         onKeyDown={wrapSP(F)}
@@ -28,7 +28,16 @@ class App extends Component {
   render() {
     return (
       <FocusTrap>
-        <EventListener target={document} onKeyDown={store.onKeyDown} />
+        <EventListener
+          target={'document'}
+          onKeyDown={withOptions(
+            e => {
+              console.log(`e`, e)
+              return store.onKeyDown()
+            },
+            {passive: true, capture: false},
+          )}
+        />
         <div className={cn('vh-100 overflow-hidden', 'flex flex-column')}>
           <header className={cn('w-100')}>
             <h1>Fun React Notes</h1>
@@ -132,19 +141,15 @@ class NoteListItem extends Component {
     return (note.text || 'empty').trim().split('\n')[0]
   }
 
-  focusIfNeeded = () => {
-    if (this.isSelected) {
-      ReactDOM.findDOMNode(this).focus()
-    }
-  }
-
   componentDidMount() {
-    this.focusIfNeeded()
+    autorun(() => {
+      if (this.isSelected) {
+        ReactDOM.findDOMNode(this).focus()
+      }
+    })
   }
 
-  componentDidUpdate() {
-    this.focusIfNeeded()
-  }
+  componentWillUnmount() {}
 
   onDelete = wrapSP(() => store.deleteNote(this.note))
 
@@ -168,7 +173,7 @@ class NoteListItem extends Component {
       >
         <div className={cn('flex-auto truncate')}>{this.displayText}</div>
         <div className={cn({dn: !isSelected})}>
-          <Btn onClick={wrapSP(this.onDelete)}>X</Btn>
+          <Btn onClick={this.onDelete}>X</Btn>
         </div>
       </ScrollIntoViewIfNeeded>
     )
