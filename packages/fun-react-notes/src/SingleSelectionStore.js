@@ -38,7 +38,7 @@ export const SingleSelectionStore = model('SingleSelectionStore')
             whenKeyPD('down')(self.selectNext),
             whenKeyPD('up')(self.selectPrev),
           ),
-          tabIndex: 0,
+          // tabIndex: 0,
         },
         props,
       )
@@ -62,10 +62,11 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       self.rafFocusSelected()
     },
     focusSelected() {
-      /*const elementId = self.selectedKey
+      const elementId = self.selectedKey
       const el = document.getElementById(elementId)
-      console.log(`el`, el)
-      el.scrollIntoView({})*/
+      // console.log(`el`, el)
+      // el.scrollIntoView({})
+      el.focus()
     },
     setSelectedKey(key) {
       self.selectedIdx = self.keys.indexOf(key)

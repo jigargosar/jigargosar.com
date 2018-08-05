@@ -101,7 +101,7 @@ class Note extends Component {
           },
           'flex',
         )}
-        // tabIndex={note.isSelected ? 0 : null}
+        tabIndex={note.isSelected ? 0 : null}
       >
         <div className={cn('flex-auto truncate')}>
           {(note.text || 'empty').split('\n')[0]}
