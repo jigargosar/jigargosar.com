@@ -83,7 +83,6 @@ class Note extends Component {
       <div
         {...other}
         id={note.id}
-        // onClick={() => store.updateSelectedOnFocus(note)}
         className={cn(
           'pa2',
           'bb b--moon-gray',

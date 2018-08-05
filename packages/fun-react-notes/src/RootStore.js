@@ -56,6 +56,7 @@ const NoteCollection = model('NotesCollection')
     },
   }))
   .actions(self => ({
+    addNewAt(idx) {},
     addAll(notes) {
       self.notes.push(...notes)
     },
