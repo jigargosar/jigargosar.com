@@ -86,7 +86,7 @@ class NoteList extends Component {
 @observer
 class Note extends Component {
   @computed
-  get containerProps() {
+  get itemProps() {
     return store.notesSelection.getItemProps({key: this.note.id})
   }
 
@@ -114,7 +114,7 @@ class Note extends Component {
     const isSelected = this.isSelected
     return (
       <ScrollIntoViewIfNeeded
-        {...this.containerProps}
+        {...this.itemProps}
         active={isSelected}
         id={note.id}
         className={cn(
