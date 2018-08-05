@@ -111,24 +111,25 @@ class Note extends Component {
     return (note.text || 'empty').trim().split('\n')[0]
   }
   render({note} = this.props) {
+    const isSelected = this.isSelected
     return (
       <ScrollIntoViewIfNeeded
         {...this.containerProps}
-        active={this.isSelected}
+        active={isSelected}
         id={note.id}
         className={cn(
           'pa2',
           'bb b--moon-gray',
           {
-            'blue bg-black-05': note.isSelected,
+            'blue bg-black-05': isSelected,
             outline: this.isFocused,
           },
           'flex',
         )}
-        tabIndex={note.isSelected ? 0 : null}
+        tabIndex={isSelected ? 0 : null}
       >
         <div className={cn('flex-auto truncate')}>{this.displayText}</div>
-        <div className={cn({dn: !note.isSelected})}>
+        <div className={cn({dn: !isSelected})}>
           <div
             role={'button'}
             className={cn('input-reset')}
