@@ -126,7 +126,6 @@ class NoteEditor extends Component {
 class NoteList extends Component {
   @computed
   get containerProps() {
-    // return store.notesSelection.getContainerProps()
     return this.selection.getContainerProps()
   }
 
@@ -171,7 +170,6 @@ class NoteListItem extends Component {
 
   @computed
   get itemProps() {
-    // return store.notesSelection.getItemProps({key: this.note.id})
     return this.selection.getItemProps({key: this.note.id})
   }
 
