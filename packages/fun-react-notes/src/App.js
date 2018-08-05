@@ -30,8 +30,13 @@ class App extends Component {
               <button onClick={store.reset}>Reset Store</button>
             </h4>
           </header>
-          <main className={cn('overflow-hidden flex-auto', 'flex')}>
-            <aside className={cn('overflow-scroll w-33 ba br-0')}>
+          <main className={cn('flex-auto overflow-hidden', 'flex')}>
+            <aside
+              className={cn(
+                'w-33 overflow-scroll',
+                'ba br-0 b--moon-gray',
+              )}
+            >
               <NoteList />
             </aside>
             <div className={cn('flex-auto flex ba')}>
