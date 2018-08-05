@@ -74,21 +74,12 @@ const RootStore = types
     notesCollection: optional(NoteCollection),
     _sel: optional(SingleSelectionStore),
   })
-  .extend(() => {
-    const isEditorFocused = observable.box(false)
-    return {
-      views: {
-        get isEditorFocused() {
-          return false
-        },
-      },
-      actions: {
-        setEditorFocused(bool) {
-          isEditorFocused.set(bool)
-        },
-      },
-    }
-  })
+  .volatile(() => ({isEditorFocused: false}))
+  .actions(self => ({
+    setEditorFocused(bool) {
+      self.isEditorFocused = bool
+    },
+  }))
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
