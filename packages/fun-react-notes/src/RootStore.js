@@ -100,7 +100,7 @@ const RootStore = types
         default: [
           ['mod+enter', 'onAddNoteAfterSelected'],
           ['shift+mod+enter', 'onAddNoteBeforeSelected'],
-          ['d', 'onDeleteSelected'],
+          ['d', 'onDeleteSelectedNote'],
         ],
         editing: [],
       }
@@ -137,7 +137,7 @@ const RootStore = types
         )
       },
       deleteNote: note => self.notesCollection.deleteNote(note),
-      deleteSelectedNote() {
+      onDeleteSelectedNote() {
         const note = self.selectedNote
         if (note) {
           self.deleteNote(note)
