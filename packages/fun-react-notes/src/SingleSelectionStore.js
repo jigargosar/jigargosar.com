@@ -1,4 +1,4 @@
-import {computed, model, nullNumber} from './little-mst'
+import {autorun, computed, model, nullNumber} from './little-mst'
 import {__, _compose, _merge, defaultTo, mathMod} from './ramda'
 import {whenKeyPD, withKeyEvent} from './components/utils'
 
@@ -67,3 +67,23 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       self.selectedIdx -= 1
     },
   }))
+
+const SSM = model('SSM', {_idx: 0, _max: 0}).views(self => ({
+  get max() {
+    const max = self._max
+    return max === 0 ? NaN : max
+  },
+  get idx() {
+    return mathMod(self._idx)(self.max)
+  },
+  get lastIdx() {
+    return self.max - 1
+  },
+}))
+
+const ssm = SSM.create()
+
+autorun(() => {
+  console.log(`ssm.max`, ssm.max)
+  console.log(`ssm.idx`, ssm.idx)
+})
