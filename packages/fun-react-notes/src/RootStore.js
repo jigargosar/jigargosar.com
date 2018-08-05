@@ -110,9 +110,14 @@ const RootStore = types
       return self._sel.getItemProps({key: note.id, note})
     },
     get onKeyDown() {
+      const keyBindings = [
+        ['mod+enter', 'onAddNoteAfterSelected'],
+        ['shift+mod+enter', 'onAddNoteBeforeSelected'],
+      ]
       return withKeyEvent(
-        whenKey('mod+enter')(self.onAddNoteAfterSelected),
-        whenKey('shift+mod+enter')(self.onAddNoteBeforeSelected),
+        keyBindings.map(([key, cmdName]) =>
+          whenKey(key)(self.on(cmdName)),
+        ),
       )
     },
   }))
@@ -132,6 +137,7 @@ const RootStore = types
     }
 
     return {
+      on: cmdName => e => self[cmdName](e),
       afterCreate() {
         self._sel.setComputedKeys(
           computed(() => self.allNotes.map(_prop('id')), {name: 'allni'}),
