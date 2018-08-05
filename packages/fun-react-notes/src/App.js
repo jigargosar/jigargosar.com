@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {_map} from './ramda'
+import {_compose, _map} from './ramda'
 import store from './store'
 import {
   cn,
@@ -39,7 +39,7 @@ class App extends Component {
             >
               <NoteList />
             </aside>
-            <div className={cn('flex-auto flex ba')}>
+            <div className={cn('flex-auto flex', 'ba b--moon-gray')}>
               <NoteEditor />
             </div>
           </main>
@@ -58,7 +58,7 @@ class NoteEditor extends Component {
     return (
       <textarea
         id={note.id}
-        className={cn('input-reset w-100 pa2 m0 b--moon-gray')}
+        className={cn('input-reset w-100 pa2 m0 bn b--moon-gray')}
         style={{
           resize: 'none',
           minHeight: 300,
@@ -89,6 +89,11 @@ class NoteList extends Component {
 
 @observer
 class Note extends Component {
+  @computed
+  get displayText() {
+    const {note} = this.props
+    return (note.text || 'empty').trim().split('\n')[0]
+  }
   render({note, ...other} = this.props) {
     return (
       <ScrollIntoViewIfNeeded
@@ -107,9 +112,7 @@ class Note extends Component {
         )}
         tabIndex={note.isSelected ? 0 : null}
       >
-        <div className={cn('flex-auto truncate')}>
-          {(note.text || 'empty').split('\n')[0]}
-        </div>
+        <div className={cn('flex-auto truncate')}>{this.displayText}</div>
         <div className={cn({dn: !note.isSelected})}>
           <div
             role={'button'}
