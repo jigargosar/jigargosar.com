@@ -22,7 +22,7 @@ class App extends Component {
           whenKey('shift+mod+enter')(store.onAddNoteBeforeSelected),
         )}
       >
-        <div className={cn('vh-100', 'flex flex-column')}>
+        <div className={cn('vh-100 overflow-hidden', 'flex flex-column')}>
           <header className={cn('w-100')}>
             <h1>Fun React Notes</h1>
             <h4>
@@ -30,8 +30,8 @@ class App extends Component {
               <button onClick={store.reset}>Reset Store</button>
             </h4>
           </header>
-          <main className={cn('flex-auto flex')}>
-            <aside className={cn('w-33')}>
+          <main className={cn('overflow-hidden flex-auto', 'flex')}>
+            <aside className={cn('overflow-scroll w-33')}>
               <NoteList />
             </aside>
             <div className={cn('flex-auto flex')}>
