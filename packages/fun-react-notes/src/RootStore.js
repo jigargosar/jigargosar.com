@@ -28,14 +28,13 @@ import {whenKey, withKeyEvent} from './components/utils'
 
 const NoteModel = _compose(
   extend(self => {
-    const root = () => getRoot(self)
+    // const root = () => getRoot(self)
     const update = attrs => Object.assign(self, attrs)
     return {
       views: {},
       actions: {
         update,
         onTextChange: e => update({text: e.target.value}),
-        onDelete: () => root().deleteNote(self),
       },
     }
   }),

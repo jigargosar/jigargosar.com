@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {_map} from './ramda'
+import {_map, F} from './ramda'
 import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
@@ -8,11 +8,27 @@ import ReactDOM from 'react-dom'
 import EventListener from 'react-event-listener'
 
 @observer
+class Btn extends Component {
+  render({children, other} = this.props) {
+    return (
+      <button
+        onKeyDown={wrapSP(F)}
+        {...other}
+        // role={'button'}
+        className={cn('input-reset')}
+      >
+        {children}
+      </button>
+    )
+  }
+}
+
+@observer
 class App extends Component {
   render() {
     return (
       <FocusTrap>
-        <EventListener target={window} onKeyDown={store.onKeyDown} />
+        <EventListener target={document} onKeyDown={store.onKeyDown} />
         <div className={cn('vh-100 overflow-hidden', 'flex flex-column')}>
           <header className={cn('w-100')}>
             <h1>Fun React Notes</h1>
@@ -89,17 +105,6 @@ class NoteList extends Component {
 }
 
 @observer
-class Btn extends Component {
-  render({children, other} = this.props) {
-    return (
-      <div {...other} role={'button'} className={cn('input-reset')}>
-        {children}
-      </div>
-    )
-  }
-}
-
-@observer
 class NoteListItem extends Component {
   @computed
   get itemProps() {
@@ -163,7 +168,7 @@ class NoteListItem extends Component {
       >
         <div className={cn('flex-auto truncate')}>{this.displayText}</div>
         <div className={cn({dn: !isSelected})}>
-          <Btn onClick={wrapSP(note.onDelete)}>X</Btn>
+          <Btn onClick={wrapSP(this.onDelete)}>X</Btn>
         </div>
       </ScrollIntoViewIfNeeded>
     )
