@@ -21,17 +21,7 @@ const NoteModel = _compose(
     const root = () => getRoot(self)
     const update = attrs => Object.assign(self, attrs)
     return {
-      views: {
-        get isSelected() {
-          return root().isNoteSelected(self)
-        },
-        get isFocused() {
-          return root().isNoteFocused(self)
-        },
-        get listItemProps() {
-          return root().getNoteListItemProps(self)
-        },
-      },
+      views: {},
       actions: {
         update,
         onTextChange: e => update({text: e.target.value}),
@@ -101,18 +91,6 @@ const RootStore = types
     },
     get selectedNote() {
       return self.allNotes[self._sel.selectedIdx]
-    },
-    get noteListProps() {
-      return self._sel.getContainerProps()
-    },
-    isNoteSelected(m) {
-      return self.selectedNote === m
-    },
-    isNoteFocused(m) {
-      return false
-    },
-    getNoteListItemProps(note) {
-      return self._sel.getItemProps({key: note.id, note})
     },
     get mode() {
       return self.isEditorFocused ? 'editing' : 'default'
