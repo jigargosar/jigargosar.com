@@ -14,6 +14,8 @@ import {
 import {StorageItem} from './services/storage'
 import {SingleSelectionStore} from './SingleSelectionStore'
 import {forEachIndexed} from './little-ramda'
+import {whenKey, withKeyEvent} from './components/utils'
+import store from './store'
 
 const NoteModel = _compose(
   extend(self => {
@@ -106,6 +108,12 @@ const RootStore = types
     },
     getNoteListItemProps(note) {
       return self._sel.getItemProps({key: note.id, note})
+    },
+    get onKeyDown() {
+      return withKeyEvent(
+        whenKey('mod+enter')(self.onAddNoteAfterSelected),
+        whenKey('shift+mod+enter')(self.onAddNoteBeforeSelected),
+      )
     },
   }))
   .actions(self => {

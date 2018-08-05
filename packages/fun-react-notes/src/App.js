@@ -1,14 +1,7 @@
 import React, {Component} from 'react'
-import {_compose, _map} from './ramda'
+import {_map} from './ramda'
 import store from './store'
-import {
-  cn,
-  FocusTrap,
-  observer,
-  whenKey,
-  withKeyEvent,
-  wrapSP,
-} from './components/utils'
+import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
 import {computed} from './little-mst'
 
@@ -16,12 +9,7 @@ import {computed} from './little-mst'
 class App extends Component {
   render() {
     return (
-      <FocusTrap
-        onKeyDown={withKeyEvent(
-          whenKey('mod+enter')(store.onAddNoteAfterSelected),
-          whenKey('shift+mod+enter')(store.onAddNoteBeforeSelected),
-        )}
-      >
+      <FocusTrap onKeyDown={store.onKeyDown}>
         <div className={cn('vh-100 overflow-hidden', 'flex flex-column')}>
           <header className={cn('w-100')}>
             <h1>Fun React Notes</h1>
