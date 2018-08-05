@@ -100,6 +100,7 @@ const RootStore = types
         default: [
           ['mod+enter', 'onAddNoteAfterSelected'],
           ['shift+mod+enter', 'onAddNoteBeforeSelected'],
+          ['d', 'onDeleteSelected'],
         ],
         editing: [],
       }
@@ -135,8 +136,12 @@ const RootStore = types
           computed(() => self.allNotes.map(_prop('id')), {name: 'allni'}),
         )
       },
-      deleteNote(note) {
-        self.notesCollection.deleteNote(note)
+      deleteNote: note => self.notesCollection.deleteNote(note),
+      deleteSelectedNote() {
+        const note = self.selectedNote
+        if (note) {
+          self.deleteNote(note)
+        }
       },
       onAddNote() {
         addNewNoteAt(0)
