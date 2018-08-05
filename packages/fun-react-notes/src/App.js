@@ -25,7 +25,7 @@ class Btn extends Component {
 function disposable(Comp) {
   return class Disposable extends Component {
     disposers = Disposers()
-    addDisposer = disposer => this.disposers.push([disposer])
+    addDisposer = disposer => this.disposers.push(disposer)
 
     componentWillUnmount() {
       this.disposers.dispose()
