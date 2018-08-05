@@ -21,7 +21,6 @@ export const SingleSelectionStore = model('SingleSelectionStore')
         mathMod(__, self.keys.length),
         defaultTo(0),
       )(idx)
-      self.rafFocusSelected()
     },
     get selectedIdx() {
       if (self.keys.length === 0) {
@@ -55,22 +54,8 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     },
   }))
   .actions(self => ({
-    rafFocusSelected() {
-      requestAnimationFrame(self.focusSelected)
-    },
-    afterCreate() {
-      self.rafFocusSelected()
-    },
-    focusSelected() {
-      const elementId = self.selectedKey
-      const el = document.getElementById(elementId)
-      // console.log(`el`, el)
-      // el.scrollIntoView({})
-      el.focus()
-    },
     setSelectedKey(key) {
       self.selectedIdx = self.keys.indexOf(key)
-      // setFocusAndSelectionOnDOMId(key)
     },
     setComputedKeys(computedKeys) {
       self.computedKeys = computedKeys
