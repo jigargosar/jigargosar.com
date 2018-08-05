@@ -10,6 +10,7 @@ import {
   wrapSP,
 } from './components/utils'
 import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
+import {computed} from './little-mst'
 
 @observer
 class App extends Component {
@@ -69,9 +70,13 @@ class NoteEditor extends Component {
 
 @observer
 class NoteList extends Component {
+  @computed
+  get containerProps() {
+    return store.notesSelection.getContainerProps()
+  }
   render() {
     return (
-      <div {...store.noteListProps}>
+      <div {...this.containerProps}>
         {_map(note => <Note {...note.listItemProps} />)(store.allNotes)}
       </div>
     )
@@ -85,7 +90,7 @@ class Note extends Component {
       <ScrollIntoViewIfNeeded
         {...other}
         active={note.isSelected}
-        options={{behavior: 'auto', scrollMode: 'if-needed'}}
+        options={{behavior: 'smooth', scrollMode: 'if-needed'}}
         id={note.id}
         className={cn(
           'pa2',
@@ -96,7 +101,7 @@ class Note extends Component {
           },
           'flex',
         )}
-        tabIndex={note.isSelected ? 0 : null}
+        // tabIndex={note.isSelected ? 0 : null}
       >
         <div className={cn('flex-auto truncate')}>
           {(note.text || 'empty').split('\n')[0]}

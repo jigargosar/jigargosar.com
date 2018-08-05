@@ -86,6 +86,9 @@ const RootStore = types
     }
   })
   .views(self => ({
+    get notesSelection() {
+      return self._sel
+    },
     get allNotes() {
       return self.notesCollection.all
     },

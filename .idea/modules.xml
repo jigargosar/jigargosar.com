@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/packages/cra-list2/cra-list2.iml" filepath="$PROJECT_DIR$/packages/cra-list2/cra-list2.iml" />
       <module fileurl="file://$PROJECT_DIR$/packages/fun-react-notes/fun-react-notes.iml" filepath="$PROJECT_DIR$/packages/fun-react-notes/fun-react-notes.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/fun-vue-notes/fun-vue-notes.iml" filepath="$PROJECT_DIR$/packages/fun-vue-notes/fun-vue-notes.iml" />
       <module fileurl="file://$PROJECT_DIR$/jigargosar.com.iml" filepath="$PROJECT_DIR$/jigargosar.com.iml" />
     </modules>
   </component>
