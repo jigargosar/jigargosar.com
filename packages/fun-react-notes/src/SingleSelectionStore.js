@@ -13,11 +13,15 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     get keys() {
       return self.computedKeys.get()
     },
+    get selectedKey() {
+      return self.keys[self._selectedIdx]
+    },
     set selectedIdx(idx) {
       self._selectedIdx = _compose(
         mathMod(__, self.keys.length),
         defaultTo(0),
       )(idx)
+      self.focusSelected()
     },
     get selectedIdx() {
       if (self.keys.length === 0) {
@@ -51,8 +55,20 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     },
   }))
   .actions(self => ({
+    rafFocusSelected() {
+      requestAnimationFrame(self.focusSelected)
+    },
+    afterCreate() {
+      self.rafFocusSelected()
+    },
+    focusSelected() {
+      const elementId = self.selectedKey
+      const el = document.getElementById(elementId)
+      console.log(`el`, el)
+    },
     setSelectedKey(key) {
       self.selectedIdx = self.keys.indexOf(key)
+      // setFocusAndSelectionOnDOMId(key)
     },
     setComputedKeys(computedKeys) {
       self.computedKeys = computedKeys

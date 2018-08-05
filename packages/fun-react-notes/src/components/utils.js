@@ -187,9 +187,10 @@ export function createSelection(start, end = start) {
 export const setFocusAndSelectionOnDOMId = (domId, selection) =>
   requestAnimationFrame(() => {
     const el = document.getElementById(domId)
+    debugger
     console.assert(!!el, `Focus: el not found ${domId}`)
     if (el) {
-      el.focus()
+      console.log(`el.focus()`, el.focus())
     }
     if (selection) {
       el.setSelectionRange(selection.start, selection.end)

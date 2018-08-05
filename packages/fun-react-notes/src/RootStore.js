@@ -113,9 +113,9 @@ const RootStore = types
       updateSortIdx(insert(idx)(note)(allNotes))
     }
 
-    function addNewNote(fn) {
+    function addNewNoteAt(idx) {
       const note = NoteModel.create()
-      fn(note)
+      updateSortIdxWithNoteAt(idx, note, self.allNotes)
       self.notesCollection.addAll([note])
       self._sel.setSelectedKey(note.id)
     }
@@ -130,24 +130,17 @@ const RootStore = types
         self.notesCollection.deleteNote(note)
       },
       onAddNote() {
-        addNewNote(note => {
-          const idx = 0
-          updateSortIdxWithNoteAt(idx, note, self.allNotes)
-        })
+        addNewNoteAt(0)
       },
       onAddNoteAfterSelected() {
-        addNewNote(note => {
-          const oldIdx = indexOf(self.selectedNote)(self.allNotes)
-          const idx = oldIdx < 0 ? 0 : oldIdx + 1
-          updateSortIdxWithNoteAt(idx, note, self.allNotes)
-        })
+        const oldIdx = indexOf(self.selectedNote)(self.allNotes)
+        const idx = oldIdx < 0 ? 0 : oldIdx + 1
+        addNewNoteAt(idx)
       },
       onAddNoteBeforeSelected() {
-        addNewNote(note => {
-          const oldIdx = indexOf(self.selectedNote)(self.allNotes)
-          const idx = oldIdx < 0 ? 0 : oldIdx
-          updateSortIdxWithNoteAt(idx, note, self.allNotes)
-        })
+        const oldIdx = indexOf(self.selectedNote)(self.allNotes)
+        const idx = oldIdx < 0 ? 0 : oldIdx
+        addNewNoteAt(idx)
       },
     }
   })
