@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {_map} from './ramda'
+import {_map, _prop} from './ramda'
 import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
@@ -127,14 +127,27 @@ class NoteList extends Component {
   get containerProps() {
     return store.notesSelection.getContainerProps()
   }
+
+  @computed
+  get notes() {
+    return store.allNotes
+  }
+
+  componentDidMount() {
+    this.props.selection.setComputedKeys(
+      computed(() => this.notes.map(_prop('id'))),
+    )
+  }
+
   render() {
     return (
       <div {...this.containerProps}>
-        {_map(note => <NoteListItem key={note.id} note={note} />)(
-          store.allNotes,
-        )}
+        {_map(NoteList.renderNote)(this.notes)}
       </div>
     )
+  }
+  static renderNote(note) {
+    return <NoteListItem key={note.id} note={note} />
   }
 }
 
