@@ -11,13 +11,13 @@ import EventListener from 'react-event-listener'
 class Btn extends Component {
   render({children, ...other} = this.props) {
     return (
-      <button
+      <div
         {...other}
         // role={'button'}
         className={cn('input-reset')}
       >
         {children}
-      </button>
+      </div>
     )
   }
 }
