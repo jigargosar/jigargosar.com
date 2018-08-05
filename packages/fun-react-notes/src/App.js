@@ -4,6 +4,7 @@ import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
 import {computed} from './little-mst'
+import ReactDOM from 'react-dom'
 
 @observer
 class App extends Component {
@@ -77,7 +78,9 @@ class NoteList extends Component {
   render() {
     return (
       <div {...this.containerProps}>
-        {_map(note => <NoteListItem key={note.id} note={note} />)(store.allNotes)}
+        {_map(note => <NoteListItem key={note.id} note={note} />)(
+          store.allNotes,
+        )}
       </div>
     )
   }
@@ -110,6 +113,19 @@ class NoteListItem extends Component {
     const {note} = this.props
     return (note.text || 'empty').trim().split('\n')[0]
   }
+
+  componentDidMount() {
+    if (this.isSelected) {
+      ReactDOM.findDOMNode(this).focus()
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.isSelected) {
+      ReactDOM.findDOMNode(this).focus()
+    }
+  }
+
   render({note} = this.props) {
     const isSelected = this.isSelected
     return (
