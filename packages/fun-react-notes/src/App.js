@@ -23,32 +23,37 @@ class Btn extends Component {
   }
 }
 
-const disposable = BaseComponent => {
-  return class Disposable extends Component {
-    static displayName = wrapDisplayName(BaseComponent, 'Disposable')
-    disposers = Disposers()
-    addDisposer = disposer => this.disposers.push(disposer)
+const disposable = BaseComponent =>
+  observer(
+    class Disposable extends Component {
+      static displayName = wrapDisplayName(BaseComponent, 'Disposable')
+      disposers = Disposers()
+      addDisposer = disposer => this.disposers.push(disposer)
 
-    componentWillUnmount() {
-      this.disposers.dispose()
-    }
+      componentWillUnmount() {
+        this.disposers.dispose()
+      }
 
-    render() {
-      return (
-        <BaseComponent addDisposer={this.addDisposer} {...this.props} />
-      )
-    }
-  }
-}
+      render() {
+        return (
+          <BaseComponent addDisposer={this.addDisposer} {...this.props} />
+        )
+      }
+    },
+  )
 
 const withSelectionHandler = BaseComponent =>
-  class SelectionHandler extends Component {
-    static displayName = wrapDisplayName(BaseComponent, 'SelectionHandler')
-    render() {
-      return <BaseComponent {...this.props} />
-    }
-  }
-
+  observer(
+    class SelectionHandler extends Component {
+      static displayName = wrapDisplayName(
+        BaseComponent,
+        'SelectionHandler',
+      )
+      render() {
+        return <BaseComponent {...this.props} />
+      }
+    },
+  )
 @observer
 class App extends Component {
   render() {
