@@ -7,6 +7,7 @@ import {autorun, computed, Disposers} from './little-mst'
 import ReactDOM from 'react-dom'
 import EventListener from 'react-event-listener'
 import {wrapDisplayName} from './components/little-recompose'
+import {SingleSelectionStore} from './SingleSelectionStore'
 
 @observer
 class Btn extends Component {
@@ -49,8 +50,9 @@ const withSelectionHandler = BaseComponent =>
         BaseComponent,
         'SelectionHandler',
       )
+      selection = SingleSelectionStore.create()
       render() {
-        return <BaseComponent {...this.props} />
+        return <BaseComponent selection={this.selection} {...this.props} />
       }
     },
   )
@@ -118,6 +120,7 @@ class NoteEditor extends Component {
   }
 }
 
+@withSelectionHandler
 @observer
 class NoteList extends Component {
   @computed
