@@ -21,9 +21,8 @@ class App extends Component {
           whenKey('mod+enter')(store.onAddNoteAfterSelected),
           whenKey('shift+mod+enter')(store.onAddNoteBeforeSelected),
         )}
-        className={cn('vh-100')}
       >
-        <div className={cn('flex flex-column')}>
+        <div className={cn('vh-100', 'flex flex-column')}>
           <div className={cn('w-100')}>
             <h1>Fun React Notes</h1>
             <h4>
