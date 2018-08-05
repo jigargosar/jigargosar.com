@@ -87,6 +87,17 @@ class NoteList extends Component {
 }
 
 @observer
+class Btn extends Component {
+  render({children, other} = this.props) {
+    return (
+      <div {...other} role={'button'} className={cn('input-reset')}>
+        {children}
+      </div>
+    )
+  }
+}
+
+@observer
 class NoteListItem extends Component {
   @computed
   get itemProps() {
@@ -128,6 +139,8 @@ class NoteListItem extends Component {
     this.focusIfNeeded()
   }
 
+  onDelete = wrapSP(() => store.deleteNote(this.note))
+
   render({note} = this.props) {
     const isSelected = this.isSelected
     return (
@@ -148,13 +161,7 @@ class NoteListItem extends Component {
       >
         <div className={cn('flex-auto truncate')}>{this.displayText}</div>
         <div className={cn({dn: !isSelected})}>
-          <div
-            role={'button'}
-            className={cn('input-reset')}
-            onClick={wrapSP(note.onDelete)}
-          >
-            X
-          </div>
+          <Btn onClick={wrapSP(note.onDelete)}>X</Btn>
         </div>
       </ScrollIntoViewIfNeeded>
     )
