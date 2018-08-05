@@ -51,6 +51,7 @@ export {
 } from 'mobx-state-tree'
 
 export {
+  observable,
   values,
   has,
   get,

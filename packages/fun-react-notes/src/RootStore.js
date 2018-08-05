@@ -7,6 +7,7 @@ import {
   getRoot,
   idProp,
   model,
+  observable,
   onSnapshot,
   optional,
   types,
@@ -73,6 +74,21 @@ const RootStore = types
     notesCollection: optional(NoteCollection),
     _sel: optional(SingleSelectionStore),
   })
+  .extend(() => {
+    const isEditorFocused = observable.box(false)
+    return {
+      views: {
+        get isEditorFocused() {
+          return false
+        },
+      },
+      actions: {
+        setEditorFocused(bool) {
+          isEditorFocused.set(bool)
+        },
+      },
+    }
+  })
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
@@ -108,6 +124,9 @@ const RootStore = types
     },
     getNoteListItemProps(note) {
       return self._sel.getItemProps({key: note.id, note})
+    },
+    get mode() {
+      return self.isEditorFocused ? 'editing' : 'default'
     },
     get keyBindings() {
       const keyBindings = {
