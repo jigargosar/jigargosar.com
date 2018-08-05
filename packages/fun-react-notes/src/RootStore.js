@@ -104,7 +104,6 @@ const RootStore = types
     },
     get mode() {
       return _cond([
-        //
         [_prop('isEditorFocused'), always('editing')],
         [T, always('default')],
       ])(self)
