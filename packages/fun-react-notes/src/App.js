@@ -23,9 +23,9 @@ class Btn extends Component {
   }
 }
 
-function disposable(Comp) {
+const disposable = BaseComponent => {
   return class Disposable extends Component {
-    static displayName = wrapDisplayName(Comp, 'Disposable')
+    static displayName = wrapDisplayName(BaseComponent, 'Disposable')
     disposers = Disposers()
     addDisposer = disposer => this.disposers.push(disposer)
 
@@ -34,10 +34,14 @@ function disposable(Comp) {
     }
 
     render() {
-      return <Comp addDisposer={this.addDisposer} {...this.props} />
+      return (
+        <BaseComponent addDisposer={this.addDisposer} {...this.props} />
+      )
     }
   }
 }
+
+function withSingleSelectionHandler() {}
 
 @observer
 class App extends Component {
