@@ -5,12 +5,14 @@ import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
 import {computed} from './little-mst'
 import ReactDOM from 'react-dom'
+import EventListener from 'react-event-listener'
 
 @observer
 class App extends Component {
   render() {
     return (
-      <FocusTrap onKeyDown={store.onKeyDown}>
+      <FocusTrap>
+        <EventListener target={window} onKeyDown={store.onKeyDown} />
         <div className={cn('vh-100 overflow-hidden', 'flex flex-column')}>
           <header className={cn('w-100')}>
             <h1>Fun React Notes</h1>

@@ -1,4 +1,14 @@
-import {_compose, _prop, ascend, indexOf, insert, sortWith} from './ramda'
+import {
+  _compose,
+  _cond,
+  _prop,
+  always,
+  ascend,
+  indexOf,
+  insert,
+  sortWith,
+  T,
+} from './ramda'
 import {
   addDisposer,
   applySnapshot,
@@ -93,7 +103,11 @@ const RootStore = types
       return self.allNotes[self._sel.selectedIdx]
     },
     get mode() {
-      return self.isEditorFocused ? 'editing' : 'default'
+      return _cond([
+        //
+        [_prop('isEditorFocused'), always('editing')],
+        [T, always('default')],
+      ])(self)
     },
     get keyBindings() {
       const keyBindings = {
