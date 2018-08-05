@@ -200,8 +200,7 @@ class NoteListItem extends Component {
 
   @computed
   get displayText() {
-    const {note} = this.props
-    return (note.text || 'empty').trim().split('\n')[0]
+    return (this.note.text || 'empty').trim().split('\n')[0]
   }
 
   componentDidMount() {
