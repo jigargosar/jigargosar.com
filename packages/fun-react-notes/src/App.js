@@ -6,6 +6,7 @@ import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
 import {autorun, computed, Disposers} from './little-mst'
 import ReactDOM from 'react-dom'
 import EventListener from 'react-event-listener'
+import {wrapDisplayName} from './components/little-recompose'
 
 @observer
 class Btn extends Component {
@@ -24,6 +25,7 @@ class Btn extends Component {
 
 function disposable(Comp) {
   return class Disposable extends Component {
+    static displayName = wrapDisplayName(Comp, 'Disposable')
     disposers = Disposers()
     addDisposer = disposer => this.disposers.push(disposer)
 
