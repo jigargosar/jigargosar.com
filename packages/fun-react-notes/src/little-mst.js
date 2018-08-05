@@ -1,6 +1,6 @@
 import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
-import {_compose, _merge, _path, _startsWith} from './ramda'
+import {_compose, _merge, _path, _startsWith, call} from './ramda'
 
 export {
   addDisposer,
@@ -101,3 +101,15 @@ export const nullNumber = types.maybeNull(types.number)
 export const optional = (t, dv = {}) => types.optional(t, dv)
 export const stringArray = types.array(types.string)
 export const model = (n, p = null) => types.model(n, p)
+
+export function Disposers() {
+  const list = []
+  return {
+    push: (...args) => list.push(...args),
+    dispose: () => {
+      list.forEach(call)
+      list.splice(0, list.length)
+    },
+    length: () => list.length,
+  }
+}

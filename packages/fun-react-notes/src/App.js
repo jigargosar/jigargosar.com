@@ -3,7 +3,7 @@ import {_map, F} from './ramda'
 import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
-import {autorun, computed} from './little-mst'
+import {autorun, computed, Disposers} from './little-mst'
 import ReactDOM from 'react-dom'
 import EventListener, {withOptions} from 'react-event-listener'
 
@@ -12,7 +12,6 @@ class Btn extends Component {
   render({children, ...other} = this.props) {
     return (
       <button
-        onKeyDown={wrapSP(F)}
         {...other}
         // role={'button'}
         className={cn('input-reset')}
@@ -33,7 +32,7 @@ class App extends Component {
           onKeyDown={withOptions(
             e => {
               console.log(`e`, e)
-              return store.onKeyDown()
+              return store.onKeyDown(e)
             },
             {passive: true, capture: false},
           )}
@@ -115,6 +114,7 @@ class NoteList extends Component {
 
 @observer
 class NoteListItem extends Component {
+  disposers = Disposers()
   @computed
   get itemProps() {
     return store.notesSelection.getItemProps({key: this.note.id})
@@ -142,14 +142,20 @@ class NoteListItem extends Component {
   }
 
   componentDidMount() {
-    autorun(() => {
-      if (this.isSelected) {
-        ReactDOM.findDOMNode(this).focus()
-      }
-    })
+    this.disposers.push(
+      autorun(() => {
+        if (this.isSelected) {
+          requestAnimationFrame(() => {
+            ReactDOM.findDOMNode(this).focus()
+          })
+        }
+      }),
+    )
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.disposers.dispose()
+  }
 
   onDelete = wrapSP(() => store.deleteNote(this.note))
 
