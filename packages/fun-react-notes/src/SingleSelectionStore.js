@@ -68,18 +68,30 @@ export const SingleSelectionStore = model('SingleSelectionStore')
     },
   }))
 
-const SSM = model('SSM', {_idx: 0, _max: 0}).views(self => ({
-  get max() {
-    const max = self._max
-    return max === 0 ? NaN : max
-  },
-  get idx() {
-    return mathMod(self._idx)(self.max)
-  },
-  get lastIdx() {
-    return self.max - 1
-  },
-}))
+const SSM = model('SSM', {_idx: 0, _max: 0})
+  .views(self => ({
+    get max() {
+      const max = self._max
+      return max === 0 ? NaN : max
+    },
+    get idx() {
+      return mathMod(self._idx)(self.max)
+    },
+    get lastIdx() {
+      return self.max - 1
+    },
+  }))
+  .actions(self => ({
+    setMax(val) {
+      console.assert(val >= 0)
+      self._max = val
+    },
+    setIdx(val) {
+      console.assert(val >= 0)
+      console.assert(val < self.max)
+      self._idx = val
+    },
+  }))
 
 const ssm = SSM.create()
 
@@ -87,3 +99,6 @@ autorun(() => {
   console.log(`ssm.max`, ssm.max)
   console.log(`ssm.idx`, ssm.idx)
 })
+
+ssm.setMax(2)
+ssm.setIdx(1)
