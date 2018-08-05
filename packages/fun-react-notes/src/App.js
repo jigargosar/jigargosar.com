@@ -174,13 +174,8 @@ class NoteList extends Component {
 @observer
 class NoteListItem extends Component {
   @computed
-  get selection() {
-    return this.props.selection
-  }
-
-  @computed
   get itemProps() {
-    return this.selection.getItemProps({key: this.note.id})
+    return this.props.selection.getItemProps({key: this.note.id})
   }
 
   @computed
