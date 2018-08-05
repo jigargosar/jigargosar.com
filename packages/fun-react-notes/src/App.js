@@ -23,21 +23,21 @@ class App extends Component {
         )}
       >
         <div className={cn('vh-100', 'flex flex-column')}>
-          <div className={cn('w-100')}>
+          <header className={cn('w-100')}>
             <h1>Fun React Notes</h1>
             <h4>
               <button onClick={store.onAddNote}>Add</button>
               <button onClick={store.reset}>Reset Store</button>
             </h4>
-          </div>
-          <div className={cn('flex-auto flex')}>
-            <div className={cn('w-33')}>
+          </header>
+          <main className={cn('flex-auto flex')}>
+            <aside className={cn('w-33')}>
               <NoteList />
-            </div>
+            </aside>
             <div className={cn('flex-auto flex')}>
               <NoteEditor />
             </div>
-          </div>
+          </main>
         </div>
       </FocusTrap>
     )
