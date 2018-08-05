@@ -14,7 +14,10 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       return self.computedKeys.get()
     },
     set selectedIdx(idx) {
-      self._selectedIdx = mathMod(idx, self.keys.length)
+      self._selectedIdx = _compose(
+        mathMod(__, self.keys.length),
+        defaultTo(0),
+      )(idx)
     },
     get selectedIdx() {
       if (self.keys.length === 0) {
