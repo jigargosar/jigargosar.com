@@ -9,6 +9,7 @@ import {
   withKeyEvent,
   wrapSP,
 } from './components/utils'
+import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
 
 @observer
 class App extends Component {
@@ -80,8 +81,10 @@ class NoteList extends Component {
 class Note extends Component {
   render({note, ...other} = this.props) {
     return (
-      <div
+      <ScrollIntoViewIfNeeded
         {...other}
+        active={note.isSelected}
+        options={{behavior: 'smooth', scrollMode: 'if-needed'}}
         id={note.id}
         className={cn(
           'pa2',
@@ -105,7 +108,7 @@ class Note extends Component {
             X
           </div>
         </div>
-      </div>
+      </ScrollIntoViewIfNeeded>
     )
   }
 }

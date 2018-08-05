@@ -65,7 +65,7 @@ export const SingleSelectionStore = model('SingleSelectionStore')
       const elementId = self.selectedKey
       const el = document.getElementById(elementId)
       console.log(`el`, el)
-      el.scrollIntoView()
+      el.scrollIntoView({})
     },
     setSelectedKey(key) {
       self.selectedIdx = self.keys.indexOf(key)
