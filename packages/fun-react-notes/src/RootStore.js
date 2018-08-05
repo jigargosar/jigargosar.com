@@ -12,7 +12,6 @@ import {
 import {
   addDisposer,
   applySnapshot,
-  computed,
   extend,
   idProp,
   model,
@@ -22,7 +21,6 @@ import {
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
-import {SingleSelectionStore} from './SingleSelectionStore'
 import {forEachIndexed} from './little-ramda'
 import {whenKey, withKeyEvent} from './components/utils'
 
@@ -69,7 +67,6 @@ const NoteCollection = model('NotesCollection')
 const RootStore = types
   .model('RootStore', {
     notesCollection: optional(NoteCollection),
-    _sel: optional(SingleSelectionStore),
     selectedNoteIdx: nullNumber,
   })
   .volatile(() => ({isEditorFocused: false}))
@@ -93,9 +90,6 @@ const RootStore = types
     }
   })
   .views(self => ({
-    get notesSelection() {
-      return self._sel
-    },
     get allNotes() {
       return self.notesCollection.all
     },
@@ -139,7 +133,6 @@ const RootStore = types
       const note = NoteModel.create()
       updateSortIdxWithNoteAt(idx, note, self.allNotes)
       self.notesCollection.addAll([note])
-      self._sel.setSelectedKey(note.id)
       self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
     }
 
@@ -148,11 +141,6 @@ const RootStore = types
         self.selectedNoteIdx = idx
       },
       on: cmdName => e => self[cmdName](e),
-      afterCreate() {
-        self._sel.setComputedKeys(
-          computed(() => self.allNotes.map(_prop('id')), {name: 'allni'}),
-        )
-      },
       deleteNote: note => self.notesCollection.deleteNote(note),
       onDeleteSelectedNote() {
         const note = self.selectedNote
