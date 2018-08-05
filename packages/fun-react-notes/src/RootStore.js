@@ -110,11 +110,13 @@ const RootStore = types
       return self._sel.getItemProps({key: note.id, note})
     },
     get keyBindings() {
-      const keyBindings = [
-        ['mod+enter', 'onAddNoteAfterSelected'],
-        ['shift+mod+enter', 'onAddNoteBeforeSelected'],
-      ]
-      return keyBindings
+      const keyBindings = {
+        default: [
+          ['mod+enter', 'onAddNoteAfterSelected'],
+          ['shift+mod+enter', 'onAddNoteBeforeSelected'],
+        ],
+      }
+      return keyBindings['default']
     },
     get onKeyDown() {
       return withKeyEvent(
