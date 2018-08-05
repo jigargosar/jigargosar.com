@@ -109,13 +109,16 @@ const RootStore = types
     getNoteListItemProps(note) {
       return self._sel.getItemProps({key: note.id, note})
     },
-    get onKeyDown() {
+    get keyBindings() {
       const keyBindings = [
         ['mod+enter', 'onAddNoteAfterSelected'],
         ['shift+mod+enter', 'onAddNoteBeforeSelected'],
       ]
+      return keyBindings
+    },
+    get onKeyDown() {
       return withKeyEvent(
-        keyBindings.map(([key, cmdName]) =>
+        self.keyBindings.map(([key, cmdName]) =>
           whenKey(key)(self.on(cmdName)),
         ),
       )
