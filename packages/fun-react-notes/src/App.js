@@ -27,16 +27,7 @@ class App extends Component {
   render() {
     return (
       <FocusTrap>
-        <EventListener
-          target={'document'}
-          onKeyDown={withOptions(
-            e => {
-              console.log(`e`, e)
-              return store.onKeyDown(e)
-            },
-            {passive: true, capture: false},
-          )}
-        />
+        <EventListener target={'document'} onKeyDown={store.onKeyDown} />
         <div className={cn('vh-100 overflow-hidden', 'flex flex-column')}>
           <header className={cn('w-100')}>
             <h1>Fun React Notes</h1>
