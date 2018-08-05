@@ -198,9 +198,7 @@ class NoteListItem extends Component {
     this.props.addDisposer(
       autorun(() => {
         if (this.isSelected) {
-          requestAnimationFrame(() => {
-            ReactDOM.findDOMNode(this).focus()
-          })
+          requestAnimationFrame(() => ReactDOM.findDOMNode(this).focus())
         }
       }),
     )
