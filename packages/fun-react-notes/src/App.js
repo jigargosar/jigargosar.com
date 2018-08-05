@@ -14,7 +14,7 @@ class Btn extends Component {
       <div
         {...other}
         // role={'button'}
-        className={cn('input-reset')}
+        className={cn('input-reset dib ph1 f5 blue normal pointer')}
       >
         {children}
       </div>
@@ -47,8 +47,8 @@ class App extends Component {
           <header className={cn('w-100')}>
             <h1>Fun React Notes</h1>
             <h4>
-              <button onClick={store.onAddNote}>Add</button>
-              <button onClick={store.reset}>Reset Store</button>
+              <Btn onClick={store.onAddNote}>Add</Btn>
+              <Btn onClick={store.reset}>Reset Store</Btn>
             </h4>
           </header>
           <main className={cn('flex-auto overflow-hidden', 'flex')}>
@@ -172,7 +172,7 @@ class NoteListItem extends Component {
           'pa2',
           'bb b--moon-gray',
           {
-            'blue bg-black-05': isSelected,
+            'bg-black-10': isSelected,
             outline: this.isFocused,
           },
           'flex',
