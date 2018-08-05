@@ -31,10 +31,10 @@ class App extends Component {
             </h4>
           </header>
           <main className={cn('overflow-hidden flex-auto', 'flex')}>
-            <aside className={cn('overflow-scroll w-33')}>
+            <aside className={cn('overflow-scroll w-33 ba br-0')}>
               <NoteList />
             </aside>
-            <div className={cn('flex-auto flex')}>
+            <div className={cn('flex-auto flex ba')}>
               <NoteEditor />
             </div>
           </main>
