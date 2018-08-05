@@ -39,7 +39,7 @@ class App extends Component {
 
 @observer
 class NoteEditor extends Component {
-  get getInputProps() {
+  get inputProps() {
     return {
       onFocus: () => store.setEditorFocused(true),
       onBlur: () => store.setEditorFocused(false),
@@ -52,6 +52,7 @@ class NoteEditor extends Component {
     }
     return (
       <textarea
+        {...this.inputProps}
         id={note.id}
         className={cn('input-reset w-100 pa2 m0 bn b--moon-gray')}
         style={{
