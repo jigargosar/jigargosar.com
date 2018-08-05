@@ -39,6 +39,13 @@ class App extends Component {
 
 @observer
 class NoteEditor extends Component {
+  get getInputProps() {
+    return {
+      onFocus: () => store.setEditorFocused(true),
+      onBlur: () => store.setEditorFocused(false),
+    }
+  }
+
   render(note = store.selectedNote) {
     if (!note) {
       return null
