@@ -20,6 +20,7 @@ class App extends Component {
           whenKey('mod+enter')(store.onAddNoteAfterSelected),
           whenKey('shift+mod+enter')(store.onAddNoteBeforeSelected),
         )}
+        className={cn('vh-100')}
       >
         <div className={cn('flex flex-column')}>
           <div className={cn('w-100')}>
@@ -84,7 +85,7 @@ class Note extends Component {
       <ScrollIntoViewIfNeeded
         {...other}
         active={note.isSelected}
-        options={{behavior: 'smooth', scrollMode: 'if-needed'}}
+        options={{behavior: 'auto', scrollMode: 'if-needed'}}
         id={note.id}
         className={cn(
           'pa2',
@@ -95,6 +96,7 @@ class Note extends Component {
           },
           'flex',
         )}
+        tabIndex={note.isSelected ? 0 : null}
       >
         <div className={cn('flex-auto truncate')}>
           {(note.text || 'empty').split('\n')[0]}
