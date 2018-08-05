@@ -90,14 +90,24 @@ class NoteList extends Component {
 @observer
 class Note extends Component {
   @computed
+  get containerProps() {
+    return store.notesSelection.getItemProps({key: this.note.id})
+  }
+
+  @computed
+  get note() {
+    return this.props.note
+  }
+
+  @computed
   get displayText() {
     const {note} = this.props
     return (note.text || 'empty').trim().split('\n')[0]
   }
-  render({note, ...other} = this.props) {
+  render({note} = this.props) {
     return (
       <ScrollIntoViewIfNeeded
-        {...other}
+        {...this.containerProps}
         active={note.isSelected}
         options={{behavior: 'smooth', scrollMode: 'if-needed'}}
         id={note.id}
