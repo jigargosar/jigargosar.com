@@ -81,7 +81,7 @@ class NoteList extends Component {
   render() {
     return (
       <div {...this.containerProps}>
-        {_map(note => <Note {...note.listItemProps} />)(store.allNotes)}
+        {_map(note => <Note key={note.id} note={note} />)(store.allNotes)}
       </div>
     )
   }
@@ -92,6 +92,16 @@ class Note extends Component {
   @computed
   get containerProps() {
     return store.notesSelection.getItemProps({key: this.note.id})
+  }
+
+  @computed
+  get isSelected() {
+    return store.selectedNote === this.note
+  }
+
+  @computed
+  get isFocused() {
+    return false
   }
 
   @computed
@@ -108,7 +118,7 @@ class Note extends Component {
     return (
       <ScrollIntoViewIfNeeded
         {...this.containerProps}
-        active={note.isSelected}
+        active={this.isSelected}
         options={{behavior: 'smooth', scrollMode: 'if-needed'}}
         id={note.id}
         className={cn(
