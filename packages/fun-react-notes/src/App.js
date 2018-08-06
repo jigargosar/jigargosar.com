@@ -7,6 +7,15 @@ import EventListener from 'react-event-listener'
 import {wrapDisplayName} from './components/little-recompose'
 
 @observer
+class App extends Component {
+  render() {
+    return <View store={store} />
+  }
+}
+
+export default App
+
+@observer
 class Btn extends Component {
   render({children, ...other} = this.props) {
     return (
@@ -44,15 +53,6 @@ const disposable = BaseComponent =>
       }
     },
   )
-
-@observer
-class App extends Component {
-  render() {
-    return <View store={store} />
-  }
-}
-
-export default App
 
 class View extends Component {
   render({store} = this.props) {
