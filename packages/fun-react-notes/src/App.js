@@ -1,13 +1,10 @@
 import React, {Component} from 'react'
-import {_map, _prop} from './ramda'
+import {_map} from './ramda'
 import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
-import ScrollIntoViewIfNeeded from 'react-scroll-into-view-if-needed'
 import {autorun, computed, Disposers} from './little-mst'
-import ReactDOM from 'react-dom'
 import EventListener from 'react-event-listener'
 import {wrapDisplayName} from './components/little-recompose'
-import {SingleSelectionStore} from './SingleSelectionStore'
 
 @observer
 class Btn extends Component {
@@ -48,19 +45,6 @@ const disposable = BaseComponent =>
     },
   )
 
-const withSelectionHandler = BaseComponent =>
-  observer(
-    class SelectionHandler extends Component {
-      static displayName = wrapDisplayName(
-        BaseComponent,
-        'SelectionHandler',
-      )
-      selection = SingleSelectionStore.create()
-      render() {
-        return <BaseComponent selection={this.selection} {...this.props} />
-      }
-    },
-  )
 @observer
 class App extends Component {
   render() {
@@ -125,67 +109,26 @@ class NoteEditor extends Component {
   }
 }
 
-@withSelectionHandler
 @disposable
 @observer
 class NoteList extends Component {
-  @computed
-  get containerProps() {
-    return this.selection.getContainerProps()
-  }
-
   @computed
   get notes() {
     return store.allNotes
   }
 
-  @computed
-  get selection() {
-    return this.props.selection
-  }
-
-  componentDidMount() {
-    this.selection.setComputedKeys(
-      computed(() => this.notes.map(_prop('id'))),
-    )
-    this.props.autorun(() =>
-      store.setSelectedNoteIdx(this.selection.selectedIdx),
-    )
-    this.props.autorun(() => {
-      if (store.selectedNote) {
-        this.selection.setSelectedKey(store.selectedNote.id)
-      }
-    })
-  }
-
   render() {
-    return (
-      <div {...this.containerProps}>
-        {_map(this.renderNote)(this.notes)}
-      </div>
-    )
+    return <div>{_map(this.renderNote)(this.notes)}</div>
   }
-  renderNote = note => (
-    <NoteListItem key={note.id} note={note} selection={this.selection} />
-  )
+  renderNote = note => <NoteListItem key={note.id} note={note} />
 }
 
 @disposable
 @observer
 class NoteListItem extends Component {
   @computed
-  get itemProps() {
-    return this.props.selection.getItemProps({key: this.note.id})
-  }
-
-  @computed
   get isSelected() {
     return store.selectedNote === this.note
-  }
-
-  @computed
-  get isFocused() {
-    return false
   }
 
   @computed
@@ -198,22 +141,14 @@ class NoteListItem extends Component {
     return (this.note.text || 'empty').trim().split('\n')[0]
   }
 
-  componentDidMount() {
-    this.props.autorun(() => {
-      if (this.isSelected) {
-        requestAnimationFrame(() => ReactDOM.findDOMNode(this).focus())
-      }
-    })
-  }
-
   onDelete = wrapSP(() => store.deleteNote(this.note))
 
   render({note} = this.props) {
     const isSelected = this.isSelected
     return (
-      <ScrollIntoViewIfNeeded
+      <div
         {...this.itemProps}
-        active={isSelected}
+        // active={isSelected}
         id={note.id}
         className={cn(
           'pa2',
@@ -224,13 +159,13 @@ class NoteListItem extends Component {
           },
           'flex',
         )}
-        tabIndex={isSelected ? 0 : null}
+        // tabIndex={isSelected ? 0 : null}
       >
         <div className={cn('flex-auto truncate')}>{this.displayText}</div>
         <div className={cn({dn: !isSelected})}>
           <Btn onClick={this.onDelete}>X</Btn>
         </div>
-      </ScrollIntoViewIfNeeded>
+      </div>
     )
   }
 }
