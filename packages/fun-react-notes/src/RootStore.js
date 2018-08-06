@@ -2,6 +2,7 @@ import {
   _compose,
   _prop,
   ascend,
+  dec,
   inc,
   indexOf,
   insert,
@@ -111,14 +112,12 @@ const RootStore = types
           //
           ['a', 'onAddNote'],
           ['d', 'onDeleteSelectedNote'],
-          ['up', 'onSelectNext'],
-          ['down', 'onSelectPrev'],
-          ['alt+up', 'onSelectNext'],
-          ['alt+down', 'onSelectPrev'],
+          ['up', 'onSelectPrev'],
+          ['down', 'onSelectNext'],
         ],
         editing: [
-          ['alt+up', 'onSelectNext'],
-          ['alt+down', 'onSelectPrev'],
+          ['alt+up', 'onSelectPrev'],
+          ['alt+down', 'onSelectNext'],
         ],
       }
       return keyBindings[self.mode]
