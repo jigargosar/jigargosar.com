@@ -2,9 +2,11 @@ import React, {Component} from 'react'
 import {_map} from './ramda'
 import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
-import {autorun, computed, Disposers} from './little-mst'
+import {computed} from './little-mst'
 import EventListener from 'react-event-listener'
-import {wrapDisplayName} from './components/little-recompose'
+import {withProps} from './components/little-recompose'
+import {disposable} from './components/hoc'
+import FocusChild from './components/lib/FocusChild'
 
 @observer
 class App extends Component {
@@ -29,30 +31,6 @@ class Btn extends Component {
     )
   }
 }
-
-const disposable = BaseComponent =>
-  observer(
-    class Disposable extends Component {
-      static displayName = wrapDisplayName(BaseComponent, 'Disposable')
-      disposers = Disposers()
-      addDisposer = disposer => this.disposers.push(disposer)
-      autorun = (view, opts = {}) => this.addDisposer(autorun(view, opts))
-
-      componentWillUnmount() {
-        this.disposers.dispose()
-      }
-
-      render() {
-        return (
-          <BaseComponent
-            addDisposer={this.addDisposer}
-            autorun={this.autorun}
-            {...this.props}
-          />
-        )
-      }
-    },
-  )
 
 @observer
 class View extends Component {
@@ -134,6 +112,7 @@ class NoteList extends Component {
   }
 }
 
+@withProps(() => {})
 @disposable
 @observer
 class NoteListItem extends Component {
@@ -163,26 +142,29 @@ class NoteListItem extends Component {
   render({note} = this.props) {
     const isSelected = this.isSelected
     return (
-      <div
-        {...this.itemProps}
-        onClick={this.onClick}
-        id={note.id}
-        className={cn(
-          'pa2',
-          'bb b--moon-gray',
-          {
-            'bg-black-10': isSelected,
-            outline: this.isFocused,
-          },
-          'flex',
-        )}
-        // tabIndex={isSelected ? 0 : null}
-      >
-        <div className={cn('flex-auto truncate')}>{this.displayText}</div>
-        <div className={cn({dn: !isSelected})}>
-          <Btn onClick={this.onDelete}>X</Btn>
+      <FocusChild shouldFocus={isSelected && !this.store.isEditing}>
+        <div
+          {...this.itemProps}
+          onClick={this.onClick}
+          id={note.id}
+          className={cn(
+            'pa2',
+            'bb b--moon-gray',
+            {
+              'bg-black-10': isSelected,
+            },
+            'flex',
+          )}
+          tabIndex={isSelected ? 0 : null}
+        >
+          <div className={cn('flex-auto truncate')}>
+            {this.displayText}
+          </div>
+          <div className={cn({dn: !isSelected})}>
+            <Btn onClick={this.onDelete}>X</Btn>
+          </div>
         </div>
-      </div>
+      </FocusChild>
     )
   }
 }
