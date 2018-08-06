@@ -2,6 +2,7 @@ import {
   _compose,
   _prop,
   ascend,
+  inc,
   indexOf,
   insert,
   isEmpty,
@@ -137,6 +138,9 @@ const RootStore = types
     setSelectedNoteIdx(idx) {
       self.selectedNoteIdx = mathMod(idx)(self.allNotes.length)
     },
+    overSelectedNoteIdx(fn) {
+      self.setSelectedNoteIdx(fn(self.selectedNoteIdx))
+    },
     deleteNote(note) {
       if (self.canDelete) {
         self.notesCollection.remove(note)
@@ -147,10 +151,10 @@ const RootStore = types
     },
     on: cmdName => e => self[cmdName](e),
     onSelectPrev() {
-      self.setSelectedNoteIdx(self.setSelectedNoteIdx - 1)
+      self.overSelectedNoteIdx(dec)
     },
     onSelectNext() {
-      self.setSelectedNoteIdx(self.setSelectedNoteIdx + 1)
+      self.overSelectedNoteIdx(inc)
     },
     onDeleteSelectedNote() {
       self.deleteNote(self.selectedNote)
