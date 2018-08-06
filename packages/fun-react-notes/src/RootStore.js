@@ -16,7 +16,6 @@ import {
   extend,
   idProp,
   model,
-  nullNumber,
   onSnapshot,
   optional,
   types,
@@ -67,7 +66,10 @@ const NoteCollection = model('NotesCollection')
 const RootStore = types
   .model('RootStore', {
     notesCollection: optional(NoteCollection),
-    selectedNoteIdx: nullNumber,
+    selectedNoteIdx: optional(
+      types.refinement('Index', types.number, i => i >= 0),
+      0,
+    ),
   })
   .volatile(() => ({isEditorFocused: false}))
   .actions(self => ({
@@ -120,6 +122,9 @@ const RootStore = types
   }))
   .actions(self => ({
     setSelectedNoteIdx(idx) {
+      if (idx < 0) {
+        return
+      }
       self.selectedNoteIdx = idx
     },
     on: cmdName => e => self[cmdName](e),
