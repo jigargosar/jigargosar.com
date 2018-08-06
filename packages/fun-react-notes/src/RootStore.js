@@ -4,9 +4,10 @@ import {
   _prop,
   always,
   ascend,
+  clamp,
   indexOf,
   insert,
-  mathMod,
+  isEmpty,
   sortWith,
   T,
 } from './ramda'
@@ -96,7 +97,10 @@ const RootStore = types
       return self.notesCollection.all
     },
     get selectedNote() {
-      const idx = mathMod(self.selectedNoteIdx)(self.allNotes.length)
+      if (isEmpty(self.allNotes)) {
+        return null
+      }
+      const idx = clamp(0)(self.allNotes.length - 1)(self.selectedNoteIdx)
       return self.allNotes[idx]
     },
     get mode() {
