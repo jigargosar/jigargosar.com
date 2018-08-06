@@ -116,27 +116,28 @@ const RootStore = types
       )
     },
   }))
-  .actions(self => {
-    return {
-      setSelectedNoteIdx(idx) {
-        self.selectedNoteIdx = idx
-      },
-      on: cmdName => e => self[cmdName](e),
-      deleteNote: note => self.notesCollection.remove(note),
-      onDeleteSelectedNote() {
-        const note = self.selectedNote
-        if (note) {
-          self.deleteNote(note)
-        }
-      },
-      onAddNote() {
-        const note = NoteModel.create()
-        const allNotes = insert(0)(note)(self.allNotes)
-        forEachIndexed((n, sortIdx) => n.update({sortIdx}))(allNotes)
-        self.notesCollection.push(note)
-        self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
-      },
-    }
-  })
+  .actions(self => ({
+    setSelectedNoteIdx(idx) {
+      self.selectedNoteIdx = idx
+    },
+    on: cmdName => e => self[cmdName](e),
+    deleteNote: note => self.notesCollection.remove(note),
+    onDeleteSelectedNote() {
+      const note = self.selectedNote
+      if (note) {
+        self.deleteNote(note)
+      }
+    },
+    setSelectedNote(note) {
+      self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
+    },
+    onAddNote() {
+      const note = NoteModel.create()
+      const allNotes = insert(0)(note)(self.allNotes)
+      forEachIndexed((n, sortIdx) => n.update({sortIdx}))(allNotes)
+      self.notesCollection.push(note)
+      self.setSelectedNote(note)
+    },
+  }))
 
 export default RootStore
