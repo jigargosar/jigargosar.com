@@ -70,8 +70,7 @@ class NoteEditor extends Component {
   @computed
   get focusProps() {
     return {
-      onFocus: () => store.setEditorFocused(true),
-      onBlur: () => store.setEditorFocused(false),
+      onFocus: () => store.setIsEditing(true),
     }
   }
 
@@ -117,6 +116,12 @@ class NoteList extends Component {
 @observer
 class NoteListItem extends Component {
   @computed
+  get focusProps() {
+    return {
+      onFocus: () => store.setIsEditing(false),
+    }
+  }
+  @computed
   get isSelected() {
     return this.store.selectedNote === this.note
   }
@@ -144,7 +149,7 @@ class NoteListItem extends Component {
     return (
       <FocusChild shouldFocus={isSelected && !this.store.isEditing}>
         <div
-          {...this.itemProps}
+          {...this.focusProps}
           onClick={this.onClick}
           id={note.id}
           className={cn(

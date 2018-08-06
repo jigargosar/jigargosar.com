@@ -73,7 +73,7 @@ const RootStore = types
     isEditing: false,
   })
   .actions(self => ({
-    setEditorFocused(bool) {
+    setIsEditing(bool) {
       self.isEditing = bool
     },
   }))
