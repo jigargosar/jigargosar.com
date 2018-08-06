@@ -132,7 +132,12 @@ const RootStore = types
       self.selectedNoteIdx = idx
     },
     on: cmdName => e => self[cmdName](e),
-    deleteNote: note => self.notesCollection.remove(note),
+    deleteNote(note) {
+      if (self.allNotes.length === 1) {
+        return
+      }
+      return self.notesCollection.remove(note)
+    },
     onDeleteSelectedNote() {
       const note = self.selectedNote
       if (note) {
