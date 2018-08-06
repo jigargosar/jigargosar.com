@@ -5,6 +5,7 @@ import {
   indexOf,
   insert,
   isEmpty,
+  mathMod,
   sortWith,
 } from './ramda'
 import {
@@ -105,8 +106,19 @@ const RootStore = types
     },
     get keyBindings() {
       const keyBindings = {
-        default: [['a', 'onAddNote'], ['d', 'onDeleteSelectedNote']],
-        editing: [],
+        default: [
+          //
+          ['a', 'onAddNote'],
+          ['d', 'onDeleteSelectedNote'],
+          ['up', 'onSelectNext'],
+          ['down', 'onSelectPrev'],
+          ['alt+up', 'onSelectNext'],
+          ['alt+down', 'onSelectPrev'],
+        ],
+        editing: [
+          ['alt+up', 'onSelectNext'],
+          ['alt+down', 'onSelectPrev'],
+        ],
       }
       return keyBindings[self.mode]
     },
@@ -123,22 +135,25 @@ const RootStore = types
   }))
   .actions(self => ({
     setSelectedNoteIdx(idx) {
-      if (idx < 0) {
-        return
-      }
-      self.selectedNoteIdx = idx
+      self.selectedNoteIdx = mathMod(idx)(self.allNotes.length)
     },
-    on: cmdName => e => self[cmdName](e),
     deleteNote(note) {
       if (self.canDelete) {
         self.notesCollection.remove(note)
       }
     },
-    onDeleteSelectedNote() {
-      self.deleteNote(self.selectedNote)
-    },
     setSelectedNote(note) {
       self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
+    },
+    on: cmdName => e => self[cmdName](e),
+    onSelectPrev() {
+      self.setSelectedNoteIdx(self.setSelectedNoteIdx - 1)
+    },
+    onSelectNext() {
+      self.setSelectedNoteIdx(self.setSelectedNoteIdx + 1)
+    },
+    onDeleteSelectedNote() {
+      self.deleteNote(self.selectedNote)
     },
     onAddNote() {
       const note = NoteModel.create()
