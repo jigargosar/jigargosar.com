@@ -143,7 +143,10 @@ class NoteListItem extends Component {
   }
 
   onDelete = wrapSP(() => this.store.deleteNote(this.note))
-  onClick = wrapSP(() => this.store.setSelectedNote(this.note))
+  onClick = wrapSP(() => {
+    this.store.setSelectedNote(this.note)
+    this.store.setIsEditing(false)
+  })
 
   render({note} = this.props) {
     const isSelected = this.isSelected
