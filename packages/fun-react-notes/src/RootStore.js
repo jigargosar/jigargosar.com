@@ -123,6 +123,9 @@ const RootStore = types
         ),
       )
     },
+    get canDelete() {
+      return self.allNotes.length > 1
+    },
   }))
   .actions(self => ({
     setSelectedNoteIdx(idx) {
@@ -133,10 +136,9 @@ const RootStore = types
     },
     on: cmdName => e => self[cmdName](e),
     deleteNote(note) {
-      if (self.allNotes.length === 1) {
-        return
+      if (self.canDelete) {
+        self.notesCollection.remove(note)
       }
-      return self.notesCollection.remove(note)
     },
     onDeleteSelectedNote() {
       const note = self.selectedNote
