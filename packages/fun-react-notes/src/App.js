@@ -54,6 +54,7 @@ const disposable = BaseComponent =>
     },
   )
 
+@observer
 class View extends Component {
   render({store} = this.props) {
     return (
@@ -88,6 +89,7 @@ class View extends Component {
 
 @observer
 class NoteEditor extends Component {
+  @computed
   get focusProps() {
     return {
       onFocus: () => store.setEditorFocused(true),

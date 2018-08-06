@@ -1,14 +1,11 @@
 import {
   _compose,
-  _cond,
   _prop,
-  always,
   ascend,
   indexOf,
   insert,
   isEmpty,
   sortWith,
-  T,
 } from './ramda'
 import {
   addDisposer,
@@ -70,11 +67,11 @@ const RootStore = types
       types.refinement('Index', types.number, i => i >= 0),
       0,
     ),
+    isEditing: false,
   })
-  .volatile(() => ({isEditorFocused: false}))
   .actions(self => ({
     setEditorFocused(bool) {
-      self.isEditorFocused = bool
+      self.isEditing = bool
     },
   }))
   .actions(self => {
@@ -104,10 +101,7 @@ const RootStore = types
       return allNotes[idx]
     },
     get mode() {
-      return _cond([
-        [_prop('isEditorFocused'), always('editing')],
-        [T, always('default')],
-      ])(self)
+      return self.isEditing ? 'editing' : 'default'
     },
     get keyBindings() {
       const keyBindings = {
