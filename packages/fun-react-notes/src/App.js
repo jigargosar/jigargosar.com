@@ -44,6 +44,8 @@ class View extends Component {
             <h4>
               <Btn onClick={store.onAddNote}>Add</Btn>
               <Btn onClick={store.reset}>Reset Store</Btn>
+              <Btn onClick={store.undo}>undo</Btn>
+              <Btn onClick={store.redo}>redo</Btn>
             </h4>
           </header>
           <main className={cn('flex-auto overflow-hidden', 'flex')}>

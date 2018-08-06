@@ -67,7 +67,7 @@ const State = model('State', {
 const RootStore = types
   .model('RootStore', {
     state: optional(State),
-    history: optional(UndoManager, {targetPath: '../state'}),
+    history: optional(UndoManager, {}),
   })
   .extend(self => {
     return {
@@ -81,8 +81,6 @@ const RootStore = types
         get withoutUndo() {
           return self.history.withoutUndo
         },
-      },
-      actions: {
         undo() {
           self.canUndo && self.history.undo()
         },
@@ -90,6 +88,7 @@ const RootStore = types
           self.canRedo && self.history.redo()
         },
       },
+      actions: {},
     }
   })
   .views(self => ({
@@ -118,10 +117,10 @@ const RootStore = types
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
       loadFromLS() {
-        applySnapshot(self, ls.load())
+        self.withoutUndo(() => applySnapshot(self, ls.load()))
       },
       reset() {
-        applySnapshot(self, {})
+        self.withoutUndo(() => applySnapshot(self, {}))
       },
       saveToLSOnSnapshotChange() {
         addDisposer(self, onSnapshot(self, ls.save))
