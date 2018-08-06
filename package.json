@@ -6,6 +6,7 @@
   "author": "Jigar Gosar <jigar.gosar@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "react-event-listener": "^0.6.2"
+    "react-event-listener": "^0.6.2",
+    "reactotron-mst": "^2.0.0"
   }
 }

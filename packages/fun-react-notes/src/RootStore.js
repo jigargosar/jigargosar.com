@@ -7,6 +7,7 @@ import {
   model,
   onSnapshot,
   optional,
+  TimeTraveller,
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
@@ -54,15 +55,37 @@ const NoteCollection = model('NotesCollection')
     },
   }))
 
+const State = model('State', {
+  notesCollection: optional(NoteCollection),
+  selectedNoteIdx: optional(
+    types.refinement('Index', types.number, i => i >= 0),
+    0,
+  ),
+  isEditing: false,
+})
+
 const RootStore = types
   .model('RootStore', {
-    notesCollection: optional(NoteCollection),
-    selectedNoteIdx: optional(
-      types.refinement('Index', types.number, i => i >= 0),
-      0,
-    ),
-    isEditing: false,
+    state: optional(State),
+    history: optional(TimeTraveller, {targetPath: '../state'}),
   })
+  .views(self => ({
+    get notesCollection() {
+      return self.state.notesCollection
+    },
+    get selectedNoteIdx() {
+      return self.state.selectedNoteIdx
+    },
+    set selectedNoteIdx(val) {
+      return (self.state.selectedNoteIdx = val)
+    },
+    get isEditing() {
+      return self.state.isEditing
+    },
+    set isEditing(val) {
+      return (self.state.isEditing = val)
+    },
+  }))
   .actions(self => ({
     setIsEditing(bool) {
       self.isEditing = bool
