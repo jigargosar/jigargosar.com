@@ -48,6 +48,14 @@ const disposable = BaseComponent =>
 @observer
 class App extends Component {
   render() {
+    return <View store={store} />
+  }
+}
+
+export default App
+
+class View extends Component {
+  render({store} = this.props) {
     return (
       <FocusTrap>
         <EventListener target={'document'} onKeyDown={store.onKeyDown} />
@@ -66,10 +74,10 @@ class App extends Component {
                 'ba br-0 b--moon-gray',
               )}
             >
-              <NoteList />
+              <NoteList store={store} />
             </aside>
             <div className={cn('flex-auto flex', 'ba b--moon-gray')}>
-              <NoteEditor />
+              <NoteEditor store={store} />
             </div>
           </main>
         </div>
@@ -87,7 +95,8 @@ class NoteEditor extends Component {
     }
   }
 
-  render(note = store.selectedNote) {
+  render() {
+    const note = store.selectedNote
     if (!note) {
       return null
     }
@@ -112,15 +121,15 @@ class NoteEditor extends Component {
 @disposable
 @observer
 class NoteList extends Component {
-  @computed
-  get notes() {
-    return store.allNotes
+  render({store} = this.props) {
+    return (
+      <div>
+        {_map(note => (
+          <NoteListItem key={note.id} note={note} store={store} />
+        ))(store.allNotes)}
+      </div>
+    )
   }
-
-  render() {
-    return <div>{_map(this.renderNote)(this.notes)}</div>
-  }
-  renderNote = note => <NoteListItem key={note.id} note={note} />
 }
 
 @disposable
@@ -128,7 +137,12 @@ class NoteList extends Component {
 class NoteListItem extends Component {
   @computed
   get isSelected() {
-    return store.selectedNote === this.note
+    return this.store.selectedNote === this.note
+  }
+
+  @computed
+  get store() {
+    return this.props.store
   }
 
   @computed
@@ -141,8 +155,8 @@ class NoteListItem extends Component {
     return (this.note.text || 'empty').trim().split('\n')[0]
   }
 
-  onDelete = wrapSP(() => store.deleteNote(this.note))
-  onClick = wrapSP(() => store.setSelectedNote(this.note))
+  onDelete = wrapSP(() => this.store.deleteNote(this.note))
+  onClick = wrapSP(() => this.store.setSelectedNote(this.note))
 
   render({note} = this.props) {
     const isSelected = this.isSelected
@@ -170,5 +184,3 @@ class NoteListItem extends Component {
     )
   }
 }
-
-export default App
