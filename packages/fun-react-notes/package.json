@@ -24,6 +24,7 @@
     "mobx-preact": "^3.0.0",
     "mobx-react": "^5.2.3",
     "mobx-state-tree": "^3.0.2",
+    "mst-middlewares": "^3.0.2",
     "nanoid": "^1.1.0",
     "preact": "^8.2.9",
     "prop-types": "^15.6.2",

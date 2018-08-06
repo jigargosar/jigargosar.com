@@ -62,6 +62,16 @@ export {
   computed,
 } from 'mobx'
 
+export {
+  UndoManager,
+  TimeTraveller,
+  connectReduxDevtools,
+  atomic,
+  asReduxStore,
+  actionLogger,
+  simpleActionLogger,
+} from 'mst-middlewares'
+
 export const modelNamed = name => types.model(name)
 export const modelProps = props => modelType => modelType.props(props)
 export const modelAttrs = attrs => modelType =>
