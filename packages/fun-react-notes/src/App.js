@@ -158,9 +158,7 @@ class NoteListItem extends Component {
           className={cn(
             'pa2',
             'bb b--moon-gray',
-            {
-              'bg-black-10': isSelected,
-            },
+            {'bg-black-10': isSelected},
             'flex',
           )}
           tabIndex={isSelected ? 0 : null}

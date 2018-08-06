@@ -54,6 +54,9 @@ const NoteCollection = model('NotesCollection')
     },
   }))
   .actions(self => ({
+    unshift(...notes) {
+      self.notes.unshift(...notes)
+    },
     push(...notes) {
       self.notes.push(...notes)
     },
