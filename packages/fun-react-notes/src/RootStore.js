@@ -103,11 +103,6 @@ const RootStore = types
       return (self.state.isEditing = val)
     },
   }))
-  .actions(self => ({
-    setIsEditing(bool) {
-      self.isEditing = bool
-    },
-  }))
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
@@ -167,6 +162,9 @@ const RootStore = types
     },
   }))
   .actions(self => ({
+    setIsEditing(bool) {
+      self.isEditing = bool
+    },
     setSelectedNoteIdx(idx) {
       self.selectedNoteIdx = mathMod(idx)(self.allNotes.length)
     },
