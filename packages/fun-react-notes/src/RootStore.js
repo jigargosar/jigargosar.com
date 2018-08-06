@@ -116,6 +116,8 @@ const RootStore = types
           ['down', 'onSelectNext'],
         ],
         editing: [
+          ['alt+a', 'onAddNote'],
+          ['alt+d', 'onDeleteSelectedNote'],
           ['alt+up', 'onSelectPrev'],
           ['alt+down', 'onSelectNext'],
         ],
