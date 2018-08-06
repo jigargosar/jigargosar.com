@@ -6,6 +6,7 @@ import {
   ascend,
   indexOf,
   insert,
+  mathMod,
   sortWith,
   T,
 } from './ramda'
@@ -93,7 +94,8 @@ const RootStore = types
       return self.notesCollection.all
     },
     get selectedNote() {
-      return self.allNotes[self.selectedNoteIdx]
+      const idx = mathMod(self.selectedNoteIdx)(self.allNotes.length)
+      return self.allNotes[idx]
     },
     get mode() {
       return _cond([
