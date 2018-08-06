@@ -54,11 +54,10 @@ const NoteCollection = model('NotesCollection')
     },
   }))
   .actions(self => ({
-    addNewAt(idx) {},
-    addAll(notes) {
+    push(...notes) {
       self.notes.push(...notes)
     },
-    deleteNote(note) {
+    remove(note) {
       const idx = self.notes.indexOf(note)
       self.notes.splice(idx, 1)
     },
@@ -104,11 +103,7 @@ const RootStore = types
     },
     get keyBindings() {
       const keyBindings = {
-        default: [
-          ['mod+enter', 'onAddNoteAfterSelected'],
-          ['shift+mod+enter', 'onAddNoteBeforeSelected'],
-          ['d', 'onDeleteSelectedNote'],
-        ],
+        default: [['a', 'onAddNote'], ['d', 'onDeleteSelectedNote']],
         editing: [],
       }
       return keyBindings[self.mode]
@@ -122,26 +117,12 @@ const RootStore = types
     },
   }))
   .actions(self => {
-    const updateSortIdx = forEachIndexed((n, sortIdx) =>
-      n.update({sortIdx}),
-    )
-    function updateSortIdxWithNoteAt(idx, note, allNotes) {
-      updateSortIdx(insert(idx)(note)(allNotes))
-    }
-
-    function addNewNoteAt(idx) {
-      const note = NoteModel.create()
-      updateSortIdxWithNoteAt(idx, note, self.allNotes)
-      self.notesCollection.addAll([note])
-      self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
-    }
-
     return {
       setSelectedNoteIdx(idx) {
         self.selectedNoteIdx = idx
       },
       on: cmdName => e => self[cmdName](e),
-      deleteNote: note => self.notesCollection.deleteNote(note),
+      deleteNote: note => self.notesCollection.remove(note),
       onDeleteSelectedNote() {
         const note = self.selectedNote
         if (note) {
@@ -149,17 +130,11 @@ const RootStore = types
         }
       },
       onAddNote() {
-        addNewNoteAt(0)
-      },
-      onAddNoteAfterSelected() {
-        const oldIdx = indexOf(self.selectedNote)(self.allNotes)
-        const idx = oldIdx < 0 ? 0 : oldIdx + 1
-        addNewNoteAt(idx)
-      },
-      onAddNoteBeforeSelected() {
-        const oldIdx = indexOf(self.selectedNote)(self.allNotes)
-        const idx = oldIdx < 0 ? 0 : oldIdx
-        addNewNoteAt(idx)
+        const note = NoteModel.create()
+        const allNotes = insert(0)(note)(self.allNotes)
+        forEachIndexed((n, sortIdx) => n.update({sortIdx}))(allNotes)
+        self.notesCollection.push(note)
+        self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
       },
     }
   })
