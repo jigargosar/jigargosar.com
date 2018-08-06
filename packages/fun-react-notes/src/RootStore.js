@@ -50,7 +50,8 @@ const NoteCollection = model('NotesCollection')
   })
   .views(self => ({
     get all() {
-      return sortWith([ascend(_prop('sortIdx'))])(self.notes)
+      // return sortWith([ascend(_prop('sortIdx'))])(self.notes)
+      return self.notes
     },
   }))
   .actions(self => ({
@@ -167,7 +168,7 @@ const RootStore = types
       const note = NoteModel.create()
       const allNotes = insert(0)(note)(self.allNotes)
       forEachIndexed((n, sortIdx) => n.update({sortIdx}))(allNotes)
-      self.notesCollection.push(note)
+      self.notesCollection.unshift(note)
       self.setSelectedNote(note)
     },
   }))
