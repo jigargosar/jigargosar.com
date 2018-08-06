@@ -141,10 +141,7 @@ const RootStore = types
       }
     },
     onDeleteSelectedNote() {
-      const note = self.selectedNote
-      if (note) {
-        self.deleteNote(note)
-      }
+      self.deleteNote(self.selectedNote)
     },
     setSelectedNote(note) {
       self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
