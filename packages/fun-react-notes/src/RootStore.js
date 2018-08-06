@@ -4,7 +4,6 @@ import {
   _prop,
   always,
   ascend,
-  clamp,
   indexOf,
   insert,
   isEmpty,
@@ -22,7 +21,7 @@ import {
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
-import {forEachIndexed} from './little-ramda'
+import {clampArrIdx, forEachIndexed} from './little-ramda'
 import {whenKey, withKeyEvent} from './components/utils'
 
 const NoteModel = _compose(
@@ -97,11 +96,12 @@ const RootStore = types
       return self.notesCollection.all
     },
     get selectedNote() {
-      if (isEmpty(self.allNotes)) {
+      const allNotes = self.allNotes
+      if (isEmpty(allNotes)) {
         return null
       }
-      const idx = clamp(0)(self.allNotes.length - 1)(self.selectedNoteIdx)
-      return self.allNotes[idx]
+      const idx = clampArrIdx(self.selectedNoteIdx, allNotes)
+      return allNotes[idx]
     },
     get mode() {
       return _cond([

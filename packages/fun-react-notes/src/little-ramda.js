@@ -3,6 +3,7 @@ import {
   _when,
   addIndex,
   always,
+  clamp,
   curryN,
   defaultTo,
   forEach,
@@ -60,3 +61,7 @@ export function sugarExtend() {
 export const T1 = obj => fn => fn(obj)
 export const composeExt = (...ext) => self =>
   _compose(reduce(mergeDeepRight)({}), map(T1(self)))(ext)
+
+export function clampArrIdx(selectedNoteIdx, allNotes) {
+  return clamp(0)(allNotes.length - 1)(selectedNoteIdx)
+}
