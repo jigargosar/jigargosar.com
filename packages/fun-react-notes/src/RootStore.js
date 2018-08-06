@@ -69,22 +69,30 @@ const RootStore = types
     state: optional(State),
     history: optional(UndoManager, {targetPath: '../state'}),
   })
+  .extend(self => {
+    return {
+      views: {
+        get canUndo() {
+          return self.history.canUndo
+        },
+        get canRedo() {
+          return self.history.canRedo
+        },
+        get withoutUndo() {
+          return self.history.withoutUndo
+        },
+      },
+      actions: {
+        undo() {
+          self.canUndo && self.history.undo()
+        },
+        redo() {
+          self.canRedo && self.history.redo()
+        },
+      },
+    }
+  })
   .views(self => ({
-    get canUndo() {
-      return self.history.canUndo
-    },
-    get canRedo() {
-      return self.history.canRedo
-    },
-    get undo() {
-      return self.history.undo
-    },
-    get redo() {
-      return self.history.redo
-    },
-    get withoutUndo() {
-      return self.history.withoutUndo
-    },
     get notesCollection() {
       return self.state.notesCollection
     },
