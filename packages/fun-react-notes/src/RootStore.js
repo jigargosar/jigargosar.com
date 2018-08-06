@@ -7,8 +7,8 @@ import {
   model,
   onSnapshot,
   optional,
-  TimeTraveller,
   types,
+  UndoManager,
 } from './little-mst'
 import {StorageItem} from './services/storage'
 import {clampArrIdx} from './little-ramda'
@@ -67,9 +67,24 @@ const State = model('State', {
 const RootStore = types
   .model('RootStore', {
     state: optional(State),
-    history: optional(TimeTraveller, {targetPath: '../state'}),
+    history: optional(UndoManager, {targetPath: '../state'}),
   })
   .views(self => ({
+    get canUndo() {
+      return self.history.canUndo
+    },
+    get canRedo() {
+      return self.history.canRedo
+    },
+    get undo() {
+      return self.history.undo
+    },
+    get redo() {
+      return self.history.redo
+    },
+    get withoutUndo() {
+      return self.history.withoutUndo
+    },
     get notesCollection() {
       return self.state.notesCollection
     },
