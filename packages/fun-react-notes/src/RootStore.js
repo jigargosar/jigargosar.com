@@ -1,15 +1,4 @@
-import {
-  _compose,
-  _prop,
-  ascend,
-  dec,
-  inc,
-  indexOf,
-  insert,
-  isEmpty,
-  mathMod,
-  sortWith,
-} from './ramda'
+import {_compose, dec, inc, indexOf, isEmpty, mathMod} from './ramda'
 import {
   addDisposer,
   applySnapshot,
@@ -21,7 +10,7 @@ import {
   types,
 } from './little-mst'
 import {StorageItem} from './services/storage'
-import {clampArrIdx, forEachIndexed} from './little-ramda'
+import {clampArrIdx} from './little-ramda'
 import {whenKey, withKeyEvent} from './components/utils'
 
 const NoteModel = _compose(
@@ -40,7 +29,6 @@ const NoteModel = _compose(
   model('Note', {
     id: idProp('Note'),
     text: '',
-    sortIdx: 0,
   }),
 )
 
@@ -50,7 +38,6 @@ const NoteCollection = model('NotesCollection')
   })
   .views(self => ({
     get all() {
-      // return sortWith([ascend(_prop('sortIdx'))])(self.notes)
       return self.notes
     },
   }))
@@ -166,8 +153,6 @@ const RootStore = types
     },
     onAddNote() {
       const note = NoteModel.create()
-      const allNotes = insert(0)(note)(self.allNotes)
-      forEachIndexed((n, sortIdx) => n.update({sortIdx}))(allNotes)
       self.notesCollection.unshift(note)
       self.setSelectedNote(note)
     },
