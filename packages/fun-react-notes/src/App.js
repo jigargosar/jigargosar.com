@@ -83,6 +83,7 @@ class NoteEditor extends Component {
       <textarea
         {...this.focusProps}
         id={note.id}
+        key={note.id}
         className={cn('input-reset w-100 pa2 m0 bn b--moon-gray')}
         style={{
           resize: 'none',
