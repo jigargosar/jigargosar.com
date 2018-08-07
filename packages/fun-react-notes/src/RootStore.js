@@ -145,7 +145,7 @@ const RootStore = types
       return self.isEditing ? 'editing' : 'default'
     },
     get keyBindings() {
-      const fallback = [['mod+z', 'undo'], ['mod+shift+z', 'redo']]
+      const fallback = [['mod+z', 'onUndo'], ['mod+shift+z', 'onRedo']]
       const defaultEditingAlt = [
         ['a', 'onAddNote'],
         ['d', 'onDeleteSelectedNote'],
@@ -197,9 +197,13 @@ const RootStore = types
       self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
     },
     on: cmdName => e => self[cmdName](e),
-    pd(e) {
+    onUndo(e) {
       e.preventDefault()
-      e.stopImmediatePropagation()
+      self.canUndo && self.history.undo()
+    },
+    onRedo(e) {
+      e.preventDefault()
+      self.canRedo && self.history.redo()
     },
     onSelectPrev() {
       self.overSelectedNoteIdx(dec)
