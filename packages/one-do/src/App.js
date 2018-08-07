@@ -58,13 +58,18 @@ class TaskLists extends Component {
             <div
               className={cn(
                 'pa2',
-                'flex items-center',
-                store.isSelected(l) ? 'bg-moon-gray' : '',
+                'flex items-center ttu',
+                store.isSelected(l) ? 'bg-black-10' : '',
               )}
               onClick={wrapSP(() => store.selectList(l))}
             >
               <div className={cn('flex-auto')}>{l.name}</div>
-              <Btn onClick={wrapSP(() => store.deleteList(l))}>X</Btn>
+              <Btn
+                onClick={wrapSP(() => store.deleteList(l))}
+                disabled={!store.canDelete}
+              >
+                X
+              </Btn>
             </div>
           </Fragment>
         ))}
