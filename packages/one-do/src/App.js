@@ -32,7 +32,7 @@ class View extends Component {
               <h3 className={cn('ma2')}>My Lists</h3>
               {store.taskLists.map(l => (
                 <Fragment key={l.id}>
-                  <div>{l.name}</div>
+                  <div className={cn('pa2')}>{l.name}</div>
                 </Fragment>
               ))}
             </aside>
