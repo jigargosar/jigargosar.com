@@ -32,7 +32,12 @@ class View extends Component {
             >
               <TaskLists store={store} />
             </aside>
-            <div className={cn('flex-auto flex', 'ba b--moon-gray')}>
+            <div
+              className={cn(
+                'flex-auto overflow-scroll',
+                'ba b--moon-gray',
+              )}
+            >
               <Tasks store={store} />
             </div>
           </main>
@@ -82,7 +87,7 @@ class Tasks extends Component {
   render({store} = this.props) {
     const list = store.selectedList
     return (
-      <div className={cn('flex-auto')}>
+      <Fragment>
         <div className={cn('pa2')}>
           <Btn onClick={wrapSP(() => list.add({name: 'task foo'}))}>
             ADD
@@ -108,7 +113,7 @@ class Tasks extends Component {
             </div>
           </Fragment>
         ))}
-      </div>
+      </Fragment>
     )
   }
 }
