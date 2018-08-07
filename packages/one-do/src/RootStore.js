@@ -1,7 +1,6 @@
 import {
   addDisposer,
   applySnapshot,
-  flow,
   getEnv,
   model,
   modelId,
@@ -10,25 +9,8 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {
-  _compose,
-  _prop,
-  clamp,
-  defaultTo,
-  equals,
-  filter,
-  forEach,
-  map,
-  merge,
-  pick,
-} from './lib/ramda'
+import {_compose, clamp, defaultTo, pick} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
-import pSettle from 'p-settle'
-import pForever from 'p-forever'
-import delay from 'delay'
-import store from './store'
-
-const PCancelable = require('p-cancelable')
 
 const Task = model('Task', {
   id: modelId('Task'),
