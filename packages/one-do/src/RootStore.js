@@ -14,11 +14,14 @@ import {overProp} from './lib/little-ramda'
 const Task = model('Task', {
   id: modelId('Task'),
   name: '',
+  isDirty: true,
 })
+
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   tasks: types.array(Task),
+  isDirty: true,
 }).actions(self => ({
   add(props) {
     self.tasks.push(Task.create(props))
