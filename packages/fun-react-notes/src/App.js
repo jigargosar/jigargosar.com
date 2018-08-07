@@ -25,7 +25,7 @@ class Btn extends Component {
         {..._when(_prop('disabled'))(omit('onClick'))(other)}
         role={'button'}
         className={cn(
-          'input-reset dib ph1 f5 normal pointer',
+          'input-reset dib ph1 f5 normal pointer ttu',
           propOr(false)('disabled')(other) ? 'gray' : 'blue',
         )}
         style={{userSelect: 'none'}}
