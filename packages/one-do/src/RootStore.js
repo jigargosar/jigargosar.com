@@ -26,7 +26,6 @@ const RootStore = model('RootStore', {
 })
   .preProcessSnapshot(snapshot => {
     const tl = TaskList.create({name: 'TODO'})
-
     return _compose(
       overProp('currentList')(defaultTo(tl)),
       overProp('taskLists')(defaultTo([tl])),
