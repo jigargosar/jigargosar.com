@@ -38,6 +38,9 @@ const RootStore = model('RootStore', {
   })
   .actions(lsActions)
   .actions(self => ({
+    setCurrentList(l) {
+      self.currentList = l
+    },
     addList: function(props) {
       self.lists.unshift(TaskList.create(props))
     },

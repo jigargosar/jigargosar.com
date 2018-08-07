@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import store from './store'
-import {cn, FocusTrap, observer} from './lib/little-react'
+import {cn, FocusTrap, observer, wrapSP} from './lib/little-react'
 import EventListener from 'react-event-listener'
 import {Btn} from './lib/tachyons-components'
 
@@ -32,13 +32,20 @@ class View extends Component {
             >
               <h3 className={cn('ma2', 'flex items-center')}>
                 <div className={cn('flex-auto')}>My Lists</div>
-                <Btn onClick={() => store.addList({name: 'foo'})}>ADD</Btn>
+                <Btn onClick={wrapSP(() => store.addList({name: 'foo'}))}>
+                  ADD
+                </Btn>
               </h3>
               {store.lists.map(l => (
                 <Fragment key={l.id}>
-                  <div className={cn('pa2', 'flex items-center')}>
+                  <div
+                    className={cn('pa2', 'flex items-center')}
+                    onClick={wrapSP(() => store.setCurrentList(l))}
+                  >
                     <div className={cn('flex-auto')}>{l.name}</div>
-                    <Btn onClick={() => store.deleteList(l)}>X</Btn>
+                    <Btn onClick={wrapSP(() => store.deleteList(l))}>
+                      X
+                    </Btn>
                   </div>
                 </Fragment>
               ))}
