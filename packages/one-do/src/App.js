@@ -29,7 +29,7 @@ class View extends Component {
                 'ba br-0 b--moon-gray',
               )}
             >
-              task lists
+              <h3 className={cn('ma2')}>Lists</h3>
             </aside>
             <div className={cn('flex-auto flex', 'ba b--moon-gray')}>
               task list
