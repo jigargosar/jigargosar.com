@@ -17,6 +17,7 @@ import {
   defaultTo,
   equals,
   forEach,
+  map,
   pick,
   zip,
 } from './lib/ramda'
@@ -112,10 +113,9 @@ const RootStore = model('RootStore', {
       console.debug('sync start')
       self.isSyncing = true
       const dirtyItems = self.lists.filter(_prop('isDirty'))
+      const syncItem = getEnv(self).syncAdapter.syncItem
       const results = yield pSettle(
-        dirtyItems.map(i => {
-          return getEnv(self).syncAdapter.syncItem('taskList', i.syncProps)
-        }),
+        map(i => syncItem('taskList', i.syncProps))(dirtyItems),
       )
       console.log(results)
       _compose(
