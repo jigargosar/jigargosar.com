@@ -32,11 +32,6 @@ const RootStore = model('RootStore', {
   })
   .actions(lsActions)
   .actions(self => ({
-    initStore: function() {
-      if (isEmpty(self.taskLists)) {
-        self.addTaskList({name: 'TODO'})
-      }
-    },
     addTaskList: function(props) {
       self.taskLists.unshift(TaskList.create(props))
     },
