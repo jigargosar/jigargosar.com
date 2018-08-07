@@ -75,7 +75,7 @@ const RootStore = model('RootStore', {
       const dirtyItems = self.lists.filter(_prop('isDirty'))
       const results = pSettle(
         dirtyItems.map(i =>
-          getEnv('syncAdapter').syncItem(
+          getEnv(self).syncAdapter.syncItem(
             'taskList',
             pick(['id', 'name'])(i),
           ),
