@@ -7,7 +7,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {isEmpty} from './lib/ramda'
+import {_compose, defaultTo, isEmpty, lensProp, over} from './lib/ramda'
 
 const Task = model('Task', {
   id: modelId('Task'),
@@ -21,7 +21,15 @@ const TaskList = model('TaskList', {
 
 const RootStore = model('RootStore', {
   taskLists: types.array(TaskList),
+  currentList: types.reference(TaskList),
 })
+  .preProcessSnapshot(snapshot => {
+    const tl = TaskList.create({name: 'TODO'})
+    return _compose(
+      over(lensProp('currentList'))(_compose(defaultTo(tl))),
+      over(lensProp('taskLists'))(_compose(defaultTo([tl]))),
+    )(snapshot)
+  })
   .actions(lsActions)
   .actions(self => ({
     initStore: function() {
@@ -37,16 +45,11 @@ const RootStore = model('RootStore', {
 function lsActions(self) {
   const ls = StorageItem({name: 'rootSnapshot'})
   return {
-    afterCreate() {
-      self.initStore()
-    },
     loadFromLS() {
       applySnapshot(self, ls.load())
-      self.initStore()
     },
     reset() {
       applySnapshot(self, {})
-      self.initStore()
     },
     saveToLSOnSnapshotChange() {
       addDisposer(self, onSnapshot(self, ls.save))
