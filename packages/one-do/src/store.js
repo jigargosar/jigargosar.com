@@ -1,9 +1,13 @@
 import RootStore from './RootStore'
+import delay from 'delay'
 
 const syncAdapter = {
   syncItem(name, props) {
     // return Promise.resolve(props)
-    return Promise.reject({msg: 'sync error', props})
+    return delay.reject(2000, {
+      msg: 'sync error',
+      props,
+    })
   },
 }
 const store = RootStore.create({}, {syncAdapter})
