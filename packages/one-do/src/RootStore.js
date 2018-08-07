@@ -16,6 +16,7 @@ import {
   clamp,
   defaultTo,
   equals,
+  filter,
   flatten,
   forEach,
   map,
@@ -119,21 +120,18 @@ const RootStore = model('RootStore', {
       }
       console.debug('sync start')
       self.isSyncing = true
-      const dirtyItems = self.lists.filter(_prop('isDirty'))
       const results = yield _compose(
         pSettle,
-        flatten,
-        map(item => {
-          return [item.sync().then(merge({item}))]
-        }),
-      )(dirtyItems)
+        map(list => list.sync().then(merge({list}))),
+        filter(_prop('isDirty')),
+      )(self.lists)
       console.log(results)
 
       forEach(({isFulfilled, isRejected, value, reason}) => {
         if (isFulfilled) {
-          const item = value.item
-          if (equals(value.props, item.syncProps)) {
-            item.isDirty = false
+          const list = value.list
+          if (equals(value.props, list.syncProps)) {
+            list.isDirty = false
           }
         }
         if (isRejected) {
