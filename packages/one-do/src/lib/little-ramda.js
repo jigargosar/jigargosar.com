@@ -19,6 +19,8 @@ import {
 } from './ramda'
 import Sugar from 'sugar'
 
+export {default as pluralize} from 'pluralize'
+
 if (module.hot) {
   window._ = require('ramda')
 }

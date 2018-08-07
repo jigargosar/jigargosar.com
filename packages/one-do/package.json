@@ -41,7 +41,8 @@
     "remotedev": "^0.2.7",
     "styled-components": "^3.3.3",
     "sugar": "^2.0.4",
-    "tachyons": "^4.11.1"
+    "tachyons": "^4.11.1",
+    "pluralize": "latest"
   },
   "scripts": {
     "start": "nodemon -w config-overrides.js -x react-app-rewired start",

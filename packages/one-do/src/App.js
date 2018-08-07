@@ -68,9 +68,12 @@ class ListNames extends Component {
               )}
               onClick={wrapSP(() => store.selectList(l))}
             >
-              <div className={cn('flex-auto')}>{`${l.name} (${
-                l.tasks.length
-              })`}</div>
+              <div className={cn('flex-auto', 'flex items-center')}>
+                <div>{`${l.name}`}</div>
+                <div className={cn('ph1 gray self-start', 'f7')}>
+                  {`${l.tasks.length}`}
+                </div>
+              </div>
               <Btn
                 onClick={wrapSP(() => store.deleteList(l))}
                 disabled={!store.canDelete}
