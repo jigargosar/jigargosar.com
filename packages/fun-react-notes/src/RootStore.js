@@ -152,12 +152,16 @@ const RootStore = types
           ['d', 'onDeleteSelectedNote'],
           ['up', 'onSelectPrev'],
           ['down', 'onSelectNext'],
+          ['mod+z', 'pd'],
+          ['mod+shift+z', 'pd'],
         ],
         editing: [
           ['alt+a', 'onAddNote'],
           ['alt+d', 'onDeleteSelectedNote'],
           ['alt+up', 'onSelectPrev'],
           ['alt+down', 'onSelectNext'],
+          ['mod+z', 'pd'],
+          ['mod+shift+z', 'pd'],
         ],
       }
       return keyBindings[self.mode]
@@ -192,6 +196,10 @@ const RootStore = types
       self.setSelectedNoteIdx(indexOf(note)(self.allNotes))
     },
     on: cmdName => e => self[cmdName](e),
+    pd(e) {
+      e.preventDefault()
+      e.stopImmediatePropagation()
+    },
     onSelectPrev() {
       self.overSelectedNoteIdx(dec)
     },
