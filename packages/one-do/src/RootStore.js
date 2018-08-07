@@ -18,7 +18,11 @@ const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   tasks: types.array(Task),
-})
+}).actions(self => ({
+  add(props) {
+    self.tasks.push(Task.create(props))
+  },
+}))
 
 const RootStore = model('RootStore', {
   taskLists: types.array(TaskList),
@@ -35,6 +39,9 @@ const RootStore = model('RootStore', {
   .actions(self => ({
     addTaskList: function(props) {
       self.taskLists.unshift(TaskList.create(props))
+    },
+    addTask(props) {
+      self.currentList.add(props)
     },
   }))
 
