@@ -13,6 +13,28 @@ class App extends Component {
 
 export default App
 
+function getFragment(store) {
+  return (
+    <Fragment>
+      <h3 className={cn('ma2', 'flex items-center')}>
+        <div className={cn('flex-auto')}>My Lists</div>
+        <Btn onClick={wrapSP(() => store.addList({name: 'foo'}))}>ADD</Btn>
+      </h3>
+      {store.lists.map(l => (
+        <Fragment key={l.id}>
+          <div
+            className={cn('pa2', 'flex items-center')}
+            onClick={wrapSP(() => store.setCurrentList(l))}
+          >
+            <div className={cn('flex-auto')}>{l.name}</div>
+            <Btn onClick={wrapSP(() => store.deleteList(l))}>X</Btn>
+          </div>
+        </Fragment>
+      ))}
+    </Fragment>
+  )
+}
+
 @observer
 class View extends Component {
   render({store} = this.props) {
@@ -30,25 +52,7 @@ class View extends Component {
                 'ba br-0 b--moon-gray',
               )}
             >
-              <h3 className={cn('ma2', 'flex items-center')}>
-                <div className={cn('flex-auto')}>My Lists</div>
-                <Btn onClick={wrapSP(() => store.addList({name: 'foo'}))}>
-                  ADD
-                </Btn>
-              </h3>
-              {store.lists.map(l => (
-                <Fragment key={l.id}>
-                  <div
-                    className={cn('pa2', 'flex items-center')}
-                    onClick={wrapSP(() => store.setCurrentList(l))}
-                  >
-                    <div className={cn('flex-auto')}>{l.name}</div>
-                    <Btn onClick={wrapSP(() => store.deleteList(l))}>
-                      X
-                    </Btn>
-                  </div>
-                </Fragment>
-              ))}
+              {getFragment(store)}
             </aside>
             <div className={cn('flex-auto flex', 'ba b--moon-gray')}>
               task list
