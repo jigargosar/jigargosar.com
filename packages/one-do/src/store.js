@@ -1,5 +1,6 @@
 import RootStore from './RootStore'
 import delay from 'delay'
+import pForever from 'p-forever'
 
 const syncAdapter = {
   syncItem(name, props) {
@@ -12,11 +13,16 @@ const syncAdapter = {
       : Promise.resolve(props)
   },
 }
+
 const store = RootStore.create({}, {syncAdapter})
 
 store.loadFromLS()
 store.saveToLSOnSnapshotChange()
-store.sync()
+
+pForever(async () => {
+  await delay(500)
+  return store.sync()
+})
 
 export default /*hotSnapshot(module)*/ store
 
