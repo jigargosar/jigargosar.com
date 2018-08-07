@@ -1,7 +1,6 @@
 import {
   addDisposer,
   applySnapshot,
-  getEnv,
   model,
   modelId,
   onSnapshot,
@@ -21,20 +20,14 @@ const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   tasks: types.array(Task),
-})
-  .actions(self => ({
-    add(props) {
-      self.tasks.push(Task.create(props))
-    },
-    delete(task) {
-      spliceItem(task)(self.tasks)
-    },
-  }))
-  .views(self => ({
-    get syncProps() {
-      return pick(['id', 'name'])(self)
-    },
-  }))
+}).actions(self => ({
+  add(props) {
+    self.tasks.push(Task.create(props))
+  },
+  delete(task) {
+    spliceItem(task)(self.tasks)
+  },
+}))
 
 const RootStore = model('RootStore', {
   lists: types.array(TaskList),
