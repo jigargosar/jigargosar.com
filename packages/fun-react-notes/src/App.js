@@ -91,19 +91,21 @@ class NoteEditor extends Component {
       return null
     }
     return (
-      <textarea
-        {...this.focusProps}
-        id={note.id}
-        className={cn('input-reset w-100 pa2 m0 bn b--moon-gray')}
-        style={{
-          resize: 'none',
-          minHeight: 300,
-        }}
-        rows={1}
-        value={note.text}
-        onChange={note.onTextChange}
-        placeholder={`${note.id}`}
-      />
+      <FocusChild shouldFocus={store.isEditing}>
+        <textarea
+          {...this.focusProps}
+          id={note.id}
+          className={cn('input-reset w-100 pa2 m0 bn b--moon-gray')}
+          style={{
+            resize: 'none',
+            minHeight: 300,
+          }}
+          rows={1}
+          value={note.text}
+          onChange={note.onTextChange}
+          placeholder={`${note.id}`}
+        />
+      </FocusChild>
     )
   }
 }
