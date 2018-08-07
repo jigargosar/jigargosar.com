@@ -45,7 +45,7 @@ class View extends Component {
         <EventListener target={'document'} onKeyDown={store.onKeyDown} />
         <div className={cn('vh-100 overflow-hidden', 'flex flex-column')}>
           <header className={cn('w-100')}>
-            <h1>Fun React Notes</h1>
+            <h1>One Do</h1>
             <h4>
               <Btn onClick={store.onAddNote}>Add</Btn>
               <Btn onClick={store.reset}>Reset Store</Btn>
@@ -64,10 +64,10 @@ class View extends Component {
                 'ba br-0 b--moon-gray',
               )}
             >
-              <NoteList store={store} />
+              <ListNames store={store} />
             </aside>
             <div className={cn('flex-auto flex', 'ba b--moon-gray')}>
-              <NoteEditor store={store} />
+              <OneDoList store={store} />
             </div>
           </main>
         </div>
@@ -77,7 +77,7 @@ class View extends Component {
 }
 
 @observer
-class NoteEditor extends Component {
+class OneDoList extends Component {
   @computed
   get focusProps() {
     return {
@@ -112,12 +112,12 @@ class NoteEditor extends Component {
 
 @disposable
 @observer
-class NoteList extends Component {
+class ListNames extends Component {
   render({store} = this.props) {
     return (
       <div>
         {_map(note => (
-          <NoteListItem key={note.id} note={note} store={store} />
+          <ListNameItem key={note.id} note={note} store={store} />
         ))(store.allNotes)}
       </div>
     )
@@ -127,7 +127,7 @@ class NoteList extends Component {
 @withProps(() => {})
 @disposable
 @observer
-class NoteListItem extends Component {
+class ListNameItem extends Component {
   @computed
   get focusProps() {
     return {
