@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react'
 import store from './store'
 import {cn, FocusTrap, observer} from './lib/little-react'
 import EventListener from 'react-event-listener'
+import {Btn} from './lib/tachyons-components'
 
 @observer
 class App extends Component {
@@ -29,7 +30,9 @@ class View extends Component {
                 'ba br-0 b--moon-gray',
               )}
             >
-              <h3 className={cn('ma2')}>My Lists</h3>
+              <h3 className={cn('ma2')}>
+                My Lists <Btn>ADD</Btn>
+              </h3>
               {store.taskLists.map(l => (
                 <Fragment key={l.id}>
                   <div className={cn('pa2')}>{l.name}</div>
