@@ -47,7 +47,6 @@ const RootStore = model('RootStore', {
     return _compose(overProp('lists')(defaultTo([tl])))(snapshot)
   })
   .actions(lsActions)
-
   .views(self => ({
     get selectedIdx() {
       return clamp(0, self.lists.length - 1)(self._selectedIdx)
