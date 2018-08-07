@@ -2,29 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="047e998e-6510-4af3-8a22-39e2bcac3998" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/jigargosar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-overrides.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RootStore.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/AutoSize.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/FocusChild.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/aproba/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/hoc.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/little-mst.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/little-ramda.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/little-react.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/little-recompose.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/ramda.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/storage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/store.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -87,7 +65,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config-overrides.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
+            <state relative-caret-position="144">
               <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
@@ -229,7 +207,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1533630662098</updated>
-      <workItem from="1533630663531" duration="955000" />
+      <workItem from="1533630663531" duration="978000" />
     </task>
     <task id="LOCAL-00001" summary="one-do">
       <created>1533630871394</created>
@@ -238,17 +216,23 @@
       <option name="project" value="LOCAL" />
       <updated>1533630871394</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="one-do">
+      <created>1533631627046</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1533631627046</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="955000" />
+    <option name="totallyTimeSpent" value="978000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="720" y="23" width="720" height="877" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info auto_hide="true" content_ui="combo" id="Project" order="0" sideWeight="0.49707603" weight="0.42222223" />
+      <window_info active="true" auto_hide="true" content_ui="combo" id="Project" order="0" sideWeight="0.49707603" visible="true" weight="0.42222223" />
       <window_info id="Structure" order="1" sideWeight="0.5008726" side_tool="true" weight="0.33194444" />
       <window_info id="Designer" order="2" />
       <window_info id="Learn" order="3" />
@@ -347,7 +331,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config-overrides.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
+        <state relative-caret-position="144">
           <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
