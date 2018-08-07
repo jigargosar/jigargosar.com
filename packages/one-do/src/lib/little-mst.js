@@ -123,3 +123,5 @@ export function Disposers() {
     length: () => list.length,
   }
 }
+
+export const spliceItem = el => arr => arr.splice(arr.indexOf(el), 1)

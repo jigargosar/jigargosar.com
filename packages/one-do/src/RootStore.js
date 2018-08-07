@@ -4,10 +4,11 @@ import {
   model,
   modelId,
   onSnapshot,
+  spliceItem,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, defaultTo, lensProp, over} from './lib/ramda'
+import {_compose, defaultTo} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 
 const Task = model('Task', {
@@ -41,7 +42,7 @@ const RootStore = model('RootStore', {
       self.lists.unshift(TaskList.create(props))
     },
     deleteList(l) {
-      self.lists.splice(self.lists.indexOf(l), 1)
+      spliceItem(l)(self.lists)
     },
     addTask(props) {
       self.currentList.add(props)
