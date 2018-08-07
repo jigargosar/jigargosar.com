@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import store from './store'
 import {cn, FocusTrap, observer} from './lib/little-react'
 import EventListener from 'react-event-listener'
@@ -30,6 +30,11 @@ class View extends Component {
               )}
             >
               <h3 className={cn('ma2')}>Lists</h3>
+              {store.taskLists.map(l => (
+                <Fragment key={l.id}>
+                  <div>{l.name}</div>
+                </Fragment>
+              ))}
             </aside>
             <div className={cn('flex-auto flex', 'ba b--moon-gray')}>
               task list

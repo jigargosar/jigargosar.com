@@ -24,7 +24,7 @@ const RootStore = model('RootStore', {
 })
   .actions(lsActions)
   .actions(self => ({
-    afterCreate() {
+    initStore: function() {
       if (isEmpty(self.taskLists)) {
         self.addTaskList({name: 'TODO'})
       }
@@ -37,12 +37,16 @@ const RootStore = model('RootStore', {
 function lsActions(self) {
   const ls = StorageItem({name: 'rootSnapshot'})
   return {
-    afterCreate() {},
+    afterCreate() {
+      self.initStore()
+    },
     loadFromLS() {
       applySnapshot(self, ls.load())
+      self.initStore()
     },
     reset() {
       applySnapshot(self, {})
+      self.initStore()
     },
     saveToLSOnSnapshotChange() {
       addDisposer(self, onSnapshot(self, ls.save))
