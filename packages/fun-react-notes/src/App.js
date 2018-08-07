@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {_map} from './ramda'
+import {_map, _prop, _when, omit, propOr} from './ramda'
 import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import {computed} from './little-mst'
@@ -22,9 +22,12 @@ class Btn extends Component {
   render({children, ...other} = this.props) {
     return (
       <div
-        {...other}
+        {..._when(_prop('disabled'))(omit('onClick'))(other)}
         // role={'button'}
-        className={cn('input-reset dib ph1 f5 blue normal pointer')}
+        className={cn(
+          'input-reset dib ph1 f5 normal pointer',
+          propOr(false)('disabled')(other) ? 'gray' : 'blue',
+        )}
         style={{userSelect: 'none'}}
       >
         {children}
@@ -45,8 +48,12 @@ class View extends Component {
             <h4>
               <Btn onClick={store.onAddNote}>Add</Btn>
               <Btn onClick={store.reset}>Reset Store</Btn>
-              <Btn onClick={store.undo}>undo</Btn>
-              <Btn onClick={store.redo}>redo</Btn>
+              <Btn onClick={store.undo} disabled={!store.canUndo}>
+                undo
+              </Btn>
+              <Btn onClick={store.redo} disabled={!store.canRedo}>
+                redo
+              </Btn>
             </h4>
           </header>
           <main className={cn('flex-auto overflow-hidden', 'flex')}>
