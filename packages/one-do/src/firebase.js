@@ -14,7 +14,7 @@ const app = (() => {
       storageBucket: 'not-now-142808.appspot.com',
       messagingSenderId: '476064436883',
     })
-    const firestore = app.firestore()
+
     firestore.settings({timestampsInSnapshots: true})
     firestore.enablePersistence().catch(console.error)
 
@@ -40,3 +40,5 @@ const auth = app.auth()
 export const getUser = () => auth.currentUser
 export const isSignedIn = () => !!getUser()
 export const isSignedOut = () => !isSignedIn()
+
+export const firestore = app.firestore()
