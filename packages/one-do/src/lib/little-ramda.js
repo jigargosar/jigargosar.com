@@ -9,9 +9,11 @@ import {
   forEach,
   isEmpty,
   length,
+  lensProp,
   map,
   mergeDeepRight,
   nAry,
+  over,
   reduce,
   tap,
 } from './ramda'
@@ -70,3 +72,4 @@ export const mapFirst = fn => map(([l, r]) => [fn(l), r])
 export const mapSecond = fn => map(([l, r]) => [l, fn(r)])
 export const mapBoth = fn => map(([l, r]) => [fn(l), fn(r)])
 export const mapEach = fnl => fnr => map(([l, r]) => [fnl(l), fnr(r)])
+export const overProp = pn => over(lensProp(pn))

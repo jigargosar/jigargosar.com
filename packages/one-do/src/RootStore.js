@@ -7,7 +7,8 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, defaultTo, isEmpty, lensProp, over} from './lib/ramda'
+import {_compose, defaultTo, lensProp, over} from './lib/ramda'
+import {overProp} from './lib/little-ramda'
 
 const Task = model('Task', {
   id: modelId('Task'),
@@ -25,9 +26,10 @@ const RootStore = model('RootStore', {
 })
   .preProcessSnapshot(snapshot => {
     const tl = TaskList.create({name: 'TODO'})
+
     return _compose(
-      over(lensProp('currentList'))(_compose(defaultTo(tl))),
-      over(lensProp('taskLists'))(_compose(defaultTo([tl]))),
+      overProp('currentList')(defaultTo(tl)),
+      overProp('taskLists')(defaultTo([tl])),
     )(snapshot)
   })
   .actions(lsActions)
