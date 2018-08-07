@@ -33,7 +33,6 @@ const PCancelable = require('p-cancelable')
 const Task = model('Task', {
   id: modelId('Task'),
   name: '',
-  isDirty: true,
 }).actions(self => ({
   sync() {
     return getEnv(self).syncAdapter.syncItem('task', self.syncProps)
@@ -44,7 +43,6 @@ const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   tasks: types.array(Task),
-  isDirty: true,
 })
   .volatile(self => ({
     isSyncing: false,
@@ -70,9 +68,6 @@ const RootStore = model('RootStore', {
   lists: types.array(TaskList),
   _selectedIdx: 0,
 })
-  .volatile(self => ({
-    isSyncing: false,
-  }))
   .preProcessSnapshot(snapshot => {
     const tl = TaskList.create({name: 'TODO'})
     return _compose(overProp('lists')(defaultTo([tl])))(snapshot)
@@ -96,51 +91,6 @@ const RootStore = model('RootStore', {
     },
   }))
   .actions(self => ({
-    startSyncing() {
-      return new PCancelable((resolve, reject, onCancel) => {
-        let canceled = false
-        onCancel(() => {
-          canceled = true
-        })
-
-        pForever(async () => {
-          return canceled ? pForever.end : store.delayedSync()
-        })
-      })
-    },
-    delayedSync: flow(function*() {
-      yield delay(5000)
-      return yield self.sync()
-    }),
-
-    sync: flow(function*() {
-      if (self.isSyncing) {
-        return
-      }
-      console.debug('sync start')
-      self.isSyncing = true
-      const results = yield _compose(
-        pSettle,
-        map(list => list.sync().then(merge({list}))),
-        filter(_prop('isDirty')),
-      )(self.lists)
-      console.debug('sync', results)
-
-      forEach(({isFulfilled, isRejected, value, reason}) => {
-        if (isFulfilled) {
-          const list = value.list
-          if (equals(value.props, list.syncProps)) {
-            list.isDirty = false
-          }
-        }
-        if (isRejected) {
-          console.error(reason)
-        }
-      })(results)
-
-      self.isSyncing = false
-      console.debug('sync end')
-    }),
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },

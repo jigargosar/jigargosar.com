@@ -1,5 +1,6 @@
 import RootStore from './RootStore'
 import delay from 'delay'
+import {destroy} from './lib/little-mst'
 
 const syncAdapter = {
   syncItem(name, props) {
@@ -17,15 +18,12 @@ const store = RootStore.create({}, {syncAdapter})
 
 store.loadFromLS()
 store.saveToLSOnSnapshotChange()
-const cancelSync = store.startSyncing()
-cancelSync.catch(console.log)
 
 export default /*hotSnapshot(module)*/ store
 
 if (module.hot) {
-  // connectReduxDevtools(require('remotedev'), store)
   window.s = store
   module.hot.dispose(() => {
-    cancelSync.cancel('canceling on dispose')
+    destroy(store)
   })
 }
