@@ -29,7 +29,7 @@ class View extends Component {
                 'ba br-0 b--moon-gray',
               )}
             >
-              <h3 className={cn('ma2')}>Lists</h3>
+              <h3 className={cn('ma2')}>My Lists</h3>
               {store.taskLists.map(l => (
                 <Fragment key={l.id}>
                   <div>{l.name}</div>
