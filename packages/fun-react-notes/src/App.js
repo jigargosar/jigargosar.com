@@ -102,7 +102,7 @@ class NoteEditor extends Component {
         rows={1}
         value={note.text}
         onChange={note.onTextChange}
-        placeholder={`${note.sortIdx} ${note.id}`}
+        placeholder={`${note.id}`}
       />
     )
   }
