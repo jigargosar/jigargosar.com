@@ -1,9 +1,13 @@
 import RootStore from './RootStore'
 import delay from 'delay'
 import {destroy} from './lib/little-mst'
-import {signInWithPopup} from './firebase'
+import {authState, isSignedOut, signInWithPopup} from './firebase'
 
-// signInWithPopup()
+authState.then(() => {
+  if (isSignedOut()) {
+    signInWithPopup()
+  }
+})
 
 const syncAdapter = {
   syncItem(name, props) {

@@ -25,3 +25,7 @@ export const authState = new Promise(resolve => {
     listener()
   })
 })
+
+export const getUser = () => app.auth().currentUser
+export const isSignedIn = () => !!getUser()
+export const isSignedOut = () => !isSignedIn()
