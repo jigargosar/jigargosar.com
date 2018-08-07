@@ -1,4 +1,4 @@
-import {_compose, dec, inc, indexOf, isEmpty, mathMod} from './ramda'
+import {_compose, dec, inc, indexOf, isEmpty, map, mathMod} from './ramda'
 import {
   addDisposer,
   applySnapshot,
@@ -145,23 +145,24 @@ const RootStore = types
       return self.isEditing ? 'editing' : 'default'
     },
     get keyBindings() {
+      const fallback = [['mod+z', 'undo'], ['mod+shift+z', 'redo']]
+      const defaultEditingAlt = [
+        ['a', 'onAddNote'],
+        ['d', 'onDeleteSelectedNote'],
+        ['up', 'onSelectPrev'],
+        ['down', 'onSelectNext'],
+      ]
+      const mapFirst = fn => map(([l, r]) => [fn(l), r])
       const keyBindings = {
         default: [
           //
-          ['a', 'onAddNote'],
-          ['d', 'onDeleteSelectedNote'],
-          ['up', 'onSelectPrev'],
-          ['down', 'onSelectNext'],
-          ['mod+z', 'pd'],
-          ['mod+shift+z', 'pd'],
+          ...defaultEditingAlt,
+          ...fallback,
         ],
         editing: [
-          ['alt+a', 'onAddNote'],
-          ['alt+d', 'onDeleteSelectedNote'],
-          ['alt+up', 'onSelectPrev'],
-          ['alt+down', 'onSelectNext'],
-          ['mod+z', 'pd'],
-          ['mod+shift+z', 'pd'],
+          //
+          ...mapFirst(k => `alt+${k}`)(defaultEditingAlt),
+          ...fallback,
         ],
       }
       return keyBindings[self.mode]
