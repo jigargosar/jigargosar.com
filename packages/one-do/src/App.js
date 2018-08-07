@@ -31,7 +31,10 @@ class View extends Component {
               )}
             >
               <h3 className={cn('ma2')}>
-                My Lists <Btn>ADD</Btn>
+                My Lists{' '}
+                <Btn onClick={() => store.addTaskList({name: 'foo'})}>
+                  ADD
+                </Btn>
               </h3>
               {store.taskLists.map(l => (
                 <Fragment key={l.id}>
