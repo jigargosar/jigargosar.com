@@ -16,6 +16,7 @@ import {
   clamp,
   defaultTo,
   equals,
+  flatten,
   forEach,
   map,
   pick,
@@ -33,7 +34,11 @@ const Task = model('Task', {
   id: modelId('Task'),
   name: '',
   isDirty: true,
-})
+}).actions(self => ({
+  sync() {
+    return getEnv(self).syncAdapter.syncItem('task', self.syncProps)
+  },
+}))
 
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
@@ -44,13 +49,15 @@ const TaskList = model('TaskList', {
   .volatile(self => ({
     isSyncing: false,
   }))
-
   .actions(self => ({
     add(props) {
       self.tasks.push(Task.create(props))
     },
     delete(task) {
       spliceItem(task)(self.tasks)
+    },
+    sync() {
+      return getEnv(self).syncAdapter.syncItem('taskList', self.syncProps)
     },
   }))
   .views(self => ({
@@ -113,10 +120,13 @@ const RootStore = model('RootStore', {
       console.debug('sync start')
       self.isSyncing = true
       const dirtyItems = self.lists.filter(_prop('isDirty'))
-      const syncItem = getEnv(self).syncAdapter.syncItem
-      const results = yield pSettle(
-        map(i => syncItem('taskList', i.syncProps))(dirtyItems),
-      )
+      const results = yield _compose(
+        pSettle,
+        flatten,
+        map(i => {
+          return [i.sync()]
+        }),
+      )(dirtyItems)
       console.log(results)
       _compose(
         forEach(([i, r]) => {
