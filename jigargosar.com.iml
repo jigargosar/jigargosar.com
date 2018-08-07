@@ -9,6 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/packages/cra-lists" />
       <excludeFolder url="file://$MODULE_DIR$/packages/fun-react-notes" />
       <excludeFolder url="file://$MODULE_DIR$/packages/gatsby-site" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/one-do" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
