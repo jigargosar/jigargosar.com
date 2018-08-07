@@ -125,7 +125,7 @@ const RootStore = model('RootStore', {
         map(list => list.sync().then(merge({list}))),
         filter(_prop('isDirty')),
       )(self.lists)
-      console.log(results)
+      console.debug('sync', results)
 
       forEach(({isFulfilled, isRejected, value, reason}) => {
         if (isFulfilled) {
