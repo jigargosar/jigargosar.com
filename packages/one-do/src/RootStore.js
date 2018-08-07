@@ -102,7 +102,7 @@ const RootStore = model('RootStore', {
       if (self.isSyncing) {
         return
       }
-      console.log('sync start')
+      console.debug('sync start')
       self.isSyncing = true
       const dirtyItems = self.lists.filter(_prop('isDirty'))
       const pickSyncProps = pick(['id', 'name'])
@@ -123,7 +123,7 @@ const RootStore = model('RootStore', {
         }),
       )(zip(dirtyItems, results))
       self.isSyncing = false
-      console.log('sync end')
+      console.debug('sync end')
     }),
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
