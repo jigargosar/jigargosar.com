@@ -1,6 +1,7 @@
 import {
   addDisposer,
   applySnapshot,
+  flow,
   getEnv,
   model,
   modelId,
@@ -9,7 +10,16 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, _prop, clamp, defaultTo, pick} from './lib/ramda'
+import {
+  _compose,
+  _prop,
+  clamp,
+  defaultTo,
+  equals,
+  forEach,
+  pick,
+  zip,
+} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 import pSettle from 'p-settle'
 
@@ -67,22 +77,27 @@ const RootStore = model('RootStore', {
     },
   }))
   .actions(self => ({
-    sync() {
+    sync: flow(function*() {
       if (self.isSyncing) {
         return
       }
       self.isSyncing = true
       const dirtyItems = self.lists.filter(_prop('isDirty'))
-      const results = pSettle(
+      const pickSyncProps = pick(['id', 'name'])
+      const results = yield pSettle(
         dirtyItems.map(i =>
-          getEnv(self).syncAdapter.syncItem(
-            'taskList',
-            pick(['id', 'name'])(i),
-          ),
+          getEnv(self).syncAdapter.syncItem('taskList', pickSyncProps(i)),
         ),
       )
       console.log(results)
-    },
+      _compose(
+        forEach(([i, r]) => {
+          if (r.isFulfilled && equals(r.value, pickSyncProps(i))) {
+            i.isDirty = false
+          }
+        }),
+      )(zip(dirtyItems, results))
+    }),
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },

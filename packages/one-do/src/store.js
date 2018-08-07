@@ -1,8 +1,8 @@
 import RootStore from './RootStore'
 
 const syncAdapter = {
-  syncItem(name, i) {
-    return Promise.resolve('foo')
+  syncItem(name, props) {
+    return Promise.resolve(props)
   },
 }
 const store = RootStore.create({}, {syncAdapter})
