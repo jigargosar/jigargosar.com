@@ -30,15 +30,16 @@ class View extends Component {
                 'ba br-0 b--moon-gray',
               )}
             >
-              <h3 className={cn('ma2')}>
-                My Lists{' '}
-                <Btn onClick={() => store.addTaskList({name: 'foo'})}>
-                  ADD
-                </Btn>
+              <h3 className={cn('ma2', 'flex items-center')}>
+                <div className={cn('flex-auto')}>My Lists</div>
+                <Btn onClick={() => store.addList({name: 'foo'})}>ADD</Btn>
               </h3>
-              {store.taskLists.map(l => (
+              {store.lists.map(l => (
                 <Fragment key={l.id}>
-                  <div className={cn('pa2')}>{l.name}</div>
+                  <div className={cn('pa2', 'flex items-center')}>
+                    <div className={cn('flex-auto')}>{l.name}</div>
+                    <Btn onClick={() => store.deleteList(l)}>X</Btn>
+                  </div>
                 </Fragment>
               ))}
             </aside>

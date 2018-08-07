@@ -25,20 +25,23 @@ const TaskList = model('TaskList', {
 }))
 
 const RootStore = model('RootStore', {
-  taskLists: types.array(TaskList),
+  lists: types.array(TaskList),
   currentList: types.reference(TaskList),
 })
   .preProcessSnapshot(snapshot => {
     const tl = TaskList.create({name: 'TODO'})
     return _compose(
       overProp('currentList')(defaultTo(tl)),
-      overProp('taskLists')(defaultTo([tl])),
+      overProp('lists')(defaultTo([tl])),
     )(snapshot)
   })
   .actions(lsActions)
   .actions(self => ({
-    addTaskList: function(props) {
-      self.taskLists.unshift(TaskList.create(props))
+    addList: function(props) {
+      self.lists.unshift(TaskList.create(props))
+    },
+    deleteList(l) {
+      self.lists.splice(self.lists.indexOf(l), 1)
     },
     addTask(props) {
       self.currentList.add(props)
