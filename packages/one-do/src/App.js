@@ -33,7 +33,7 @@ class View extends Component {
               <TaskLists store={store} />
             </aside>
             <div className={cn('flex-auto flex', 'ba b--moon-gray')}>
-              task list
+              <Tasks store={store} />
             </div>
           </main>
         </div>
@@ -74,6 +74,41 @@ class TaskLists extends Component {
           </Fragment>
         ))}
       </Fragment>
+    )
+  }
+}
+@observer
+class Tasks extends Component {
+  render({store} = this.props) {
+    const list = store.selectedList
+    return (
+      <div className={cn('flex-auto')}>
+        <div className={cn('pa2')}>
+          <Btn onClick={wrapSP(() => list.add({name: 'task foo'}))}>
+            ADD
+          </Btn>
+        </div>
+        {list.tasks.map(t => (
+          <Fragment key={t.id}>
+            <div
+              className={cn(
+                'pa2',
+                'flex items-center',
+                // store.isSelected(t) ? 'bg-black-10' : '',
+              )}
+              // onClick={wrapSP(() => store.selectList(t))}
+            >
+              <div className={cn('flex-auto')}>{t.name}</div>
+              <Btn
+              // onClick={wrapSP(() => store.deleteList(t))}
+              // disabled={!store.canDelete}
+              >
+                X
+              </Btn>
+            </div>
+          </Fragment>
+        ))}
+      </div>
     )
   }
 }
