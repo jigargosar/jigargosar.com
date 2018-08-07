@@ -35,7 +35,7 @@ export function wrapLog(fn, name = 'wrapTapLog fn') {
     return out
   })
 }
-export {default as validate} from './vendor/aproba'
+export {default as validate} from './aproba/index'
 export const mapIndexed = addIndex(map)
 
 export const forEachIndexed = addIndex(forEach)

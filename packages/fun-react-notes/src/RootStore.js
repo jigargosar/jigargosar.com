@@ -1,4 +1,4 @@
-import {_compose, dec, inc, indexOf, isEmpty, mathMod} from './ramda'
+import {_compose, dec, inc, indexOf, isEmpty, mathMod} from './lib/ramda'
 import {
   addDisposer,
   applySnapshot,
@@ -9,10 +9,10 @@ import {
   optional,
   types,
   UndoManager,
-} from './little-mst'
-import {StorageItem} from './services/storage'
-import {clampArrIdx, mapFirst} from './little-ramda'
-import {whenKey, withKeyEvent} from './components/utils'
+} from './lib/little-mst'
+import {StorageItem} from './lib/storage'
+import {clampArrIdx, mapFirst} from './lib/little-ramda'
+import {whenKey, withKeyEvent} from './lib/little-react'
 
 const NoteModel = _compose(
   extend(self => {

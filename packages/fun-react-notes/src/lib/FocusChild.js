@@ -2,7 +2,7 @@ import {observer} from 'mobx-react'
 import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import {disposable} from '../hoc'
+import {disposable} from './hoc'
 
 @disposable
 @observer

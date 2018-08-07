@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import {_map} from './ramda'
+import {_map} from './lib/ramda'
 import store from './store'
-import {cn, FocusTrap, observer, wrapSP} from './components/utils'
-import {computed} from './little-mst'
+import {cn, FocusTrap, observer, wrapSP} from './lib/little-react'
+import {computed} from './lib/little-mst'
 import EventListener from 'react-event-listener'
-import {withProps} from './components/little-recompose'
-import {disposable} from './components/hoc'
-import FocusChild from './components/lib/FocusChild'
+import {withProps} from './lib/little-recompose'
+import {disposable} from './lib/hoc'
+import FocusChild from './lib/FocusChild'
 
 @observer
 class App extends Component {

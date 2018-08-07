@@ -1,9 +1,9 @@
 import {componentFromProp, compose, defaultProps} from 'recompose'
 import {merge} from 'ramda'
-import {observer} from './utils'
+import {observer} from './little-react'
 import React, {Component} from 'react'
 import {wrapDisplayName} from './little-recompose'
-import {autorun, Disposers} from '../little-mst'
+import {autorun, Disposers} from './little-mst'
 
 export const cfp = dp =>
   compose(

@@ -2,19 +2,11 @@ import React, {Component as RC, Fragment as F} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import * as R from 'ramda'
-import {
-  _compose,
-  _cond,
-  _tap,
-  curry,
-  prop,
-  reduce,
-  reduced,
-} from '../ramda'
+import {_compose, _cond, _tap, curry, prop, reduce, reduced} from './ramda'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
-import {mapIndexed} from '../little-ramda'
+import {mapIndexed} from './little-ramda'
 
 export {cn}
 

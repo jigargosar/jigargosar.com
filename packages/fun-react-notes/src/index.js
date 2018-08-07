@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import 'tachyons/css/tachyons.min.css'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker'
-import {sugarExtend} from './little-ramda'
+import {sugarExtend} from './lib/little-ramda'
 
 sugarExtend()
 

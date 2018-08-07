@@ -1,5 +1,5 @@
-import {validate} from '../little-ramda'
-import {compose, identity, isNil} from '../ramda'
+import {validate} from './little-ramda'
+import {compose, identity, isNil} from './ramda'
 
 export const storage = Storage()
 
