@@ -1,4 +1,4 @@
-import {_compose, dec, inc, indexOf, isEmpty, map, mathMod} from './ramda'
+import {_compose, dec, inc, indexOf, isEmpty, mathMod} from './ramda'
 import {
   addDisposer,
   applySnapshot,
@@ -11,7 +11,7 @@ import {
   UndoManager,
 } from './little-mst'
 import {StorageItem} from './services/storage'
-import {clampArrIdx} from './little-ramda'
+import {clampArrIdx, mapFirst} from './little-ramda'
 import {whenKey, withKeyEvent} from './components/utils'
 
 const NoteModel = _compose(
@@ -152,7 +152,7 @@ const RootStore = types
         ['up', 'onSelectPrev'],
         ['down', 'onSelectNext'],
       ]
-      const mapFirst = fn => map(([l, r]) => [fn(l), r])
+
       const keyBindings = {
         default: [
           //

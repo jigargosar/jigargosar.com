@@ -65,3 +65,8 @@ export const composeExt = (...ext) => self =>
 export function clampArrIdx(selectedNoteIdx, allNotes) {
   return clamp(0)(allNotes.length - 1)(selectedNoteIdx)
 }
+
+export const mapFirst = fn => map(([l, r]) => [fn(l), r])
+export const mapSecond = fn => map(([l, r]) => [l, fn(r)])
+export const mapBoth = fn => map(([l, r]) => [fn(l), fn(r)])
+export const mapEach = fnl => fnr => map(([l, r]) => [fnl(l), fnr(r)])
