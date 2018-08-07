@@ -46,16 +46,6 @@ class View extends Component {
         <div className={cn('vh-100 overflow-hidden', 'flex flex-column')}>
           <header className={cn('w-100')}>
             <h1>One Do</h1>
-            <h4>
-              <Btn onClick={store.onAddNote}>Add</Btn>
-              <Btn onClick={store.reset}>Reset Store</Btn>
-              <Btn onClick={store.undo} disabled={!store.canUndo}>
-                undo
-              </Btn>
-              <Btn onClick={store.redo} disabled={!store.canRedo}>
-                redo
-              </Btn>
-            </h4>
           </header>
           <main className={cn('flex-auto overflow-hidden', 'flex')}>
             <aside
@@ -64,10 +54,10 @@ class View extends Component {
                 'ba br-0 b--moon-gray',
               )}
             >
-              <ListNames store={store} />
+              aside
             </aside>
             <div className={cn('flex-auto flex', 'ba b--moon-gray')}>
-              <OneDoList store={store} />
+              list
             </div>
           </main>
         </div>
