@@ -25,6 +25,7 @@ import pSettle from 'p-settle'
 import pForever from 'p-forever'
 import delay from 'delay'
 import store from './store'
+
 const PCancelable = require('p-cancelable')
 
 const Task = model('Task', {
@@ -42,12 +43,18 @@ const TaskList = model('TaskList', {
   .volatile(self => ({
     isSyncing: false,
   }))
+
   .actions(self => ({
     add(props) {
       self.tasks.push(Task.create(props))
     },
     delete(task) {
       spliceItem(task)(self.tasks)
+    },
+  }))
+  .views(self => ({
+    get syncProps() {
+      return pick(['id', 'name'])(self)
     },
   }))
 
@@ -105,16 +112,15 @@ const RootStore = model('RootStore', {
       console.debug('sync start')
       self.isSyncing = true
       const dirtyItems = self.lists.filter(_prop('isDirty'))
-      const pickSyncProps = pick(['id', 'name'])
       const results = yield pSettle(
-        dirtyItems.map(i =>
-          getEnv(self).syncAdapter.syncItem('taskList', pickSyncProps(i)),
-        ),
+        dirtyItems.map(i => {
+          return getEnv(self).syncAdapter.syncItem('taskList', i.syncProps)
+        }),
       )
       console.log(results)
       _compose(
         forEach(([i, r]) => {
-          if (r.isFulfilled && equals(r.value, pickSyncProps(i))) {
+          if (r.isFulfilled && equals(r.value, i.syncProps)) {
             i.isDirty = false
           }
           if (r.isRejected) {
