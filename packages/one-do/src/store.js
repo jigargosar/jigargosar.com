@@ -4,10 +4,12 @@ import delay from 'delay'
 const syncAdapter = {
   syncItem(name, props) {
     // return Promise.resolve(props)
-    return delay.reject(2000, {
-      msg: 'sync error',
-      props,
-    })
+    return Math.random() > 0.4
+      ? delay.reject(2000, {
+          msg: 'sync error',
+          props,
+        })
+      : Promise.resolve(props)
   },
 }
 const store = RootStore.create({}, {syncAdapter})
