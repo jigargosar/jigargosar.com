@@ -15,8 +15,11 @@ const app = (() => {
       messagingSenderId: '476064436883',
     })
 
-    firestore.settings({timestampsInSnapshots: true})
-    firestore.enablePersistence().catch(console.error)
+    app.firestore().settings({timestampsInSnapshots: true})
+    app
+      .firestore()
+      .enablePersistence()
+      .catch(console.error)
 
     return app
   }
@@ -43,8 +46,8 @@ export const isSignedOut = () => !isSignedIn()
 
 export const firestore = app.firestore()
 
-export const usersFirestoreCRef = firestore.collection('users')
-export const firestoreUserRef = () => usersFirestoreCRef.doc(getUser().uid)
+export const firestoreUsersCref = firestore.collection('users')
+export const firestoreUserRef = () => firestoreUsersCref.doc(getUser().uid)
 
-export const userFirestoreCRefNamed = name =>
+export const firestoreUserCRefNamed = name =>
   firestoreUserRef().collection(name)

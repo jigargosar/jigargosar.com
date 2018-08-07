@@ -1,11 +1,17 @@
 import RootStore from './RootStore'
 import {destroy} from './lib/little-mst'
-import {authState, isSignedOut, signInWithPopup} from './firebase'
+import {
+  authState,
+  firestoreUserCRefNamed,
+  isSignedOut,
+  signInWithPopup,
+} from './firebase'
 
-authState.then(() => {
+authState.then(async () => {
   if (isSignedOut()) {
-    signInWithPopup()
+    await signInWithPopup()
   }
+  const cRef = await firestoreUserCRefNamed('todos')
 })
 
 const store = RootStore.create({}, {})
