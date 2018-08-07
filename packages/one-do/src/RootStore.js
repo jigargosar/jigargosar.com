@@ -22,24 +22,32 @@ const TaskList = model('TaskList', {
   name: '',
   tasks: types.array(Task),
   isDirty: true,
-}).actions(self => ({
-  add(props) {
-    self.tasks.push(Task.create(props))
-  },
-  delete(task) {
-    spliceItem(task)(self.tasks)
-  },
-}))
+})
+  .volatile(self => ({
+    syncing: false,
+  }))
+  .actions(self => ({
+    add(props) {
+      self.tasks.push(Task.create(props))
+    },
+    delete(task) {
+      spliceItem(task)(self.tasks)
+    },
+  }))
 
 const RootStore = model('RootStore', {
   lists: types.array(TaskList),
   _selectedIdx: 0,
 })
+  .volatile(self => ({
+    syncing: false,
+  }))
   .preProcessSnapshot(snapshot => {
     const tl = TaskList.create({name: 'TODO'})
     return _compose(overProp('lists')(defaultTo([tl])))(snapshot)
   })
   .actions(lsActions)
+
   .views(self => ({
     get selectedIdx() {
       return clamp(0, self.lists.length - 1)(self._selectedIdx)
