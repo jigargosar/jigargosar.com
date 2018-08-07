@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {_map, _prop, _when, omit, propOr} from './ramda'
+import {_map} from './ramda'
 import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './components/utils'
 import {computed} from './little-mst'
@@ -19,16 +19,17 @@ export default App
 
 @observer
 class Btn extends Component {
-  render({children, ...other} = this.props) {
+  render({children, disabled = false, onClick, ...other} = this.props) {
     return (
       <div
-        {..._when(_prop('disabled'))(omit('onClick'))(other)}
+        {...other}
         role={'button'}
         className={cn(
           'input-reset dib ph1 f5 normal pointer ttu',
-          propOr(false)('disabled')(other) ? 'gray' : 'blue',
+          disabled ? 'gray' : 'blue',
         )}
         style={{userSelect: 'none'}}
+        onClick={disabled ? null : onClick}
       >
         {children}
       </div>
