@@ -56,8 +56,12 @@ class TaskLists extends Component {
         {store.lists.map(l => (
           <Fragment key={l.id}>
             <div
-              className={cn('pa2', 'flex items-center')}
-              onClick={wrapSP(() => store.setCurrentList(l))}
+              className={cn(
+                'pa2',
+                'flex items-center',
+                store.isSelected(l) ? 'bg-moon-gray' : '',
+              )}
+              onClick={wrapSP(() => store.selectList(l))}
             >
               <div className={cn('flex-auto')}>{l.name}</div>
               <Btn onClick={wrapSP(() => store.deleteList(l))}>X</Btn>

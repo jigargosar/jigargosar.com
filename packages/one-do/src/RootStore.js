@@ -8,7 +8,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, defaultTo} from './lib/ramda'
+import {_compose, clamp, defaultTo} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 
 const Task = model('Task', {
@@ -27,19 +27,30 @@ const TaskList = model('TaskList', {
 
 const RootStore = model('RootStore', {
   lists: types.array(TaskList),
-  currentList: types.reference(TaskList),
+  _selectedIdx: 0,
 })
   .preProcessSnapshot(snapshot => {
     const tl = TaskList.create({name: 'TODO'})
-    return _compose(
-      overProp('currentList')(defaultTo(tl)),
-      overProp('lists')(defaultTo([tl])),
-    )(snapshot)
+    return _compose(overProp('lists')(defaultTo([tl])))(snapshot)
   })
   .actions(lsActions)
+  .views(self => ({
+    get selectedIdx() {
+      return clamp(0, self.lists.length - 1)(self._selectedIdx)
+    },
+    set selectedIdx(val) {
+      return (self._selectedIdx = val)
+    },
+    get selectedList() {
+      return self.lists[self.selectedIdx]
+    },
+    isSelected(l) {
+      return self.selectedList === l
+    },
+  }))
   .actions(self => ({
-    setCurrentList(l) {
-      self.currentList = l
+    selectList(l) {
+      self.selectedIdx = self.lists.indexOf(l)
     },
     addList: function(props) {
       self.lists.unshift(TaskList.create(props))
