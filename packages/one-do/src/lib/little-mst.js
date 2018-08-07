@@ -75,12 +75,12 @@ export {
 export const modelNamed = name => types.model(name)
 export const modelProps = props => modelType => modelType.props(props)
 export const modelAttrs = attrs => modelType =>
-  modelType.props(_merge({...idProp(modelType.name)}, attrs))
+  modelType.props(_merge({...modelId(modelType.name)}, attrs))
 export const extend = fn => modelType => modelType.extend(fn)
 export const actions = fn => modelType => modelType.actions(fn)
 export const views = fn => modelType => modelType.views(fn)
 export const tId = types.identifier
-export const idProp = prefix =>
+export const modelId = prefix =>
   types.optional(identifierFor(prefix), () => `${prefix}_${nanoid()}`)
 
 function identifierFor(prefix) {
