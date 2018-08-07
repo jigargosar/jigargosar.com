@@ -8,7 +8,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, clamp, defaultTo, pick} from './lib/ramda'
+import {_compose, clamp, defaultTo} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 
 const Task = model('Task', {
