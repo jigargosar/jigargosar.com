@@ -42,3 +42,7 @@ export const isSignedIn = () => !!getUser()
 export const isSignedOut = () => !isSignedIn()
 
 export const firestore = app.firestore()
+
+export const usersFirestoreCRef = firestore.collection('users')
+export const userFirestoreCRef = () =>
+  firestore.collection('users').doc(getUser().uid)
