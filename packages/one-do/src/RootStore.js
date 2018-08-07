@@ -47,6 +47,9 @@ const RootStore = model('RootStore', {
     isSelected(l) {
       return self.selectedList === l
     },
+    get canDelete() {
+      return self.lists.length > 1
+    },
   }))
   .actions(self => ({
     selectList(l) {
@@ -56,7 +59,9 @@ const RootStore = model('RootStore', {
       self.lists.unshift(TaskList.create(props))
     },
     deleteList(l) {
-      spliceItem(l)(self.lists)
+      if (self.canDelete) {
+        spliceItem(l)(self.lists)
+      }
     },
     addTask(props) {
       self.currentList.add(props)
