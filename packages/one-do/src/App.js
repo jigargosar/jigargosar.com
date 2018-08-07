@@ -70,7 +70,7 @@ class ListNames extends Component {
             >
               <div className={cn('flex-auto', 'flex items-center')}>
                 <div>{`${l.name}`}</div>
-                <div className={cn('ph1 gray self-start', 'f7')}>
+                <div className={cn('ph1 gray self-start', 'f6')}>
                   {`${l.tasks.length}`}
                 </div>
               </div>
