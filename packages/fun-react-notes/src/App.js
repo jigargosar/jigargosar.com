@@ -23,7 +23,7 @@ class Btn extends Component {
     return (
       <div
         {..._when(_prop('disabled'))(omit('onClick'))(other)}
-        // role={'button'}
+        role={'button'}
         className={cn(
           'input-reset dib ph1 f5 normal pointer',
           propOr(false)('disabled')(other) ? 'gray' : 'blue',
