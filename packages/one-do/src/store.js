@@ -6,7 +6,7 @@ const syncAdapter = {
   syncItem(name, props) {
     // return Promise.resolve(props)
     return Math.random() > 0.4
-      ? delay.reject(2000, {
+      ? delay.reject(5000, {
           msg: 'sync error',
           props,
         })
