@@ -30,7 +30,7 @@ class View extends Component {
                 'ba br-0 b--moon-gray',
               )}
             >
-              <TaskLists store={store} />
+              <ListNames store={store} />
             </aside>
             <div
               className={cn(
@@ -48,7 +48,7 @@ class View extends Component {
 }
 
 @observer
-class TaskLists extends Component {
+class ListNames extends Component {
   render({store} = this.props) {
     return (
       <Fragment>
