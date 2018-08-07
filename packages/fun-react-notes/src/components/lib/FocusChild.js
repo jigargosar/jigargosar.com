@@ -19,6 +19,7 @@ class FocusChild extends React.Component {
           return
         }
         const dom = ReactDOM.findDOMNode(this)
+        dom.focus()
         requestAnimationFrame(() => {
           dom.focus()
         })
