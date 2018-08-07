@@ -7,6 +7,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
+import {isEmpty} from './lib/ramda'
 
 const Task = model('Task', {
   id: modelId('Task'),
@@ -22,7 +23,13 @@ const RootStore = model('RootStore', {
   taskLists: types.array(TaskList),
 })
   .actions(lsActions)
-  .actions(self => ({}))
+  .actions(self => ({
+    afterCreate() {
+      if (isEmpty(self.taskLists)) {
+        self.taskLists.unshift(TaskList.create({name: 'TODO'}))
+      }
+    },
+  }))
 
 function lsActions(self) {
   const ls = StorageItem({name: 'rootSnapshot'})
