@@ -8,18 +8,18 @@ import {
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
 
-const OneDo = model('OneDo', {
-  id: modelId('OneDo'),
+const Task = model('Task', {
+  id: modelId('Task'),
   name: '',
 })
-const OneDoList = model('OneDoList', {
-  id: modelId('OneDoList'),
+const TaskList = model('TaskList', {
+  id: modelId('TaskList'),
   name: '',
-  items: types.array(OneDo),
+  tasks: types.array(Task),
 })
 
 const RootStore = model('RootStore', {
-  oneDoLists: types.array(OneDoList),
+  taskLists: types.array(TaskList),
 })
   .actions(lsActions)
   .actions(self => ({}))
