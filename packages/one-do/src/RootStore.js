@@ -23,6 +23,9 @@ const TaskList = model('TaskList', {
   add(props) {
     self.tasks.push(Task.create(props))
   },
+  delete(task) {
+    spliceItem(task)(self.tasks)
+  },
 }))
 
 const RootStore = model('RootStore', {
@@ -58,9 +61,9 @@ const RootStore = model('RootStore', {
     addList: function(props) {
       self.lists.unshift(TaskList.create(props))
     },
-    deleteList(l) {
+    deleteList(list) {
       if (self.canDelete) {
-        spliceItem(l)(self.lists)
+        spliceItem(list)(self.lists)
       }
     },
     addTask(props) {

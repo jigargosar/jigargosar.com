@@ -104,12 +104,7 @@ class Tasks extends Component {
               // onClick={wrapSP(() => store.selectList(t))}
             >
               <div className={cn('flex-auto')}>{t.name}</div>
-              <Btn
-              // onClick={wrapSP(() => store.deleteList(t))}
-              // disabled={!store.canDelete}
-              >
-                X
-              </Btn>
+              <Btn onClick={wrapSP(() => list.delete(t))}>X</Btn>
             </div>
           </Fragment>
         ))}
