@@ -1,8 +1,8 @@
 import {
   addDisposer,
   applySnapshot,
-  modelId,
   model,
+  modelId,
   onSnapshot,
   types,
 } from './lib/little-mst'
@@ -26,8 +26,11 @@ const RootStore = model('RootStore', {
   .actions(self => ({
     afterCreate() {
       if (isEmpty(self.taskLists)) {
-        self.taskLists.unshift(TaskList.create({name: 'TODO'}))
+        self.addTaskList({name: 'TODO'})
       }
+    },
+    addTaskList: function(props) {
+      self.taskLists.unshift(TaskList.create(props))
     },
   }))
 
