@@ -25,6 +25,7 @@
     "mobx-state-tree": "^3.0.2",
     "mst-middlewares": "^3.0.2",
     "nanoid": "^1.1.0",
+    "p-cancelable": "^0.5.0",
     "p-forever": "^1.0.1",
     "p-settle": "^2.1.0",
     "pluralize": "latest",

@@ -1,6 +1,5 @@
 import RootStore from './RootStore'
 import delay from 'delay'
-import pForever from 'p-forever'
 
 const syncAdapter = {
   syncItem(name, props) {
@@ -18,15 +17,15 @@ const store = RootStore.create({}, {syncAdapter})
 
 store.loadFromLS()
 store.saveToLSOnSnapshotChange()
-
-pForever(async () => {
-  await delay(500)
-  return store.sync()
-})
+const cancelSync = store.startSyncing()
+cancelSync.catch(console.log)
 
 export default /*hotSnapshot(module)*/ store
 
 if (module.hot) {
   // connectReduxDevtools(require('remotedev'), store)
   window.s = store
+  module.hot.dispose(() => {
+    cancelSync.cancel('canceling on dispose')
+  })
 }

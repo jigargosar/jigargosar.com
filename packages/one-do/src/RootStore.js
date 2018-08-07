@@ -22,6 +22,10 @@ import {
 } from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 import pSettle from 'p-settle'
+import pForever from 'p-forever'
+import delay from 'delay'
+import store from './store'
+const PCancelable = require('p-cancelable')
 
 const Task = model('Task', {
   id: modelId('Task'),
@@ -77,6 +81,23 @@ const RootStore = model('RootStore', {
     },
   }))
   .actions(self => ({
+    startSyncing() {
+      return new PCancelable((resolve, reject, onCancel) => {
+        let canceled = false
+        onCancel(() => {
+          canceled = true
+        })
+
+        pForever(async () => {
+          return canceled ? pForever.end : store.delayedSync()
+        })
+      })
+    },
+    delayedSync: flow(function*() {
+      yield delay(500)
+      return yield self.sync()
+    }),
+
     sync: flow(function*() {
       if (self.isSyncing) {
         return
