@@ -1,6 +1,7 @@
 import {
   addDisposer,
   applySnapshot,
+  getEnv,
   model,
   modelId,
   onSnapshot,
@@ -8,8 +9,9 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, clamp, defaultTo} from './lib/ramda'
+import {_compose, _prop, clamp, defaultTo, pick} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
+import pSettle from 'p-settle'
 
 const Task = model('Task', {
   id: modelId('Task'),
@@ -24,7 +26,7 @@ const TaskList = model('TaskList', {
   isDirty: true,
 })
   .volatile(self => ({
-    syncing: false,
+    isSyncing: false,
   }))
   .actions(self => ({
     add(props) {
@@ -40,7 +42,7 @@ const RootStore = model('RootStore', {
   _selectedIdx: 0,
 })
   .volatile(self => ({
-    syncing: false,
+    isSyncing: false,
   }))
   .preProcessSnapshot(snapshot => {
     const tl = TaskList.create({name: 'TODO'})
@@ -65,6 +67,22 @@ const RootStore = model('RootStore', {
     },
   }))
   .actions(self => ({
+    sync() {
+      if (self.isSyncing) {
+        return
+      }
+      self.isSyncing = true
+      const dirtyItems = self.lists.filter(_prop('isDirty'))
+      const results = pSettle(
+        dirtyItems.map(i =>
+          getEnv('syncAdapter').syncItem(
+            'taskList',
+            pick(['id', 'name'])(i),
+          ),
+        ),
+      )
+      console.log(results)
+    },
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },

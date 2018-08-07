@@ -24,6 +24,8 @@
     "mobx-state-tree": "^3.0.2",
     "mst-middlewares": "^3.0.2",
     "nanoid": "^1.1.0",
+    "p-settle": "^2.1.0",
+    "pluralize": "latest",
     "prop-types": "^15.6.2",
     "ramda": "^0.25.0",
     "react": "^16.4.2",
@@ -41,8 +43,7 @@
     "remotedev": "^0.2.7",
     "styled-components": "^3.3.3",
     "sugar": "^2.0.4",
-    "tachyons": "^4.11.1",
-    "pluralize": "latest"
+    "tachyons": "^4.11.1"
   },
   "scripts": {
     "start": "nodemon -w config-overrides.js -x react-app-rewired start",
