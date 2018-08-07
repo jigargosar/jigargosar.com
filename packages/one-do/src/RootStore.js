@@ -15,29 +15,19 @@ import {overProp} from './lib/little-ramda'
 const Task = model('Task', {
   id: modelId('Task'),
   name: '',
-}).actions(self => ({
-  sync() {
-    return getEnv(self).syncAdapter.syncItem('task', self.syncProps)
-  },
-}))
+}).actions(self => ({}))
 
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   tasks: types.array(Task),
 })
-  .volatile(self => ({
-    isSyncing: false,
-  }))
   .actions(self => ({
     add(props) {
       self.tasks.push(Task.create(props))
     },
     delete(task) {
       spliceItem(task)(self.tasks)
-    },
-    sync() {
-      return getEnv(self).syncAdapter.syncItem('taskList', self.syncProps)
     },
   }))
   .views(self => ({
