@@ -25,6 +25,7 @@ class Btn extends Component {
         {...other}
         // role={'button'}
         className={cn('input-reset dib ph1 f5 blue normal pointer')}
+        style={{userSelect: 'none'}}
       >
         {children}
       </div>

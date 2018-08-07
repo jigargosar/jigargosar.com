@@ -106,11 +106,23 @@ const RootStore = types
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
+      initStore() {
+        if (self.allNotes.length === 0) {
+          self.withoutUndo(() => {
+            self.notesCollection.unshift(NoteModel.create())
+          })
+        }
+      },
+      afterCreate() {
+        self.initStore()
+      },
       loadFromLS() {
         self.withoutUndo(() => applySnapshot(self, ls.load()))
+        self.initStore()
       },
       reset() {
         self.withoutUndo(() => applySnapshot(self, {}))
+        self.initStore()
       },
       saveToLSOnSnapshotChange() {
         addDisposer(self, onSnapshot(self, ls.save))
