@@ -17,7 +17,6 @@ import {
   defaultTo,
   equals,
   filter,
-  flatten,
   forEach,
   map,
   merge,
