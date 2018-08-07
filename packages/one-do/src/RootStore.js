@@ -95,6 +95,9 @@ const RootStore = model('RootStore', {
           if (r.isFulfilled && equals(r.value, pickSyncProps(i))) {
             i.isDirty = false
           }
+          if (r.isRejected) {
+            console.error(r.reason)
+          }
         }),
       )(zip(dirtyItems, results))
     }),

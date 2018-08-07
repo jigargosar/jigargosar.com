@@ -2,7 +2,8 @@ import RootStore from './RootStore'
 
 const syncAdapter = {
   syncItem(name, props) {
-    return Promise.resolve(props)
+    // return Promise.resolve(props)
+    return Promise.reject({msg: 'sync error', props})
   },
 }
 const store = RootStore.create({}, {syncAdapter})
