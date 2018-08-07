@@ -9,7 +9,7 @@ const syncAdapter = {
           msg: 'sync error',
           props,
         })
-      : Promise.resolve(props)
+      : Promise.resolve({props})
   },
 }
 

@@ -19,8 +19,8 @@ import {
   flatten,
   forEach,
   map,
+  merge,
   pick,
-  zip,
 } from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 import pSettle from 'p-settle'
@@ -123,21 +123,24 @@ const RootStore = model('RootStore', {
       const results = yield _compose(
         pSettle,
         flatten,
-        map(i => {
-          return [i.sync()]
+        map(item => {
+          return [item.sync().then(merge({item}))]
         }),
       )(dirtyItems)
       console.log(results)
-      _compose(
-        forEach(([i, r]) => {
-          if (r.isFulfilled && equals(r.value, i.syncProps)) {
-            i.isDirty = false
+
+      forEach(({isFulfilled, isRejected, value, reason}) => {
+        if (isFulfilled) {
+          const item = value.item
+          if (equals(value.props, item.syncProps)) {
+            item.isDirty = false
           }
-          if (r.isRejected) {
-            console.error(r.reason)
-          }
-        }),
-      )(zip(dirtyItems, results))
+        }
+        if (isRejected) {
+          console.error(reason)
+        }
+      })(results)
+
       self.isSyncing = false
       console.debug('sync end')
     }),
