@@ -8,9 +8,7 @@ import {StorageItem} from './lib/storage'
 
 const RootStore = model('RootStore', {})
   .actions(lsActions)
-  .actions(self => ({
-    initStore() {},
-  }))
+  .actions(self => ({}))
 
 function lsActions(self) {
   const ls = StorageItem({name: 'rootSnapshot'})
