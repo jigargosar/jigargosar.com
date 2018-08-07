@@ -1,6 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import 'firebase/storage'
+import 'firebase/firestore'
 
 const app = (() => {
   if (firebase.apps[0]) {
@@ -14,6 +14,9 @@ const app = (() => {
       storageBucket: 'not-now-142808.appspot.com',
       messagingSenderId: '476064436883',
     })
+    const firestore = app.firestore()
+    firestore.settings({timestampsInSnapshots: true})
+    firestore.enablePersistence().catch(console.error)
 
     return app
   }
