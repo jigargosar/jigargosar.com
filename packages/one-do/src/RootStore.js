@@ -94,7 +94,7 @@ const RootStore = model('RootStore', {
       })
     },
     delayedSync: flow(function*() {
-      yield delay(500)
+      yield delay(5000)
       return yield self.sync()
     }),
 
