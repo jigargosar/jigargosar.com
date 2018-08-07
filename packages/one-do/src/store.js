@@ -2,6 +2,7 @@ import RootStore from './RootStore'
 import delay from 'delay'
 import {destroy} from './lib/little-mst'
 import firebase from 'firebase/app'
+import 'firebase/auth'
 
 const app =
   firebase.apps[0] ||
@@ -13,6 +14,11 @@ const app =
     storageBucket: 'not-now-142808.appspot.com',
     messagingSenderId: '476064436883',
   })
+
+const GoogleAuthProvider = firebase.auth.GoogleAuthProvider
+const authProvider = new GoogleAuthProvider()
+authProvider.setCustomParameters({prompt: 'select_account'})
+app.auth().signInWithPopup(authProvider)
 
 const syncAdapter = {
   syncItem(name, props) {
