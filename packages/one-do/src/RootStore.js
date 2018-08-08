@@ -69,7 +69,7 @@ const RootStore = model('RootStore', {
   }))
   .volatile(self => ({}))
   .actions(self => ({
-    afterCreate() {
+    sync() {
       authState.then(async () => {
         if (isSignedOut()) {
           await signInWithPopup()
@@ -81,6 +81,9 @@ const RootStore = model('RootStore', {
           taskListCRef.doc(l.id).set(l.fireSnap)
         })
       })
+    },
+    afterCreate() {
+      self.sync()
     },
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
