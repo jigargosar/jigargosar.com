@@ -87,7 +87,6 @@ const TaskListCollection = model('TaskListCollection', {
     const tl = TaskList.create({name: 'TODO'})
     return _compose(overProp('items')(defaultTo([tl])))(snapshot)
   })
-  .volatile(self => ({isSyncing: false}))
   .views(self => ({
     get canDelete() {
       return self.items.length > 1
@@ -95,10 +94,6 @@ const TaskListCollection = model('TaskListCollection', {
   }))
   .actions(self => {
     const sync = flow(function*() {
-      if (self.isSyncing) {
-        return
-      }
-      self.isSyncing = true
       yield authState
       if (isSignedOut()) {
         yield signInWithPopup()
@@ -109,10 +104,9 @@ const TaskListCollection = model('TaskListCollection', {
       self.items.forEach(l => {
         taskListCRef.doc(l.id).set(l.fireSnap)
       })
-      self.isSyncing = false
     })
     return {
-      _sync: sync,
+      _sync: pDropConcurrentCalls(sync),
       sync: decorate(atomic, () => self._sync()),
       add: function(props) {
         self.items.unshift(TaskList.create(props))
