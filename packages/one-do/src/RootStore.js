@@ -35,7 +35,7 @@ const TaskList = model('TaskList', {
   tasks: types.array(Task),
 })
   .volatile(self => ({
-    isSavingToFire: false,
+    isSaving: false,
   }))
   .views(self => ({
     get fireSnap() {
@@ -50,16 +50,16 @@ const TaskList = model('TaskList', {
       spliceItem(task)(self.tasks)
     },
     saveToFire: atomicFlow(function*(dRef) {
-      if (self.isSavingToFire || !self.isDirty) {
+      if (self.isSaving || !self.isDirty) {
         return
       }
-      if (!self.isSavingToFire) {
-        self.isSavingToFire = true
+      if (!self.isSaving) {
+        self.isSaving = true
         if (self.isDirty) {
           yield dRef.set(self.fireSnap)
           self.isDirty = false
         }
-        self.isSavingToFire = false
+        self.isSaving = false
       }
     }),
   }))
