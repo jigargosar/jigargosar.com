@@ -55,9 +55,8 @@ const TaskList = model('TaskList', {
       }
     }),
     loadFromFireData(data) {
-      if (self.isDirty) {
-        return
-      }
+      if (self.isDirty) return
+
       Object.assign(self, self.pickFireProps(data))
     },
   }))
