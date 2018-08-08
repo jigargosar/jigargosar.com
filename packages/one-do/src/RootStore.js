@@ -32,8 +32,11 @@ const TaskList = model('TaskList', {
   tasks: types.array(Task),
 })
   .views(self => ({
+    get pickFireProps() {
+      return pick(['id', 'name'])
+    },
     get fireSnap() {
-      return pick(['id', 'name'])(self)
+      return self.pickFireProps(self)
     },
   }))
   .actions(self => ({
@@ -51,6 +54,9 @@ const TaskList = model('TaskList', {
         self.isDirty = false
       }
     }),
+    loadFromFireData(data) {
+      Object.assign(self, self.pickFireProps(data))
+    },
   }))
 
 async function queryToDocsData(cRef) {
@@ -90,7 +96,7 @@ const TaskListCollection = model('TaskListCollection', {
         docsData.forEach(data => {
           const item = findById(data.id)(self.items)
           if (item) {
-            Object.assign(item, data)
+            item.loadFromFireData(data)
           } else {
             self.add(data)
           }
