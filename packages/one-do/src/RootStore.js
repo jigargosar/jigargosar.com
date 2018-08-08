@@ -83,7 +83,7 @@ const TaskListCollection = model('TaskListCollection', {
       if (isSignedOut()) {
         yield signInWithPopup()
       }
-      const taskListCRef = firestoreUserCRefNamed('TaskLists')
+      const taskListCRef = firestoreUserCRefNamed(TaskListCollection.name)
       const qs = yield taskListCRef.get()
       console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
       self.items.forEach(l => {
