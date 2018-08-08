@@ -10,7 +10,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, _prop, clamp, defaultTo, pick} from './lib/ramda'
+import {_compose, _prop, clamp, defaultTo, equals, pick} from './lib/ramda'
 import {findById, overProp} from './lib/little-ramda'
 import {
   authState,
@@ -45,8 +45,11 @@ const TaskList = model('TaskList', {
     },
     saveToCRef: dropFlow(function*(cRef) {
       console.assert(self.isDirty)
-      yield cRef.doc(self.id).set(self.fireSnap)
-      self.isDirty = false
+      const oldFireSnap = self.fireSnap
+      yield cRef.doc(self.id).set(oldFireSnap)
+      if (equals(oldFireSnap, self.fireSnap)) {
+        self.isDirty = false
+      }
     }),
   }))
 
