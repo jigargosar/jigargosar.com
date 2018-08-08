@@ -10,6 +10,12 @@ import {
 import {StorageItem} from './lib/storage'
 import {_compose, clamp, defaultTo} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
+import {
+  authState,
+  firestoreUserCRefNamed,
+  isSignedOut,
+  signInWithPopup,
+} from './firebase'
 
 const Task = model('Task', {
   id: modelId('Task'),
@@ -56,6 +62,15 @@ const RootStore = model('RootStore', {
     },
   }))
   .actions(self => ({
+    afterCreate() {
+      authState.then(async () => {
+        if (isSignedOut()) {
+          await signInWithPopup()
+        }
+        const qs = await firestoreUserCRefNamed('todos').get()
+        console.log(`res`, qs.docs.map(qds => qds.data()))
+      })
+    },
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },
