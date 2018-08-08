@@ -87,10 +87,10 @@ const TaskListCollection = model('TaskListCollection', {
         console.debug(`[sync] fireTaskLists`, docsData)
         console.log(`[sync] fireTaskLists: docs.length`, docsData.length)
 
-        const saveResult = yield Promise.all(
+        const pushResult = yield Promise.all(
           self.dirtyItems.map(i => i.saveToCref(cRef)),
         )
-        console.log('[sync] saveResult', saveResult)
+        console.log('[sync] pushResult', pushResult)
       }),
       add: function(props) {
         self.items.unshift(TaskList.create(props))
