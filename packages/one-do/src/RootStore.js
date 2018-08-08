@@ -92,9 +92,8 @@ const TaskListCollection = model('TaskListCollection', {
         atomic,
         pDropConcurrentCalls(
           flow(function*() {
-            yield authState
             if (isSignedOut()) {
-              yield signInWithPopup()
+              return
             }
             const taskListCRef = firestoreUserCRefNamed(
               TaskListCollection.name,
@@ -148,9 +147,15 @@ const RootStore = model('RootStore', {
   }))
   .volatile(self => ({}))
   .actions(self => ({
-    sync() {
-      self.taskListCollection.sync()
-    },
+    sync: pDropConcurrentCalls(
+      flow(function*() {
+        yield authState
+        if (isSignedOut()) {
+          yield signInWithPopup()
+        }
+        self.taskListCollection.sync()
+      }),
+    ),
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },
