@@ -41,6 +41,30 @@ const TaskList = model('TaskList', {
     },
   }))
 
+const TaskListCollection = model('TaskListCollection', {
+  items: types.array(TaskList),
+})
+  .preProcessSnapshot(snapshot => {
+    const tl = TaskList.create({name: 'TODO'})
+    return _compose(overProp('items')(defaultTo([tl])))(snapshot)
+  })
+  .volatile(self => ({
+    get canDelete() {
+      return self.items.length > 1
+    },
+  }))
+  .views(self => ({}))
+  .actions(self => ({
+    addList: function(props) {
+      self.items.unshift(TaskList.create(props))
+    },
+    deleteList(item) {
+      if (self.canDelete) {
+        spliceItem(item)(self.items)
+      }
+    },
+  }))
+
 const RootStore = model('RootStore', {
   lists: types.array(TaskList),
   _selectedIdx: 0,
