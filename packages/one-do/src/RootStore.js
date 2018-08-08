@@ -100,14 +100,17 @@ const TaskListCollection = model('TaskListCollection', {
             )
             const qs = yield taskListCRef.get()
             const docs = qs.docs
-            console.debug(`fireTaskLists`, docs.map(qds => qds.data()))
-            console.log(`fireTaskLists: docs.length`, docs.length)
+            console.debug(
+              `[sync] fireTaskLists`,
+              docs.map(qds => qds.data()),
+            )
+            console.log(`[sync] fireTaskLists: docs.length`, docs.length)
             const saveResult = yield Promise.all(
               self.items
                 .filter(_prop('isDirty'))
                 .map(i => i.saveToFirestoreCollection(taskListCRef)),
             )
-            console.log('saveResult', saveResult)
+            console.log('[sync] saveResult', saveResult)
           }),
         ),
       ),
