@@ -56,10 +56,10 @@ const TaskListCollection = model('TaskListCollection', {
   }))
   .views(self => ({}))
   .actions(self => ({
-    addList: function(props) {
+    add: function(props) {
       self.items.unshift(TaskList.create(props))
     },
-    deleteList(item) {
+    delete(item) {
       if (self.canDelete) {
         spliceItem(item)(self.items)
       }
@@ -113,12 +113,10 @@ const RootStore = model('RootStore', {
       self.selectedIdx = self.lists.indexOf(l)
     },
     addList: function(props) {
-      self.lists.unshift(TaskList.create(props))
+      self.lists.add(props)
     },
-    deleteList(list) {
-      if (self.canDelete) {
-        spliceItem(list)(self.lists)
-      }
+    deleteList(props) {
+      self.taskListCollection.delete(props)
     },
     addTask(props) {
       self.currentList.add(props)
