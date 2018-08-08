@@ -8,7 +8,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, clamp, defaultTo} from './lib/ramda'
+import {_compose, clamp, defaultTo, pick} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 import {
   authState,
@@ -26,14 +26,20 @@ const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   tasks: types.array(Task),
-}).actions(self => ({
-  add(props) {
-    self.tasks.push(Task.create(props))
-  },
-  delete(task) {
-    spliceItem(task)(self.tasks)
-  },
-}))
+})
+  .views(self => ({
+    get fireSnap() {
+      return pick(['id', 'name'])(self)
+    },
+  }))
+  .actions(self => ({
+    add(props) {
+      self.tasks.push(Task.create(props))
+    },
+    delete(task) {
+      spliceItem(task)(self.tasks)
+    },
+  }))
 
 const RootStore = model('RootStore', {
   lists: types.array(TaskList),
@@ -61,14 +67,19 @@ const RootStore = model('RootStore', {
       return self.lists.length > 1
     },
   }))
+  .volatile(self => ({}))
   .actions(self => ({
     afterCreate() {
       authState.then(async () => {
         if (isSignedOut()) {
           await signInWithPopup()
         }
-        const qs = await firestoreUserCRefNamed('todos').get()
-        console.log(`res`, qs.docs.map(qds => qds.data()))
+        const taskListCRef = firestoreUserCRefNamed('TaskLists')
+        const qs = await taskListCRef.get()
+        console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
+        self.lists.forEach(l => {
+          taskListCRef.doc(l.id).set(l.fireSnap)
+        })
       })
     },
     selectList(l) {
