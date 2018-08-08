@@ -96,20 +96,26 @@ const TaskListCollection = model('TaskListCollection', {
     },
   }))
   .actions(self => {
-    const sync = flow(function*() {
-      yield authState
-      if (isSignedOut()) {
-        yield signInWithPopup()
-      }
-      const taskListCRef = firestoreUserCRefNamed(TaskListCollection.name)
-      const qs = yield taskListCRef.get()
-      console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
-      self.items.forEach(l => {
-        taskListCRef.doc(l.id).set(l.fireSnap)
-      })
-    })
     return {
-      sync: decorate(atomic, pDropConcurrentCalls(sync)),
+      sync: decorate(
+        atomic,
+        pDropConcurrentCalls(
+          flow(function*() {
+            yield authState
+            if (isSignedOut()) {
+              yield signInWithPopup()
+            }
+            const taskListCRef = firestoreUserCRefNamed(
+              TaskListCollection.name,
+            )
+            const qs = yield taskListCRef.get()
+            console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
+            self.items.forEach(l => {
+              taskListCRef.doc(l.id).set(l.fireSnap)
+            })
+          }),
+        ),
+      ),
       add: function(props) {
         self.items.unshift(TaskList.create(props))
       },
