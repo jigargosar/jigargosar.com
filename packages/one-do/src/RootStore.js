@@ -16,6 +16,7 @@ import {overProp, pDropConcurrentCalls} from './lib/little-ramda'
 import {
   authState,
   firestoreUserCRefNamed,
+  isSignedIn,
   isSignedOut,
   signInWithPopup,
 } from './firebase'
@@ -69,10 +70,7 @@ const TaskListCollection = model('TaskListCollection', {
   }))
   .actions(self => {
     const generator = function*() {
-      if (isSignedOut()) {
-        return
-      }
-      const cRef = firestoreUserCRefNamed(TaskListCollection.name)
+      console.assert(isSignedIn())
       // const qs = yield cRef.get()
       // const docs = qs.docs
       // console.debug(
@@ -80,6 +78,7 @@ const TaskListCollection = model('TaskListCollection', {
       //   docs.map(qds => qds.data()),
       // )
       // console.log(`[sync] fireTaskLists: docs.length`, docs.length)
+      const cRef = firestoreUserCRefNamed(TaskListCollection.name)
       const saveResult = yield Promise.all(
         self.items.filter(_prop('isDirty')).map(i => i.saveToCref(cRef)),
       )
