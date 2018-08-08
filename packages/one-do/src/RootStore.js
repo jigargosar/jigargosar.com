@@ -71,7 +71,7 @@ const TaskListCollection = model('TaskListCollection', {
 })
   .preProcessSnapshot(snapshot => {
     const tl = TaskList.create({name: 'TODO'})
-    return _compose(overProp('items')(defaultTo([tl])))(snapshot)
+    return overProp('items')(defaultTo([tl]))(snapshot)
   })
   .views(self => ({
     get canDelete() {
