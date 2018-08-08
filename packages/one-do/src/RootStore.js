@@ -78,8 +78,7 @@ const TaskListCollection = model('TaskListCollection', {
         const cRef = firestoreUserCRefNamed(TaskListCollection.name)
 
         const docsData = yield queryToDocsData(cRef)
-        console.debug(`[sync] fireTaskLists`, docsData)
-        console.log(`[sync] fireTaskLists: docs.length`, docsData.length)
+        console.log(`[sync] pull result: docsData.length`, docsData.length)
 
         const pushResult = yield Promise.all(
           self.dirtyItems.map(i => i.saveToCRef(cRef)),
