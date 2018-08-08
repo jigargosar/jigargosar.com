@@ -126,15 +126,13 @@ const RootStore = model('RootStore', {
   }))
   .volatile(self => ({}))
   .actions(self => ({
-    sync: pDropConcurrentCalls(
-      flow(function*() {
-        yield authState
-        if (isSignedOut()) {
-          yield signInWithPopup()
-        }
-        self.taskListCollection.sync()
-      }),
-    ),
+    sync: dropFlow(function*() {
+      yield authState
+      if (isSignedOut()) {
+        yield signInWithPopup()
+      }
+      self.taskListCollection.sync()
+    }),
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },
