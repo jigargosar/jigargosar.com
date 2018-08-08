@@ -10,7 +10,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, _prop, clamp, defaultTo, equals, pick} from './lib/ramda'
+import {_prop, clamp, defaultTo, equals, pick} from './lib/ramda'
 import {findById, overProp} from './lib/little-ramda'
 import {
   authState,
@@ -62,8 +62,7 @@ const TaskList = model('TaskList', {
 
 async function queryToDocsData(cRef) {
   const qs = await cRef.get()
-  const docs = qs.docs
-  return docs.map(qds => qds.data())
+  return qs.docs.map(qds => qds.data())
 }
 
 const TaskListCollection = model('TaskListCollection', {
