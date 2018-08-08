@@ -6,6 +6,8 @@ const store = RootStore.create({}, {})
 store.loadFromLS()
 store.saveToLSOnSnapshotChange()
 
+store.sync()
+
 export default /*hotSnapshot(module)*/ store
 
 if (module.hot) {

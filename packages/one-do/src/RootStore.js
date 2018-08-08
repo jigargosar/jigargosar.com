@@ -78,7 +78,7 @@ const TaskListCollection = model('TaskListCollection', {
     },
   }))
   .actions(self => ({
-    sync: flow(function*() {
+    sync: atomicFlow(function*() {
       if (self.isSyncing) {
         return
       }
@@ -132,7 +132,7 @@ const RootStore = model('RootStore', {
   }))
   .volatile(self => ({}))
   .actions(self => ({
-    afterCreate() {
+    sync() {
       self.taskListCollection.sync()
     },
     selectList(l) {
