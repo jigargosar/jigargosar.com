@@ -79,6 +79,10 @@ const TaskListCollection = model('TaskListCollection', {
   }))
   .actions(self => ({
     sync: flow(function*() {
+      if (self.isSyncing) {
+        return
+      }
+      self.isSyncing = true
       yield authState
       if (isSignedOut()) {
         yield signInWithPopup()
@@ -89,6 +93,7 @@ const TaskListCollection = model('TaskListCollection', {
       self.items.forEach(l => {
         taskListCRef.doc(l.id).set(l.fireSnap)
       })
+      self.isSyncing = false
     }),
     add: function(props) {
       self.items.unshift(TaskList.create(props))
