@@ -32,9 +32,11 @@ const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   isDirty: true,
-  isSaving: false,
   tasks: types.array(Task),
 })
+  .volatile(self => ({
+    isSavingToFire: false,
+  }))
   .views(self => ({
     get fireSnap() {
       return pick(['id', 'name'])(self)
