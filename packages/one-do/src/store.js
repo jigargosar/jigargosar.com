@@ -7,8 +7,6 @@ store.loadFromLS()
 store.saveToLSOnSnapshotChange()
 
 store.sync()
-store.sync()
-store.sync()
 
 export default /*hotSnapshot(module)*/ store
 

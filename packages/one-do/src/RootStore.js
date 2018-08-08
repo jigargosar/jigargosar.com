@@ -11,7 +11,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, clamp, defaultTo, nAry, pick} from './lib/ramda'
+import {_compose, clamp, defaultTo, pick} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 import {
   authState,
@@ -100,10 +100,12 @@ const TaskListCollection = model('TaskListCollection', {
             )
             const qs = yield taskListCRef.get()
             console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
-            self.items.forEach(i => {
-              // taskListCRef.doc(i.id).set(i.fireSnap)
-              i.saveToFirestoreCollection(taskListCRef)
-            })
+            const saveResult = yield Promise.all(
+              self.items.map(i =>
+                i.saveToFirestoreCollection(taskListCRef),
+              ),
+            )
+            console.log(saveResult)
           }),
         ),
       ),
@@ -152,7 +154,7 @@ const RootStore = model('RootStore', {
       self.selectedIdx = self.lists.indexOf(l)
     },
     addList: function(props) {
-      self.lists.add(props)
+      self.taskListCollection.add(props)
     },
     deleteList(props) {
       self.taskListCollection.delete(props)
@@ -178,20 +180,3 @@ function lsActions(self) {
 }
 
 export default RootStore
-
-function pf(ret) {
-  return new Promise(resolve => {
-    resolve(ret)
-    // setTimeout(() => resolve(ret), 1000)
-  })
-}
-
-const pfDrop = pDropConcurrentCalls(pf)
-
-pfDrop(1).then(console.log)
-pfDrop(2).then(console.log)
-
-setImmediate(() => {
-  pfDrop(3).then(console.log)
-  pfDrop(4).then(console.log)
-})
