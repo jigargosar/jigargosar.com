@@ -71,12 +71,12 @@ const TaskListCollection = model('TaskListCollection', {
     const tl = TaskList.create({name: 'TODO'})
     return _compose(overProp('items')(defaultTo([tl])))(snapshot)
   })
-  .volatile(self => ({
+  .volatile(self => ({isSyncing: false}))
+  .views(self => ({
     get canDelete() {
       return self.items.length > 1
     },
   }))
-  .views(self => ({}))
   .actions(self => ({
     sync: flow(function*() {
       yield authState
