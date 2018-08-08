@@ -40,6 +40,9 @@ const TaskList = model('TaskList', {
     delete(task) {
       spliceItem(task)(self.tasks)
     },
+    saveToFire(dRef) {
+      dRef.set(self.fireSnap)
+    },
   }))
 
 const TaskListCollection = model('TaskListCollection', {
