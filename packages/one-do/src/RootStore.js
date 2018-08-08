@@ -44,11 +44,13 @@ const TaskList = model('TaskList', {
       spliceItem(task)(self.tasks)
     },
     saveToFire: flow(function*(dRef) {
-      if (self.isSavingToFire) return
-      self.isSavingToFire = true
-      if (self.isDirty) {
-        yield dRef.set(self.fireSnap)
-        self.isDirty = false
+      if (!self.isSavingToFire) {
+        self.isSavingToFire = true
+        if (self.isDirty) {
+          yield dRef.set(self.fireSnap)
+          self.isDirty = false
+        }
+        self.isSavingToFire = false
       }
     }),
   }))
