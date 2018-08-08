@@ -84,8 +84,9 @@ const TaskListCollection = model('TaskListCollection', {
 
         const docsData = yield queryToDocsData(cRef)
         console.log(`[sync] pull result: docsData.length`, docsData.length)
-        docsData.forEach(d => {
-          const item = findById(d.id)(self.items)
+        docsData.forEach(data => {
+          const item = findById(data.id)(self.items)
+          Object.assign(item, data)
         })
       }),
       add: function(props) {
