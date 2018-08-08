@@ -99,7 +99,9 @@ const TaskListCollection = model('TaskListCollection', {
               TaskListCollection.name,
             )
             const qs = yield taskListCRef.get()
-            console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
+            const docs = qs.docs
+            console.debug(`fireTaskLists`, docs.map(qds => qds.data()))
+            console.log(`fireTaskLists: docs.length`, docs.length)
             const saveResult = yield Promise.all(
               self.items
                 .filter(_prop('isDirty'))
