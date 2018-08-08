@@ -95,10 +95,10 @@ const TaskListCollection = model('TaskListCollection', {
             if (isSignedOut()) {
               return
             }
-            const taskListCRef = firestoreUserCRefNamed(
+            const cRef = firestoreUserCRefNamed(
               TaskListCollection.name,
             )
-            // const qs = yield taskListCRef.get()
+            // const qs = yield cRef.get()
             // const docs = qs.docs
             // console.debug(
             //   `[sync] fireTaskLists`,
@@ -108,7 +108,7 @@ const TaskListCollection = model('TaskListCollection', {
             const saveResult = yield Promise.all(
               self.items
                 .filter(_prop('isDirty'))
-                .map(i => i.saveToFirestoreCollection(taskListCRef)),
+                .map(i => i.saveToFirestoreCollection(cRef)),
             )
             console.log('[sync] saveResult', saveResult)
           }),
