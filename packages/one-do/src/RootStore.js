@@ -67,6 +67,9 @@ const TaskListCollection = model('TaskListCollection', {
     get canDelete() {
       return self.items.length > 1
     },
+    get dirtyItems() {
+      return self.items.filter(_prop('isDirty'))
+    },
   }))
   .actions(self => {
     const generator = function*() {
@@ -80,7 +83,7 @@ const TaskListCollection = model('TaskListCollection', {
       // console.log(`[sync] fireTaskLists: docs.length`, docs.length)
       const cRef = firestoreUserCRefNamed(TaskListCollection.name)
       const saveResult = yield Promise.all(
-        self.items.filter(_prop('isDirty')).map(i => i.saveToCref(cRef)),
+        self.dirtyItems.map(i => i.saveToCref(cRef)),
       )
       console.log('[sync] saveResult', saveResult)
     }
