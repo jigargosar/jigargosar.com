@@ -48,15 +48,14 @@ const TaskList = model('TaskList', {
     },
     saveToCRef: dropFlow(function*(cRef) {
       console.assert(self.isDirty)
-      const oldFireSnap = self.fireSnap
-      yield cRef.doc(self.id).set(oldFireSnap)
-      if (equals(oldFireSnap, self.fireSnap)) {
+      const preSaveFireSnap = self.fireSnap
+      yield cRef.doc(self.id).set(preSaveFireSnap)
+      if (equals(preSaveFireSnap, self.fireSnap)) {
         self.isDirty = false
       }
     }),
     loadFromFireData(data) {
       if (self.isDirty) return
-
       Object.assign(self, self.pickFireProps(data))
     },
   }))
