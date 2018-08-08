@@ -86,7 +86,11 @@ const TaskListCollection = model('TaskListCollection', {
         console.log(`[sync] pull result: docsData.length`, docsData.length)
         docsData.forEach(data => {
           const item = findById(data.id)(self.items)
-          Object.assign(item, data)
+          if (item) {
+            Object.assign(item, data)
+          } else {
+            self.add(data)
+          }
         })
       }),
       add: function(props) {
