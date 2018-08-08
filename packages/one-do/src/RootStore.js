@@ -1,7 +1,7 @@
 import {
   addDisposer,
   applySnapshot,
-  atomic,
+  decorate,
   flow,
   model,
   modelId,
@@ -19,6 +19,7 @@ import {
   isSignedOut,
   signInWithPopup,
 } from './firebase'
+import {atomic} from 'mst-middlewares'
 
 const Task = model('Task', {
   id: modelId('Task'),
@@ -44,16 +45,19 @@ const TaskList = model('TaskList', {
     delete(task) {
       spliceItem(task)(self.tasks)
     },
-    saveToFire: flow(function*(dRef) {
-      if (!self.isSavingToFire) {
-        self.isSavingToFire = true
-        if (self.isDirty) {
-          yield dRef.set(self.fireSnap)
-          self.isDirty = false
+    saveToFire: decorate(
+      atomic,
+      flow(function*(dRef) {
+        if (!self.isSavingToFire) {
+          self.isSavingToFire = true
+          if (self.isDirty) {
+            yield dRef.set(self.fireSnap)
+            self.isDirty = false
+          }
+          self.isSavingToFire = false
         }
-        self.isSavingToFire = false
-      }
-    }),
+      }),
+    ),
   }))
 
 const TaskListCollection = model('TaskListCollection', {
