@@ -27,7 +27,7 @@ const Task = model('Task', {
   name: '',
 }).actions(self => ({}))
 
-const atomicFlow = fn => decorate(atomic, flow(fn))
+const atomicFlow = fn => decorate(atomic, fn)
 
 const pDropConcurrentCalls = asyncFn => {
   let retPromise = null
@@ -106,8 +106,6 @@ const TaskListCollection = model('TaskListCollection', {
       })
     })
     return {
-      _sync: pDropConcurrentCalls(sync),
-      // sync: decorate(atomic, () => self._sync()),
       sync: decorate(atomic, pDropConcurrentCalls(sync)),
       add: function(props) {
         self.items.unshift(TaskList.create(props))
