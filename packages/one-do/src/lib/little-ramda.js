@@ -14,6 +14,7 @@ import {
   mergeDeepRight,
   nAry,
   over,
+  propEq,
   reduce,
   tap,
 } from './ramda'
@@ -89,3 +90,4 @@ export const pDropConcurrentCalls = asyncFn => {
     return retPromise
   }
 }
+export const findById = id => list => list.find(propEq('id', id))

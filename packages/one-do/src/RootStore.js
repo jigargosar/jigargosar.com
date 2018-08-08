@@ -11,7 +11,7 @@ import {
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
 import {_compose, _prop, clamp, defaultTo, pick} from './lib/ramda'
-import {overProp} from './lib/little-ramda'
+import {findById, overProp} from './lib/little-ramda'
 import {
   authState,
   firestoreUserCRefNamed,
@@ -84,6 +84,9 @@ const TaskListCollection = model('TaskListCollection', {
 
         const docsData = yield queryToDocsData(cRef)
         console.log(`[sync] pull result: docsData.length`, docsData.length)
+        docsData.forEach(d => {
+          const item = findById(d.id)(self.items)
+        })
       }),
       add: function(props) {
         self.items.unshift(TaskList.create(props))
