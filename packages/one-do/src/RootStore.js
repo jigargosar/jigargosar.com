@@ -48,6 +48,9 @@ const TaskList = model('TaskList', {
       spliceItem(task)(self.tasks)
     },
     saveToFire: atomicFlow(function*(dRef) {
+      if (self.isSavingToFire || !self.isDirty) {
+        return
+      }
       if (!self.isSavingToFire) {
         self.isSavingToFire = true
         if (self.isDirty) {
