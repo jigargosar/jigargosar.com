@@ -21,7 +21,9 @@ class View extends Component {
         <EventListener target={'document'} onKeyDown={store.onKeyDown} />
         <div className={cn('vh-100 overflow-hidden', 'flex flex-column')}>
           <header className={cn('w-100')}>
-            <h1>One Do</h1>
+            <h2 className={cn('dib mh2')}>One Do</h2>
+            <Btn onClick={() => store.reset()}>reset</Btn>
+            <Btn onClick={() => store.sync()}>sync</Btn>
           </header>
           <main className={cn('flex-auto overflow-hidden', 'flex')}>
             <aside
