@@ -23,7 +23,7 @@ import {
 const Task = model('Task', {
   id: modelId('Task'),
   name: '',
-}).actions(self => ({}))
+})
 
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
@@ -55,6 +55,9 @@ const TaskList = model('TaskList', {
       }
     }),
     loadFromFireData(data) {
+      if (self.isDirty) {
+        return
+      }
       Object.assign(self, self.pickFireProps(data))
     },
   }))
