@@ -77,33 +77,38 @@ const TaskListCollection = model('TaskListCollection', {
       return self.items.length > 1
     },
   }))
-  .actions(self => ({
-    sync: atomicFlow(function*() {
-      if (self.isSyncing) {
-        return
-      }
-      self.isSyncing = true
-      yield authState
-      if (isSignedOut()) {
-        yield signInWithPopup()
-      }
-      const taskListCRef = firestoreUserCRefNamed(TaskListCollection.name)
-      const qs = yield taskListCRef.get()
-      console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
-      self.items.forEach(l => {
-        taskListCRef.doc(l.id).set(l.fireSnap)
-      })
-      self.isSyncing = false
-    }),
-    add: function(props) {
-      self.items.unshift(TaskList.create(props))
-    },
-    delete(item) {
-      if (self.canDelete) {
-        spliceItem(item)(self.items)
-      }
-    },
-  }))
+  .actions(self => {
+    return {
+      _sync: flow(function*() {
+        if (self.isSyncing) {
+          return
+        }
+        self.isSyncing = true
+        yield authState
+        if (isSignedOut()) {
+          yield signInWithPopup()
+        }
+        const taskListCRef = firestoreUserCRefNamed(
+          TaskListCollection.name,
+        )
+        const qs = yield taskListCRef.get()
+        console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
+        self.items.forEach(l => {
+          taskListCRef.doc(l.id).set(l.fireSnap)
+        })
+        self.isSyncing = false
+      }),
+      sync: decorate(atomic, () => self._sync()),
+      add: function(props) {
+        self.items.unshift(TaskList.create(props))
+      },
+      delete(item) {
+        if (self.canDelete) {
+          spliceItem(item)(self.items)
+        }
+      },
+    }
+  })
 
 const RootStore = model('RootStore', {
   taskListCollection: optional(TaskListCollection, {}),
