@@ -4,6 +4,7 @@ import {
   model,
   modelId,
   onSnapshot,
+  optional,
   spliceItem,
   types,
 } from './lib/little-mst'
@@ -66,15 +67,14 @@ const TaskListCollection = model('TaskListCollection', {
   }))
 
 const RootStore = model('RootStore', {
-  lists: types.array(TaskList),
+  taskListCollection: optional(TaskListCollection, {}),
   _selectedIdx: 0,
 })
-  .preProcessSnapshot(snapshot => {
-    const tl = TaskList.create({name: 'TODO'})
-    return _compose(overProp('lists')(defaultTo([tl])))(snapshot)
-  })
   .actions(lsActions)
   .views(self => ({
+    get lists() {
+      return self.taskListCollection.items
+    },
     get selectedIdx() {
       return clamp(0, self.lists.length - 1)(self._selectedIdx)
     },
