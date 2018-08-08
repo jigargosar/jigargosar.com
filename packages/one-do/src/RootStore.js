@@ -63,12 +63,10 @@ const TaskList = model('TaskList', {
       atomic,
       pDropConcurrentCalls(
         flow(function*(cRef) {
-          if (!self.isDirty) {
-            return
-          }
           if (self.isDirty) {
-            yield cRef.doc(self.id).set(self.fireSnap)
+            const ret = yield cRef.doc(self.id).set(self.fireSnap)
             self.isDirty = false
+            return ret
           }
         }),
       ),
