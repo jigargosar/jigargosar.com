@@ -44,16 +44,11 @@ const TaskList = model('TaskList', {
     delete(task) {
       spliceItem(task)(self.tasks)
     },
-    saveToCref: pDropConcurrentCalls(
-      flow(function*(cRef) {
-        if (self.isDirty) {
-          yield cRef.doc(self.id).set(self.fireSnap)
-          self.isDirty = false
-          return 'saveToCref Success'
-        }
-        return 'saveToCref notDirty'
-      }),
-    ),
+    saveToCRef: dropFlow(function*(cRef) {
+      console.assert(self.isDirty)
+      yield cRef.doc(self.id).set(self.fireSnap)
+      self.isDirty = false
+    }),
   }))
 
 async function queryToDocsData(cRef) {
@@ -88,7 +83,7 @@ const TaskListCollection = model('TaskListCollection', {
         console.log(`[sync] fireTaskLists: docs.length`, docsData.length)
 
         const pushResult = yield Promise.all(
-          self.dirtyItems.map(i => i.saveToCref(cRef)),
+          self.dirtyItems.map(i => i.saveToCRef(cRef)),
         )
         console.log('[sync] pushResult', pushResult)
       }),
