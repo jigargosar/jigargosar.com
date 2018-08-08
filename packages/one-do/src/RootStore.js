@@ -72,16 +72,16 @@ const TaskListCollection = model('TaskListCollection', {
     },
   }))
   .actions(self => {
+    // const qs = yield cRef.get()
+    // const docs = qs.docs
+    // console.debug(
+    //   `[sync] fireTaskLists`,
+    //   docs.map(qds => qds.data()),
+    // )
+    // console.log(`[sync] fireTaskLists: docs.length`, docs.length)
     return {
       sync: dropFlow(function*() {
         console.assert(isSignedIn())
-        // const qs = yield cRef.get()
-        // const docs = qs.docs
-        // console.debug(
-        //   `[sync] fireTaskLists`,
-        //   docs.map(qds => qds.data()),
-        // )
-        // console.log(`[sync] fireTaskLists: docs.length`, docs.length)
         const cRef = firestoreUserCRefNamed(TaskListCollection.name)
         const saveResult = yield Promise.all(
           self.dirtyItems.map(i => i.saveToCref(cRef)),
