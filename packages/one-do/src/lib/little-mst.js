@@ -1,6 +1,7 @@
 import {applySnapshot, getSnapshot, types} from 'mobx-state-tree'
 import nanoid from 'nanoid'
 import {_compose, _merge, _path, _startsWith, call} from './ramda'
+import {pDropConcurrentCalls} from './little-ramda'
 
 export {
   addDisposer,
@@ -125,3 +126,4 @@ export function Disposers() {
 }
 
 export const spliceItem = el => arr => arr.splice(arr.indexOf(el), 1)
+export const dropFlow = generator => pDropConcurrentCalls(flow(generator))

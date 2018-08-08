@@ -2,6 +2,7 @@ import {
   addDisposer,
   applySnapshot,
   decorate,
+  dropFlow,
   flow,
   model,
   modelId,
@@ -12,7 +13,7 @@ import {
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
 import {_compose, _prop, clamp, defaultTo, pick} from './lib/ramda'
-import {overProp} from './lib/little-ramda'
+import {overProp, pDropConcurrentCalls} from './lib/little-ramda'
 import {
   authState,
   firestoreUserCRefNamed,
@@ -20,26 +21,11 @@ import {
   signInWithPopup,
 } from './firebase'
 import {atomic} from 'mst-middlewares'
-import pFinally from 'p-finally'
 
 const Task = model('Task', {
   id: modelId('Task'),
   name: '',
 }).actions(self => ({}))
-
-const pDropConcurrentCalls = asyncFn => {
-  let retPromise = null
-
-  return (...args) => {
-    if (!retPromise) {
-      retPromise = asyncFn(...args)
-
-      pFinally(retPromise, () => (retPromise = null))
-    }
-
-    return retPromise
-  }
-}
 
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
@@ -87,33 +73,27 @@ const TaskListCollection = model('TaskListCollection', {
     },
   }))
   .actions(self => {
+    const generator = function*() {
+      if (isSignedOut()) {
+        return
+      }
+      const cRef = firestoreUserCRefNamed(TaskListCollection.name)
+      // const qs = yield cRef.get()
+      // const docs = qs.docs
+      // console.debug(
+      //   `[sync] fireTaskLists`,
+      //   docs.map(qds => qds.data()),
+      // )
+      // console.log(`[sync] fireTaskLists: docs.length`, docs.length)
+      const saveResult = yield Promise.all(
+        self.items
+          .filter(_prop('isDirty'))
+          .map(i => i.saveToFirestoreCollection(cRef)),
+      )
+      console.log('[sync] saveResult', saveResult)
+    }
     return {
-      sync: decorate(
-        atomic,
-        pDropConcurrentCalls(
-          flow(function*() {
-            if (isSignedOut()) {
-              return
-            }
-            const cRef = firestoreUserCRefNamed(
-              TaskListCollection.name,
-            )
-            // const qs = yield cRef.get()
-            // const docs = qs.docs
-            // console.debug(
-            //   `[sync] fireTaskLists`,
-            //   docs.map(qds => qds.data()),
-            // )
-            // console.log(`[sync] fireTaskLists: docs.length`, docs.length)
-            const saveResult = yield Promise.all(
-              self.items
-                .filter(_prop('isDirty'))
-                .map(i => i.saveToFirestoreCollection(cRef)),
-            )
-            console.log('[sync] saveResult', saveResult)
-          }),
-        ),
-      ),
+      sync: dropFlow(generator),
       add: function(props) {
         self.items.unshift(TaskList.create(props))
       },
