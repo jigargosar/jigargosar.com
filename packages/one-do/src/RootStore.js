@@ -1,6 +1,7 @@
 import {
   addDisposer,
   applySnapshot,
+  atomic,
   flow,
   model,
   modelId,
