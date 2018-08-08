@@ -56,6 +56,19 @@ const TaskListCollection = model('TaskListCollection', {
   }))
   .views(self => ({}))
   .actions(self => ({
+    sync() {
+      authState.then(async () => {
+        if (isSignedOut()) {
+          await signInWithPopup()
+        }
+        const taskListCRef = firestoreUserCRefNamed('TaskLists')
+        const qs = await taskListCRef.get()
+        console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
+        self.items.forEach(l => {
+          taskListCRef.doc(l.id).set(l.fireSnap)
+        })
+      })
+    },
     add: function(props) {
       self.items.unshift(TaskList.create(props))
     },
@@ -93,21 +106,8 @@ const RootStore = model('RootStore', {
   }))
   .volatile(self => ({}))
   .actions(self => ({
-    sync() {
-      authState.then(async () => {
-        if (isSignedOut()) {
-          await signInWithPopup()
-        }
-        const taskListCRef = firestoreUserCRefNamed('TaskLists')
-        const qs = await taskListCRef.get()
-        console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
-        self.lists.forEach(l => {
-          taskListCRef.doc(l.id).set(l.fireSnap)
-        })
-      })
-    },
     afterCreate() {
-      self.sync()
+      self.taskListCollection.sync()
     },
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
