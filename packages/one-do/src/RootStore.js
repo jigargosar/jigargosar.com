@@ -29,7 +29,7 @@ const Task = model('Task', {
 
 const atomicFlow = fn => decorate(atomic, flow(fn))
 
-const dropCallsTillPromiseNotResolved = asyncFn => {
+const dropConcurrent = asyncFn => {
   let retPromise = null
   const wrapperFn = (...args) => {
     if (!retPromise) {
@@ -195,7 +195,7 @@ function pf(ret) {
   })
 }
 
-const pfDrop = dropCallsTillPromiseNotResolved(pf)
+const pfDrop = dropConcurrent(pf)
 
 pfDrop(1).then(console.log)
 pfDrop(2).then(console.log)
