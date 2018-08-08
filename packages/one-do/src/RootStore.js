@@ -26,6 +26,8 @@ const Task = model('Task', {
   name: '',
 }).actions(self => ({}))
 
+const atomicFlow = fn => decorate(atomic, flow(fn))
+
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
@@ -45,19 +47,16 @@ const TaskList = model('TaskList', {
     delete(task) {
       spliceItem(task)(self.tasks)
     },
-    saveToFire: decorate(
-      atomic,
-      flow(function*(dRef) {
-        if (!self.isSavingToFire) {
-          self.isSavingToFire = true
-          if (self.isDirty) {
-            yield dRef.set(self.fireSnap)
-            self.isDirty = false
-          }
-          self.isSavingToFire = false
+    saveToFire: atomicFlow(function*(dRef) {
+      if (!self.isSavingToFire) {
+        self.isSavingToFire = true
+        if (self.isDirty) {
+          yield dRef.set(self.fireSnap)
+          self.isDirty = false
         }
-      }),
-    ),
+        self.isSavingToFire = false
+      }
+    }),
   }))
 
 const TaskListCollection = model('TaskListCollection', {
