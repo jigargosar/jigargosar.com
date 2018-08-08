@@ -77,13 +77,13 @@ const TaskListCollection = model('TaskListCollection', {
         console.assert(isSignedIn())
         const cRef = firestoreUserCRefNamed(TaskListCollection.name)
 
-        const docsData = yield queryToDocsData(cRef)
-        console.log(`[sync] pull result: docsData.length`, docsData.length)
-
         const pushResult = yield Promise.all(
           self.dirtyItems.map(i => i.saveToCRef(cRef)),
         )
         console.log('[sync] push success', pushResult.length)
+
+        const docsData = yield queryToDocsData(cRef)
+        console.log(`[sync] pull result: docsData.length`, docsData.length)
       }),
       add: function(props) {
         self.items.unshift(TaskList.create(props))
