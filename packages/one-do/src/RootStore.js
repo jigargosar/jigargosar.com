@@ -11,7 +11,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, clamp, defaultTo, pick} from './lib/ramda'
+import {_compose, _prop, clamp, defaultTo, pick} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 import {
   authState,
@@ -101,11 +101,11 @@ const TaskListCollection = model('TaskListCollection', {
             const qs = yield taskListCRef.get()
             console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
             const saveResult = yield Promise.all(
-              self.items.map(i =>
-                i.saveToFirestoreCollection(taskListCRef),
-              ),
+              self.items
+                .filter(_prop('isDirty'))
+                .map(i => i.saveToFirestoreCollection(taskListCRef)),
             )
-            console.log(saveResult)
+            console.log('saveResult', saveResult)
           }),
         ),
       ),
