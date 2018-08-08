@@ -1,7 +1,6 @@
 import {
   addDisposer,
   applySnapshot,
-  decorate,
   dropFlow,
   flow,
   model,
@@ -20,7 +19,6 @@ import {
   isSignedOut,
   signInWithPopup,
 } from './firebase'
-import {atomic} from 'mst-middlewares'
 
 const Task = model('Task', {
   id: modelId('Task'),
@@ -45,18 +43,15 @@ const TaskList = model('TaskList', {
     delete(task) {
       spliceItem(task)(self.tasks)
     },
-    saveToFirestoreCollection: decorate(
-      atomic,
-      pDropConcurrentCalls(
-        flow(function*(cRef) {
-          if (self.isDirty) {
-            yield cRef.doc(self.id).set(self.fireSnap)
-            self.isDirty = false
-            return 'saveToFirestoreCollection Success'
-          }
-          return 'saveToFirestoreCollection notDirty'
-        }),
-      ),
+    saveToFirestoreCollection: pDropConcurrentCalls(
+      flow(function*(cRef) {
+        if (self.isDirty) {
+          yield cRef.doc(self.id).set(self.fireSnap)
+          self.isDirty = false
+          return 'saveToFirestoreCollection Success'
+        }
+        return 'saveToFirestoreCollection notDirty'
+      }),
     ),
   }))
 
