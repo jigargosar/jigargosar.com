@@ -43,14 +43,14 @@ const TaskList = model('TaskList', {
     delete(task) {
       spliceItem(task)(self.tasks)
     },
-    saveToFirestoreCollection: pDropConcurrentCalls(
+    saveToCref: pDropConcurrentCalls(
       flow(function*(cRef) {
         if (self.isDirty) {
           yield cRef.doc(self.id).set(self.fireSnap)
           self.isDirty = false
-          return 'saveToFirestoreCollection Success'
+          return 'saveToCref Success'
         }
-        return 'saveToFirestoreCollection notDirty'
+        return 'saveToCref notDirty'
       }),
     ),
   }))
@@ -81,9 +81,7 @@ const TaskListCollection = model('TaskListCollection', {
       // )
       // console.log(`[sync] fireTaskLists: docs.length`, docs.length)
       const saveResult = yield Promise.all(
-        self.items
-          .filter(_prop('isDirty'))
-          .map(i => i.saveToFirestoreCollection(cRef)),
+        self.items.filter(_prop('isDirty')).map(i => i.saveToCref(cRef)),
       )
       console.log('[sync] saveResult', saveResult)
     }
