@@ -11,7 +11,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_compose, clamp, defaultTo, pick} from './lib/ramda'
+import {_compose, clamp, defaultTo, nAry, pick} from './lib/ramda'
 import {overProp} from './lib/little-ramda'
 import {
   authState,
@@ -20,6 +20,7 @@ import {
   signInWithPopup,
 } from './firebase'
 import {atomic} from 'mst-middlewares'
+import pFinally from 'p-finally'
 
 const Task = model('Task', {
   id: modelId('Task'),
@@ -27,6 +28,23 @@ const Task = model('Task', {
 }).actions(self => ({}))
 
 const atomicFlow = fn => decorate(atomic, flow(fn))
+
+const dropCallsTillPromiseNotResolved = asyncFn => {
+  let retPromise = null
+  const wrapperFn = (...args) => {
+    if (!retPromise) {
+      retPromise = asyncFn(...args)
+
+      pFinally(retPromise, () => {
+        retPromise = null
+      })
+    }
+
+    return retPromise
+  }
+
+  return nAry(asyncFn.length, wrapperFn)
+}
 
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
@@ -78,26 +96,25 @@ const TaskListCollection = model('TaskListCollection', {
     },
   }))
   .actions(self => {
+    const sync = flow(function*() {
+      if (self.isSyncing) {
+        return
+      }
+      self.isSyncing = true
+      yield authState
+      if (isSignedOut()) {
+        yield signInWithPopup()
+      }
+      const taskListCRef = firestoreUserCRefNamed(TaskListCollection.name)
+      const qs = yield taskListCRef.get()
+      console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
+      self.items.forEach(l => {
+        taskListCRef.doc(l.id).set(l.fireSnap)
+      })
+      self.isSyncing = false
+    })
     return {
-      _sync: flow(function*() {
-        if (self.isSyncing) {
-          return
-        }
-        self.isSyncing = true
-        yield authState
-        if (isSignedOut()) {
-          yield signInWithPopup()
-        }
-        const taskListCRef = firestoreUserCRefNamed(
-          TaskListCollection.name,
-        )
-        const qs = yield taskListCRef.get()
-        console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
-        self.items.forEach(l => {
-          taskListCRef.doc(l.id).set(l.fireSnap)
-        })
-        self.isSyncing = false
-      }),
+      _sync: sync,
       sync: decorate(atomic, () => self._sync()),
       add: function(props) {
         self.items.unshift(TaskList.create(props))
@@ -170,3 +187,20 @@ function lsActions(self) {
 }
 
 export default RootStore
+
+function pf(ret) {
+  return new Promise(resolve => {
+    resolve(ret)
+    // setTimeout(() => resolve(ret), 1000)
+  })
+}
+
+const pfDrop = dropCallsTillPromiseNotResolved(pf)
+
+pfDrop(1).then(console.log)
+pfDrop(2).then(console.log)
+
+setImmediate(() => {
+  pfDrop(3).then(console.log)
+  pfDrop(4).then(console.log)
+})
