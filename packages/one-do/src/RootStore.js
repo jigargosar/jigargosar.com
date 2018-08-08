@@ -98,13 +98,13 @@ const TaskListCollection = model('TaskListCollection', {
             const taskListCRef = firestoreUserCRefNamed(
               TaskListCollection.name,
             )
-            const qs = yield taskListCRef.get()
-            const docs = qs.docs
-            console.debug(
-              `[sync] fireTaskLists`,
-              docs.map(qds => qds.data()),
-            )
-            console.log(`[sync] fireTaskLists: docs.length`, docs.length)
+            // const qs = yield taskListCRef.get()
+            // const docs = qs.docs
+            // console.debug(
+            //   `[sync] fireTaskLists`,
+            //   docs.map(qds => qds.data()),
+            // )
+            // console.log(`[sync] fireTaskLists: docs.length`, docs.length)
             const saveResult = yield Promise.all(
               self.items
                 .filter(_prop('isDirty'))
