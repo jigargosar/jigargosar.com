@@ -78,7 +78,7 @@ const TaskListCollection = model('TaskListCollection', {
   }))
   .views(self => ({}))
   .actions(self => ({
-    sync() {
+    sync: flow(function*() {
       authState.then(async () => {
         if (isSignedOut()) {
           await signInWithPopup()
@@ -90,7 +90,7 @@ const TaskListCollection = model('TaskListCollection', {
           taskListCRef.doc(l.id).set(l.fireSnap)
         })
       })
-    },
+    }),
     add: function(props) {
       self.items.unshift(TaskList.create(props))
     },
