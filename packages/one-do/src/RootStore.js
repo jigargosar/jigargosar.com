@@ -29,7 +29,8 @@ const Task = model('Task', {
 
 const pDropConcurrentCalls = asyncFn => {
   let retPromise = null
-  const wrapperFn = (...args) => {
+
+  return (...args) => {
     if (!retPromise) {
       retPromise = asyncFn(...args)
 
@@ -38,8 +39,6 @@ const pDropConcurrentCalls = asyncFn => {
 
     return retPromise
   }
-
-  return nAry(asyncFn.length, wrapperFn)
 }
 
 const TaskList = model('TaskList', {
@@ -48,9 +47,6 @@ const TaskList = model('TaskList', {
   isDirty: true,
   tasks: types.array(Task),
 })
-  .volatile(self => ({
-    isSaving: false,
-  }))
   .views(self => ({
     get fireSnap() {
       return pick(['id', 'name'])(self)
@@ -63,20 +59,16 @@ const TaskList = model('TaskList', {
     delete(task) {
       spliceItem(task)(self.tasks)
     },
-    saveToFire: decorate(
+    saveToFirestoreCollection: decorate(
       atomic,
       pDropConcurrentCalls(
-        flow(function*(dRef) {
-          if (self.isSaving || !self.isDirty) {
+        flow(function*(cRef) {
+          if (!self.isDirty) {
             return
           }
-          if (!self.isSaving) {
-            self.isSaving = true
-            if (self.isDirty) {
-              yield dRef.set(self.fireSnap)
-              self.isDirty = false
-            }
-            self.isSaving = false
+          if (self.isDirty) {
+            yield cRef.doc(self.id).set(self.fireSnap)
+            self.isDirty = false
           }
         }),
       ),
@@ -110,8 +102,9 @@ const TaskListCollection = model('TaskListCollection', {
             )
             const qs = yield taskListCRef.get()
             console.log(`fireTaskLists`, qs.docs.map(qds => qds.data()))
-            self.items.forEach(l => {
-              taskListCRef.doc(l.id).set(l.fireSnap)
+            self.items.forEach(i => {
+              // taskListCRef.doc(i.id).set(i.fireSnap)
+              i.saveToFirestoreCollection(taskListCRef)
             })
           }),
         ),
