@@ -26,6 +26,7 @@ const Task = model('Task', {
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
+  isDirty: true,
   tasks: types.array(Task),
 })
   .views(self => ({
@@ -40,9 +41,12 @@ const TaskList = model('TaskList', {
     delete(task) {
       spliceItem(task)(self.tasks)
     },
-    saveToFire(dRef) {
-      dRef.set(self.fireSnap)
-    },
+    saveToFire: flow(function*(dRef) {
+      if (isDirty) {
+        yield dRef.set(self.fireSnap)
+        self.isDirty = false
+      }
+    }),
   }))
 
 const TaskListCollection = model('TaskListCollection', {
