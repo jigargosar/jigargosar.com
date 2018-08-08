@@ -27,8 +27,6 @@ const Task = model('Task', {
   name: '',
 }).actions(self => ({}))
 
-const atomicFlow = fn => decorate(atomic, fn)
-
 const pDropConcurrentCalls = asyncFn => {
   let retPromise = null
   const wrapperFn = (...args) => {
@@ -65,19 +63,24 @@ const TaskList = model('TaskList', {
     delete(task) {
       spliceItem(task)(self.tasks)
     },
-    saveToFire: atomicFlow(function*(dRef) {
-      if (self.isSaving || !self.isDirty) {
-        return
-      }
-      if (!self.isSaving) {
-        self.isSaving = true
-        if (self.isDirty) {
-          yield dRef.set(self.fireSnap)
-          self.isDirty = false
-        }
-        self.isSaving = false
-      }
-    }),
+    saveToFire: decorate(
+      atomic,
+      pDropConcurrentCalls(
+        flow(function*(dRef) {
+          if (self.isSaving || !self.isDirty) {
+            return
+          }
+          if (!self.isSaving) {
+            self.isSaving = true
+            if (self.isDirty) {
+              yield dRef.set(self.fireSnap)
+              self.isDirty = false
+            }
+            self.isSaving = false
+          }
+        }),
+      ),
+    ),
   }))
 
 const TaskListCollection = model('TaskListCollection', {
