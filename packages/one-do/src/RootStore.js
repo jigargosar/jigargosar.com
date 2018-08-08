@@ -64,10 +64,11 @@ const TaskList = model('TaskList', {
       pDropConcurrentCalls(
         flow(function*(cRef) {
           if (self.isDirty) {
-            const ret = yield cRef.doc(self.id).set(self.fireSnap)
+            yield cRef.doc(self.id).set(self.fireSnap)
             self.isDirty = false
-            return ret
+            return 'saveToFirestoreCollection Success'
           }
+          return 'saveToFirestoreCollection notDirty'
         }),
       ),
     ),
