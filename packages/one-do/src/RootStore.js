@@ -1,6 +1,7 @@
 import {
   addDisposer,
   applySnapshot,
+  flow,
   model,
   modelId,
   onSnapshot,
@@ -27,6 +28,7 @@ const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   isDirty: true,
+  isSaving: false,
   tasks: types.array(Task),
 })
   .views(self => ({
@@ -42,7 +44,9 @@ const TaskList = model('TaskList', {
       spliceItem(task)(self.tasks)
     },
     saveToFire: flow(function*(dRef) {
-      if (isDirty) {
+      if (self.isSavingToFire) return
+      self.isSavingToFire = true
+      if (self.isDirty) {
         yield dRef.set(self.fireSnap)
         self.isDirty = false
       }
