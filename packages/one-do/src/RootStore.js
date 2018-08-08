@@ -2,7 +2,6 @@ import {
   addDisposer,
   applySnapshot,
   dropFlow,
-  flow,
   model,
   modelId,
   onSnapshot,
@@ -12,7 +11,7 @@ import {
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
 import {_compose, _prop, clamp, defaultTo, pick} from './lib/ramda'
-import {overProp, pDropConcurrentCalls} from './lib/little-ramda'
+import {overProp} from './lib/little-ramda'
 import {
   authState,
   firestoreUserCRefNamed,
