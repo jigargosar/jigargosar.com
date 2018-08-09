@@ -11,12 +11,15 @@ import {
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
 import {
+  _compose,
   _prop,
   ascend,
   clamp,
   defaultTo,
   equals,
+  flatten,
   pick,
+  pluck,
   reject,
   sortWith,
 } from './lib/ramda'
@@ -88,6 +91,9 @@ const TaskList = model('TaskList', {
     get activeTasks() {
       return reject(_prop('isDeleted'))(self.tasks)
     },
+    get dirtyTasks() {
+      return self.tasks.filter(_prop('isDirty'))
+    },
   }))
   .actions(self => ({
     update(props) {
@@ -135,11 +141,18 @@ const TaskListCollection = model('TaskListCollection', {
     get activeItems() {
       return reject(_prop('isDeleted'))(self.items)
     },
+    get tasks() {
+      return _compose(flatten, pluck('tasks'))(self.items)
+    },
+    get dirtyTasks() {
+      return _compose(flatten, pluck('dirtyTasks'))(self.items)
+    },
   }))
   .actions(self => {
     return {
       sync: dropFlow(function*() {
         yield self.syncLists()
+        yield self.syncTasks()
       }),
       syncLists: dropFlow(function*() {
         console.assert(isSignedIn())
