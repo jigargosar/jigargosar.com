@@ -97,7 +97,7 @@ function collection(Model) {
         docsData.forEach(data => {
           const item = findById(data.id)(self.items)
           if (item) {
-            item.loadFromRemoteData(data)
+            self.loadFromRemoteData(data, item)
           } else {
             self.add({...data, isDirty: false})
           }
