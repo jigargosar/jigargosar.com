@@ -9,6 +9,7 @@ import {
   forEach,
   isEmpty,
   length,
+  lensPath,
   lensProp,
   map,
   mergeDeepRight,
@@ -77,6 +78,7 @@ export const mapSecond = fn => map(([l, r]) => [l, fn(r)])
 export const mapBoth = fn => map(([l, r]) => [fn(l), fn(r)])
 export const mapEach = fnl => fnr => map(([l, r]) => [fnl(l), fnr(r)])
 export const overProp = pn => over(lensProp(pn))
+export const overPath = pt => over(lensPath(pt))
 export const pDropConcurrentCalls = asyncFn => {
   let retPromise = null
 

@@ -24,7 +24,7 @@ import {
   reject,
   sortWith,
 } from './lib/ramda'
-import {findById, overProp} from './lib/little-ramda'
+import {findById, overPath} from './lib/little-ramda'
 import {
   authState,
   firestoreUserCRefNamed,
@@ -174,10 +174,6 @@ const TaskList = model('TaskList', {
 const TaskListCollection = model('TaskListCollection', {
   items: types.array(TaskList),
 })
-  .preProcessSnapshot(snapshot => {
-    const tl = TaskList.create({name: 'TODO'})
-    return overProp('items')(defaultTo([tl]))(snapshot)
-  })
   .views(self => ({
     get dirtyItems() {
       return self.items.filter(_prop('isDirty'))
@@ -225,6 +221,12 @@ const RootStore = model('RootStore', {
   taskCollection: optional(TaskCollection),
   _selectedIdx: 0,
 })
+  .preProcessSnapshot(snapshot => {
+    const tl = TaskList.create({name: 'TODO'})
+    return overPath(['taskListCollection', 'items'])(defaultTo([tl]))(
+      snapshot,
+    )
+  })
   .actions(lsActions)
   .views(self => ({
     get lists() {
