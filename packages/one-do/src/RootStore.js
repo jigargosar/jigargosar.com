@@ -184,9 +184,9 @@ const RootStore = model('RootStore', {
   _selectedIdx: 0,
 })
   .preProcessSnapshot(snapshot => {
-    const tl = {name: 'TODO'}
+    const defaultList = {name: 'TODO'}
     const result = overPath(['taskListCollection', 'items'])(
-      defaultTo([tl]),
+      defaultTo([defaultList]),
     )(snapshot)
 
     console.debug('[RS] preProcessSnapshot result', result)
