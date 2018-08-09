@@ -118,6 +118,7 @@ class Tasks extends Component {
           <Fragment key={task.id}>
             <div className={cn('pa2', 'flex items-center')}>
               <div className={cn('flex-auto')}>{task.name}</div>
+              {task.isDirty && <div>*</div>}
               <Btn onClick={wrapSP(() => store.deleteTask(task))}>X</Btn>
             </div>
           </Fragment>
