@@ -10,7 +10,6 @@ import {
   nullString,
   onSnapshot,
   optional,
-  reaction,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
