@@ -10,6 +10,11 @@ class App extends Component {
   render() {
     return <View store={store} />
   }
+
+  componentDidCatch(error, info) {
+    console.log(info, error)
+    return <div>Error</div>
+  }
 }
 
 export default App

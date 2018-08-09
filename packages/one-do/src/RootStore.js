@@ -36,7 +36,7 @@ import {
 
 function collection(Model) {
   const Collection = model(`${Model.name}Collection`, {
-    items: types.array(Model),
+    items: optional(types.array(Model), []),
   })
     .volatile(self => ({}))
     .views(self => ({
@@ -160,6 +160,8 @@ const TaskList = model('TaskList', {
     saveToCRef: dropFlow(function*(cRef) {
       console.assert(self.isDirty)
       const preSaveFireSnap = self.fireSnap
+      // const preSaveFireSnap2 = self.fireSnap
+      // const preSaveFireSnap3 = self.fireSnap
       yield cRef.doc(self.id).set(preSaveFireSnap)
       if (equals(preSaveFireSnap, self.fireSnap)) {
         self.isDirty = false
@@ -181,10 +183,13 @@ const RootStore = model('RootStore', {
   _selectedIdx: 0,
 })
   .preProcessSnapshot(snapshot => {
-    const tl = TaskList.create({name: 'TODO'})
-    return overPath(['taskListCollection', 'items'])(defaultTo([tl]))(
+    const tl = {name: 'TODO'}
+    const ret = overPath(['taskListCollection', 'items'])(defaultTo([tl]))(
       snapshot,
     )
+    console.log(`ret`, ret)
+    console.log(`ret`, ret)
+    return ret
   })
   .actions(lsActions)
   .views(self => ({

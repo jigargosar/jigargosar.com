@@ -14,6 +14,10 @@ if (module.hot) {
   window.s = store
   window.store = store
   module.hot.dispose(() => {
-    destroy(store)
+    try {
+      destroy(store)
+    } catch (e) {
+      console.log('[store] destroy on hot dispose', e)
+    }
   })
 }

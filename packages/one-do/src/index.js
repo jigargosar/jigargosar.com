@@ -7,7 +7,8 @@ import {sugarExtend} from './lib/little-ramda'
 
 sugarExtend()
 
-function render(type = require('./App').default) {
+function render() {
+  const type = require('./App').default
   ReactDOM.render(
     React.createElement(type),
     document.getElementById('root'),
@@ -17,9 +18,13 @@ function render(type = require('./App').default) {
 if (module.hot) {
   console.log('Cold Boot')
   module.hot.accept(['./App'], () => {
-    console.clear()
-    console.log('Hot Reload')
-    render()
+    try {
+      console.clear()
+      console.log('Hot Reload')
+      render()
+    } catch (e) {
+      console.error('[index] hot accept', e)
+    }
   })
 }
 
