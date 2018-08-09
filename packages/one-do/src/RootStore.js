@@ -18,6 +18,7 @@ import {
   clamp,
   defaultTo,
   equals,
+  filter,
   isNil,
   pick,
   propEq,
@@ -36,7 +37,7 @@ import {
 
 function collection(Model) {
   const Collection = model(`${Model.name}Collection`, {
-    items: optional(types.array(Model), []),
+    items: types.optional(types.array(Model), []),
   })
     .volatile(self => ({}))
     .views(self => ({
@@ -56,6 +57,9 @@ function collection(Model) {
       },
       delete(item) {
         item.update({isDeleted: true})
+      },
+      filter(fn) {
+        return filter(fn)(self.items)
       },
       sync: dropFlow(function*() {
         console.assert(isSignedIn())
@@ -132,13 +136,10 @@ const TaskList = model('TaskList', {
       return getRoot(self).taskCollection
     },
     get tasks() {
-      return self.taskCollection.items.filter(propEq('parentId', self))
+      return self.taskCollection.filter(propEq('parentId', self))
     },
     get activeTasks() {
       return reject(_prop('isDeleted'))(self.tasks)
-    },
-    get dirtyTasks() {
-      return self.tasks.filter(_prop('isDirty'))
     },
   }))
   .views(self => ({
@@ -188,7 +189,7 @@ const RootStore = model('RootStore', {
       snapshot,
     )
     console.log(`ret`, ret)
-    console.log(`ret`, ret)
+    // console.log(`ret`, ret)
     return ret
   })
   .actions(lsActions)
@@ -226,14 +227,14 @@ const RootStore = model('RootStore', {
       yield self.taskListCollection.sync()
       yield self.taskCollection.sync()
     }),
-    *syncIfDirty() {
+    syncIfDirty: dropFlow(function*() {
       const isDirty =
         self.taskCollection.isDirty || self.taskListCollection.isDirty
 
       if (isDirty) {
         yield self.sync()
       }
-    },
+    }),
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },

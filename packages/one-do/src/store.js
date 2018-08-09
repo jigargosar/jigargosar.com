@@ -3,10 +3,14 @@ import {destroy} from './lib/little-mst'
 
 const store = RootStore.create({}, {})
 
-store.loadFromLS()
+try {
+  store.loadFromLS()
+} catch (e) {
+  console.log('[store] loadFromLS', e)
+}
 store.saveToLSOnSnapshotChange()
 
-store.sync()
+store.syncIfDirty()
 
 export default /*hotSnapshot(module)*/ store
 
