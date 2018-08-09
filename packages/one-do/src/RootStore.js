@@ -30,11 +30,12 @@ const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   isDirty: true,
+  isDeleted: false,
   tasks: types.array(Task),
 })
   .views(self => ({
     get pickFireProps() {
-      return pick(['id', 'name'])
+      return pick(['id', 'name', 'isDeleted'])
     },
     get fireSnap() {
       return self.pickFireProps(self)
@@ -127,7 +128,7 @@ const RootStore = model('RootStore', {
   .actions(lsActions)
   .views(self => ({
     get lists() {
-      return self.taskListCollection.items
+      return self.taskListCollection.activeItems
     },
     get selectedIdx() {
       return clamp(0, self.lists.length - 1)(self._selectedIdx)
@@ -142,7 +143,7 @@ const RootStore = model('RootStore', {
       return self.selectedList === l
     },
     get canDelete() {
-      return self.lists.length > 1
+      return self.taskListCollection.canDelete
     },
   }))
   .volatile(self => ({}))
