@@ -90,6 +90,7 @@ class ListName extends Component {
             {`${list.tasks.length}`}
           </div>
         </div>
+        {list.isDirty && <div>*</div>}
         <Btn
           onClick={wrapSP(() => store.deleteList(list))}
           disabled={!store.canDelete}
