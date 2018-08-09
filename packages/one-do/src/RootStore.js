@@ -43,7 +43,7 @@ const Task = model('Task', {
       return getParentOfType(self, TaskList)
     },
     get pickFireProps() {
-      return pick(['id', 'name', 'isDone', 'isDeleted'])
+      return pick(['id', 'parentListId', 'name', 'isDone', 'isDeleted'])
     },
     get fireSnap() {
       return self.pickFireProps(self)
@@ -180,7 +180,8 @@ const TaskListCollection = model('TaskListCollection', {
           if (task) {
             task.loadFromFireData(data)
           } else {
-            self.add(data)
+            const taskList = findById(data.parentListId)(self.items)
+            taskList.add(data)
           }
         })
       }),
