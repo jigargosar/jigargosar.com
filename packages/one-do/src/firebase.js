@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import {fromPromise, fromResource} from './lib/mobx-utils'
-import {identity} from './lib/ramda'
+import {complement, identity} from './lib/ramda'
 
 const app = (() => {
   if (firebase.apps[0]) {
@@ -58,10 +58,13 @@ export const userState = (() => {
   )
 })()
 
+export const isUserStateUnknown = () => userState.state === UNKNOWN
+export const isUserStateKnown = complement(isUserStateUnknown)
+export const isSignedIn = () => userState.state === SIGNED_IN
+export const isSignedOut = () => userState.state === SIGNED_OUT
+
 const auth = app.auth()
 export const getUser = () => auth.currentUser
-export const isSignedIn = () => !!getUser()
-export const isSignedOut = () => !isSignedIn()
 
 export const firestore = app.firestore()
 
