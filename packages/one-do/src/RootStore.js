@@ -280,7 +280,7 @@ const RootStore = model('RootStore', {
       list.update(props)
     },
     addTask(props) {
-      self.taskCollection.add({...props, parentId: self.selectedList})
+      self.taskCollection.add({...props, parentId: self.selectedList.id})
     },
     deleteTask(props) {
       self.taskCollection.delete(props)
