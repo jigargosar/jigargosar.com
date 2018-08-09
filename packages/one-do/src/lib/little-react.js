@@ -192,3 +192,5 @@ export const setFocusAndSelectionOnDOMId = (domId, selection) =>
 export function cnWith(...cnArgs) {
   return cls => cn(...cnArgs, cls)
 }
+
+export const onClickSP = fn => ({onClick: wrapSP(fn)})
