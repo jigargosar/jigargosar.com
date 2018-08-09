@@ -29,7 +29,9 @@ class View extends Component {
           <header className={cn('w-100')}>
             <h2 className={cn('dib mh2')}>One Do</h2>
             <Btn onClick={() => store.reset()}>reset</Btn>
-            <Btn onClick={() => store.sync()}>sync</Btn>
+            <Btn disabled={!store.canSync} onClick={() => store.sync()}>
+              sync
+            </Btn>
           </header>
           <main className={cn('flex-auto overflow-hidden', 'flex')}>
             <aside
