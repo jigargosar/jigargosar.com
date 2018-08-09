@@ -1,7 +1,6 @@
 import {
   addDisposer,
   applySnapshot,
-  autorun,
   dropFlow,
   flow,
   getRoot,
@@ -11,6 +10,7 @@ import {
   nullString,
   onSnapshot,
   optional,
+  reaction,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
@@ -227,9 +227,12 @@ const RootStore = model('RootStore', {
     afterCreate() {
       addDisposer(
         self,
-        autorun(() => {
-          self.setSelectedListId(self.lists[self.selectedIdx].id)
-        }),
+        reaction(
+          () => [self.selectedIdx],
+          () => {
+            self.setSelectedListId(self.selectedListFromIdx.id)
+          },
+        ),
       )
     },
     sync: dropFlow(function*() {
