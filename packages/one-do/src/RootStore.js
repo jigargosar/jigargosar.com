@@ -1,12 +1,14 @@
 import {
   addDisposer,
   applySnapshot,
+  autorun,
   dropFlow,
   flow,
   getRoot,
   getSnapshot,
   model,
   modelId,
+  nullString,
   onSnapshot,
   optional,
   types,
@@ -167,6 +169,7 @@ const RootStore = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
   taskCollection: optional(TaskCollection),
   _selectedIdx: 0,
+  selectedListId: nullString,
 })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -196,7 +199,13 @@ const RootStore = model('RootStore', {
       return clamp(0, self.lists.length - 1)(self._selectedIdx)
     },
     get selectedList() {
+      return self.selectedListFromId || self.selectedListFromIdx
+    },
+    get selectedListFromIdx() {
       return self.lists[self.selectedIdx]
+    },
+    get selectedListFromId() {
+      return findById(self.selectedListId)(self.lists)
     },
     isSelected(l) {
       return self.selectedList === l
@@ -212,6 +221,17 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
+    setSelectedListId(id) {
+      self.selectedListId = id
+    },
+    afterCreate() {
+      addDisposer(
+        self,
+        autorun(() => {
+          self.setSelectedListId(self.lists[self.selectedIdx].id)
+        }),
+      )
+    },
     sync: dropFlow(function*() {
       console.assert(isSignedIn())
       try {
