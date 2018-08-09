@@ -187,9 +187,10 @@ const RootStore = model('RootStore', {
     },
     get lists() {
       const activeLists = self.taskListCollection.activeItems
-      return sortWith([ascend(_compose(toUpper, _prop('name')))])(
-        activeLists,
-      )
+      return sortWith(
+        //
+        [ascend(_compose(toUpper, _prop('name')))],
+      )(activeLists)
     },
     get tasks() {
       return self.selectedList.activeTasks
