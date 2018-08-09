@@ -174,6 +174,9 @@ const RootStore = model('RootStore', {
     deleteList(props) {
       self.taskListCollection.delete(props)
     },
+    updateList(props, list) {
+      list.update(props)
+    },
     addTask(props) {
       self.currentList.add(props)
     },
