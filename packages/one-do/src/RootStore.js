@@ -1,7 +1,6 @@
 import {
   addDisposer,
   applySnapshot,
-  autorun,
   dropFlow,
   flow,
   getRoot,
@@ -219,24 +218,10 @@ const RootStore = model('RootStore', {
       yield self.taskCollection.pullFromRemote()
     }),
     syncIfDirty: dropFlow(function*() {
-      if (self.isDirty) {
+      if (isSignedIn() && self.isDirty) {
         yield self.sync()
       }
     }),
-    startRemoteSync() {
-      addDisposer(
-        self,
-        autorun(async () => {
-          async function extracted() {
-            if (isSignedIn() && self.isDirty) {
-              await self.sync()
-            }
-          }
-          await extracted()
-          await extracted()
-        }),
-      )
-    },
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },
