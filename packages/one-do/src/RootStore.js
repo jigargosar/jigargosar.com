@@ -210,19 +210,23 @@ const RootStore = model('RootStore', {
   }))
   .volatile(self => ({}))
   .actions(self => ({
-    ensureLoginAndSync: dropFlow(function*() {
-      yield authStateKnownPromise
-      if (isSignedOut()) {
-        yield signInWithPopup()
-      }
+    sync: dropFlow(function*() {
+      console.assert(isSignedIn())
       yield self.taskListCollection.pushDirtyToRemote()
       yield self.taskCollection.pushDirtyToRemote()
       yield self.taskListCollection.pullFromRemote()
       yield self.taskCollection.pullFromRemote()
     }),
+    ensureLoginAndSync: dropFlow(function*() {
+      yield authStateKnownPromise
+      if (isSignedOut()) {
+        yield signInWithPopup()
+      }
+      self.sync()
+    }),
     trySync: dropFlow(function*() {
       if (self.canSync) {
-        yield self.ensureLoginAndSync()
+        yield self.sync()
       }
     }),
     selectList(l) {
