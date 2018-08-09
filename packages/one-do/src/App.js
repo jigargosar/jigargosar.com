@@ -114,9 +114,20 @@ class ListName extends Component {
 @observer
 class Tasks extends Component {
   render({store} = this.props) {
+    const list = store.selectedList
     return (
       <Fragment>
         <div className={cn('pa2')}>
+          <div className={cn('flex-auto')}>
+            <input
+              className={cn('w-100 pa1 ttu')}
+              type="text"
+              value={list.name}
+              onChange={e =>
+                store.updateList({name: e.target.value}, list)
+              }
+            />
+          </div>
           <Btn onClick={wrapSP(() => store.addTask({name: fWord()}))}>
             ADD
           </Btn>
