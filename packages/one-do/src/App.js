@@ -108,14 +108,7 @@ class Tasks extends Component {
         </div>
         {list.tasks.map(t => (
           <Fragment key={t.id}>
-            <div
-              className={cn(
-                'pa2',
-                'flex items-center',
-                // store.isSelected(t) ? 'bg-black-10' : '',
-              )}
-              // onClick={wrapSP(() => store.selectList(t))}
-            >
+            <div className={cn('pa2', 'flex items-center')}>
               <div className={cn('flex-auto')}>{t.name}</div>
               <Btn onClick={wrapSP(() => list.delete(t))}>X</Btn>
             </div>
