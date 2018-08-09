@@ -44,7 +44,7 @@ const TaskList = model('TaskList', {
   .actions(self => ({
     update(props) {
       const preUpdateSnap = self.fireSnap
-      Object.assign(props)
+      Object.assign(self, props)
       if (!equals(preUpdateSnap, self.fireSnap)) {
         self.isDirty = true
       }
