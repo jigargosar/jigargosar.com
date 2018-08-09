@@ -176,6 +176,15 @@ const TaskListCollection = model('TaskListCollection', {
           }
         })
       }),
+      add: function(props) {
+        return self.items.push(TaskList.create(props))
+      },
+      delete(item) {
+        if (self.canDelete) {
+          // spliceItem(item)(self.items)
+          item.update({isDeleted: true})
+        }
+      },
       syncTasks: dropFlow(function*() {
         console.assert(isSignedIn())
         const cRef = firestoreUserCRefNamed(TaskList.name)
@@ -201,15 +210,6 @@ const TaskListCollection = model('TaskListCollection', {
           }
         })
       }),
-      add: function(props) {
-        return self.items.push(TaskList.create(props))
-      },
-      delete(item) {
-        if (self.canDelete) {
-          // spliceItem(item)(self.items)
-          item.update({isDeleted: true})
-        }
-      },
     }
   })
 
