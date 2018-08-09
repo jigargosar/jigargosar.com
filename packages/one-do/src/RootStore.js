@@ -168,6 +168,53 @@ const TaskList = model('TaskList', {
     },
   }))
 
+function collection(Model) {
+  const Collection = model(`${Model.name}Collection`, {
+    items: types.array(Model),
+  })
+    .volatile(self => ({}))
+    .views(self => ({
+      get dirtyItems() {
+        return self.items.filter(_prop('isDirty'))
+      },
+      get activeItems() {
+        return reject(_prop('isDeleted'))(self.items)
+      },
+      get isDirty() {
+        return self.dirtyItems.length > 0
+      },
+    }))
+    .actions(self => ({
+      add(props) {
+        self.items.push(Model.create(props))
+      },
+      delete(item) {
+        item.update({isDeleted: true})
+      },
+      sync: dropFlow(function*() {
+        console.assert(isSignedIn())
+        const cRef = firestoreUserCRefNamed(Collection.name)
+
+        const pushResult = yield Promise.all(
+          self.dirtyItems.map(i => i.saveToCRef(cRef)),
+        )
+        console.log('[sync] push success', pushResult.length)
+
+        const docsData = yield queryToDocsData(cRef)
+        console.log(`[sync] pull result: docsData.length`, docsData.length)
+        docsData.forEach(data => {
+          const item = findById(data.id)(self.items)
+          if (item) {
+            item.loadFromFireData(data)
+          } else {
+            self.add({...data, isDirty: false})
+          }
+        })
+      }),
+    }))
+  return Collection
+}
+
 const TaskListCollection = model('TaskListCollection', {
   items: types.array(TaskList),
 })
