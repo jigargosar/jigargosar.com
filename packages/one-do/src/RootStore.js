@@ -95,26 +95,29 @@ const Task = model('Task', {
 })
   .volatile(self => ({}))
   .views(self => ({
-    get pickFireProps() {
-      return pick(['id', 'parentId', 'name', 'isDone', 'isDeleted'])
+    get remoteProps() {
+      return ['id', 'parentId', 'name', 'isDone', 'isDeleted']
     },
-    get fireSnap() {
+    get pickFireProps() {
+      return pick(self.remoteProps)
+    },
+    get remoteSnap() {
       return self.pickFireProps(getSnapshot(self))
     },
   }))
   .actions(self => ({
     update(props) {
-      const preUpdateSnap = self.fireSnap
+      const preUpdateSnap = self.remoteSnap
       Object.assign(self, self.pickFireProps(props))
-      if (!self.isDirty && !equals(preUpdateSnap, self.fireSnap)) {
+      if (!self.isDirty && !equals(preUpdateSnap, self.remoteSnap)) {
         self.isDirty = true
       }
     },
     saveToCRef: dropFlow(function*(cRef) {
       console.assert(self.isDirty)
-      const preSaveFireSnap = self.fireSnap
+      const preSaveFireSnap = self.remoteSnap
       yield cRef.doc(self.id).set(preSaveFireSnap)
-      if (equals(preSaveFireSnap, self.fireSnap)) {
+      if (equals(preSaveFireSnap, self.remoteSnap)) {
         self.isDirty = false
       }
     }),
@@ -146,25 +149,25 @@ const TaskList = model('TaskList', {
     get pickFireProps() {
       return pick(['id', 'name', 'isDeleted'])
     },
-    get fireSnap() {
+    get remoteSnap() {
       return self.pickFireProps(getSnapshot(self))
     },
   }))
   .actions(self => ({
     update(props) {
-      const preUpdateSnap = self.fireSnap
+      const preUpdateSnap = self.remoteSnap
       Object.assign(self, self.pickFireProps(props))
-      if (!self.isDirty && !equals(preUpdateSnap, self.fireSnap)) {
+      if (!self.isDirty && !equals(preUpdateSnap, self.remoteSnap)) {
         self.isDirty = true
       }
     },
     saveToCRef: dropFlow(function*(cRef) {
       console.assert(self.isDirty)
-      const preSaveFireSnap = self.fireSnap
+      const preSaveFireSnap = self.remoteSnap
       // const preSaveFireSnap2 = self.fireSnap
       // const preSaveFireSnap3 = self.fireSnap
       yield cRef.doc(self.id).set(preSaveFireSnap)
-      if (equals(preSaveFireSnap, self.fireSnap)) {
+      if (equals(preSaveFireSnap, self.remoteSnap)) {
         self.isDirty = false
       }
     }),
