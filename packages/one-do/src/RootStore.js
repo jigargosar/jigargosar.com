@@ -126,6 +126,8 @@ const TaskList = model('TaskList', {
     },
   }))
 
+const TaskCollection = model('TaskCollection', {})
+
 const TaskListCollection = model('TaskListCollection', {
   items: types.array(TaskList),
 })
@@ -213,7 +215,8 @@ const TaskListCollection = model('TaskListCollection', {
   })
 
 const RootStore = model('RootStore', {
-  taskListCollection: optional(TaskListCollection, {}),
+  taskListCollection: optional(TaskListCollection),
+  taskCollection: optional(TaskCollection),
   _selectedIdx: 0,
 })
   .actions(lsActions)
