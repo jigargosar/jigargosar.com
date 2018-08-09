@@ -10,7 +10,7 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_prop, clamp, defaultTo, equals, pick} from './lib/ramda'
+import {_prop, clamp, defaultTo, equals, pick, reject} from './lib/ramda'
 import {findById, overProp} from './lib/little-ramda'
 import {
   authState,
@@ -70,10 +70,13 @@ const TaskListCollection = model('TaskListCollection', {
   })
   .views(self => ({
     get canDelete() {
-      return self.items.length > 1
+      return self.activeItems.length > 1
     },
     get dirtyItems() {
       return self.items.filter(_prop('isDirty'))
+    },
+    get activeItems() {
+      return reject(_prop('isDeleted'))(self.items)
     },
   }))
   .actions(self => {
