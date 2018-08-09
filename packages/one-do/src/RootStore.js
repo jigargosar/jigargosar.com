@@ -223,7 +223,7 @@ const RootStore = model('RootStore', {
         yield signInWithPopup()
       }
     }),
-    trySync: dropFlow(function*() {
+    trySync: flow(function*() {
       if (self.canSync) {
         yield self.sync()
       }
