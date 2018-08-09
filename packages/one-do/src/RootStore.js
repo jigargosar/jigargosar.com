@@ -2,7 +2,6 @@ import {
   addDisposer,
   applySnapshot,
   dropFlow,
-  getParentOfType,
   model,
   modelId,
   onSnapshot,
@@ -46,7 +45,7 @@ const Task = model('Task', {
   .volatile(self => ({}))
   .views(self => ({
     get parentListId() {
-      return getParentOfType(self, TaskList).id
+      return self.parentId.id
     },
     set parentListId(val) {
       console.assert(self.parentListId === val)
