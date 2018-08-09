@@ -264,8 +264,8 @@ const RootStore = model('RootStore', {
       if (isSignedOut()) {
         yield signInWithPopup()
       }
-      self.taskListCollection.sync()
-      self.taskCollection.sync()
+      yield self.taskListCollection.sync()
+      yield self.taskCollection.sync()
     }),
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
