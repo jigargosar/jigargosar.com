@@ -2,11 +2,11 @@ import {
   addDisposer,
   applySnapshot,
   dropFlow,
+  getParentOfType,
   model,
   modelId,
   onSnapshot,
   optional,
-  spliceItem,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
@@ -39,6 +39,9 @@ const Task = model('Task', {
 })
   .volatile(self => ({}))
   .views(self => ({
+    get parentListId() {
+      return getParentOfType(self, TaskList)
+    },
     get pickFireProps() {
       return pick(['id', 'name', 'isDone', 'isDeleted'])
     },
@@ -53,6 +56,18 @@ const Task = model('Task', {
       if (!self.isDirty && !equals(preUpdateSnap, self.fireSnap)) {
         self.isDirty = true
       }
+    },
+    saveToCRef: dropFlow(function*(cRef) {
+      console.assert(self.isDirty)
+      const preSaveFireSnap = self.fireSnap
+      yield cRef.doc(self.id).set(preSaveFireSnap)
+      if (equals(preSaveFireSnap, self.fireSnap)) {
+        self.isDirty = false
+      }
+    }),
+    loadFromFireData(data) {
+      if (self.isDirty) return
+      Object.assign(self, self.pickFireProps(data))
     },
   }))
 
@@ -83,7 +98,8 @@ const TaskList = model('TaskList', {
       self.tasks.push(Task.create(props))
     },
     delete(task) {
-      spliceItem(task)(self.tasks)
+      // spliceItem(task)(self.tasks)
+      task.update({isDeleted: true})
     },
     saveToCRef: dropFlow(function*(cRef) {
       console.assert(self.isDirty)
@@ -137,6 +153,29 @@ const TaskListCollection = model('TaskListCollection', {
           const item = findById(data.id)(self.items)
           if (item) {
             item.loadFromFireData(data)
+          } else {
+            self.add(data)
+          }
+        })
+      }),
+      syncTasks: dropFlow(function*() {
+        console.assert(isSignedIn())
+        const cRef = firestoreUserCRefNamed(TaskList.name)
+
+        const pushResult = yield Promise.all(
+          self.dirtyTasks.map(task => task.saveToCRef(cRef)),
+        )
+        console.log('[sync tasks] push success', pushResult.length)
+
+        const docsData = yield queryToDocsData(cRef)
+        console.log(
+          `[sync tasks] pull result: docsData.length`,
+          docsData.length,
+        )
+        docsData.forEach(data => {
+          const task = findById(data.id)(self.tasks)
+          if (task) {
+            task.loadFromFireData(data)
           } else {
             self.add(data)
           }
