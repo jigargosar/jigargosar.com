@@ -61,24 +61,24 @@ class ListNames extends Component {
             ADD
           </Btn>
         </h3>
-        {store.lists.map(l => (
-          <Fragment key={l.id}>
+        {store.lists.map(list => (
+          <Fragment key={list.id}>
             <div
               className={cn(
                 'pa2',
                 'flex items-center ttu',
-                store.isSelected(l) ? 'bg-black-10' : '',
+                store.isSelected(list) ? 'bg-black-10' : '',
               )}
-              onClick={wrapSP(() => store.selectList(l))}
+              onClick={wrapSP(() => store.selectList(list))}
             >
               <div className={cn('flex-auto', 'flex items-center')}>
-                <div>{`${l.name}`}</div>
+                <div>{`${list.name}`}</div>
                 <div className={cn('ph1 gray self-start', 'f6')}>
-                  {`${l.tasks.length}`}
+                  {`${list.tasks.length}`}
                 </div>
               </div>
               <Btn
-                onClick={wrapSP(() => store.deleteList(l))}
+                onClick={wrapSP(() => store.deleteList(list))}
                 disabled={!store.canDelete}
               >
                 X
