@@ -85,6 +85,9 @@ const TaskList = model('TaskList', {
     get fireSnap() {
       return self.pickFireProps(self)
     },
+    get activeTasks() {
+      return reject(_prop('isDeleted'))(self.tasks)
+    },
   }))
   .actions(self => ({
     update(props) {
