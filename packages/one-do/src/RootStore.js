@@ -175,18 +175,6 @@ const TaskList = model('TaskList', {
         self.isDirty = true
       }
     },
-    saveToCRef: dropFlow(function*(cRef) {
-      console.assert(self.isDirty)
-      const preSaveFireSnap = self.remoteSnap
-      yield cRef.doc(self.id).set(preSaveFireSnap)
-      if (equals(preSaveFireSnap, self.remoteSnap)) {
-        self.isDirty = false
-      }
-    }),
-    loadFromRemoteData(data) {
-      if (self.isDirty) return
-      Object.assign(self, self.pickRemoteProps(data))
-    },
   }))
 
 const TaskCollection = collection(Task)
