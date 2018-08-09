@@ -51,6 +51,35 @@ class View extends Component {
 }
 
 @observer
+class ListName extends Component {
+  render({store, list} = this.props) {
+    return (
+      <div
+        className={cn(
+          'pa2',
+          'flex items-center ttu',
+          store.isSelected(list) ? 'bg-black-10' : '',
+        )}
+        onClick={wrapSP(() => store.selectList(list))}
+      >
+        <div className={cn('flex-auto', 'flex items-center')}>
+          <div>{`${list.name}`}</div>
+          <div className={cn('ph1 gray self-start', 'f6')}>
+            {`${list.tasks.length}`}
+          </div>
+        </div>
+        <Btn
+          onClick={wrapSP(() => store.deleteList(list))}
+          disabled={!store.canDelete}
+        >
+          X
+        </Btn>
+      </div>
+    )
+  }
+}
+
+@observer
 class ListNames extends Component {
   render({store} = this.props) {
     return (
@@ -63,27 +92,7 @@ class ListNames extends Component {
         </h3>
         {store.lists.map(list => (
           <Fragment key={list.id}>
-            <div
-              className={cn(
-                'pa2',
-                'flex items-center ttu',
-                store.isSelected(list) ? 'bg-black-10' : '',
-              )}
-              onClick={wrapSP(() => store.selectList(list))}
-            >
-              <div className={cn('flex-auto', 'flex items-center')}>
-                <div>{`${list.name}`}</div>
-                <div className={cn('ph1 gray self-start', 'f6')}>
-                  {`${list.tasks.length}`}
-                </div>
-              </div>
-              <Btn
-                onClick={wrapSP(() => store.deleteList(list))}
-                disabled={!store.canDelete}
-              >
-                X
-              </Btn>
-            </div>
+            <ListName store={store} list={list} />
           </Fragment>
         ))}
       </Fragment>
