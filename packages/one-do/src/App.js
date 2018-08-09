@@ -124,17 +124,25 @@ class Tasks extends Component {
         {store.tasks.map(task => (
           <Fragment key={task.id}>
             <div className={cn('pa2', 'flex items-center')}>
-              <div>
+              <input
+                className={cn('mh2')}
+                checked={task.isDone}
+                onChange={e =>
+                  store.updateTask({isDone: e.target.checked}, task)
+                }
+                type="checkbox"
+              />
+              {/*<div className={cn('flex-auto')}>{task.name}</div>*/}
+              <div className={cn('flex-auto')}>
                 <input
-                  className={cn('mh2')}
-                  checked={task.isDone}
+                  className={cn('w-100 pa1')}
+                  type="text"
+                  value={task.name}
                   onChange={e =>
-                    store.updateTask({isDone: e.target.checked}, task)
+                    store.updateTask({name: e.target.value}, task)
                   }
-                  type="checkbox"
                 />
               </div>
-              <div className={cn('flex-auto')}>{task.name}</div>
               {task.isDirty && <div>*</div>}
               <Btn onClick={wrapSP(() => store.deleteTask(task))}>X</Btn>
             </div>
