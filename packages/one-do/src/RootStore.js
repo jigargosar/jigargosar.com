@@ -132,15 +132,6 @@ const Task = model('Task', {
       return self.pickRemoteProps(getSnapshot(self))
     },
   }))
-  .actions(self => ({
-    update(props) {
-      const preUpdateSnap = self.remoteSnap
-      Object.assign(self, self.pickRemoteProps(props))
-      if (!self.isDirty && !equals(preUpdateSnap, self.remoteSnap)) {
-        self.isDirty = true
-      }
-    },
-  }))
 
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
@@ -165,15 +156,6 @@ const TaskList = model('TaskList', {
     },
     get remoteSnap() {
       return self.pickRemoteProps(getSnapshot(self))
-    },
-  }))
-  .actions(self => ({
-    update(props) {
-      const preUpdateSnap = self.remoteSnap
-      Object.assign(self, self.pickRemoteProps(props))
-      if (!self.isDirty && !equals(preUpdateSnap, self.remoteSnap)) {
-        self.isDirty = true
-      }
     },
   }))
 
@@ -252,7 +234,7 @@ const RootStore = model('RootStore', {
       }
     },
     updateList(props, list) {
-      list.update(props)
+      self.taskListCollection.update(props, list)
     },
     addTask(props) {
       self.taskCollection.add({...props, parentId: self.selectedList.id})
@@ -261,7 +243,7 @@ const RootStore = model('RootStore', {
       self.taskCollection.delete(props)
     },
     updateTask(props, task) {
-      task.update(props)
+      self.taskCollection.update(props, task)
     },
   }))
 
