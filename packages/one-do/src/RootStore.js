@@ -10,7 +10,16 @@ import {
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
-import {_prop, clamp, defaultTo, equals, pick, reject} from './lib/ramda'
+import {
+  _prop,
+  ascend,
+  clamp,
+  defaultTo,
+  equals,
+  pick,
+  reject,
+  sortWith,
+} from './lib/ramda'
 import {findById, overProp} from './lib/little-ramda'
 import {
   authState,
@@ -128,7 +137,8 @@ const RootStore = model('RootStore', {
   .actions(lsActions)
   .views(self => ({
     get lists() {
-      return self.taskListCollection.activeItems
+      const activeItems = self.taskListCollection.activeItems
+      return sortWith([ascend(_prop('name'))])(activeItems)
     },
     get selectedIdx() {
       return clamp(0, self.lists.length - 1)(self._selectedIdx)
