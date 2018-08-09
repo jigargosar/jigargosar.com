@@ -210,7 +210,7 @@ const RootStore = model('RootStore', {
   }))
   .volatile(self => ({}))
   .actions(self => ({
-    sync: dropFlow(function*() {
+    ensureLoginAndSync: dropFlow(function*() {
       yield authStateKnownPromise
       if (isSignedOut()) {
         yield signInWithPopup()
@@ -222,7 +222,7 @@ const RootStore = model('RootStore', {
     }),
     trySync: dropFlow(function*() {
       if (self.canSync) {
-        yield self.sync()
+        yield self.ensureLoginAndSync()
       }
     }),
     selectList(l) {
