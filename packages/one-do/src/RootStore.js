@@ -5,7 +5,6 @@ import {
   getParentOfType,
   model,
   modelId,
-  nullRef,
   onSnapshot,
   optional,
   types,
@@ -19,6 +18,8 @@ import {
   defaultTo,
   equals,
   flatten,
+  isNil,
+  map,
   pick,
   pluck,
   reject,
@@ -37,7 +38,7 @@ import {
 const Task = model('Task', {
   id: modelId('Task'),
   name: '',
-  parentId: nullRef(types.late(() => TaskList)),
+  parentId: types.reference(types.late(() => TaskList)),
   isDone: false,
   isDirty: true,
   isDeleted: false,
@@ -82,7 +83,8 @@ const Task = model('Task', {
     }),
     loadFromFireData(data) {
       if (self.isDirty) return
-      Object.assign(self, self.pickFireProps(data))
+      const cleanProps = _compose(reject(isNil), self.pickFireProps)(data)
+      Object.assign(self, cleanProps)
     },
   }))
 
@@ -93,6 +95,12 @@ const TaskList = model('TaskList', {
   isDeleted: false,
   tasks: types.array(Task),
 })
+  .preProcessSnapshot(snapshot => {
+    const setParentId = task => ({...task, parentId: snapshot.id})
+    return overProp('tasks')(_compose(map(setParentId), defaultTo([])))(
+      snapshot,
+    )
+  })
   .views(self => ({
     get pickFireProps() {
       return pick(['id', 'name', 'isDeleted'])
@@ -116,7 +124,7 @@ const TaskList = model('TaskList', {
       }
     },
     add(task) {
-      return self.tasks.push(Task.create(task))
+      return self.tasks.push(Task.create({...task, parentId: self.id}))
     },
     delete(task) {
       task.update({isDeleted: true})
