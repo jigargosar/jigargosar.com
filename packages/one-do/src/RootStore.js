@@ -55,6 +55,28 @@ function collection(Model) {
       add(props) {
         self.items.push(Model.create(props))
       },
+      update(props, item) {
+        const preUpdateSnap = item.remoteSnap
+        Object.assign(item, item.pickRemoteProps(props))
+        if (!item.isDirty && !equals(preUpdateSnap, item.remoteSnap)) {
+          item.isDirty = true
+        }
+      },
+      saveToCRef: dropFlow(function*(cRef, item) {
+        console.assert(item.isDirty)
+        const preSaveFireSnap = item.remoteSnap
+        yield cRef.doc(item.id).set(preSaveFireSnap)
+        if (equals(preSaveFireSnap, item.remoteSnap)) {
+          item.isDirty = false
+        }
+      }),
+      loadFromRemoteData(data, item) {
+        if (item.isDirty) return
+        const cleanProps = _compose(reject(isNil), item.pickRemoteProps)(
+          data,
+        )
+        Object.assign(item, cleanProps)
+      },
       delete(item) {
         item.update({isDeleted: true})
       },
@@ -66,7 +88,7 @@ function collection(Model) {
         const cRef = firestoreUserCRefNamed(Collection.name)
 
         const pushResult = yield Promise.all(
-          self.dirtyItems.map(i => i.saveToCRef(cRef)),
+          self.dirtyItems.map(item => self.saveToCRef(cRef, item)),
         )
         console.log('[sync] push success', pushResult.length)
 
