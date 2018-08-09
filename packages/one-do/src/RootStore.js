@@ -98,17 +98,17 @@ const Task = model('Task', {
     get remoteProps() {
       return ['id', 'parentId', 'name', 'isDone', 'isDeleted']
     },
-    get pickFireProps() {
+    get pickRemoteProps() {
       return pick(self.remoteProps)
     },
     get remoteSnap() {
-      return self.pickFireProps(getSnapshot(self))
+      return self.pickRemoteProps(getSnapshot(self))
     },
   }))
   .actions(self => ({
     update(props) {
       const preUpdateSnap = self.remoteSnap
-      Object.assign(self, self.pickFireProps(props))
+      Object.assign(self, self.pickRemoteProps(props))
       if (!self.isDirty && !equals(preUpdateSnap, self.remoteSnap)) {
         self.isDirty = true
       }
@@ -123,7 +123,9 @@ const Task = model('Task', {
     }),
     loadFromFireData(data) {
       if (self.isDirty) return
-      const cleanProps = _compose(reject(isNil), self.pickFireProps)(data)
+      const cleanProps = _compose(reject(isNil), self.pickRemoteProps)(
+        data,
+      )
       Object.assign(self, cleanProps)
     },
   }))
@@ -146,17 +148,17 @@ const TaskList = model('TaskList', {
     },
   }))
   .views(self => ({
-    get pickFireProps() {
+    get pickRemoteProps() {
       return pick(['id', 'name', 'isDeleted'])
     },
     get remoteSnap() {
-      return self.pickFireProps(getSnapshot(self))
+      return self.pickRemoteProps(getSnapshot(self))
     },
   }))
   .actions(self => ({
     update(props) {
       const preUpdateSnap = self.remoteSnap
-      Object.assign(self, self.pickFireProps(props))
+      Object.assign(self, self.pickRemoteProps(props))
       if (!self.isDirty && !equals(preUpdateSnap, self.remoteSnap)) {
         self.isDirty = true
       }
@@ -173,7 +175,7 @@ const TaskList = model('TaskList', {
     }),
     loadFromFireData(data) {
       if (self.isDirty) return
-      Object.assign(self, self.pickFireProps(data))
+      Object.assign(self, self.pickRemoteProps(data))
     },
   }))
 
