@@ -2,6 +2,7 @@ import {
   addDisposer,
   applySnapshot,
   dropFlow,
+  getSnapshot,
   model,
   modelId,
   onSnapshot,
@@ -44,24 +45,11 @@ const Task = model('Task', {
 })
   .volatile(self => ({}))
   .views(self => ({
-    get parentListId() {
-      return self.parentId.id
-    },
-    set parentListId(val) {
-      console.assert(self.parentListId === val)
-    },
     get pickFireProps() {
-      return pick([
-        'id',
-        'parentId',
-        'parentListId',
-        'name',
-        'isDone',
-        'isDeleted',
-      ])
+      return pick(['id', 'parentId', 'name', 'isDone', 'isDeleted'])
     },
     get fireSnap() {
-      return self.pickFireProps(self)
+      return self.pickFireProps(getSnapshot(self))
     },
   }))
   .actions(self => ({
@@ -105,7 +93,7 @@ const TaskList = model('TaskList', {
       return pick(['id', 'name', 'isDeleted'])
     },
     get fireSnap() {
-      return self.pickFireProps(self)
+      return self.pickFireProps(getSnapshot(self))
     },
     get activeTasks() {
       return reject(_prop('isDeleted'))(self.tasks)
@@ -196,7 +184,7 @@ const TaskListCollection = model('TaskListCollection', {
       }),
       syncLists: dropFlow(function*() {
         console.assert(isSignedIn())
-        const cRef = firestoreUserCRefNamed(TaskCollection.name)
+        const cRef = firestoreUserCRefNamed(TaskListCollection.name)
 
         const pushResult = yield Promise.all(
           self.dirtyItems.map(i => i.saveToCRef(cRef)),
@@ -216,7 +204,7 @@ const TaskListCollection = model('TaskListCollection', {
       }),
       syncTasks: dropFlow(function*() {
         console.assert(isSignedIn())
-        const cRef = firestoreUserCRefNamed(TaskList.name)
+        const cRef = firestoreUserCRefNamed(TaskCollection.name)
 
         const pushResult = yield Promise.all(
           self.dirtyTasks.map(task => task.saveToCRef(cRef)),
