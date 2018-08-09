@@ -41,6 +41,13 @@ const TaskList = model('TaskList', {
     },
   }))
   .actions(self => ({
+    update(props) {
+      const preUpdateSnap = self.fireSnap
+      Object.assign(props)
+      if (!equals(preUpdateSnap, self.fireSnap)) {
+        self.isDirty = true
+      }
+    },
     add(props) {
       self.tasks.push(Task.create(props))
     },
@@ -106,7 +113,8 @@ const TaskListCollection = model('TaskListCollection', {
       },
       delete(item) {
         if (self.canDelete) {
-          spliceItem(item)(self.items)
+          // spliceItem(item)(self.items)
+          item.update({isDeleted: true})
         }
       },
     }
