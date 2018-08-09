@@ -12,6 +12,7 @@ export default /*hotSnapshot(module)*/ store
 
 if (module.hot) {
   window.s = store
+  window.store = store
   module.hot.dispose(() => {
     destroy(store)
   })

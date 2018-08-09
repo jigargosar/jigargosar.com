@@ -3,6 +3,7 @@ import store from './store'
 import {cn, FocusTrap, observer, wrapSP} from './lib/little-react'
 import EventListener from 'react-event-listener'
 import {Btn} from './lib/tachyons-components'
+import {fWord} from './lib/fake'
 
 @observer
 class App extends Component {
@@ -56,7 +57,7 @@ class ListNames extends Component {
       <Fragment>
         <h3 className={cn('ma2', 'flex items-center')}>
           <div className={cn('flex-auto')}>My Lists</div>
-          <Btn onClick={wrapSP(() => store.addList({name: 'foo'}))}>
+          <Btn onClick={wrapSP(() => store.addList({name: fWord()}))}>
             ADD
           </Btn>
         </h3>
@@ -96,9 +97,7 @@ class Tasks extends Component {
     return (
       <Fragment>
         <div className={cn('pa2')}>
-          <Btn onClick={wrapSP(() => list.add({name: 'task foo'}))}>
-            ADD
-          </Btn>
+          <Btn onClick={wrapSP(() => list.add({name: fWord()}))}>ADD</Btn>
         </div>
         {list.tasks.map(t => (
           <Fragment key={t.id}>

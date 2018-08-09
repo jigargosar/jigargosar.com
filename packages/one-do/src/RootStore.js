@@ -185,3 +185,5 @@ function lsActions(self) {
 }
 
 export default RootStore
+
+window.f.firestore().collection('users')
