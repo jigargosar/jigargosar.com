@@ -127,6 +127,9 @@ const TaskList = model('TaskList', {
   }))
 
 const TaskCollection = model('TaskCollection', {})
+  .volatile(self => ({}))
+  .views(self => ({}))
+  .actions(self => ({}))
 
 const TaskListCollection = model('TaskListCollection', {
   items: types.array(TaskList),
