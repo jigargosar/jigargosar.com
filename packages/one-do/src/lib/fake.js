@@ -1,3 +1,3 @@
 import f from 'faker'
 
-export const fWord = () => f.lorem.word()
+export const fWord = () => f.random.word()
