@@ -217,12 +217,11 @@ const RootStore = model('RootStore', {
       yield self.taskListCollection.pullFromRemote()
       yield self.taskCollection.pullFromRemote()
     }),
-    ensureLoginAndSync: dropFlow(function*() {
+    ensureLogin: dropFlow(function*() {
       yield authStateKnownPromise
       if (isSignedOut()) {
         yield signInWithPopup()
       }
-      self.sync()
     }),
     trySync: dropFlow(function*() {
       if (self.canSync) {

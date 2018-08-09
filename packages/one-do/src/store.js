@@ -9,7 +9,7 @@ try {
 }
 const disposer = store.saveToLSOnSnapshotChange()
 
-store.ensureLoginAndSync()
+store.ensureLogin()
 
 export default /*hotSnapshot(module)*/ store
 
