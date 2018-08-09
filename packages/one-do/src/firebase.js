@@ -35,7 +35,7 @@ export function signInWithPopup() {
   return app.auth().signInWithPopup(authProvider)
 }
 
-export const authStateKnown = fromPromise(resolve => {
+export const authStateKnownPromise = fromPromise(resolve => {
   const listener = app.auth().onAuthStateChanged(() => {
     resolve()
     listener()

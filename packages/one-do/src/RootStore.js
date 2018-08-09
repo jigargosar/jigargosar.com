@@ -28,7 +28,7 @@ import {
 } from './lib/ramda'
 import {findById, overPath} from './lib/little-ramda'
 import {
-  authStateKnown,
+  authStateKnownPromise,
   firestoreUserCRefNamed,
   isSignedIn,
   isSignedOut,
@@ -208,7 +208,7 @@ const RootStore = model('RootStore', {
   .volatile(self => ({}))
   .actions(self => ({
     sync: dropFlow(function*() {
-      yield authStateKnown
+      yield authStateKnownPromise
       if (isSignedOut()) {
         yield signInWithPopup()
       }
