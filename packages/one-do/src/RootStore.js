@@ -205,17 +205,24 @@ const RootStore = model('RootStore', {
       return self.taskListCollection.activeItems.length > 1
     },
     get canSync() {
-      return isSignedIn() && self.isDirty
+      return isSignedIn() && self.isDirty && !self.isSyncing
     },
   }))
-  .volatile(self => ({}))
+  .volatile(self => ({
+    isSyncing: false,
+  }))
   .actions(self => ({
     sync: dropFlow(function*() {
       console.assert(isSignedIn())
-      yield self.taskListCollection.pushDirtyToRemote()
-      yield self.taskCollection.pushDirtyToRemote()
-      yield self.taskListCollection.pullFromRemote()
-      yield self.taskCollection.pullFromRemote()
+      try {
+        self.isSyncing = true
+        yield self.taskListCollection.pushDirtyToRemote()
+        yield self.taskCollection.pushDirtyToRemote()
+        yield self.taskListCollection.pullFromRemote()
+        yield self.taskCollection.pullFromRemote()
+      } finally {
+        self.isSyncing = false
+      }
     }),
     ensureLogin: dropFlow(function*() {
       yield authStateKnownPromise
