@@ -179,6 +179,9 @@ const RootStore = model('RootStore', {
   })
   .actions(lsActions)
   .views(self => ({
+    get isDirty() {
+      return self.taskCollection.isDirty || self.taskListCollection.isDirty
+    },
     get lists() {
       const activeItems = self.taskListCollection.activeItems
       return sortWith([ascend(_prop('name'))])(activeItems)
@@ -215,10 +218,7 @@ const RootStore = model('RootStore', {
       yield self.taskCollection.pullFromRemote()
     }),
     syncIfDirty: dropFlow(function*() {
-      const isDirty =
-        self.taskCollection.isDirty || self.taskListCollection.isDirty
-
-      if (isDirty) {
+      if (self.isDirty) {
         yield self.sync()
       }
     }),
