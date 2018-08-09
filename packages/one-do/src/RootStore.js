@@ -181,7 +181,6 @@ const TaskListCollection = model('TaskListCollection', {
       },
       delete(item) {
         if (self.canDelete) {
-          // spliceItem(item)(self.items)
           item.update({isDeleted: true})
         }
       },
