@@ -207,7 +207,7 @@ const RootStore = model('RootStore', {
       return sortWith([ascend(_prop('name'))])(activeItems)
     },
     get tasks() {
-      return self.selectedList.tasks
+      return self.selectedList.activeTasks
     },
     get selectedIdx() {
       return clamp(0, self.lists.length - 1)(self._selectedIdx)
