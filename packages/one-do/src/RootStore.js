@@ -198,7 +198,7 @@ const RootStore = model('RootStore', {
     isSelected(l) {
       return self.selectedList === l
     },
-    get canDelete() {
+    get canDeleteList() {
       return self.taskListCollection.activeItems.length > 1
     },
   }))
@@ -229,7 +229,7 @@ const RootStore = model('RootStore', {
       self.taskListCollection.add(props)
     },
     deleteList(props) {
-      if (self.canDelete) {
+      if (self.canDeleteList) {
         self.taskListCollection.delete(props)
       }
     },
