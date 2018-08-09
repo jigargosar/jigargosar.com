@@ -186,11 +186,11 @@ const RootStore = model('RootStore', {
     get tasks() {
       return self.selectedList.activeTasks
     },
-    get selectedIdx() {
-      return clamp(0, self.lists.length - 1)(self._selectedIdx)
-    },
     set selectedIdx(val) {
       return (self._selectedIdx = val)
+    },
+    get selectedIdx() {
+      return clamp(0, self.lists.length - 1)(self._selectedIdx)
     },
     get selectedList() {
       return self.lists[self.selectedIdx]
