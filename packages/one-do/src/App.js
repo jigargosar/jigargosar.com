@@ -1,12 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import store from './store'
-import {
-  cn,
-  FocusTrap,
-  observer,
-  onClickSP,
-  wrapSP,
-} from './lib/little-react'
+import {cn, FocusTrap, observer, wrapSP} from './lib/little-react'
 import EventListener from 'react-event-listener'
 import {Btn} from './lib/tachyons-components'
 import {fWord} from './lib/fake'
@@ -104,7 +98,7 @@ class Tasks extends Component {
     return (
       <Fragment>
         <div className={cn('pa2')}>
-          <Btn {...onClickSP(() => list.add({name: fWord()}))}>ADD</Btn>
+          <Btn onClick={wrapSP(() => list.add({name: fWord()}))}>ADD</Btn>
         </div>
         {list.tasks.map(t => (
           <Fragment key={t.id}>
