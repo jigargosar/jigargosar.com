@@ -182,6 +182,14 @@ const TaskListCollection = model('TaskListCollection', {
   }))
   .actions(self => {
     return {
+      add: function(props) {
+        return self.items.push(TaskList.create(props))
+      },
+      delete(item) {
+        if (self.canDelete) {
+          item.update({isDeleted: true})
+        }
+      },
       sync: dropFlow(function*() {
         yield self.syncLists()
         yield self.syncTasks()
@@ -206,14 +214,6 @@ const TaskListCollection = model('TaskListCollection', {
           }
         })
       }),
-      add: function(props) {
-        return self.items.push(TaskList.create(props))
-      },
-      delete(item) {
-        if (self.canDelete) {
-          item.update({isDeleted: true})
-        }
-      },
       syncTasks: dropFlow(function*() {
         console.assert(isSignedIn())
         const cRef = firestoreUserCRefNamed(TaskList.name)
