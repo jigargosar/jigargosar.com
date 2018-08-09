@@ -217,7 +217,7 @@ const RootStore = model('RootStore', {
       yield self.taskListCollection.pullFromRemote()
       yield self.taskCollection.pullFromRemote()
     }),
-    syncIfDirty: dropFlow(function*() {
+    trySync: dropFlow(function*() {
       if (isSignedIn() && self.isDirty) {
         yield self.sync()
       }

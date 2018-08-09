@@ -9,7 +9,7 @@ try {
 }
 const disposer = store.saveToLSOnSnapshotChange()
 
-store.syncIfDirty()
+store.trySync()
 // store.startRemoteSync()
 
 export default /*hotSnapshot(module)*/ store
