@@ -27,6 +27,7 @@ import {
   propEq,
   reject,
   sortWith,
+  toUpper,
 } from './lib/ramda'
 import {findById, overPath} from './lib/little-ramda'
 import {
@@ -187,13 +188,16 @@ const RootStore = model('RootStore', {
     },
     get lists() {
       const activeItems = self.taskListCollection.activeItems
-      return sortWith([ascend(_prop('name'))])(activeItems)
+      return sortWith([ascend(_compose(toUpper, _prop('name')))])(
+        activeItems,
+      )
     },
     get tasks() {
       return self.selectedList.activeTasks
     },
     set selectedIdx(val) {
-      return (self._selectedIdx = val)
+      self._selectedIdx = val
+      self.selectedListId = self.selectedListFromIdx.id
     },
     get selectedIdx() {
       return clamp(0, self.lists.length - 1)(self._selectedIdx)
@@ -221,20 +225,6 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
-    setSelectedListId(id) {
-      self.selectedListId = id
-    },
-    afterCreate() {
-      addDisposer(
-        self,
-        reaction(
-          () => [self.selectedIdx],
-          () => {
-            self.setSelectedListId(self.selectedListFromIdx.id)
-          },
-        ),
-      )
-    },
     sync: dropFlow(function*() {
       console.assert(isSignedIn())
       try {
