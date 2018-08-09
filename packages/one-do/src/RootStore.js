@@ -222,7 +222,11 @@ const TaskListCollection = model('TaskListCollection', {
             task.loadFromFireData(data)
           } else {
             const taskList = findById(data.parentId)(self.items)
-            console.assert(taskList)
+            console.assert(
+              taskList,
+              '[sync tasks] taskList not found for',
+              data,
+            )
             taskList.add({...data, isDirty: false})
           }
         })
