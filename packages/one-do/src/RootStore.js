@@ -110,7 +110,7 @@ const TaskListCollection = model('TaskListCollection', {
         })
       }),
       add: function(props) {
-        self.items.unshift(TaskList.create(props))
+        self.items.push(TaskList.create(props))
       },
       delete(item) {
         if (self.canDelete) {
