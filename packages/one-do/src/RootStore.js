@@ -5,6 +5,7 @@ import {
   getParentOfType,
   model,
   modelId,
+  nullRef,
   onSnapshot,
   optional,
   types,
@@ -36,6 +37,7 @@ import {
 const Task = model('Task', {
   id: modelId('Task'),
   name: '',
+  parentId: nullRef(types.late(() => TaskList)),
   isDone: false,
   isDirty: true,
   isDeleted: false,
@@ -49,7 +51,14 @@ const Task = model('Task', {
       console.assert(self.parentListId === val)
     },
     get pickFireProps() {
-      return pick(['id', 'parentListId', 'name', 'isDone', 'isDeleted'])
+      return pick([
+        'id',
+        'parentId',
+        'parentListId',
+        'name',
+        'isDone',
+        'isDeleted',
+      ])
     },
     get fireSnap() {
       return self.pickFireProps(self)
@@ -126,9 +135,18 @@ const TaskList = model('TaskList', {
     },
   }))
 
-const TaskCollection = model('TaskCollection', {})
+const TaskCollection = model('TaskCollection', {
+  items: types.array(Task),
+})
   .volatile(self => ({}))
-  .views(self => ({}))
+  .views(self => ({
+    get dirtyItems() {
+      return self.items.filter(_prop('isDirty'))
+    },
+    get activeItems() {
+      return reject(_prop('isDeleted'))(self.items)
+    },
+  }))
   .actions(self => ({}))
 
 const TaskListCollection = model('TaskListCollection', {
