@@ -17,6 +17,7 @@ import {
   firestoreUserCRefNamed,
   isSignedIn,
   isSignedOut,
+  queryToDocsData,
   signInWithPopup,
 } from './firebase'
 
@@ -59,11 +60,6 @@ const TaskList = model('TaskList', {
       Object.assign(self, self.pickFireProps(data))
     },
   }))
-
-async function queryToDocsData(cRef) {
-  const qs = await cRef.get()
-  return qs.docs.map(qds => qds.data())
-}
 
 const TaskListCollection = model('TaskListCollection', {
   items: types.array(TaskList),

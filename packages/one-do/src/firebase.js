@@ -55,3 +55,8 @@ export const firestoreUserCRefNamed = name =>
 if (module.hot) {
   window.f = firebase
 }
+
+export async function queryToDocsData(cRef) {
+  const qs = await cRef.get()
+  return qs.docs.map(qds => qds.data())
+}
