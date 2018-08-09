@@ -226,7 +226,14 @@ const RootStore = model('RootStore', {
       yield self.taskListCollection.sync()
       yield self.taskCollection.sync()
     }),
-    syncIfDirty() {},
+    *syncIfDirty() {
+      const isDirty =
+        self.taskCollection.isDirty || self.taskListCollection.isDirty
+
+      if (isDirty) {
+        yield self.sync()
+      }
+    },
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },
