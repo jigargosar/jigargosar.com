@@ -2,6 +2,7 @@ import {
   addDisposer,
   applySnapshot,
   dropFlow,
+  flow,
   getRoot,
   getSnapshot,
   model,
@@ -42,13 +43,16 @@ function collection(Model) {
     .volatile(self => ({}))
     .views(self => ({
       get dirtyItems() {
-        return self.items.filter(_prop('isDirty'))
+        return self.filter(_prop('isDirty'))
       },
       get activeItems() {
         return reject(_prop('isDeleted'))(self.items)
       },
       get isDirty() {
         return self.dirtyItems.length > 0
+      },
+      filter(fn) {
+        return filter(fn)(self.items)
       },
     }))
     .actions(self => ({
@@ -62,7 +66,7 @@ function collection(Model) {
           item.isDirty = true
         }
       },
-      saveToCRef: dropFlow(function*(cRef, item) {
+      saveToCRef: flow(function*(cRef, item) {
         console.assert(item.isDirty)
         const preSaveFireSnap = item.remoteSnap
         yield cRef.doc(item.id).set(preSaveFireSnap)
@@ -79,9 +83,6 @@ function collection(Model) {
       },
       delete(item) {
         item.update({isDeleted: true})
-      },
-      filter(fn) {
-        return filter(fn)(self.items)
       },
       sync: dropFlow(function*() {
         console.assert(isSignedIn())
@@ -297,7 +298,9 @@ function lsActions(self) {
       applySnapshot(self, {})
     },
     saveToLSOnSnapshotChange() {
-      addDisposer(self, onSnapshot(self, ls.save))
+      const disposer = onSnapshot(self, ls.save)
+      addDisposer(self, disposer)
+      return disposer
     },
   }
 }

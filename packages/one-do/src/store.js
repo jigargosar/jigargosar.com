@@ -8,7 +8,7 @@ try {
 } catch (e) {
   console.log('[store] loadFromLS', e)
 }
-store.saveToLSOnSnapshotChange()
+const disposer = store.saveToLSOnSnapshotChange()
 
 store.syncIfDirty()
 
@@ -19,9 +19,9 @@ if (module.hot) {
   window.store = store
   module.hot.dispose(() => {
     try {
-      destroy(store)
+      disposer()
     } catch (e) {
-      console.log('[store] destroy on hot dispose', e)
+      console.log('[store] destroy/dispose on hot dispose', e)
     }
   })
 }
