@@ -19,7 +19,6 @@ import {
   equals,
   flatten,
   isNil,
-  map,
   pick,
   pluck,
   reject,
