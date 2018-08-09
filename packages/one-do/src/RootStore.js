@@ -131,7 +131,7 @@ const TaskList = model('TaskList', {
       return getRoot(self).taskCollection
     },
     get tasks() {
-      return self.taskCollection.items.filter(propEq('parentId', self.id))
+      return self.taskCollection.items.filter(propEq('parentId', self))
     },
     get activeTasks() {
       return reject(_prop('isDeleted'))(self.tasks)
