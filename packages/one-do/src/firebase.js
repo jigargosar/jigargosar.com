@@ -1,7 +1,8 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
-import {fromPromise} from './lib/mobx-utils'
+import {fromPromise, fromResource} from './lib/mobx-utils'
+import {identity} from './lib/ramda'
 
 const app = (() => {
   if (firebase.apps[0]) {
@@ -39,6 +40,23 @@ export const authState = fromPromise(resolve => {
     listener()
   })
 })
+
+const UNKNOWN = 'UNKNOWN'
+const SIGNED_IN = 'SIGNED_IN'
+const SIGNED_OUT = 'SIGNED_OUT'
+
+export const userState = (() => {
+  let disposer = identity
+  return fromResource(
+    sink => {
+      disposer = app.auth().onAuthStateChanged(user => {
+        sink({user, state: user ? SIGNED_IN : SIGNED_OUT})
+      })
+    },
+    disposer,
+    {user: null, state: UNKNOWN},
+  )
+})()
 
 const auth = app.auth()
 export const getUser = () => auth.currentUser
