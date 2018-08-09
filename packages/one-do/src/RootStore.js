@@ -1,6 +1,7 @@
 import {
   addDisposer,
   applySnapshot,
+  autorun,
   dropFlow,
   flow,
   getRoot,
@@ -222,6 +223,16 @@ const RootStore = model('RootStore', {
         yield self.sync()
       }
     }),
+    startRemoteSync() {
+      addDisposer(
+        self,
+        autorun(() => {
+          if (isSignedIn() && self.isDirty) {
+            self.sync()
+          }
+        }),
+      )
+    },
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },
