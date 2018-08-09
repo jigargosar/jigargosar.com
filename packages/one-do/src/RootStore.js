@@ -82,12 +82,6 @@ const TaskList = model('TaskList', {
   isDeleted: false,
   tasks: types.array(Task),
 })
-  .preProcessSnapshot(snapshot => {
-    const setParentId = task => ({...task, parentId: snapshot.id})
-    return overProp('tasks')(_compose(map(setParentId), defaultTo([])))(
-      snapshot,
-    )
-  })
   .views(self => ({
     get pickFireProps() {
       return pick(['id', 'name', 'isDeleted'])
