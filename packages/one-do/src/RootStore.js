@@ -2,6 +2,7 @@ import {
   addDisposer,
   applySnapshot,
   dropFlow,
+  getRoot,
   getSnapshot,
   model,
   modelId,
@@ -21,6 +22,7 @@ import {
   isNil,
   pick,
   pluck,
+  propEq,
   reject,
   sortWith,
 } from './lib/ramda'
@@ -74,12 +76,32 @@ const Task = model('Task', {
     },
   }))
 
+const TaskCollection = model('TaskCollection', {
+  items: types.array(Task),
+})
+  .volatile(self => ({}))
+  .views(self => ({
+    get dirtyItems() {
+      return self.items.filter(_prop('isDirty'))
+    },
+    get activeItems() {
+      return reject(_prop('isDeleted'))(self.items)
+    },
+  }))
+  .actions(self => ({
+    add(props) {
+      return self.tasks.push(Task.create(props))
+    },
+    delete(props) {
+      props.update({isDeleted: true})
+    },
+  }))
+
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
   name: '',
   isDirty: true,
   isDeleted: false,
-  tasks: types.array(Task),
 })
   .views(self => ({
     get pickFireProps() {
@@ -87,6 +109,14 @@ const TaskList = model('TaskList', {
     },
     get fireSnap() {
       return self.pickFireProps(getSnapshot(self))
+    },
+  }))
+  .views(self => ({
+    get taskCollection() {
+      return getRoot(self).taskCollection
+    },
+    get tasks() {
+      return self.taskCollection.items.filter(propEq('parentId', self.id))
     },
     get activeTasks() {
       return reject(_prop('isDeleted'))(self.tasks)
@@ -122,20 +152,6 @@ const TaskList = model('TaskList', {
       Object.assign(self, self.pickFireProps(data))
     },
   }))
-
-const TaskCollection = model('TaskCollection', {
-  items: types.array(Task),
-})
-  .volatile(self => ({}))
-  .views(self => ({
-    get dirtyItems() {
-      return self.items.filter(_prop('isDirty'))
-    },
-    get activeItems() {
-      return reject(_prop('isDeleted'))(self.items)
-    },
-  }))
-  .actions(self => ({}))
 
 const TaskListCollection = model('TaskListCollection', {
   items: types.array(TaskList),
@@ -279,10 +295,10 @@ const RootStore = model('RootStore', {
       list.update(props)
     },
     addTask(props) {
-      self.selectedList.add(props)
+      self.taskCollection.add({...props, parentId: self.selectedList})
     },
     deleteTask(props) {
-      self.selectedList.delete(props)
+      self.taskCollection.delete(props)
     },
     updateTask(props, task) {
       task.update(props)
