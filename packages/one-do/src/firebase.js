@@ -35,7 +35,7 @@ export function signInWithPopup() {
   return app.auth().signInWithPopup(authProvider)
 }
 
-export const authState = fromPromise(resolve => {
+export const authStateKnown = fromPromise(resolve => {
   const listener = app.auth().onAuthStateChanged(() => {
     resolve()
     listener()
@@ -46,7 +46,7 @@ const UNKNOWN = 'UNKNOWN'
 const SIGNED_IN = 'SIGNED_IN'
 const SIGNED_OUT = 'SIGNED_OUT'
 
-export const observableUserState = (() => {
+export const observableAuthState = (() => {
   let disposer = identity
   return fromResource(
     sink => {
@@ -59,17 +59,18 @@ export const observableUserState = (() => {
   )
 })()
 
-const userState = () => observableUserState.current().state
+const authState = () => observableAuthState.current().state
+const user = () => observableAuthState.current().user
 
-export const isUserStateUnknown = () => userState() === UNKNOWN
+export const isUserStateUnknown = () => authState() === UNKNOWN
 export const isUserStateKnown = complement(isUserStateUnknown)
-export const isSignedIn = () => userState() === SIGNED_IN
-export const isSignedOut = () => userState() === SIGNED_OUT
+export const isSignedIn = () => authState() === SIGNED_IN
+export const isSignedOut = () => authState() === SIGNED_OUT
 
-autorun(() => userState())
+autorun(() => observableAuthState.current())
 
 const auth = app.auth()
-export const getUser = () => auth.currentUser
+export const getUser = () => user() || auth.currentUser
 
 export const firestore = app.firestore()
 
