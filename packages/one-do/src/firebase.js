@@ -3,6 +3,7 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import {fromPromise, fromResource} from './lib/mobx-utils'
 import {complement, identity} from './lib/ramda'
+import {autorun} from './lib/little-mst'
 
 const app = (() => {
   if (firebase.apps[0]) {
@@ -64,6 +65,8 @@ export const isUserStateUnknown = () => userState() === UNKNOWN
 export const isUserStateKnown = complement(isUserStateUnknown)
 export const isSignedIn = () => userState() === SIGNED_IN
 export const isSignedOut = () => userState() === SIGNED_OUT
+
+autorun(() => userState())
 
 const auth = app.auth()
 export const getUser = () => auth.currentUser
