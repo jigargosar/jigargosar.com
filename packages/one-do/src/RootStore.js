@@ -178,8 +178,6 @@ const TaskList = model('TaskList', {
     saveToCRef: dropFlow(function*(cRef) {
       console.assert(self.isDirty)
       const preSaveFireSnap = self.remoteSnap
-      // const preSaveFireSnap2 = self.fireSnap
-      // const preSaveFireSnap3 = self.fireSnap
       yield cRef.doc(self.id).set(preSaveFireSnap)
       if (equals(preSaveFireSnap, self.remoteSnap)) {
         self.isDirty = false
