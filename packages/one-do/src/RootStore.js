@@ -43,7 +43,10 @@ const Task = model('Task', {
   .volatile(self => ({}))
   .views(self => ({
     get parentListId() {
-      return getParentOfType(self, TaskList)
+      return getParentOfType(self, TaskList).id
+    },
+    set parentListId(val) {
+      console.assert(self.parentListId === val)
     },
     get pickFireProps() {
       return pick(['id', 'parentListId', 'name', 'isDone', 'isDeleted'])
@@ -104,7 +107,7 @@ const TaskList = model('TaskList', {
       }
     },
     add(props) {
-      self.tasks.push(Task.create(props))
+      return self.tasks.push(Task.create(props))
     },
     delete(task) {
       // spliceItem(task)(self.tasks)
@@ -170,7 +173,7 @@ const TaskListCollection = model('TaskListCollection', {
           if (item) {
             item.loadFromFireData(data)
           } else {
-            self.add(data)
+            self.add({...data, isDirty: false})
           }
         })
       }),
@@ -194,12 +197,13 @@ const TaskListCollection = model('TaskListCollection', {
             task.loadFromFireData(data)
           } else {
             const taskList = findById(data.parentListId)(self.items)
-            taskList.add(data)
+            console.assert(taskList)
+            taskList.add({...data, isDirty: false})
           }
         })
       }),
       add: function(props) {
-        self.items.push(TaskList.create(props))
+        return self.items.push(TaskList.create(props))
       },
       delete(item) {
         if (self.canDelete) {
