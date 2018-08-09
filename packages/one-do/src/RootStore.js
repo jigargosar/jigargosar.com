@@ -82,7 +82,7 @@ function collection(Model) {
         Object.assign(item, cleanProps)
       },
       delete(item) {
-        item.update({isDeleted: true})
+        self.update({isDeleted: true}, item)
       },
       pullFromRemote: dropFlow(function*() {
         console.assert(isSignedIn())
