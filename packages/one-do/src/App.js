@@ -82,6 +82,7 @@ class ListName extends Component {
           store.isSelected(list) ? 'bg-black-10' : '',
         )}
         onClick={wrapSP(() => store.selectList(list))}
+        onDoubleClick={wrapSP(() => list.update({name: fWord()}))}
       >
         <div className={cn('flex-auto', 'flex items-center')}>
           <div>{`${list.name}`}</div>
