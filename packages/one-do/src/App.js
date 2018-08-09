@@ -51,6 +51,27 @@ class View extends Component {
 }
 
 @observer
+class MyLists extends Component {
+  render({store} = this.props) {
+    return (
+      <Fragment>
+        <h3 className={cn('ma2', 'flex items-center')}>
+          <div className={cn('flex-auto')}>My Lists</div>
+          <Btn onClick={wrapSP(() => store.addList({name: fWord()}))}>
+            ADD
+          </Btn>
+        </h3>
+        {store.lists.map(list => (
+          <Fragment key={list.id}>
+            <ListName store={store} list={list} />
+          </Fragment>
+        ))}
+      </Fragment>
+    )
+  }
+}
+
+@observer
 class ListName extends Component {
   render({store, list} = this.props) {
     return (
@@ -75,27 +96,6 @@ class ListName extends Component {
           X
         </Btn>
       </div>
-    )
-  }
-}
-
-@observer
-class MyLists extends Component {
-  render({store} = this.props) {
-    return (
-      <Fragment>
-        <h3 className={cn('ma2', 'flex items-center')}>
-          <div className={cn('flex-auto')}>My Lists</div>
-          <Btn onClick={wrapSP(() => store.addList({name: fWord()}))}>
-            ADD
-          </Btn>
-        </h3>
-        {store.lists.map(list => (
-          <Fragment key={list.id}>
-            <ListName store={store} list={list} />
-          </Fragment>
-        ))}
-      </Fragment>
     )
   }
 }
