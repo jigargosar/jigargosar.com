@@ -204,6 +204,9 @@ const RootStore = model('RootStore', {
     get canDeleteList() {
       return self.taskListCollection.activeItems.length > 1
     },
+    get canSync() {
+      return isSignedIn() && self.isDirty
+    },
   }))
   .volatile(self => ({}))
   .actions(self => ({
@@ -218,7 +221,7 @@ const RootStore = model('RootStore', {
       yield self.taskCollection.pullFromRemote()
     }),
     trySync: dropFlow(function*() {
-      if (isSignedIn() && self.isDirty) {
+      if (self.canSync) {
         yield self.sync()
       }
     }),
