@@ -176,9 +176,6 @@ const TaskListCollection = model('TaskListCollection', {
     return overProp('items')(defaultTo([tl]))(snapshot)
   })
   .views(self => ({
-    get canDelete() {
-      return self.activeItems.length > 1
-    },
     get dirtyItems() {
       return self.items.filter(_prop('isDirty'))
     },
@@ -192,9 +189,7 @@ const TaskListCollection = model('TaskListCollection', {
         return self.items.push(TaskList.create(props))
       },
       delete(item) {
-        if (self.canDelete) {
-          item.update({isDeleted: true})
-        }
+        item.update({isDeleted: true})
       },
       sync: dropFlow(function*() {
         console.assert(isSignedIn())
@@ -246,7 +241,7 @@ const RootStore = model('RootStore', {
       return self.selectedList === l
     },
     get canDelete() {
-      return self.taskListCollection.canDelete
+      return self.taskListCollection.activeItems.length > 1
     },
   }))
   .volatile(self => ({}))
@@ -266,7 +261,9 @@ const RootStore = model('RootStore', {
       self.taskListCollection.add(props)
     },
     deleteList(props) {
-      self.taskListCollection.delete(props)
+      if (self.canDelete) {
+        self.taskListCollection.delete(props)
+      }
     },
     updateList(props, list) {
       list.update(props)
