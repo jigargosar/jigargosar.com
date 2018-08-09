@@ -140,6 +140,9 @@ const RootStore = model('RootStore', {
       const activeItems = self.taskListCollection.activeItems
       return sortWith([ascend(_prop('name'))])(activeItems)
     },
+    get tasks() {
+      return self.selectedList.tasks
+    },
     get selectedIdx() {
       return clamp(0, self.lists.length - 1)(self._selectedIdx)
     },
@@ -179,6 +182,9 @@ const RootStore = model('RootStore', {
     },
     addTask(props) {
       self.currentList.add(props)
+    },
+    deleteTask(props) {
+      self.currentList.delete(props)
     },
   }))
 

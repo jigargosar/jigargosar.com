@@ -107,17 +107,18 @@ class ListName extends Component {
 @observer
 class Tasks extends Component {
   render({store} = this.props) {
-    const list = store.selectedList
     return (
       <Fragment>
         <div className={cn('pa2')}>
-          <Btn onClick={wrapSP(() => list.add({name: fWord()}))}>ADD</Btn>
+          <Btn onClick={wrapSP(() => store.addTask({name: fWord()}))}>
+            ADD
+          </Btn>
         </div>
-        {list.tasks.map(t => (
-          <Fragment key={t.id}>
+        {store.tasks.map(task => (
+          <Fragment key={task.id}>
             <div className={cn('pa2', 'flex items-center')}>
-              <div className={cn('flex-auto')}>{t.name}</div>
-              <Btn onClick={wrapSP(() => list.delete(t))}>X</Btn>
+              <div className={cn('flex-auto')}>{task.name}</div>
+              <Btn onClick={wrapSP(() => store.deleteTask(task))}>X</Btn>
             </div>
           </Fragment>
         ))}
