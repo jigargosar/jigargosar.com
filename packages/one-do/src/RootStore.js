@@ -186,9 +186,9 @@ const RootStore = model('RootStore', {
       return self.taskCollection.isDirty || self.taskListCollection.isDirty
     },
     get lists() {
-      const activeItems = self.taskListCollection.activeItems
+      const activeLists = self.taskListCollection.activeItems
       return sortWith([ascend(_compose(toUpper, _prop('name')))])(
-        activeItems,
+        activeLists,
       )
     },
     get tasks() {
