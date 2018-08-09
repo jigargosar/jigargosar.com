@@ -185,12 +185,12 @@ const RootStore = model('RootStore', {
 })
   .preProcessSnapshot(snapshot => {
     const tl = {name: 'TODO'}
-    const ret = overPath(['taskListCollection', 'items'])(defaultTo([tl]))(
-      snapshot,
-    )
-    console.log(`ret`, ret)
-    // console.log(`ret`, ret)
-    return ret
+    const result = overPath(['taskListCollection', 'items'])(
+      defaultTo([tl]),
+    )(snapshot)
+
+    console.debug('[RS] preProcessSnapshot result', result)
+    return result
   })
   .actions(lsActions)
   .views(self => ({
