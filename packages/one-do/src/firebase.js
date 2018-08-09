@@ -45,7 +45,7 @@ const UNKNOWN = 'UNKNOWN'
 const SIGNED_IN = 'SIGNED_IN'
 const SIGNED_OUT = 'SIGNED_OUT'
 
-export const userState = (() => {
+export const observableUserState = (() => {
   let disposer = identity
   return fromResource(
     sink => {
@@ -58,10 +58,12 @@ export const userState = (() => {
   )
 })()
 
-export const isUserStateUnknown = () => userState.state === UNKNOWN
+const userState = () => observableUserState.current().state
+
+export const isUserStateUnknown = () => userState() === UNKNOWN
 export const isUserStateKnown = complement(isUserStateUnknown)
-export const isSignedIn = () => userState.state === SIGNED_IN
-export const isSignedOut = () => userState.state === SIGNED_OUT
+export const isSignedIn = () => userState() === SIGNED_IN
+export const isSignedOut = () => userState() === SIGNED_OUT
 
 const auth = app.auth()
 export const getUser = () => auth.currentUser
