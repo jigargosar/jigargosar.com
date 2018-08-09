@@ -75,7 +75,7 @@ function collection(Model) {
         docsData.forEach(data => {
           const item = findById(data.id)(self.items)
           if (item) {
-            item.loadFromFireData(data)
+            item.loadFromRemoteData(data)
           } else {
             self.add({...data, isDirty: false})
           }
@@ -121,7 +121,7 @@ const Task = model('Task', {
         self.isDirty = false
       }
     }),
-    loadFromFireData(data) {
+    loadFromRemoteData(data) {
       if (self.isDirty) return
       const cleanProps = _compose(reject(isNil), self.pickRemoteProps)(
         data,
@@ -173,7 +173,7 @@ const TaskList = model('TaskList', {
         self.isDirty = false
       }
     }),
-    loadFromFireData(data) {
+    loadFromRemoteData(data) {
       if (self.isDirty) return
       Object.assign(self, self.pickRemoteProps(data))
     },
