@@ -84,14 +84,9 @@ function collection(Model) {
       delete(item) {
         item.update({isDeleted: true})
       },
-      sync: dropFlow(function*() {
+      pullFromRemote: dropFlow(function*() {
         console.assert(isSignedIn())
         const cRef = firestoreUserCRefNamed(Collection.name)
-
-        const pushResult = yield Promise.all(
-          self.dirtyItems.map(item => self.saveToCRef(cRef, item)),
-        )
-        console.log('[sync] push success', pushResult.length)
 
         const docsData = yield queryToDocsData(cRef)
         console.log(`[sync] pull result: docsData.length`, docsData.length)
@@ -103,6 +98,15 @@ function collection(Model) {
             self.add({...data, isDirty: false})
           }
         })
+      }),
+      pushDirtyToRemote: dropFlow(function*() {
+        console.assert(isSignedIn())
+        const cRef = firestoreUserCRefNamed(Collection.name)
+
+        const pushResult = yield Promise.all(
+          self.dirtyItems.map(item => self.saveToCRef(cRef, item)),
+        )
+        console.log('[sync] push success', pushResult.length)
       }),
     }))
   return Collection
@@ -135,21 +139,6 @@ const Task = model('Task', {
       if (!self.isDirty && !equals(preUpdateSnap, self.remoteSnap)) {
         self.isDirty = true
       }
-    },
-    saveToCRef: dropFlow(function*(cRef) {
-      console.assert(self.isDirty)
-      const preSaveFireSnap = self.remoteSnap
-      yield cRef.doc(self.id).set(preSaveFireSnap)
-      if (equals(preSaveFireSnap, self.remoteSnap)) {
-        self.isDirty = false
-      }
-    }),
-    loadFromRemoteData(data) {
-      if (self.isDirty) return
-      const cleanProps = _compose(reject(isNil), self.pickRemoteProps)(
-        data,
-      )
-      Object.assign(self, cleanProps)
     },
   }))
 
@@ -252,8 +241,10 @@ const RootStore = model('RootStore', {
       if (isSignedOut()) {
         yield signInWithPopup()
       }
-      yield self.taskListCollection.sync()
-      yield self.taskCollection.sync()
+      yield self.taskListCollection.pushDirtyToRemote()
+      yield self.taskCollection.pushDirtyToRemote()
+      yield self.taskListCollection.pullFromRemote()
+      yield self.taskCollection.pullFromRemote()
     }),
     syncIfDirty: dropFlow(function*() {
       const isDirty =

@@ -1,5 +1,4 @@
 import RootStore from './RootStore'
-import {destroy} from './lib/little-mst'
 
 const store = RootStore.create({}, {})
 
