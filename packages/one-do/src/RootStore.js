@@ -79,6 +79,9 @@ const TaskCollection = model('TaskCollection', {
 })
   .volatile(self => ({}))
   .views(self => ({
+    get isDirty() {
+      return self.dirtyItems.length > 0
+    },
     get dirtyItems() {
       return self.items.filter(_prop('isDirty'))
     },
@@ -182,6 +185,9 @@ const TaskListCollection = model('TaskListCollection', {
     get activeItems() {
       return reject(_prop('isDeleted'))(self.items)
     },
+    get isDirty() {
+      return self.dirtyItems.length > 0
+    },
   }))
   .actions(self => {
     return {
@@ -254,6 +260,7 @@ const RootStore = model('RootStore', {
       yield self.taskListCollection.sync()
       yield self.taskCollection.sync()
     }),
+    syncIfDirty() {},
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
     },
