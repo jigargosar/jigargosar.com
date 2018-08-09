@@ -120,6 +120,9 @@ const TaskListCollection = model('TaskListCollection', {
   .actions(self => {
     return {
       sync: dropFlow(function*() {
+        yield self.syncLists()
+      }),
+      syncLists: dropFlow(function*() {
         console.assert(isSignedIn())
         const cRef = firestoreUserCRefNamed(TaskListCollection.name)
 
