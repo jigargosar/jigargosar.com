@@ -188,7 +188,7 @@ const TaskListCollection = model('TaskListCollection', {
       }),
       syncLists: dropFlow(function*() {
         console.assert(isSignedIn())
-        const cRef = firestoreUserCRefNamed(TaskListCollection.name)
+        const cRef = firestoreUserCRefNamed(TaskCollection.name)
 
         const pushResult = yield Promise.all(
           self.dirtyItems.map(i => i.saveToCRef(cRef)),
@@ -233,7 +233,7 @@ const TaskListCollection = model('TaskListCollection', {
           if (task) {
             task.loadFromFireData(data)
           } else {
-            const taskList = findById(data.parentListId)(self.items)
+            const taskList = findById(data.parentId)(self.items)
             console.assert(taskList)
             taskList.add({...data, isDirty: false})
           }
