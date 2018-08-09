@@ -90,11 +90,34 @@ const TaskCollection = model('TaskCollection', {
   }))
   .actions(self => ({
     add(props) {
-      return self.tasks.push(Task.create(props))
+      return self.items.push(Task.create(props))
     },
     delete(props) {
       props.update({isDeleted: true})
     },
+    sync: dropFlow(function*() {
+      console.assert(isSignedIn())
+      const cRef = firestoreUserCRefNamed(TaskCollection.name)
+
+      const pushResult = yield Promise.all(
+        self.dirtyItems.map(task => task.saveToCRef(cRef)),
+      )
+      console.log('[sync tasks] push success', pushResult.length)
+
+      const docsData = yield queryToDocsData(cRef)
+      console.log(
+        `[sync tasks] pull result: docsData.length`,
+        docsData.length,
+      )
+      docsData.forEach(data => {
+        const task = findById(data.id)(self.items)
+        if (task) {
+          task.loadFromFireData(data)
+        } else {
+          self.add({...data, isDirty: false})
+        }
+      })
+    }),
   }))
 
 const TaskList = model('TaskList', {
@@ -132,12 +155,6 @@ const TaskList = model('TaskList', {
       if (!self.isDirty && !equals(preUpdateSnap, self.fireSnap)) {
         self.isDirty = true
       }
-    },
-    add(task) {
-      return self.tasks.push(Task.create({...task, parentId: self.id}))
-    },
-    delete(task) {
-      task.update({isDeleted: true})
     },
     saveToCRef: dropFlow(function*(cRef) {
       console.assert(self.isDirty)
@@ -188,10 +205,6 @@ const TaskListCollection = model('TaskListCollection', {
         }
       },
       sync: dropFlow(function*() {
-        yield self.syncLists()
-        yield self.syncTasks()
-      }),
-      syncLists: dropFlow(function*() {
         console.assert(isSignedIn())
         const cRef = firestoreUserCRefNamed(TaskListCollection.name)
 
@@ -208,35 +221,6 @@ const TaskListCollection = model('TaskListCollection', {
             item.loadFromFireData(data)
           } else {
             self.add({...data, isDirty: false})
-          }
-        })
-      }),
-      syncTasks: dropFlow(function*() {
-        console.assert(isSignedIn())
-        const cRef = firestoreUserCRefNamed(TaskCollection.name)
-
-        const pushResult = yield Promise.all(
-          self.dirtyTasks.map(task => task.saveToCRef(cRef)),
-        )
-        console.log('[sync tasks] push success', pushResult.length)
-
-        const docsData = yield queryToDocsData(cRef)
-        console.log(
-          `[sync tasks] pull result: docsData.length`,
-          docsData.length,
-        )
-        docsData.forEach(data => {
-          const task = findById(data.id)(self.tasks)
-          if (task) {
-            task.loadFromFireData(data)
-          } else {
-            const taskList = findById(data.parentId)(self.items)
-            console.assert(
-              taskList,
-              '[sync tasks] taskList not found for',
-              data,
-            )
-            taskList.add({...data, isDirty: false})
           }
         })
       }),
@@ -281,6 +265,7 @@ const RootStore = model('RootStore', {
         yield signInWithPopup()
       }
       self.taskListCollection.sync()
+      self.taskCollection.sync()
     }),
     selectList(l) {
       self.selectedIdx = self.lists.indexOf(l)
