@@ -106,11 +106,10 @@ const TaskList = model('TaskList', {
         self.isDirty = true
       }
     },
-    add(props) {
-      return self.tasks.push(Task.create(props))
+    add(task) {
+      return self.tasks.push(Task.create(task))
     },
     delete(task) {
-      // spliceItem(task)(self.tasks)
       task.update({isDeleted: true})
     },
     saveToCRef: dropFlow(function*(cRef) {
