@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import {fromPromise} from './lib/mobx-utils'
 
 const app = (() => {
   if (firebase.apps[0]) {
@@ -32,7 +33,7 @@ export function signInWithPopup() {
   return app.auth().signInWithPopup(authProvider)
 }
 
-export const authState = new Promise(resolve => {
+export const authState = fromPromise(resolve => {
   const listener = app.auth().onAuthStateChanged(() => {
     resolve()
     listener()
@@ -46,8 +47,8 @@ export const isSignedOut = () => !isSignedIn()
 
 export const firestore = app.firestore()
 
-export const firestoreUsersCref = firestore.collection('users')
-export const firestoreUserRef = () => firestoreUsersCref.doc(getUser().uid)
+export const firestoreUsersCRef = firestore.collection('users')
+export const firestoreUserRef = () => firestoreUsersCRef.doc(getUser().uid)
 
 export const firestoreUserCRefNamed = name =>
   firestoreUserRef().collection(name)
