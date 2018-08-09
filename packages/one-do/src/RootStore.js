@@ -104,14 +104,6 @@ const TaskList = model('TaskList', {
   isDeleted: false,
 })
   .views(self => ({
-    get pickFireProps() {
-      return pick(['id', 'name', 'isDeleted'])
-    },
-    get fireSnap() {
-      return self.pickFireProps(getSnapshot(self))
-    },
-  }))
-  .views(self => ({
     get taskCollection() {
       return getRoot(self).taskCollection
     },
@@ -123,6 +115,14 @@ const TaskList = model('TaskList', {
     },
     get dirtyTasks() {
       return self.tasks.filter(_prop('isDirty'))
+    },
+  }))
+  .views(self => ({
+    get pickFireProps() {
+      return pick(['id', 'name', 'isDeleted'])
+    },
+    get fireSnap() {
+      return self.pickFireProps(getSnapshot(self))
     },
   }))
   .actions(self => ({
