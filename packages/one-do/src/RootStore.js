@@ -33,7 +33,28 @@ import {
 const Task = model('Task', {
   id: modelId('Task'),
   name: '',
+  isDone: false,
+  isDirty: true,
+  isDeleted: false,
 })
+  .volatile(self => ({}))
+  .views(self => ({
+    get pickFireProps() {
+      return pick(['id', 'name', 'isDone', 'isDeleted'])
+    },
+    get fireSnap() {
+      return self.pickFireProps(self)
+    },
+  }))
+  .actions(self => ({
+    update(props) {
+      const preUpdateSnap = self.fireSnap
+      Object.assign(self, self.pickFireProps(props))
+      if (!self.isDirty && !equals(preUpdateSnap, self.fireSnap)) {
+        self.isDirty = true
+      }
+    },
+  }))
 
 const TaskList = model('TaskList', {
   id: modelId('TaskList'),
