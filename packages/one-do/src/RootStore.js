@@ -18,10 +18,8 @@ import {
   clamp,
   defaultTo,
   equals,
-  flatten,
   isNil,
   pick,
-  pluck,
   propEq,
   reject,
   sortWith,
@@ -186,12 +184,6 @@ const TaskListCollection = model('TaskListCollection', {
     },
     get activeItems() {
       return reject(_prop('isDeleted'))(self.items)
-    },
-    get tasks() {
-      return _compose(flatten, pluck('tasks'))(self.items)
-    },
-    get dirtyTasks() {
-      return _compose(flatten, pluck('dirtyTasks'))(self.items)
     },
   }))
   .actions(self => {
