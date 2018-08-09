@@ -226,10 +226,14 @@ const RootStore = model('RootStore', {
     startRemoteSync() {
       addDisposer(
         self,
-        autorun(() => {
-          if (isSignedIn() && self.isDirty) {
-            self.sync()
+        autorun(async () => {
+          async function extracted() {
+            if (isSignedIn() && self.isDirty) {
+              await self.sync()
+            }
           }
+          await extracted()
+          await extracted()
         }),
       )
     },
