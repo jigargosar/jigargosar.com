@@ -51,3 +51,7 @@ export const firestoreUserRef = () => firestoreUsersCref.doc(getUser().uid)
 
 export const firestoreUserCRefNamed = name =>
   firestoreUserRef().collection(name)
+
+if (module.hot) {
+  window.f = firebase
+}
