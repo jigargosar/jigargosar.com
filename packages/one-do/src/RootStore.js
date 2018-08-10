@@ -232,24 +232,11 @@ const RootStore = model('RootStore', {
     get tasks() {
       return self.selectedList.activeTasks
     },
-    set selectedIdx(val) {
-      self._selectedIdx = val
-      self.selectedListId = self.selectedListFromIdx.id
-    },
-    get selectedIdx() {
-      return clamp(0, self.lists.length - 1)(self._selectedIdx)
-    },
     get selectedList() {
-      return self.selectedListFromId || self.selectedListFromIdx
-    },
-    get selectedListFromIdx() {
-      return self.lists[self.selectedIdx]
-    },
-    get selectedListFromId() {
-      return findById(self.selectedListId)(self.lists)
+      return self.listSelection.selectedItem
     },
     isSelected(l) {
-      return self.selectedList === l
+      return self.listSelection.isSelected(l)
     },
     get canDeleteList() {
       return self.taskListCollection.activeItems.length > 1
@@ -290,7 +277,6 @@ const RootStore = model('RootStore', {
     }),
     selectList(l) {
       self.listSelection.selectItem(l)
-      self.selectedIdx = self.lists.indexOf(l)
     },
     addList: function(props) {
       self.taskListCollection.add(props)
