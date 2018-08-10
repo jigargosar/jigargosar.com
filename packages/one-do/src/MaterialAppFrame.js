@@ -78,6 +78,7 @@ class MaterialAppFrame extends Component {
   render() {
     const {classes, store} = this.props
     const isDrawerOpen = this.isDrawerOpen
+    const toggleDrawer = bindToggle('isDrawerOpen')(this)
     return (
       <FocusTrap
         active={false}
@@ -88,7 +89,7 @@ class MaterialAppFrame extends Component {
           <AppBar
             position="absolute"
             className={classes.appBar}
-            onClick={bindToggle('isDrawerOpen')(this)}
+            onClick={toggleDrawer}
           >
             <Toolbar>
               <Typography variant="title" color="inherit" noWrap>
@@ -104,9 +105,10 @@ class MaterialAppFrame extends Component {
                 : classes.drawerPaperClosed,
             }}
             open={isDrawerOpen}
+            onClose={toggleDrawer}
           >
             <div className={classes.toolbar}>
-              <IconButton onClick={bindToggle('isDrawerOpen')(this)}>
+              <IconButton onClick={toggleDrawer}>
                 <ChevronLeftIcon />
               </IconButton>
             </div>
