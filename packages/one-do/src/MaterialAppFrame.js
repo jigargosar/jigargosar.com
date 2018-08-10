@@ -190,6 +190,7 @@ class TaskItem extends Component {
         <ListItem
           dense
           disableGutters
+          divider
           // dense={false}
         >
           <Checkbox
@@ -295,7 +296,7 @@ class ListName extends Component {
       <ListItem
         className={cn('ttu', this.isSelected ? 'bg-black-10' : '')}
         button
-        dense={true}
+        divider
         onClick={() => store.selectList(list)}
         onDoubleClick={wrapSP(
           () => false && store.updateList({name: fWord()}, list),
