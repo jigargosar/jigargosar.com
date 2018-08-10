@@ -73,18 +73,31 @@ class MaterialAppFrame extends Component {
   @observable drawerVariant = 'temporary'
 
   componentDidMount() {
-    syncLS('drawerState')(['isDrawerOpen'])(this)
+    requestAnimationFrame(() => {
+      syncLS('drawerState')(['isDrawerOpen'])(this)
+    })
   }
 
   toggleDrawer = (bool = !this.isDrawerOpen) => () => {
     this.isDrawerOpen = bool
   }
 
-  get shouldCloseDrawerOnClick() {}
+  @computed
+  get isDrawerTemporary() {
+    return this.drawerVariant === 'temporary'
+  }
 
   render() {
     const {classes, store} = this.props
 
+    const isDrawerOpen = this.isDrawerOpen
+    const drawerVariant = this.drawerVariant
+    console.log(
+      `this.drawerVariant`,
+      this.drawerVariant,
+      'this.isDrawerOpen',
+      this.isDrawerOpen,
+    )
     return (
       <FocusTrap
         active={false}
@@ -104,15 +117,15 @@ class MaterialAppFrame extends Component {
             </Toolbar>
           </AppBar>
           <Drawer
-            variant={this.drawerVariant}
+            variant={drawerVariant}
             classes={{
-              paper: this.isDrawerOpen
+              paper: isDrawerOpen
                 ? classes.drawerPaper
                 : classes.drawerPaperClosed,
             }}
-            open={this.isDrawerOpen}
+            open={isDrawerOpen}
             onClose={this.toggleDrawer(false)}
-            onClick={this.toggleDrawer(false)}
+            keepMounted={true}
           >
             <div className={classes.toolbar}>
               <IconButton onClick={this.toggleDrawer(false)}>
