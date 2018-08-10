@@ -4,7 +4,7 @@ import {cn, FocusTrap, observer, wrapSP} from './lib/little-react'
 import EventListener from 'react-event-listener'
 import {Btn} from './lib/tachyons-components'
 import {fWord} from './lib/fake'
-import MaterialApp from './MaterialApp'
+import MaterialApp from './MaterialAppFrame'
 
 @observer
 class App extends Component {
