@@ -46,7 +46,7 @@ const styles = theme => ({
 @disposable
 @observer
 class ClippedDrawer extends Component {
-  @observable isDrawerOpen = false
+  @observable isDrawerOpen = true
 
   componentDidMount() {
     syncLS('drawerState')(['isDrawerOpen'])(this)
