@@ -173,7 +173,7 @@ const Selection = model('Selection', {
   .volatile(self => ({computedItems: computed(() => [])}))
   .views(self => ({
     get items() {
-      return self._computedItems.get()
+      return self.computedItems.get()
     },
     set idx(val) {
       self._idx = val
@@ -195,7 +195,11 @@ const Selection = model('Selection', {
       return self.selectedItem === l
     },
   }))
-  .actions(self => ({}))
+  .actions(self => ({
+    selectItem(item) {
+      self.idx = self.items.indexOf(item)
+    },
+  }))
 
 const RootStore = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
@@ -285,6 +289,7 @@ const RootStore = model('RootStore', {
       }
     }),
     selectList(l) {
+      self.listSelection.selectItem(l)
       self.selectedIdx = self.lists.indexOf(l)
     },
     addList: function(props) {
