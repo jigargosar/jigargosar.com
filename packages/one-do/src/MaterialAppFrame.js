@@ -19,6 +19,10 @@ import EventListener from 'react-event-listener'
 import cn from 'classnames'
 import {Btn} from './lib/tachyons-components'
 import {fWord} from './lib/fake'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import InboxIcon from '@material-ui/icons/MoveToInbox'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItem from '@material-ui/core/ListItem'
 
 const drawerWidth = 240
 
@@ -194,6 +198,34 @@ class MyLists extends Component {
 @observer
 class ListName extends Component {
   render({store, list} = this.props) {
+    return (
+      <ListItem
+        className={cn('ttu', store.isSelected(list) ? 'bg-black-10' : '')}
+        button
+        dense={false}
+        onClick={wrapSP(() => store.selectList(list))}
+        onDoubleClick={wrapSP(() =>
+          store.updateList({name: fWord()}, list),
+        )}
+      >
+        {false && (
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+        )}
+        <ListItemText
+          primary={
+            <div className={cn('flex-auto', 'flex items-center')}>
+              <div>{`${list.name}`}</div>
+              <div className={cn('ph1 gray self-start', 'f6')}>
+                {`${list.tasks.length}`}
+              </div>
+              {list.isDirty && <div>*</div>}
+            </div>
+          }
+        />
+      </ListItem>
+    )
     return (
       <div
         className={cn(
