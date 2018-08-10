@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import {mailFolderListItems, otherMailFolderListItems} from './tileData'
 import {FocusTrap, observer, wrapSP} from './lib/little-react'
-import {observable} from './lib/little-mst'
+import {computed, observable} from './lib/little-mst'
 import {disposable} from './lib/hoc'
 import {bindToggle, syncLS} from './lib/little-mobx-react'
 import {
@@ -23,6 +23,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItem from '@material-ui/core/ListItem'
+import ListSubheader from '@material-ui/core/ListSubheader'
 
 const drawerWidth = 240
 
@@ -31,7 +32,7 @@ const styles = theme => ({
     flexGrow: 1,
     height: '100vh',
     zIndex: 1,
-    overflow: 'hidden',
+    // overflow: 'hidden',
     position: 'relative',
     display: 'flex',
   },
@@ -93,9 +94,7 @@ class MaterialAppFrame extends Component {
             open={isDrawerOpen}
           >
             <div className={classes.toolbar} />
-            <List>
-              <MyLists store={store} />
-            </List>
+            <MyLists store={store} />
             <div className={cn('dn')}>
               <List>{mailFolderListItems}</List>
               <Divider />
@@ -126,8 +125,8 @@ class Tasks extends Component {
   render({store} = this.props) {
     const list = store.selectedList
     return (
-      <Fragment>
-        <div className={cn('pa2')}>
+      <div className={cn('relative flex-auto overflow-scroll')}>
+        <div className={cn('_pa2')}>
           <div className={cn('flex-auto')}>
             <input
               className={cn('w-100 pa1 ttu')}
@@ -144,7 +143,7 @@ class Tasks extends Component {
         </div>
         {store.tasks.map(task => (
           <Fragment key={task.id}>
-            <div className={cn('pa2', 'flex items-center')}>
+            <div className={cn('_pa2', 'flex items-center')}>
               <input
                 className={cn('mh2')}
                 checked={task.isDone}
@@ -169,7 +168,7 @@ class Tasks extends Component {
             </div>
           </Fragment>
         ))}
-      </Fragment>
+      </div>
     )
   }
 }
@@ -178,29 +177,37 @@ class Tasks extends Component {
 class MyLists extends Component {
   render({store} = this.props) {
     return (
-      <Fragment>
-        <h3 className={cn('ma2', 'flex items-center')}>
-          <div className={cn('flex-auto')}>My Lists</div>
-          <Btn onClick={wrapSP(() => store.addList({name: fWord()}))}>
-            ADD
-          </Btn>
-        </h3>
+      <List
+        subheader={
+          <ListSubheader
+            color="primary"
+            disableSticky={false}
+            className={cn('', 'flex items-center')}
+          >
+            <div className={cn('flex-auto')}>My Lists</div>
+            <Btn onClick={wrapSP(() => store.addList({name: fWord()}))}>
+              ADD
+            </Btn>
+          </ListSubheader>
+        }
+      >
         {store.lists.map(list => (
           <Fragment key={list.id}>
             <ListName store={store} list={list} />
           </Fragment>
         ))}
-      </Fragment>
+      </List>
     )
   }
 }
 
 @observer
 class ListName extends Component {
-  render({store, list} = this.props) {
+  render() {
+    const {store, list} = this.props
     return (
       <ListItem
-        className={cn('ttu', store.isSelected(list) ? 'bg-black-10' : '')}
+        className={cn('ttu', this.isSelected ? 'bg-black-10' : '')}
         button
         dense={false}
         onClick={wrapSP(() => store.selectList(list))}
@@ -217,7 +224,7 @@ class ListName extends Component {
           primary={
             <div className={cn('flex-auto', 'flex items-center')}>
               <div>{`${list.name}`}</div>
-              <div className={cn('ph1 gray self-start', 'f6')}>
+              <div className={cn('flex-auto ph1 gray self-start', 'f6')}>
                 {`${list.tasks.length}`}
               </div>
               {list.isDirty && <div>*</div>}
@@ -253,5 +260,11 @@ class ListName extends Component {
         </Btn>
       </div>
     )
+  }
+
+  @computed
+  get isSelected() {
+    const {store, list} = this.props
+    return store.isSelected(list)
   }
 }
