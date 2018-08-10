@@ -24,6 +24,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItem from '@material-ui/core/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/'
 
 const drawerWidth = 240
 
@@ -230,6 +231,14 @@ class ListName extends Component {
             </div>
           }
         />
+        <ListItemSecondaryAction>
+          <Btn
+            onClick={wrapSP(() => store.deleteList(list))}
+            disabled={!store.canDeleteList}
+          >
+            X
+          </Btn>
+        </ListItemSecondaryAction>
       </ListItem>
     )
     return (
