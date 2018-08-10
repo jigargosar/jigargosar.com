@@ -204,8 +204,6 @@ const Selection = model('Selection', {
 const RootStore = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
   taskCollection: optional(TaskCollection),
-  _selectedIdx: 0,
-  selectedListId: nullString,
   listSelection: optional(Selection),
 })
   .preProcessSnapshot(snapshot => {
@@ -277,6 +275,7 @@ const RootStore = model('RootStore', {
     }),
     selectList(l) {
       self.listSelection.selectItem(l)
+      self.listSelection.computedItems = computed(() => self.lists)
     },
     addList: function(props) {
       self.taskListCollection.add(props)
