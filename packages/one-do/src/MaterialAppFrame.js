@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {FocusTrap, observer, wrapSP} from './lib/little-react'
 import {computed, observable} from './lib/little-mst'
 import {disposable} from './lib/hoc'
-import {syncLS} from './lib/little-mobx-react'
 import {
   AppBar,
   Drawer,
@@ -69,11 +68,18 @@ const styles = theme => ({
 @disposable
 @observer
 class MaterialAppFrame extends Component {
-  @observable isDrawerOpen = Boolean(storage.get('drawerState') || false)
+  @observable isDrawerOpen = true
+
+  constructor(props, context) {
+    super(props, context)
+    this.isDrawerOpen = Boolean(
+      storage.get('drawerState') || isWidthUp('sm', props.width),
+    )
+  }
 
   componentDidMount() {
-    requestAnimationFrame(() => {
-      syncLS('drawerState')(['isDrawerOpen'])(this)
+    this.props.autorun(() => {
+      storage.set('drawerState', this.isDrawerOpen)
     })
   }
 
