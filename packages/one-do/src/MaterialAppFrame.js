@@ -30,7 +30,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/'
 import IconButton from '@material-ui/core/IconButton'
-import {F, pluck} from './lib/ramda'
+import {F} from './lib/ramda'
 import {pluralize} from './lib/little-ramda'
 
 const drawerWidth = 240
@@ -241,7 +241,12 @@ class ListName extends Component {
         )}
         <ListItemText
           primary={`${list.name}`}
-          secondary={`${taskCount} ${pluralize('TASK', taskCount)}`}
+          secondary={
+            <Fragment>
+              {`${taskCount} ${pluralize('TASK', taskCount)}`}
+              <Fragment>{list.isDirty && '*'}</Fragment>
+            </Fragment>
+          }
         />
         <ListItemSecondaryAction>
           <IconButton
