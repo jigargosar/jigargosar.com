@@ -9,7 +9,8 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import {mailFolderListItems, otherMailFolderListItems} from './tileData'
 import {observer} from './lib/little-react'
-import {bindToggle, observable} from './lib/little-mst'
+import {bindToggle, observable, syncLS} from './lib/little-mst'
+import {disposable} from './lib/hoc'
 
 const drawerWidth = 240
 
@@ -42,9 +43,15 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
+@disposable
 @observer
 class ClippedDrawer extends Component {
   @observable isDrawerOpen = false
+
+  componentDidMount() {
+    syncLS('drawerState')(['isDrawerOpen'])(this)
+  }
+
   render() {
     const {classes} = this.props
     const isDrawerOpen = this.isDrawerOpen

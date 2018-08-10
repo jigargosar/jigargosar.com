@@ -1,14 +1,15 @@
 import {
   applySnapshot,
+  decorate,
+  flow,
   getSnapshot,
   types,
-  flow,
-  decorate,
 } from 'mobx-state-tree'
 import nanoid from 'nanoid'
-import {_compose, _merge, _path, _startsWith, call} from './ramda'
+import {_compose, _merge, _path, _startsWith, call, pick} from './ramda'
 import {pDropConcurrentCalls} from './little-ramda'
 import {atomic} from 'mst-middlewares'
+import {storage} from './storage'
 
 export {
   addDisposer,
@@ -137,3 +138,11 @@ export const dropFlow = generator => pDropConcurrentCalls(flow(generator))
 export const decorateAtomic = action => decorate(atomic, action)
 
 export const bindToggle = pn => self => () => (self[pn] = !self[pn])
+
+export const syncLS = key => pns => comp => {
+  const propName = key
+  Object.assign(comp, pick(pns)(storage.get(propName) || {}))
+  return comp.props.autorun(() => {
+    storage.set(propName, pick(pns)(comp))
+  })
+}
