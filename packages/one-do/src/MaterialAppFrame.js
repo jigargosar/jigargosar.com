@@ -5,7 +5,7 @@ import {mailFolderListItems, otherMailFolderListItems} from './tileData'
 import {FocusTrap, observer, wrapSP} from './lib/little-react'
 import {computed, observable} from './lib/little-mst'
 import {disposable} from './lib/hoc'
-import {bindToggle, syncLS} from './lib/little-mobx-react'
+import {syncLS} from './lib/little-mobx-react'
 import {
   AppBar,
   Divider,
@@ -75,10 +75,12 @@ class MaterialAppFrame extends Component {
     syncLS('drawerState')(['isDrawerOpen'])(this)
   }
 
+  toggleDrawer = (bool = this.isDrawerOpen) => () => {
+    this.isDrawerOpen = !bool
+  }
+
   render() {
     const {classes, store} = this.props
-    const isDrawerOpen = this.isDrawerOpen
-    const toggleDrawer = bindToggle('isDrawerOpen')(this)
     return (
       <FocusTrap
         active={false}
@@ -89,7 +91,7 @@ class MaterialAppFrame extends Component {
           <AppBar
             position="absolute"
             className={classes.appBar}
-            onClick={toggleDrawer}
+            onClick={this.toggleDrawer()}
           >
             <Toolbar>
               <Typography variant="title" color="inherit" noWrap>
@@ -100,15 +102,15 @@ class MaterialAppFrame extends Component {
           <Drawer
             variant="temporary"
             classes={{
-              paper: isDrawerOpen
+              paper: this.isDrawerOpen
                 ? classes.drawerPaper
                 : classes.drawerPaperClosed,
             }}
-            open={isDrawerOpen}
-            onClose={toggleDrawer}
+            open={this.isDrawerOpen}
+            onClose={this.toggleDrawer()}
           >
             <div className={classes.toolbar}>
-              <IconButton onClick={toggleDrawer}>
+              <IconButton onClick={this.toggleDrawer()}>
                 <ChevronLeftIcon />
               </IconButton>
             </div>
