@@ -69,7 +69,7 @@ const styles = theme => ({
 @disposable
 @observer
 class MaterialAppFrame extends Component {
-  @observable isDrawerOpen = true
+  @observable isDrawerOpen = false
   @observable drawerVariant = 'temporary'
 
   componentDidMount() {
@@ -90,9 +90,7 @@ class MaterialAppFrame extends Component {
   render() {
     const {classes, store} = this.props
 
-    const isDrawerOpen = this.isDrawerOpen
-    const drawerVariant = this.drawerVariant
-    console.log(
+    console.debug(
       `this.drawerVariant`,
       this.drawerVariant,
       'this.isDrawerOpen',
@@ -117,13 +115,13 @@ class MaterialAppFrame extends Component {
             </Toolbar>
           </AppBar>
           <Drawer
-            variant={drawerVariant}
+            variant={this.drawerVariant}
             classes={{
-              paper: isDrawerOpen
+              paper: this.isDrawerOpen
                 ? classes.drawerPaper
                 : classes.drawerPaperClosed,
             }}
-            open={isDrawerOpen}
+            open={this.isDrawerOpen}
             onClose={this.toggleDrawer(false)}
             keepMounted={true}
           >
