@@ -172,11 +172,8 @@ const Selection = model('Selection', {
 })
   .volatile(self => ({computedItems: computed(() => [])}))
   .views(self => ({
-    set computedItems(val) {
-      return (self.computedItems = val)
-    },
     get items() {
-      return self.computedItems.get()
+      return self._computedItems.get()
     },
     set idx(val) {
       self._idx = val
@@ -261,6 +258,9 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
+    afterCreate() {
+      self.listSelection.computedItems = computed(() => self.lists)
+    },
     sync: dropFlow(function*() {
       console.assert(isSignedIn())
       try {
