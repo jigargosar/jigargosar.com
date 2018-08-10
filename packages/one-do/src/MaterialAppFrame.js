@@ -75,9 +75,6 @@ class MaterialAppFrame extends Component {
     requestAnimationFrame(() => {
       syncLS('drawerState')(['isDrawerOpen'])(this)
     })
-    this.props.autorun(() => {
-      console.log(`this.props.width`, this.props.width)
-    })
   }
 
   toggleDrawer = (bool = !this.isDrawerOpen) => () => {
