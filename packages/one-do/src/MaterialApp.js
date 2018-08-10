@@ -1,16 +1,20 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {withStyles} from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
-import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
+
 import {mailFolderListItems, otherMailFolderListItems} from './tileData'
 import {observer} from './lib/little-react'
-import {bindToggle, observable, syncLS} from './lib/little-mst'
+import {observable} from './lib/little-mst'
 import {disposable} from './lib/hoc'
+import {bindToggle, syncLS} from './lib/little-mobx-react'
+import {
+  withStyles,
+  AppBar,
+  Divider,
+  List,
+  Drawer,
+  Typography,
+  Toolbar,
+} from './lib/material-ui'
 
 const drawerWidth = 240
 
