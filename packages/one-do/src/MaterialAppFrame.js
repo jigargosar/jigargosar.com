@@ -123,6 +123,7 @@ class MaterialAppFrame extends Component {
             }}
             open={this.isDrawerOpen}
             onClose={this.toggleDrawer(false)}
+            onClick={this.toggleDrawer(false)}
             ModalProps={{keepMounted: true}}
           >
             {this.renderToolBar()}
