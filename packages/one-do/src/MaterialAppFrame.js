@@ -28,10 +28,11 @@ import ListItem from '@material-ui/core/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/'
 import IconButton from '@material-ui/core/IconButton'
-import {F} from './lib/ramda'
+import {_compose, F} from './lib/ramda'
 import {pluralize} from './lib/little-ramda'
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth'
 import {storage} from './lib/storage'
+import {mapProps} from './lib/little-recompose'
 
 const drawerWidth = 240
 
@@ -65,7 +66,19 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
-@withWidth()
+@_compose(
+  withWidth(),
+  mapProps(({width, ...other}) => {
+    const drawerVariant = isWidthUp('sm', width)
+      ? 'persistent'
+      : 'temporary'
+    return {
+      drawerVariant: drawerVariant,
+      isDrawerTemporary: drawerVariant === 'temporary',
+      ...other,
+    }
+  }),
+)
 @disposable
 @observer
 class MaterialAppFrame extends Component {
@@ -88,25 +101,9 @@ class MaterialAppFrame extends Component {
     this.isDrawerOpen = bool
   }
 
-  @computed
-  get isDrawerTemporary() {
-    return this.drawerVariant === 'temporary'
-  }
-
-  @computed
-  get drawerVariant() {
-    return isWidthUp('sm', this.props.width) ? 'persistent' : 'temporary'
-  }
-
   render() {
     const {classes, store} = this.props
 
-    console.debug(
-      `this.drawerVariant`,
-      this.drawerVariant,
-      'this.isDrawerOpen',
-      this.isDrawerOpen,
-    )
     return (
       <FocusTrap
         active={false}
@@ -118,7 +115,7 @@ class MaterialAppFrame extends Component {
             {this.renderToolBar()}
           </AppBar>
           <Drawer
-            variant={this.drawerVariant}
+            variant={this.props.drawerVariant}
             classes={{
               paper: this.isDrawerOpen
                 ? classes.drawerPaper
@@ -128,14 +125,14 @@ class MaterialAppFrame extends Component {
             onClose={this.toggleDrawer(false)}
             ModalProps={{keepMounted: true}}
           >
-            <AppBar position="absolute" className={classes.appBar}>
-              {this.renderToolBar()}
-            </AppBar>
-            <div className={classes.toolbar}>
-              <IconButton onClick={this.toggleDrawer(false)}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </div>
+            {this.renderToolBar()}
+            {false && (
+              <div className={classes.toolbar}>
+                <IconButton onClick={this.toggleDrawer(false)}>
+                  <ChevronLeftIcon />
+                </IconButton>
+              </div>
+            )}
             <MyLists store={store} />
           </Drawer>
           <main className={classes.content}>
