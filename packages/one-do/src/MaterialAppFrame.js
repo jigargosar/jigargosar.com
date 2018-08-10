@@ -70,17 +70,21 @@ const styles = theme => ({
 @observer
 class MaterialAppFrame extends Component {
   @observable isDrawerOpen = true
+  @observable drawerVariant = 'temporary'
 
   componentDidMount() {
     syncLS('drawerState')(['isDrawerOpen'])(this)
   }
 
-  toggleDrawer = (bool = this.isDrawerOpen) => () => {
-    this.isDrawerOpen = !bool
+  toggleDrawer = (bool = !this.isDrawerOpen) => () => {
+    this.isDrawerOpen = bool
   }
+
+  get shouldCloseDrawerOnClick() {}
 
   render() {
     const {classes, store} = this.props
+
     return (
       <FocusTrap
         active={false}
@@ -100,17 +104,18 @@ class MaterialAppFrame extends Component {
             </Toolbar>
           </AppBar>
           <Drawer
-            variant="temporary"
+            variant={this.drawerVariant}
             classes={{
               paper: this.isDrawerOpen
                 ? classes.drawerPaper
                 : classes.drawerPaperClosed,
             }}
             open={this.isDrawerOpen}
-            onClose={this.toggleDrawer()}
+            onClose={this.toggleDrawer(false)}
+            onClick={this.toggleDrawer(false)}
           >
             <div className={classes.toolbar}>
-              <IconButton onClick={this.toggleDrawer()}>
+              <IconButton onClick={this.toggleDrawer(false)}>
                 <ChevronLeftIcon />
               </IconButton>
             </div>
@@ -233,7 +238,7 @@ class ListName extends Component {
         className={cn('ttu', this.isSelected ? 'bg-black-10' : '')}
         button
         dense={true}
-        onClick={wrapSP(() => store.selectList(list))}
+        onClick={() => store.selectList(list)}
         onDoubleClick={wrapSP(
           () => false && store.updateList({name: fWord()}, list),
         )}
