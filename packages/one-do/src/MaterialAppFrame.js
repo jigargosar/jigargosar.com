@@ -21,6 +21,7 @@ import {Btn} from './lib/tachyons-components'
 import {fWord} from './lib/fake'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import TaskListIcon from '@material-ui/icons/ListRounded'
 import AddListIcon from '@material-ui/icons/PlaylistAddRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
@@ -78,7 +79,10 @@ class MaterialAppFrame extends Component {
     const {classes, store} = this.props
     const isDrawerOpen = this.isDrawerOpen
     return (
-      <FocusTrap focusTrapOptions={{fallbackFocus: document}}>
+      <FocusTrap
+        active={false}
+        focusTrapOptions={{fallbackFocus: document}}
+      >
         <EventListener target={'document'} onKeyDown={store.onKeyDown} />
         <div className={classes.root}>
           <AppBar
@@ -93,7 +97,7 @@ class MaterialAppFrame extends Component {
             </Toolbar>
           </AppBar>
           <Drawer
-            variant="persistent"
+            variant="temporary"
             classes={{
               paper: isDrawerOpen
                 ? classes.drawerPaper
@@ -101,7 +105,11 @@ class MaterialAppFrame extends Component {
             }}
             open={isDrawerOpen}
           >
-            <div className={classes.toolbar} />
+            <div className={classes.toolbar}>
+              <IconButton onClick={bindToggle('isDrawerOpen')(this)}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </div>
             <MyLists store={store} />
             <div className={cn('dn')}>
               <List>{mailFolderListItems}</List>
