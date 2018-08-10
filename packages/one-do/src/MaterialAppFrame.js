@@ -7,13 +7,13 @@ import {computed, observable} from './lib/little-mst'
 import {disposable} from './lib/hoc'
 import {bindToggle, syncLS} from './lib/little-mobx-react'
 import {
-  withStyles,
   AppBar,
   Divider,
-  List,
   Drawer,
-  Typography,
+  List,
   Toolbar,
+  Typography,
+  withStyles,
 } from './lib/material-ui'
 import EventListener from 'react-event-listener'
 import cn from 'classnames'
@@ -30,7 +30,8 @@ import ListItem from '@material-ui/core/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/'
 import IconButton from '@material-ui/core/IconButton'
-import {T} from './lib/ramda'
+import {F, pluck} from './lib/ramda'
+import {pluralize} from './lib/little-ramda'
 
 const drawerWidth = 240
 
@@ -217,6 +218,7 @@ class MyLists extends Component {
 class ListName extends Component {
   render() {
     const {store, list} = this.props
+    const taskCount = list.tasks.length
     return (
       <ListItem
         className={cn('ttu', this.isSelected ? 'bg-black-10' : '')}
@@ -232,14 +234,14 @@ class ListName extends Component {
             <InboxIcon />
           </ListItemIcon>
         )}
-        {T() && (
+        {F() && (
           <ListItemIcon>
             <TaskListIcon />
           </ListItemIcon>
         )}
         <ListItemText
           primary={`${list.name}`}
-          secondary={`${list.tasks.length}`}
+          secondary={`${taskCount} ${pluralize('TASK', taskCount)}`}
         />
         <ListItemSecondaryAction>
           <IconButton
