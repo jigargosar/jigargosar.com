@@ -89,9 +89,14 @@ class MaterialAppFrame extends Component {
             open={isDrawerOpen}
           >
             <div className={classes.toolbar} />
-            <List>{mailFolderListItems}</List>
-            <Divider />
-            <List>{otherMailFolderListItems}</List>
+            <List>
+              <MyLists store={store} />
+            </List>
+            <div className={cn('dn')}>
+              <List>{mailFolderListItems}</List>
+              <Divider />
+              <List>{otherMailFolderListItems}</List>
+            </div>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
@@ -161,6 +166,60 @@ class Tasks extends Component {
           </Fragment>
         ))}
       </Fragment>
+    )
+  }
+}
+
+@observer
+class MyLists extends Component {
+  render({store} = this.props) {
+    return (
+      <Fragment>
+        <h3 className={cn('ma2', 'flex items-center')}>
+          <div className={cn('flex-auto')}>My Lists</div>
+          <Btn onClick={wrapSP(() => store.addList({name: fWord()}))}>
+            ADD
+          </Btn>
+        </h3>
+        {store.lists.map(list => (
+          <Fragment key={list.id}>
+            <ListName store={store} list={list} />
+          </Fragment>
+        ))}
+      </Fragment>
+    )
+  }
+}
+
+@observer
+class ListName extends Component {
+  render({store, list} = this.props) {
+    return (
+      <div
+        className={cn(
+          'pa2',
+          'flex items-center ttu',
+          store.isSelected(list) ? 'bg-black-10' : '',
+        )}
+        onClick={wrapSP(() => store.selectList(list))}
+        onDoubleClick={wrapSP(() =>
+          store.updateList({name: fWord()}, list),
+        )}
+      >
+        <div className={cn('flex-auto', 'flex items-center')}>
+          <div>{`${list.name}`}</div>
+          <div className={cn('ph1 gray self-start', 'f6')}>
+            {`${list.tasks.length}`}
+          </div>
+        </div>
+        {list.isDirty && <div>*</div>}
+        <Btn
+          onClick={wrapSP(() => store.deleteList(list))}
+          disabled={!store.canDeleteList}
+        >
+          X
+        </Btn>
+      </div>
     )
   }
 }
