@@ -4,11 +4,13 @@ import {cn, FocusTrap, observer, wrapSP} from './lib/little-react'
 import EventListener from 'react-event-listener'
 import {Btn} from './lib/tachyons-components'
 import {fWord} from './lib/fake'
+import MaterialApp from './MaterialApp'
 
 @observer
 class App extends Component {
   render() {
-    return <View store={store} />
+    const App = this.props.isTachyonApp ? TachyonApp : MaterialApp
+    return <App store={store} />
   }
 
   componentDidCatch(error, info) {
@@ -20,7 +22,7 @@ class App extends Component {
 export default App
 
 @observer
-class View extends Component {
+class TachyonApp extends Component {
   render({store} = this.props) {
     return (
       <FocusTrap focusTrapOptions={{fallbackFocus: document}}>
