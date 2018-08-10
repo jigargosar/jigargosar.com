@@ -18,6 +18,7 @@ import {fWord} from './lib/fake'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
+import MenuIcon from '@material-ui/icons/MenuRounded'
 import TaskListIcon from '@material-ui/icons/ListRounded'
 import AddListIcon from '@material-ui/icons/PlaylistAddRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
@@ -113,16 +114,8 @@ class MaterialAppFrame extends Component {
       >
         <EventListener target={'document'} onKeyDown={store.onKeyDown} />
         <div className={classes.root}>
-          <AppBar
-            position="absolute"
-            className={classes.appBar}
-            onClick={this.toggleDrawer()}
-          >
-            <Toolbar>
-              <Typography variant="title" color="inherit" noWrap>
-                ONE DO
-              </Typography>
-            </Toolbar>
+          <AppBar position="absolute" className={classes.appBar}>
+            {this.renderToolBar()}
           </AppBar>
           <Drawer
             variant={this.drawerVariant}
@@ -135,6 +128,9 @@ class MaterialAppFrame extends Component {
             onClose={this.toggleDrawer(false)}
             ModalProps={{keepMounted: true}}
           >
+            <AppBar position="absolute" className={classes.appBar}>
+              {this.renderToolBar()}
+            </AppBar>
             <div className={classes.toolbar}>
               <IconButton onClick={this.toggleDrawer(false)}>
                 <ChevronLeftIcon />
@@ -148,6 +144,24 @@ class MaterialAppFrame extends Component {
           </main>
         </div>
       </FocusTrap>
+    )
+  }
+
+  renderToolBar() {
+    return (
+      <Toolbar>
+        <IconButton color={'inherit'} onClick={this.toggleDrawer()}>
+          <MenuIcon />
+        </IconButton>
+        <Typography
+          className={cn('ml2')}
+          variant="title"
+          color="inherit"
+          noWrap
+        >
+          ONE DO
+        </Typography>
+      </Toolbar>
     )
   }
 }
