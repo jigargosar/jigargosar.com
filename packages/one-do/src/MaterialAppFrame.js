@@ -181,7 +181,6 @@ class MyLists extends Component {
         subheader={
           <ListSubheader
             color="primary"
-            disableSticky={false}
             className={cn('', 'flex items-center')}
           >
             <div className={cn('flex-auto')}>My Lists</div>
