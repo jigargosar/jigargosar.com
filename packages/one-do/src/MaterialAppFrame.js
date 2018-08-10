@@ -34,6 +34,9 @@ import withWidth, {isWidthUp} from '@material-ui/core/withWidth'
 import {storage} from './lib/storage'
 import {mapProps} from './lib/little-recompose'
 import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
+import Input from '@material-ui/core/Input'
+import InputAdornment from '@material-ui/core/InputAdornment'
 
 const drawerWidth = 240
 
@@ -184,27 +187,66 @@ class TaskItem extends Component {
     const {task, store} = this.props
 
     return (
-      <div className={cn('_pa2', 'flex items-center')}>
-        <input
-          className={cn('mh2')}
-          checked={task.isDone}
-          onChange={e =>
-            store.updateTask({isDone: e.target.checked}, task)
-          }
-          type="checkbox"
-        />
-        {/*<div className={cn('flex-auto')}>{task.name}</div>*/}
-        <div className={cn('flex-auto')}>
-          <input
-            className={cn('w-100 pa1')}
-            type="text"
-            value={task.name}
-            onChange={e => store.updateTask({name: e.target.value}, task)}
+      <Fragment>
+        <ListItem
+          dense
+          // dense={false}
+        >
+          <Checkbox
+            onChange={e =>
+              store.updateTask({isDone: e.target.checked}, task)
+            }
+            checked={task.isDone}
+            // tabIndex={-1}
+            // disableRipple
           />
-        </div>
-        {task.isDirty && <div>*</div>}
-        <Btn onClick={wrapSP(() => store.deleteTask(task))}>X</Btn>
-      </div>
+          <ListItemText>
+            <Input
+              fullWidth
+              type="text"
+              value={task.name}
+              endAdornment={
+                task.isDirty && (
+                  <InputAdornment position="end">*</InputAdornment>
+                )
+              }
+              onChange={e =>
+                store.updateTask({name: e.target.value}, task)
+              }
+            />
+          </ListItemText>
+          <ListItemSecondaryAction>
+            <IconButton onClick={wrapSP(() => store.deleteTask(task))}>
+              <DeleteIcon />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
+        {false && (
+          <div className={cn('_pa2', 'flex items-center')}>
+            <input
+              className={cn('mh2')}
+              checked={task.isDone}
+              onChange={e =>
+                store.updateTask({isDone: e.target.checked}, task)
+              }
+              type="checkbox"
+            />
+            {/*<div className={cn('flex-auto')}>{task.name}</div>*/}
+            <div className={cn('flex-auto')}>
+              <input
+                className={cn('w-100 pa1')}
+                type="text"
+                value={task.name}
+                onChange={e =>
+                  store.updateTask({name: e.target.value}, task)
+                }
+              />
+            </div>
+            {task.isDirty && <div>*</div>}
+            <Btn onClick={wrapSP(() => store.deleteTask(task))}>X</Btn>
+          </div>
+        )}
+      </Fragment>
     )
   }
 }
