@@ -13,7 +13,6 @@ import {
 } from './lib/material-ui'
 import EventListener from 'react-event-listener'
 import cn from 'classnames'
-import {Btn} from './lib/tachyons-components'
 import {fWord} from './lib/fake'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
@@ -63,7 +62,7 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
+    // padding: theme.spacing.unit * 3,
     paddingBottom: theme.spacing.unit * 10,
     minWidth: 0, // So the Typography noWrap works
     overflow: 'scroll',
@@ -190,6 +189,7 @@ class TaskItem extends Component {
       <Fragment>
         <ListItem
           dense
+          disableGutters
           // dense={false}
         >
           <Checkbox
@@ -200,7 +200,7 @@ class TaskItem extends Component {
             // tabIndex={-1}
             // disableRipple
           />
-          <ListItemText>
+          <ListItemText className={cn('pl0')}>
             <Input
               fullWidth
               type="text"
@@ -245,7 +245,7 @@ class Tasks extends Component {
             />
           </div>
         </div>
-        <List>
+        <List disablePadding>
           {store.tasks.map(task => (
             <Fragment key={task.id}>
               <TaskItem task={task} store={store} />
