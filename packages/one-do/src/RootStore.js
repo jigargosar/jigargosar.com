@@ -1,7 +1,6 @@
 import {
   addDisposer,
   applySnapshot,
-  computed,
   dropFlow,
   flow,
   getRoot,
@@ -17,6 +16,7 @@ import {StorageItem} from './lib/storage'
 import {
   _compose,
   _prop,
+  always,
   ascend,
   clamp,
   defaultTo,
@@ -170,26 +170,26 @@ const Selection = model('Selection', {
   _idx: 0,
   id: nullString,
 })
-  .volatile(self => ({computedItems: computed(() => [])}))
+  .volatile(() => ({items: always([])}))
   .views(self => ({
-    get items() {
-      return self.computedItems.get()
-    },
+    // items() {
+    //   return resolvePath(self, '..').lists
+    // },
     set idx(val) {
       self._idx = val
       self._id = self.selectedItemFromIdx.id
     },
     get idx() {
-      return clamp(0, self.items.length - 1)(self._idx)
+      return clamp(0, self.items().length - 1)(self._idx)
     },
     get selectedItem() {
       return self.selectedItemFromId || self.selectedItemFromIdx
     },
     get selectedItemFromIdx() {
-      return self.items[self.idx]
+      return self.items()[self.idx]
     },
     get selectedItemFromId() {
-      return findById(self._id)(self.items)
+      return findById(self._id)(self.items())
     },
     isSelected(l) {
       return self.selectedItem === l
@@ -197,7 +197,7 @@ const Selection = model('Selection', {
   }))
   .actions(self => ({
     selectItem(item) {
-      self.idx = self.items.indexOf(item)
+      self.idx = self.items().indexOf(item)
     },
   }))
 
@@ -247,8 +247,11 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
+    setItemsFn() {
+      self.listSelection.items = () => self.lists
+    },
     afterCreate() {
-      self.listSelection.computedItems = computed(() => self.lists)
+      self.setItemsFn()
     },
     sync: dropFlow(function*() {
       console.assert(isSignedIn())
@@ -274,8 +277,8 @@ const RootStore = model('RootStore', {
       }
     }),
     selectList(l) {
+      self.setItemsFn()
       self.listSelection.selectItem(l)
-      self.listSelection.computedItems = computed(() => self.lists)
     },
     addList: function(props) {
       self.taskListCollection.add(props)
