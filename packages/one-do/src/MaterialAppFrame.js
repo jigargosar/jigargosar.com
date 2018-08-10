@@ -21,10 +21,14 @@ import {Btn} from './lib/tachyons-components'
 import {fWord} from './lib/fake'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
+import AddListIcon from '@material-ui/icons/CreateNewFolderRounded'
+import AddTaskIcon from '@material-ui/icons/PlaylistAddRounded'
+import DeleteIcon from '@material-ui/icons/DeleteRounded'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItem from '@material-ui/core/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/'
+import IconButton from '@material-ui/core/IconButton'
 
 const drawerWidth = 240
 
@@ -123,7 +127,8 @@ export default withStyles(styles)(MaterialAppFrame)
 
 @observer
 class Tasks extends Component {
-  render({store} = this.props) {
+  render() {
+    const {store} = this.props
     const list = store.selectedList
     return (
       <div className={cn('relative flex-auto overflow-scroll')}>
@@ -138,9 +143,12 @@ class Tasks extends Component {
               }
             />
           </div>
-          <Btn onClick={wrapSP(() => store.addTask({name: fWord()}))}>
-            ADD
-          </Btn>
+
+          <IconButton
+            onClick={wrapSP(() => store.addTask({name: fWord()}))}
+          >
+            <AddTaskIcon />
+          </IconButton>
         </div>
         {store.tasks.map(task => (
           <Fragment key={task.id}>
@@ -185,9 +193,11 @@ class MyLists extends Component {
             className={cn('', 'flex items-center')}
           >
             <div className={cn('flex-auto')}>My Lists</div>
-            <Btn onClick={wrapSP(() => store.addList({name: fWord()}))}>
-              ADD
-            </Btn>
+            <IconButton
+              onClick={wrapSP(() => store.addList({name: fWord()}))}
+            >
+              <AddListIcon />
+            </IconButton>
           </ListSubheader>
         }
       >
@@ -211,8 +221,8 @@ class ListName extends Component {
         button
         dense={false}
         onClick={wrapSP(() => store.selectList(list))}
-        onDoubleClick={wrapSP(() =>
-          store.updateList({name: fWord()}, list),
+        onDoubleClick={wrapSP(
+          () => false && store.updateList({name: fWord()}, list),
         )}
       >
         {false && (
@@ -232,41 +242,14 @@ class ListName extends Component {
           }
         />
         <ListItemSecondaryAction>
-          <Btn
+          <IconButton
             onClick={wrapSP(() => store.deleteList(list))}
             disabled={!store.canDeleteList}
           >
-            X
-          </Btn>
+            <DeleteIcon />
+          </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
-    )
-    return (
-      <div
-        className={cn(
-          'pa2',
-          'flex items-center ttu',
-          store.isSelected(list) ? 'bg-black-10' : '',
-        )}
-        onClick={wrapSP(() => store.selectList(list))}
-        onDoubleClick={wrapSP(() =>
-          store.updateList({name: fWord()}, list),
-        )}
-      >
-        <div className={cn('flex-auto', 'flex items-center')}>
-          <div>{`${list.name}`}</div>
-          <div className={cn('ph1 gray self-start', 'f6')}>
-            {`${list.tasks.length}`}
-          </div>
-        </div>
-        {list.isDirty && <div>*</div>}
-        <Btn
-          onClick={wrapSP(() => store.deleteList(list))}
-          disabled={!store.canDeleteList}
-        >
-          X
-        </Btn>
-      </div>
     )
   }
 
