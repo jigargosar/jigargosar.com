@@ -86,9 +86,7 @@ class MaterialAppFrame extends Component {
 
   constructor(props, context) {
     super(props, context)
-    this.isDrawerOpen = Boolean(
-      storage.get('drawerState') || isWidthUp('sm', props.width),
-    )
+    this.isDrawerOpen = Boolean(storage.get('drawerState'))
   }
 
   componentDidMount() {
