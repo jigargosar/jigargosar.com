@@ -172,9 +172,6 @@ const Selection = model('Selection', {
 })
   .volatile(() => ({items: always([])}))
   .views(self => ({
-    // items() {
-    //   return resolvePath(self, '..').lists
-    // },
     set idx(val) {
       self._idx = val
       self._id = self.selectedItemFromIdx.id
@@ -247,11 +244,11 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
-    setItemsFn() {
+    setListSelectionItemsGetter() {
       self.listSelection.items = () => self.lists
     },
     afterCreate() {
-      self.setItemsFn()
+      self.setListSelectionItemsGetter()
     },
     sync: dropFlow(function*() {
       console.assert(isSignedIn())
@@ -277,7 +274,7 @@ const RootStore = model('RootStore', {
       }
     }),
     selectList(l) {
-      self.setItemsFn()
+      self.setListSelectionItemsGetter()
       self.listSelection.selectItem(l)
     },
     addList: function(props) {
