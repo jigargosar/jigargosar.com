@@ -1,6 +1,7 @@
 import {
   addDisposer,
   applySnapshot,
+  computed,
   dropFlow,
   flow,
   getRoot,
@@ -169,23 +170,29 @@ const Selection = model('Selection', {
   _idx: 0,
   id: nullString,
 })
-  .volatile(self => ({}))
+  .volatile(self => ({computedItems: computed(() => [])}))
   .views(self => ({
+    set computedItems(val) {
+      return (self.computedItems = val)
+    },
+    get items() {
+      return self.computedItems.get()
+    },
     set idx(val) {
       self._idx = val
       self._id = self.selectedItemFromIdx.id
     },
     get idx() {
-      return clamp(0, self.lists.length - 1)(self._idx)
+      return clamp(0, self.items.length - 1)(self._idx)
     },
     get selectedItem() {
       return self.selectedItemFromId || self.selectedItemFromIdx
     },
     get selectedItemFromIdx() {
-      return self.lists[self.idx]
+      return self.items[self.idx]
     },
     get selectedItemFromId() {
-      return findById(self._id)(self.lists)
+      return findById(self._id)(self.items)
     },
     isSelected(l) {
       return self.selectedItem === l
