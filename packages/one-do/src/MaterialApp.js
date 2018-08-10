@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import {mailFolderListItems, otherMailFolderListItems} from './tileData'
 import {observer} from './lib/little-react'
-import {observable} from './lib/little-mst'
+import {bindToggle, observable} from './lib/little-mst'
 
 const drawerWidth = 240
 
@@ -50,7 +50,11 @@ class ClippedDrawer extends Component {
     const isDrawerOpen = this.isDrawerOpen
     return (
       <div className={classes.root}>
-        <AppBar position="absolute" className={classes.appBar}>
+        <AppBar
+          position="absolute"
+          className={classes.appBar}
+          onClick={bindToggle('isDrawerOpen')(this)}
+        >
           <Toolbar>
             <Typography variant="title" color="inherit" noWrap>
               Clipped drawer
