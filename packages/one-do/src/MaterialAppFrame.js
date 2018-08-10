@@ -111,9 +111,6 @@ class MaterialAppFrame extends Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            <Typography noWrap>
-              {/*{'You think water moves fast? You should see ice.'}*/}
-            </Typography>
             <Tasks store={store} />
           </main>
         </div>
