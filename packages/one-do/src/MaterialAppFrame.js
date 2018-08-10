@@ -33,6 +33,7 @@ import {pluralize} from './lib/little-ramda'
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth'
 import {storage} from './lib/storage'
 import {mapProps} from './lib/little-recompose'
+import Button from '@material-ui/core/Button'
 
 const drawerWidth = 240
 
@@ -60,6 +61,7 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
+    paddingBottom: theme.spacing.unit * 10,
     minWidth: 0, // So the Typography noWrap works
     overflow: 'scroll',
   },
@@ -138,6 +140,14 @@ class MaterialAppFrame extends Component {
             <div className={classes.toolbar} />
             <Tasks store={store} />
           </main>
+          <Button
+            variant="fab"
+            color={'secondary'}
+            className={cn('absolute right-1 bottom-1')}
+            onClick={wrapSP(() => store.addTask({name: fWord()}))}
+          >
+            <AddTaskIcon />
+          </Button>
         </div>
       </FocusTrap>
     )
@@ -186,12 +196,6 @@ class Tasks extends Component {
               }
             />
           </div>
-
-          <IconButton
-            onClick={wrapSP(() => store.addTask({name: fWord()}))}
-          >
-            <AddTaskIcon />
-          </IconButton>
         </div>
         <List>
           {store.tasks.map(task => (
