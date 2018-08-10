@@ -221,31 +221,6 @@ class TaskItem extends Component {
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
-        {false && (
-          <div className={cn('_pa2', 'flex items-center')}>
-            <input
-              className={cn('mh2')}
-              checked={task.isDone}
-              onChange={e =>
-                store.updateTask({isDone: e.target.checked}, task)
-              }
-              type="checkbox"
-            />
-            {/*<div className={cn('flex-auto')}>{task.name}</div>*/}
-            <div className={cn('flex-auto')}>
-              <input
-                className={cn('w-100 pa1')}
-                type="text"
-                value={task.name}
-                onChange={e =>
-                  store.updateTask({name: e.target.value}, task)
-                }
-              />
-            </div>
-            {task.isDirty && <div>*</div>}
-            <Btn onClick={wrapSP(() => store.deleteTask(task))}>X</Btn>
-          </div>
-        )}
       </Fragment>
     )
   }
