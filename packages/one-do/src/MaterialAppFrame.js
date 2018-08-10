@@ -21,6 +21,7 @@ import {Btn} from './lib/tachyons-components'
 import {fWord} from './lib/fake'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
+import TaskListIcon from '@material-ui/icons/ListRounded'
 import AddListIcon from '@material-ui/icons/CreateNewFolderRounded'
 import AddTaskIcon from '@material-ui/icons/PlaylistAddRounded'
 import DeleteIcon from '@material-ui/icons/DeleteRounded'
@@ -29,6 +30,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/'
 import IconButton from '@material-ui/core/IconButton'
+import {T} from './lib/ramda'
 
 const drawerWidth = 240
 
@@ -219,7 +221,7 @@ class ListName extends Component {
       <ListItem
         className={cn('ttu', this.isSelected ? 'bg-black-10' : '')}
         button
-        dense={false}
+        dense={true}
         onClick={wrapSP(() => store.selectList(list))}
         onDoubleClick={wrapSP(
           () => false && store.updateList({name: fWord()}, list),
@@ -230,16 +232,14 @@ class ListName extends Component {
             <InboxIcon />
           </ListItemIcon>
         )}
+        {T() && (
+          <ListItemIcon>
+            <TaskListIcon />
+          </ListItemIcon>
+        )}
         <ListItemText
-          primary={
-            <div className={cn('flex-auto', 'flex items-center')}>
-              <div>{`${list.name}`}</div>
-              <div className={cn('flex-auto ph1 gray self-start', 'f6')}>
-                {`${list.tasks.length}`}
-              </div>
-              {list.isDirty && <div>*</div>}
-            </div>
-          }
+          primary={`${list.name}`}
+          secondary={`${list.tasks.length}`}
         />
         <ListItemSecondaryAction>
           <IconButton
