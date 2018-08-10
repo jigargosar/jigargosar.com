@@ -165,11 +165,40 @@ const TaskCollection = collection(Task)
 
 const TaskListCollection = collection(TaskList)
 
+const Selection = model('Selection', {
+  _idx: 0,
+  id: nullString,
+})
+  .volatile(self => ({}))
+  .views(self => ({
+    set idx(val) {
+      self._idx = val
+      self._id = self.selectedItemFromIdx.id
+    },
+    get idx() {
+      return clamp(0, self.lists.length - 1)(self._idx)
+    },
+    get selectedItem() {
+      return self.selectedItemFromId || self.selectedItemFromIdx
+    },
+    get selectedItemFromIdx() {
+      return self.lists[self.idx]
+    },
+    get selectedItemFromId() {
+      return findById(self._id)(self.lists)
+    },
+    isSelected(l) {
+      return self.selectedItem === l
+    },
+  }))
+  .actions(self => ({}))
+
 const RootStore = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
   taskCollection: optional(TaskCollection),
   _selectedIdx: 0,
   selectedListId: nullString,
+  listSelection: optional(Selection),
 })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
