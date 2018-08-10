@@ -1,14 +1,11 @@
 import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
-
-import {mailFolderListItems, otherMailFolderListItems} from './tileData'
 import {FocusTrap, observer, wrapSP} from './lib/little-react'
 import {computed, observable} from './lib/little-mst'
 import {disposable} from './lib/hoc'
 import {syncLS} from './lib/little-mobx-react'
 import {
   AppBar,
-  Divider,
   Drawer,
   List,
   Toolbar,
@@ -33,6 +30,8 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/'
 import IconButton from '@material-ui/core/IconButton'
 import {F} from './lib/ramda'
 import {pluralize} from './lib/little-ramda'
+import withWidth, {isWidthUp} from '@material-ui/core/withWidth'
+import {storage} from './lib/storage'
 
 const drawerWidth = 240
 
@@ -66,15 +65,18 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
+@withWidth()
 @disposable
 @observer
 class MaterialAppFrame extends Component {
-  @observable isDrawerOpen = false
-  @observable drawerVariant = 'temporary'
+  @observable isDrawerOpen = Boolean(storage.get('drawerState') || false)
 
   componentDidMount() {
     requestAnimationFrame(() => {
       syncLS('drawerState')(['isDrawerOpen'])(this)
+    })
+    this.props.autorun(() => {
+      console.log(`this.props.width`, this.props.width)
     })
   }
 
@@ -85,6 +87,11 @@ class MaterialAppFrame extends Component {
   @computed
   get isDrawerTemporary() {
     return this.drawerVariant === 'temporary'
+  }
+
+  @computed
+  get drawerVariant() {
+    return isWidthUp('sm', this.props.width) ? 'persistent' : 'temporary'
   }
 
   render() {
@@ -123,7 +130,7 @@ class MaterialAppFrame extends Component {
             }}
             open={this.isDrawerOpen}
             onClose={this.toggleDrawer(false)}
-            keepMounted={true}
+            ModalProps={{keepMounted: true}}
           >
             <div className={classes.toolbar}>
               <IconButton onClick={this.toggleDrawer(false)}>
@@ -131,11 +138,6 @@ class MaterialAppFrame extends Component {
               </IconButton>
             </div>
             <MyLists store={store} />
-            <div className={cn('dn')}>
-              <List>{mailFolderListItems}</List>
-              <Divider />
-              <List>{otherMailFolderListItems}</List>
-            </div>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
