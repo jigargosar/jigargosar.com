@@ -57,7 +57,7 @@ class ClippedDrawer extends Component {
         >
           <Toolbar>
             <Typography variant="title" color="inherit" noWrap>
-              Clipped drawer
+              ONE DO
             </Typography>
           </Toolbar>
         </AppBar>
