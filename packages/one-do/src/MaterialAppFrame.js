@@ -133,10 +133,12 @@ class MaterialAppFrame extends Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            <div className={cn('overflow-hidden flex flex-column')}>
+            {/*<div className={cn('overflow-hidden flex flex-column')}>*/}
+            <List disablePadding className={cn('overflow-scroll pb5')}>
               <SelectedListContentHeader store={store} />
               <Tasks store={store} />
-            </div>
+            </List>
+            {/*</div>*/}
           </main>
           <Button
             variant="fab"
@@ -235,17 +237,15 @@ class SelectedListContentHeader extends Component {
     const {store} = this.props
     const list = store.selectedList
     return (
-      <List disablePadding>
-        <ListItem disableGutters className={cn('_pa0')}>
-          <Input
-            inputProps={{className: cn('pa2 ttu')}}
-            fullWidth
-            type="text"
-            value={list.name}
-            onChange={e => store.updateList({name: e.target.value}, list)}
-          />
-        </ListItem>
-      </List>
+      <ListSubheader className={'pa0 bg-white-80'}>
+        <Input
+          inputProps={{className: cn('pa2 ttu')}}
+          fullWidth
+          type="text"
+          value={list.name}
+          onChange={e => store.updateList({name: e.target.value}, list)}
+        />
+      </ListSubheader>
     )
   }
 }
@@ -254,13 +254,9 @@ class SelectedListContentHeader extends Component {
 class Tasks extends Component {
   render() {
     const {store} = this.props
-    return (
-      <List disablePadding className={cn('overflow-scroll pb5')}>
-        {store.tasks.map(task => (
-          <TaskItem key={task.id} task={task} store={store} />
-        ))}
-      </List>
-    )
+    return store.tasks.map(task => (
+      <TaskItem key={task.id} task={task} store={store} />
+    ))
   }
 }
 
