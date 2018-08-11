@@ -42,7 +42,6 @@ import AppBar from '@material-ui/core/AppBar/AppBar'
 import {computed} from './lib/little-mst'
 import Dialog from '@material-ui/core/Dialog/Dialog'
 import DialogActions from '@material-ui/core/DialogActions/DialogActions'
-import DialogContentText from '@material-ui/core/DialogContentText/DialogContentText'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 
@@ -296,30 +295,25 @@ class EditTaskModal extends Component {
               {'Edit Task'}
             </DialogTitle>
             <DialogContent style={{minWidth: '30em'}}>
-              <DialogContentText>
-                <Input
-                  fullWidth
-                  autoFocus
-                  type="text"
-                  disabled={task.isDone}
-                  value={task.name}
-                  onChange={e =>
-                    store.updateTask({name: e.target.value}, task)
-                  }
-                  endAdornment={
-                    task.isDirty && (
-                      <InputAdornment position="end">*</InputAdornment>
-                    )
-                  }
-                  inputProps={{className: cn({strike: task.isDone})}}
-                />
-              </DialogContentText>
+              <Input
+                fullWidth
+                autoFocus={true}
+                type="text"
+                disabled={task.isDone}
+                value={task.name}
+                onChange={e =>
+                  store.updateTask({name: e.target.value}, task)
+                }
+                endAdornment={
+                  task.isDirty && (
+                    <InputAdornment position="end">*</InputAdornment>
+                  )
+                }
+                inputProps={{className: cn({strike: task.isDone})}}
+              />
             </DialogContent>
             <DialogActions>
-              {/*<Button onClick={this.handleClose} color="primary">*/}
-              {/*Disagree*/}
-              {/*</Button>*/}
-              <Button onClick={this.handleClose} color="primary" autoFocus>
+              <Button onClick={this.handleClose} color="primary">
                 Close
               </Button>
             </DialogActions>
