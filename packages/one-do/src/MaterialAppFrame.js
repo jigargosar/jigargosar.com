@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {
   EventListener,
   FocusTrap,
+  Fr,
   observer,
   wrapSP,
 } from './lib/little-react'
@@ -45,6 +46,7 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContentText from '@material-ui/core/DialogContentText/DialogContentText'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
+import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog'
 
 const drawerWidth = 240
 
@@ -271,40 +273,45 @@ class Tasks extends Component {
   }
 }
 
+@withMobileDialog()
 @observer
 class EditTaskModal extends Component {
   handleClose = () => {
     this.props.store.endEditTask()
   }
   render() {
-    const {store} = this.props
+    const {store, fullScreen} = this.props
     const {editingTask} = store
     return (
-      <Dialog
-        // fullScreen={fullScreen}
-        open={Boolean(editingTask)}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are
-            running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            Disagree
-          </Button>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Fr>
+        {editingTask && (
+          <Dialog
+            fullScreen={fullScreen}
+            open={true}
+            onClose={this.handleClose}
+            aria-labelledby="responsive-dialog-title"
+          >
+            <DialogTitle id="responsive-dialog-title">
+              {"Use Google's location service?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Let Google help apps determine location. This means sending
+                anonymous location data to Google, even when no apps are
+                running.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Disagree
+              </Button>
+              <Button onClick={this.handleClose} color="primary" autoFocus>
+                Agree
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
+      </Fr>
     )
   }
 }
