@@ -229,7 +229,16 @@ const RootStore = model('RootStore', {
       return self.isMobileLayout ? 'mobile' : 'desktop'
     },
     set isDrawerOpen(val) {
-      return (self.drawerOpenState[self.layoutMode] = val)
+      if (!self.isMobileLayout) {
+        self.drawerOpenState.mobile = false
+      }
+      self.drawerOpenState[self.layoutMode] = val
+    },
+    get drawerVariant() {
+      return self.isMobileLayout ? 'temporary' : 'persistent'
+    },
+    get isDrawerTemporary() {
+      return self.drawerVariant === 'temporary'
     },
     get isDrawerOpen() {
       return self.drawerOpenState[self.layoutMode]

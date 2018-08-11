@@ -95,20 +95,9 @@ const updateMobileLayout = ({store, width}) => {
     componentDidMount() {
       updateMobileLayout(this.props)
     },
-
     componentDidUpdate() {
       updateMobileLayout(this.props)
     },
-  }),
-  mapProps(({width, ...other}) => {
-    const drawerVariant = isWidthUp('sm', width)
-      ? 'persistent'
-      : 'temporary'
-    return {
-      drawerVariant: drawerVariant,
-      isDrawerTemporary: drawerVariant === 'temporary',
-      ...other,
-    }
   }),
   observer,
 )
@@ -116,7 +105,7 @@ class MaterialAppFrame extends Component {
   toggleDrawer = bindAction(this)('toggleDrawer')
 
   render() {
-    const {classes, store, isDrawerTemporary} = this.props
+    const {classes, store} = this.props
 
     return (
       <FocusTrap
@@ -129,7 +118,7 @@ class MaterialAppFrame extends Component {
             {this.renderToolBar()}
           </AppBar>
           <Drawer
-            variant={this.props.drawerVariant}
+            variant={store.drawerVariant}
             classes={{
               paper: store.isDrawerOpen
                 ? classes.drawerPaper
@@ -137,7 +126,9 @@ class MaterialAppFrame extends Component {
             }}
             open={store.isDrawerOpen}
             onClose={this.toggleDrawer(false)}
-            onClick={isDrawerTemporary ? this.toggleDrawer(false) : null}
+            onClick={
+              store.isDrawerTemporary ? this.toggleDrawer(false) : null
+            }
             ModalProps={{keepMounted: true}}
           >
             {this.renderToolBar()}
