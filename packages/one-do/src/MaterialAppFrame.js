@@ -133,7 +133,7 @@ class MaterialAppFrame extends Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            <Tasks store={store} />
+            <SelectedListContent store={store} />
           </main>
           <Button
             variant="fab"
@@ -227,31 +227,49 @@ class TaskItem extends Component {
 }
 
 @observer
-class Tasks extends Component {
+class SelectedListContent extends Component {
+  render() {
+    const {store} = this.props
+    return (
+      <div className={cn('overflow-hidden flex flex-column')}>
+        <SelectedListContentHeader store={store} />
+        <Tasks store={store} />
+      </div>
+    )
+  }
+}
+
+@observer
+class SelectedListContentHeader extends Component {
   render() {
     const {store} = this.props
     const list = store.selectedList
     return (
-      <div className={cn('overflow-hidden flex flex-column')}>
-        <List disablePadding>
-          <ListItem disableGutters className={cn('_pa0')}>
-            <Input
-              inputProps={{className: cn('pa2 ttu')}}
-              fullWidth
-              type="text"
-              value={list.name}
-              onChange={e =>
-                store.updateList({name: e.target.value}, list)
-              }
-            />
-          </ListItem>
-        </List>
-        <List disablePadding className={cn('overflow-scroll pb5')}>
-          {store.tasks.map(task => (
-            <TaskItem key={task.id} task={task} store={store} />
-          ))}
-        </List>
-      </div>
+      <List disablePadding>
+        <ListItem disableGutters className={cn('_pa0')}>
+          <Input
+            inputProps={{className: cn('pa2 ttu')}}
+            fullWidth
+            type="text"
+            value={list.name}
+            onChange={e => store.updateList({name: e.target.value}, list)}
+          />
+        </ListItem>
+      </List>
+    )
+  }
+}
+
+@observer
+class Tasks extends Component {
+  render() {
+    const {store} = this.props
+    return (
+      <List disablePadding className={cn('overflow-scroll pb5')}>
+        {store.tasks.map(task => (
+          <TaskItem key={task.id} task={task} store={store} />
+        ))}
+      </List>
     )
   }
 }
