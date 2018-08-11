@@ -205,8 +205,6 @@ class TaskItem extends Component {
             color={'default'}
             icon={<CheckBoxBlankIcon />}
             checkedIcon={<CheckBoxCheckedIcon />}
-            // tabIndex={-1}
-            // disableRipple
           />
           <ListItemText className={cn('pl0')}>
             <Input
