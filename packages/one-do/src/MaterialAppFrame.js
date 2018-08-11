@@ -44,6 +44,7 @@ import Dialog from '@material-ui/core/Dialog/Dialog'
 import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
+import TextField from '../node_modules/@material-ui/core/TextField/TextField'
 
 const drawerWidth = 240
 
@@ -290,12 +291,14 @@ class EditTaskModal extends Component {
             open={true}
             onClose={this.handleClose}
             aria-labelledby="responsive-dialog-title"
+            maxWidth={'xs'}
+            fullWidth
           >
             <DialogTitle id="responsive-dialog-title">
               {'Edit Task'}
             </DialogTitle>
-            <DialogContent style={{minWidth: '30em'}}>
-              <Input
+            <DialogContent>
+              <TextField
                 fullWidth
                 autoFocus={true}
                 type="text"
@@ -304,12 +307,12 @@ class EditTaskModal extends Component {
                 onChange={e =>
                   store.updateTask({name: e.target.value}, task)
                 }
-                endAdornment={
-                  task.isDirty && (
+                InputProps={{
+                  endAdornment: task.isDirty && (
                     <InputAdornment position="end">*</InputAdornment>
-                  )
-                }
-                inputProps={{className: cn({strike: task.isDone})}}
+                  ),
+                  inputProps: {className: cn({strike: task.isDone})},
+                }}
               />
             </DialogContent>
             <DialogActions>
