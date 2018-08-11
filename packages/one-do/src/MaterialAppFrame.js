@@ -211,6 +211,7 @@ class TaskItem extends Component {
               fullWidth
               type="text"
               disabled={task.isDone}
+              disableUnderline
               value={task.name}
               onChange={e =>
                 store.updateTask({name: e.target.value}, task)
@@ -220,6 +221,7 @@ class TaskItem extends Component {
                   <InputAdornment position="end">*</InputAdornment>
                 )
               }
+              inputProps={{className: cn({strike: task.isDone})}}
             />
           </ListItemText>
           {task.isDone && (
