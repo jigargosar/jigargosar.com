@@ -183,12 +183,7 @@ class TaskItem extends Component {
 
     return (
       <Fragment>
-        <ListItem
-          dense
-          disableGutters
-          // divider
-          // dense={false}
-        >
+        <ListItem dense disableGutters>
           <Checkbox
             onChange={e =>
               store.updateTask({isDone: e.target.checked}, task)
