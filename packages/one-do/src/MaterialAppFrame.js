@@ -6,20 +6,16 @@ import {
   observer,
   wrapSP,
 } from './lib/little-react'
-import {computed} from './lib/little-mst'
 import {disposable} from './lib/hoc'
 
 import cn from 'classnames'
 import {fWord} from './lib/fake'
 
 import {pluralize} from './lib/little-ramda'
-import {mapProps} from './lib/recompose'
-import {_compose, F} from './lib/ramda'
-
-import InboxIcon from '@material-ui/icons/MoveToInbox'
+import {mapProps, withProps} from './lib/recompose'
+import {_compose} from './lib/ramda'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import MenuIcon from '@material-ui/icons/MenuRounded'
-import TaskListIcon from '@material-ui/icons/ListRounded'
 import AddListIcon from '@material-ui/icons/PlaylistAddRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
 import DeleteIcon from '@material-ui/icons/DeleteRounded'
@@ -29,7 +25,6 @@ import IconButton from '@material-ui/core/IconButton/IconButton'
 
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
-import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader'
 import Input from '@material-ui/core/Input/Input'
@@ -43,6 +38,7 @@ import Typography from '@material-ui/core/Typography/Typography'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Drawer from '@material-ui/core/Drawer/Drawer'
 import AppBar from '@material-ui/core/AppBar/AppBar'
+import {computed} from './lib/little-mst'
 
 const drawerWidth = 240
 
@@ -293,13 +289,17 @@ class MyLists extends Component {
 }
 
 @observer
+@withProps(({store, list}) => ({
+  isSelected: computed(() => store.isSelected(list)).get(),
+}))
+@observer
 class ListName extends Component {
   render() {
-    const {store, list} = this.props
+    const {store, list, isSelected} = this.props
     const taskCount = list.pendingTasks.length
     return (
       <ListItem
-        className={cn('ttu', this.isSelected ? 'bg-black-10' : '')}
+        className={cn('ttu', isSelected ? 'bg-black-10' : '')}
         button
         // divider
         onClick={() => store.selectList(list)}
@@ -307,16 +307,6 @@ class ListName extends Component {
           () => false && store.updateList({name: fWord()}, list),
         )}
       >
-        {false && (
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-        )}
-        {F() && (
-          <ListItemIcon>
-            <TaskListIcon />
-          </ListItemIcon>
-        )}
         <ListItemText
           primary={`${list.name}`}
           secondary={
@@ -338,9 +328,7 @@ class ListName extends Component {
     )
   }
 
-  @computed
   get isSelected() {
-    const {store, list} = this.props
-    return store.isSelected(list)
+    return this.props.isSelected
   }
 }
