@@ -255,6 +255,9 @@ const RootStore = model('RootStore', {
     editTask(task) {
       self.editingTaskId = task.id
     },
+    endEditTask() {
+      self.editingTaskId = null
+    },
     toggleDrawer(bool = !self.isDrawerOpen) {
       self.isDrawerOpen = bool
     },

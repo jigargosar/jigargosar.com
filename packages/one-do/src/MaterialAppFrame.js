@@ -40,6 +40,11 @@ import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Drawer from '@material-ui/core/Drawer/Drawer'
 import AppBar from '@material-ui/core/AppBar/AppBar'
 import {computed} from './lib/little-mst'
+import Dialog from '@material-ui/core/Dialog/Dialog'
+import DialogActions from '@material-ui/core/DialogActions/DialogActions'
+import DialogContentText from '@material-ui/core/DialogContentText/DialogContentText'
+import DialogContent from '@material-ui/core/DialogContent/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 
 const drawerWidth = 240
 
@@ -147,6 +152,7 @@ class MaterialAppFrame extends Component {
           >
             <AddTaskIcon />
           </Button>
+          <EditTaskModal store={store} />
         </div>
       </FocusTrap>
     )
@@ -262,6 +268,44 @@ class Tasks extends Component {
     return store.tasks.map(task => (
       <TaskItem key={task.id} task={task} store={store} />
     ))
+  }
+}
+
+@observer
+class EditTaskModal extends Component {
+  handleClose = () => {
+    this.props.store.endEditTask()
+  }
+  render() {
+    const {store} = this.props
+    const {editingTask} = store
+    return (
+      <Dialog
+        // fullScreen={fullScreen}
+        open={Boolean(editingTask)}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are
+            running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary">
+            Disagree
+          </Button>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
   }
 }
 
