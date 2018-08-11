@@ -295,27 +295,24 @@ class EditTaskModal extends Component {
             <DialogTitle id="responsive-dialog-title">
               {'Edit Task'}
             </DialogTitle>
-            <DialogContent>
+            <DialogContent style={{width: '30em'}}>
               <DialogContentText>
-                Let Google help apps determine location. This means sending
-                anonymous location data to Google, even when no apps are
-                running.
+                <Input
+                  fullWidth
+                  type="text"
+                  disabled={task.isDone}
+                  value={task.name}
+                  onChange={e =>
+                    store.updateTask({name: e.target.value}, task)
+                  }
+                  endAdornment={
+                    task.isDirty && (
+                      <InputAdornment position="end">*</InputAdornment>
+                    )
+                  }
+                  inputProps={{className: cn({strike: task.isDone})}}
+                />
               </DialogContentText>
-              <Input
-                fullWidth
-                type="text"
-                disabled={task.isDone}
-                value={task.name}
-                onChange={e =>
-                  store.updateTask({name: e.target.value}, task)
-                }
-                endAdornment={
-                  task.isDirty && (
-                    <InputAdornment position="end">*</InputAdornment>
-                  )
-                }
-                inputProps={{className: cn({strike: task.isDone})}}
-              />
             </DialogContent>
             {/*<DialogActions>*/}
             {/*<Button onClick={this.handleClose} color="primary">*/}
