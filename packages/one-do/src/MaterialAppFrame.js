@@ -295,10 +295,11 @@ class EditTaskModal extends Component {
             <DialogTitle id="responsive-dialog-title">
               {'Edit Task'}
             </DialogTitle>
-            <DialogContent style={{width: '30em'}}>
+            <DialogContent style={{minWidth: '30em'}}>
               <DialogContentText>
                 <Input
                   fullWidth
+                  autoFocus
                   type="text"
                   disabled={task.isDone}
                   value={task.name}
@@ -314,14 +315,14 @@ class EditTaskModal extends Component {
                 />
               </DialogContentText>
             </DialogContent>
-            {/*<DialogActions>*/}
-            {/*<Button onClick={this.handleClose} color="primary">*/}
-            {/*Disagree*/}
-            {/*</Button>*/}
-            {/*<Button onClick={this.handleClose} color="primary" autoFocus>*/}
-            {/*Agree*/}
-            {/*</Button>*/}
-            {/*</DialogActions>*/}
+            <DialogActions>
+              {/*<Button onClick={this.handleClose} color="primary">*/}
+              {/*Disagree*/}
+              {/*</Button>*/}
+              <Button onClick={this.handleClose} color="primary" autoFocus>
+                Close
+              </Button>
+            </DialogActions>
           </Dialog>
         )}
       </Fr>
