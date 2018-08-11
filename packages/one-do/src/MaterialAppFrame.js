@@ -301,11 +301,7 @@ class ListName extends Component {
       <ListItem
         className={cn('ttu', {'bg-black-20': isSelected})}
         button
-        // divider
         onClick={() => store.selectList(list)}
-        onDoubleClick={wrapSP(
-          () => false && store.updateList({name: fWord()}, list),
-        )}
       >
         <ListItemText
           primary={`${list.name}`}
