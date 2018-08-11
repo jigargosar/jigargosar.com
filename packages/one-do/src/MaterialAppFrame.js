@@ -282,10 +282,10 @@ class EditTaskModal extends Component {
   }
   render() {
     const {store} = this.props
-    const {editingTask} = store
+    const {editingTask: task} = store
     return (
       <Fr>
-        {editingTask && (
+        {task && (
           <Dialog
             fullScreen={store.isMobileLayout}
             open={true}
@@ -293,7 +293,7 @@ class EditTaskModal extends Component {
             aria-labelledby="responsive-dialog-title"
           >
             <DialogTitle id="responsive-dialog-title">
-              {"Use Google's location service?"}
+              {'Edit Task'}
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
@@ -301,15 +301,30 @@ class EditTaskModal extends Component {
                 anonymous location data to Google, even when no apps are
                 running.
               </DialogContentText>
+              <Input
+                fullWidth
+                type="text"
+                disabled={task.isDone}
+                value={task.name}
+                onChange={e =>
+                  store.updateTask({name: e.target.value}, task)
+                }
+                endAdornment={
+                  task.isDirty && (
+                    <InputAdornment position="end">*</InputAdornment>
+                  )
+                }
+                inputProps={{className: cn({strike: task.isDone})}}
+              />
             </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Disagree
-              </Button>
-              <Button onClick={this.handleClose} color="primary" autoFocus>
-                Agree
-              </Button>
-            </DialogActions>
+            {/*<DialogActions>*/}
+            {/*<Button onClick={this.handleClose} color="primary">*/}
+            {/*Disagree*/}
+            {/*</Button>*/}
+            {/*<Button onClick={this.handleClose} color="primary" autoFocus>*/}
+            {/*Agree*/}
+            {/*</Button>*/}
+            {/*</DialogActions>*/}
           </Dialog>
         )}
       </Fr>
