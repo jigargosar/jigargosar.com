@@ -248,9 +248,7 @@ class Tasks extends Component {
         </List>
         <List disablePadding className={cn('overflow-scroll pb5')}>
           {store.tasks.map(task => (
-            <Fragment key={task.id}>
-              <TaskItem task={task} store={store} />
-            </Fragment>
+            <TaskItem key={task.id} task={task} store={store} />
           ))}
         </List>
       </div>
