@@ -238,18 +238,13 @@ class Tasks extends Component {
     const list = store.selectedList
     return (
       <div className={cn('relative flex-auto overflow-scroll')}>
-        <div className={cn('_pa2')}>
-          <div className={cn('flex-auto')}>
-            <input
-              className={cn('w-100 pa1 ttu')}
-              type="text"
-              value={list.name}
-              onChange={e =>
-                store.updateList({name: e.target.value}, list)
-              }
-            />
-          </div>
-        </div>
+        <Input
+          className={cn('pa1 ttu')}
+          fullWidth
+          type="text"
+          value={list.name}
+          onChange={e => store.updateList({name: e.target.value}, list)}
+        />
         <List disablePadding>
           {store.tasks.map(task => (
             <Fragment key={task.id}>
