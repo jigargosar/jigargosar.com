@@ -96,28 +96,7 @@ const styles = theme => ({
 @disposable
 @observer
 class MaterialAppFrame extends Component {
-  constructor(props, context) {
-    super(props, context)
-    this.isDrawerOpen = Boolean(storage.get('drawerState'))
-  }
-
-  componentDidMount() {
-    this.props.autorun(() => {
-      storage.set('drawerState', this.isDrawerOpen)
-    })
-  }
-
-  get isDrawerOpen() {
-    return this.props.store.isDrawerOpen
-  }
-
-  set isDrawerOpen(val) {
-    return this.props.store.setIsDrawerOpen(val)
-  }
-
-  toggleDrawer = (bool = !this.isDrawerOpen) => () => {
-    this.isDrawerOpen = bool
-  }
+  toggleDrawer = bool => () => this.props.store.toggleDrawer(bool)
 
   render() {
     const {classes, store, isDrawerTemporary} = this.props
@@ -135,11 +114,11 @@ class MaterialAppFrame extends Component {
           <Drawer
             variant={this.props.drawerVariant}
             classes={{
-              paper: this.isDrawerOpen
+              paper: store.isDrawerOpen
                 ? classes.drawerPaper
                 : classes.drawerPaperClosed,
             }}
-            open={this.isDrawerOpen}
+            open={store.isDrawerOpen}
             onClose={this.toggleDrawer(false)}
             onClick={isDrawerTemporary ? this.toggleDrawer(false) : null}
             ModalProps={{keepMounted: true}}

@@ -248,8 +248,8 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
-    setIsDrawerOpen(val) {
-      self.isDrawerOpen = val
+    toggleDrawer(bool = !self.isDrawerOpen) {
+      self.isDrawerOpen = bool
     },
     setListSelectionItemsGetter() {
       self.listSelection.items = () => self.lists
