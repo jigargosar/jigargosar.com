@@ -206,6 +206,7 @@ const RootStore = model('RootStore', {
   taskCollection: optional(TaskCollection),
   listSelection: optional(Selection),
   isDrawerOpen: false,
+  isMobileLayout: false,
   editingTaskId: nullString,
 })
   .preProcessSnapshot(snapshot => {
@@ -252,6 +253,12 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
+    setMobileLayout(isMobileLayout) {
+      if (!self.isMobileLayout && isMobileLayout) {
+        self.isDrawerOpen = false
+      }
+      self.isMobileLayout = isMobileLayout
+    },
     editTask(task) {
       self.editingTaskId = task.id
     },

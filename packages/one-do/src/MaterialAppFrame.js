@@ -7,13 +7,12 @@ import {
   observer,
   wrapSP,
 } from './lib/little-react'
-import {disposable} from './lib/hoc'
 
 import cn from 'classnames'
 import {fWord} from './lib/fake'
 
 import {pluralize} from './lib/little-ramda'
-import {mapProps, withProps} from './lib/recompose'
+import {lifecycle, mapProps, withProps} from './lib/recompose'
 import {_compose} from './lib/ramda'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import MenuIcon from '@material-ui/icons/MenuRounded'
@@ -85,18 +84,22 @@ const styles = theme => ({
 const bindAction = comp => actionName => (...args) => () =>
   comp.props.store[actionName](...args)
 
-const withMobile = _compose(
-  withWidth(),
-  mapProps(({width, ...other}) => {
-    return {
-      mobile: !isWidthUp('sm', width),
-      ...other,
-    }
-  }),
-)
+const updateMobileLayout = ({store, width}) => {
+  const isMobileLayout = !isWidthUp('sm', width)
+  store.setMobileLayout(isMobileLayout)
+}
 
 @_compose(
   withWidth(),
+  lifecycle({
+    componentDidMount() {
+      updateMobileLayout(this.props)
+    },
+
+    componentDidUpdate() {
+      updateMobileLayout(this.props)
+    },
+  }),
   mapProps(({width, ...other}) => {
     const drawerVariant = isWidthUp('sm', width)
       ? 'persistent'
@@ -107,9 +110,8 @@ const withMobile = _compose(
       ...other,
     }
   }),
+  observer,
 )
-@disposable
-@observer
 class MaterialAppFrame extends Component {
   toggleDrawer = bindAction(this)('toggleDrawer')
 
@@ -282,20 +284,19 @@ class Tasks extends Component {
   }
 }
 
-@withMobile
 @observer
 class EditTaskModal extends Component {
   handleClose = () => {
     this.props.store.endEditTask()
   }
   render() {
-    const {store, mobile: fullScreen} = this.props
+    const {store} = this.props
     const {editingTask} = store
     return (
       <Fr>
         {editingTask && (
           <Dialog
-            fullScreen={fullScreen}
+            fullScreen={store.isMobileLayout}
             open={true}
             onClose={this.handleClose}
             aria-labelledby="responsive-dialog-title"
