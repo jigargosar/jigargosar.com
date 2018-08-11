@@ -13,7 +13,6 @@ import cn from 'classnames'
 import {fWord} from './lib/fake'
 
 import {pluralize} from './lib/little-ramda'
-import {storage} from './lib/storage'
 import {mapProps} from './lib/recompose'
 import {_compose, F} from './lib/ramda'
 
@@ -80,6 +79,9 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
+const bindAction = comp => actionName => (...args) =>
+  comp.props.store[actionName](...args)
+
 @_compose(
   withWidth(),
   mapProps(({width, ...other}) => {
@@ -96,7 +98,7 @@ const styles = theme => ({
 @disposable
 @observer
 class MaterialAppFrame extends Component {
-  toggleDrawer = bool => () => this.props.store.toggleDrawer(bool)
+  toggleDrawer = () => bindAction(this)('toggleDrawer')
 
   render() {
     const {classes, store, isDrawerTemporary} = this.props
