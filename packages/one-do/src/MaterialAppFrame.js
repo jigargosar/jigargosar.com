@@ -84,19 +84,19 @@ const styles = theme => ({
 const bindAction = comp => actionName => (...args) => () =>
   comp.props.store[actionName](...args)
 
-const updateMobileLayout = ({store, width}) => {
+const updateLayout = ({store, width}) => {
   const isMobileLayout = !isWidthUp('sm', width)
-  store.setMobileLayout(isMobileLayout)
+  store.setLayout(isMobileLayout ? 'mobile' : 'desktop')
 }
 
 @_compose(
   withWidth(),
   lifecycle({
     componentDidMount() {
-      updateMobileLayout(this.props)
+      updateLayout(this.props)
     },
     componentDidUpdate() {
-      updateMobileLayout(this.props)
+      updateLayout(this.props)
     },
   }),
   observer,

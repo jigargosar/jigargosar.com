@@ -211,8 +211,11 @@ const RootStore = model('RootStore', {
       desktop: true,
     }),
   ),
-  isMobileLayout: false,
   editingTaskId: nullString,
+  layout: optional(
+    types.enumeration('layout', ['desktop', 'mobile']),
+    'desktop',
+  ),
 })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -225,23 +228,20 @@ const RootStore = model('RootStore', {
   })
   .actions(lsActions)
   .views(self => ({
-    get layoutMode() {
-      return self.isMobileLayout ? 'mobile' : 'desktop'
-    },
     set isDrawerOpen(val) {
-      if (!self.isMobileLayout) {
-        self.drawerOpenState.mobile = false
-      }
-      self.drawerOpenState[self.layoutMode] = val
+      self.drawerOpenState[self.layout] = val
+    },
+    get isDrawerOpen() {
+      return self.drawerOpenState[self.layout]
+    },
+    get isMobileLayout() {
+      return self.layout === 'mobile'
     },
     get drawerVariant() {
       return self.isMobileLayout ? 'temporary' : 'persistent'
     },
     get isDrawerTemporary() {
       return self.drawerVariant === 'temporary'
-    },
-    get isDrawerOpen() {
-      return self.drawerOpenState[self.layoutMode]
     },
     get isDirty() {
       return self.taskCollection.isDirty || self.taskListCollection.isDirty
@@ -276,8 +276,10 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
-    setMobileLayout(isMobileLayout) {
-      self.isMobileLayout = isMobileLayout
+    setLayout(layout) {
+      if (self.layout === layout) return
+      self.layout = layout
+      self.drawerOpenState.mobile = false
     },
     editTask(task) {
       self.editingTaskId = task.id
