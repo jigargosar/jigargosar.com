@@ -190,7 +190,7 @@ class TaskItem extends Component {
         <ListItem
           dense
           disableGutters
-          divider
+          // divider
           // dense={false}
         >
           <Checkbox
@@ -198,6 +198,7 @@ class TaskItem extends Component {
               store.updateTask({isDone: e.target.checked}, task)
             }
             checked={task.isDone}
+            color={'default'}
             // tabIndex={-1}
             // disableRipple
           />
@@ -205,22 +206,25 @@ class TaskItem extends Component {
             <Input
               fullWidth
               type="text"
+              disabled={task.isDone}
               value={task.name}
+              onChange={e =>
+                store.updateTask({name: e.target.value}, task)
+              }
               endAdornment={
                 task.isDirty && (
                   <InputAdornment position="end">*</InputAdornment>
                 )
               }
-              onChange={e =>
-                store.updateTask({name: e.target.value}, task)
-              }
             />
           </ListItemText>
-          <ListItemSecondaryAction>
-            <IconButton onClick={wrapSP(() => store.deleteTask(task))}>
-              <DeleteIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
+          {task.isDone && (
+            <ListItemSecondaryAction>
+              <IconButton onClick={wrapSP(() => store.deleteTask(task))}>
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          )}
         </ListItem>
       </Fragment>
     )
@@ -296,7 +300,7 @@ class ListName extends Component {
       <ListItem
         className={cn('ttu', this.isSelected ? 'bg-black-10' : '')}
         button
-        divider
+        // divider
         onClick={() => store.selectList(list)}
         onDoubleClick={wrapSP(
           () => false && store.updateList({name: fWord()}, list),
