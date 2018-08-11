@@ -46,7 +46,6 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContentText from '@material-ui/core/DialogContentText/DialogContentText'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
-import withMobileDialog from '@material-ui/core/withMobileDialog/withMobileDialog'
 
 const drawerWidth = 240
 
@@ -83,8 +82,18 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
-const bindAction = comp => actionName => (...args) =>
+const bindAction = comp => actionName => (...args) => () =>
   comp.props.store[actionName](...args)
+
+const withMobile = _compose(
+  withWidth(),
+  mapProps(({width, ...other}) => {
+    return {
+      mobile: !isWidthUp('sm', width),
+      ...other,
+    }
+  }),
+)
 
 @_compose(
   withWidth(),
@@ -102,7 +111,7 @@ const bindAction = comp => actionName => (...args) =>
 @disposable
 @observer
 class MaterialAppFrame extends Component {
-  toggleDrawer = () => bindAction(this)('toggleDrawer')
+  toggleDrawer = bindAction(this)('toggleDrawer')
 
   render() {
     const {classes, store, isDrawerTemporary} = this.props
@@ -273,14 +282,14 @@ class Tasks extends Component {
   }
 }
 
-@withMobileDialog()
+@withMobile
 @observer
 class EditTaskModal extends Component {
   handleClose = () => {
     this.props.store.endEditTask()
   }
   render() {
-    const {store, fullScreen} = this.props
+    const {store, mobile: fullScreen} = this.props
     const {editingTask} = store
     return (
       <Fr>

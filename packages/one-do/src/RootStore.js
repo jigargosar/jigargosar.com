@@ -258,8 +258,8 @@ const RootStore = model('RootStore', {
     endEditTask() {
       self.editingTaskId = null
     },
-    toggleDrawer(bool = !self.isDrawerOpen) {
-      self.isDrawerOpen = bool
+    toggleDrawer(bool) {
+      self.isDrawerOpen = defaultTo(!self.isDrawerOpen)(bool)
     },
     setListSelectionItemsGetter() {
       self.listSelection.items = () => self.lists
