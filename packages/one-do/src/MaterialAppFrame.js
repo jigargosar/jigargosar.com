@@ -296,7 +296,7 @@ class MyLists extends Component {
 class ListName extends Component {
   render() {
     const {store, list, isSelected} = this.props
-    const taskCount = list.pendingTasks.length
+    const pendingCount = list.pendingTasks.length
     return (
       <ListItem
         className={cn('ttu', {'bg-black-20': isSelected})}
@@ -307,7 +307,7 @@ class ListName extends Component {
           primary={`${list.name}`}
           secondary={
             <Fragment>
-              {`${taskCount} ${pluralize('TASK', taskCount)}`}
+              {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
               <Fragment>{list.isDirty && '*'}</Fragment>
             </Fragment>
           }
