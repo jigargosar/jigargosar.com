@@ -12,7 +12,7 @@ import cn from 'classnames'
 import {fWord} from './lib/fake'
 
 import {pluralize} from './lib/little-ramda'
-import {lifecycle, mapProps, withProps} from './lib/recompose'
+import {lifecycle, withProps} from './lib/recompose'
 import {_compose} from './lib/ramda'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import MenuIcon from '@material-ui/icons/MenuRounded'
@@ -24,7 +24,8 @@ import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction'
+import ListItemSecondaryAction
+  from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader'
@@ -42,7 +43,8 @@ import AppBar from '@material-ui/core/AppBar/AppBar'
 import {computed} from './lib/little-mst'
 import Dialog from '@material-ui/core/Dialog/Dialog'
 import DialogActions from '@material-ui/core/DialogActions/DialogActions'
-import DialogContentText from '@material-ui/core/DialogContentText/DialogContentText'
+import DialogContentText
+  from '@material-ui/core/DialogContentText/DialogContentText'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 
