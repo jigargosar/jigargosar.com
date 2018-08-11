@@ -22,6 +22,8 @@ import TaskListIcon from '@material-ui/icons/ListRounded'
 import AddListIcon from '@material-ui/icons/PlaylistAddRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
 import DeleteIcon from '@material-ui/icons/DeleteRounded'
+import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
+import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItem from '@material-ui/core/ListItem'
 import ListSubheader from '@material-ui/core/ListSubheader'
@@ -201,6 +203,8 @@ class TaskItem extends Component {
             }
             checked={task.isDone}
             color={'default'}
+            icon={<CheckBoxBlankIcon />}
+            checkedIcon={<CheckBoxCheckedIcon />}
             // tabIndex={-1}
             // disableRipple
           />
