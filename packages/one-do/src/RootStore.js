@@ -205,7 +205,12 @@ const RootStore = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
   taskCollection: optional(TaskCollection),
   listSelection: optional(Selection),
-  isDrawerOpen: false,
+  drawerOpenState: optional(
+    model('DrawerOpenState', {
+      mobile: false,
+      desktop: true,
+    }),
+  ),
   isMobileLayout: false,
   editingTaskId: nullString,
 })
@@ -220,6 +225,15 @@ const RootStore = model('RootStore', {
   })
   .actions(lsActions)
   .views(self => ({
+    get layoutMode() {
+      return self.isMobileLayout ? 'mobile' : 'desktop'
+    },
+    set isDrawerOpen(val) {
+      return (self.drawerOpenState[self.layoutMode] = val)
+    },
+    get isDrawerOpen() {
+      return self.drawerOpenState[self.layoutMode]
+    },
     get isDirty() {
       return self.taskCollection.isDirty || self.taskListCollection.isDirty
     },
@@ -254,9 +268,6 @@ const RootStore = model('RootStore', {
   }))
   .actions(self => ({
     setMobileLayout(isMobileLayout) {
-      if (!self.isMobileLayout && isMobileLayout) {
-        self.isDrawerOpen = false
-      }
       self.isMobileLayout = isMobileLayout
     },
     editTask(task) {
