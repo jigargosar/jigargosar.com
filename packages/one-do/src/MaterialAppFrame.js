@@ -133,12 +133,10 @@ class MaterialAppFrame extends Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            {/*<div className={cn('overflow-hidden flex flex-column')}>*/}
             <List disablePadding className={cn('overflow-scroll pb5')}>
               <SelectedListContentHeader store={store} />
               <Tasks store={store} />
             </List>
-            {/*</div>*/}
           </main>
           <Button
             variant="fab"
