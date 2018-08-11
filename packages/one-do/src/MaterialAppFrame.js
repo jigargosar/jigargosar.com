@@ -299,7 +299,7 @@ class ListName extends Component {
     const taskCount = list.pendingTasks.length
     return (
       <ListItem
-        className={cn('ttu', isSelected ? 'bg-black-10' : '')}
+        className={cn('ttu', {'bg-black-20': isSelected})}
         button
         // divider
         onClick={() => store.selectList(list)}
@@ -326,9 +326,5 @@ class ListName extends Component {
         </ListItemSecondaryAction>
       </ListItem>
     )
-  }
-
-  get isSelected() {
-    return this.props.isSelected
   }
 }
