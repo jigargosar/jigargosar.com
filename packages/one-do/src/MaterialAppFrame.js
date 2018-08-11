@@ -133,7 +133,10 @@ class MaterialAppFrame extends Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            <SelectedListContent store={store} />
+            <div className={cn('overflow-hidden flex flex-column')}>
+              <SelectedListContentHeader store={store} />
+              <Tasks store={store} />
+            </div>
           </main>
           <Button
             variant="fab"
@@ -222,19 +225,6 @@ class TaskItem extends Component {
           )}
         </ListItem>
       </Fragment>
-    )
-  }
-}
-
-@observer
-class SelectedListContent extends Component {
-  render() {
-    const {store} = this.props
-    return (
-      <div className={cn('overflow-hidden flex flex-column')}>
-        <SelectedListContentHeader store={store} />
-        <Tasks store={store} />
-      </div>
     )
   }
 }
