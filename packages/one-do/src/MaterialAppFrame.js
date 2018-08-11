@@ -63,9 +63,11 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     // padding: theme.spacing.unit * 3,
-    paddingBottom: theme.spacing.unit * 10,
+    // paddingBottom: theme.spacing.unit * 10,
     minWidth: 0, // So the Typography noWrap works
-    overflow: 'scroll',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
   },
   toolbar: theme.mixins.toolbar,
 })
@@ -237,15 +239,21 @@ class Tasks extends Component {
     const {store} = this.props
     const list = store.selectedList
     return (
-      <div className={cn('relative flex-auto overflow-scroll')}>
-        <Input
-          className={cn('pa1 ttu')}
-          fullWidth
-          type="text"
-          value={list.name}
-          onChange={e => store.updateList({name: e.target.value}, list)}
-        />
+      <div className={cn('overflow-hidden flex flex-column')}>
         <List disablePadding>
+          <ListItem disableGutters className={cn('_pa0')}>
+            <Input
+              inputProps={{className: cn('pa2 ttu')}}
+              fullWidth
+              type="text"
+              value={list.name}
+              onChange={e =>
+                store.updateList({name: e.target.value}, list)
+              }
+            />
+          </ListItem>
+        </List>
+        <List disablePadding className={cn('overflow-scroll pb5')}>
           {store.tasks.map(task => (
             <Fragment key={task.id}>
               <TaskItem task={task} store={store} />
