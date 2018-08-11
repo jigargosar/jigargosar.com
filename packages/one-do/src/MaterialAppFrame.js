@@ -19,6 +19,7 @@ import MenuIcon from '@material-ui/icons/MenuRounded'
 import AddListIcon from '@material-ui/icons/PlaylistAddRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
 import DeleteIcon from '@material-ui/icons/DeleteRounded'
+import EditIcon from '@material-ui/icons/EditRounded'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 import IconButton from '@material-ui/core/IconButton/IconButton'
@@ -211,15 +212,26 @@ class TaskItem extends Component {
               inputProps={{className: cn({strike: task.isDone})}}
             />
           </ListItemText>
-          {task.isDone && (
-            <ListItemSecondaryAction>
-              <IconButton onClick={wrapSP(() => store.deleteTask(task))}>
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          )}
+          {this.renderSecondaryAction(task, store)}
         </ListItem>
       </Fragment>
+    )
+  }
+
+  renderSecondaryAction(task, store) {
+    return (
+      <ListItemSecondaryAction>
+        {task.isDone && (
+          <IconButton onClick={wrapSP(() => store.deleteTask(task))}>
+            <DeleteIcon />
+          </IconButton>
+        )}
+        {!task.isDone && (
+          <IconButton onClick={wrapSP(() => store.editTask(task))}>
+            <EditIcon />
+          </IconButton>
+        )}
+      </ListItemSecondaryAction>
     )
   }
 }

@@ -206,6 +206,7 @@ const RootStore = model('RootStore', {
   taskCollection: optional(TaskCollection),
   listSelection: optional(Selection),
   isDrawerOpen: false,
+  editingTaskId: nullString,
 })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -228,6 +229,9 @@ const RootStore = model('RootStore', {
         [ascend(_compose(toUpper, _prop('name')))],
       )(activeLists)
     },
+    get editingTask() {
+      return findById(self.editingTaskId)(self.tasks)
+    },
     get tasks() {
       return self.selectedList.activeTasks
     },
@@ -248,6 +252,9 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
+    editTask(task) {
+      self.editingTaskId = task.id
+    },
     toggleDrawer(bool = !self.isDrawerOpen) {
       self.isDrawerOpen = bool
     },
