@@ -61,7 +61,7 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.paper,
     // padding: theme.spacing.unit * 3,
     paddingBottom: theme.spacing.unit * 10,
     minWidth: 0, // So the Typography noWrap works
@@ -104,7 +104,7 @@ class MaterialAppFrame extends Component {
   }
 
   render() {
-    const {classes, store} = this.props
+    const {classes, store, isDrawerTemporary} = this.props
 
     return (
       <FocusTrap
@@ -125,7 +125,7 @@ class MaterialAppFrame extends Component {
             }}
             open={this.isDrawerOpen}
             onClose={this.toggleDrawer(false)}
-            onClick={this.toggleDrawer(false)}
+            onClick={isDrawerTemporary ? this.toggleDrawer(false) : null}
             ModalProps={{keepMounted: true}}
           >
             {this.renderToolBar()}
