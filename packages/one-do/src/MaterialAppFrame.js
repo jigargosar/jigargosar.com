@@ -298,7 +298,7 @@ class MyLists extends Component {
 class ListName extends Component {
   render() {
     const {store, list} = this.props
-    const taskCount = list.tasks.length
+    const taskCount = list.pendingTasks.length
     return (
       <ListItem
         className={cn('ttu', this.isSelected ? 'bg-black-10' : '')}
