@@ -274,9 +274,7 @@ class MyLists extends Component {
         }
       >
         {store.lists.map(list => (
-          <Fragment key={list.id}>
-            <ListName store={store} list={list} />
-          </Fragment>
+          <ListName key={list.id} store={store} list={list} />
         ))}
       </List>
     )
