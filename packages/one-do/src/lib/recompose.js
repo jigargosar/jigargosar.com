@@ -1,7 +1,3 @@
-import * as rc from 'recompose'
-
-export {rc}
-
 export {
   nest,
   lifecycle,

@@ -205,6 +205,7 @@ const RootStore = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
   taskCollection: optional(TaskCollection),
   listSelection: optional(Selection),
+  isDrawerOpen: false,
 })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -247,6 +248,9 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
+    setIsDrawerOpen(val) {
+      self.isDrawerOpen = val
+    },
     setListSelectionItemsGetter() {
       self.listSelection.items = () => self.lists
     },

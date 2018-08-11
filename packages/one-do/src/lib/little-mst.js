@@ -68,6 +68,7 @@ export {
   trace,
   reaction,
   computed,
+  action,
 } from 'mobx'
 
 export {

@@ -1,20 +1,22 @@
 import React, {Component, Fragment} from 'react'
 import PropTypes from 'prop-types'
-import {FocusTrap, observer, wrapSP} from './lib/little-react'
-import {computed, observable} from './lib/little-mst'
-import {disposable} from './lib/hoc'
 import {
-  AppBar,
-  Drawer,
-  List,
-  Toolbar,
-  Typography,
-  withStyles,
-} from './lib/material-ui'
-import EventListener from 'react-event-listener'
+  EventListener,
+  FocusTrap,
+  observer,
+  wrapSP,
+} from './lib/little-react'
+import {computed} from './lib/little-mst'
+import {disposable} from './lib/hoc'
+
 import cn from 'classnames'
 import {fWord} from './lib/fake'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
+
+import {pluralize} from './lib/little-ramda'
+import {storage} from './lib/storage'
+import {mapProps} from './lib/recompose'
+import {_compose, F} from './lib/ramda'
+
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import MenuIcon from '@material-ui/icons/MenuRounded'
@@ -24,20 +26,24 @@ import AddTaskIcon from '@material-ui/icons/Add'
 import DeleteIcon from '@material-ui/icons/DeleteRounded'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItem from '@material-ui/core/ListItem'
-import ListSubheader from '@material-ui/core/ListSubheader'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/'
-import IconButton from '@material-ui/core/IconButton'
-import {_compose, F} from './lib/ramda'
-import {pluralize} from './lib/little-ramda'
-import withWidth, {isWidthUp} from '@material-ui/core/withWidth'
-import {storage} from './lib/storage'
-import {mapProps} from './lib/little-recompose'
-import Button from '@material-ui/core/Button'
-import Checkbox from '@material-ui/core/Checkbox'
-import Input from '@material-ui/core/Input'
-import InputAdornment from '@material-ui/core/InputAdornment'
+import IconButton from '@material-ui/core/IconButton/IconButton'
+
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction'
+import ListItemText from '@material-ui/core/ListItemText/ListItemText'
+import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon'
+import ListItem from '@material-ui/core/ListItem/ListItem'
+import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader'
+import Input from '@material-ui/core/Input/Input'
+import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
+import Checkbox from '@material-ui/core/Checkbox/Checkbox'
+import Button from '@material-ui/core/Button/Button'
+import withWidth, {isWidthUp} from '@material-ui/core/withWidth/withWidth'
+import withStyles from '@material-ui/core/styles/withStyles'
+import List from '@material-ui/core/List/List'
+import Typography from '@material-ui/core/Typography/Typography'
+import Toolbar from '@material-ui/core/Toolbar/Toolbar'
+import Drawer from '@material-ui/core/Drawer/Drawer'
+import AppBar from '@material-ui/core/AppBar/AppBar'
 
 const drawerWidth = 240
 
@@ -90,8 +96,6 @@ const styles = theme => ({
 @disposable
 @observer
 class MaterialAppFrame extends Component {
-  @observable isDrawerOpen = true
-
   constructor(props, context) {
     super(props, context)
     this.isDrawerOpen = Boolean(storage.get('drawerState'))
@@ -101,6 +105,14 @@ class MaterialAppFrame extends Component {
     this.props.autorun(() => {
       storage.set('drawerState', this.isDrawerOpen)
     })
+  }
+
+  get isDrawerOpen() {
+    return this.props.store.isDrawerOpen
+  }
+
+  set isDrawerOpen(val) {
+    return this.props.store.setIsDrawerOpen(val)
   }
 
   toggleDrawer = (bool = !this.isDrawerOpen) => () => {
@@ -271,7 +283,8 @@ class Tasks extends Component {
 
 @observer
 class MyLists extends Component {
-  render({store} = this.props) {
+  render() {
+    const {store} = this.props
     return (
       <List
         subheader={

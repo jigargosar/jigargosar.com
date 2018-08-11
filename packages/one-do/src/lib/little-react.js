@@ -1,4 +1,4 @@
-import React, {Component as RC, Fragment as F} from 'react'
+import React, {Component as RC, Fragment as Fr} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import * as R from 'ramda'
@@ -7,11 +7,14 @@ import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
 import {mapIndexed} from './little-ramda'
+import ReactEventListener from 'react-event-listener'
 
 export {cn}
 
+export const EventListener = ReactEventListener
+
 export {default as autobind} from 'autobind'
-export {F, RC, observer, Observer, inject, isHotKey}
+export {Fr, RC, observer, Observer, inject, isHotKey}
 export {default as FocusTrap} from 'focus-trap-react'
 export {PropTypes}
 
