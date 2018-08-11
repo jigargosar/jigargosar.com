@@ -287,7 +287,7 @@ class EditTaskModal extends Component {
       <Fr>
         {task && (
           <Dialog
-            fullScreen={store.isMobileLayout}
+            // fullScreen={store.isMobileLayout}
             open={true}
             onClose={this.handleClose}
             aria-labelledby="responsive-dialog-title"
