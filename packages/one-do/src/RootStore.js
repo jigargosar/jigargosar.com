@@ -170,7 +170,7 @@ const TaskCollection = collection(Task)
 
 const TaskListCollection = collection(TaskList)
 
-const RootStoreBase = model('RootStore', {
+const RootStoreExt = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
   taskCollection: optional(TaskCollection),
   listSelection: optional(Selection, {targetPathFromRoot: ['lists']}),
@@ -277,7 +277,7 @@ const RootStoreBase = model('RootStore', {
     },
   }))
 
-const RootStore = types.compose(RootStoreBase, Layout)
+const RootStore = types.compose(RootStoreExt, Layout)
 
 function lsActions(self) {
   const ls = StorageItem({name: 'rootSnapshot'})
