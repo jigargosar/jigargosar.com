@@ -89,6 +89,26 @@ const updateLayout = ({store, width}) => {
   store.setLayout(isMobileLayout ? 'mobile' : 'desktop')
 }
 
+@observer
+class SelectedListContent extends Component {
+  render() {
+    return (
+      <List
+        disablePadding
+        dense={false}
+        className={cn('overflow-scroll pb5')}
+      >
+        <SelectedListContentHeader store={this.props.store} />
+        <Tasks store={this.props.store} />
+      </List>
+    )
+  }
+}
+
+SelectedListContent.propTypes = {
+  store: PropTypes.object.isRequired,
+}
+
 @_compose(
   withWidth(),
   lifecycle({
@@ -143,14 +163,7 @@ class MaterialAppFrame extends Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            <List
-              disablePadding
-              dense={false}
-              className={cn('overflow-scroll pb5')}
-            >
-              <SelectedListContentHeader store={store} />
-              <Tasks store={store} />
-            </List>
+            <SelectedListContent store={store} />
           </main>
           <Button
             variant="fab"
