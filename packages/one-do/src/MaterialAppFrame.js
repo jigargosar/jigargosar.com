@@ -408,7 +408,7 @@ class DrawerTaskListItem extends Component {
 const AllTaskListItem = compose(
   observer,
   withProps(({store}) => ({
-    name: 'All Lists',
+    name: 'All Tasks',
     isSelected: store.isAllListSelected,
     pendingCount: store.allListsPendingCount,
     isDirty: store.isDirty,
