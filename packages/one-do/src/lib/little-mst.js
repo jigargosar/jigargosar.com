@@ -138,3 +138,5 @@ export const dropFlow = generator => pDropConcurrentCalls(flow(generator))
 export const decorateAtomic = action => decorate(atomic, action)
 export const bindStoreAction = comp => actionName => (...args) => () =>
   comp.props.store[actionName](...args)
+export const optionalEnum = (name, values, defaultValue = values[0]) =>
+  optional(types.enumeration(name, values), defaultValue)

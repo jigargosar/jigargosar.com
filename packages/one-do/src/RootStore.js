@@ -38,6 +38,12 @@ import {
   queryToDocsData,
   signInWithPopup,
 } from './firebase'
+import {
+  isLayoutMobile,
+  LAYOUT_DESKTOP,
+  LAYOUT_MOBILE,
+  LayoutEnum,
+} from './models/Layout'
 
 function collection(Model) {
   const Collection = model(`${Model.name}Collection`, {
@@ -207,15 +213,12 @@ const RootStore = model('RootStore', {
   listSelection: optional(Selection),
   drawerOpenState: optional(
     model('DrawerOpenState', {
-      mobile: false,
-      desktop: true,
+      [LAYOUT_MOBILE]: false,
+      [LAYOUT_DESKTOP]: true,
     }),
   ),
   editingTaskId: nullString,
-  layout: optional(
-    types.enumeration('layout', ['desktop', 'mobile']),
-    'desktop',
-  ),
+  layout: LayoutEnum,
 })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -235,7 +238,7 @@ const RootStore = model('RootStore', {
       return self.drawerOpenState[self.layout]
     },
     get isMobileLayout() {
-      return self.layout === 'mobile'
+      return isLayoutMobile(self.layout)
     },
     get drawerVariant() {
       return self.isMobileLayout ? 'temporary' : 'persistent'
