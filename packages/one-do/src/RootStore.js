@@ -82,6 +82,8 @@ const RootStoreBase = model('RootStore', {
       return self.listSelection.selectedItem
     },
     isListSelected(list) {
+      if (self.isAllListSelected) return false
+
       return self.listSelection.isSelected(list)
     },
     get canDeleteList() {
