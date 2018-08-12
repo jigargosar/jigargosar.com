@@ -31,9 +31,42 @@ import {Selection} from './models/Selection'
 import {collection} from './models/Collection'
 import {Task, TaskList} from './models/Task'
 
-const RootStoreExt = model('RootStore', {
+const Collections = model('Collections', {
   taskListCollection: optional(collection(TaskList)),
   taskCollection: optional(collection(Task)),
+})
+  .volatile(self => ({
+    isSyncing: false,
+  }))
+  .views(self => ({
+    get isDirty() {
+      return self.taskCollection.isDirty || self.taskListCollection.isDirty
+    },
+    get canSync() {
+      return isSignedIn() && self.isDirty && !self.isSyncing
+    },
+  }))
+  .actions(self => ({
+    sync: dropFlow(function*() {
+      console.assert(isSignedIn())
+      try {
+        self.isSyncing = true
+        yield self.taskListCollection.pushDirtyToRemote()
+        yield self.taskCollection.pushDirtyToRemote()
+        yield self.taskListCollection.pullFromRemote()
+        yield self.taskCollection.pullFromRemote()
+      } finally {
+        self.isSyncing = false
+      }
+    }),
+    trySync: flow(function*() {
+      if (self.canSync) {
+        yield self.sync()
+      }
+    }),
+  }))
+
+const RootStoreExt = model('RootStore', {
   listSelection: optional(Selection, {targetPathFromRoot: ['lists']}),
   editingTaskId: nullString,
 })
@@ -51,9 +84,6 @@ const RootStoreExt = model('RootStore', {
   })
   .actions(lsActions)
   .views(self => ({
-    get isDirty() {
-      return self.taskCollection.isDirty || self.taskListCollection.isDirty
-    },
     get lists() {
       const activeLists = self.taskListCollection.activeItems
       return sortWith(
@@ -76,12 +106,6 @@ const RootStoreExt = model('RootStore', {
     get canDeleteList() {
       return self.taskListCollection.activeItems.length > 1
     },
-    get canSync() {
-      return isSignedIn() && self.isDirty && !self.isSyncing
-    },
-  }))
-  .volatile(self => ({
-    isSyncing: false,
   }))
   .actions(self => ({
     editTask(task) {
@@ -90,23 +114,6 @@ const RootStoreExt = model('RootStore', {
     endEditTask() {
       self.editingTaskId = null
     },
-    sync: dropFlow(function*() {
-      console.assert(isSignedIn())
-      try {
-        self.isSyncing = true
-        yield self.taskListCollection.pushDirtyToRemote()
-        yield self.taskCollection.pushDirtyToRemote()
-        yield self.taskListCollection.pullFromRemote()
-        yield self.taskCollection.pullFromRemote()
-      } finally {
-        self.isSyncing = false
-      }
-    }),
-    trySync: flow(function*() {
-      if (self.canSync) {
-        yield self.sync()
-      }
-    }),
     ensureLogin: dropFlow(function*() {
       yield authStateKnownPromise
       if (isSignedOut()) {
@@ -138,7 +145,7 @@ const RootStoreExt = model('RootStore', {
     },
   }))
 
-const RootStore = types.compose(RootStoreExt, Layout)
+const RootStore = types.compose(Layout, Collections, RootStoreExt)
 
 function lsActions(self) {
   const ls = StorageItem({name: 'rootSnapshot'})
@@ -158,5 +165,3 @@ function lsActions(self) {
 }
 
 export default RootStore
-
-window.f.firestore().collection('users')
