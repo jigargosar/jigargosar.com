@@ -276,6 +276,7 @@ const RootStoreBase = model('RootStore', {
       self.taskCollection.update(props, task)
     },
   }))
+
 const RootStore = types.compose(RootStoreBase, Layout)
 
 function lsActions(self) {
