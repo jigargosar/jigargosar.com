@@ -351,8 +351,9 @@ class MyLists extends Component {
           </ListSubheader>
         }
       >
+        <ListItem>All Lists</ListItem>
         {store.lists.map(list => (
-          <ListName key={list.id} store={store} list={list} />
+          <TaskListItem key={list.id} store={store} list={list} />
         ))}
       </List>
     )
@@ -364,7 +365,43 @@ class MyLists extends Component {
   isSelected: computed(() => store.isListSelected(list)).get(),
 }))
 @observer
-class ListName extends Component {
+class AllTaskListItem extends Component {
+  render() {
+    const {store, list, isSelected} = this.props
+    const pendingCount = list.pendingTasks.length
+    return (
+      <ListItem
+        className={cn('ttu', {'bg-black-20': isSelected})}
+        button
+        onClick={() => store.setSelectedList(list)}
+      >
+        <ListItemText
+          primary={`${list.name}`}
+          secondary={
+            <Fragment>
+              {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
+              <Fragment>{list.isDirty && '*'}</Fragment>
+            </Fragment>
+          }
+        />
+        <ListItemSecondaryAction>
+          <IconButton
+            onClick={wrapSP(() => store.deleteList(list))}
+            disabled={!store.canDeleteList}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
+    )
+  }
+}
+@observer
+@withProps(({store, list}) => ({
+  isSelected: computed(() => store.isListSelected(list)).get(),
+}))
+@observer
+class TaskListItem extends Component {
   render() {
     const {store, list, isSelected} = this.props
     const pendingCount = list.pendingTasks.length
