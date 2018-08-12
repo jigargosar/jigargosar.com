@@ -66,11 +66,12 @@ const Collections = model('Collections', {
     }),
   }))
 
-const RootStoreExt = model('RootStore', {
-  listSelection: optional(Selection, {targetPathFromRoot: ['lists']}),
+const RootStoreBase = model('RootStore', {
+  listSelection: Selection,
   editingTaskId: nullString,
 })
   .preProcessSnapshot(snapshot => {
+    debugger
     const defaultList = {name: 'TODO'}
     const result = compose(
       overPath(['listSelection', 'targetPathFromRoot'])(
@@ -145,7 +146,7 @@ const RootStoreExt = model('RootStore', {
     },
   }))
 
-const RootStore = types.compose(Layout, Collections, RootStoreExt)
+const RootStore = types.compose(RootStoreBase, Layout, Collections)
 
 function lsActions(self) {
   const ls = StorageItem({name: 'rootSnapshot'})
