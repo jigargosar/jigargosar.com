@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography/Typography'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import {DeleteIcon} from './Icons'
+import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase'
 
 @observer
 export class SelectedListContent extends Component {
@@ -40,11 +41,12 @@ class SelectedListContentHeader extends Component {
     const {store} = this.props
     const list = store.selectedList
     return (
-      <ListSubheader className={'bg-white-80 flex'}>
+      <ListSubheader
+        component={props => <ButtonBase {...props} />}
+        className={'bg-white-80 flex'}
+        onClick={wrapSP(() => store.editList(list))}
+      >
         <div className={cn('flex-auto ttu')}>{list.name}</div>
-        <IconButton onClick={wrapSP(() => store.editList(list))}>
-          <EditIcon />
-        </IconButton>
       </ListSubheader>
     )
   }
