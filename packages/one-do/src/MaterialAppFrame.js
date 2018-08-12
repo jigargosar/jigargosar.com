@@ -372,7 +372,7 @@ class ListName extends Component {
       <ListItem
         className={cn('ttu', {'bg-black-20': isSelected})}
         button
-        onClick={() => store.selectList(list)}
+        onClick={() => store.setSelectedList(list)}
       >
         <ListItemText
           primary={`${list.name}`}

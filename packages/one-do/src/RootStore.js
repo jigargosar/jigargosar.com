@@ -120,7 +120,7 @@ const RootStoreExt = model('RootStore', {
         yield signInWithPopup()
       }
     }),
-    selectList(l) {
+    setSelectedList(l) {
       self.listSelection.setSelectedItem(l)
     },
     addList: function(props) {
