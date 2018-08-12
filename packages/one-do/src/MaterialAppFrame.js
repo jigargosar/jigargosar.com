@@ -243,13 +243,10 @@ class EditListModal extends Component {
             // fullScreen={store.isMobileLayout}
             open={true}
             onClose={this.handleClose}
-            aria-labelledby="responsive-dialog-title"
             maxWidth={'xs'}
             fullWidth
           >
-            <DialogTitle id="responsive-dialog-title">
-              {'Edit List'}
-            </DialogTitle>
+            <DialogTitle>{'Edit List'}</DialogTitle>
             <DialogContent>
               <TextField
                 fullWidth
