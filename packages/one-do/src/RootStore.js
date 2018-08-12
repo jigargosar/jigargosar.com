@@ -186,7 +186,6 @@ const RootStoreBase = model('RootStore', {
     )(snapshot)
 
     console.debug('[RS] preProcessSnapshot result', result)
-    debugger
     return result
   })
   .actions(lsActions)
