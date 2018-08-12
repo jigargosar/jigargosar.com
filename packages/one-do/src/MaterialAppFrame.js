@@ -197,7 +197,6 @@ class EditTaskModal extends Component {
                 fullWidth
                 autoFocus={true}
                 type="text"
-                disabled={task.isDone}
                 value={task.name}
                 onChange={e =>
                   store.updateTask({name: e.target.value}, task)
@@ -210,7 +209,6 @@ class EditTaskModal extends Component {
                       </Typography>
                     </InputAdornment>
                   ),
-                  inputProps: {className: cn({strike: task.isDone})},
                 }}
               />
             </DialogContent>
