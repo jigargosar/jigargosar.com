@@ -18,6 +18,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/L
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import {DeleteIcon} from './Icons'
 import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase'
+import {F} from '../lib/ramda'
 
 @observer
 export class SelectedListContent extends Component {
@@ -78,6 +79,7 @@ class TaskItem extends Component {
             store.updateTask({isDone: e.target.checked}, task)
           }
           checked={task.isDone}
+          onClick={wrapSP(F)}
           color={'default'}
           icon={<CheckBoxBlankIcon />}
           checkedIcon={<CheckBoxCheckedIcon />}
