@@ -72,18 +72,22 @@ class TaskItem extends Component {
       <ListItem
         disableGutters
         className={cn('pv0')}
-        disabled={task.isDone}
+        // disabled={task.isDone}
+        onClick={wrapSP(() => store.editTask(task))}
+        button
       >
-        <Checkbox
-          onChange={e =>
-            store.updateTask({isDone: e.target.checked}, task)
-          }
-          checked={task.isDone}
-          onClick={wrapSP(F)}
-          color={'default'}
-          icon={<CheckBoxBlankIcon />}
-          checkedIcon={<CheckBoxCheckedIcon />}
-        />
+        <div>
+          <Checkbox
+            onChange={e =>
+              store.updateTask({isDone: e.target.checked}, task)
+            }
+            checked={task.isDone}
+            onClick={wrapSP(F)}
+            color={'default'}
+            icon={<CheckBoxBlankIcon />}
+            checkedIcon={<CheckBoxCheckedIcon />}
+          />
+        </div>
         <ListItemText
           disableTypography
           className={cn('pl0 flex items-center')}
