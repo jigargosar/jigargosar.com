@@ -177,10 +177,8 @@ const Selection = model('Selection', {
   _idx: 0,
   _id: nullString,
 })
-  .volatile(() => ({_itemsGetter: always([])}))
   .views(self => ({
     get items() {
-      // return self._itemsGetter()
       return getRoot(self).lists
     },
     get idx() {
@@ -200,10 +198,6 @@ const Selection = model('Selection', {
     },
   }))
   .actions(self => ({
-    setItemsGetter(itemsGetter) {
-      self._itemsGetter = itemsGetter
-      console.log(`self.selectedItemFromId`, self.selectedItemFromId)
-    },
     setSelectedItem(item) {
       self._id = propOr(null)('id')(item)
       if (!isNil(self._id)) {
@@ -289,12 +283,6 @@ const RootStoreBase = model('RootStore', {
     },
     endEditTask() {
       self.editingTaskId = null
-    },
-    setListSelectionItemsGetter() {
-      self.listSelection.setItemsGetter(() => self.lists)
-    },
-    afterCreate() {
-      self.setListSelectionItemsGetter()
     },
     sync: dropFlow(function*() {
       console.assert(isSignedIn())
