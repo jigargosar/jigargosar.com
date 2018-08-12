@@ -256,6 +256,9 @@ class EditListModal extends Component {
                 autoFocus={true}
                 type="text"
                 value={list.name}
+                onKeyDown={withKeyEvent(
+                  whenKey('enter')(this.handleClose),
+                )}
                 onChange={e =>
                   store.updateList({name: e.target.value}, list)
                 }
