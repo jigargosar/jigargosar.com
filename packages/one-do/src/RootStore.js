@@ -38,12 +38,7 @@ import {
   queryToDocsData,
   signInWithPopup,
 } from './firebase'
-import {
-  isLayoutMobile,
-  LAYOUT_DESKTOP,
-  LAYOUT_MOBILE,
-  LayoutEnum,
-} from './models/Layout'
+import {Layout} from './models/Layout'
 
 function collection(Model) {
   const Collection = model(`${Model.name}Collection`, {
@@ -207,18 +202,11 @@ const Selection = model('Selection', {
     },
   }))
 
-const RootStore = model('RootStore', {
+const RootStoreBase = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
   taskCollection: optional(TaskCollection),
   listSelection: optional(Selection),
-  drawerOpenState: optional(
-    model('DrawerOpenState', {
-      [LAYOUT_MOBILE]: false,
-      [LAYOUT_DESKTOP]: true,
-    }),
-  ),
   editingTaskId: nullString,
-  layout: LayoutEnum,
 })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -231,21 +219,6 @@ const RootStore = model('RootStore', {
   })
   .actions(lsActions)
   .views(self => ({
-    set isDrawerOpen(val) {
-      self.drawerOpenState[self.layout] = val
-    },
-    get isDrawerOpen() {
-      return self.drawerOpenState[self.layout]
-    },
-    get isMobileLayout() {
-      return isLayoutMobile(self.layout)
-    },
-    get drawerVariant() {
-      return self.isMobileLayout ? 'temporary' : 'persistent'
-    },
-    get isDrawerTemporary() {
-      return self.drawerVariant === 'temporary'
-    },
     get isDirty() {
       return self.taskCollection.isDirty || self.taskListCollection.isDirty
     },
@@ -279,19 +252,11 @@ const RootStore = model('RootStore', {
     isSyncing: false,
   }))
   .actions(self => ({
-    setLayout(layout) {
-      if (self.layout === layout) return
-      self.layout = layout
-      self.drawerOpenState.mobile = false
-    },
     editTask(task) {
       self.editingTaskId = task.id
     },
     endEditTask() {
       self.editingTaskId = null
-    },
-    toggleDrawer(bool) {
-      self.isDrawerOpen = defaultTo(!self.isDrawerOpen)(bool)
     },
     setListSelectionItemsGetter() {
       self.listSelection.items = () => self.lists
@@ -347,6 +312,7 @@ const RootStore = model('RootStore', {
       self.taskCollection.update(props, task)
     },
   }))
+const RootStore = types.compose(RootStoreBase, Layout)
 
 function lsActions(self) {
   const ls = StorageItem({name: 'rootSnapshot'})
