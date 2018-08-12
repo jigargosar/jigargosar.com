@@ -9,7 +9,6 @@ import {
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
 import {
-  _compose,
   _prop,
   ascend,
   compose,
@@ -49,7 +48,7 @@ const RootStoreBase = model('RootStore', {
       const activeLists = self.taskListCollection.activeItems
       return sortWith(
         //
-        [ascend(_compose(toUpper, _prop('name')))],
+        [ascend(compose(toUpper, _prop('name')))],
       )(activeLists)
     },
     get editingTask() {
