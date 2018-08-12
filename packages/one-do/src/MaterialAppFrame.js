@@ -351,7 +351,7 @@ class MyLists extends Component {
           </ListSubheader>
         }
       >
-        <ListItem>All Lists</ListItem>
+        <AllTaskListItem store={store} />
         {store.lists.map(list => (
           <TaskListItem key={list.id} store={store} list={list} />
         ))}
@@ -361,41 +361,34 @@ class MyLists extends Component {
 }
 
 @observer
-@withProps(({store, list}) => ({
-  isSelected: computed(() => store.isListSelected(list)).get(),
+@withProps(({store}) => ({
+  isSelected: store.isAllListSelected,
 }))
 @observer
 class AllTaskListItem extends Component {
   render() {
-    const {store, list, isSelected} = this.props
-    const pendingCount = list.pendingTasks.length
+    const {store, isSelected} = this.props
+    const pendingCount = store.allListsPendingCount
     return (
       <ListItem
         className={cn('ttu', {'bg-black-20': isSelected})}
         button
-        onClick={() => store.setSelectedList(list)}
+        onClick={() => store.setIsAllListSelected(true)}
       >
         <ListItemText
-          primary={`${list.name}`}
+          primary={'All Lists'}
           secondary={
             <Fragment>
               {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
-              <Fragment>{list.isDirty && '*'}</Fragment>
+              <Fragment>{store.isDirty && '*'}</Fragment>
             </Fragment>
           }
         />
-        <ListItemSecondaryAction>
-          <IconButton
-            onClick={wrapSP(() => store.deleteList(list))}
-            disabled={!store.canDeleteList}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
       </ListItem>
     )
   }
 }
+
 @observer
 @withProps(({store, list}) => ({
   isSelected: computed(() => store.isListSelected(list)).get(),

@@ -42,6 +42,9 @@ export const TaskList = model('TaskList', {
     get pendingTasks() {
       return reject(_prop('isDone'))(self.activeTasks)
     },
+    get pendingCount() {
+      return self.pendingTasks.length
+    },
   }))
   .views(self => ({
     get pickRemoteProps() {

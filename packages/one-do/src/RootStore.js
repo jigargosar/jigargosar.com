@@ -13,7 +13,9 @@ import {
   ascend,
   compose,
   defaultTo,
+  pluck,
   sortWith,
+  sum,
   toUpper,
 } from './lib/ramda'
 import {findById, overPath} from './lib/little-ramda'
@@ -29,6 +31,7 @@ import {Collections} from './models/Collections'
 const RootStoreBase = model('RootStore', {
   listSelection: Selection,
   editingTaskId: nullString,
+  isAllListSelected: false,
 })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -59,6 +62,9 @@ const RootStoreBase = model('RootStore', {
     }
   })
   .views(self => ({
+    get allListsPendingCount() {
+      return compose(sum, pluck('pendingCount'))(self.lists)
+    },
     get lists() {
       const activeLists = self.taskListCollection.activeItems
       return sortWith(
@@ -83,6 +89,9 @@ const RootStoreBase = model('RootStore', {
     },
   }))
   .actions(self => ({
+    setIsAllListSelected(bool) {
+      self.isAllListSelected = bool
+    },
     editTask(task) {
       self.editingTaskId = task.id
     },
