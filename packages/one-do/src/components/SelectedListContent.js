@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
 import {observer} from 'mobx-react'
 import {wrapSP} from '../lib/little-react'
-
-import EditIcon from '@material-ui/icons/EditRounded'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 
