@@ -10,7 +10,6 @@ import {
   nullString,
   onSnapshot,
   optional,
-  reaction,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
@@ -18,17 +17,13 @@ import {
   _compose,
   _prop,
   ascend,
-  clamp,
   compose,
   defaultTo,
   equals,
   filter,
-  indexOf,
   isNil,
-  pathOr,
   pick,
   propEq,
-  propOr,
   reject,
   sortWith,
   toUpper,
@@ -43,6 +38,7 @@ import {
   signInWithPopup,
 } from './firebase'
 import {Layout} from './models/Layout'
+import {Selection} from './models/Selection'
 
 function collection(Model) {
   const Collection = model(`${Model.name}Collection`, {
@@ -173,62 +169,6 @@ const TaskList = model('TaskList', {
 const TaskCollection = collection(Task)
 
 const TaskListCollection = collection(TaskList)
-
-const Selection = model('Selection', {
-  _idx: 0,
-  _id: nullString,
-  targetPathFromRoot: types.array(types.string),
-})
-  .views(self => ({
-    get items() {
-      return pathOr([])(self.targetPathFromRoot)(getRoot(self))
-    },
-    get idx() {
-      return clamp(0, self.items.length - 1)(self._idx)
-    },
-    get selectedItem() {
-      return self.selectedItemFromId || self.selectedItemFromIdx
-    },
-    get selectedItemFromIdx() {
-      return self.items[self.idx]
-    },
-    get selectedItemFromId() {
-      return findById(self._id)(self.items)
-    },
-    isSelected(l) {
-      return self.selectedItem === l
-    },
-  }))
-  .actions(self => ({
-    setSelectedItem(item) {
-      self._id = propOr(null)('id')(item)
-      if (!isNil(self._id)) {
-        self._idx = indexOf(item)(self.items)
-      }
-    },
-    afterCreate() {
-      addDisposer(
-        self,
-        reaction(
-          () => self.selectedItemFromId,
-          () => {
-            console.log(`self.selectedItemFromId`, self.selectedItemFromId)
-          },
-        ),
-      )
-      addDisposer(
-        self,
-        reaction(
-          () => self.items,
-          () => {
-            if (isNil(self.selectedItemFromId)) {
-              self.setSelectedItem(self.selectedItemFromIdx)
-            }
-          },
-        ),
-      )
-    },
-  }))
 
 const RootStoreBase = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
