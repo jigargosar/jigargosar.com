@@ -2,11 +2,9 @@ import {
   addDisposer,
   applySnapshot,
   dropFlow,
-  flow,
   model,
   nullString,
   onSnapshot,
-  optional,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
@@ -22,49 +20,12 @@ import {
 import {findById, overPath} from './lib/little-ramda'
 import {
   authStateKnownPromise,
-  isSignedIn,
   isSignedOut,
   signInWithPopup,
 } from './firebase'
 import {Layout} from './models/Layout'
 import {Selection} from './models/Selection'
-import {collection} from './models/Collection'
-import {Task, TaskList} from './models/Task'
-
-const Collections = model('Collections', {
-  taskListCollection: optional(collection(TaskList)),
-  taskCollection: optional(collection(Task)),
-})
-  .volatile(self => ({
-    isSyncing: false,
-  }))
-  .views(self => ({
-    get isDirty() {
-      return self.taskCollection.isDirty || self.taskListCollection.isDirty
-    },
-    get canSync() {
-      return isSignedIn() && self.isDirty && !self.isSyncing
-    },
-  }))
-  .actions(self => ({
-    sync: dropFlow(function*() {
-      console.assert(isSignedIn())
-      try {
-        self.isSyncing = true
-        yield self.taskListCollection.pushDirtyToRemote()
-        yield self.taskCollection.pushDirtyToRemote()
-        yield self.taskListCollection.pullFromRemote()
-        yield self.taskCollection.pullFromRemote()
-      } finally {
-        self.isSyncing = false
-      }
-    }),
-    trySync: flow(function*() {
-      if (self.canSync) {
-        yield self.sync()
-      }
-    }),
-  }))
+import {Collections} from './models/Collections'
 
 const RootStoreBase = model('RootStore', {
   listSelection: Selection,
