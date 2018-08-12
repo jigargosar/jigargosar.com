@@ -23,6 +23,7 @@ import {
   defaultTo,
   equals,
   filter,
+  indexOf,
   isNil,
   pick,
   propEq,
@@ -179,11 +180,8 @@ const Selection = model('Selection', {
   .volatile(() => ({_itemsGetter: always([])}))
   .views(self => ({
     get items() {
-      return self._itemsGetter()
-    },
-    set idx(val) {
-      self._idx = val
-      self._id = self.selectedItemFromIdx.id
+      // return self._itemsGetter()
+      return getRoot(self).lists
     },
     get idx() {
       return clamp(0, self.items.length - 1)(self._idx)
@@ -206,9 +204,10 @@ const Selection = model('Selection', {
       self._itemsGetter = itemsGetter
       console.log(`self.selectedItemFromId`, self.selectedItemFromId)
     },
-    updateId() {
-      if (isNil(self.selectedItemFromId)) {
-        self._id = propOr(null)('id')(self.selectedItemFromIdx)
+    setSelectedItem(item) {
+      self._id = propOr(null)('id')(item)
+      if (!isNil(self._id)) {
+        self._idx = indexOf(item)(self.items)
       }
     },
     afterCreate() {
@@ -221,10 +220,17 @@ const Selection = model('Selection', {
           },
         ),
       )
-      addDisposer(self, reaction(() => self.items, self.updateId))
-    },
-    selectItem(item) {
-      self.idx = self.items.indexOf(item)
+      addDisposer(
+        self,
+        reaction(
+          () => self.items,
+          () => {
+            if (isNil(self.selectedItemFromId)) {
+              self.setSelectedItem(self.selectedItemFromIdx)
+            }
+          },
+        ),
+      )
     },
   }))
 
@@ -314,8 +320,7 @@ const RootStoreBase = model('RootStore', {
       }
     }),
     selectList(l) {
-      self.setListSelectionItemsGetter()
-      self.listSelection.selectItem(l)
+      self.listSelection.setSelectedItem(l)
     },
     addList: function(props) {
       self.taskListCollection.add(props)
