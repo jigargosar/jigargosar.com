@@ -10,6 +10,7 @@ import {
   nullString,
   onSnapshot,
   optional,
+  reaction,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
@@ -172,10 +173,13 @@ const TaskListCollection = collection(TaskList)
 
 const Selection = model('Selection', {
   _idx: 0,
-  id: nullString,
+  _id: nullString,
 })
-  .volatile(() => ({items: always([])}))
+  .volatile(() => ({_itemsGetter: always([])}))
   .views(self => ({
+    get items() {
+      return self._itemsGetter
+    },
     set idx(val) {
       self._idx = val
       self._id = self.selectedItemFromIdx.id
@@ -197,6 +201,20 @@ const Selection = model('Selection', {
     },
   }))
   .actions(self => ({
+    setItemsGetter(itemsGetter) {
+      self._itemsGetter = itemsGetter
+    },
+    afterCreate() {
+      addDisposer(
+        self,
+        reaction(
+          () => self.selectedItemFromId,
+          () => {
+            console.log(`self.selectedItemFromId`, self.selectedItemFromId)
+          },
+        ),
+      )
+    },
     selectItem(item) {
       self.idx = self.items().indexOf(item)
     },
@@ -259,7 +277,7 @@ const RootStoreBase = model('RootStore', {
       self.editingTaskId = null
     },
     setListSelectionItemsGetter() {
-      self.listSelection.items = () => self.lists
+      self.listSelection.setItemsGetter(() => self.lists)
     },
     afterCreate() {
       self.setListSelectionItemsGetter()
