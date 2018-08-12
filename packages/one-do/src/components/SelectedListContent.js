@@ -41,14 +41,18 @@ class SelectedListContentHeader extends Component {
     const {store} = this.props
     const list = store.selectedList
     return (
-      <ListSubheader className={'pa0 bg-white-80'}>
-        <Input
-          inputProps={{className: cn('pa2 ttu')}}
-          fullWidth
-          type="text"
-          value={list.name}
-          onChange={e => store.updateList({name: e.target.value}, list)}
-        />
+      <ListSubheader className={'bg-white-80 flex'}>
+        <div className={cn('flex-auto')}>{list.name}</div>
+        {/*<Input*/}
+        {/*inputProps={{className: cn('pa2 ttu')}}*/}
+        {/*fullWidth*/}
+        {/*type="text"*/}
+        {/*value={list.name}*/}
+        {/*onChange={e => store.updateList({name: e.target.value}, list)}*/}
+        {/*/>*/}
+        <IconButton onClick={wrapSP(() => store.editList(list))}>
+          <EditIcon />
+        </IconButton>
       </ListSubheader>
     )
   }

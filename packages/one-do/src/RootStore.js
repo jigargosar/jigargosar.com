@@ -31,6 +31,7 @@ import {Collections} from './models/Collections'
 const RootStoreBase = model('RootStore', {
   listSelection: Selection,
   editingTaskId: nullString,
+  editingListId: nullString,
   isAllListSelected: false,
 })
   .preProcessSnapshot(snapshot => {
@@ -75,6 +76,9 @@ const RootStoreBase = model('RootStore', {
     get editingTask() {
       return findById(self.editingTaskId)(self.tasks)
     },
+    get editingList() {
+      return findById(self.editingListId)(self.lists)
+    },
     get tasks() {
       return self.selectedList.activeTasks
     },
@@ -102,6 +106,12 @@ const RootStoreBase = model('RootStore', {
     },
     endEditTask() {
       self.editingTaskId = null
+    },
+    editList(list) {
+      self.editingListId = list.id
+    },
+    endEditList() {
+      self.editingListId = null
     },
     ensureLogin: dropFlow(function*() {
       yield authStateKnownPromise

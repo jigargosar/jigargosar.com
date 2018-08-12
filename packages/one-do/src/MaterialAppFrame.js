@@ -139,6 +139,7 @@ class MaterialAppFrame extends Component {
             <AddTaskIcon />
           </Button>
           <EditTaskModal store={store} />
+          <EditListModal store={store} />
         </div>
       </FocusTrap>
     )
@@ -210,6 +211,59 @@ class EditTaskModal extends Component {
                     </InputAdornment>
                   ),
                   inputProps: {className: cn({strike: task.isDone})},
+                }}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
+      </Fr>
+    )
+  }
+}
+@observer
+class EditListModal extends Component {
+  handleClose = () => {
+    this.props.store.endEditList()
+  }
+  render() {
+    const {store} = this.props
+    const {editingList: list} = store
+    return (
+      <Fr>
+        {list && (
+          <Dialog
+            // fullScreen={store.isMobileLayout}
+            open={true}
+            onClose={this.handleClose}
+            aria-labelledby="responsive-dialog-title"
+            maxWidth={'xs'}
+            fullWidth
+          >
+            <DialogTitle id="responsive-dialog-title">
+              {'Edit List'}
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                fullWidth
+                autoFocus={true}
+                type="text"
+                value={list.name}
+                onChange={e =>
+                  store.updateList({name: e.target.value}, list)
+                }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Typography variant={'headline'} color={'error'}>
+                        {list.isDirty && `*`}
+                      </Typography>
+                    </InputAdornment>
+                  ),
                 }}
               />
             </DialogContent>
