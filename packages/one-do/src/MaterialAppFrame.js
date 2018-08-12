@@ -363,24 +363,26 @@ class MyLists extends Component {
 @observer
 @withProps(({store}) => ({
   isSelected: store.isAllListSelected,
+  pendingCount: store.allListsPendingCount,
+  isDirty: store.isDirty,
+  onClickSelect: () => store.setIsAllListSelected(true),
 }))
 @observer
 class AllTaskListItem extends Component {
   render() {
-    const {store, isSelected} = this.props
-    const pendingCount = store.allListsPendingCount
+    const {isSelected, pendingCount, isDirty, onClickSelect} = this.props
     return (
       <ListItem
         className={cn('ttu', {'bg-black-20': isSelected})}
         button
-        onClick={() => store.setIsAllListSelected(true)}
+        onClick={onClickSelect}
       >
         <ListItemText
           primary={'All Lists'}
           secondary={
             <Fragment>
               {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
-              <Fragment>{store.isDirty && '*'}</Fragment>
+              <Fragment>{isDirty && '*'}</Fragment>
             </Fragment>
           }
         />
