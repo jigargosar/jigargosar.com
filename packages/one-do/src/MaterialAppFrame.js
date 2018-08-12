@@ -12,7 +12,7 @@ import cn from 'classnames'
 import {fWord} from './lib/fake'
 
 import {pluralize} from './lib/little-ramda'
-import {withProps} from './lib/recompose'
+import {onlyUpdateForKeys, withProps} from './lib/recompose'
 import {compose} from './lib/ramda'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import MenuIcon from '@material-ui/icons/MenuRounded'
@@ -108,6 +108,7 @@ SelectedListContent.propTypes = {
     const isMobileLayout = !isWidthUp('sm', width)
     store.setLayout(isMobileLayout ? 'mobile' : 'desktop')
   }),
+  onlyUpdateForKeys(['store']),
   observer,
 )
 class MaterialAppFrame extends Component {
