@@ -10,7 +10,6 @@ import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader'
 import Input from '@material-ui/core/Input/Input'
 import cn from 'classnames'
 import List from '@material-ui/core/List/List'
-import PropTypes from 'prop-types'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import Checkbox from '@material-ui/core/Checkbox/Checkbox'
 
@@ -36,8 +35,33 @@ export class SelectedListContent extends Component {
   }
 }
 
-SelectedListContent.propTypes = {
-  store: PropTypes.object.isRequired,
+@observer
+class SelectedListContentHeader extends Component {
+  render() {
+    const {store} = this.props
+    const list = store.selectedList
+    return (
+      <ListSubheader className={'pa0 bg-white-80'}>
+        <Input
+          inputProps={{className: cn('pa2 ttu')}}
+          fullWidth
+          type="text"
+          value={list.name}
+          onChange={e => store.updateList({name: e.target.value}, list)}
+        />
+      </ListSubheader>
+    )
+  }
+}
+
+@observer
+class Tasks extends Component {
+  render() {
+    const {store} = this.props
+    return store.tasks.map(task => (
+      <TaskItem key={task.id} task={task} store={store} />
+    ))
+  }
 }
 
 @observer
@@ -89,34 +113,5 @@ class TaskItem extends Component {
         </ListItemSecondaryAction>
       </ListItem>
     )
-  }
-}
-
-@observer
-class SelectedListContentHeader extends Component {
-  render() {
-    const {store} = this.props
-    const list = store.selectedList
-    return (
-      <ListSubheader className={'pa0 bg-white-80'}>
-        <Input
-          inputProps={{className: cn('pa2 ttu')}}
-          fullWidth
-          type="text"
-          value={list.name}
-          onChange={e => store.updateList({name: e.target.value}, list)}
-        />
-      </ListSubheader>
-    )
-  }
-}
-
-@observer
-class Tasks extends Component {
-  render() {
-    const {store} = this.props
-    return store.tasks.map(task => (
-      <TaskItem key={task.id} task={task} store={store} />
-    ))
   }
 }
