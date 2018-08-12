@@ -3,6 +3,7 @@ import {observer} from 'mobx-react'
 import {wrapSP} from '../lib/little-react'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
+import AddRounded from '@material-ui/icons/AddRounded'
 
 import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader'
 import cn from 'classnames'
@@ -18,7 +19,9 @@ import {DeleteIcon} from './Icons'
 import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase'
 import {F} from '../lib/ramda'
 import {withStyles} from '../lib/material-ui'
+import Button from '@material-ui/core/es/Button/Button'
 
+export const AddIcon = AddRounded
 @observer
 export class SelectedListContent extends Component {
   render() {
@@ -38,6 +41,7 @@ export class SelectedListContent extends Component {
 @withStyles(theme => ({
   root: {
     color: theme.palette.secondary.main,
+    padding: 0,
   },
 }))
 @observer
@@ -48,12 +52,21 @@ class SelectedListContentHeader extends Component {
     return (
       <ListSubheader
         classes={{root: classes.root}}
-        component={props => <ButtonBase {...props} component={'div'} />}
-        className={'bg-white-80 flex'}
-        color={'primary'}
-        onClick={wrapSP(() => store.editList(list))}
+        component={props => (
+          <Button
+            {...props}
+            color={'secondary'}
+            classes={{root: classes.root}}
+            component={'div'}
+          />
+        )}
+        className={'bg-white-80 flex pl2 pr1'}
+        // onClick={wrapSP(() => store.editList(list))}
       >
         <div className={cn('flex-auto ttu')}>{list.name}</div>
+        <IconButton color={'secondary'}>
+          <AddIcon />
+        </IconButton>
       </ListSubheader>
     )
   }
