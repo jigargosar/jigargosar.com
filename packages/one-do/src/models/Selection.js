@@ -40,15 +40,6 @@ export const Selection = model('Selection', {
       addDisposer(
         self,
         reaction(
-          () => self.selectedItemFromId,
-          () => {
-            console.log(`self.selectedItemFromId`, self.selectedItemFromId)
-          },
-        ),
-      )
-      addDisposer(
-        self,
-        reaction(
           () => self.items,
           () => {
             if (isNil(self.selectedItemFromId)) {
