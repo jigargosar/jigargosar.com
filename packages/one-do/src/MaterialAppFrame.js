@@ -62,8 +62,6 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    // padding: theme.spacing.unit * 3,
-    // paddingBottom: theme.spacing.unit * 10,
     minWidth: 0, // So the Typography noWrap works
     overflow: 'hidden',
     display: 'flex',
