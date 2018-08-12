@@ -109,11 +109,6 @@ class TaskItem extends Component {
               <DeleteIcon />
             </IconButton>
           )}
-          {!task.isDone && (
-            <IconButton onClick={wrapSP(() => store.editTask(task))}>
-              <EditIcon />
-            </IconButton>
-          )}
         </ListItemSecondaryAction>
       </ListItem>
     )
