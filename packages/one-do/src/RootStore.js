@@ -100,8 +100,8 @@ const RootStoreExt = model('RootStore', {
     get selectedList() {
       return self.listSelection.selectedItem
     },
-    isSelected(l) {
-      return self.listSelection.isSelected(l)
+    isListSelected(list) {
+      return self.listSelection.isSelected(list)
     },
     get canDeleteList() {
       return self.taskListCollection.activeItems.length > 1

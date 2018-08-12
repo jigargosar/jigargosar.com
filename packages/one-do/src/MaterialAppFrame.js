@@ -361,7 +361,7 @@ class MyLists extends Component {
 
 @observer
 @withProps(({store, list}) => ({
-  isSelected: computed(() => store.isSelected(list)).get(),
+  isSelected: computed(() => store.isListSelected(list)).get(),
 }))
 @observer
 class ListName extends Component {
