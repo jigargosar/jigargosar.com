@@ -42,7 +42,22 @@ const RootStoreBase = model('RootStore', {
     console.debug('[RS] preProcessSnapshot result', result)
     return result
   })
-  .actions(lsActions)
+  .actions(self => {
+    const ls = StorageItem({name: 'rootSnapshot'})
+    return {
+      loadFromLS() {
+        applySnapshot(self, ls.load())
+      },
+      reset() {
+        applySnapshot(self, {})
+      },
+      saveToLSOnSnapshotChange() {
+        const disposer = onSnapshot(self, ls.save)
+        addDisposer(self, disposer)
+        return disposer
+      },
+    }
+  })
   .views(self => ({
     get lists() {
       const activeLists = self.taskListCollection.activeItems
@@ -106,22 +121,5 @@ const RootStoreBase = model('RootStore', {
   }))
 
 const RootStore = types.compose(RootStoreBase, Layout, Collections)
-
-function lsActions(self) {
-  const ls = StorageItem({name: 'rootSnapshot'})
-  return {
-    loadFromLS() {
-      applySnapshot(self, ls.load())
-    },
-    reset() {
-      applySnapshot(self, {})
-    },
-    saveToLSOnSnapshotChange() {
-      const disposer = onSnapshot(self, ls.save)
-      addDisposer(self, disposer)
-      return disposer
-    },
-  }
-}
 
 export default RootStore
