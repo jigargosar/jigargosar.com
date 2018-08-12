@@ -71,6 +71,11 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
+const contentLookup = {
+  SelectedList: SelectedListContent,
+  AllLists: SelectedListContent,
+}
+
 @compose(
   withWidth(),
   afterMountAndUpdate(({store, width}) => {
@@ -86,7 +91,7 @@ class MaterialAppFrame extends Component {
   render() {
     const {classes, store} = this.props
 
-    const ContentView = SelectedListContent
+    const ContentView = contentLookup[store.contentViewName]
 
     return (
       <FocusTrap

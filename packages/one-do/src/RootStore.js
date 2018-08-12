@@ -89,6 +89,9 @@ const RootStoreBase = model('RootStore', {
     get canDeleteList() {
       return self.taskListCollection.activeItems.length > 1
     },
+    get contentViewName() {
+      return self.isAllListSelected ? 'AllLists' : 'SelectedList'
+    },
   }))
   .actions(self => ({
     setIsAllListSelected(bool) {
