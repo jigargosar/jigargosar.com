@@ -42,7 +42,7 @@ class SelectedListContentHeader extends Component {
     const list = store.selectedList
     return (
       <ListSubheader
-        component={props => <ButtonBase {...props} />}
+        component={props => <ButtonBase {...props} component={'div'} />}
         className={'bg-white-80 flex'}
         onClick={wrapSP(() => store.editList(list))}
       >
