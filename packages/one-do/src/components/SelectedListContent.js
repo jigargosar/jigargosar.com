@@ -17,7 +17,7 @@ import IconButton from '@material-ui/core/IconButton/IconButton'
 import {DeleteIcon} from './Icons'
 import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase'
 import {F} from '../lib/ramda'
-import Button from '@material-ui/core/es/Button/Button'
+import {withStyles} from '../lib/material-ui'
 
 @observer
 export class SelectedListContent extends Component {
@@ -35,13 +35,19 @@ export class SelectedListContent extends Component {
   }
 }
 
+@withStyles(theme => ({
+  root: {
+    color: theme.palette.secondary.main,
+  },
+}))
 @observer
 class SelectedListContentHeader extends Component {
   render() {
-    const {store} = this.props
+    const {store, classes} = this.props
     const list = store.selectedList
     return (
       <ListSubheader
+        classes={{root: classes.root}}
         component={props => <ButtonBase {...props} component={'div'} />}
         className={'bg-white-80 flex'}
         color={'primary'}
