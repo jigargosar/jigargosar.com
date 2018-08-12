@@ -12,8 +12,8 @@ import cn from 'classnames'
 import {fWord} from './lib/fake'
 
 import {pluralize} from './lib/little-ramda'
-import {lifecycle, withProps} from './lib/recompose'
-import {_compose} from './lib/ramda'
+import {withProps} from './lib/recompose'
+import {compose} from './lib/ramda'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import AddListIcon from '@material-ui/icons/PlaylistAddRounded'
@@ -39,12 +39,13 @@ import Typography from '@material-ui/core/Typography/Typography'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Drawer from '@material-ui/core/Drawer/Drawer'
 import AppBar from '@material-ui/core/AppBar/AppBar'
-import {computed} from './lib/little-mst'
+import {bindStoreAction, computed} from './lib/little-mst'
 import Dialog from '@material-ui/core/Dialog/Dialog'
 import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
+import {afterMountAndUpdate} from './lib/little-recompose'
 
 const drawerWidth = 240
 
@@ -81,14 +82,6 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
-const bindStoreAction = comp => actionName => (...args) => () =>
-  comp.props.store[actionName](...args)
-
-const updateLayout = ({store, width}) => {
-  const isMobileLayout = !isWidthUp('sm', width)
-  store.setLayout(isMobileLayout ? 'mobile' : 'desktop')
-}
-
 @observer
 class SelectedListContent extends Component {
   render() {
@@ -109,15 +102,11 @@ SelectedListContent.propTypes = {
   store: PropTypes.object.isRequired,
 }
 
-@_compose(
+@compose(
   withWidth(),
-  lifecycle({
-    componentDidMount() {
-      updateLayout(this.props)
-    },
-    componentDidUpdate() {
-      updateLayout(this.props)
-    },
+  afterMountAndUpdate(({store, width}) => {
+    const isMobileLayout = !isWidthUp('sm', width)
+    store.setLayout(isMobileLayout ? 'mobile' : 'desktop')
   }),
   observer,
 )

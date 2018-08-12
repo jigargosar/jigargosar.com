@@ -136,3 +136,5 @@ export function Disposers() {
 export const spliceItem = el => arr => arr.splice(arr.indexOf(el), 1)
 export const dropFlow = generator => pDropConcurrentCalls(flow(generator))
 export const decorateAtomic = action => decorate(atomic, action)
+export const bindStoreAction = comp => actionName => (...args) => () =>
+  comp.props.store[actionName](...args)
