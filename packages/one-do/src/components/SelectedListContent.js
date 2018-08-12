@@ -90,8 +90,8 @@ class TaskItem extends Component {
     return (
       <ListItem
         disableGutters
-        className={cn('pv0')}
-        button={!task.isDone}
+        className={cn('pv0 pointer')}
+        // button={!task.isDone}
         disabled={task.isDone}
         classes={{}}
         // disableRipple={task.isDone}
