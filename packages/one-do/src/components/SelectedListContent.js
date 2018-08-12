@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {observer} from 'mobx-react'
 import {wrapSP} from '../lib/little-react'
 
-import DeleteIcon from '@material-ui/icons/DeleteRounded'
 import EditIcon from '@material-ui/icons/EditRounded'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
@@ -19,6 +18,7 @@ import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import Typography from '@material-ui/core/Typography/Typography'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction'
 import IconButton from '@material-ui/core/IconButton/IconButton'
+import {DeleteIcon} from './Icons'
 
 @observer
 export class SelectedListContent extends Component {

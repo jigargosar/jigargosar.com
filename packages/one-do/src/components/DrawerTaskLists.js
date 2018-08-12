@@ -10,7 +10,6 @@ import AddListIcon from '@material-ui/icons/PlaylistAddRounded'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import {wrapSP} from '../lib/little-react'
-import DeleteIcon from '@material-ui/icons/DeleteRounded'
 import List from '@material-ui/core/List/List'
 import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader'
 import cn from 'classnames'
@@ -19,6 +18,7 @@ import PropTypes from 'prop-types'
 import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import {pluralize} from '../lib/little-ramda'
+import {DeleteIcon} from './Icons'
 
 @observer
 export class DrawerTaskLists extends Component {
