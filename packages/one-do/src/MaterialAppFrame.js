@@ -35,6 +35,7 @@ import {bindStoreAction} from './lib/little-mst'
 import {afterMountAndUpdate} from './lib/little-recompose'
 import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {SelectedListContent} from './components/SelectedListContent'
+import {AllListsContent} from './components/AllListsContent'
 
 const drawerWidth = 240
 
@@ -73,7 +74,7 @@ const styles = theme => ({
 
 const contentLookup = {
   SelectedList: SelectedListContent,
-  AllLists: SelectedListContent,
+  AllLists: AllListsContent,
 }
 
 @compose(
