@@ -72,9 +72,10 @@ class TaskItem extends Component {
       <ListItem
         disableGutters
         className={cn('pv0')}
-        button
+        button={!task.isDone}
+        disabled={task.isDone}
         classes={{}}
-        disableRipple={task.isDone}
+        // disableRipple={task.isDone}
         onClick={task.isDone ? null : wrapSP(() => store.editTask(task))}
       >
         <Checkbox
