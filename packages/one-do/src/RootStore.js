@@ -71,7 +71,6 @@ const RootStoreBase = model('RootStore', {
   editingTaskId: nullString,
 })
   .preProcessSnapshot(snapshot => {
-    debugger
     const defaultList = {name: 'TODO'}
     const result = compose(
       overPath(['listSelection', 'targetPathFromRoot'])(
