@@ -102,15 +102,15 @@ const RootStoreExt = model('RootStore', {
         self.isSyncing = false
       }
     }),
+    trySync: flow(function*() {
+      if (self.canSync) {
+        yield self.sync()
+      }
+    }),
     ensureLogin: dropFlow(function*() {
       yield authStateKnownPromise
       if (isSignedOut()) {
         yield signInWithPopup()
-      }
-    }),
-    trySync: flow(function*() {
-      if (self.canSync) {
-        yield self.sync()
       }
     }),
     selectList(l) {
