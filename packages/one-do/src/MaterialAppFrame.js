@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {
   EventListener,
@@ -10,13 +10,11 @@ import {
 
 import cn from 'classnames'
 import {fWord} from './lib/fake'
-
-import {pluralize} from './lib/little-ramda'
-import {onlyUpdateForKeys, withProps} from './lib/recompose'
+import {onlyUpdateForKeys} from './lib/recompose'
 import {compose} from './lib/ramda'
+
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import MenuIcon from '@material-ui/icons/MenuRounded'
-import AddListIcon from '@material-ui/icons/PlaylistAddRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
 import DeleteIcon from '@material-ui/icons/DeleteRounded'
 import EditIcon from '@material-ui/icons/EditRounded'
@@ -39,13 +37,15 @@ import Typography from '@material-ui/core/Typography/Typography'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Drawer from '@material-ui/core/Drawer/Drawer'
 import AppBar from '@material-ui/core/AppBar/AppBar'
-import {bindStoreAction, computed} from './lib/little-mst'
 import Dialog from '@material-ui/core/Dialog/Dialog'
 import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
+
+import {bindStoreAction} from './lib/little-mst'
 import {afterMountAndUpdate} from './lib/little-recompose'
+import {DrawerTaskLists} from './components/DrawerTaskLists'
 
 const drawerWidth = 240
 
@@ -149,7 +149,7 @@ class MaterialAppFrame extends Component {
                 </IconButton>
               </div>
             )}
-            <MyLists store={store} />
+            <DrawerTaskLists store={store} />
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
@@ -330,146 +330,3 @@ class EditTaskModal extends Component {
     )
   }
 }
-
-@observer
-class MyLists extends Component {
-  render() {
-    const {store} = this.props
-    return (
-      <List
-        subheader={
-          <ListSubheader
-            color="primary"
-            className={cn('', 'flex items-center')}
-          >
-            <div className={cn('flex-auto')}>My Lists</div>
-            <IconButton
-              onClick={wrapSP(() => store.addList({name: fWord()}))}
-            >
-              <AddListIcon />
-            </IconButton>
-          </ListSubheader>
-        }
-      >
-        <AllTaskListItem store={store} />
-        {store.lists.map(list => (
-          <TaskListItem key={list.id} store={store} list={list} />
-        ))}
-      </List>
-    )
-  }
-}
-
-@observer
-class DrawerTaskListItem extends Component {
-  static defaultProps = {
-    secondaryAction: null,
-  }
-
-  static propTypes = {
-    isDirty: PropTypes.bool.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    name: PropTypes.string.isRequired,
-    onClickSelect: PropTypes.func.isRequired,
-    pendingCount: PropTypes.number.isRequired,
-    secondaryAction: PropTypes.any,
-  }
-
-  render() {
-    const {
-      isSelected,
-      pendingCount,
-      isDirty,
-      onClickSelect,
-      secondaryAction,
-      name,
-    } = this.props
-    return (
-      <ListItem
-        className={cn('ttu', {'bg-black-20': isSelected})}
-        button
-        onClick={onClickSelect}
-      >
-        <ListItemText
-          primary={name}
-          secondary={
-            <Fragment>
-              {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
-              <Fragment>{isDirty && '*'}</Fragment>
-            </Fragment>
-          }
-        />
-        {secondaryAction}
-      </ListItem>
-    )
-  }
-}
-
-const AllTaskListItem = compose(
-  observer,
-  withProps(({store}) => ({
-    name: 'All Tasks',
-    isSelected: store.isAllListSelected,
-    pendingCount: store.allListsPendingCount,
-    isDirty: store.isDirty,
-    onClickSelect: () => store.setIsAllListSelected(true),
-  })),
-)(DrawerTaskListItem)
-
-const TaskListItem = compose(
-  observer,
-  withProps(({store, list}) => ({
-    name: list.name,
-    isSelected: computed(() => store.isListSelected(list)).get(),
-    pendingCount: list.pendingCount,
-    isDirty: list.isDirty,
-    onClickSelect: () => store.setSelectedList(list),
-    secondaryAction: (
-      <ListItemSecondaryAction>
-        <IconButton
-          onClick={wrapSP(() => store.deleteList(list))}
-          disabled={!store.canDeleteList}
-        >
-          <DeleteIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
-    ),
-  })),
-)(DrawerTaskListItem)
-
-// @observer
-// @withProps(({store, list}) => ({
-//   isSelected: computed(() => store.isListSelected(list)).get(),
-// }))
-// @observer
-// class TaskListItem extends Component {
-//   render() {
-//     const {store, list, isSelected} = this.props
-//     const pendingCount = list.pendingTasks.length
-//     return (
-//       <ListItem
-//         className={cn('ttu', {'bg-black-20': isSelected})}
-//         button
-//         onClick={() => store.setSelectedList(list)}
-//       >
-//         <ListItemText
-//           primary={`${list.name}`}
-//           secondary={
-//             <Fragment>
-//               {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
-//               <Fragment>{list.isDirty && '*'}</Fragment>
-//             </Fragment>
-//           }
-//         />
-//         <ListItemSecondaryAction>
-//           <IconButton
-//             onClick={wrapSP(() => store.deleteList(list))}
-//             disabled={!store.canDeleteList}
-//           >
-//             <DeleteIcon />
-//           </IconButton>
-//         </ListItemSecondaryAction>
-//       </ListItem>
-//     )
-//   }
-// }
