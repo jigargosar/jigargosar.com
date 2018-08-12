@@ -16,23 +16,11 @@ import {compose} from './lib/ramda'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
-import DeleteIcon from '@material-ui/icons/DeleteRounded'
-import EditIcon from '@material-ui/icons/EditRounded'
-import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
-import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 import IconButton from '@material-ui/core/IconButton/IconButton'
-
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction'
-import ListItemText from '@material-ui/core/ListItemText/ListItemText'
-import ListItem from '@material-ui/core/ListItem/ListItem'
-import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader'
-import Input from '@material-ui/core/Input/Input'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
-import Checkbox from '@material-ui/core/Checkbox/Checkbox'
 import Button from '@material-ui/core/Button/Button'
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth/withWidth'
 import withStyles from '@material-ui/core/styles/withStyles'
-import List from '@material-ui/core/List/List'
 import Typography from '@material-ui/core/Typography/Typography'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Drawer from '@material-ui/core/Drawer/Drawer'
@@ -46,6 +34,7 @@ import TextField from '@material-ui/core/TextField/TextField'
 import {bindStoreAction} from './lib/little-mst'
 import {afterMountAndUpdate} from './lib/little-recompose'
 import {DrawerTaskLists} from './components/DrawerTaskLists'
+import {SelectedListContent} from './components/SelectedListContent'
 
 const drawerWidth = 240
 
@@ -82,26 +71,6 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
-@observer
-class SelectedListContent extends Component {
-  render() {
-    return (
-      <List
-        disablePadding
-        dense={false}
-        className={cn('overflow-scroll pb5')}
-      >
-        <SelectedListContentHeader store={this.props.store} />
-        <Tasks store={this.props.store} />
-      </List>
-    )
-  }
-}
-
-SelectedListContent.propTypes = {
-  store: PropTypes.object.isRequired,
-}
-
 @compose(
   withWidth(),
   afterMountAndUpdate(({store, width}) => {
@@ -116,6 +85,8 @@ class MaterialAppFrame extends Component {
 
   render() {
     const {classes, store} = this.props
+
+    const ContentView = SelectedListContent
 
     return (
       <FocusTrap
@@ -153,7 +124,7 @@ class MaterialAppFrame extends Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            <SelectedListContent store={store} />
+            <ContentView store={store} />
           </main>
           <Button
             variant="fab"
@@ -193,87 +164,6 @@ MaterialAppFrame.propTypes = {
 }
 
 export default withStyles(styles)(MaterialAppFrame)
-
-@observer
-class TaskItem extends Component {
-  render() {
-    const {task, store} = this.props
-
-    return (
-      <ListItem
-        disableGutters
-        className={cn('pv0')}
-        disabled={task.isDone}
-      >
-        <Checkbox
-          onChange={e =>
-            store.updateTask({isDone: e.target.checked}, task)
-          }
-          checked={task.isDone}
-          color={'default'}
-          icon={<CheckBoxBlankIcon />}
-          checkedIcon={<CheckBoxCheckedIcon />}
-        />
-        <ListItemText
-          disableTypography
-          className={cn('pl0 flex items-center')}
-        >
-          <div className={cn('flex-auto', {strike: task.isDone})}>
-            {task.name}
-          </div>
-          <Typography
-            component={'div'}
-            variant={'headline'}
-            color={'error'}
-          >
-            {task.isDirty && `*`}
-          </Typography>
-        </ListItemText>
-        <ListItemSecondaryAction>
-          {task.isDone && (
-            <IconButton onClick={wrapSP(() => store.deleteTask(task))}>
-              <DeleteIcon />
-            </IconButton>
-          )}
-          {!task.isDone && (
-            <IconButton onClick={wrapSP(() => store.editTask(task))}>
-              <EditIcon />
-            </IconButton>
-          )}
-        </ListItemSecondaryAction>
-      </ListItem>
-    )
-  }
-}
-
-@observer
-class SelectedListContentHeader extends Component {
-  render() {
-    const {store} = this.props
-    const list = store.selectedList
-    return (
-      <ListSubheader className={'pa0 bg-white-80'}>
-        <Input
-          inputProps={{className: cn('pa2 ttu')}}
-          fullWidth
-          type="text"
-          value={list.name}
-          onChange={e => store.updateList({name: e.target.value}, list)}
-        />
-      </ListSubheader>
-    )
-  }
-}
-
-@observer
-class Tasks extends Component {
-  render() {
-    const {store} = this.props
-    return store.tasks.map(task => (
-      <TaskItem key={task.id} task={task} store={store} />
-    ))
-  }
-}
 
 @observer
 class EditTaskModal extends Component {
