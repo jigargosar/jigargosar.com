@@ -351,7 +351,7 @@ class MyLists extends Component {
           </ListSubheader>
         }
       >
-        <DrawerTaskListItem store={store} />
+        <AllTaskListItem store={store} />
         {store.lists.map(list => (
           <TaskListItem key={list.id} store={store} list={list} />
         ))}
@@ -360,13 +360,6 @@ class MyLists extends Component {
   }
 }
 
-@observer
-@withProps(({store}) => ({
-  isSelected: store.isAllListSelected,
-  pendingCount: store.allListsPendingCount,
-  isDirty: store.isDirty,
-  onClickSelect: () => store.setIsAllListSelected(true),
-}))
 @observer
 class DrawerTaskListItem extends Component {
   static propTypes = {
@@ -397,6 +390,16 @@ class DrawerTaskListItem extends Component {
     )
   }
 }
+
+const AllTaskListItem = compose(
+  observer,
+  withProps(({store}) => ({
+    isSelected: store.isAllListSelected,
+    pendingCount: store.allListsPendingCount,
+    isDirty: store.isDirty,
+    onClickSelect: () => store.setIsAllListSelected(true),
+  })),
+)(DrawerTaskListItem)
 
 @observer
 @withProps(({store, list}) => ({
