@@ -362,15 +362,28 @@ class MyLists extends Component {
 
 @observer
 class DrawerTaskListItem extends Component {
+  static defaultProps = {
+    secondaryAction: null,
+  }
+
   static propTypes = {
     isDirty: PropTypes.bool.isRequired,
     isSelected: PropTypes.bool.isRequired,
+    name: PropTypes.string.isRequired,
     onClickSelect: PropTypes.func.isRequired,
     pendingCount: PropTypes.number.isRequired,
+    secondaryAction: PropTypes.any,
   }
 
   render() {
-    const {isSelected, pendingCount, isDirty, onClickSelect} = this.props
+    const {
+      isSelected,
+      pendingCount,
+      isDirty,
+      onClickSelect,
+      secondaryAction,
+      name,
+    } = this.props
     return (
       <ListItem
         className={cn('ttu', {'bg-black-20': isSelected})}
@@ -378,7 +391,7 @@ class DrawerTaskListItem extends Component {
         onClick={onClickSelect}
       >
         <ListItemText
-          primary={'All Lists'}
+          primary={name}
           secondary={
             <Fragment>
               {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
@@ -386,6 +399,7 @@ class DrawerTaskListItem extends Component {
             </Fragment>
           }
         />
+        {secondaryAction}
       </ListItem>
     )
   }
@@ -394,6 +408,7 @@ class DrawerTaskListItem extends Component {
 const AllTaskListItem = compose(
   observer,
   withProps(({store}) => ({
+    name: 'All Lists',
     isSelected: store.isAllListSelected,
     pendingCount: store.allListsPendingCount,
     isDirty: store.isDirty,
@@ -401,39 +416,60 @@ const AllTaskListItem = compose(
   })),
 )(DrawerTaskListItem)
 
-@observer
-@withProps(({store, list}) => ({
-  isSelected: computed(() => store.isListSelected(list)).get(),
-}))
-@observer
-class TaskListItem extends Component {
-  render() {
-    const {store, list, isSelected} = this.props
-    const pendingCount = list.pendingTasks.length
-    return (
-      <ListItem
-        className={cn('ttu', {'bg-black-20': isSelected})}
-        button
-        onClick={() => store.setSelectedList(list)}
-      >
-        <ListItemText
-          primary={`${list.name}`}
-          secondary={
-            <Fragment>
-              {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
-              <Fragment>{list.isDirty && '*'}</Fragment>
-            </Fragment>
-          }
-        />
-        <ListItemSecondaryAction>
-          <IconButton
-            onClick={wrapSP(() => store.deleteList(list))}
-            disabled={!store.canDeleteList}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-    )
-  }
-}
+const TaskListItem = compose(
+  observer,
+  withProps(({store, list}) => ({
+    name: list.name,
+    isSelected: computed(() => store.isListSelected(list)).get(),
+    pendingCount: list.pendingCount,
+    isDirty: list.isDirty,
+    onClickSelect: () => store.setSelectedList(list),
+    secondaryAction: (
+      <ListItemSecondaryAction>
+        <IconButton
+          onClick={wrapSP(() => store.deleteList(list))}
+          disabled={!store.canDeleteList}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
+    ),
+  })),
+)(DrawerTaskListItem)
+
+// @observer
+// @withProps(({store, list}) => ({
+//   isSelected: computed(() => store.isListSelected(list)).get(),
+// }))
+// @observer
+// class TaskListItem extends Component {
+//   render() {
+//     const {store, list, isSelected} = this.props
+//     const pendingCount = list.pendingTasks.length
+//     return (
+//       <ListItem
+//         className={cn('ttu', {'bg-black-20': isSelected})}
+//         button
+//         onClick={() => store.setSelectedList(list)}
+//       >
+//         <ListItemText
+//           primary={`${list.name}`}
+//           secondary={
+//             <Fragment>
+//               {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
+//               <Fragment>{list.isDirty && '*'}</Fragment>
+//             </Fragment>
+//           }
+//         />
+//         <ListItemSecondaryAction>
+//           <IconButton
+//             onClick={wrapSP(() => store.deleteList(list))}
+//             disabled={!store.canDeleteList}
+//           >
+//             <DeleteIcon />
+//           </IconButton>
+//         </ListItemSecondaryAction>
+//       </ListItem>
+//     )
+//   }
+// }
