@@ -44,7 +44,7 @@ import Dialog from '@material-ui/core/Dialog/Dialog'
 import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
-import TextField from '../node_modules/@material-ui/core/TextField/TextField'
+import TextField from '@material-ui/core/TextField/TextField'
 
 const drawerWidth = 240
 
@@ -143,7 +143,11 @@ class MaterialAppFrame extends Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            <List disablePadding className={cn('overflow-scroll pb5')}>
+            <List
+              disablePadding
+              dense={false}
+              className={cn('overflow-scroll pb5')}
+            >
               <SelectedListContentHeader store={store} />
               <Tasks store={store} />
             </List>
@@ -193,55 +197,48 @@ class TaskItem extends Component {
     const {task, store} = this.props
 
     return (
-      <Fragment>
-        <ListItem dense disableGutters>
-          <Checkbox
-            onChange={e =>
-              store.updateTask({isDone: e.target.checked}, task)
-            }
-            checked={task.isDone}
-            color={'default'}
-            icon={<CheckBoxBlankIcon />}
-            checkedIcon={<CheckBoxCheckedIcon />}
-          />
-          <ListItemText className={cn('pl0')}>
-            <Input
-              fullWidth
-              type="text"
-              disabled={task.isDone}
-              disableUnderline
-              value={task.name}
-              onChange={e =>
-                store.updateTask({name: e.target.value}, task)
-              }
-              endAdornment={
-                task.isDirty && (
-                  <InputAdornment position="end">*</InputAdornment>
-                )
-              }
-              inputProps={{className: cn({strike: task.isDone})}}
-            />
-          </ListItemText>
-          {this.renderSecondaryAction(task, store)}
-        </ListItem>
-      </Fragment>
-    )
-  }
-
-  renderSecondaryAction(task, store) {
-    return (
-      <ListItemSecondaryAction>
-        {task.isDone && (
-          <IconButton onClick={wrapSP(() => store.deleteTask(task))}>
-            <DeleteIcon />
-          </IconButton>
-        )}
-        {!task.isDone && (
-          <IconButton onClick={wrapSP(() => store.editTask(task))}>
-            <EditIcon />
-          </IconButton>
-        )}
-      </ListItemSecondaryAction>
+      <ListItem
+        disableGutters
+        className={cn('pv0')}
+        disabled={task.isDone}
+      >
+        <Checkbox
+          onChange={e =>
+            store.updateTask({isDone: e.target.checked}, task)
+          }
+          checked={task.isDone}
+          color={'default'}
+          icon={<CheckBoxBlankIcon />}
+          checkedIcon={<CheckBoxCheckedIcon />}
+        />
+        <ListItemText
+          disableTypography
+          className={cn('pl0 flex items-center')}
+        >
+          <div className={cn('flex-auto', {strike: task.isDone})}>
+            {task.name}
+          </div>
+          <Typography
+            component={'div'}
+            variant={'headline'}
+            color={'error'}
+          >
+            {task.isDirty && `*`}
+          </Typography>
+        </ListItemText>
+        <ListItemSecondaryAction>
+          {task.isDone && (
+            <IconButton onClick={wrapSP(() => store.deleteTask(task))}>
+              <DeleteIcon />
+            </IconButton>
+          )}
+          {!task.isDone && (
+            <IconButton onClick={wrapSP(() => store.editTask(task))}>
+              <EditIcon />
+            </IconButton>
+          )}
+        </ListItemSecondaryAction>
+      </ListItem>
     )
   }
 }
@@ -308,8 +305,12 @@ class EditTaskModal extends Component {
                   store.updateTask({name: e.target.value}, task)
                 }
                 InputProps={{
-                  endAdornment: task.isDirty && (
-                    <InputAdornment position="end">*</InputAdornment>
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Typography variant={'headline'} color={'error'}>
+                        {task.isDirty && `*`}
+                      </Typography>
+                    </InputAdornment>
                   ),
                   inputProps: {className: cn({strike: task.isDone})},
                 }}
