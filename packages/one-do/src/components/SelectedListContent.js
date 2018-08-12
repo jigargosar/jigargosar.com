@@ -7,7 +7,6 @@ import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 
 import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader'
-import Input from '@material-ui/core/Input/Input'
 import cn from 'classnames'
 import List from '@material-ui/core/List/List'
 import ListItem from '@material-ui/core/ListItem/ListItem'
@@ -42,14 +41,7 @@ class SelectedListContentHeader extends Component {
     const list = store.selectedList
     return (
       <ListSubheader className={'bg-white-80 flex'}>
-        <div className={cn('flex-auto')}>{list.name}</div>
-        {/*<Input*/}
-        {/*inputProps={{className: cn('pa2 ttu')}}*/}
-        {/*fullWidth*/}
-        {/*type="text"*/}
-        {/*value={list.name}*/}
-        {/*onChange={e => store.updateList({name: e.target.value}, list)}*/}
-        {/*/>*/}
+        <div className={cn('flex-auto ttu')}>{list.name}</div>
         <IconButton onClick={wrapSP(() => store.editList(list))}>
           <EditIcon />
         </IconButton>

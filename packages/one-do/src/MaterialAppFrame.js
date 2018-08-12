@@ -5,6 +5,8 @@ import {
   FocusTrap,
   Fr,
   observer,
+  whenKey,
+  withKeyEvent,
   wrapSP,
 } from './lib/little-react'
 
@@ -198,6 +200,9 @@ class EditTaskModal extends Component {
                 autoFocus={true}
                 type="text"
                 value={task.name}
+                onKeyDown={withKeyEvent(
+                  whenKey('enter')(this.handleClose),
+                )}
                 onChange={e =>
                   store.updateTask({name: e.target.value}, task)
                 }
