@@ -26,6 +26,7 @@ import {
   isNil,
   pick,
   propEq,
+  propOr,
   reject,
   sortWith,
   toUpper,
@@ -178,23 +179,23 @@ const Selection = model('Selection', {
   .volatile(() => ({_itemsGetter: always([])}))
   .views(self => ({
     get items() {
-      return self._itemsGetter
+      return self._itemsGetter()
     },
     set idx(val) {
       self._idx = val
       self._id = self.selectedItemFromIdx.id
     },
     get idx() {
-      return clamp(0, self.items().length - 1)(self._idx)
+      return clamp(0, self.items.length - 1)(self._idx)
     },
     get selectedItem() {
       return self.selectedItemFromId || self.selectedItemFromIdx
     },
     get selectedItemFromIdx() {
-      return self.items()[self.idx]
+      return self.items[self.idx]
     },
     get selectedItemFromId() {
-      return findById(self._id)(self.items())
+      return findById(self._id)(self.items)
     },
     isSelected(l) {
       return self.selectedItem === l
@@ -203,6 +204,12 @@ const Selection = model('Selection', {
   .actions(self => ({
     setItemsGetter(itemsGetter) {
       self._itemsGetter = itemsGetter
+      console.log(`self.selectedItemFromId`, self.selectedItemFromId)
+    },
+    updateId() {
+      if (isNil(self.selectedItemFromId)) {
+        self._id = propOr(null)('id')(self.selectedItemFromIdx)
+      }
     },
     afterCreate() {
       addDisposer(
@@ -214,9 +221,10 @@ const Selection = model('Selection', {
           },
         ),
       )
+      addDisposer(self, reaction(() => self.items, self.updateId))
     },
     selectItem(item) {
-      self.idx = self.items().indexOf(item)
+      self.idx = self.items.indexOf(item)
     },
   }))
 
