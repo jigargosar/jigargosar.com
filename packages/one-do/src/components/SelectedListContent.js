@@ -17,6 +17,7 @@ import IconButton from '@material-ui/core/IconButton/IconButton'
 import {DeleteIcon} from './Icons'
 import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase'
 import {F} from '../lib/ramda'
+import Button from '@material-ui/core/es/Button/Button'
 
 @observer
 export class SelectedListContent extends Component {
@@ -43,6 +44,7 @@ class SelectedListContentHeader extends Component {
       <ListSubheader
         component={props => <ButtonBase {...props} component={'div'} />}
         className={'bg-white-80 flex'}
+        color={'primary'}
         onClick={wrapSP(() => store.editList(list))}
       >
         <div className={cn('flex-auto ttu')}>{list.name}</div>
