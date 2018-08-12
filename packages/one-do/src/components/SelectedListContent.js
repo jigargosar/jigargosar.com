@@ -20,6 +20,7 @@ import ButtonBase from '@material-ui/core/ButtonBase/ButtonBase'
 import {F} from '../lib/ramda'
 import {withStyles} from '../lib/material-ui'
 import Button from '@material-ui/core/es/Button/Button'
+import {fWord} from '../lib/fake'
 
 export const AddIcon = AddRounded
 @observer
@@ -61,10 +62,13 @@ class SelectedListContentHeader extends Component {
           />
         )}
         className={'bg-white-80 flex pl2 pr1'}
-        // onClick={wrapSP(() => store.editList(list))}
+        onClick={wrapSP(() => store.editList(list))}
       >
         <div className={cn('flex-auto ttu')}>{list.name}</div>
-        <IconButton color={'secondary'}>
+        <IconButton
+          color={'secondary'}
+          onClick={wrapSP(() => store.addTask({name: fWord()}, list))}
+        >
           <AddIcon />
         </IconButton>
       </ListSubheader>
@@ -90,7 +94,7 @@ class TaskItem extends Component {
     return (
       <ListItem
         disableGutters
-        className={cn('pv0 pointer')}
+        className={cn('pv0', {pointer: !task.isDone})}
         // button={!task.isDone}
         disabled={task.isDone}
         classes={{}}
