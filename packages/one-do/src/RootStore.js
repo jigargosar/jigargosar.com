@@ -17,14 +17,15 @@ import {StorageItem} from './lib/storage'
 import {
   _compose,
   _prop,
-  always,
   ascend,
   clamp,
+  compose,
   defaultTo,
   equals,
   filter,
   indexOf,
   isNil,
+  pathOr,
   pick,
   propEq,
   propOr,
@@ -176,10 +177,11 @@ const TaskListCollection = collection(TaskList)
 const Selection = model('Selection', {
   _idx: 0,
   _id: nullString,
+  targetPathFromRoot: types.array(types.string),
 })
   .views(self => ({
     get items() {
-      return getRoot(self).lists
+      return pathOr([])(self.targetPathFromRoot)(getRoot(self))
     },
     get idx() {
       return clamp(0, self.items.length - 1)(self._idx)
@@ -231,16 +233,20 @@ const Selection = model('Selection', {
 const RootStoreBase = model('RootStore', {
   taskListCollection: optional(TaskListCollection),
   taskCollection: optional(TaskCollection),
-  listSelection: optional(Selection),
+  listSelection: optional(Selection, {targetPathFromRoot: ['lists']}),
   editingTaskId: nullString,
 })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
-    const result = overPath(['taskListCollection', 'items'])(
-      defaultTo([defaultList]),
+    const result = compose(
+      overPath(['listSelection', 'targetPathFromRoot'])(
+        defaultTo(['lists']),
+      ),
+      overPath(['taskListCollection', 'items'])(defaultTo([defaultList])),
     )(snapshot)
 
     console.debug('[RS] preProcessSnapshot result', result)
+    debugger
     return result
   })
   .actions(lsActions)
