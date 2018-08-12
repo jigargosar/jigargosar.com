@@ -81,7 +81,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
-const bindAction = comp => actionName => (...args) => () =>
+const bindStoreAction = comp => actionName => (...args) => () =>
   comp.props.store[actionName](...args)
 
 const updateLayout = ({store, width}) => {
@@ -122,7 +122,7 @@ SelectedListContent.propTypes = {
   observer,
 )
 class MaterialAppFrame extends Component {
-  toggleDrawer = bindAction(this)('toggleDrawer')
+  toggleDrawer = bindStoreAction(this)('toggleDrawer')
 
   render() {
     const {classes, store} = this.props
