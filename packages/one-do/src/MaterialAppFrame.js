@@ -351,7 +351,7 @@ class MyLists extends Component {
           </ListSubheader>
         }
       >
-        <AllTaskListItem store={store} />
+        <DrawerTaskListItem store={store} />
         {store.lists.map(list => (
           <TaskListItem key={list.id} store={store} list={list} />
         ))}
@@ -368,7 +368,14 @@ class MyLists extends Component {
   onClickSelect: () => store.setIsAllListSelected(true),
 }))
 @observer
-class AllTaskListItem extends Component {
+class DrawerTaskListItem extends Component {
+  static propTypes = {
+    isDirty: PropTypes.bool.isRequired,
+    isSelected: PropTypes.bool.isRequired,
+    onClickSelect: PropTypes.func.isRequired,
+    pendingCount: PropTypes.number.isRequired,
+  }
+
   render() {
     const {isSelected, pendingCount, isDirty, onClickSelect} = this.props
     return (
