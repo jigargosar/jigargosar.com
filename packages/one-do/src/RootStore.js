@@ -166,13 +166,9 @@ const TaskList = model('TaskList', {
     },
   }))
 
-const TaskCollection = collection(Task)
-
-const TaskListCollection = collection(TaskList)
-
 const RootStoreExt = model('RootStore', {
-  taskListCollection: optional(TaskListCollection),
-  taskCollection: optional(TaskCollection),
+  taskListCollection: optional(collection(TaskList)),
+  taskCollection: optional(collection(Task)),
   listSelection: optional(Selection, {targetPathFromRoot: ['lists']}),
   editingTaskId: nullString,
 })
