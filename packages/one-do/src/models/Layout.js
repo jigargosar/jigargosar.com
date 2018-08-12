@@ -3,21 +3,16 @@ import {defaultTo, equals} from 'ramda'
 
 export const LAYOUT_DESKTOP = 'desktop'
 export const LAYOUT_MOBILE = 'mobile'
-export const LayoutEnum = optionalEnum('Layout', [
-  LAYOUT_DESKTOP,
-  LAYOUT_MOBILE,
-])
 export const isLayoutMobile = equals(LAYOUT_MOBILE)
 export const isLayoutDesktop = equals(LAYOUT_DESKTOP)
 
+const drawerOpenState = model('DrawerOpenState', {
+  [LAYOUT_MOBILE]: false,
+  [LAYOUT_DESKTOP]: true,
+})
 export const Layout = model('Layout', {
-  drawerOpenState: optional(
-    model('DrawerOpenState', {
-      [LAYOUT_MOBILE]: false,
-      [LAYOUT_DESKTOP]: true,
-    }),
-  ),
-  layout: LayoutEnum,
+  drawerOpenState: optional(drawerOpenState),
+  layout: optionalEnum('Layout', [LAYOUT_DESKTOP, LAYOUT_MOBILE]),
 })
   .volatile(self => ({}))
   .views(self => ({
@@ -41,7 +36,7 @@ export const Layout = model('Layout', {
     setLayout(layout) {
       if (self.layout === layout) return
       self.layout = layout
-      self.drawerOpenState[LAYOUT_MOBILE] = false
+      self.drawerOpenState = {}
     },
     toggleDrawer(bool) {
       self.isDrawerOpen = defaultTo(!self.isDrawerOpen)(bool)
