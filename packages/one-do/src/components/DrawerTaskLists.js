@@ -61,7 +61,7 @@ class DrawerTaskListItem extends Component {
     name: PropTypes.string.isRequired,
     onClickSelect: PropTypes.func.isRequired,
     pendingCount: PropTypes.number.isRequired,
-    secondaryAction: PropTypes.any,
+    secondaryAction: PropTypes.node,
   }
 
   render() {
