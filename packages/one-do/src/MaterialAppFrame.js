@@ -36,7 +36,7 @@ import {withStore, withStoreDN} from './StoreContext'
 import {dispatchAddTask, dispatchToggleDrawer} from './StoreActions'
 import {EditTaskModal} from './EditTaskModal'
 import {FlexRow} from './components/UI'
-import {Btn} from './lib/Btn'
+import {IconBtn} from './lib/IconBtn'
 
 const drawerWidth = 240
 
@@ -136,17 +136,6 @@ class SideBar extends Component {
       </Drawer>
     )
   }
-}
-
-function IconBtn({label, Icon, ...other}) {
-  return (
-    <Btn {...other}>
-      <div className={cn('flex flex-column items-center')}>
-        <Icon />
-        <div className={cn('f6')}>{label}</div>
-      </div>
-    </Btn>
-  )
 }
 
 @compose(
