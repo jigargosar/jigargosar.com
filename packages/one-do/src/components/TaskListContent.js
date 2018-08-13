@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {observer} from 'mobx-react'
 import {wrapSP} from '../lib/little-react'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
@@ -46,20 +45,16 @@ class Header extends Component {
 @withStore
 class Tasks extends Component {
   render() {
-    const {tasks} = this.props
-    return tasks.map(task => <TaskItem key={task.id} task={task} />)
+    return this.props.tasks.map(task => (
+      <TaskItem key={task.id} task={task} />
+    ))
   }
 }
 
-function storeOf(node) {
-  return getParentOfType(node, RootStore)
-}
-
-@observer
+@withStore
 class TaskItem extends Component {
   render() {
-    const {task} = this.props
-    const store = storeOf(task)
+    const {store, task} = this.props
     const isDone = task.isDone
     return (
       <div
