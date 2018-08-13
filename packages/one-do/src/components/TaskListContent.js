@@ -72,7 +72,7 @@ class TaskItem extends Component {
     const isDone = task.isDone
     return (
       <div
-        className={cn('pv0', {pointer: !isDone})}
+        className={cn('flex  items-center', {pointer: !isDone})}
         onClick={isDone ? null : wrapSP(() => store.editTask(task))}
       >
         <Btn
