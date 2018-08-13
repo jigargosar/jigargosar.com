@@ -10,8 +10,9 @@ import {
 import {FlexRow} from './components/UI'
 import {IconBtn} from './lib/IconBtn'
 import {AddIcon, DeleteIcon, MenuIcon} from './components/Icons'
+import {withStore} from './StoreContext'
 
-export function BottomBar() {
+function BottomBar({store: {selectedTask}}) {
   return (
     <FlexRow className={cn('pa2 flex-shrink-0', 'bt b--moon-gray')}>
       <IconBtn
@@ -27,10 +28,13 @@ export function BottomBar() {
       <IconBtn
         Icon={DeleteIcon}
         label={'delete'}
-        onClick={dispatchDeleteTask(store.selectedTask)}
+        disabled={Boolean(!selectedTask)}
+        onClick={dispatchDeleteTask(selectedTask)}
       />
     </FlexRow>
   )
 }
 
 BottomBar.propTypes = {}
+
+export default withStore(BottomBar)

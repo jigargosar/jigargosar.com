@@ -33,7 +33,7 @@ import {TaskListContent} from './components/TaskListContent'
 import {withStore, withStoreDN} from './StoreContext'
 import {dispatchToggleDrawer} from './StoreActions'
 import {EditTaskModal} from './EditTaskModal'
-import {BottomBar} from './BottomBar'
+import BottomBar from './BottomBar'
 
 const drawerWidth = 240
 
