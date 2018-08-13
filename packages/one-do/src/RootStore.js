@@ -27,7 +27,7 @@ import {
 import {Layout} from './models/Layout'
 import {Selection} from './models/Selection'
 import {Collections} from './models/Collections'
-import {whenKey, whenKeyPD, withKeyEvent} from './lib/little-react'
+import {whenKeyPD, withKeyEvent} from './lib/little-react'
 
 const RootStoreBase = model('RootStore', {
   listSelection: Selection,
