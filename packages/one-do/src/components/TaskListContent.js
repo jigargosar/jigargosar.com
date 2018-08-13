@@ -43,7 +43,7 @@ class Header extends Component {
     const list = store.selectedList
     return (
       <div
-        className={'bg-white-80 flex pa2'}
+        className={'flex items-center bg-white-80 flex pa2 pr0'}
         onClick={wrapSP(() => store.editList(list))}
       >
         <div className={cn('flex-auto ttu')}>{list.name}</div>
