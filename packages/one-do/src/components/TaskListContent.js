@@ -10,29 +10,25 @@ import {withStoreDN} from '../StoreContext'
 import {dispatchAddTask, dispatchEditListSP} from '../StoreActions'
 import {FlexRow} from './UI'
 
-export const TaskListContent = withStoreDN('TaskListContent')(props => {
-  const store = props.store
-  return (
+export const TaskListContent = withStoreDN('TaskListContent')(
+  ({store}) => (
     <div className={cn('overflow-scroll pb5')}>
       <Header list={store.selectedList} />
       <Tasks tasks={store.tasks} />
     </div>
-  )
-})
-const Header = withStoreDN('Header')(props => {
-  const {list} = props
-  return (
-    <FlexRow className={'pa2 pr0 '} onClick={dispatchEditListSP(list)}>
-      <div className={cn('fa ttu')}>{list.name}</div>
-      <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
-        <AddIcon />
-      </Btn>
-    </FlexRow>
-  )
-})
+  ),
+)
+const Header = withStoreDN('Header')(({list}) => (
+  <FlexRow className={'pa2 pr0 '} onClick={dispatchEditListSP(list)}>
+    <div className={cn('fa ttu')}>{list.name}</div>
+    <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
+      <AddIcon />
+    </Btn>
+  </FlexRow>
+))
 
-const Tasks = withStoreDN('Tasks')(props =>
-  props.tasks.map(task => <TaskItem key={task.id} task={task} />),
+const Tasks = withStoreDN('Tasks')(({tasks}) =>
+  tasks.map(task => <TaskItem key={task.id} task={task} />),
 )
 
 const TaskItem = withStoreDN('TaskItem')(props => {
