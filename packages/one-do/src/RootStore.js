@@ -65,7 +65,10 @@ const RootStoreBase = model('RootStore', {
   })
   .views(self => ({
     get onKeyDown() {
-      const keyMap = [['mod+/', 'Help']]
+      const keyMap = [
+        //
+        ['mod+/', 'Help'],
+      ]
 
       return withKeyEvent(
         ...keyMap.map(([k, h]) => whenKeyPD(k)(self[`on${h}`])),
