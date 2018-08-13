@@ -36,6 +36,7 @@ import {
   dispatchDeleteTask,
   dispatchEditTask,
   dispatchToggleDrawer,
+  dispatchUpdateItem,
 } from './StoreActions'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
@@ -229,7 +230,7 @@ class EditListModal extends Component {
                   whenKey('enter')(this.handleClose),
                 )}
                 onChange={e =>
-                  store.updateList({name: e.target.value}, list)
+                  dispatchUpdateItem({name: e.target.value}, list)(e)
                 }
                 InputProps={{
                   endAdornment: (
