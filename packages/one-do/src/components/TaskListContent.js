@@ -9,8 +9,9 @@ import {fWord} from '../lib/fake'
 import {Btn} from '../lib/tachyons-components'
 import {getParentOfType} from '../lib/little-mst'
 import RootStore from '../RootStore'
+import {withStore} from '../StoreContext'
 
-@observer
+@withStore
 export class TaskListContent extends Component {
   render() {
     const store = this.props.store
@@ -45,7 +46,7 @@ class Header extends Component {
 @observer
 class Tasks extends Component {
   render() {
-    const {store, tasks} = this.props
+    const {tasks} = this.props
     return tasks.map(task => <TaskItem key={task.id} task={task} />)
   }
 }

@@ -7,7 +7,6 @@ import {
   observer,
   whenKey,
   withKeyEvent,
-  wrapSP,
 } from './lib/little-react'
 
 import cn from 'classnames'
@@ -157,7 +156,7 @@ class MaterialAppFrame extends Component {
           <SideBar />
           <main className={classes.content}>
             <div className={classes.toolbar} />
-            <ContentView store={store} />
+            <ContentView />
           </main>
           <Button
             variant="fab"

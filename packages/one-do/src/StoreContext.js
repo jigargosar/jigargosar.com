@@ -7,12 +7,12 @@ import {setDisplayName} from './lib/recompose'
 const StoreContext = React.createContext(store)
 const StoreContentConsumer = StoreContext.Consumer
 
-export function withStore(BaseComponent) {
+export const withStore = BaseComponent => {
   const BaseComponentObserver = observer(BaseComponent)
   return function withStore(props) {
     return (
       <StoreContentConsumer>
-        {store => <BaseComponent {...props} store={store} />}
+        {store => <BaseComponentObserver {...props} store={store} />}
       </StoreContentConsumer>
     )
   }
