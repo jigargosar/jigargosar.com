@@ -19,12 +19,12 @@ export class Btn extends Component {
         className={cn(
           'link',
           'flex items-center',
-          `input-reset dib mh1 f${f} normal pointer ttu`,
-          disabled ? 'gray' : 'blue',
+          `input-reset dib mh1 f${f} normal ttu`,
+          disabled ? 'gray' : 'blue pointer',
         )}
         style={{userSelect: 'none' /*fontSize: 'inherit'*/}}
         onClick={disabled ? null : onClick}
-        tabIndex={0}
+        tabIndex={disabled ? null : 0}
       >
         {children}
       </div>
