@@ -42,12 +42,6 @@ const TaskItem = withStoreDN('TaskItem')(
         {name}
         {isDirty && ` *`}
       </Div>
-
-      {isDone && (
-        <Btn onClick={dispatchDeleteTaskSP(task)}>
-          <DeleteIcon />
-        </Btn>
-      )}
     </FlexRow>
   ),
 )
