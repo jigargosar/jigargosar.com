@@ -24,7 +24,7 @@ import {fWord} from '../lib/fake'
 
 export const AddIcon = AddRounded
 @observer
-export class SelectedListContent extends Component {
+export class TaskListContent extends Component {
   render() {
     return (
       <List
@@ -32,7 +32,7 @@ export class SelectedListContent extends Component {
         dense={false}
         className={cn('overflow-scroll pb5')}
       >
-        <SelectedListContentHeader store={this.props.store} />
+        <Header store={this.props.store} />
         <Tasks store={this.props.store} />
       </List>
     )
@@ -46,7 +46,7 @@ export class SelectedListContent extends Component {
   },
 }))
 @observer
-class SelectedListContentHeader extends Component {
+class Header extends Component {
   render() {
     const {store, classes} = this.props
     const list = store.selectedList

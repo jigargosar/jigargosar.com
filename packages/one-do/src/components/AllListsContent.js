@@ -1,4 +1,4 @@
 // import React from 'react'
-import {SelectedListContent} from './SelectedListContent'
+import {TaskListContent} from './TaskListContent'
 
-export const AllListsContent = SelectedListContent
+export const AllListsContent = TaskListContent
