@@ -13,6 +13,7 @@ import {
   ascend,
   compose,
   defaultTo,
+  pathOr,
   pluck,
   sortWith,
   sum,
@@ -87,9 +88,9 @@ const RootStoreBase = types
         [ascend(compose(toUpper, _prop('name')))],
       )(activeLists)
     },
-    // get editingTask() {
-    //   return findById(self.editingTaskId)(self.tasks)
-    // },
+    get editingTaskId() {
+      return pathOr(null)(['editingTask', 'id'])(self)
+    },
     get editingList() {
       return findById(self.editingListId)(self.lists)
     },
@@ -127,6 +128,7 @@ const RootStoreBase = types
       )
       self.updateTask(self.editingTask, originalTask)
       self.editingTask = null
+      return originalTask
     },
     editList(list) {
       self.editingListId = list.id
@@ -158,8 +160,10 @@ const RootStoreBase = types
     addTask(props, list = self.selectedList) {
       self.taskCollection.add({...props, parentId: list.id})
     },
-    deleteTask(props) {
-      self.taskCollection.delete(props)
+    deleteTask(task) {
+      const taskToDelete =
+        self.editingTaskId === task.id ? self.endEditTask() : task
+      self.taskCollection.delete(taskToDelete)
     },
     updateTask(props, task) {
       self.taskCollection.update(props, task)

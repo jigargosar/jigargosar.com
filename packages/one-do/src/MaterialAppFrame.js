@@ -34,7 +34,12 @@ import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {AllListsContent} from './components/AllListsContent'
 import {withStore, withStoreDN} from './StoreContext'
-import {dispatchAddTask, dispatchToggleDrawer} from './StoreActions'
+import {
+  dispatchAddTask,
+  dispatchDeleteTask,
+  dispatchToggleDrawer,
+  dispatchUpdateTask,
+} from './StoreActions'
 
 const drawerWidth = 240
 
@@ -221,7 +226,7 @@ class EditTaskModal extends Component {
                   whenKey('enter')(this.handleClose),
                 )}
                 onChange={e =>
-                  store.updateTask({name: e.target.value}, task)
+                  dispatchUpdateTask({name: e.target.value}, task)(e)
                 }
               />
             </DialogContent>
@@ -230,6 +235,9 @@ class EditTaskModal extends Component {
             >
               <Button onClick={this.handleClose} color="primary">
                 ok
+              </Button>
+              <Button onClick={dispatchDeleteTask(task)} color="primary">
+                delete
               </Button>
             </DialogActions>
           </Dialog>
