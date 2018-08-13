@@ -39,7 +39,7 @@ export function whenKey(...keys) {
 
 export function whenKeyPD(...keys) {
   return function(fn) {
-    return [isKey(...keys), wrapPD(fn)]
+    return [isKey(...keys), tapPD(fn)]
   }
 }
 
@@ -47,7 +47,7 @@ export function withKeyEvent(...conditions) {
   return _tap(_cond(conditions))
 }
 
-export const wrapPD = fn =>
+export const tapPD = fn =>
   R.tap(e => {
     e.preventDefault()
     fn(e)
