@@ -75,7 +75,11 @@ class DrawerTaskListItem extends Component {
     } = this.props
     return (
       <ListItem
-        className={cn('ttu', {'bg-black-20': isSelected})}
+        className={cn(
+          'ttu',
+          'br bw2',
+          isSelected ? 'b--blue' : 'b--transparent',
+        )}
         button
         onClick={onClickSelect}
       >
