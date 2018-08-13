@@ -86,6 +86,28 @@ const GlobalEventListener = withStoreDN('GlobalEventListener')(store => (
   <EventListener target={'document'} onKeyDown={store.onKeyDown} />
 ))
 
+class TopToolBar extends Component {
+  render() {
+    return (
+      <Toolbar>
+        <IconButton color={'inherit'} onClick={this.props.onClick}>
+          <MenuIcon />
+        </IconButton>
+        <Typography
+          className={cn('ml2')}
+          variant="title"
+          color="inherit"
+          noWrap
+        >
+          ONE DO
+        </Typography>
+      </Toolbar>
+    )
+  }
+}
+
+TopToolBar.propTypes = {onClick: PropTypes.any}
+
 @compose(
   withStore,
   withWidth(),
@@ -129,13 +151,6 @@ class MaterialAppFrame extends Component {
             ModalProps={{keepMounted: true}}
           >
             {this.renderToolBar()}
-            {false && (
-              <div className={classes.toolbar}>
-                <IconButton onClick={this.toggleDrawer(false)}>
-                  <ChevronLeftIcon />
-                </IconButton>
-              </div>
-            )}
             <DrawerTaskLists store={store} />
           </Drawer>
           <main className={classes.content}>
@@ -158,21 +173,7 @@ class MaterialAppFrame extends Component {
   }
 
   renderToolBar() {
-    return (
-      <Toolbar>
-        <IconButton color={'inherit'} onClick={this.toggleDrawer()}>
-          <MenuIcon />
-        </IconButton>
-        <Typography
-          className={cn('ml2')}
-          variant="title"
-          color="inherit"
-          noWrap
-        >
-          ONE DO
-        </Typography>
-      </Toolbar>
-    )
+    return <TopToolBar onClick={this.toggleDrawer()} />
   }
 }
 
