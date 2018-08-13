@@ -2,12 +2,22 @@ import React, {Component as RC, Fragment as Fr} from 'react'
 import {inject, observer, Observer} from 'mobx-react'
 import isHotKey from 'is-hotkey'
 import * as R from 'ramda'
-import {_compose, _cond, _tap, curry, prop, reduce, reduced} from './ramda'
+import {
+  _compose,
+  _cond,
+  _tap,
+  compose,
+  curry,
+  prop,
+  reduce,
+  reduced,
+} from './ramda'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
 import {mapIndexed} from './little-ramda'
 import ReactEventListener from 'react-event-listener'
+import {setDisplayName} from './recompose'
 
 export {cn}
 
@@ -197,3 +207,5 @@ export function cnWith(...cnArgs) {
 }
 
 export const onClickSP = fn => ({onClick: tapSP(fn)})
+
+export const observerDN = dn => compose(setDisplayName(dn), observer)

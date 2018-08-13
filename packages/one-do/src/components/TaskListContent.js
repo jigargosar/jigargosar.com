@@ -15,6 +15,8 @@ import {FlexRow} from './UI'
 import {ifElse_} from '../lib/little-ramda'
 import CheckBtn from './CheckBtn'
 import {renderKeyedById} from '../lib/little-react'
+import {renameProp, withProps} from '../lib/recompose'
+import {compose} from '../lib/ramda'
 
 export const TaskListContent = withStoreDN('TaskListContent')(
   ({store: {tasks, selectedList: list}}) => (
@@ -30,6 +32,13 @@ export const TaskListContent = withStoreDN('TaskListContent')(
   ),
 )
 
+const withCN = compose(
+  renameProp('cn', 'className'),
+  withProps(({className}) => ({className: cn(...className)})),
+)
+
+const Div = withCN('div')
+
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
     <FlexRow
@@ -40,10 +49,10 @@ const TaskItem = withStoreDN('TaskItem')(
         checked={isDone}
         onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}
       />
-      <div className={cn('fa', {strike: isDone})}>
+      <Div cn={['fa', {strike: isDone}]}>
         {name}
         {isDirty && ` *`}
-      </div>
+      </Div>
 
       {isDone && (
         <Btn onClick={dispatchDeleteTaskSP(task)}>
