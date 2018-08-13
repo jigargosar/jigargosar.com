@@ -1,5 +1,4 @@
 import React from 'react'
-import {tapSP} from '../lib/little-react'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 import cn from 'classnames'
@@ -15,6 +14,7 @@ import {
   dispatchUpdateTaskSP,
 } from '../StoreActions'
 import {FlexRow} from './UI'
+import {ifElse_} from '../lib/little-ramda'
 
 export const TaskListContent = withStoreDN('TaskListContent')(
   ({store}) => (
@@ -37,19 +37,15 @@ const Tasks = withStoreDN('Tasks')(({tasks}) =>
   tasks.map(task => <TaskItem key={task.id} task={task} />),
 )
 
-const ifTF = (bool, t, f) => {
-  return bool ? t : f
-}
-
 function checkBoxIcon(isChecked) {
-  return ifTF(isChecked, <CheckBoxCheckedIcon />, <CheckBoxBlankIcon />)
+  return ifElse_(isChecked, <CheckBoxCheckedIcon />, <CheckBoxBlankIcon />)
 }
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
     <div
       className={cn('frc', {pointer: !isDone})}
-      onClick={ifTF(isDone, null, dispatchEditTaskSP(task))}
+      onClick={ifElse_(isDone, null, dispatchEditTaskSP(task))}
     >
       <Btn onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}>
         {checkBoxIcon(isDone)}

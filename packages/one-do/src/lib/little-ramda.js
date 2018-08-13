@@ -93,3 +93,6 @@ export const pDropConcurrentCalls = asyncFn => {
   }
 }
 export const findById = id => list => list.find(propEq('id', id))
+export const ifElse_ = (bool, t, f) => {
+  return bool ? t : f
+}
