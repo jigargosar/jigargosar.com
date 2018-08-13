@@ -16,8 +16,8 @@ export class TaskListContent extends Component {
     const store = this.props.store
     return (
       <div className={cn('overflow-scroll pb5')}>
-        <Header store={store} />
-        <Tasks store={store} />
+        <Header list={store.selectedList} />
+        <Tasks store={store} tasks={store.tasks} />
       </div>
     )
   }
@@ -26,8 +26,8 @@ export class TaskListContent extends Component {
 @observer
 class Header extends Component {
   render() {
-    const {store} = this.props
-    const list = store.selectedList
+    const {list} = this.props
+    const store = storeOf(list)
     return (
       <div
         className={'frc pa2 pr0 '}
@@ -45,18 +45,20 @@ class Header extends Component {
 @observer
 class Tasks extends Component {
   render() {
-    const {store} = this.props
-    return store.tasks.map(task => (
-      <TaskItem key={task.id} task={task} store={store} />
-    ))
+    const {store, tasks} = this.props
+    return tasks.map(task => <TaskItem key={task.id} task={task} />)
   }
+}
+
+function storeOf(node) {
+  return getParentOfType(node, RootStore)
 }
 
 @observer
 class TaskItem extends Component {
   render() {
     const {task} = this.props
-    const store = getParentOfType(task, RootStore)
+    const store = storeOf(task)
     const isDone = task.isDone
     return (
       <div

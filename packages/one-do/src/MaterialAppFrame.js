@@ -12,7 +12,7 @@ import {
 
 import cn from 'classnames'
 import {fWord} from './lib/fake'
-import {onlyUpdateForKeys} from './lib/recompose'
+import {defaultProps, onlyUpdateForKeys} from './lib/recompose'
 import {compose} from './lib/ramda'
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
