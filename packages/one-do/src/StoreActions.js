@@ -1,5 +1,6 @@
 import store from './store'
 
-export const actionDispatcher = actionName => (...args) => () =>
+export const dispatch = actionName => (...args) => () =>
   store[actionName](...args)
-export const dispatchToggleDrawer = actionDispatcher('toggleDrawer')
+export const dispatchToggleDrawer = dispatch('toggleDrawer')
+export const dispatchAddTask = dispatch('toggleDrawer')
