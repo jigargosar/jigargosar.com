@@ -200,14 +200,6 @@ class MaterialAppFrame extends Component {
               />
             </FlexRow>
           </main>
-          <Button
-            variant="fab"
-            color={'secondary'}
-            className={cn('absolute right-1 bottom-1')}
-            onClick={e => dispatchAddTask({name: fWord()})(e)}
-          >
-            <AddTaskIcon />
-          </Button>
           <EditTaskModal store={store} />
           <EditListModal store={store} />
         </div>
