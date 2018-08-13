@@ -35,6 +35,8 @@ import {TaskListContent} from './components/TaskListContent'
 import {withStore, withStoreDN} from './StoreContext'
 import {dispatchAddTask, dispatchToggleDrawer} from './StoreActions'
 import {EditTaskModal} from './EditTaskModal'
+import {FlexRow} from './components/UI'
+import {Btn} from './lib/tachyons-components'
 
 const drawerWidth = 240
 
@@ -136,6 +138,17 @@ class SideBar extends Component {
   }
 }
 
+function IconBtn({label, Icon, ...other}) {
+  return (
+    <Btn {...other}>
+      <div className={cn('flex flex-column items-center')}>
+        <Icon />
+        <div className={cn('f6')}>{label}</div>
+      </div>
+    </Btn>
+  )
+}
+
 @compose(
   withStore,
   withWidth(),
@@ -166,6 +179,25 @@ class MaterialAppFrame extends Component {
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView />
+            <FlexRow
+              className={cn('pa2 flex-shrink-0', 'bt b--moon-gray')}
+            >
+              <IconBtn
+                Icon={AddTaskIcon}
+                label={'add'}
+                onClick={e => dispatchAddTask({name: fWord()})(e)}
+              />
+              <IconBtn
+                Icon={AddTaskIcon}
+                label={'add'}
+                onClick={e => dispatchAddTask({name: fWord()})(e)}
+              />
+              <IconBtn
+                Icon={AddTaskIcon}
+                label={'add'}
+                onClick={e => dispatchAddTask({name: fWord()})(e)}
+              />
+            </FlexRow>
           </main>
           <Button
             variant="fab"

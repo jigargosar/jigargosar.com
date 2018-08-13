@@ -18,4 +18,5 @@ export const FlexRow = compose(
   withCN,
   withMergedClassName('frc'),
 )('div')
+
 export const Div = withCN('div')
