@@ -71,9 +71,13 @@ const contentLookup = {
   AllLists: AllListsContent,
 }
 
-const GlobalEventListener = withStoreDN('GlobalEventListener')(store => (
-  <EventListener target={'document'} onKeyDown={store.onKeyDown} />
-))
+const GlobalEventListener = withStoreDN('GlobalEventListener')(
+  ({store}) => {
+    return (
+      <EventListener target={'document'} onKeyDown={store.onKeyDown} />
+    )
+  },
+)
 
 @observer
 class TopToolBar extends Component {

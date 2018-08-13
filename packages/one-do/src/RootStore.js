@@ -27,6 +27,7 @@ import {
 import {Layout} from './models/Layout'
 import {Selection} from './models/Selection'
 import {Collections} from './models/Collections'
+import {whenKey, whenKeyPD, withKeyEvent} from './lib/little-react'
 
 const RootStoreBase = model('RootStore', {
   listSelection: Selection,
@@ -63,6 +64,13 @@ const RootStoreBase = model('RootStore', {
     }
   })
   .views(self => ({
+    get onKeyDown() {
+      const keyMap = [['mod+/', 'Help']]
+
+      return withKeyEvent(
+        ...keyMap.map(([k, h]) => whenKeyPD(k)(self[`on${h}`])),
+      )
+    },
     get allListsPendingCount() {
       return compose(sum, pluck('pendingCount'))(self.lists)
     },
@@ -98,6 +106,9 @@ const RootStoreBase = model('RootStore', {
     },
   }))
   .actions(self => ({
+    onHelp() {
+      alert('Help? wat!')
+    },
     setIsAllListSelected(bool) {
       self.isAllListSelected = bool
     },
