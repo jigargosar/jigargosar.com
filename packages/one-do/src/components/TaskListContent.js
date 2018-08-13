@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import {AddIcon} from './Icons'
 import {fWord} from '../lib/fake'
-import {Btn} from '../lib/Btn'
+import {Btn, BtnBehaviour} from '../lib/Btn'
 import {withStoreDN} from '../StoreContext'
 import {
   dispatchAddTaskSP,
@@ -29,18 +29,22 @@ export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
-    <FlexRow
+    <Div
       cn={[
         'ph3 pointer bl bw2',
         store.isSelected(task) ? 'b--blue' : 'b--transparent',
       ]}
-      onClick={dispatchSetSelection(task)}
-      onDoubleClick={dispatchEditTaskSP(task)}
     >
-      <Div cn={['fa', {strike: isDone}]}>
-        {name}
-        {isDirty && ` *`}
-      </Div>
-    </FlexRow>
+      <BtnBehaviour
+        className={cn('link')}
+        onClick={dispatchSetSelection(task)}
+        onDoubleClick={dispatchEditTaskSP(task)}
+      >
+        <Div cn={['fa', {strike: isDone}]}>
+          {name}
+          {isDirty && ` *`}
+        </Div>
+      </BtnBehaviour>
+    </Div>
   ),
 )

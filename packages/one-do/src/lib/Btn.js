@@ -37,3 +37,23 @@ export class Btn extends Component {
     )
   }
 }
+@observer
+export class BtnBehaviour extends Component {
+  render() {
+    const {disabled = false, onClick, ...other} = this.props
+    return (
+      <div
+        role={'button'}
+        onKeyDown={
+          disabled ? null : withKeyEvent(whenKeySP('enter')(onClick))
+        }
+        onKeyUp={
+          disabled ? null : withKeyEvent(whenKeySP('space')(onClick))
+        }
+        onClick={disabled ? null : onClick}
+        tabIndex={disabled ? null : 0}
+        {...other}
+      />
+    )
+  }
+}
