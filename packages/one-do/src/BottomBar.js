@@ -2,10 +2,14 @@ import React from 'react'
 
 import cn from 'classnames'
 import {fWord} from './lib/fake'
-import {dispatchAddTask, dispatchToggleDrawer} from './StoreActions'
+import {
+  dispatchAddTask,
+  dispatchDeleteTask,
+  dispatchToggleDrawer,
+} from './StoreActions'
 import {FlexRow} from './components/UI'
 import {IconBtn} from './lib/IconBtn'
-import {AddIcon, MenuIcon} from './components/Icons'
+import {AddIcon, DeleteIcon, MenuIcon} from './components/Icons'
 
 export function BottomBar() {
   return (
@@ -19,6 +23,11 @@ export function BottomBar() {
         Icon={AddIcon}
         label={'add'}
         onClick={e => dispatchAddTask({name: fWord()})(e)}
+      />
+      <IconBtn
+        Icon={DeleteIcon}
+        label={'delete'}
+        onClick={dispatchDeleteTask(store.selectedTask)}
       />
     </FlexRow>
   )
