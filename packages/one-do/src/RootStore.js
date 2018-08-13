@@ -2,7 +2,6 @@ import {
   addDisposer,
   applySnapshot,
   dropFlow,
-  model,
   nullString,
   onSnapshot,
   types,
@@ -28,13 +27,16 @@ import {Layout} from './models/Layout'
 import {Selection} from './models/Selection'
 import {Collections} from './models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
+import {Task} from './models/Task'
+import {types} from 'mobx-state-tree'
 
-const RootStoreBase = model('RootStore', {
-  listSelection: Selection,
-  editingTaskId: nullString,
-  editingListId: nullString,
-  isAllListSelected: false,
-})
+const RootStoreBase = types
+  .model('RootStore', {
+    listSelection: Selection,
+    editingTask: types.maybeNull(Task),
+    editingListId: nullString,
+    isAllListSelected: false,
+  })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
     const result = compose(

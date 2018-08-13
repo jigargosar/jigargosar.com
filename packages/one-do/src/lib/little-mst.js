@@ -119,8 +119,6 @@ export const nullString = types.maybeNull(types.string)
 export const nullNumber = types.maybeNull(types.number)
 export const optional = (t, dv = {}) => types.optional(t, dv)
 export const stringArray = types.array(types.string)
-export const model = (n, p = null) => types.model(n, p)
-
 export function Disposers() {
   const list = []
   return {

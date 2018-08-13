@@ -1,14 +1,15 @@
-import {model, nullString} from '../lib/little-mst'
+import {nullString} from '../lib/little-mst'
 import {addDisposer, getRoot, types} from 'mobx-state-tree'
 import {clamp, indexOf, isNil, pathOr, propOr} from 'ramda'
 import {findById} from '../lib/little-ramda'
 import {reaction} from 'mobx'
 
-export const Selection = model('Selection', {
-  _idx: 0,
-  _id: nullString,
-  targetPathFromRoot: types.array(types.string),
-})
+export const Selection = types
+  .model('Selection', {
+    _idx: 0,
+    _id: nullString,
+    targetPathFromRoot: types.array(types.string),
+  })
   .views(self => ({
     get items() {
       return pathOr([])(self.targetPathFromRoot)(getRoot(self))

@@ -1,13 +1,14 @@
-import {dropFlow, model, optional} from '../lib/little-mst'
+import {dropFlow, optional} from '../lib/little-mst'
 import {collection} from './Collection'
 import {Task, TaskList} from './Task'
 import {isSignedIn} from '../firebase'
-import {flow} from 'mobx-state-tree'
+import {flow, types} from 'mobx-state-tree'
 
-export const Collections = model('Collections', {
-  taskListCollection: optional(collection(TaskList)),
-  taskCollection: optional(collection(Task)),
-})
+export const Collections = types
+  .model('Collections', {
+    taskListCollection: optional(collection(TaskList)),
+    taskCollection: optional(collection(Task)),
+  })
   .volatile(self => ({
     isSyncing: false,
   }))

@@ -1,4 +1,4 @@
-import {dropFlow, model} from '../lib/little-mst'
+import {dropFlow} from '../lib/little-mst'
 import {flow, types} from 'mobx-state-tree'
 import {_compose, _prop} from '../lib/ramda'
 import {equals, filter, isNil, reject} from 'ramda'
@@ -10,9 +10,10 @@ import {
 import {findById} from '../lib/little-ramda'
 
 export function collection(Model) {
-  const Collection = model(`${Model.name}Collection`, {
-    items: types.optional(types.array(Model), []),
-  })
+  const Collection = types
+    .model(`${Model.name}Collection`, {
+      items: types.optional(types.array(Model), []),
+    })
     .volatile(self => ({}))
     .views(self => ({
       get dirtyItems() {

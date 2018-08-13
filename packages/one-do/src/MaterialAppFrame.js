@@ -12,7 +12,7 @@ import {
 import cn from 'classnames'
 import {fWord} from './lib/fake'
 import {onlyUpdateForKeys, withProps} from './lib/recompose'
-import {compose, pick} from './lib/ramda'
+import {compose} from './lib/ramda'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton/IconButton'
@@ -35,7 +35,6 @@ import {TaskListContent} from './components/TaskListContent'
 import {AllListsContent} from './components/AllListsContent'
 import {withStore, withStoreDN} from './StoreContext'
 import {dispatchAddTask, dispatchToggleDrawer} from './StoreActions'
-import {observable} from './lib/little-mst'
 
 const drawerWidth = 240
 
@@ -192,11 +191,10 @@ export default withStyles(styles)(MaterialAppFrame)
 
 @observer
 class EditTaskModal extends Component {
-  @observable editProps = pick('name')(this.props.task)
   handleClose = () => {
     this.props.store.endEditTask()
   }
-  save = () => {
+  handleSave = () => {
     this.props.store.endEditTask()
   }
   render() {

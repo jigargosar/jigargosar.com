@@ -1,16 +1,17 @@
-import {model, modelId} from '../lib/little-mst'
+import {modelId} from '../lib/little-mst'
 import {getRoot, getSnapshot, types} from 'mobx-state-tree'
 import {pick, propEq, reject} from 'ramda'
 import {_prop} from '../lib/ramda'
 
-export const Task = model('Task', {
-  id: modelId('Task'),
-  name: '',
-  parentId: types.reference(types.late(() => TaskList)),
-  isDone: false,
-  isDirty: true,
-  isDeleted: false,
-})
+export const Task = types
+  .model('Task', {
+    id: modelId('Task'),
+    name: '',
+    parentId: types.reference(types.late(() => TaskList)),
+    isDone: false,
+    isDirty: true,
+    isDeleted: false,
+  })
   .volatile(self => ({}))
   .views(self => ({
     get remoteProps() {
@@ -23,12 +24,13 @@ export const Task = model('Task', {
       return self.pickRemoteProps(getSnapshot(self))
     },
   }))
-export const TaskList = model('TaskList', {
-  id: modelId('TaskList'),
-  name: '',
-  isDirty: true,
-  isDeleted: false,
-})
+export const TaskList = types
+  .model('TaskList', {
+    id: modelId('TaskList'),
+    name: '',
+    isDirty: true,
+    isDeleted: false,
+  })
   .views(self => ({
     get taskCollection() {
       return getRoot(self).taskCollection
