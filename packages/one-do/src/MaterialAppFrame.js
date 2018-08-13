@@ -100,25 +100,27 @@ class TopToolBar extends Component {
   }
 }
 
+@withStore
 class SideBar extends Component {
   render() {
+    const store = this.props.store
     return (
       <Drawer
-        variant={this.props.store.drawerVariant}
+        variant={store.drawerVariant}
         classes={{
-          paper: this.props.store.isDrawerOpen
+          paper: store.isDrawerOpen
             ? this.props.classes.drawerPaper
             : this.props.classes.drawerPaperClosed,
         }}
-        open={this.props.store.isDrawerOpen}
-        onClose={this.props.onClose}
+        open={store.isDrawerOpen}
+        onClose={dispatchToggleDrawer(false)}
         onClick={
-          this.props.store.isDrawerTemporary ? this.props.onClose : null
+          store.isDrawerTemporary ? dispatchToggleDrawer(false) : null
         }
         ModalProps={{keepMounted: true}}
       >
-        {this.props.renderToolBar}
-        <DrawerTaskLists store={this.props.store} />
+        <TopToolBar />
+        <DrawerTaskLists store={store} />
       </Drawer>
     )
   }
@@ -127,8 +129,6 @@ class SideBar extends Component {
 SideBar.propTypes = {
   store: PropTypes.any,
   classes: PropTypes.any,
-  onClose: PropTypes.any,
-  renderToolBar: PropTypes.any,
 }
 
 @compose(
@@ -155,14 +155,9 @@ class MaterialAppFrame extends Component {
         <GlobalEventListener />
         <div className={classes.root}>
           <AppBar position="absolute" className={classes.appBar}>
-            {this.renderToolBar()}
+            {<TopToolBar />}
           </AppBar>
-          <SideBar
-            store={store}
-            classes={classes}
-            onClose={dispatchToggleDrawer(false)}
-            renderToolBar={this.renderToolBar()}
-          />
+          <SideBar store={store} classes={classes} />
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView store={store} />
@@ -180,10 +175,6 @@ class MaterialAppFrame extends Component {
         </div>
       </FocusTrap>
     )
-  }
-
-  renderToolBar() {
-    return <TopToolBar />
   }
 }
 
