@@ -28,7 +28,7 @@ export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
-    <FlexRow cn={['pointer']} onClick={dispatchEditTaskSP(task)}>
+    <FlexRow cn={['ph3 pointer']} onClick={dispatchEditTaskSP(task)}>
       <Div cn={['fa', {strike: isDone}]}>
         {name}
         {isDirty && ` *`}
