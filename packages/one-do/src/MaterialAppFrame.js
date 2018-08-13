@@ -32,7 +32,6 @@ import TextField from '@material-ui/core/TextField/TextField'
 import {afterMountAndUpdate} from './lib/little-recompose'
 import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
-import {AllListsContent} from './components/AllListsContent'
 import {withStore, withStoreDN} from './StoreContext'
 import {
   dispatchAddTask,
@@ -73,7 +72,7 @@ const SelectedListContent = compose(
 
 const contentLookup = {
   SelectedList: SelectedListContent,
-  AllLists: AllListsContent,
+  AllLists: SelectedListContent,
 }
 
 const GlobalEventListener = withStoreDN('GlobalEventListener')(
