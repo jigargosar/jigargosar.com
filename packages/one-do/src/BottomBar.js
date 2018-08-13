@@ -17,6 +17,13 @@ function BottomBar({store: {selectedTask: task}}) {
   return (
     <FlexRow className={cn('pa2 flex-shrink-0', 'bt b--moon-gray')}>
       <IconBtn
+        Icon={DeleteIcon}
+        label={'delete'}
+        disabled={Boolean(!task)}
+        onClick={dispatchDeleteTask(task)}
+      />
+      <div className={cn('flex-auto')} />
+      <IconBtn
         Icon={MenuIcon}
         label={'menu'}
         onClick={dispatchToggleDrawer()}
@@ -33,12 +40,6 @@ function BottomBar({store: {selectedTask: task}}) {
         onClick={
           task ? dispatchUpdateTask({isDone: !task.isDone}, task) : null
         }
-      />
-      <IconBtn
-        Icon={DeleteIcon}
-        label={'delete'}
-        disabled={Boolean(!task)}
-        onClick={dispatchDeleteTask(task)}
       />
     </FlexRow>
   )
