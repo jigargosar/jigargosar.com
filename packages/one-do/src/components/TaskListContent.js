@@ -11,6 +11,7 @@ import {
   dispatchAddTask,
   dispatchDeleteTaskSP,
   dispatchEditListSP,
+  dispatchEditTaskSP,
   dispatchUpdateTaskSP,
 } from '../StoreActions'
 import {FlexRow} from './UI'
@@ -40,7 +41,7 @@ const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
     <div
       className={cn('frc', {pointer: !isDone})}
-      onClick={isDone ? null : tapSP(() => store.editTask(task))}
+      onClick={isDone ? null : dispatchEditTaskSP(task)}
     >
       <Btn onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}>
         {isDone ? <CheckBoxCheckedIcon /> : <CheckBoxBlankIcon />}
