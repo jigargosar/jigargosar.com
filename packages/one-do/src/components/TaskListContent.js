@@ -28,7 +28,7 @@ export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
-    <FlexRow cn={[{pointer: !isDone}]} onClick={dispatchEditTaskSP(task)}>
+    <FlexRow cn={['pointer']} onClick={dispatchEditTaskSP(task)}>
       <CheckBtn
         checked={isDone}
         onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}
