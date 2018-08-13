@@ -1,8 +1,9 @@
-import {computed, nullString} from '../lib/little-mst'
+import {nullString} from '../lib/little-mst'
 import {addDisposer, getRoot, types} from 'mobx-state-tree'
-import {clamp, indexOf, isNil, pathOr, propOr} from 'ramda'
+import {clamp, indexOf, isNil, propOr} from 'ramda'
 import {findById} from '../lib/little-ramda'
 import {reaction} from 'mobx'
+import {path} from '../lib/ramda'
 
 export const Selection = types
   .model('Selection', {
@@ -15,7 +16,7 @@ export const Selection = types
       return self.items
     },
     get items() {
-      return pathOr([])(self.targetPathFromRoot)(getRoot(self))
+      return path(self.targetPathFromRoot)(getRoot(self))
     },
     get idx() {
       if (self.items.length === 0) return NaN
@@ -45,7 +46,7 @@ export const Selection = types
       addDisposer(
         self,
         reaction(
-          () => self.itemsFn(),
+          () => self.items,
           () => {
             if (isNil(self.selectedItemFromId)) {
               self.setSelectedItem(self.selectedItemFromIdx)
