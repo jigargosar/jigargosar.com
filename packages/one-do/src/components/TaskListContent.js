@@ -31,8 +31,7 @@ const Tasks = withStoreDN('Tasks')(({tasks}) =>
   tasks.map(task => <TaskItem key={task.id} task={task} />),
 )
 
-const TaskItem = withStoreDN('TaskItem')(props => {
-  const {store, task} = props
+const TaskItem = withStoreDN('TaskItem')(({store, task}) => {
   const isDone = task.isDone
   return (
     <div
