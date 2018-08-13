@@ -42,32 +42,29 @@ const Tasks = withStoreDN('Tasks')(props =>
   props.tasks.map(task => <TaskItem key={task.id} task={task} />),
 )
 
-@withStore
-class TaskItem extends Component {
-  render() {
-    const {store, task} = this.props
-    const isDone = task.isDone
-    return (
-      <div
-        className={cn('frc', {pointer: !isDone})}
-        onClick={isDone ? null : wrapSP(() => store.editTask(task))}
+const TaskItem = withStoreDN('TaskItem')(props => {
+  const {store, task} = props
+  const isDone = task.isDone
+  return (
+    <div
+      className={cn('frc', {pointer: !isDone})}
+      onClick={isDone ? null : wrapSP(() => store.editTask(task))}
+    >
+      <Btn
+        onClick={wrapSP(() => store.updateTask({isDone: !isDone}, task))}
       >
-        <Btn
-          onClick={wrapSP(() => store.updateTask({isDone: !isDone}, task))}
-        >
-          {isDone ? <CheckBoxCheckedIcon /> : <CheckBoxBlankIcon />}
-        </Btn>
-        <div className={cn('fa', {strike: isDone})}>
-          {task.name}
-          {task.isDirty && ` *`}
-        </div>
-
-        {isDone && (
-          <Btn onClick={wrapSP(() => store.deleteTask(task))}>
-            <DeleteIcon />
-          </Btn>
-        )}
+        {isDone ? <CheckBoxCheckedIcon /> : <CheckBoxBlankIcon />}
+      </Btn>
+      <div className={cn('fa', {strike: isDone})}>
+        {task.name}
+        {task.isDirty && ` *`}
       </div>
-    )
-  }
-}
+
+      {isDone && (
+        <Btn onClick={wrapSP(() => store.deleteTask(task))}>
+          <DeleteIcon />
+        </Btn>
+      )}
+    </div>
+  )
+})
