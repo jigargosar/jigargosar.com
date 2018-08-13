@@ -68,6 +68,7 @@ const RootStoreBase = model('RootStore', {
       const keyMap = [
         //
         ['mod+/', 'Help'],
+        ['mod+shift+f', 'Help'],
       ]
 
       return withKeyEvent(
