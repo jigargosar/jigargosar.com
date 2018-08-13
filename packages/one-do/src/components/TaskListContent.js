@@ -1,6 +1,4 @@
 import React from 'react'
-import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
-import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 import cn from 'classnames'
 import {AddIcon, DeleteIcon} from './Icons'
 import {fWord} from '../lib/fake'
@@ -15,6 +13,7 @@ import {
 } from '../StoreActions'
 import {FlexRow} from './UI'
 import {ifElse_} from '../lib/little-ramda'
+import CheckBtn from './CheckBtn'
 
 export const TaskListContent = withStoreDN('TaskListContent')(
   ({store}) => (
@@ -37,19 +36,16 @@ const Tasks = withStoreDN('Tasks')(({tasks}) =>
   tasks.map(task => <TaskItem key={task.id} task={task} />),
 )
 
-function checkBoxIcon(isChecked) {
-  return ifElse_(isChecked, <CheckBoxCheckedIcon />, <CheckBoxBlankIcon />)
-}
-
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
     <div
       className={cn('frc', {pointer: !isDone})}
       onClick={ifElse_(isDone, null, dispatchEditTaskSP(task))}
     >
-      <Btn onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}>
-        {checkBoxIcon(isDone)}
-      </Btn>
+      <CheckBtn
+        checked={isDone}
+        onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}
+      />
       <div className={cn('fa', {strike: isDone})}>
         {name}
         {isDirty && ` *`}
