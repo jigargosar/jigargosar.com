@@ -15,6 +15,7 @@ export const Selection = types
       return pathOr([])(self.targetPathFromRoot)(getRoot(self))
     },
     get idx() {
+      if (self.items.length === 0) return NaN
       return clamp(0, self.items.length - 1)(self._idx)
     },
     get selectedItem() {
