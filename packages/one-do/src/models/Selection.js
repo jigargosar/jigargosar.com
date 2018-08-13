@@ -19,7 +19,7 @@ export const Selection = types
       return path(self.targetPathFromRoot)(getRoot(self))
     },
     get idx() {
-      if (self.items.length === 0) return NaN
+      if (self.items.length === 0) return 0
       return clamp(0, self.items.length - 1)(self._idx)
     },
     get selectedItem() {
@@ -42,15 +42,27 @@ export const Selection = types
         self._idx = indexOf(item)(self.items)
       }
     },
+    setIdx(idx) {
+      self._idx = idx
+    },
     afterCreate() {
       addDisposer(
         self,
         reaction(
-          () => path(self.targetPathFromRoot)(getRoot(self)),
+          () => self.items,
           () => {
             if (isNil(self.selectedItemFromId)) {
               self.setSelectedItem(self.selectedItemFromIdx)
             }
+          },
+        ),
+      )
+      addDisposer(
+        self,
+        reaction(
+          () => self.idx,
+          () => {
+            self.setIdx(self.idx)
           },
         ),
       )
