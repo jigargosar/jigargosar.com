@@ -1,6 +1,7 @@
 import {
   addDisposer,
   applySnapshot,
+  clone,
   dropFlow,
   nullString,
   onSnapshot,
@@ -28,7 +29,6 @@ import {Selection} from './models/Selection'
 import {Collections} from './models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
 import {Task} from './models/Task'
-import {types} from 'mobx-state-tree'
 
 const RootStoreBase = types
   .model('RootStore', {
@@ -87,9 +87,9 @@ const RootStoreBase = types
         [ascend(compose(toUpper, _prop('name')))],
       )(activeLists)
     },
-    get editingTask() {
-      return findById(self.editingTaskId)(self.tasks)
-    },
+    // get editingTask() {
+    //   return findById(self.editingTaskId)(self.tasks)
+    // },
     get editingList() {
       return findById(self.editingListId)(self.lists)
     },
@@ -119,10 +119,10 @@ const RootStoreBase = types
       self.isAllListSelected = bool
     },
     editTask(task) {
-      self.editingTaskId = task.id
+      self.editingTask = clone(task)
     },
     endEditTask() {
-      self.editingTaskId = null
+      self.editingTask = null
     },
     editList(list) {
       self.editingListId = list.id
