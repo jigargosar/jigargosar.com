@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Btn} from '../lib/tachyons-components'
+import {Btn} from '../lib/Btn'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 import {ifElse_} from '../lib/little-ramda'

@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import {AddIcon} from './Icons'
 import {fWord} from '../lib/fake'
-import {Btn} from '../lib/tachyons-components'
+import {Btn} from '../lib/Btn'
 import {withStoreDN} from '../StoreContext'
 import {
   dispatchAddTaskSP,

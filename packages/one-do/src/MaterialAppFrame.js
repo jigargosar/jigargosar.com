@@ -36,7 +36,7 @@ import {withStore, withStoreDN} from './StoreContext'
 import {dispatchAddTask, dispatchToggleDrawer} from './StoreActions'
 import {EditTaskModal} from './EditTaskModal'
 import {FlexRow} from './components/UI'
-import {Btn} from './lib/tachyons-components'
+import {Btn} from './lib/Btn'
 
 const drawerWidth = 240
 
@@ -188,8 +188,9 @@ class MaterialAppFrame extends Component {
                 onClick={e => dispatchAddTask({name: fWord()})(e)}
               />
               <IconBtn
+                disabled
                 Icon={AddTaskIcon}
-                label={'add'}
+                label={'addaaaaaaa'}
                 onClick={e => dispatchAddTask({name: fWord()})(e)}
               />
               <IconBtn
