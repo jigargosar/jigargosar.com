@@ -1,18 +1,16 @@
 import React from 'react'
 import cn from 'classnames'
-import {AddIcon, DeleteIcon} from './Icons'
+import {AddIcon} from './Icons'
 import {fWord} from '../lib/fake'
 import {Btn} from '../lib/tachyons-components'
 import {withStoreDN} from '../StoreContext'
 import {
   dispatchAddTask,
-  dispatchDeleteTaskSP,
   dispatchEditListSP,
   dispatchEditTaskSP,
   dispatchUpdateTaskSP,
 } from '../StoreActions'
 import {Div, FlexRow} from './UI'
-import {ifElse_} from '../lib/little-ramda'
 import CheckBtn from './CheckBtn'
 import {renderKeyedById} from '../lib/little-react'
 
@@ -30,10 +28,7 @@ export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
-    <FlexRow
-      cn={[{pointer: !isDone}]}
-      onClick={ifElse_(isDone, null, dispatchEditTaskSP(task))}
-    >
+    <FlexRow cn={[{pointer: !isDone}]} onClick={dispatchEditTaskSP(task)}>
       <CheckBtn
         checked={isDone}
         onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}
