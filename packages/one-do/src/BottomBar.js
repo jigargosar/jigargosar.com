@@ -6,10 +6,11 @@ import {
   dispatchAddTask,
   dispatchDeleteTask,
   dispatchToggleDrawer,
+  dispatchUpdateTask,
 } from './StoreActions'
 import {FlexRow} from './components/UI'
 import {IconBtn} from './lib/IconBtn'
-import {AddIcon, DeleteIcon, MenuIcon} from './components/Icons'
+import {AddIcon, DeleteIcon, DoneIcon, MenuIcon} from './components/Icons'
 import {withStore} from './StoreContext'
 
 function BottomBar({store: {selectedTask}}) {
@@ -30,6 +31,15 @@ function BottomBar({store: {selectedTask}}) {
         label={'delete'}
         disabled={Boolean(!selectedTask)}
         onClick={dispatchDeleteTask(selectedTask)}
+      />
+      <IconBtn
+        Icon={DoneIcon}
+        label={'done'}
+        disabled={Boolean(!selectedTask)}
+        onClick={dispatchUpdateTask(
+          {isDone: !selectedTask.isDone},
+          selectedTask,
+        )}
       />
     </FlexRow>
   )
