@@ -14,6 +14,7 @@ import {
   dispatchUpdateTaskSP,
 } from './StoreActions'
 import CheckBtn from './components/CheckBtn'
+import {FlexRow} from './components/UI'
 
 @observer
 export class EditTaskModal extends Component {
@@ -39,25 +40,27 @@ export class EditTaskModal extends Component {
               {'Edit Task'}
             </DialogTitle>
             <DialogContent>
-              <CheckBtn
-                checked={task.isDone}
-                onClick={dispatchUpdateTaskSP(
-                  {isDone: !task.isDone},
-                  task,
-                )}
-              />
-              <TextField
-                fullWidth
-                autoFocus={true}
-                type="text"
-                value={task.name}
-                onKeyDown={withKeyEvent(
-                  whenKey('enter')(this.handleClose),
-                )}
-                onChange={e =>
-                  dispatchUpdateTask({name: e.target.value}, task)(e)
-                }
-              />
+              <FlexRow>
+                <CheckBtn
+                  checked={task.isDone}
+                  onClick={dispatchUpdateTaskSP(
+                    {isDone: !task.isDone},
+                    task,
+                  )}
+                />
+                <TextField
+                  fullWidth
+                  autoFocus={true}
+                  type="text"
+                  value={task.name}
+                  onKeyDown={withKeyEvent(
+                    whenKey('enter')(this.handleClose),
+                  )}
+                  onChange={e =>
+                    dispatchUpdateTask({name: e.target.value}, task)(e)
+                  }
+                />
+              </FlexRow>
             </DialogContent>
             <DialogActions
               className={cn('flex-row-reverse justify-start')}
