@@ -109,7 +109,7 @@ const TaskListItem = compose(
   observer,
   withProps(({store, list}) => ({
     name: list.name,
-    isSelected: computed(() => store.isListSelected(list)).get(),
+    isSelected: computed(() => store.isSelected(list)).get(),
     pendingCount: list.pendingCount,
     isDirty: list.isDirty,
     onClickSelect: () => store.setSelectedList(list),

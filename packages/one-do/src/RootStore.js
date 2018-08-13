@@ -105,12 +105,15 @@ const RootStoreBase = types
       return self.selectedList.activeTasks
     },
     get selectedList() {
-      return self.listSelection.selectedItem
+      return self.selectionFor(TaskList).selectedItem
     },
-    isListSelected(list) {
-      if (self.isAllListSelected) return false
+    get selectedTask() {
+      return self.selectionFor(Task).selectedItem
+    },
+    isSelected(node) {
+      if (TaskList.is(node) && self.isAllListSelected) return false
 
-      return self.listSelection.isSelected(list)
+      return self.selectionFor(node).isSelected(node)
     },
     get canDeleteList() {
       return self.taskListCollection.activeItems.length > 1
