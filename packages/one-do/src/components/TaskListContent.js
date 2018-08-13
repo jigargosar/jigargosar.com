@@ -31,9 +31,8 @@ const Tasks = withStoreDN('Tasks')(({tasks}) =>
   tasks.map(task => <TaskItem key={task.id} task={task} />),
 )
 
-const TaskItem = withStoreDN('TaskItem')(({store, task}) => {
-  const isDone = task.isDone
-  return (
+const TaskItem = withStoreDN('TaskItem')(
+  ({store, task, _task: {isDone, name, isDirty} = task}) => (
     <div
       className={cn('frc', {pointer: !isDone})}
       onClick={isDone ? null : wrapSP(() => store.editTask(task))}
@@ -44,8 +43,8 @@ const TaskItem = withStoreDN('TaskItem')(({store, task}) => {
         {isDone ? <CheckBoxCheckedIcon /> : <CheckBoxBlankIcon />}
       </Btn>
       <div className={cn('fa', {strike: isDone})}>
-        {task.name}
-        {task.isDirty && ` *`}
+        {name}
+        {isDirty && ` *`}
       </div>
 
       {isDone && (
@@ -54,5 +53,5 @@ const TaskItem = withStoreDN('TaskItem')(({store, task}) => {
         </Btn>
       )}
     </div>
-  )
-})
+  ),
+)
