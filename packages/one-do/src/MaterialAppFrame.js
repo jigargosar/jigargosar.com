@@ -126,11 +126,6 @@ class SideBar extends Component {
   }
 }
 
-SideBar.propTypes = {
-  store: PropTypes.any,
-  classes: PropTypes.any,
-}
-
 @compose(
   withStore,
   withWidth(),
@@ -157,7 +152,7 @@ class MaterialAppFrame extends Component {
           <AppBar position="absolute" className={classes.appBar}>
             {<TopToolBar />}
           </AppBar>
-          <SideBar store={store} classes={classes} />
+          <SideBar classes={classes} />
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView store={store} />
