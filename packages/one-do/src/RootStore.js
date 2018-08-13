@@ -170,7 +170,7 @@ const RootStoreBase = types
       const originalList = self.taskListCollection.findById(
         self.editingList.id,
       )
-      self.updateList(self.editingList, originalList)
+      self.update(self.editingList, originalList)
       self.editingList = null
       return originalList
     },
