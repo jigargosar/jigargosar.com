@@ -29,14 +29,12 @@ export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
-    <Div
-      cn={[
-        'ph3 pointer bl bw2',
-        store.isSelected(task) ? 'b--blue' : 'b--transparent',
-      ]}
-    >
+    <Div>
       <BtnBehaviour
-        className={cn('link')}
+        className={cn(
+          'link ph3 pointer bl bw2',
+          store.isSelected(task) ? 'b--blue' : 'b--transparent',
+        )}
         onClick={dispatchSetSelection(task)}
         onDoubleClick={dispatchEditTaskSP(task)}
       >
