@@ -7,7 +7,12 @@ import {AddIcon, DeleteIcon} from './Icons'
 import {fWord} from '../lib/fake'
 import {Btn} from '../lib/tachyons-components'
 import {withStoreDN} from '../StoreContext'
-import {dispatchAddTask, dispatchEditListSP} from '../StoreActions'
+import {
+  dispatchAddTask,
+  dispatchDeleteTaskSP,
+  dispatchEditListSP,
+  dispatchUpdateTaskSP,
+} from '../StoreActions'
 import {FlexRow} from './UI'
 
 export const TaskListContent = withStoreDN('TaskListContent')(
@@ -37,9 +42,7 @@ const TaskItem = withStoreDN('TaskItem')(
       className={cn('frc', {pointer: !isDone})}
       onClick={isDone ? null : tapSP(() => store.editTask(task))}
     >
-      <Btn
-        onClick={tapSP(() => store.updateTask({isDone: !isDone}, task))}
-      >
+      <Btn onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}>
         {isDone ? <CheckBoxCheckedIcon /> : <CheckBoxBlankIcon />}
       </Btn>
       <div className={cn('fa', {strike: isDone})}>
@@ -48,7 +51,7 @@ const TaskItem = withStoreDN('TaskItem')(
       </div>
 
       {isDone && (
-        <Btn onClick={tapSP(() => store.deleteTask(task))}>
+        <Btn onClick={dispatchDeleteTaskSP(task)}>
           <DeleteIcon />
         </Btn>
       )}
