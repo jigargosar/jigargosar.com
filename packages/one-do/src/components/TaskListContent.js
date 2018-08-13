@@ -17,7 +17,7 @@ import CheckBtn from './CheckBtn'
 import {renderKeyedById} from '../lib/little-react'
 
 export const TaskListContent = withStoreDN('TaskListContent')(
-  ({store: {tasks, selectedList: list}}) => (
+  ({store: {selectedList: list}}) => (
     <div className={cn('overflow-scroll pb5')}>
       <FlexRow className={'pa2 pr0 '} onClick={dispatchEditListSP(list)}>
         <div className={cn('fa ttu')}>{list.name}</div>
@@ -25,7 +25,7 @@ export const TaskListContent = withStoreDN('TaskListContent')(
           <AddIcon />
         </Btn>
       </FlexRow>
-      {renderKeyedById(TaskItem, 'task', tasks)},
+      {renderKeyedById(TaskItem, 'task', list.activeTasks)},
     </div>
   ),
 )
