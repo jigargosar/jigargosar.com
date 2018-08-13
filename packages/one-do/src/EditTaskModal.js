@@ -39,8 +39,8 @@ export class EditTaskModal extends Component {
             <DialogTitle id="responsive-dialog-title">
               {'Edit Task'}
             </DialogTitle>
-            <DialogContent>
-              <FlexRow>
+            <DialogContent className={cn('pl0')}>
+              <FlexRow className={cn('pl3')}>
                 <CheckBtn
                   checked={task.isDone}
                   onClick={dispatchUpdateTaskSP(
