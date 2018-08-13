@@ -175,11 +175,6 @@ const RootStoreBase = types
     addList: function(props) {
       self.taskListCollection.add(props)
     },
-    deleteList(props) {
-      if (self.canDeleteList) {
-        self.taskListCollection.delete(props)
-      }
-    },
     updateList(props, list) {
       self.taskListCollection.update(props, list)
     },
@@ -190,6 +185,13 @@ const RootStoreBase = types
       const taskToDelete =
         self.editingTaskId === task.id ? self.endEditTask() : task
       self.taskCollection.delete(taskToDelete)
+    },
+    deleteList(list) {
+      if (self.canDeleteList) {
+        const listToDelete =
+          self.editingListId === list.id ? self.endEditList() : list
+        self.listCollection.delete(listToDelete)
+      }
     },
     updateTask(props, task) {
       self.taskCollection.update(props, task)
