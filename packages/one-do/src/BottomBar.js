@@ -13,7 +13,7 @@ import {IconBtn} from './lib/IconBtn'
 import {AddIcon, DeleteIcon, DoneIcon, MenuIcon} from './components/Icons'
 import {withStore} from './StoreContext'
 
-function BottomBar({store: {selectedTask}}) {
+function BottomBar({store: {selectedTask: task}}) {
   return (
     <FlexRow className={cn('pa2 flex-shrink-0', 'bt b--moon-gray')}>
       <IconBtn
@@ -27,19 +27,18 @@ function BottomBar({store: {selectedTask}}) {
         onClick={e => dispatchAddTask({name: fWord()})(e)}
       />
       <IconBtn
-        Icon={DeleteIcon}
-        label={'delete'}
-        disabled={Boolean(!selectedTask)}
-        onClick={dispatchDeleteTask(selectedTask)}
-      />
-      <IconBtn
         Icon={DoneIcon}
         label={'done'}
-        disabled={Boolean(!selectedTask)}
-        onClick={dispatchUpdateTask(
-          {isDone: !selectedTask.isDone},
-          selectedTask,
-        )}
+        disabled={Boolean(!task)}
+        onClick={
+          task ? dispatchUpdateTask({isDone: !task.isDone}, task) : null
+        }
+      />
+      <IconBtn
+        Icon={DeleteIcon}
+        label={'delete'}
+        disabled={Boolean(!task)}
+        onClick={dispatchDeleteTask(task)}
       />
     </FlexRow>
   )
