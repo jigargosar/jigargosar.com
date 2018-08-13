@@ -32,8 +32,8 @@ export const TaskListContent = withStoreDN('TaskListContent')(
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
-    <div
-      className={cn('frc', {pointer: !isDone})}
+    <FlexRow
+      className={cn({pointer: !isDone})}
       onClick={ifElse_(isDone, null, dispatchEditTaskSP(task))}
     >
       <CheckBtn
@@ -50,6 +50,6 @@ const TaskItem = withStoreDN('TaskItem')(
           <DeleteIcon />
         </Btn>
       )}
-    </div>
+    </FlexRow>
   ),
 )
