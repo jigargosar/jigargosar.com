@@ -147,6 +147,9 @@ const RootStoreBase = types
     editTask(task) {
       self.editingTask = clone(task)
     },
+    editList(list) {
+      self.editingList = clone(list)
+    },
     endEditTask() {
       const originalTask = self.taskCollection.findById(
         self.editingTask.id,
@@ -154,9 +157,6 @@ const RootStoreBase = types
       self.updateTask(self.editingTask, originalTask)
       self.editingTask = null
       return originalTask
-    },
-    editList(list) {
-      self.editingList = clone(list)
     },
     endEditList() {
       const originalList = self.taskListCollection.findById(
@@ -175,22 +175,22 @@ const RootStoreBase = types
     addList: function(props) {
       self.taskListCollection.add(props)
     },
+    updateTask(props, task) {
+      self.taskCollection.update(props, task)
+    },
     updateList(props, list) {
       self.taskListCollection.update(props, list)
     },
     addTask(props, list = self.selectedList) {
       self.taskCollection.add({...props, parentId: list.id})
     },
-    deleteTask(task) {
-      self.taskCollection.delete(task)
-    },
     deleteList(list) {
       if (self.canDeleteList) {
         self.listCollection.delete(list)
       }
     },
-    updateTask(props, task) {
-      self.taskCollection.update(props, task)
+    deleteTask(task) {
+      self.taskCollection.delete(task)
     },
     setSelection(item) {
       if (TaskList.is(item)) {
