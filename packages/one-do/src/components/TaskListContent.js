@@ -5,8 +5,8 @@ import {fWord} from '../lib/fake'
 import {Btn} from '../lib/tachyons-components'
 import {withStoreDN} from '../StoreContext'
 import {
-  dispatchAddTask,
-  dispatchEditListSP,
+  dispatchAddTaskSP,
+  dispatchEditList,
   dispatchEditTaskSP,
   dispatchUpdateTaskSP,
 } from '../StoreActions'
@@ -16,9 +16,9 @@ import {renderKeyedById} from '../lib/little-react'
 
 export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
   <div className={cn('overflow-scroll pb5')}>
-    <FlexRow className={'pa2 pr0 '} onClick={dispatchEditListSP(list)}>
+    <FlexRow className={'pa2 pr0 '} onClick={dispatchEditList(list)}>
       <div className={cn('fa ttu')}>{list.name}</div>
-      <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
+      <Btn onClick={dispatchAddTaskSP({name: fWord()}, list)}>
         <AddIcon />
       </Btn>
     </FlexRow>
