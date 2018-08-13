@@ -3,6 +3,8 @@ import {
   applySnapshot,
   clone,
   dropFlow,
+  getType,
+  isStateTreeNode,
   nullString,
   onSnapshot,
   types,
@@ -18,6 +20,7 @@ import {
   sortWith,
   sum,
   toUpper,
+  when,
 } from './lib/ramda'
 import {findById, overPath} from './lib/little-ramda'
 import {
@@ -29,11 +32,12 @@ import {Layout} from './models/Layout'
 import {Selection} from './models/Selection'
 import {Collections} from './models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
-import {Task} from './models/Task'
+import {Task, TaskList} from './models/Task'
 
 const RootStoreBase = types
   .model('RootStore', {
     listSelection: Selection,
+    taskSelection: Selection,
     editingTask: types.maybeNull(Task),
     editingListId: nullString,
     isAllListSelected: false,
@@ -43,6 +47,9 @@ const RootStoreBase = types
     const result = compose(
       overPath(['listSelection', 'targetPathFromRoot'])(
         defaultTo(['lists']),
+      ),
+      overPath(['taskSelection', 'targetPathFromRoot'])(
+        defaultTo(['tasks']),
       ),
       overPath(['taskListCollection', 'items'])(defaultTo([defaultList])),
     )(snapshot)
@@ -111,6 +118,14 @@ const RootStoreBase = types
     get contentViewName() {
       return self.isAllListSelected ? 'AllLists' : 'SelectedList'
     },
+    selectionFor(nodeOrType) {
+      const selectionMap = new Map([
+        [Task, self.taskSelection],
+        [TaskList, self.listSelection],
+      ])
+      const type = when(isStateTreeNode)(getType)(nodeOrType)
+      return selectionMap.get(type)
+    },
   }))
   .actions(self => ({
     onHelp() {
@@ -167,6 +182,9 @@ const RootStoreBase = types
     },
     updateTask(props, task) {
       self.taskCollection.update(props, task)
+    },
+    setSelection(item) {
+      self.selectionFor(item).setSelectedItem(item)
     },
   }))
 
