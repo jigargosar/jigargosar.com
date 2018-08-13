@@ -21,57 +21,36 @@ import {F} from '../lib/ramda'
 import {withStyles} from '../lib/material-ui'
 import Button from '@material-ui/core/es/Button/Button'
 import {fWord} from '../lib/fake'
+import {Btn} from '../lib/tachyons-components'
 
 export const AddIcon = AddRounded
 @observer
 export class TaskListContent extends Component {
   render() {
     return (
-      <List
-        disablePadding
-        dense={false}
-        className={cn('overflow-scroll pb5')}
-      >
+      <div className={cn('overflow-scroll pb5')}>
         <Header store={this.props.store} />
         <Tasks store={this.props.store} />
-      </List>
+      </div>
     )
   }
 }
 
-@withStyles(theme => ({
-  root: {
-    color: theme.palette.secondary.main,
-    padding: 0,
-  },
-}))
 @observer
 class Header extends Component {
   render() {
-    const {store, classes} = this.props
+    const {store} = this.props
     const list = store.selectedList
     return (
-      <ListSubheader
-        classes={{root: classes.root}}
-        component={props => (
-          <Button
-            {...props}
-            color={'secondary'}
-            classes={{root: classes.root}}
-            component={'div'}
-          />
-        )}
-        className={'bg-white-80 flex pl2 pr1'}
+      <div
+        className={'bg-white-80 flex pa2'}
         onClick={wrapSP(() => store.editList(list))}
       >
         <div className={cn('flex-auto ttu')}>{list.name}</div>
-        <IconButton
-          color={'secondary'}
-          onClick={wrapSP(() => store.addTask({name: fWord()}, list))}
-        >
+        <Btn onClick={wrapSP(() => store.addTask({name: fWord()}, list))}>
           <AddIcon />
-        </IconButton>
-      </ListSubheader>
+        </Btn>
+      </div>
     )
   }
 }
@@ -90,50 +69,28 @@ class Tasks extends Component {
 class TaskItem extends Component {
   render() {
     const {task, store} = this.props
-
+    const isDone = task.isDone
     return (
-      <ListItem
-        disableGutters
-        className={cn('pv0', {pointer: !task.isDone})}
-        // button={!task.isDone}
-        disabled={task.isDone}
-        classes={{}}
-        // disableRipple={task.isDone}
-        onClick={task.isDone ? null : wrapSP(() => store.editTask(task))}
+      <div
+        className={cn('pv0', {pointer: !isDone})}
+        onClick={isDone ? null : wrapSP(() => store.editTask(task))}
       >
-        <Checkbox
-          onChange={e =>
-            store.updateTask({isDone: e.target.checked}, task)
-          }
-          checked={task.isDone}
-          onClick={wrapSP(F)}
-          color={'default'}
-          icon={<CheckBoxBlankIcon />}
-          checkedIcon={<CheckBoxCheckedIcon />}
-        />
-        <ListItemText
-          disableTypography
-          className={cn('pl0 flex items-center')}
+        <Btn
+          onClick={wrapSP(() => store.updateTask({isDone: !isDone}, task))}
         >
-          <div className={cn('flex-auto', {strike: task.isDone})}>
-            {task.name}
-          </div>
-          <Typography
-            component={'div'}
-            variant={'headline'}
-            color={'error'}
-          >
-            {task.isDirty && `*`}
-          </Typography>
-        </ListItemText>
-        <ListItemSecondaryAction>
-          {task.isDone && (
-            <IconButton onClick={wrapSP(() => store.deleteTask(task))}>
-              <DeleteIcon />
-            </IconButton>
-          )}
-        </ListItemSecondaryAction>
-      </ListItem>
+          {isDone ? <CheckBoxCheckedIcon /> : <CheckBoxBlankIcon />}
+        </Btn>
+        <div className={cn('flex-auto', {strike: isDone})}>
+          {task.name}
+        </div>
+        <div>{task.isDirty && `*`}</div>
+
+        {isDone && (
+          <Btn onClick={wrapSP(() => store.deleteTask(task))}>
+            <DeleteIcon />
+          </Btn>
+        )}
+      </div>
     )
   }
 }
