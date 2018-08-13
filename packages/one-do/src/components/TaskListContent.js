@@ -14,6 +14,7 @@ import {
 import {FlexRow} from './UI'
 import {ifElse_} from '../lib/little-ramda'
 import CheckBtn from './CheckBtn'
+import {renderKeyedById} from '../lib/little-react'
 
 export const TaskListContent = withStoreDN('TaskListContent')(
   ({store}) => (
@@ -33,7 +34,7 @@ const Header = withStoreDN('Header')(({list}) => (
 ))
 
 const Tasks = withStoreDN('Tasks')(({tasks}) =>
-  tasks.map(task => <TaskItem key={task.id} task={task} />),
+  renderKeyedById(TaskItem, 'task', tasks),
 )
 
 const TaskItem = withStoreDN('TaskItem')(
