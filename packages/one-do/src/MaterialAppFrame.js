@@ -33,12 +33,8 @@ import {afterMountAndUpdate} from './lib/little-recompose'
 import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {withStore, withStoreDN} from './StoreContext'
-import {
-  dispatchAddTask,
-  dispatchDeleteTask,
-  dispatchToggleDrawer,
-  dispatchUpdateTask,
-} from './StoreActions'
+import {dispatchAddTask, dispatchToggleDrawer} from './StoreActions'
+import {EditTaskModal} from './EditTaskModal'
 
 const drawerWidth = 240
 
@@ -193,58 +189,6 @@ MaterialAppFrame.propTypes = {
 
 export default withStyles(styles)(MaterialAppFrame)
 
-@observer
-class EditTaskModal extends Component {
-  handleClose = () => {
-    this.props.store.endEditTask()
-  }
-  render() {
-    const {store} = this.props
-    const {editingTask: task} = store
-    return (
-      <Fr>
-        {task && (
-          <Dialog
-            // fullScreen={store.isMobileLayout}
-            open={true}
-            onClose={this.handleClose}
-            aria-labelledby="responsive-dialog-title"
-            maxWidth={'xs'}
-            fullWidth
-          >
-            <DialogTitle id="responsive-dialog-title">
-              {'Edit Task'}
-            </DialogTitle>
-            <DialogContent>
-              <TextField
-                fullWidth
-                autoFocus={true}
-                type="text"
-                value={task.name}
-                onKeyDown={withKeyEvent(
-                  whenKey('enter')(this.handleClose),
-                )}
-                onChange={e =>
-                  dispatchUpdateTask({name: e.target.value}, task)(e)
-                }
-              />
-            </DialogContent>
-            <DialogActions
-              className={cn('flex-row-reverse justify-start')}
-            >
-              <Button onClick={this.handleClose} color="primary">
-                ok
-              </Button>
-              <Button onClick={dispatchDeleteTask(task)} color="primary">
-                delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-        )}
-      </Fr>
-    )
-  }
-}
 @observer
 class EditListModal extends Component {
   handleClose = () => {
