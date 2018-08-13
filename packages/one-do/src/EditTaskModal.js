@@ -40,36 +40,24 @@ export class EditTaskModal extends Component {
               {'Edit Task'}
             </DialogTitle>
             <DialogContent className={cn('pl0')}>
-              <FlexRow className={cn('pl3')}>
-                <CheckBtn
-                  checked={task.isDone}
-                  onClick={dispatchUpdateTaskSP(
-                    {isDone: !task.isDone},
-                    task,
-                  )}
-                />
-                <TextField
-                  fullWidth
-                  autoFocus={true}
-                  type="text"
-                  value={task.name}
-                  onKeyDown={withKeyEvent(
-                    whenKey('enter')(this.handleClose),
-                  )}
-                  onChange={e =>
-                    dispatchUpdateTask({name: e.target.value}, task)(e)
-                  }
-                />
-              </FlexRow>
+              <TextField
+                fullWidth
+                autoFocus={true}
+                type="text"
+                value={task.name}
+                onKeyDown={withKeyEvent(
+                  whenKey('enter')(this.handleClose),
+                )}
+                onChange={e =>
+                  dispatchUpdateTask({name: e.target.value}, task)(e)
+                }
+              />
             </DialogContent>
             <DialogActions
               className={cn('flex-row-reverse justify-start')}
             >
               <Button onClick={this.handleClose} color="primary">
                 ok
-              </Button>
-              <Button onClick={dispatchDeleteTask(task)} color="primary">
-                delete
               </Button>
             </DialogActions>
           </Dialog>
