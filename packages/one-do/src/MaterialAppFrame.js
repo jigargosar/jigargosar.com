@@ -11,7 +11,7 @@ import {
 
 import cn from 'classnames'
 import {fWord} from './lib/fake'
-import {onlyUpdateForKeys} from './lib/recompose'
+import {onlyUpdateForKeys, withProps} from './lib/recompose'
 import {compose} from './lib/ramda'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
@@ -61,8 +61,13 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
+const SelectedListContent = compose(
+  withStoreDN('SelectedListContent'),
+  withProps(({store}) => ({list: store.selectedList})),
+)(TaskListContent)
+
 const contentLookup = {
-  SelectedList: TaskListContent,
+  SelectedList: SelectedListContent,
   AllLists: AllListsContent,
 }
 
