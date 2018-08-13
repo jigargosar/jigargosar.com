@@ -12,14 +12,8 @@ import {
 
 import cn from 'classnames'
 import {fWord} from './lib/fake'
-import {
-  defaultProps,
-  onlyUpdateForKeys,
-  setDisplayName,
-} from './lib/recompose'
+import {onlyUpdateForKeys} from './lib/recompose'
 import {compose} from './lib/ramda'
-
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import AddTaskIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton/IconButton'
@@ -36,13 +30,12 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
-
-import {bindStoreAction} from './lib/little-mst'
 import {afterMountAndUpdate} from './lib/little-recompose'
 import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {AllListsContent} from './components/AllListsContent'
 import {withStore, withStoreDN} from './StoreContext'
+import {dispatchToggleDrawer} from './StoreActions'
 
 const drawerWidth = 240
 
@@ -86,11 +79,12 @@ const GlobalEventListener = withStoreDN('GlobalEventListener')(store => (
   <EventListener target={'document'} onKeyDown={store.onKeyDown} />
 ))
 
+@observer
 class TopToolBar extends Component {
   render() {
     return (
       <Toolbar>
-        <IconButton color={'inherit'} onClick={this.props.onClick}>
+        <IconButton color={'inherit'} onClick={dispatchToggleDrawer()}>
           <MenuIcon />
         </IconButton>
         <Typography
@@ -106,7 +100,36 @@ class TopToolBar extends Component {
   }
 }
 
-TopToolBar.propTypes = {onClick: PropTypes.any}
+class SideBar extends Component {
+  render() {
+    return (
+      <Drawer
+        variant={this.props.store.drawerVariant}
+        classes={{
+          paper: this.props.store.isDrawerOpen
+            ? this.props.classes.drawerPaper
+            : this.props.classes.drawerPaperClosed,
+        }}
+        open={this.props.store.isDrawerOpen}
+        onClose={this.props.onClose}
+        onClick={
+          this.props.store.isDrawerTemporary ? this.props.onClose : null
+        }
+        ModalProps={{keepMounted: true}}
+      >
+        {this.props.renderToolBar}
+        <DrawerTaskLists store={this.props.store} />
+      </Drawer>
+    )
+  }
+}
+
+SideBar.propTypes = {
+  store: PropTypes.any,
+  classes: PropTypes.any,
+  onClose: PropTypes.any,
+  renderToolBar: PropTypes.any,
+}
 
 @compose(
   withStore,
@@ -119,8 +142,6 @@ TopToolBar.propTypes = {onClick: PropTypes.any}
   observer,
 )
 class MaterialAppFrame extends Component {
-  toggleDrawer = bindStoreAction(this)('toggleDrawer')
-
   render() {
     const {classes, store} = this.props
 
@@ -136,23 +157,12 @@ class MaterialAppFrame extends Component {
           <AppBar position="absolute" className={classes.appBar}>
             {this.renderToolBar()}
           </AppBar>
-          <Drawer
-            variant={store.drawerVariant}
-            classes={{
-              paper: store.isDrawerOpen
-                ? classes.drawerPaper
-                : classes.drawerPaperClosed,
-            }}
-            open={store.isDrawerOpen}
-            onClose={this.toggleDrawer(false)}
-            onClick={
-              store.isDrawerTemporary ? this.toggleDrawer(false) : null
-            }
-            ModalProps={{keepMounted: true}}
-          >
-            {this.renderToolBar()}
-            <DrawerTaskLists store={store} />
-          </Drawer>
+          <SideBar
+            store={store}
+            classes={classes}
+            onClose={dispatchToggleDrawer(false)}
+            renderToolBar={this.renderToolBar()}
+          />
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView store={store} />
@@ -173,7 +183,7 @@ class MaterialAppFrame extends Component {
   }
 
   renderToolBar() {
-    return <TopToolBar onClick={this.toggleDrawer()} />
+    return <TopToolBar />
   }
 }
 

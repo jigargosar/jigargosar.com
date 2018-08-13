@@ -136,7 +136,7 @@ export function Disposers() {
 export const spliceItem = el => arr => arr.splice(arr.indexOf(el), 1)
 export const dropFlow = generator => pDropConcurrentCalls(flow(generator))
 export const decorateAtomic = action => decorate(atomic, action)
-export const bindStoreAction = comp => actionName => (...args) => () =>
+export const bindStoreAction = actionName => comp => (...args) => () =>
   comp.props.store[actionName](...args)
 export const optionalEnum = (name, values, defaultValue = values[0]) =>
   optional(types.enumeration(name, values), defaultValue)
