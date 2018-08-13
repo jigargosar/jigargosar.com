@@ -37,6 +37,14 @@ const Tasks = withStoreDN('Tasks')(({tasks}) =>
   tasks.map(task => <TaskItem key={task.id} task={task} />),
 )
 
+const ifTF = (bool, t, f) => {
+  return bool ? t : f
+}
+
+function checkBoxIcon(isChecked) {
+  return ifTF(isChecked, <CheckBoxCheckedIcon />, <CheckBoxBlankIcon />)
+}
+
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
     <div
@@ -44,7 +52,7 @@ const TaskItem = withStoreDN('TaskItem')(
       onClick={isDone ? null : dispatchEditTaskSP(task)}
     >
       <Btn onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}>
-        {isDone ? <CheckBoxCheckedIcon /> : <CheckBoxBlankIcon />}
+        {checkBoxIcon(isDone)}
       </Btn>
       <div className={cn('fa', {strike: isDone})}>
         {name}
