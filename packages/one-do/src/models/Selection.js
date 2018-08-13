@@ -19,7 +19,7 @@ export const Selection = types
       return path(self.targetPathFromRoot)(getRoot(self))
     },
     get idx() {
-      if (self.items.length === 0) return 0
+      if (self.items.length === 0) return NaN
       return clamp(0, self.items.length - 1)(self._idx)
     },
     get selectedItem() {
@@ -40,7 +40,7 @@ export const Selection = types
       self._id = propOr(null)('id')(item)
       if (!isNil(self._id)) {
         const idx = indexOf(item)(self.items)
-        self._idx = idx === -1 ? 0 : idx
+        self._idx = idx === -1 ? NaN : idx
       }
     },
     setIdx(idx) {
