@@ -18,7 +18,7 @@ export class TaskListContent extends Component {
     return (
       <div className={cn('overflow-scroll pb5')}>
         <Header list={store.selectedList} />
-        <Tasks store={store} tasks={store.tasks} />
+        <Tasks tasks={store.tasks} />
       </div>
     )
   }
@@ -43,7 +43,7 @@ class Header extends Component {
   }
 }
 
-@observer
+@withStore
 class Tasks extends Component {
   render() {
     const {tasks} = this.props
