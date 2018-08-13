@@ -39,7 +39,7 @@ const RootStoreBase = types
     listSelection: Selection,
     taskSelection: Selection,
     editingTask: types.maybeNull(Task),
-    editingListId: nullString,
+    editingList: types.maybeNull(TaskList),
     isAllListSelected: false,
   })
   .preProcessSnapshot(snapshot => {
@@ -98,8 +98,8 @@ const RootStoreBase = types
     get editingTaskId() {
       return pathOr(null)(['editingTask', 'id'])(self)
     },
-    get editingList() {
-      return findById(self.editingListId)(self.lists)
+    get editingListId() {
+      return pathOr(null)(['editingListId', 'id'])(self)
     },
     get tasks() {
       return self.selectedList.activeTasks
@@ -149,10 +149,15 @@ const RootStoreBase = types
       return originalTask
     },
     editList(list) {
-      self.editingListId = list.id
+      self.editingList = clone(list)
     },
     endEditList() {
-      self.editingListId = null
+      const originalList = self.taskListCollection.findById(
+        self.editingList.id,
+      )
+      self.updateList(self.editingList, originalList)
+      self.editingList = null
+      return originalList
     },
     ensureLogin: dropFlow(function*() {
       yield authStateKnownPromise
