@@ -5,7 +5,6 @@ import {
   dropFlow,
   getType,
   isStateTreeNode,
-  nullString,
   onSnapshot,
   types,
 } from './lib/little-mst'
@@ -22,7 +21,7 @@ import {
   toUpper,
   when,
 } from './lib/ramda'
-import {findById, overPath} from './lib/little-ramda'
+import {overPath} from './lib/little-ramda'
 import {
   authStateKnownPromise,
   isSignedOut,
@@ -125,6 +124,14 @@ const RootStoreBase = types
       const selectionMap = new Map([
         [Task, self.taskSelection],
         [TaskList, self.listSelection],
+      ])
+      const type = when(isStateTreeNode)(getType)(nodeOrType)
+      return selectionMap.get(type)
+    },
+    editItemFor(nodeOrType) {
+      const selectionMap = new Map([
+        [Task, self.editingTask],
+        [TaskList, self.editingList],
       ])
       const type = when(isStateTreeNode)(getType)(nodeOrType)
       return selectionMap.get(type)
