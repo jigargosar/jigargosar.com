@@ -14,7 +14,7 @@ import {Div, FlexRow} from './UI'
 import {renderKeyedById} from '../lib/little-react'
 
 export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
-  <div className={cn('overflow-scroll pb5')}>
+  <div className={cn('overflow-scroll pb5 h-100')}>
     <FlexRow className={'pa2 pr0 '} onClick={dispatchEditList(list)}>
       <div className={cn('fa ttu')}>{list.name}</div>
       <Btn onClick={dispatchAddTaskSP({name: fWord()}, list)}>
