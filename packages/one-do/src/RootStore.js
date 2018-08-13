@@ -182,15 +182,11 @@ const RootStoreBase = types
       self.taskCollection.add({...props, parentId: list.id})
     },
     deleteTask(task) {
-      const taskToDelete =
-        self.editingTaskId === task.id ? self.endEditTask() : task
-      self.taskCollection.delete(taskToDelete)
+      self.taskCollection.delete(task)
     },
     deleteList(list) {
       if (self.canDeleteList) {
-        const listToDelete =
-          self.editingListId === list.id ? self.endEditList() : list
-        self.listCollection.delete(listToDelete)
+        self.listCollection.delete(list)
       }
     },
     updateTask(props, task) {
