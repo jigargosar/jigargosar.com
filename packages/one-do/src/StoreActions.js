@@ -27,3 +27,6 @@ export const dispatchUpdateTask = dispatch('updateTask')
 export const dispatchUpdateTaskSP = dispatchSP('updateTask')
 export const dispatchDeleteTask = dispatch('deleteTask')
 export const dispatchDeleteTaskSP = dispatchSP('deleteTask')
+
+export const dispatchSetSelection = dispatch('setSelection')
+export const dispatchSetSelectionSP = dispatchSP(dispatchSetSelection)

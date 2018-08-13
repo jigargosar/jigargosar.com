@@ -8,10 +8,9 @@ import {
   dispatchAddTaskSP,
   dispatchEditList,
   dispatchEditTaskSP,
-  dispatchUpdateTaskSP,
+  dispatchSetSelection,
 } from '../StoreActions'
 import {Div, FlexRow} from './UI'
-import CheckBtn from './CheckBtn'
 import {renderKeyedById} from '../lib/little-react'
 
 export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
@@ -22,13 +21,19 @@ export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
         <AddIcon />
       </Btn>
     </FlexRow>
-    {renderKeyedById(TaskItem, 'task', list.activeTasks)}
+    <div className={cn('pointer')}>
+      {renderKeyedById(TaskItem, 'task', list.activeTasks)}
+    </div>
   </div>
 ))
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
-    <FlexRow cn={['ph3 pointer']} onClick={dispatchEditTaskSP(task)}>
+    <FlexRow
+      cn={['ph3 pointer']}
+      onClick={dispatchSetSelection(task)}
+      onDoubleClick={dispatchEditTaskSP(task)}
+    >
       <Div cn={['fa', {strike: isDone}]}>
         {name}
         {isDirty && ` *`}
