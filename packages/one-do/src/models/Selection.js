@@ -46,7 +46,7 @@ export const Selection = types
       addDisposer(
         self,
         reaction(
-          () => self.items,
+          () => path(self.targetPathFromRoot)(getRoot(self)),
           () => {
             if (isNil(self.selectedItemFromId)) {
               self.setSelectedItem(self.selectedItemFromIdx)
