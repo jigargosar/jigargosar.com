@@ -39,16 +39,6 @@ import {dispatchToggleDrawer} from './StoreActions'
 
 const drawerWidth = 240
 
-const drawerStyles = {
-  drawerPaper: {
-    position: 'relative',
-    width: drawerWidth,
-  },
-  drawerPaperClosed: {
-    position: 'relative',
-    width: 0,
-  },
-}
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -61,7 +51,6 @@ const styles = theme => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
   },
-  ...drawerStyles,
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
@@ -103,7 +92,16 @@ class TopToolBar extends Component {
   }
 }
 
-@withStyles(theme => drawerStyles)
+@withStyles(theme => ({
+  drawerPaper: {
+    position: 'relative',
+    width: drawerWidth,
+  },
+  drawerPaperClosed: {
+    position: 'relative',
+    width: 0,
+  },
+}))
 @withStore
 class SideBar extends Component {
   render() {
@@ -156,7 +154,7 @@ class MaterialAppFrame extends Component {
           <AppBar position="absolute" className={classes.appBar}>
             {<TopToolBar />}
           </AppBar>
-          <SideBar classes={classes} />
+          <SideBar />
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView store={store} />
