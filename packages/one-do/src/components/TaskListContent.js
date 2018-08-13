@@ -30,7 +30,10 @@ export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
     <FlexRow
-      cn={['ph3 pointer']}
+      cn={[
+        'ph3 pointer bl bw2',
+        store.isSelected(task) ? 'b--blue' : 'b--transparent',
+      ]}
       onClick={dispatchSetSelection(task)}
       onDoubleClick={dispatchEditTaskSP(task)}
     >
