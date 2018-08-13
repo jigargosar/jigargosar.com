@@ -35,7 +35,7 @@ import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {AllListsContent} from './components/AllListsContent'
 import {withStore, withStoreDN} from './StoreContext'
-import {dispatchToggleDrawer} from './StoreActions'
+import {dispatchAddTask, dispatchToggleDrawer} from './StoreActions'
 
 const drawerWidth = 240
 
@@ -163,7 +163,7 @@ class MaterialAppFrame extends Component {
             variant="fab"
             color={'secondary'}
             className={cn('absolute right-1 bottom-1')}
-            onClick={wrapSP(() => store.addTask({name: fWord()}))}
+            onClick={dispatchAddTask({name: fWord()})}
           >
             <AddTaskIcon />
           </Button>
