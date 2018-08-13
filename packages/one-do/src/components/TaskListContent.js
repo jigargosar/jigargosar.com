@@ -27,10 +27,7 @@ class Header extends Component {
   render() {
     const {list} = this.props
     return (
-      <div
-        className={'frc pa2 pr0 '}
-        onClick={wrapSP(dispatchEditListSP(list))}
-      >
+      <div className={'frc pa2 pr0 '} onClick={dispatchEditListSP(list)}>
         <div className={cn('fa ttu')}>{list.name}</div>
         <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
           <AddIcon />
