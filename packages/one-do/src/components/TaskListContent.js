@@ -15,7 +15,12 @@ import {FlexRow} from './UI'
 import {ifElse_} from '../lib/little-ramda'
 import CheckBtn from './CheckBtn'
 import {renderKeyedById} from '../lib/little-react'
-import {renameProp, withProps} from '../lib/recompose'
+import {
+  mapProps,
+  renameProp,
+  setDisplayName,
+  withProps,
+} from '../lib/recompose'
 import {compose} from '../lib/ramda'
 
 export const TaskListContent = withStoreDN('TaskListContent')(
@@ -33,8 +38,11 @@ export const TaskListContent = withStoreDN('TaskListContent')(
 )
 
 const withCN = compose(
-  renameProp('cn', 'className'),
-  withProps(({className}) => ({className: cn(...className)})),
+  setDisplayName('withCN'),
+  mapProps(({cn: cnArray, ...other}) => ({
+    className: cn(...cnArray),
+    ...other,
+  })),
 )
 
 const Div = withCN('div')
