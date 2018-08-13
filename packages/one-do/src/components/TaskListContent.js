@@ -24,7 +24,7 @@ export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
         <AddIcon />
       </Btn>
     </FlexRow>
-    {renderKeyedById(TaskItem, 'task', list.activeTasks)},
+    {renderKeyedById(TaskItem, 'task', list.activeTasks)}
   </div>
 ))
 
