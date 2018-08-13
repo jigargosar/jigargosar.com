@@ -12,7 +12,11 @@ import {
 
 import cn from 'classnames'
 import {fWord} from './lib/fake'
-import {defaultProps, onlyUpdateForKeys} from './lib/recompose'
+import {
+  defaultProps,
+  onlyUpdateForKeys,
+  setDisplayName,
+} from './lib/recompose'
 import {compose} from './lib/ramda'
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftRounded'
@@ -38,7 +42,7 @@ import {afterMountAndUpdate} from './lib/little-recompose'
 import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {AllListsContent} from './components/AllListsContent'
-import {withStore} from './StoreContext'
+import {withStore, withStoreDN} from './StoreContext'
 
 const drawerWidth = 240
 
@@ -78,6 +82,10 @@ const contentLookup = {
   AllLists: AllListsContent,
 }
 
+const GlobalEventListener = withStoreDN('GlobalEventListener')(store => (
+  <EventListener target={'document'} onKeyDown={store.onKeyDown} />
+))
+
 @compose(
   withStore,
   withWidth(),
@@ -101,7 +109,7 @@ class MaterialAppFrame extends Component {
         active={false}
         focusTrapOptions={{fallbackFocus: document}}
       >
-        <EventListener target={'document'} onKeyDown={store.onKeyDown} />
+        <GlobalEventListener />
         <div className={classes.root}>
           <AppBar position="absolute" className={classes.appBar}>
             {this.renderToolBar()}
