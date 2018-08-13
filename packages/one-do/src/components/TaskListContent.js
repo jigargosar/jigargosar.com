@@ -10,6 +10,7 @@ import {Btn} from '../lib/tachyons-components'
 import {getParentOfType} from '../lib/little-mst'
 import RootStore from '../RootStore'
 import {withStore} from '../StoreContext'
+import {dispatchAddTask, dispatchEditList} from '../StoreActions'
 
 @withStore
 export class TaskListContent extends Component {
@@ -24,18 +25,17 @@ export class TaskListContent extends Component {
   }
 }
 
-@observer
+@withStore
 class Header extends Component {
   render() {
     const {list} = this.props
-    const store = storeOf(list)
     return (
       <div
         className={'frc pa2 pr0 '}
-        onClick={wrapSP(() => store.editList(list))}
+        onClick={wrapSP(dispatchEditList(list))}
       >
         <div className={cn('fa ttu')}>{list.name}</div>
-        <Btn onClick={wrapSP(() => store.addTask({name: fWord()}, list))}>
+        <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
           <AddIcon />
         </Btn>
       </div>

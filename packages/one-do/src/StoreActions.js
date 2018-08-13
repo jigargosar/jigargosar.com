@@ -5,3 +5,4 @@ export const dispatch = actionName => (...args) => () =>
 
 export const dispatchToggleDrawer = dispatch('toggleDrawer')
 export const dispatchAddTask = dispatch('addTask')
+export const dispatchEditList = dispatch('editList')
