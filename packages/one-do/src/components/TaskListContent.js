@@ -23,20 +23,17 @@ export class TaskListContent extends Component {
   }
 }
 
-@withStore
-class Header extends Component {
-  render() {
-    const {list} = this.props
-    return (
-      <FlexRow className={'pa2 pr0 '} onClick={dispatchEditListSP(list)}>
-        <div className={cn('fa ttu')}>{list.name}</div>
-        <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
-          <AddIcon />
-        </Btn>
-      </FlexRow>
-    )
-  }
-}
+const Header = withStoreDN('Header')(props => {
+  const {list} = props
+  return (
+    <FlexRow className={'pa2 pr0 '} onClick={dispatchEditListSP(list)}>
+      <div className={cn('fa ttu')}>{list.name}</div>
+      <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
+        <AddIcon />
+      </Btn>
+    </FlexRow>
+  )
+})
 
 const Tasks = withStoreDN('Tasks')(props =>
   props.tasks.map(task => <TaskItem key={task.id} task={task} />),
