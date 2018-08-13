@@ -11,6 +11,9 @@ export const Selection = types
     targetPathFromRoot: types.array(types.string),
   })
   .views(self => ({
+    itemsFn() {
+      return self.items
+    },
     get items() {
       return pathOr([])(self.targetPathFromRoot)(getRoot(self))
     },
@@ -42,7 +45,7 @@ export const Selection = types
       addDisposer(
         self,
         reaction(
-          () => computed(() => self.items).get(),
+          () => self.itemsFn(),
           () => {
             if (isNil(self.selectedItemFromId)) {
               self.setSelectedItem(self.selectedItemFromIdx)
