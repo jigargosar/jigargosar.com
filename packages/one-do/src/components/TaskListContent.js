@@ -6,8 +6,9 @@ import cn from 'classnames'
 import {AddIcon, DeleteIcon} from './Icons'
 import {fWord} from '../lib/fake'
 import {Btn} from '../lib/tachyons-components'
-import {withStore} from '../StoreContext'
+import {withStore, withStoreDN} from '../StoreContext'
 import {dispatchAddTask, dispatchEditListSP} from '../StoreActions'
+import {FlexRow} from './UI'
 
 @withStore
 export class TaskListContent extends Component {
@@ -27,24 +28,19 @@ class Header extends Component {
   render() {
     const {list} = this.props
     return (
-      <div className={'frc pa2 pr0 '} onClick={dispatchEditListSP(list)}>
+      <FlexRow className={'pa2 pr0 '} onClick={dispatchEditListSP(list)}>
         <div className={cn('fa ttu')}>{list.name}</div>
         <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
           <AddIcon />
         </Btn>
-      </div>
+      </FlexRow>
     )
   }
 }
 
-@withStore
-class Tasks extends Component {
-  render() {
-    return this.props.tasks.map(task => (
-      <TaskItem key={task.id} task={task} />
-    ))
-  }
-}
+const Tasks = withStoreDN('Tasks')(props =>
+  props.tasks.map(task => <TaskItem key={task.id} task={task} />),
+)
 
 @withStore
 class TaskItem extends Component {
