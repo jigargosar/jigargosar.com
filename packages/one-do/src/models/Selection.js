@@ -39,7 +39,8 @@ export const Selection = types
     setSelectedItem(item) {
       self._id = propOr(null)('id')(item)
       if (!isNil(self._id)) {
-        self._idx = indexOf(item)(self.items)
+        const idx = indexOf(item)(self.items)
+        self._idx = idx === -1 ? 0 : idx
       }
     },
     setIdx(idx) {
@@ -60,9 +61,11 @@ export const Selection = types
       addDisposer(
         self,
         reaction(
-          () => self.idx,
+          () => indexOf(self.selectedItem)(self.items),
           () => {
-            self.setIdx(self.idx)
+            if (!isNil(self.selectedItem)) {
+              self.setSelectedItem(self.selectedItem)
+            }
           },
         ),
       )
