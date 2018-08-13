@@ -122,6 +122,10 @@ const RootStoreBase = types
       self.editingTask = clone(task)
     },
     endEditTask() {
+      const originalTask = self.taskCollection.findById(
+        self.editingTask.id,
+      )
+      self.updateTask(self.editingTask, originalTask)
       self.editingTask = null
     },
     editList(list) {

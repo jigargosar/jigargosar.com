@@ -28,6 +28,9 @@ export function collection(Model) {
       filter(fn) {
         return filter(fn)(self.items)
       },
+      findById(id) {
+        return findById(id)(self.items)
+      },
     }))
     .actions(self => ({
       add(props) {

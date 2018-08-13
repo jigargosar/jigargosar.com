@@ -194,9 +194,6 @@ class EditTaskModal extends Component {
   handleClose = () => {
     this.props.store.endEditTask()
   }
-  handleSave = () => {
-    this.props.store.endEditTask()
-  }
   render() {
     const {store} = this.props
     const {editingTask: task} = store
@@ -233,9 +230,6 @@ class EditTaskModal extends Component {
             >
               <Button onClick={this.handleClose} color="primary">
                 ok
-              </Button>
-              <Button onClick={this.handleClose} color="primary">
-                cancel
               </Button>
             </DialogActions>
           </Dialog>
