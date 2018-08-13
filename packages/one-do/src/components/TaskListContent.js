@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {wrapSP} from '../lib/little-react'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
@@ -6,23 +6,19 @@ import cn from 'classnames'
 import {AddIcon, DeleteIcon} from './Icons'
 import {fWord} from '../lib/fake'
 import {Btn} from '../lib/tachyons-components'
-import {withStore, withStoreDN} from '../StoreContext'
+import {withStoreDN} from '../StoreContext'
 import {dispatchAddTask, dispatchEditListSP} from '../StoreActions'
 import {FlexRow} from './UI'
 
-@withStore
-export class TaskListContent extends Component {
-  render() {
-    const store = this.props.store
-    return (
-      <div className={cn('overflow-scroll pb5')}>
-        <Header list={store.selectedList} />
-        <Tasks tasks={store.tasks} />
-      </div>
-    )
-  }
-}
-
+export const TaskListContent = withStoreDN('TaskListContent')(props => {
+  const store = props.store
+  return (
+    <div className={cn('overflow-scroll pb5')}>
+      <Header list={store.selectedList} />
+      <Tasks tasks={store.tasks} />
+    </div>
+  )
+})
 const Header = withStoreDN('Header')(props => {
   const {list} = props
   return (
