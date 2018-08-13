@@ -10,11 +10,9 @@ import {
 } from './lib/little-react'
 
 import cn from 'classnames'
-import {fWord} from './lib/fake'
 import {onlyUpdateForKeys, withProps} from './lib/recompose'
 import {compose} from './lib/ramda'
 import MenuIcon from '@material-ui/icons/MenuRounded'
-import AddTaskIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
 import Button from '@material-ui/core/Button/Button'
@@ -33,10 +31,9 @@ import {afterMountAndUpdate} from './lib/little-recompose'
 import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {withStore, withStoreDN} from './StoreContext'
-import {dispatchAddTask, dispatchToggleDrawer} from './StoreActions'
+import {dispatchToggleDrawer} from './StoreActions'
 import {EditTaskModal} from './EditTaskModal'
-import {FlexRow} from './components/UI'
-import {IconBtn} from './lib/IconBtn'
+import {BottomBar} from './BottomBar'
 
 const drawerWidth = 240
 
@@ -168,26 +165,7 @@ class MaterialAppFrame extends Component {
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView />
-            <FlexRow
-              className={cn('pa2 flex-shrink-0', 'bt b--moon-gray')}
-            >
-              <IconBtn
-                Icon={AddTaskIcon}
-                label={'add'}
-                onClick={e => dispatchAddTask({name: fWord()})(e)}
-              />
-              <IconBtn
-                disabled
-                Icon={AddTaskIcon}
-                label={'addaaaaaaa'}
-                onClick={e => dispatchAddTask({name: fWord()})(e)}
-              />
-              <IconBtn
-                Icon={AddTaskIcon}
-                label={'add'}
-                onClick={e => dispatchAddTask({name: fWord()})(e)}
-              />
-            </FlexRow>
+            <BottomBar />
           </main>
           <EditTaskModal store={store} />
           <EditListModal store={store} />

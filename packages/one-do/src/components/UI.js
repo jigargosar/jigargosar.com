@@ -19,4 +19,8 @@ export const FlexRow = compose(
   withMergedClassName('frc'),
 )('div')
 
+FlexRow.propTypes = {}
+
 export const Div = withCN('div')
+
+Div.propTypes = {}
