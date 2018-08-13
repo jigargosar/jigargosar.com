@@ -171,7 +171,7 @@ class MaterialAppFrame extends Component {
             variant="fab"
             color={'secondary'}
             className={cn('absolute right-1 bottom-1')}
-            onClick={dispatchAddTask({name: fWord()})}
+            onClick={e => dispatchAddTask({name: fWord()})(e)}
           >
             <AddTaskIcon />
           </Button>
