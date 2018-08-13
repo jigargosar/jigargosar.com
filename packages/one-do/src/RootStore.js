@@ -121,20 +121,28 @@ const RootStoreBase = types
       return self.isAllListSelected ? 'AllLists' : 'SelectedList'
     },
     selectionFor(nodeOrType) {
-      const selectionMap = new Map([
+      const lookup = new Map([
         [Task, self.taskSelection],
         [TaskList, self.listSelection],
       ])
       const type = when(isStateTreeNode)(getType)(nodeOrType)
-      return selectionMap.get(type)
+      return lookup.get(type)
     },
     editItemFor(nodeOrType) {
-      const selectionMap = new Map([
+      const lookup = new Map([
         [Task, self.editingTask],
         [TaskList, self.editingList],
       ])
       const type = when(isStateTreeNode)(getType)(nodeOrType)
-      return selectionMap.get(type)
+      return lookup.get(type)
+    },
+    collectionFor(nodeOrType) {
+      const lookup = new Map([
+        [Task, self.taskCollection],
+        [TaskList, self.taskListCollection],
+      ])
+      const type = when(isStateTreeNode)(getType)(nodeOrType)
+      return lookup.get(type)
     },
   }))
   .actions(self => ({
