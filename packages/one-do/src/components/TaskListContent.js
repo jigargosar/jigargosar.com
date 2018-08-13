@@ -7,7 +7,7 @@ import {AddIcon, DeleteIcon} from './Icons'
 import {fWord} from '../lib/fake'
 import {Btn} from '../lib/tachyons-components'
 import {withStore} from '../StoreContext'
-import {dispatchAddTask, dispatchEditList} from '../StoreActions'
+import {dispatchAddTask, dispatchEditListSP} from '../StoreActions'
 
 @withStore
 export class TaskListContent extends Component {
@@ -29,7 +29,7 @@ class Header extends Component {
     return (
       <div
         className={'frc pa2 pr0 '}
-        onClick={wrapSP(dispatchEditList(list))}
+        onClick={wrapSP(dispatchEditListSP(list))}
       >
         <div className={cn('fa ttu')}>{list.name}</div>
         <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
