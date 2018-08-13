@@ -49,7 +49,7 @@ const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
     <div
       className={cn('frc', {pointer: !isDone})}
-      onClick={isDone ? null : dispatchEditTaskSP(task)}
+      onClick={ifTF(isDone, null, dispatchEditTaskSP(task))}
     >
       <Btn onClick={dispatchUpdateTaskSP({isDone: !isDone}, task)}>
         {checkBoxIcon(isDone)}
