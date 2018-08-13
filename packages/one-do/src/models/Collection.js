@@ -34,7 +34,7 @@ export function collection(Model) {
     }))
     .actions(self => ({
       add(props) {
-        self.items.push(Model.create(props))
+        self.items.unshift(Model.create(props))
       },
       update(props, item) {
         const preUpdateSnap = item.remoteSnap
