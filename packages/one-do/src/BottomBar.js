@@ -6,7 +6,7 @@ import {
   dispatchAddTask,
   dispatchDeleteTask,
   dispatchToggleDrawer,
-  dispatchUpdateTask,
+  dispatchUpdateItem,
 } from './StoreActions'
 import {FlexRow} from './components/UI'
 import {IconBtn} from './lib/IconBtn'
@@ -38,7 +38,7 @@ function BottomBar({store: {selectedTask: task}}) {
         label={'done'}
         disabled={Boolean(!task)}
         onClick={
-          task ? dispatchUpdateTask({isDone: !task.isDone}, task) : null
+          task ? dispatchUpdateItem({isDone: !task.isDone}, task) : null
         }
       />
     </FlexRow>

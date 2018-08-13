@@ -162,7 +162,7 @@ const RootStoreBase = types
       const originalTask = self.taskCollection.findById(
         self.editingTask.id,
       )
-      self.updateTask(self.editingTask, originalTask)
+      self.update(self.editingTask, originalTask)
       self.editingTask = null
       return originalTask
     },
@@ -183,14 +183,17 @@ const RootStoreBase = types
     addList: function(props) {
       self.taskListCollection.add(props)
     },
-    updateTask(props, task) {
+    addTask(props, list = self.selectedList) {
+      self.taskCollection.add({...props, parentId: list.id})
+    },
+    updateItem(props, task) {
       self.taskCollection.update(props, task)
     },
     updateList(props, list) {
       self.taskListCollection.update(props, list)
     },
-    addTask(props, list = self.selectedList) {
-      self.taskCollection.add({...props, parentId: list.id})
+    update(props, item) {
+      self.collectionFor(item).update(props, item)
     },
     deleteList(list) {
       if (self.canDeleteList) {
