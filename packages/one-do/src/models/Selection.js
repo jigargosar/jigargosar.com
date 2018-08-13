@@ -1,4 +1,4 @@
-import {nullString} from '../lib/little-mst'
+import {computed, nullString} from '../lib/little-mst'
 import {addDisposer, getRoot, types} from 'mobx-state-tree'
 import {clamp, indexOf, isNil, pathOr, propOr} from 'ramda'
 import {findById} from '../lib/little-ramda'
@@ -42,7 +42,7 @@ export const Selection = types
       addDisposer(
         self,
         reaction(
-          () => self.items,
+          () => computed(() => self.items).get(),
           () => {
             if (isNil(self.selectedItemFromId)) {
               self.setSelectedItem(self.selectedItemFromIdx)
