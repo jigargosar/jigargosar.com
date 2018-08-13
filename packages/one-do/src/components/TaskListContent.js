@@ -7,6 +7,8 @@ import cn from 'classnames'
 import {AddIcon, DeleteIcon} from './Icons'
 import {fWord} from '../lib/fake'
 import {Btn} from '../lib/tachyons-components'
+import {getParentOfType} from '../lib/little-mst'
+import RootStore from '../RootStore'
 
 @observer
 export class TaskListContent extends Component {
@@ -53,7 +55,8 @@ class Tasks extends Component {
 @observer
 class TaskItem extends Component {
   render() {
-    const {task, store} = this.props
+    const {task} = this.props
+    const store = getParentOfType(task, RootStore)
     const isDone = task.isDone
     return (
       <div
@@ -65,8 +68,10 @@ class TaskItem extends Component {
         >
           {isDone ? <CheckBoxCheckedIcon /> : <CheckBoxBlankIcon />}
         </Btn>
-        <div className={cn('fa', {strike: isDone})}>{task.name}</div>
-        <div>{task.isDirty && `*`}</div>
+        <div className={cn('fa', {strike: isDone})}>
+          {task.name}
+          {task.isDirty && ` *`}
+        </div>
 
         {isDone && (
           <Btn onClick={wrapSP(() => store.deleteTask(task))}>
