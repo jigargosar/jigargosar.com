@@ -1,12 +1,16 @@
 import React, {Component} from 'react'
-import store from './store'
 import {observer} from './lib/little-react'
-import MaterialApp from './MaterialAppFrame'
+import MaterialAppFrame from './MaterialAppFrame'
+import {StoreContextProvider} from './StoreContext'
 
 @observer
 class App extends Component {
   render() {
-    return <MaterialApp store={store} />
+    return (
+      <StoreContextProvider>
+        <MaterialAppFrame />
+      </StoreContextProvider>
+    )
   }
 
   componentDidCatch(error, info) {

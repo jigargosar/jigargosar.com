@@ -38,6 +38,7 @@ import {afterMountAndUpdate} from './lib/little-recompose'
 import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {AllListsContent} from './components/AllListsContent'
+import {withStore} from './StoreContext'
 
 const drawerWidth = 240
 
@@ -78,6 +79,7 @@ const contentLookup = {
 }
 
 @compose(
+  withStore,
   withWidth(),
   afterMountAndUpdate(({store, width}) => {
     const isMobileLayout = !isWidthUp('sm', width)
