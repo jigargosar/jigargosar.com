@@ -11,17 +11,10 @@ import {
   dispatchEditTaskSP,
   dispatchUpdateTaskSP,
 } from '../StoreActions'
-import {FlexRow} from './UI'
+import {Div, FlexRow} from './UI'
 import {ifElse_} from '../lib/little-ramda'
 import CheckBtn from './CheckBtn'
 import {renderKeyedById} from '../lib/little-react'
-import {
-  mapProps,
-  renameProp,
-  setDisplayName,
-  withProps,
-} from '../lib/recompose'
-import {compose} from '../lib/ramda'
 
 export const TaskListContent = withStoreDN('TaskListContent')(
   ({store: {tasks, selectedList: list}}) => (
@@ -36,16 +29,6 @@ export const TaskListContent = withStoreDN('TaskListContent')(
     </div>
   ),
 )
-
-const withCN = compose(
-  setDisplayName('withCN'),
-  mapProps(({cn: cnArray, ...other}) => ({
-    className: cn(...cnArray),
-    ...other,
-  })),
-)
-
-const Div = withCN('div')
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (

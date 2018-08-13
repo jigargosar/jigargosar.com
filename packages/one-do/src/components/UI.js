@@ -1,11 +1,21 @@
-import {setDisplayName, withProps} from 'recompose'
+import {mapProps, setDisplayName, withProps} from 'recompose'
 import cn from 'classnames'
 import {compose} from 'ramda'
 
-const withMergedCN = (...cns) =>
+const withMergedClassName = (...cns) =>
   withProps(({className}) => ({className: cn(className, ...cns)}))
+
+const withCN = compose(
+  setDisplayName('withCN'),
+  mapProps(({cn: cnArray = [], className, ...other}) => ({
+    className: cn(className, ...cnArray),
+    ...other,
+  })),
+)
 
 export const FlexRow = compose(
   setDisplayName('FlexRow'),
-  withMergedCN('frc'),
+  withCN,
+  withMergedClassName('frc'),
 )('div')
+export const Div = withCN('div')
