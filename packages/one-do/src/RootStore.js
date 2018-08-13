@@ -160,10 +160,6 @@ const RootStoreBase = types
         yield signInWithPopup()
       }
     }),
-    setSelectedList(l) {
-      self.listSelection.setSelectedItem(l)
-      self.isAllListSelected = false
-    },
     addList: function(props) {
       self.taskListCollection.add(props)
     },
@@ -187,6 +183,9 @@ const RootStoreBase = types
       self.taskCollection.update(props, task)
     },
     setSelection(item) {
+      if (TaskList.is(item)) {
+        self.isAllListSelected = false
+      }
       self.selectionFor(item).setSelectedItem(item)
     },
   }))

@@ -116,7 +116,7 @@ const TaskListItem = compose(
     isSelected: computed(() => store.isSelected(list)).get(),
     pendingCount: list.pendingCount,
     isDirty: list.isDirty,
-    onClickSelect: () => store.setSelectedList(list),
+    onClickSelect: () => store.setSelection(list),
     secondaryAction: (
       <ListItemSecondaryAction>
         <IconButton

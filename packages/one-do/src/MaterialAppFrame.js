@@ -33,7 +33,6 @@ import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {withStore, withStoreDN} from './StoreContext'
 import {
-  dispatchAddTask,
   dispatchDeleteTask,
   dispatchEditTask,
   dispatchToggleDrawer,
