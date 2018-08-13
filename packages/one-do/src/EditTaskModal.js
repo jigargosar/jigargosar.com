@@ -8,13 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
-import {
-  dispatchDeleteTask,
-  dispatchUpdateTask,
-  dispatchUpdateTaskSP,
-} from './StoreActions'
-import CheckBtn from './components/CheckBtn'
-import {FlexRow} from './components/UI'
+import {dispatchUpdateTask} from './StoreActions'
 
 @observer
 export class EditTaskModal extends Component {
@@ -39,7 +33,7 @@ export class EditTaskModal extends Component {
             <DialogTitle id="responsive-dialog-title">
               {'Edit Task'}
             </DialogTitle>
-            <DialogContent className={cn('pl0')}>
+            <DialogContent>
               <TextField
                 fullWidth
                 autoFocus={true}
@@ -57,7 +51,7 @@ export class EditTaskModal extends Component {
               className={cn('flex-row-reverse justify-start')}
             >
               <Button onClick={this.handleClose} color="primary">
-                ok
+                close
               </Button>
             </DialogActions>
           </Dialog>
