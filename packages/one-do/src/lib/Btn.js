@@ -1,4 +1,4 @@
-import {observer} from './little-react'
+import {observer, whenKeySP, withKeyEvent} from './little-react'
 import React, {Component} from 'react'
 import cn from 'classnames'
 
@@ -23,6 +23,12 @@ export class Btn extends Component {
           disabled ? 'gray' : 'blue pointer',
         )}
         style={{userSelect: 'none' /*fontSize: 'inherit'*/}}
+        onKeyDown={
+          disabled ? null : withKeyEvent(whenKeySP('enter')(onClick))
+        }
+        onKeyUp={
+          disabled ? null : withKeyEvent(whenKeySP('space')(onClick))
+        }
         onClick={disabled ? null : onClick}
         tabIndex={disabled ? null : 0}
       >

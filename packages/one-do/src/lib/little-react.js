@@ -53,6 +53,12 @@ export function whenKeyPD(...keys) {
   }
 }
 
+export function whenKeySP(...keys) {
+  return function(fn) {
+    return [isKey(...keys), tapSP(fn)]
+  }
+}
+
 export function withKeyEvent(...conditions) {
   return _tap(_cond(conditions))
 }
