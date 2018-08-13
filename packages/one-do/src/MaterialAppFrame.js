@@ -6,12 +6,20 @@ import {
   Fr,
   observer,
   whenKey,
+  whenKeyPD,
   withKeyEvent,
 } from './lib/little-react'
 
 import cn from 'classnames'
 import {onlyUpdateForKeys, withProps} from './lib/recompose'
-import {compose} from './lib/ramda'
+import {
+  always,
+  compose,
+  identity,
+  ifElse,
+  isNil,
+  unless,
+} from './lib/ramda'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
@@ -31,7 +39,7 @@ import {afterMountAndUpdate} from './lib/little-recompose'
 import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {withStore, withStoreDN} from './StoreContext'
-import {dispatchToggleDrawer} from './StoreActions'
+import {dispatchDeleteTask, dispatchToggleDrawer} from './StoreActions'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
 
@@ -73,7 +81,16 @@ const contentLookup = {
 const GlobalEventListener = withStoreDN('GlobalEventListener')(
   ({store}) => {
     return (
-      <EventListener target={'document'} onKeyDown={store.onKeyDown} />
+      <EventListener
+        target={'document'}
+        onKeyDown={withKeyEvent(
+          whenKeyPD('d')(
+            ifElse(isNil)(always(identity))(dispatchDeleteTask)(
+              store.selectedTask,
+            ),
+          ),
+        )}
+      />
     )
   },
 )
