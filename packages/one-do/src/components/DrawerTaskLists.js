@@ -9,7 +9,7 @@ import AddListIcon from '@material-ui/icons/PlaylistAddRounded'
 
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction/ListItemSecondaryAction'
 import IconButton from '@material-ui/core/IconButton/IconButton'
-import {wrapSP} from '../lib/little-react'
+import {tapSP} from '../lib/little-react'
 import List from '@material-ui/core/List/List'
 import ListSubheader from '@material-ui/core/ListSubheader/ListSubheader'
 import cn from 'classnames'
@@ -33,7 +33,7 @@ export class DrawerTaskLists extends Component {
           >
             <div className={cn('flex-auto')}>My Lists</div>
             <IconButton
-              onClick={wrapSP(() => store.addList({name: fWord()}))}
+              onClick={tapSP(() => store.addList({name: fWord()}))}
             >
               <AddListIcon />
             </IconButton>
@@ -116,7 +116,7 @@ const TaskListItem = compose(
     secondaryAction: (
       <ListItemSecondaryAction>
         <IconButton
-          onClick={wrapSP(() => store.deleteList(list))}
+          onClick={tapSP(() => store.deleteList(list))}
           disabled={!store.canDeleteList}
         >
           <DeleteIcon />

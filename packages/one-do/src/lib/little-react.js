@@ -53,7 +53,7 @@ export const wrapPD = fn =>
     fn(e)
   })
 
-export const wrapSP = fn =>
+export const tapSP = fn =>
   R.tap(e => {
     e.stopPropagation()
     fn(e)
@@ -196,4 +196,4 @@ export function cnWith(...cnArgs) {
   return cls => cn(...cnArgs, cls)
 }
 
-export const onClickSP = fn => ({onClick: wrapSP(fn)})
+export const onClickSP = fn => ({onClick: tapSP(fn)})

@@ -1,5 +1,5 @@
 import React from 'react'
-import {wrapSP} from '../lib/little-react'
+import {tapSP} from '../lib/little-react'
 import CheckBoxBlankIcon from '@material-ui/icons/CheckCircleOutlineRounded'
 import CheckBoxCheckedIcon from '@material-ui/icons/CheckCircleRounded'
 import cn from 'classnames'
@@ -35,10 +35,10 @@ const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
     <div
       className={cn('frc', {pointer: !isDone})}
-      onClick={isDone ? null : wrapSP(() => store.editTask(task))}
+      onClick={isDone ? null : tapSP(() => store.editTask(task))}
     >
       <Btn
-        onClick={wrapSP(() => store.updateTask({isDone: !isDone}, task))}
+        onClick={tapSP(() => store.updateTask({isDone: !isDone}, task))}
       >
         {isDone ? <CheckBoxCheckedIcon /> : <CheckBoxBlankIcon />}
       </Btn>
@@ -48,7 +48,7 @@ const TaskItem = withStoreDN('TaskItem')(
       </div>
 
       {isDone && (
-        <Btn onClick={wrapSP(() => store.deleteTask(task))}>
+        <Btn onClick={tapSP(() => store.deleteTask(task))}>
           <DeleteIcon />
         </Btn>
       )}
