@@ -52,20 +52,7 @@ export const Selection = types
         reaction(
           () => self.items,
           () => {
-            if (isNil(self.selectedItemFromId)) {
-              self.setSelectedItem(self.selectedItemFromIdx)
-            }
-          },
-        ),
-      )
-      addDisposer(
-        self,
-        reaction(
-          () => indexOf(self.selectedItem)(self.items),
-          () => {
-            if (!isNil(self.selectedItem)) {
-              self.setSelectedItem(self.selectedItem)
-            }
+            self.setSelectedItem(self.selectedItem)
           },
         ),
       )
