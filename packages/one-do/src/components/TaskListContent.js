@@ -6,8 +6,6 @@ import cn from 'classnames'
 import {AddIcon, DeleteIcon} from './Icons'
 import {fWord} from '../lib/fake'
 import {Btn} from '../lib/tachyons-components'
-import {getParentOfType} from '../lib/little-mst'
-import RootStore from '../RootStore'
 import {withStore} from '../StoreContext'
 import {dispatchAddTask, dispatchEditList} from '../StoreActions'
 
