@@ -17,24 +17,17 @@ import CheckBtn from './CheckBtn'
 import {renderKeyedById} from '../lib/little-react'
 
 export const TaskListContent = withStoreDN('TaskListContent')(
-  ({store}) => (
+  ({store: {tasks, selectedList: list}}) => (
     <div className={cn('overflow-scroll pb5')}>
-      <Header list={store.selectedList} />
-      <Tasks tasks={store.tasks} />
+      <FlexRow className={'pa2 pr0 '} onClick={dispatchEditListSP(list)}>
+        <div className={cn('fa ttu')}>{list.name}</div>
+        <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
+          <AddIcon />
+        </Btn>
+      </FlexRow>
+      {renderKeyedById(TaskItem, 'task', tasks)},
     </div>
   ),
-)
-const Header = withStoreDN('Header')(({list}) => (
-  <FlexRow className={'pa2 pr0 '} onClick={dispatchEditListSP(list)}>
-    <div className={cn('fa ttu')}>{list.name}</div>
-    <Btn onClick={dispatchAddTask({name: fWord()}, list)}>
-      <AddIcon />
-    </Btn>
-  </FlexRow>
-))
-
-const Tasks = withStoreDN('Tasks')(({tasks}) =>
-  renderKeyedById(TaskItem, 'task', tasks),
 )
 
 const TaskItem = withStoreDN('TaskItem')(
