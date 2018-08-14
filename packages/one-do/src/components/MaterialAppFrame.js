@@ -47,7 +47,6 @@ import {
   getIsLayoutMobile,
   setIsLayoutMobile,
 } from '../mst-models/RootStore'
-import {easyView} from '../lib/react-easy-store'
 import {drawerWidth} from './constants'
 
 const styles = theme => ({
@@ -167,7 +166,6 @@ class SideBar extends Component {
     setIsLayoutMobile(!isWidthUp('sm', width)),
   ),
   onlyUpdateForKeys(['store']),
-  easyView,
   observer,
 )
 class MaterialAppFrame extends Component {
