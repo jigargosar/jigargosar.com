@@ -1,5 +1,5 @@
 import React from 'react'
-import store from './store'
+import store from './mst-models/store'
 import {observer} from './lib/little-react'
 import {compose} from './lib/ramda'
 import {setDisplayName} from './lib/recompose'

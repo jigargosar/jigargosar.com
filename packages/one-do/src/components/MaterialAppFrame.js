@@ -8,11 +8,11 @@ import {
   whenKey,
   whenKeyPD,
   withKeyEvent,
-} from './lib/little-react'
+} from '../lib/little-react'
 
 import cn from 'classnames'
-import {onlyUpdateForKeys, withProps} from './lib/recompose'
-import {always, compose, identity, ifElse, isNil} from './lib/ramda'
+import {onlyUpdateForKeys, withProps} from '../lib/recompose'
+import {always, compose, identity, ifElse, isNil} from '../lib/ramda'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
@@ -28,16 +28,16 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
-import {afterMountAndUpdate} from './lib/little-recompose'
-import {DrawerTaskLists} from './components/DrawerTaskLists'
-import {TaskListContent} from './components/TaskListContent'
-import {withStore, withStoreDN} from './StoreContext'
+import {afterMountAndUpdate} from '../lib/little-recompose'
+import {DrawerTaskLists} from './DrawerTaskLists'
+import {TaskListContent} from './TaskListContent'
+import {withStore, withStoreDN} from '../StoreContext'
 import {
   handleDeleteItem,
   handleEditTask,
   handleToggleDrawer,
   handleUpdateItem,
-} from './StoreActionsHandlers'
+} from '../mst-models/StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
 import {
@@ -46,8 +46,8 @@ import {
   getIsDrawerTemporary,
   getIsLayoutMobile,
   toggleIsLayoutMobile,
-} from './RootStore'
-import {easyView} from './lib/react-easy-store'
+} from '../mst-models/RootStore'
+import {easyView} from '../lib/react-easy-store'
 
 const drawerWidth = 240
 

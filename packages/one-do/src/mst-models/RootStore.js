@@ -10,8 +10,8 @@ import {
   onSnapshot,
   optional,
   types,
-} from './lib/little-mst'
-import {StorageItem} from './lib/storage'
+} from '../lib/little-mst'
+import {StorageItem} from '../lib/storage'
 import {
   _prop,
   ascend,
@@ -23,19 +23,19 @@ import {
   sum,
   toUpper,
   when,
-} from './lib/ramda'
-import {overPath} from './lib/little-ramda'
+} from '../lib/ramda'
+import {overPath} from '../lib/little-ramda'
 import {
   authStateKnownPromise,
   isSignedOut,
   signInWithPopup,
-} from './firebase'
-import {Layout} from './mst-models/Layout'
-import {Selection} from './mst-models/Selection'
-import {Collections} from './mst-models/Collections'
-import {whenKeyPD, withKeyEvent} from './lib/little-react'
-import {Task, TaskList} from './mst-models/Task'
-import {extendObservable} from './lib/mobx'
+} from '../lib/firebase'
+import {Layout} from './Layout'
+import {Selection} from './Selection'
+import {Collections} from './Collections'
+import {whenKeyPD, withKeyEvent} from '../lib/little-react'
+import {Task, TaskList} from './Task'
+import {extendObservable} from '../lib/mobx'
 
 const RootStore = types
   .model('RootStore', {

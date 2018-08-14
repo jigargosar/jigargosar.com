@@ -9,7 +9,7 @@ import {
   handleEditList,
   handleEditTaskSP,
   handleSetSelection,
-} from '../StoreActionsHandlers'
+} from '../mst-models/StoreActionsHandlers'
 import {Div, FlexRow} from './UI'
 import {renderKeyedById} from '../lib/little-react'
 

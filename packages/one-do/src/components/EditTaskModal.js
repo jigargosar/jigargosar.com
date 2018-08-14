@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Fr, observer, whenKey, withKeyEvent} from './lib/little-react'
+import {Fr, observer, whenKey, withKeyEvent} from '../lib/little-react'
 
 import cn from 'classnames'
 import Button from '@material-ui/core/Button/Button'
@@ -8,7 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
-import {handleUpdateItem} from './StoreActionsHandlers'
+import {handleUpdateItem} from '../mst-models/StoreActionsHandlers'
 
 @observer
 export class EditTaskModal extends Component {

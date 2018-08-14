@@ -19,7 +19,7 @@ import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import {pluralize} from '../lib/little-ramda'
 import {DeleteIcon} from './Icons'
-import {handleDeleteItemSP} from '../StoreActionsHandlers'
+import {handleDeleteItemSP} from '../mst-models/StoreActionsHandlers'
 
 @observer
 export class DrawerTaskLists extends Component {

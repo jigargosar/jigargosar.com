@@ -1,5 +1,5 @@
 import RootStore from './RootStore'
-import {hotDispose} from './lib/hot'
+import {hotDispose} from '../lib/hot'
 
 const store = RootStore.create({}, {})
 

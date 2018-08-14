@@ -1,5 +1,5 @@
 import store from './store'
-import {tapSP} from './lib/little-react'
+import {tapSP} from '../lib/little-react'
 import {toggleIsDrawerOpen} from './RootStore'
 
 export const handle = actionName => (...args) => () =>

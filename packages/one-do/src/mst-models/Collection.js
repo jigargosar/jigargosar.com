@@ -6,7 +6,7 @@ import {
   firestoreUserCRefNamed,
   isSignedIn,
   queryToDocsData,
-} from '../firebase'
+} from '../lib/firebase'
 import {findById} from '../lib/little-ramda'
 
 export function collection(Model) {

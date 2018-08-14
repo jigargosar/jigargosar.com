@@ -1,7 +1,7 @@
 import {dropFlow, optional} from '../lib/little-mst'
 import {collection} from './Collection'
 import {Task, TaskList} from './Task'
-import {isSignedIn} from '../firebase'
+import {isSignedIn} from '../lib/firebase'
 import {flow, types} from 'mobx-state-tree'
 
 export const Collections = types
