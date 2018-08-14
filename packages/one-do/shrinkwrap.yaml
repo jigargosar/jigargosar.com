@@ -28,6 +28,7 @@ dependencies:
   react-app-rewire-mobx: 1.0.8
   react-app-rewired: 1.5.2
   react-dom: 16.4.2
+  react-easy-state: 5.1.0
   react-event-listener: 0.6.2
   react-scripts: 1.1.4
   react-scroll-into-view-if-needed: 2.1.5
@@ -247,6 +248,12 @@ packages:
       react-dom: ^16.3.0
     resolution:
       integrity: sha512-Ct3PijJRPACnorgdr93QUKn5o6ixfVKTmy9yLyUpeYQgkaBpkaS60qKaQnSQ3ayA+BeFJQOHOHfGfCYGqBPVBg==
+  /@nx-js/observer-util/4.2.0:
+    dev: false
+    engines:
+      node: '>=6.5.0'
+    resolution:
+      integrity: sha512-G5SGobdqdyRm1OphNH1PX91N9Iqt92uiqxURSJGKh8nN6REFjfkBzGOrd3ASrN1OnUCfRt5ucEYDUkijQRLtFQ==
   /@types/jss/9.5.4:
     dependencies:
       csstype: 2.5.6
@@ -6975,6 +6982,16 @@ packages:
       react: ^16.0.0
     resolution:
       integrity: sha512-Usl73nQqzvmJN+89r97zmeUpQDKDlh58eX6Hbs/ERdDHzeBzWy+ENk7fsGQ+5KxArV1iOFPT46/VneklK9zoWw==
+  /react-easy-state/5.1.0:
+    dependencies:
+      '@nx-js/observer-util': 4.2.0
+    dev: false
+    engines:
+      node: '>=6.0.0'
+    peerDependencies:
+      react: '*'
+    resolution:
+      integrity: sha512-pUCnYr79ORtXlDV6Aojd+jJpbcL2e49eTaBELFybOLrPUJp5CIRyzcrYwmVBOi2e+USjkTObO392Q+YCEzv/Pw==
   /react-error-overlay/4.0.0:
     dev: false
     resolution:
@@ -9028,6 +9045,7 @@ specifiers:
   react-app-rewire-mobx: ^1.0.8
   react-app-rewired: ^1.5.2
   react-dom: ^16.4.2
+  react-easy-state: ^5.1.0
   react-event-listener: ^0.6.2
   react-scripts: 1.1.4
   react-scroll-into-view-if-needed: ^2.1.5
