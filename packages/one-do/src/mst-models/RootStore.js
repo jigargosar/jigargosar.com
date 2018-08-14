@@ -255,7 +255,6 @@ const toggle = toggleFor(store)
 const getter = getterFor(store)
 
 export const toggleIsDrawerOpen = toggle('isDrawerOpen')
-export const getIsDrawerOpen = getter('isDrawerOpen')
 
 export const xStore = extendObservable(store, {
   get drawerVariant() {
