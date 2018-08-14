@@ -5,8 +5,9 @@ import {
   getSnapshot,
   types,
 } from 'mobx-state-tree'
+import {autorun, reaction} from 'mobx'
 import nanoid from 'nanoid'
-import {_compose, _merge, _path, _startsWith, call} from './ramda'
+import {_compose, _merge, _path, _startsWith, call, compose} from './ramda'
 import {pDrop} from './little-ramda'
 import {atomic} from 'mst-middlewares'
 
@@ -121,13 +122,21 @@ export const optional = (t, dv = {}) => types.optional(t, dv)
 export const stringArray = types.array(types.string)
 export function Disposers() {
   const list = []
+  const push = (...args) => list.push(...args)
+  const addDisposer = disposer => {
+    push(disposer)
+    return disposer
+  }
   return {
-    push: (...args) => list.push(...args),
+    push,
     dispose: () => {
       list.forEach(call)
       list.splice(0, list.length)
     },
     length: () => list.length,
+    addDisposer,
+    autorun: compose(addDisposer, autorun),
+    reaction: compose(addDisposer, reaction),
   }
 }
 

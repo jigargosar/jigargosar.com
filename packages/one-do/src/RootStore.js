@@ -2,12 +2,14 @@ import {
   addDisposer,
   applySnapshot,
   clone,
+  Disposers,
   dropFlow,
   getType,
   isStateTreeNode,
   observable,
   onSnapshot,
   optional,
+  trace,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
@@ -284,3 +286,12 @@ export const getDrawerVariant = () =>
 
 export const getIsDrawerTemporary = () =>
   getDrawerVariant() === 'temporary'
+
+const disposers = Disposers()
+
+disposers.reaction(
+  () => XStore.isLayoutMobile,
+  () => {
+    XStore.isDrawerOpen = !XStore.isLayoutMobile
+  },
+)
