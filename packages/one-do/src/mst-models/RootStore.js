@@ -247,12 +247,10 @@ const store = observable({
 
 const setterFor = o => pn => val => (o[pn] = val)
 const toggleFor = o => pn => (bool = !Boolean(o[pn])) => (o[pn] = bool)
-const getterFor = o => pn => () => o[pn]
 
 const setter = setterFor(store)
 const setterWithDefault = pn => val => () => setterFor(store)(pn)(val)
 const toggle = toggleFor(store)
-const getter = getterFor(store)
 
 export const toggleIsDrawerOpen = toggle('isDrawerOpen')
 
