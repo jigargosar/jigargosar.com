@@ -261,8 +261,8 @@ const RootStore = types
 export default RootStore
 
 export const XStore = observable({
-  _isLayoutMobile: true,
-  _isDrawerOpen: false,
+  isLayoutMobile: true,
+  isDrawerOpen: false,
 })
 
 const setterFor = o => pn => val => (o[pn] = val)
@@ -273,11 +273,11 @@ export const setter = setterFor(XStore)
 const toggle = toggleFor(XStore)
 const getter = getterFor(XStore)
 
-export const toggleIsLayoutMobile = toggle('_isLayoutMobile')
-export const getIsLayoutMobile = getter('_isLayoutMobile')
+export const toggleIsLayoutMobile = toggle('isLayoutMobile')
+export const getIsLayoutMobile = getter('isLayoutMobile')
 
-export const toggleIsDrawerOpen = toggle('_isDrawerOpen')
-export const getIsDrawerOpen = getter('_isDrawerOpen')
+export const toggleIsDrawerOpen = toggle('isDrawerOpen')
+export const getIsDrawerOpen = getter('isDrawerOpen')
 
 export const getDrawerVariant = () =>
   getIsLayoutMobile() ? 'temporary' : 'persistent'
