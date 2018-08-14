@@ -17,10 +17,6 @@ export const withStore = BaseComponent => {
     )
   }
 }
-
-export const withStoreDN = displayName =>
-  compose(withStore, setDisplayName(displayName))
-
 export function StoreContextProvider({children}) {
   return (
     <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
