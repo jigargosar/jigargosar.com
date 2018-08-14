@@ -253,6 +253,7 @@ export const setter = setterFor(Store)
 const toggle = toggleFor(Store)
 const getter = getterFor(Store)
 
+export const setIsLayoutMobile = setter('isLayoutMobile')
 export const toggleIsLayoutMobile = toggle('isLayoutMobile')
 export const getIsLayoutMobile = getter('isLayoutMobile')
 

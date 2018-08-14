@@ -45,6 +45,7 @@ import {
   getIsDrawerOpen,
   getIsDrawerTemporary,
   getIsLayoutMobile,
+  setIsLayoutMobile,
   toggleIsLayoutMobile,
 } from '../mst-models/RootStore'
 import {easyView} from '../lib/react-easy-store'
@@ -165,7 +166,7 @@ class SideBar extends Component {
   withWidth(),
   afterMountAndUpdate(({store, width}) => {
     const isLayoutMobile = !isWidthUp('sm', width)
-    toggleIsLayoutMobile(isLayoutMobile)
+    setIsLayoutMobile(isLayoutMobile)
   }),
   onlyUpdateForKeys(['store']),
   easyView,
