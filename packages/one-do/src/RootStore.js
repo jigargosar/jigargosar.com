@@ -263,3 +263,9 @@ export default RootStore
 export const XStore = observable({
   _layout: LAYOUT_MOBILE,
 })
+
+const setterFor = o => pn => val => (o[pn] = val)
+
+const setter = setterFor(XStore)
+
+export const setLayout = setter('_layout')
