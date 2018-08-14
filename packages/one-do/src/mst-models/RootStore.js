@@ -249,7 +249,7 @@ const setterFor = o => pn => val => (o[pn] = val)
 const toggleFor = o => pn => (bool = !Boolean(o[pn])) => (o[pn] = bool)
 const getterFor = o => pn => () => o[pn]
 
-export const setter = setterFor(Store)
+const setter = setterFor(Store)
 const toggle = toggleFor(Store)
 const getter = getterFor(Store)
 
