@@ -5,6 +5,7 @@ import {
   dropFlow,
   getType,
   isStateTreeNode,
+  observable,
   onSnapshot,
   optional,
   types,
@@ -260,7 +261,12 @@ const RootStore = types
 
 export default RootStore
 
-export const Store = easyStore({
+export const EasyStore = easyStore({
+  title: 'One Note',
+  layout: 'foo',
+})
+
+export const XStore = observable({
   title: 'One Note',
   layout: 'foo',
 })
