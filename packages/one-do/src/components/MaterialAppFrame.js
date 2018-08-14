@@ -1,17 +1,15 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {
-  EventListener,
   FocusTrap,
   Fr,
   observer,
   whenKey,
-  whenKeyPD,
   withKeyEvent,
 } from '../lib/little-react'
 
 import cn from 'classnames'
-import {always, compose, identity, ifElse, isNil} from '../lib/ramda'
+import {compose} from '../lib/ramda'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import IconButton from '@material-ui/core/IconButton/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
@@ -29,10 +27,8 @@ import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
 import {afterMountAndUpdate} from '../lib/little-recompose'
 import {DrawerTaskLists} from './DrawerTaskLists'
-import {withStore, withStoreDN} from '../StoreContext'
+import {withStore} from '../StoreContext'
 import {
-  handleDeleteItem,
-  handleEditTask,
   handleToggleDrawer,
   handleUpdateItem,
 } from '../mst-models/StoreActionsHandlers'
@@ -47,6 +43,7 @@ import {
 } from '../mst-models/RootStore'
 import {drawerWidth} from './constants'
 import SelectedListContent from './SelectedListContent'
+import GlobalEventListener from './GlobalEventListener'
 
 const styles = theme => ({
   root: {
@@ -75,32 +72,6 @@ const contentLookup = {
   SelectedList: SelectedListContent,
   AllLists: SelectedListContent,
 }
-
-@withStore
-class GlobalEventListener extends Component {
-  render() {
-    const {store} = this.props
-    return (
-      <EventListener
-        target={'document'}
-        onKeyDown={withKeyEvent(
-          whenKeyPD('d')(
-            ifElse(isNil)(always(identity))(handleDeleteItem)(
-              store.selectedTask,
-            ),
-          ),
-          whenKeyPD('e')(
-            ifElse(isNil)(always(identity))(handleEditTask)(
-              store.selectedTask,
-            ),
-          ),
-        )}
-      />
-    )
-  }
-}
-
-GlobalEventListener.propTypes = {store: PropTypes.any}
 
 @observer
 class TopToolBar extends Component {
