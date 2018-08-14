@@ -177,14 +177,6 @@ const RootStore = types
       const type = when(isStateTreeNode)(getType)(nodeOrType)
       return lookup.get(type)
     },
-    editItemFor(nodeOrType) {
-      const lookup = new Map([
-        [Task, self.editingTask],
-        [TaskList, self.editingList],
-      ])
-      const type = when(isStateTreeNode)(getType)(nodeOrType)
-      return lookup.get(type)
-    },
     collectionFor(nodeOrType) {
       const lookup = new Map([
         [Task, self.taskCollection],
@@ -200,6 +192,9 @@ const RootStore = types
       ])
       const type = when(isStateTreeNode)(getType)(nodeOrType)
       return lookup.get(type)
+    },
+    editItemFor(nodeOrType) {
+      return self[self.editItemPNFor(nodeOrType)]
     },
   }))
   .actions(self => ({
