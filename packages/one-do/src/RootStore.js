@@ -262,5 +262,5 @@ export default RootStore
 
 export const XStore = observable({
   title: 'One Note',
-  layout: 'foo',
+  layout: 'foo2',
 })

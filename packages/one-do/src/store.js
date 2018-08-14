@@ -1,4 +1,5 @@
 import RootStore from './RootStore'
+import {hotDispose} from './lib/hot'
 
 const store = RootStore.create({}, {})
 
@@ -13,11 +14,5 @@ export default store
 
 if (module.hot) {
   window.s = store
-  module.hot.dispose(() => {
-    try {
-      disposer()
-    } catch (e) {
-      console.log('[store] destroy/dispose on hot dispose', e)
-    }
-  })
+  hotDispose(disposer, module)
 }

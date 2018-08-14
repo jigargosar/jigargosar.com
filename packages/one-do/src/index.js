@@ -19,10 +19,10 @@ function render() {
 
 if (module.hot) {
   console.log('Cold Boot')
-  module.hot.accept(['./App'], () => {
+  module.hot.accept(['./App'], data => {
     try {
       console.clear()
-      console.log('Hot Reload')
+      console.log('Hot Reload', data)
       render()
     } catch (e) {
       console.error('[index] hot accept', e)
