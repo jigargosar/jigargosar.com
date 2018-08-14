@@ -12,7 +12,7 @@ const disposer = store.saveToLSOnSnapshotChange()
 store.ensureLogin()
 setInterval(() => store.trySync(), 15 * 1000)
 
-export default /*hotSnapshot(module)*/ store
+export default store
 
 if (module.hot) {
   window.s = store
