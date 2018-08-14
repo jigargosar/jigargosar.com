@@ -31,11 +31,7 @@ import {withStore} from '../StoreContext'
 import {handleUpdateItem} from '../mst-models/StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
-import {
-  getIsDrawerOpen,
-  handleToggleDrawer,
-  xStore,
-} from '../mst-models/RootStore'
+import {handleToggleDrawer, xStore} from '../mst-models/RootStore'
 import {drawerWidth} from './constants'
 import SelectedListContent from './SelectedListContent'
 import GlobalEventListener from './GlobalEventListener'
