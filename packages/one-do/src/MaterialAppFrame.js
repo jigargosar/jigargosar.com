@@ -37,7 +37,7 @@ import {
   dispatchEditTask,
   dispatchToggleDrawer,
   dispatchUpdateItem,
-} from './StoreActions'
+} from './StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
 

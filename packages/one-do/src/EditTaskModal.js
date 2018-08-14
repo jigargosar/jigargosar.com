@@ -8,7 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
-import {dispatchUpdateItem} from './StoreActions'
+import {dispatchUpdateItem} from './StoreActionsHandlers'
 
 @observer
 export class EditTaskModal extends Component {

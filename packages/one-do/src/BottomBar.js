@@ -7,7 +7,7 @@ import {
   dispatchDeleteTask,
   dispatchToggleDrawer,
   dispatchUpdateItem,
-} from './StoreActions'
+} from './StoreActionsHandlers'
 import {FlexRow} from './components/UI'
 import {IconBtn} from './lib/IconBtn'
 import {AddIcon, DeleteIcon, DoneIcon, MenuIcon} from './components/Icons'

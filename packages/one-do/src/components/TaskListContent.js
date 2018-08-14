@@ -9,7 +9,7 @@ import {
   dispatchEditList,
   dispatchEditTaskSP,
   dispatchSetSelection,
-} from '../StoreActions'
+} from '../StoreActionsHandlers'
 import {Div, FlexRow} from './UI'
 import {renderKeyedById} from '../lib/little-react'
 
