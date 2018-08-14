@@ -42,6 +42,7 @@ import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
 import {
   getDrawerVariant,
+  getIsDrawerTemporary,
   getIsLayoutMobile,
   toggleIsLayoutMobile,
 } from './RootStore'
@@ -149,9 +150,7 @@ class SideBar extends Component {
         }}
         open={store.isDrawerOpen}
         onClose={handleToggleDrawer(false)}
-        onClick={
-          store.isDrawerTemporary ? handleToggleDrawer(false) : null
-        }
+        onClick={getIsDrawerTemporary() ? handleToggleDrawer(false) : null}
         ModalProps={{keepMounted: true}}
       >
         <TopToolBar />
@@ -165,9 +164,11 @@ class SideBar extends Component {
   withStore,
   withWidth(),
   afterMountAndUpdate(({store, width}) => {
-    const isMobileLayout = !isWidthUp('sm', width)
-    store.setLayout(isMobileLayout ? 'mobile' : 'desktop')
-    toggleIsLayoutMobile(isMobileLayout)
+    const isLayoutMobile = !isWidthUp('sm', width)
+    if (getIsLayoutMobile() !== isLayoutMobile) {
+      toggleIsLayoutMobile(isLayoutMobile)
+      store.toggleDrawer(!isLayoutMobile)
+    }
   }),
   onlyUpdateForKeys(['store']),
   easyView,

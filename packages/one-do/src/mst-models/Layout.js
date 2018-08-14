@@ -24,22 +24,8 @@ export const Layout = types
     get isDrawerOpen() {
       return self.drawerOpenState[self.layout]
     },
-    get isMobileLayout() {
-      return isLayoutMobile(self.layout)
-    },
-    get drawerVariant() {
-      return self.isMobileLayout ? 'temporary' : 'persistent'
-    },
-    get isDrawerTemporary() {
-      return self.drawerVariant === 'temporary'
-    },
   }))
   .actions(self => ({
-    setLayout(layout) {
-      if (self.layout === layout) return
-      self.layout = layout
-      self.drawerOpenState = {}
-    },
     toggleDrawer(bool) {
       self.isDrawerOpen = defaultTo(!self.isDrawerOpen)(bool)
     },

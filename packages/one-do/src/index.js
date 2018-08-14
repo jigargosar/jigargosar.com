@@ -22,7 +22,7 @@ if (module.hot) {
   module.hot.accept(['./App'], data => {
     try {
       console.clear()
-      console.log('Hot Reload', data)
+      // console.log('Hot Reload', data)
       render()
     } catch (e) {
       console.error('[index] hot accept', e)

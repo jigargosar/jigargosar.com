@@ -277,3 +277,6 @@ export const getIsLayoutMobile = getter('_isLayoutMobile')
 
 export const getDrawerVariant = () =>
   getIsLayoutMobile() ? 'temporary' : 'persistent'
+
+export const getIsDrawerTemporary = () =>
+  getDrawerVariant() === 'temporary'
