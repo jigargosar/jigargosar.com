@@ -33,7 +33,7 @@ import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {withStore, withStoreDN} from './StoreContext'
 import {
-  handleDeleteTask,
+  handleDeleteItem,
   handleEditTask,
   handleToggleDrawer,
   handleUpdateItem,
@@ -83,7 +83,7 @@ const GlobalEventListener = withStoreDN('GlobalEventListener')(
         target={'document'}
         onKeyDown={withKeyEvent(
           whenKeyPD('d')(
-            ifElse(isNil)(always(identity))(handleDeleteTask)(
+            ifElse(isNil)(always(identity))(handleDeleteItem)(
               store.selectedTask,
             ),
           ),

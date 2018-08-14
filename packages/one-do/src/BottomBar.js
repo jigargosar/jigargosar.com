@@ -4,7 +4,7 @@ import cn from 'classnames'
 import {fWord} from './lib/fake'
 import {
   handleAddTask,
-  handleDeleteTask,
+  handleDeleteItem,
   handleToggleDrawer,
   handleUpdateItem,
 } from './StoreActionsHandlers'
@@ -20,7 +20,7 @@ function BottomBar({store: {selectedTask: task}}) {
         Icon={DeleteIcon}
         label={'delete'}
         disabled={Boolean(!task)}
-        onClick={handleDeleteTask(task)}
+        onClick={handleDeleteItem(task)}
       />
       <div className={cn('flex-auto')} />
       <IconBtn

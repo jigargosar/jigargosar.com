@@ -195,9 +195,6 @@ const RootStoreBase = types
       }
       self.collectionFor(item).delete(item)
     },
-    deleteTask(task) {
-      self.deleteItem(task)
-    },
     setSelection(item) {
       if (TaskList.is(item)) {
         self.isAllListSelected = false

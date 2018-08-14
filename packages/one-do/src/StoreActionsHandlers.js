@@ -19,8 +19,6 @@ export const handleAddTask = handle('addTask')
 export const handleAddTaskSP = handleSP('addTask')
 export const handleEditTask = handle('editTask')
 export const handleEditTaskSP = handleSP('editTask')
-export const handleDeleteTask = handle('deleteTask')
-export const handleDeleteTaskSP = handleSP('deleteTask')
 
 export const handleUpdateItem = handle('updateItem')
 export const handleUpdateItemSP = handleSP('updateItem')
