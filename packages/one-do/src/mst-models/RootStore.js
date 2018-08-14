@@ -271,6 +271,7 @@ const XStore = extendObservable(Store, {
   toggleIsDrawerOpen,
   getDrawerVariant,
   getIsDrawerTemporary,
+  setIsLayoutMobile,
 })
 
 const disposers = Disposers(module)
