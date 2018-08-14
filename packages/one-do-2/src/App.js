@@ -1,13 +1,10 @@
-import React, {Component} from 'react'
-import {observer} from './lib/little-react'
+import React from 'react'
 import AppFrame from './components/AppFrame'
+import {Component} from './lib/little-mobx-react'
 
-@observer
 class App extends Component {
   render() {
-    return (
-        <AppFrame />
-    )
+    return <AppFrame />
   }
 
   componentDidCatch(error, info) {
