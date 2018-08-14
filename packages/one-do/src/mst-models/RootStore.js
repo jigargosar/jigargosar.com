@@ -268,9 +268,7 @@ export const getIsDrawerTemporary = () =>
 
 const XStore = extendObservable(Store, {
   toggleIsLayoutMobile,
-  getIsLayoutMobile,
   toggleIsDrawerOpen,
-  getIsDrawerOpen,
   getDrawerVariant,
   getIsDrawerTemporary,
 })
