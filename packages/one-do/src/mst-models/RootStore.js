@@ -30,7 +30,6 @@ import {
   isSignedOut,
   signInWithPopup,
 } from '../lib/firebase'
-import {Layout} from './Layout'
 import {Selection} from './Selection'
 import {Collections} from './Collections'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
@@ -45,7 +44,6 @@ const RootStore = types
     // editingList: types.maybeNull(TaskList),
     isAllListSelected: false,
     collections: optional(Collections),
-    layout: optional(Layout),
   })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -102,26 +100,6 @@ const RootStore = types
 
     get trySync() {
       return self.collections.trySync
-    },
-  }))
-  .views(self => ({
-    get isDrawerOpen() {
-      return self.layout.isDrawerOpen
-    },
-    get isMobileLayout() {
-      return self.layout.isMobileLayout
-    },
-    get drawerVariant() {
-      return self.layout.drawerVariant
-    },
-    get isDrawerTemporary() {
-      return self.layout.isDrawerTemporary
-    },
-    get setLayout() {
-      return self.layout.setLayout
-    },
-    get toggleDrawer() {
-      return self.layout.toggleDrawer
     },
   }))
   .views(self => ({

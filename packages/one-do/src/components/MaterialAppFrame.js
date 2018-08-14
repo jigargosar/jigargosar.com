@@ -167,7 +167,6 @@ class SideBar extends Component {
     const isLayoutMobile = !isWidthUp('sm', width)
     if (getIsLayoutMobile() !== isLayoutMobile) {
       toggleIsLayoutMobile(isLayoutMobile)
-      store.toggleDrawer(!isLayoutMobile)
     }
   }),
   onlyUpdateForKeys(['store']),
