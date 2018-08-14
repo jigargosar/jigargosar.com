@@ -40,7 +40,7 @@ import {
 } from './StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
-import {XStore} from './RootStore'
+import {toggleIsLayoutMobile, XStore} from './RootStore'
 import {easyView} from './lib/react-easy-store'
 
 const drawerWidth = 240
@@ -163,7 +163,7 @@ class SideBar extends Component {
   afterMountAndUpdate(({store, width}) => {
     const isMobileLayout = !isWidthUp('sm', width)
     store.setLayout(isMobileLayout ? 'mobile' : 'desktop')
-    XStore.layout = isMobileLayout ? 'mobile' : 'desktop'
+    toggleIsLayoutMobile(isMobileLayout)
   }),
   onlyUpdateForKeys(['store']),
   easyView,
