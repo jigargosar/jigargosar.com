@@ -40,7 +40,11 @@ import {
 } from './StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
-import {getIsLayoutMobile, toggleIsLayoutMobile} from './RootStore'
+import {
+  getDrawerVariant,
+  getIsLayoutMobile,
+  toggleIsLayoutMobile,
+} from './RootStore'
 import {easyView} from './lib/react-easy-store'
 
 const drawerWidth = 240
@@ -137,7 +141,7 @@ class SideBar extends Component {
     const {store, classes} = this.props
     return (
       <Drawer
-        variant={store.drawerVariant}
+        variant={getDrawerVariant()}
         classes={{
           paper: store.isDrawerOpen
             ? classes.drawerPaper

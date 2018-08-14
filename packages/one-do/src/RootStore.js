@@ -274,3 +274,6 @@ const getter = getterFor(XStore)
 
 export const toggleIsLayoutMobile = toggle('_isLayoutMobile')
 export const getIsLayoutMobile = getter('_isLayoutMobile')
+
+export const getDrawerVariant = () =>
+  getIsLayoutMobile() ? 'temporary' : 'persistent'
