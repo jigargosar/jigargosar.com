@@ -48,8 +48,7 @@ import {
   toggleIsLayoutMobile,
 } from '../mst-models/RootStore'
 import {easyView} from '../lib/react-easy-store'
-
-const drawerWidth = 240
+import {drawerWidth} from './constants'
 
 const styles = theme => ({
   root: {
