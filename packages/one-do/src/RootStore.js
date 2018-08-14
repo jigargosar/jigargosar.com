@@ -262,4 +262,5 @@ export default RootStore
 
 export const Store = store({
   title: 'One Note',
+  layout: 'foo',
 })

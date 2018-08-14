@@ -41,6 +41,7 @@ import {
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
 import {Store} from './RootStore'
+import {view as ev} from 'react-easy-state'
 
 const drawerWidth = 240
 
@@ -162,10 +163,11 @@ class SideBar extends Component {
   afterMountAndUpdate(({store, width}) => {
     const isMobileLayout = !isWidthUp('sm', width)
     store.setLayout(isMobileLayout ? 'mobile' : 'desktop')
-    Store.layout = store.layout
+    Store.layout = isMobileLayout ? 'mobile' : 'desktop'
   }),
   onlyUpdateForKeys(['store']),
   observer,
+  ev,
 )
 class MaterialAppFrame extends Component {
   render() {
@@ -188,6 +190,7 @@ class MaterialAppFrame extends Component {
             <div className={classes.toolbar} />
             <ContentView />
             {Store.title}
+            {Store.layout}
             <BottomBar />
           </main>
           <EditTaskModal store={store} />
