@@ -165,9 +165,7 @@ class SideBar extends Component {
   withWidth(),
   afterMountAndUpdate(({store, width}) => {
     const isLayoutMobile = !isWidthUp('sm', width)
-    if (getIsLayoutMobile() !== isLayoutMobile) {
-      toggleIsLayoutMobile(isLayoutMobile)
-    }
+    toggleIsLayoutMobile(isLayoutMobile)
   }),
   onlyUpdateForKeys(['store']),
   easyView,
