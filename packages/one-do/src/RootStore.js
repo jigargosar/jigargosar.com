@@ -195,9 +195,6 @@ const RootStoreBase = types
       }
       self.collectionFor(item).delete(item)
     },
-    deleteList(list) {
-      self.deleteItem(list)
-    },
     deleteTask(task) {
       self.deleteItem(task)
     },
