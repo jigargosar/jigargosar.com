@@ -28,13 +28,14 @@ import TextField from '@material-ui/core/TextField/TextField'
 import {afterMountAndUpdate} from '../lib/little-recompose'
 import {DrawerTaskLists} from './DrawerTaskLists'
 import {withStore} from '../StoreContext'
-import {
-  handleToggleDrawer,
-  handleUpdateItem,
-} from '../mst-models/StoreActionsHandlers'
+import {handleUpdateItem} from '../mst-models/StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
-import {getIsDrawerOpen, xStore} from '../mst-models/RootStore'
+import {
+  getIsDrawerOpen,
+  handleToggleDrawer,
+  xStore,
+} from '../mst-models/RootStore'
 import {drawerWidth} from './constants'
 import SelectedListContent from './SelectedListContent'
 import GlobalEventListener from './GlobalEventListener'

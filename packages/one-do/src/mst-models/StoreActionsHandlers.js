@@ -1,6 +1,5 @@
 import store from './store'
 import {tapSP} from '../lib/little-react'
-import {toggleIsDrawerOpen} from './RootStore'
 
 export const handle = actionName => (...args) => () =>
   store[actionName](...args)
@@ -25,5 +24,3 @@ export const handleDeleteItemSP = handleSP('deleteItem')
 
 export const handleSetSelection = handle('setSelection')
 export const handleSetSelectionSP = handleSP('setSelection')
-
-export const handleToggleDrawer = val => e => toggleIsDrawerOpen(val)

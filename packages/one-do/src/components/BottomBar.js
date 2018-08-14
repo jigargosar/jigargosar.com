@@ -2,16 +2,14 @@ import React, {Component} from 'react'
 
 import cn from 'classnames'
 import {fWord} from '../lib/fake'
-import {
-  handleToggleDrawer,
-  handleUpdateItem,
-} from '../mst-models/StoreActionsHandlers'
+import {handleUpdateItem} from '../mst-models/StoreActionsHandlers'
 import {FlexRow} from './UI'
 import {IconBtn} from '../lib/IconBtn'
 import {AddIcon, DeleteIcon, DoneIcon, MenuIcon} from './Icons'
 import {withStore} from '../StoreContext'
 import {computed} from '../lib/mobx'
 import {isNil} from '../lib/ramda'
+import {handleToggleDrawer} from '../mst-models/RootStore'
 
 class BottomBar extends Component {
   @computed
