@@ -4,6 +4,7 @@ import {
   addIndex,
   always,
   clamp,
+  curry,
   curryN,
   defaultTo,
   forEach,
@@ -96,3 +97,13 @@ export const findById = id => list => list.find(propEq('id', id))
 export const ifElse_ = (bool, t, f) => {
   return bool ? t : f
 }
+
+export const defineDelegatePropertyGetter = curry(
+  (propertyName, src, target) =>
+    Object.defineProperty(target, propertyName, {
+      get() {
+        return src[propertyName]
+      },
+      enumerable: true,
+    }),
+)
