@@ -37,8 +37,8 @@ const RootStoreBase = types
   .model('RootStore', {
     listSelection: Selection,
     taskSelection: Selection,
-    editingTask: types.maybeNull(Task),
-    editingList: types.maybeNull(TaskList),
+    // editingTask: types.maybeNull(Task),
+    // editingList: types.maybeNull(TaskList),
     isAllListSelected: false,
   })
   .preProcessSnapshot(snapshot => {
@@ -56,6 +56,10 @@ const RootStoreBase = types
     console.debug('[RS] preProcessSnapshot result', result)
     return result
   })
+  .volatile(self => ({
+    // editingTask: null,
+    // editingList: null,
+  }))
   .actions(self => {
     const ls = StorageItem({name: 'rootSnapshot'})
     return {
@@ -144,6 +148,14 @@ const RootStoreBase = types
       const type = when(isStateTreeNode)(getType)(nodeOrType)
       return lookup.get(type)
     },
+    editItemPNFor(nodeOrType) {
+      const lookup = new Map([
+        [Task, 'editingTask'],
+        [TaskList, 'editingList'],
+      ])
+      const type = when(isStateTreeNode)(getType)(nodeOrType)
+      return lookup.get(type)
+    },
   }))
   .actions(self => ({
     onHelp() {
@@ -158,21 +170,23 @@ const RootStoreBase = types
     editList(list) {
       self.editingList = clone(list)
     },
+    editItem(item) {
+      self[self.editItemPNFor(item)] = clone(item)
+    },
+    endEditForType(type) {
+      const editingItem = self[self.editItemPNFor(type)]
+      const originalItem = self
+        .collectionFor(type)
+        .findById(editingItem.id)
+      self.updateItem(editingItem, originalItem)
+      self[self.editItemPNFor(type)] = null
+      return originalItem
+    },
     endEditTask() {
-      const originalTask = self.taskCollection.findById(
-        self.editingTask.id,
-      )
-      self.updateItem(self.editingTask, originalTask)
-      self.editingTask = null
-      return originalTask
+      return self.endEditForType(Task)
     },
     endEditList() {
-      const originalList = self.taskListCollection.findById(
-        self.editingList.id,
-      )
-      self.updateItem(self.editingList, originalList)
-      self.editingList = null
-      return originalList
+      return self.endEditForType(TaskList)
     },
     ensureLogin: dropFlow(function*() {
       yield authStateKnownPromise
