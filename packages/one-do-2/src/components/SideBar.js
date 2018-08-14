@@ -11,7 +11,8 @@ import {
 import {drawerWidth} from './constants'
 import {TopToolBar} from './TopToolBar'
 
-@withStore @withStyles(theme => ({
+@withStore
+@withStyles(theme => ({
   drawerPaper: {
     position: 'relative',
     width: drawerWidth,
