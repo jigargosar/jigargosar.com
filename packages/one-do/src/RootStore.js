@@ -6,6 +6,7 @@ import {
   getType,
   isStateTreeNode,
   onSnapshot,
+  optional,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
@@ -40,6 +41,7 @@ const RootStoreBase = types
     // editingTask: types.maybeNull(Task),
     // editingList: types.maybeNull(TaskList),
     isAllListSelected: false,
+    collections: optional(Collections),
   })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -50,7 +52,9 @@ const RootStoreBase = types
       overPath(['taskSelection', 'targetPathFromRoot'])(
         defaultTo(['tasks']),
       ),
-      overPath(['taskListCollection', 'items'])(defaultTo([defaultList])),
+      overPath(['collections', 'taskListCollection', 'items'])(
+        defaultTo([defaultList]),
+      ),
     )(snapshot)
 
     console.debug('[RS] preProcessSnapshot result', result)
@@ -77,6 +81,29 @@ const RootStoreBase = types
     }
   })
   .views(self => ({
+    get taskListCollection() {
+      return self.collections.taskListCollection
+    },
+    get taskCollection() {
+      return self.collections.taskCollection
+    },
+
+    get isDirty() {
+      return self.collections.isDirty
+    },
+
+    get isSyncing() {
+      return self.collections.isSyncing
+    },
+
+    get sync() {
+      return self.collections.sync
+    },
+
+    get trySync() {
+      return self.collections.trySync
+    },
+
     get onKeyDown() {
       const keyMap = [
         //
@@ -217,6 +244,6 @@ const RootStoreBase = types
     },
   }))
 
-const RootStore = types.compose(RootStoreBase, Layout, Collections)
+const RootStore = types.compose(RootStoreBase, Layout)
 
 export default RootStore
