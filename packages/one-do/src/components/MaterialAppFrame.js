@@ -34,12 +34,7 @@ import {
 } from '../mst-models/StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
-import {
-  getIsDrawerOpen,
-  getIsDrawerTemporary,
-  getIsLayoutMobile,
-  xStore,
-} from '../mst-models/RootStore'
+import {getIsDrawerOpen, xStore} from '../mst-models/RootStore'
 import {drawerWidth} from './constants'
 import SelectedListContent from './SelectedListContent'
 import GlobalEventListener from './GlobalEventListener'
@@ -118,7 +113,9 @@ class SideBar extends Component {
         }}
         open={isDrawerOpen}
         onClose={handleToggleDrawer(false)}
-        onClick={getIsDrawerTemporary() ? handleToggleDrawer(false) : null}
+        onClick={
+          xStore.isDrawerTemporary ? handleToggleDrawer(false) : null
+        }
         ModalProps={{keepMounted: true}}
       >
         <TopToolBar />
@@ -156,7 +153,6 @@ class MaterialAppFrame extends Component {
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView />
-            {`${getIsLayoutMobile()}`}
             <BottomBar />
           </main>
           <EditTaskModal store={store} />
