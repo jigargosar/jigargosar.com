@@ -2,6 +2,7 @@ import {
   addDisposer,
   applySnapshot,
   clone,
+  computed,
   Disposers,
   dropFlow,
   getType,
@@ -269,8 +270,12 @@ export const getIsDrawerTemporary = () =>
 const XStore = extendObservable(Store, {
   toggleIsLayoutMobile,
   toggleIsDrawerOpen,
-  getDrawerVariant,
-  getIsDrawerTemporary,
+  get drawerVariant() {
+    return getDrawerVariant()
+  },
+  get isDrawerTemporary() {
+    return getIsDrawerTemporary()
+  },
   setIsLayoutMobile,
 })
 
