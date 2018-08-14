@@ -1,5 +1,5 @@
 import {validate} from './little-ramda'
-import {compose, identity, isNil} from './ramda'
+import {compose, curry, identity, isNil} from './ramda'
 
 export const storage = Storage()
 
@@ -14,11 +14,11 @@ function Storage() {
         return null
       }
     },
-    set: (k, v) => {
+    set: curry((k, v) => {
       const value = JSON.stringify(v)
       ls.setItem(k, value)
       return value
-    },
+    }),
     keys() {
       return Object.keys(ls)
     },
