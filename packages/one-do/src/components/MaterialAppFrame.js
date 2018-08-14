@@ -162,7 +162,7 @@ class SideBar extends Component {
 @compose(
   withStore,
   withWidth(),
-  afterMountAndUpdate(({store, width}) =>
+  afterMountAndUpdate(({width}) =>
     setIsLayoutMobile(!isWidthUp('sm', width)),
   ),
   observer,
