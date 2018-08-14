@@ -53,7 +53,7 @@ class BottomBar extends Component {
         <IconBtn
           Icon={MenuIcon}
           label={'menu'}
-          onClick={handleToggleDrawer()}
+          onClick={handleToggleDrawer}
         />
         <IconBtn
           Icon={AddIcon}

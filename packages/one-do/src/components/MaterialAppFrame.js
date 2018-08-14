@@ -31,7 +31,12 @@ import {withStore} from '../StoreContext'
 import {handleUpdateItem} from '../mst-models/StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
-import {handleToggleDrawer, xStore} from '../mst-models/RootStore'
+import {
+  handleCloseDrawer,
+  handleCloseDrawerIfTemporary,
+  handleToggleDrawer,
+  xStore,
+} from '../mst-models/RootStore'
 import {drawerWidth} from './constants'
 import SelectedListContent from './SelectedListContent'
 import GlobalEventListener from './GlobalEventListener'
@@ -69,7 +74,7 @@ class TopToolBar extends Component {
   render() {
     return (
       <Toolbar>
-        <IconButton color={'inherit'} onClick={handleToggleDrawer()}>
+        <IconButton color={'inherit'} onClick={handleToggleDrawer}>
           <MenuIcon />
         </IconButton>
         <Typography
@@ -109,10 +114,8 @@ class SideBar extends Component {
             : classes.drawerPaperClosed,
         }}
         open={isDrawerOpen}
-        onClose={handleToggleDrawer(false)}
-        onClick={
-          xStore.isDrawerTemporary ? handleToggleDrawer(false) : null
-        }
+        onClose={handleCloseDrawer}
+        onClick={handleCloseDrawerIfTemporary}
         ModalProps={{keepMounted: true}}
       >
         <TopToolBar />

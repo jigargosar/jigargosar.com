@@ -261,7 +261,11 @@ export const xStore = extendObservable(store, {
   },
   setIsLayoutMobile: setter('isLayoutMobile'),
   toggleDrawer: toggle('isDrawerOpen'),
-  closeDrawer: setterWithDefault('isDrawerOpen', false),
+  closeDrawer: setterWithDefault('isDrawerOpen')(false),
+  // closeDrawer: () => {
+  //   store.isDrawerOpen = false
+  // },
+
   closeDrawerIfTemporary() {
     if (store.isDrawerTemporary) {
       store.closeDrawer()
@@ -281,4 +285,7 @@ disposers.reaction(
 if (module.hot) {
   window.xsr = xStore
 }
-export const handleToggleDrawer = val => e => xStore.toggleDrawer(val)
+export const handleToggleDrawer = e => xStore.toggleDrawer()
+export const handleCloseDrawer = e => xStore.closeDrawer()
+export const handleCloseDrawerIfTemporary = e =>
+  xStore.closeDrawerIfTemporary()
