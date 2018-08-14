@@ -29,7 +29,7 @@ import {
   isSignedOut,
   signInWithPopup,
 } from './firebase'
-import {Layout, LAYOUT_MOBILE} from './mst-models/Layout'
+import {Layout} from './mst-models/Layout'
 import {Selection} from './mst-models/Selection'
 import {Collections} from './mst-models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
@@ -261,11 +261,13 @@ const RootStore = types
 export default RootStore
 
 export const XStore = observable({
-  _layout: LAYOUT_MOBILE,
+  _isLayoutMobile: true,
 })
 
 const setterFor = o => pn => val => (o[pn] = val)
+const toggleFor = o => pn => (bool = !Boolean(o[pn])) => (o[pn] = bool)
 
 const setter = setterFor(XStore)
+const toggle = toggleFor(XStore)
 
-export const setLayout = setter('_layout')
+export const toggleIsLayoutMobile = toggle('_layout')
