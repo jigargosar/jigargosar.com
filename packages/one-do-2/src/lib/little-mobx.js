@@ -5,7 +5,7 @@ import {compose, defaultTo} from './ramda'
 export function mobxStorage(store, storageKey, disposers) {
   function startStoring() {
     disposers.autorun(() => {
-      console.log(`toJS(store)`, toJS(store))
+      // console.log(`toJS(store)`, toJS(store))
       compose(storage.set(storageKey), toJS)(store)
     })
   }

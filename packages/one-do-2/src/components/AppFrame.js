@@ -6,7 +6,7 @@ import {disposable} from '../lib/hoc'
 @disposable
 class AppFrame extends Component {
   componentDidMount() {
-    console.log(`this.props`, this.props)
+    console.debug(`this.props`, this.props)
     startStoreReactions()
 
     this.setInterval(() => {
