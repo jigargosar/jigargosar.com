@@ -1,14 +1,17 @@
 import React from 'react'
 import {Component} from '../lib/little-mobx-react'
 import {startStoreReactions, stopStoreReactions, store} from '../store'
+import {disposable} from '../lib/hoc'
 
+@disposable
 class AppFrame extends Component {
   componentDidMount() {
+    console.log(`this.props`, this.props)
     startStoreReactions()
 
-    setInterval(() => {
+    this.setInterval(() => {
       stopStoreReactions()
-    }, 5000)
+    }, 5001)
   }
 
   ren() {

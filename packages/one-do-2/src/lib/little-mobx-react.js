@@ -10,4 +10,8 @@ export class Component extends React.Component {
   ren(props = this.props) {
     return null
   }
+
+  get setInterval() {
+    return this.props.setInterval
+  }
 }
