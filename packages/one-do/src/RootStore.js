@@ -96,10 +96,6 @@ const RootStoreBase = types
       return self.collections.isSyncing
     },
 
-    get sync() {
-      return self.collections.sync
-    },
-
     get trySync() {
       return self.collections.trySync
     },
