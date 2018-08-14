@@ -35,7 +35,6 @@ import {
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
 import {
-  getDrawerVariant,
   getIsDrawerOpen,
   getIsDrawerTemporary,
   getIsLayoutMobile,
@@ -109,15 +108,16 @@ class TopToolBar extends Component {
 class SideBar extends Component {
   render() {
     const {store, classes} = this.props
+    const isDrawerOpen = getIsDrawerOpen()
     return (
       <Drawer
         variant={Store.drawerVariant}
         classes={{
-          paper: getIsDrawerOpen()
+          paper: isDrawerOpen
             ? classes.drawerPaper
             : classes.drawerPaperClosed,
         }}
-        open={getIsDrawerOpen()}
+        open={isDrawerOpen}
         onClose={handleToggleDrawer(false)}
         onClick={getIsDrawerTemporary() ? handleToggleDrawer(false) : null}
         ModalProps={{keepMounted: true}}
