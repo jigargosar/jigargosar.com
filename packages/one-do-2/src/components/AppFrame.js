@@ -1,14 +1,8 @@
 import React from 'react'
 import {Component} from '../lib/little-mobx-react'
-import {observable} from '../lib/mobx'
+import {startStoreReactions, store} from '../store'
 
-const store = observable({
-  counter: 0,
-})
-
-setInterval(() => {
-  store.counter++
-}, 0)
+startStoreReactions()
 
 class AppFrame extends Component {
   ren() {
