@@ -41,7 +41,7 @@ import {
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
 import {Store} from './RootStore'
-import {view as ev} from 'react-easy-state'
+import {easyView} from './lib/react-easy-store'
 
 const drawerWidth = 240
 
@@ -166,8 +166,8 @@ class SideBar extends Component {
     Store.layout = isMobileLayout ? 'mobile' : 'desktop'
   }),
   onlyUpdateForKeys(['store']),
+  easyView,
   observer,
-  ev,
 )
 class MaterialAppFrame extends Component {
   render() {
