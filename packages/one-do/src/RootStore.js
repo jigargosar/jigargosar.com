@@ -186,9 +186,6 @@ const RootStoreBase = types
     addTask(props, list = self.selectedList) {
       self.taskCollection.add({...props, parentId: list.id})
     },
-    updateList(props, list) {
-      self.taskListCollection.update(props, list)
-    },
     updateItem(props, item) {
       self.collectionFor(item).update(props, item)
     },
