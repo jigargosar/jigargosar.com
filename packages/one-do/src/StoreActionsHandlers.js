@@ -14,8 +14,6 @@ export const handleAddList = handle('addList')
 export const handleAddListSP = handleSP('addList')
 export const handleEditList = handle('editList')
 export const handleEditListSP = handleSP('editList')
-export const handleDeleteList = handle('deleteList')
-export const handleDeleteListSP = handleSP('deleteList')
 
 export const handleAddTask = handle('addTask')
 export const handleAddTaskSP = handleSP('addTask')
@@ -26,6 +24,8 @@ export const handleDeleteTaskSP = handleSP('deleteTask')
 
 export const handleUpdateItem = handle('updateItem')
 export const handleUpdateItemSP = handleSP('updateItem')
+export const handleDeleteItem = handle('deleteItem')
+export const handleDeleteItemSP = handleSP('deleteItem')
 
 export const handleSetSelection = handle('setSelection')
 export const handleSetSelectionSP = handleSP('setSelection')

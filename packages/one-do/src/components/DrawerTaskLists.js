@@ -19,6 +19,7 @@ import ListItem from '@material-ui/core/ListItem/ListItem'
 import ListItemText from '@material-ui/core/ListItemText/ListItemText'
 import {pluralize} from '../lib/little-ramda'
 import {DeleteIcon} from './Icons'
+import {handleDeleteItemSP} from '../StoreActionsHandlers'
 
 @observer
 export class DrawerTaskLists extends Component {
@@ -120,7 +121,7 @@ const TaskListItem = compose(
     secondaryAction: (
       <ListItemSecondaryAction>
         <IconButton
-          onClick={tapSP(() => store.deleteList(list))}
+          onClick={handleDeleteItemSP(list)}
           disabled={!store.canDeleteList}
         >
           <DeleteIcon />
@@ -129,40 +130,3 @@ const TaskListItem = compose(
     ),
   })),
 )(DrawerTaskListItem)
-
-// @observer
-// @withProps(({store, list}) => ({
-//   isSelected: computed(() => store.isListSelected(list)).get(),
-// }))
-// @observer
-// class TaskListItem extends Component {
-//   render() {
-//     const {store, list, isSelected} = this.props
-//     const pendingCount = list.pendingTasks.length
-//     return (
-//       <ListItem
-//         className={cn('ttu', {'bg-black-20': isSelected})}
-//         button
-//         onClick={() => store.setSelectedList(list)}
-//       >
-//         <ListItemText
-//           primary={`${list.name}`}
-//           secondary={
-//             <Fragment>
-//               {`${pendingCount} ${pluralize('TASK', pendingCount)}`}
-//               <Fragment>{list.isDirty && '*'}</Fragment>
-//             </Fragment>
-//           }
-//         />
-//         <ListItemSecondaryAction>
-//           <IconButton
-//             onClick={wrapSP(() => store.deleteList(list))}
-//             disabled={!store.canDeleteList}
-//           >
-//             <DeleteIcon />
-//           </IconButton>
-//         </ListItemSecondaryAction>
-//       </ListItem>
-//     )
-//   }
-// }
