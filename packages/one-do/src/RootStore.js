@@ -99,7 +99,8 @@ const RootStoreBase = types
     get trySync() {
       return self.collections.trySync
     },
-
+  }))
+  .views(self => ({
     get onKeyDown() {
       const keyMap = [
         //
