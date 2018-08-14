@@ -34,7 +34,7 @@ import {Collections} from './models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
 import {Task, TaskList} from './models/Task'
 
-const RootStoreBase = types
+const RootStore = types
   .model('RootStore', {
     listSelection: Selection,
     taskSelection: Selection,
@@ -42,6 +42,7 @@ const RootStoreBase = types
     // editingList: types.maybeNull(TaskList),
     isAllListSelected: false,
     collections: optional(Collections),
+    layout: optional(Layout),
   })
   .preProcessSnapshot(snapshot => {
     const defaultList = {name: 'TODO'}
@@ -98,6 +99,26 @@ const RootStoreBase = types
 
     get trySync() {
       return self.collections.trySync
+    },
+  }))
+  .views(self => ({
+    get isDrawerOpen() {
+      return self.layout.isDrawerOpen
+    },
+    get isMobileLayout() {
+      return self.layout.isMobileLayout
+    },
+    get drawerVariant() {
+      return self.layout.drawerVariant
+    },
+    get isDrawerTemporary() {
+      return self.layout.isDrawerTemporary
+    },
+    get setLayout() {
+      return self.layout.setLayout
+    },
+    get toggleDrawer() {
+      return self.layout.toggleDrawer
     },
   }))
   .views(self => ({
@@ -240,7 +261,5 @@ const RootStoreBase = types
       self.selectionFor(item).setSelectedItem(item)
     },
   }))
-
-const RootStore = types.compose(RootStoreBase, Layout)
 
 export default RootStore
