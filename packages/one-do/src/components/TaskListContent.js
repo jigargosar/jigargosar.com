@@ -3,7 +3,7 @@ import cn from 'classnames'
 import {AddIcon} from './Icons'
 import {fWord} from '../lib/fake'
 import {Btn, BtnBehaviour} from '../lib/Btn'
-import {withStoreDN} from '../StoreContext'
+import {withStore, withStoreDN} from '../StoreContext'
 import {
   handleAddTaskSP,
   handleEditList,
@@ -13,19 +13,23 @@ import {
 import {Div, FlexRow} from './UI'
 import {renderKeyedById} from '../lib/little-react'
 
-export const TaskListContent = withStoreDN('TaskListContent')(({list}) => (
-  <div className={cn('overflow-scroll h-100')}>
-    <FlexRow className={'pa2 pr0 '} onClick={handleEditList(list)}>
-      <div className={cn('fa ttu')}>{list.name}</div>
-      <Btn onClick={handleAddTaskSP({name: fWord()}, list)}>
-        <AddIcon />
-      </Btn>
-    </FlexRow>
-    <div className={cn('pointer')}>
-      {renderKeyedById(TaskItem, 'task', list.activeTasks)}
+export default withStore(TaskListContent)
+
+function TaskListContent({list}) {
+  return (
+    <div className={cn('overflow-scroll h-100')}>
+      <FlexRow className={'pa2 pr0 '} onClick={handleEditList(list)}>
+        <div className={cn('fa ttu')}>{list.name}</div>
+        <Btn onClick={handleAddTaskSP({name: fWord()}, list)}>
+          <AddIcon />
+        </Btn>
+      </FlexRow>
+      <div className={cn('pointer')}>
+        {renderKeyedById(TaskItem, 'task', list.activeTasks)}
+      </div>
     </div>
-  </div>
-))
+  )
+}
 
 const TaskItem = withStoreDN('TaskItem')(
   ({store, task, _task: {isDone, name, isDirty} = task}) => (
