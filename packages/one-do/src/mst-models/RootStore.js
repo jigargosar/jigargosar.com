@@ -266,7 +266,7 @@ export const getDrawerVariant = () =>
 export const getIsDrawerTemporary = () =>
   getDrawerVariant() === 'temporary'
 
-const XStore = extendObservable(Store, {
+const xStore = extendObservable(Store, {
   toggleIsLayoutMobile,
   toggleIsDrawerOpen,
   get drawerVariant() {
@@ -281,12 +281,12 @@ const XStore = extendObservable(Store, {
 const disposers = Disposers(module)
 
 disposers.reaction(
-  () => XStore.isLayoutMobile,
+  () => xStore.isLayoutMobile,
   () => {
-    XStore.isDrawerOpen = !XStore.isLayoutMobile
+    xStore.isDrawerOpen = !xStore.isLayoutMobile
   },
 )
 
 if (module.hot) {
-  window.xsr = XStore
+  window.xsr = xStore
 }
