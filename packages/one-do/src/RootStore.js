@@ -190,18 +190,16 @@ const RootStoreBase = types
       self.collectionFor(item).update(props, item)
     },
     deleteItem(item) {
-      if (TaskList.is(item) && !this.canDeleteList) {
+      if (TaskList.is(item) && !self.canDeleteList) {
         return
       }
       self.collectionFor(item).delete(item)
     },
     deleteList(list) {
-      if (self.canDeleteList) {
-        self.listCollection.delete(list)
-      }
+      self.deleteItem(list)
     },
     deleteTask(task) {
-      self.taskCollection.delete(task)
+      self.deleteItem(task)
     },
     setSelection(item) {
       if (TaskList.is(item)) {
