@@ -25,7 +25,7 @@ export const handleDeleteTask = handle('deleteTask')
 export const handleDeleteTaskSP = handleSP('deleteTask')
 
 export const handleUpdateItem = handle('updateItem')
-export const handleUpdateItemSP = handleSP(handleUpdateItem)
+export const handleUpdateItemSP = handleSP('updateItem')
 
 export const handleSetSelection = handle('setSelection')
-export const handleSetSelectionSP = handleSP(handleSetSelection)
+export const handleSetSelectionSP = handleSP('setSelection')
