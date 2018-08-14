@@ -8,12 +8,11 @@ const StoreContext = React.createContext(store)
 const StoreContentConsumer = StoreContext.Consumer
 
 export const withStoreProps = propsFn => BaseComponent => {
-  const BaseComponentObserver = observer(BaseComponent)
   return function withStoreProps(props) {
     return (
       <StoreContentConsumer>
         {store => (
-          <BaseComponentObserver
+          <BaseComponent
             {...mergeAll([{store}, props, propsFn(store, props)])}
           />
         )}
