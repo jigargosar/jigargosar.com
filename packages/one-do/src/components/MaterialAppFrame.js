@@ -11,7 +11,6 @@ import {
 } from '../lib/little-react'
 
 import cn from 'classnames'
-import {withProps} from '../lib/recompose'
 import {always, compose, identity, ifElse, isNil} from '../lib/ramda'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import IconButton from '@material-ui/core/IconButton/IconButton'
@@ -30,7 +29,6 @@ import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
 import {afterMountAndUpdate} from '../lib/little-recompose'
 import {DrawerTaskLists} from './DrawerTaskLists'
-import {TaskListContent} from './TaskListContent'
 import {withStore, withStoreDN} from '../StoreContext'
 import {
   handleDeleteItem,
@@ -48,6 +46,7 @@ import {
   setIsLayoutMobile,
 } from '../mst-models/RootStore'
 import {drawerWidth} from './constants'
+import SelectedListContent from './SelectedListContent'
 
 const styles = theme => ({
   root: {
@@ -71,11 +70,6 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
 })
-
-const SelectedListContent = compose(
-  withStoreDN('SelectedListContent'),
-  withProps(({store}) => ({list: store.selectedList})),
-)(TaskListContent)
 
 const contentLookup = {
   SelectedList: SelectedListContent,
