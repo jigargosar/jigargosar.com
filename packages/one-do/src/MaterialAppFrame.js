@@ -40,7 +40,7 @@ import {
 } from './StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
-import {toggleIsLayoutMobile, XStore} from './RootStore'
+import {getIsLayoutMobile, toggleIsLayoutMobile} from './RootStore'
 import {easyView} from './lib/react-easy-store'
 
 const drawerWidth = 240
@@ -189,7 +189,7 @@ class MaterialAppFrame extends Component {
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView />
-            {XStore.layout}
+            {`${getIsLayoutMobile()}`}
             <BottomBar />
           </main>
           <EditTaskModal store={store} />
