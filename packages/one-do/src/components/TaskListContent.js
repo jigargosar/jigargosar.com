@@ -2,16 +2,15 @@ import React from 'react'
 import cn from 'classnames'
 import {AddIcon} from './Icons'
 import {fWord} from '../lib/fake'
-import {Btn, BtnBehaviour} from '../lib/Btn'
-import {withStore, withStoreDN} from '../StoreContext'
+import {Btn} from '../lib/Btn'
+import {withStore} from '../StoreContext'
 import {
   handleAddTaskSP,
   handleEditList,
-  handleEditTaskSP,
-  handleSetSelection,
 } from '../mst-models/StoreActionsHandlers'
-import {Div, FlexRow} from './UI'
+import {FlexRow} from './UI'
 import {renderKeyedById} from '../lib/little-react'
+import TaskItem from './TaskItem'
 
 export default withStore(TaskListContent)
 
@@ -30,23 +29,3 @@ function TaskListContent({list}) {
     </div>
   )
 }
-
-const TaskItem = withStoreDN('TaskItem')(
-  ({store, task, _task: {isDone, name, isDirty} = task}) => (
-    <Div>
-      <BtnBehaviour
-        className={cn(
-          'link ph3 pointer bl bw2',
-          store.isSelected(task) ? 'b--blue' : 'b--transparent',
-        )}
-        onClick={handleSetSelection(task)}
-        onDoubleClick={handleEditTaskSP(task)}
-      >
-        <Div cn={['fa', {strike: isDone}]}>
-          {name}
-          {isDirty && ` *`}
-        </Div>
-      </BtnBehaviour>
-    </Div>
-  ),
-)
