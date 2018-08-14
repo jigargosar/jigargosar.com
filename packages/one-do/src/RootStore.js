@@ -9,7 +9,6 @@ import {
   observable,
   onSnapshot,
   optional,
-  trace,
   types,
 } from './lib/little-mst'
 import {StorageItem} from './lib/storage'
@@ -36,6 +35,7 @@ import {Selection} from './mst-models/Selection'
 import {Collections} from './mst-models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
 import {Task, TaskList} from './mst-models/Task'
+import {hotDispose} from './lib/hot'
 
 const RootStore = types
   .model('RootStore', {
@@ -295,3 +295,7 @@ disposers.reaction(
     XStore.isDrawerOpen = !XStore.isLayoutMobile
   },
 )
+
+if (module.hot) {
+  hotDispose(disposers.dispose, module)
+}
