@@ -11,7 +11,7 @@ import {FlexRow} from './components/UI'
 import {IconBtn} from './lib/IconBtn'
 import {AddIcon, DeleteIcon, DoneIcon, MenuIcon} from './components/Icons'
 import {withStore} from './StoreContext'
-import {handleToggleDrawer} from './RootStore'
+import {handleToggleDrawer} from './StoreActionsHandlers'
 
 function BottomBar({store: {selectedTask: task}}) {
   return (

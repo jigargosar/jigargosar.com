@@ -35,6 +35,7 @@ import {withStore, withStoreDN} from './StoreContext'
 import {
   handleDeleteItem,
   handleEditTask,
+  handleToggleDrawer,
   handleUpdateItem,
 } from './StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
@@ -44,7 +45,6 @@ import {
   getIsDrawerOpen,
   getIsDrawerTemporary,
   getIsLayoutMobile,
-  handleToggleDrawer,
   toggleIsLayoutMobile,
 } from './RootStore'
 import {easyView} from './lib/react-easy-store'

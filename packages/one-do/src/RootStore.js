@@ -296,8 +296,6 @@ disposers.reaction(
   },
 )
 
-export const handleToggleDrawer = val => e => toggleIsDrawerOpen(val)
-
 if (module.hot) {
   hotDispose(disposers.dispose, module)
 }
