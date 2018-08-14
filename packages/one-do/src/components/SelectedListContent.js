@@ -1,11 +1,13 @@
 import {compose} from 'ramda'
-import {withStoreProps} from '../StoreContext'
 import TaskListContent from './TaskListContent'
-import {setDisplayName} from '../lib/recompose'
+import {setDisplayName, withProps} from '../lib/recompose'
+import store from '../mst-models/store'
+import {observer} from '../lib/little-react'
 
 const SelectedListContent = compose(
   setDisplayName('SelectedListContent'),
-  withStoreProps(store => ({list: store.selectedList})),
+  observer,
+  withProps(() => ({list: store.selectedList})),
 )(TaskListContent)
 
 export default SelectedListContent
