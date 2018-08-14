@@ -34,6 +34,7 @@ import {Collections} from './models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
 import {Task, TaskList} from './models/Task'
 import {store} from 'react-easy-state'
+import {easyStore} from './lib/react-easy-store'
 
 const RootStore = types
   .model('RootStore', {
@@ -260,7 +261,7 @@ const RootStore = types
 
 export default RootStore
 
-export const Store = store({
+export const Store = easyStore({
   title: 'One Note',
   layout: 'foo',
 })
