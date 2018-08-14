@@ -133,6 +133,10 @@ export function Disposers(module) {
     list.forEach(call)
     list.splice(0, list.length)
   }
+  function setIntervalDisposable(handler, timeout, ...args) {
+    const intervalId = setInterval(handler, timeout, ...args)
+    return () => clearInterval(intervalId)
+  }
   if (module) {
     hotDispose(dispose, module)
   }
@@ -143,6 +147,7 @@ export function Disposers(module) {
     addDisposer,
     autorun: compose(addDisposer, autorun),
     reaction: compose(addDisposer, reaction),
+    setInterval: compose(addDisposer, setIntervalDisposable),
   }
 }
 

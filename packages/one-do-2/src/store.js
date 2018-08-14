@@ -1,11 +1,14 @@
 import {observable} from 'mobx'
+import {Disposers} from './lib/little-mst'
 
 export const store = observable({
   counter: 0,
 })
 
+const disposers = Disposers(module)
+
 export function startStoreReactions() {
-  setInterval(() => {
+  disposers.setInterval(() => {
     store.counter++
   }, 0)
 }
