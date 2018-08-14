@@ -5,13 +5,13 @@ import {fWord} from './lib/fake'
 import {
   handleAddTask,
   handleDeleteItem,
-  handleToggleDrawer,
   handleUpdateItem,
 } from './StoreActionsHandlers'
 import {FlexRow} from './components/UI'
 import {IconBtn} from './lib/IconBtn'
 import {AddIcon, DeleteIcon, DoneIcon, MenuIcon} from './components/Icons'
 import {withStore} from './StoreContext'
+import {handleToggleDrawer} from './RootStore'
 
 function BottomBar({store: {selectedTask: task}}) {
   return (

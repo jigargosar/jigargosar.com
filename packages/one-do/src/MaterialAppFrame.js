@@ -35,15 +35,16 @@ import {withStore, withStoreDN} from './StoreContext'
 import {
   handleDeleteItem,
   handleEditTask,
-  handleToggleDrawer,
   handleUpdateItem,
 } from './StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
 import {
   getDrawerVariant,
+  getIsDrawerOpen,
   getIsDrawerTemporary,
   getIsLayoutMobile,
+  handleToggleDrawer,
   toggleIsLayoutMobile,
 } from './RootStore'
 import {easyView} from './lib/react-easy-store'
@@ -144,7 +145,7 @@ class SideBar extends Component {
       <Drawer
         variant={getDrawerVariant()}
         classes={{
-          paper: store.isDrawerOpen
+          paper: getIsDrawerOpen()
             ? classes.drawerPaper
             : classes.drawerPaperClosed,
         }}
@@ -166,6 +167,7 @@ class SideBar extends Component {
   afterMountAndUpdate(({store, width}) => {
     const isLayoutMobile = !isWidthUp('sm', width)
     if (getIsLayoutMobile() !== isLayoutMobile) {
+      toggleIsLayoutMobile(isLayoutMobile)
       store.toggleDrawer(!isLayoutMobile)
     }
   }),
