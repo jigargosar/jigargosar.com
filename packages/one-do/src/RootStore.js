@@ -34,7 +34,6 @@ import {Selection} from './models/Selection'
 import {Collections} from './models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
 import {Task, TaskList} from './models/Task'
-import {easyStore} from './lib/react-easy-store'
 
 const RootStore = types
   .model('RootStore', {
@@ -260,6 +259,7 @@ const RootStore = types
   }))
 
 export default RootStore
+
 export const XStore = observable({
   title: 'One Note',
   layout: 'foo',

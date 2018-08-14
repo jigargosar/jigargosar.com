@@ -16,7 +16,6 @@ export default /*hotSnapshot(module)*/ store
 
 if (module.hot) {
   window.s = store
-  window.store = store
   module.hot.dispose(() => {
     try {
       disposer()
