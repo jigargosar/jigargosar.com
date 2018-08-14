@@ -262,10 +262,6 @@ export const xStore = extendObservable(store, {
   setIsLayoutMobile: setter('isLayoutMobile'),
   toggleDrawer: toggle('isDrawerOpen'),
   closeDrawer: setterWithDefault('isDrawerOpen')(false),
-  // closeDrawer: () => {
-  //   store.isDrawerOpen = false
-  // },
-
   closeDrawerIfTemporary() {
     if (store.isDrawerTemporary) {
       store.closeDrawer()
