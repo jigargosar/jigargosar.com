@@ -1,8 +1,6 @@
 import React from 'react'
 import store from './mst-models/store'
 import {observer} from './lib/little-react'
-import {compose} from './lib/ramda'
-import {setDisplayName} from './lib/recompose'
 
 const StoreContext = React.createContext(store)
 const StoreContentConsumer = StoreContext.Consumer
