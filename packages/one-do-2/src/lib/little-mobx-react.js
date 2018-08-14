@@ -14,4 +14,16 @@ export class Component extends React.Component {
   get setInterval() {
     return this.props.setInterval
   }
+
+  get autorun() {
+    return this.props.autorun
+  }
+
+  get reaction() {
+    return this.props.reaction
+  }
+
+  get addDisposer() {
+    return this.props.addDisposer
+  }
 }
