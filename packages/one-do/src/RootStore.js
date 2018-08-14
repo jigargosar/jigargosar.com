@@ -29,7 +29,7 @@ import {
   isSignedOut,
   signInWithPopup,
 } from './firebase'
-import {Layout} from './mst-models/Layout'
+import {Layout, LAYOUT_MOBILE} from './mst-models/Layout'
 import {Selection} from './mst-models/Selection'
 import {Collections} from './mst-models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
@@ -261,5 +261,5 @@ const RootStore = types
 export default RootStore
 
 export const XStore = observable({
-  _layout: 'foo2',
+  _layout: LAYOUT_MOBILE,
 })
