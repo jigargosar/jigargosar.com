@@ -252,8 +252,6 @@ const setter = setterFor(store)
 const setterWithDefault = pn => val => () => setterFor(store)(pn)(val)
 const toggle = toggleFor(store)
 
-export const toggleIsDrawerOpen = toggle('isDrawerOpen')
-
 export const xStore = extendObservable(store, {
   get drawerVariant() {
     return store.isLayoutMobile ? 'temporary' : 'persistent'
@@ -262,7 +260,7 @@ export const xStore = extendObservable(store, {
     return store.drawerVariant === 'temporary'
   },
   setIsLayoutMobile: setter('isLayoutMobile'),
-  toggleDrawer: toggleIsDrawerOpen,
+  toggleDrawer: toggle('isDrawerOpen'),
   closeDrawer: setterWithDefault('isDrawerOpen', false),
   closeDrawerIfTemporary() {
     if (store.isDrawerTemporary) {
@@ -283,4 +281,4 @@ disposers.reaction(
 if (module.hot) {
   window.xsr = xStore
 }
-export const handleToggleDrawer = val => e => toggleIsDrawerOpen(val)
+export const handleToggleDrawer = val => e => xStore.toggleDrawer(val)
