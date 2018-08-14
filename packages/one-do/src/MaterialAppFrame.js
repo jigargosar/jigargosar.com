@@ -33,10 +33,10 @@ import {DrawerTaskLists} from './components/DrawerTaskLists'
 import {TaskListContent} from './components/TaskListContent'
 import {withStore, withStoreDN} from './StoreContext'
 import {
-  dispatchDeleteTask,
-  dispatchEditTask,
-  dispatchToggleDrawer,
-  dispatchUpdateItem,
+  handleDeleteTask,
+  handleEditTask,
+  handleToggleDrawer,
+  handleUpdateItem,
 } from './StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
@@ -83,12 +83,12 @@ const GlobalEventListener = withStoreDN('GlobalEventListener')(
         target={'document'}
         onKeyDown={withKeyEvent(
           whenKeyPD('d')(
-            ifElse(isNil)(always(identity))(dispatchDeleteTask)(
+            ifElse(isNil)(always(identity))(handleDeleteTask)(
               store.selectedTask,
             ),
           ),
           whenKeyPD('e')(
-            ifElse(isNil)(always(identity))(dispatchEditTask)(
+            ifElse(isNil)(always(identity))(handleEditTask)(
               store.selectedTask,
             ),
           ),
@@ -103,7 +103,7 @@ class TopToolBar extends Component {
   render() {
     return (
       <Toolbar>
-        <IconButton color={'inherit'} onClick={dispatchToggleDrawer()}>
+        <IconButton color={'inherit'} onClick={handleToggleDrawer()}>
           <MenuIcon />
         </IconButton>
         <Typography
@@ -142,9 +142,9 @@ class SideBar extends Component {
             : classes.drawerPaperClosed,
         }}
         open={store.isDrawerOpen}
-        onClose={dispatchToggleDrawer(false)}
+        onClose={handleToggleDrawer(false)}
         onClick={
-          store.isDrawerTemporary ? dispatchToggleDrawer(false) : null
+          store.isDrawerTemporary ? handleToggleDrawer(false) : null
         }
         ModalProps={{keepMounted: true}}
       >
@@ -230,7 +230,7 @@ class EditListModal extends Component {
                   whenKey('enter')(this.handleClose),
                 )}
                 onChange={e =>
-                  dispatchUpdateItem({name: e.target.value}, list)(e)
+                  handleUpdateItem({name: e.target.value}, list)(e)
                 }
                 InputProps={{
                   endAdornment: (

@@ -1,31 +1,31 @@
 import store from './store'
 import {tapSP} from './lib/little-react'
 
-export const dispatch = actionName => (...args) => () =>
+export const handle = actionName => (...args) => () =>
   store[actionName](...args)
 
-export const dispatchSP = actionName => (...args) =>
+export const handleSP = actionName => (...args) =>
   tapSP(() => store[actionName](...args))
 
-export const dispatchToggleDrawer = dispatch('toggleDrawer')
-export const dispatchToggleDrawerSP = dispatchSP('toggleDrawer')
+export const handleToggleDrawer = handle('toggleDrawer')
+export const handleToggleDrawerSP = handleSP('toggleDrawer')
 
-export const dispatchAddList = dispatch('addList')
-export const dispatchAddListSP = dispatchSP('addList')
-export const dispatchEditList = dispatch('editList')
-export const dispatchEditListSP = dispatchSP('editList')
-export const dispatchDeleteList = dispatch('deleteList')
-export const dispatchDeleteListSP = dispatchSP('deleteList')
+export const handleAddList = handle('addList')
+export const handleAddListSP = handleSP('addList')
+export const handleEditList = handle('editList')
+export const handleEditListSP = handleSP('editList')
+export const handleDeleteList = handle('deleteList')
+export const handleDeleteListSP = handleSP('deleteList')
 
-export const dispatchAddTask = dispatch('addTask')
-export const dispatchAddTaskSP = dispatchSP('addTask')
-export const dispatchEditTask = dispatch('editTask')
-export const dispatchEditTaskSP = dispatchSP('editTask')
-export const dispatchDeleteTask = dispatch('deleteTask')
-export const dispatchDeleteTaskSP = dispatchSP('deleteTask')
+export const handleAddTask = handle('addTask')
+export const handleAddTaskSP = handleSP('addTask')
+export const handleEditTask = handle('editTask')
+export const handleEditTaskSP = handleSP('editTask')
+export const handleDeleteTask = handle('deleteTask')
+export const handleDeleteTaskSP = handleSP('deleteTask')
 
-export const dispatchUpdateItem = dispatch('updateItem')
-export const dispatchUpdateItemSP = dispatchSP(dispatchUpdateItem)
+export const handleUpdateItem = handle('updateItem')
+export const handleUpdateItemSP = handleSP(handleUpdateItem)
 
-export const dispatchSetSelection = dispatch('setSelection')
-export const dispatchSetSelectionSP = dispatchSP(dispatchSetSelection)
+export const handleSetSelection = handle('setSelection')
+export const handleSetSelectionSP = handleSP(handleSetSelection)

@@ -8,7 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
 import TextField from '@material-ui/core/TextField/TextField'
-import {dispatchUpdateItem} from './StoreActionsHandlers'
+import {handleUpdateItem} from './StoreActionsHandlers'
 
 @observer
 export class EditTaskModal extends Component {
@@ -43,7 +43,7 @@ export class EditTaskModal extends Component {
                   whenKey('enter')(this.handleClose),
                 )}
                 onChange={e =>
-                  dispatchUpdateItem({name: e.target.value}, task)(e)
+                  handleUpdateItem({name: e.target.value}, task)(e)
                 }
               />
             </DialogContent>

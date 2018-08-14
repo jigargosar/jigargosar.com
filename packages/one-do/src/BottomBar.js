@@ -3,10 +3,10 @@ import React from 'react'
 import cn from 'classnames'
 import {fWord} from './lib/fake'
 import {
-  dispatchAddTask,
-  dispatchDeleteTask,
-  dispatchToggleDrawer,
-  dispatchUpdateItem,
+  handleAddTask,
+  handleDeleteTask,
+  handleToggleDrawer,
+  handleUpdateItem,
 } from './StoreActionsHandlers'
 import {FlexRow} from './components/UI'
 import {IconBtn} from './lib/IconBtn'
@@ -20,25 +20,25 @@ function BottomBar({store: {selectedTask: task}}) {
         Icon={DeleteIcon}
         label={'delete'}
         disabled={Boolean(!task)}
-        onClick={dispatchDeleteTask(task)}
+        onClick={handleDeleteTask(task)}
       />
       <div className={cn('flex-auto')} />
       <IconBtn
         Icon={MenuIcon}
         label={'menu'}
-        onClick={dispatchToggleDrawer()}
+        onClick={handleToggleDrawer()}
       />
       <IconBtn
         Icon={AddIcon}
         label={'add'}
-        onClick={e => dispatchAddTask({name: fWord()})(e)}
+        onClick={e => handleAddTask({name: fWord()})(e)}
       />
       <IconBtn
         Icon={DoneIcon}
         label={'done'}
         disabled={Boolean(!task)}
         onClick={
-          task ? dispatchUpdateItem({isDone: !task.isDone}, task) : null
+          task ? handleUpdateItem({isDone: !task.isDone}, task) : null
         }
       />
     </FlexRow>
