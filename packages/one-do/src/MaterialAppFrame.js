@@ -40,7 +40,7 @@ import {
 } from './StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
-import {EasyStore, XStore} from './RootStore'
+import {XStore} from './RootStore'
 import {easyView} from './lib/react-easy-store'
 
 const drawerWidth = 240

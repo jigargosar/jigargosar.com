@@ -260,12 +260,6 @@ const RootStore = types
   }))
 
 export default RootStore
-
-export const EasyStore = easyStore({
-  title: 'One Note',
-  layout: 'foo',
-})
-
 export const XStore = observable({
   title: 'One Note',
   layout: 'foo',
