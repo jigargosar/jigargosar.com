@@ -1,5 +1,5 @@
 import {compose} from 'ramda'
-import {withStore, withStoreDN} from '../StoreContext'
+import {withStore} from '../StoreContext'
 import {withProps} from 'recompose'
 import TaskListContent from './TaskListContent'
 import {setDisplayName} from '../lib/recompose'

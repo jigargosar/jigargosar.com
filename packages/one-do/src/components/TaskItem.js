@@ -1,4 +1,4 @@
-import {withStore, withStoreDN} from '../StoreContext'
+import {withStore} from '../StoreContext'
 import {Div} from './UI'
 import {BtnBehaviour} from '../lib/Btn'
 import cn from 'classnames'
