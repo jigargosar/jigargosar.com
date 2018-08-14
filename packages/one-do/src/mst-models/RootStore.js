@@ -253,7 +253,6 @@ const setter = setterFor(Store)
 const toggle = toggleFor(Store)
 const getter = getterFor(Store)
 
-export const setIsLayoutMobile = setter('isLayoutMobile')
 export const getIsLayoutMobile = getter('isLayoutMobile')
 
 export const toggleIsDrawerOpen = toggle('isDrawerOpen')
@@ -265,7 +264,7 @@ export const getDrawerVariant = () =>
 export const getIsDrawerTemporary = () =>
   getDrawerVariant() === 'temporary'
 
-const xStore = extendObservable(Store, {
+export const xStore = extendObservable(Store, {
   toggleIsDrawerOpen,
   get drawerVariant() {
     return getDrawerVariant()
@@ -273,7 +272,7 @@ const xStore = extendObservable(Store, {
   get isDrawerTemporary() {
     return getIsDrawerTemporary()
   },
-  setIsLayoutMobile,
+  setIsLayoutMobile: setter('isLayoutMobile'),
 })
 
 const disposers = Disposers(module)
