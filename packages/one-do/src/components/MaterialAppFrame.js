@@ -103,7 +103,7 @@ class TopToolBar extends Component {
 class SideBar extends Component {
   render() {
     const {store, classes} = this.props
-    const isDrawerOpen = getIsDrawerOpen()
+    const isDrawerOpen = xStore.isDrawerOpen
     return (
       <Drawer
         variant={xStore.drawerVariant}
