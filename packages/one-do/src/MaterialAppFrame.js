@@ -163,7 +163,6 @@ class SideBar extends Component {
   afterMountAndUpdate(({store, width}) => {
     const isMobileLayout = !isWidthUp('sm', width)
     store.setLayout(isMobileLayout ? 'mobile' : 'desktop')
-    EasyStore.layout = isMobileLayout ? 'mobile' : 'desktop'
     XStore.layout = isMobileLayout ? 'mobile' : 'desktop'
   }),
   onlyUpdateForKeys(['store']),
@@ -190,8 +189,6 @@ class MaterialAppFrame extends Component {
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView />
-            {EasyStore.title}
-            {EasyStore.layout}
             {XStore.title}
             {XStore.layout}
             <BottomBar />
