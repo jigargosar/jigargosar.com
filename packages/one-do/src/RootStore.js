@@ -266,8 +266,11 @@ export const XStore = observable({
 
 const setterFor = o => pn => val => (o[pn] = val)
 const toggleFor = o => pn => (bool = !Boolean(o[pn])) => (o[pn] = bool)
+const getterFor = o => pn => o[pn]
 
 const setter = setterFor(XStore)
 const toggle = toggleFor(XStore)
+const getter = getterFor(XStore)
 
-export const toggleIsLayoutMobile = toggle('_layout')
+export const toggleIsLayoutMobile = toggle('_isLayoutMobile')
+export const isLayoutMobile = getter('_isLayoutMobile')

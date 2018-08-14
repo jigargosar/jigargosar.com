@@ -189,7 +189,6 @@ class MaterialAppFrame extends Component {
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <ContentView />
-            {XStore.title}
             {XStore.layout}
             <BottomBar />
           </main>
