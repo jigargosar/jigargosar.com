@@ -8,7 +8,7 @@ export const store = observable({
 const disposers = Disposers(module)
 
 export function startStoreReactions() {
-  return disposers.setInterval(() => {
+  disposers.setInterval(() => {
     store.counter++
   }, 0)
 }
