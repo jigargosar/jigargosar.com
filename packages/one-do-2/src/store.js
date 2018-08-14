@@ -4,19 +4,21 @@ import {mobxStorage} from './lib/little-mobx'
 
 export const store = observable({
   counter: 0,
-  inc() {
-    store.counter++
-  },
 })
 
+function incCounter() {
+  store.counter++
+}
+
 const disposers = Disposers(module)
+
 const rootStorage = mobxStorage(store, 'rootStore', disposers)
 
 export function startStoreReactions() {
   disposers.dispose()
 
   disposers.setInterval(() => {
-    store.inc()
+    incCounter()
   }, 1000)
 
   rootStorage.loadAndStart()
