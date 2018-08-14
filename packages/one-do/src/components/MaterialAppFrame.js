@@ -40,6 +40,7 @@ import {
   getIsDrawerTemporary,
   getIsLayoutMobile,
   setIsLayoutMobile,
+  Store,
 } from '../mst-models/RootStore'
 import {drawerWidth} from './constants'
 import SelectedListContent from './SelectedListContent'
@@ -110,7 +111,7 @@ class SideBar extends Component {
     const {store, classes} = this.props
     return (
       <Drawer
-        variant={getDrawerVariant()}
+        variant={Store.drawerVariant}
         classes={{
           paper: getIsDrawerOpen()
             ? classes.drawerPaper

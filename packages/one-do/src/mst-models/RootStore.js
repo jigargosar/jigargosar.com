@@ -288,5 +288,5 @@ disposers.reaction(
 )
 
 if (module.hot) {
-  window.XStore = XStore
+  window.xsr = XStore
 }
