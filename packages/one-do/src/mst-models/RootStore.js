@@ -254,7 +254,6 @@ const toggle = toggleFor(Store)
 const getter = getterFor(Store)
 
 export const setIsLayoutMobile = setter('isLayoutMobile')
-export const toggleIsLayoutMobile = toggle('isLayoutMobile')
 export const getIsLayoutMobile = getter('isLayoutMobile')
 
 export const toggleIsDrawerOpen = toggle('isDrawerOpen')
@@ -267,7 +266,6 @@ export const getIsDrawerTemporary = () =>
   getDrawerVariant() === 'temporary'
 
 const xStore = extendObservable(Store, {
-  toggleIsLayoutMobile,
   toggleIsDrawerOpen,
   get drawerVariant() {
     return getDrawerVariant()
