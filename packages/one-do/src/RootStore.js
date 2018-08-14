@@ -297,5 +297,6 @@ disposers.reaction(
 )
 
 if (module.hot) {
+  window.XStore = XStore
   hotDispose(disposers.dispose, module)
 }

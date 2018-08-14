@@ -149,7 +149,7 @@ class SideBar extends Component {
             ? classes.drawerPaper
             : classes.drawerPaperClosed,
         }}
-        open={store.isDrawerOpen}
+        open={getIsDrawerOpen()}
         onClose={handleToggleDrawer(false)}
         onClick={getIsDrawerTemporary() ? handleToggleDrawer(false) : null}
         ModalProps={{keepMounted: true}}
