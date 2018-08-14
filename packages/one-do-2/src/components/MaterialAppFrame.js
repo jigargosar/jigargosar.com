@@ -1,34 +1,20 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {
-  FocusTrap,
-  Fr,
-  observer,
-  whenKey,
-  withKeyEvent,
-} from '../lib/little-react'
+import {FocusTrap, observer} from '../lib/little-react'
 
 import cn from 'classnames'
 import {compose} from '../lib/ramda'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import IconButton from '@material-ui/core/IconButton/IconButton'
-import InputAdornment from '@material-ui/core/InputAdornment/InputAdornment'
-import Button from '@material-ui/core/Button/Button'
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth/withWidth'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Typography from '@material-ui/core/Typography/Typography'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 import Drawer from '@material-ui/core/Drawer/Drawer'
 import AppBar from '@material-ui/core/AppBar/AppBar'
-import Dialog from '@material-ui/core/Dialog/Dialog'
-import DialogActions from '@material-ui/core/DialogActions/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle'
-import TextField from '@material-ui/core/TextField/TextField'
 import {afterMountAndUpdate} from '../lib/little-recompose'
 import {DrawerTaskLists} from './DrawerTaskLists'
 import {withStore} from '../StoreContext'
-import {handleUpdateItem} from '../mst-models/StoreActionsHandlers'
 import {EditTaskModal} from './EditTaskModal'
 import BottomBar from './BottomBar'
 import {
@@ -40,6 +26,7 @@ import {
 import {drawerWidth} from './constants'
 import SelectedListContent from './SelectedListContent'
 import GlobalEventListener from './GlobalEventListener'
+import {EditListModal} from './EditListModal'
 
 const styles = theme => ({
   root: {
@@ -169,56 +156,3 @@ MaterialAppFrame.propTypes = {
 
 export default withStyles(styles)(MaterialAppFrame)
 
-@observer
-class EditListModal extends Component {
-  handleClose = () => {
-    this.props.store.endEditList()
-  }
-  render() {
-    const {store} = this.props
-    const {editingList: list} = store
-    return (
-      <Fr>
-        {list && (
-          <Dialog
-            // fullScreen={store.isMobileLayout}
-            open={true}
-            onClose={this.handleClose}
-            maxWidth={'xs'}
-            fullWidth
-          >
-            <DialogTitle>{'Edit List'}</DialogTitle>
-            <DialogContent>
-              <TextField
-                fullWidth
-                autoFocus={true}
-                type="text"
-                value={list.name}
-                onKeyDown={withKeyEvent(
-                  whenKey('enter')(this.handleClose),
-                )}
-                onChange={e =>
-                  handleUpdateItem({name: e.target.value}, list)(e)
-                }
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Typography variant={'headline'} color={'error'}>
-                        {list.isDirty && `*`}
-                      </Typography>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
-        )}
-      </Fr>
-    )
-  }
-}
