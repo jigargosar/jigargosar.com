@@ -3,13 +3,21 @@ import AppFrame from './components/AppFrame'
 import {Component} from './lib/little-mobx-react'
 
 class App extends Component {
+  state = {hasError: false}
   render() {
+    if (this.state.hasError) {
+      return this.renderError()
+    }
     return <AppFrame />
   }
 
   componentDidCatch(error, info) {
-    console.log(info, error)
-    return <div>Error</div>
+    console.error(info, error)
+    this.setState({hasError: true, error, info})
+  }
+
+  renderError() {
+    return <div>Error Occurred</div>
   }
 }
 
