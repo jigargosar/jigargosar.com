@@ -261,6 +261,5 @@ const RootStore = types
 export default RootStore
 
 export const XStore = observable({
-  title: 'One Note',
   layout: 'foo2',
 })
