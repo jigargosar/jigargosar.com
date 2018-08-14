@@ -35,6 +35,7 @@ import {Selection} from './mst-models/Selection'
 import {Collections} from './mst-models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
 import {Task, TaskList} from './mst-models/Task'
+import {extendObservable} from './lib/mobx'
 
 const RootStore = types
   .model('RootStore', {
@@ -261,7 +262,7 @@ const RootStore = types
 
 export default RootStore
 
-export const XStore = observable({
+export const Store = observable({
   isLayoutMobile: true,
   isDrawerOpen: false,
 })
@@ -270,9 +271,9 @@ const setterFor = o => pn => val => (o[pn] = val)
 const toggleFor = o => pn => (bool = !Boolean(o[pn])) => (o[pn] = bool)
 const getterFor = o => pn => () => o[pn]
 
-export const setter = setterFor(XStore)
-const toggle = toggleFor(XStore)
-const getter = getterFor(XStore)
+export const setter = setterFor(Store)
+const toggle = toggleFor(Store)
+const getter = getterFor(Store)
 
 export const toggleIsLayoutMobile = toggle('isLayoutMobile')
 export const getIsLayoutMobile = getter('isLayoutMobile')
@@ -285,6 +286,15 @@ export const getDrawerVariant = () =>
 
 export const getIsDrawerTemporary = () =>
   getDrawerVariant() === 'temporary'
+
+const XStore = extendObservable(Store, {
+  toggleIsLayoutMobile,
+  getIsLayoutMobile,
+  toggleIsDrawerOpen,
+  getIsDrawerOpen,
+  getDrawerVariant,
+  getIsDrawerTemporary,
+})
 
 const disposers = Disposers(module)
 
