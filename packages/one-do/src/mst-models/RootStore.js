@@ -258,11 +258,10 @@ export const getIsLayoutMobile = getter('isLayoutMobile')
 export const toggleIsDrawerOpen = toggle('isDrawerOpen')
 export const getIsDrawerOpen = getter('isDrawerOpen')
 
-export const getDrawerVariant = () =>
+const getDrawerVariant = () =>
   getIsLayoutMobile() ? 'temporary' : 'persistent'
 
-export const getIsDrawerTemporary = () =>
-  getDrawerVariant() === 'temporary'
+const getIsDrawerTemporary = () => getDrawerVariant() === 'temporary'
 
 export const xStore = extendObservable(store, {
   toggleIsDrawerOpen,
