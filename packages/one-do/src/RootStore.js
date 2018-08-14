@@ -189,6 +189,12 @@ const RootStoreBase = types
     updateItem(props, item) {
       self.collectionFor(item).update(props, item)
     },
+    deleteItem(item) {
+      if (TaskList.is(item) && !this.canDeleteList) {
+        return
+      }
+      self.collectionFor(item).delete(item)
+    },
     deleteList(list) {
       if (self.canDeleteList) {
         self.listCollection.delete(list)
