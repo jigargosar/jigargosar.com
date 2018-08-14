@@ -1,15 +1,12 @@
 import React, {Component} from 'react'
 import {observer} from './lib/little-react'
-import MaterialAppFrame from './components/MaterialAppFrame'
-import {StoreContextProvider} from './StoreContext'
+import AppFrame from './components/AppFrame'
 
 @observer
 class App extends Component {
   render() {
     return (
-      <StoreContextProvider>
-        <MaterialAppFrame />
-      </StoreContextProvider>
+        <AppFrame />
     )
   }
 

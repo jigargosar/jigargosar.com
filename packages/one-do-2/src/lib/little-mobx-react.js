@@ -1,11 +1,13 @@
-import {pick} from './ramda'
-import {storage} from './storage'
+import React from 'react'
+import {observer} from './little-react'
 
-export const bindToggle = pn => self => () => (self[pn] = !self[pn])
-export const syncLS = key => pns => comp => {
-  const propName = key
-  Object.assign(comp, pick(pns)(storage.get(propName) || {}))
-  return comp.props.autorun(() => {
-    storage.set(propName, pick(pns)(comp))
-  })
+@observer
+class Component extends React.Component {
+  render() {
+    return this.ren()
+  }
+
+  ren(props = this.props) {
+    return null
+  }
 }
