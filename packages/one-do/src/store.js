@@ -2,11 +2,7 @@ import RootStore from './RootStore'
 
 const store = RootStore.create({}, {})
 
-try {
-  store.loadFromLS()
-} catch (e) {
-  console.log('[store] loadFromLS', e)
-}
+store.loadFromLS()
 const disposer = store.saveToLSOnSnapshotChange()
 
 store.ensureLogin()
