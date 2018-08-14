@@ -11,7 +11,7 @@ import {
 } from '../lib/little-react'
 
 import cn from 'classnames'
-import {onlyUpdateForKeys, withProps} from '../lib/recompose'
+import {withProps} from '../lib/recompose'
 import {always, compose, identity, ifElse, isNil} from '../lib/ramda'
 import MenuIcon from '@material-ui/icons/MenuRounded'
 import IconButton from '@material-ui/core/IconButton/IconButton'
@@ -165,7 +165,6 @@ class SideBar extends Component {
   afterMountAndUpdate(({store, width}) =>
     setIsLayoutMobile(!isWidthUp('sm', width)),
   ),
-  onlyUpdateForKeys(['store']),
   observer,
 )
 class MaterialAppFrame extends Component {
