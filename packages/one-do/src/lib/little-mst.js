@@ -10,6 +10,7 @@ import nanoid from 'nanoid'
 import {_compose, _merge, _path, _startsWith, call, compose} from './ramda'
 import {pDrop} from './little-ramda'
 import {atomic} from 'mst-middlewares'
+import {hotDispose} from './hot'
 
 export {
   addDisposer,
@@ -120,19 +121,24 @@ export const nullString = types.maybeNull(types.string)
 export const nullNumber = types.maybeNull(types.number)
 export const optional = (t, dv = {}) => types.optional(t, dv)
 export const stringArray = types.array(types.string)
-export function Disposers() {
+
+export function Disposers(module) {
   const list = []
   const push = (...args) => list.push(...args)
   const addDisposer = disposer => {
     push(disposer)
     return disposer
   }
+  const dispose = () => {
+    list.forEach(call)
+    list.splice(0, list.length)
+  }
+  if (module) {
+    hotDispose(dispose, module)
+  }
   return {
     push,
-    dispose: () => {
-      list.forEach(call)
-      list.splice(0, list.length)
-    },
+    dispose,
     length: () => list.length,
     addDisposer,
     autorun: compose(addDisposer, autorun),

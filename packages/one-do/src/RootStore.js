@@ -35,7 +35,6 @@ import {Selection} from './mst-models/Selection'
 import {Collections} from './mst-models/Collections'
 import {whenKeyPD, withKeyEvent} from './lib/little-react'
 import {Task, TaskList} from './mst-models/Task'
-import {hotDispose} from './lib/hot'
 
 const RootStore = types
   .model('RootStore', {
@@ -287,7 +286,7 @@ export const getDrawerVariant = () =>
 export const getIsDrawerTemporary = () =>
   getDrawerVariant() === 'temporary'
 
-const disposers = Disposers()
+const disposers = Disposers(module)
 
 disposers.reaction(
   () => XStore.isLayoutMobile,
@@ -298,5 +297,4 @@ disposers.reaction(
 
 if (module.hot) {
   window.XStore = XStore
-  hotDispose(disposers.dispose, module)
 }

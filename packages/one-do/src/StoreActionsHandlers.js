@@ -25,4 +25,5 @@ export const handleDeleteItemSP = handleSP('deleteItem')
 
 export const handleSetSelection = handle('setSelection')
 export const handleSetSelectionSP = handleSP('setSelection')
+
 export const handleToggleDrawer = val => e => toggleIsDrawerOpen(val)
