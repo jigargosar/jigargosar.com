@@ -76,8 +76,10 @@ const contentLookup = {
   AllLists: SelectedListContent,
 }
 
-const GlobalEventListener = withStoreDN('GlobalEventListener')(
-  ({store}) => {
+@withStore
+class GlobalEventListener extends Component {
+  render() {
+    const {store} = this.props
     return (
       <EventListener
         target={'document'}
@@ -95,8 +97,10 @@ const GlobalEventListener = withStoreDN('GlobalEventListener')(
         )}
       />
     )
-  },
-)
+  }
+}
+
+GlobalEventListener.propTypes = {store: PropTypes.any}
 
 @observer
 class TopToolBar extends Component {
