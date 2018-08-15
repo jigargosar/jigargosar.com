@@ -1,6 +1,6 @@
 import {storage} from './storage'
 import {autorun, reaction, toJS} from './mobx'
-import {compose, defaultTo} from './ramda'
+import {call, compose, defaultTo} from './ramda'
 import {hotDispose} from './hot'
 
 export function mobxStorage({store, key, disposers, preProcessStorageJS}) {
