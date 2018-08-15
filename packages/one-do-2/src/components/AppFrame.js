@@ -5,7 +5,6 @@ import TaskList from './TaskList'
 import DebugDialog from './DebugDialog'
 import {FocusTrap} from '../lib/focus-trap-react'
 
-@withFocusTrap
 @observer
 class AppFrame extends Component {
   render() {
@@ -32,9 +31,3 @@ class AppFrame extends Component {
 }
 
 export default AppFrame
-
-function withFocusTrap(BaseComponent) {
-  return observer(function withFocusTrap(props) {
-    return <BaseComponent {...props} />
-  })
-}
