@@ -6,11 +6,13 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import {computed, observable} from '../lib/mobx'
 import {setter} from '../lib/mobx-decorators'
-import {identity} from '../lib/ramda'
+import {identity, isNil} from '../lib/ramda'
 import {taskViewStore} from '../stores'
 
 @observer
 class TaskListItem extends Component {
+  menuBtnRef = React.createRef()
+
   @setter('setAnchorEl')
   @observable
   anchorEl = null
@@ -22,7 +24,10 @@ class TaskListItem extends Component {
 
   @computed
   get isOpen() {
-    return taskViewStore.isTaskMenuOpenFor(this.props.task)
+    return (
+      taskViewStore.isTaskMenuOpenFor(this.props.task) &&
+      !isNil(this.menuBtnRef.current)
+    )
   }
 
   handleClose = (action = identity) => () => {
@@ -52,6 +57,7 @@ class TaskListItem extends Component {
           </div>
           <div className={cn('ph1 flex-auto', 'f4 ')}>{task.title}</div>
           <div
+            ref={this.menuBtnRef}
             className={cn('ph2', 'usn pointer')}
             onClick={this.onMenuOpen}
           >
@@ -59,7 +65,7 @@ class TaskListItem extends Component {
           </div>
         </FlexRow>
         <Menu
-          anchorEl={this.anchorEl}
+          anchorEl={this.menuBtnRef.current}
           open={this.isOpen}
           onClose={this.handleClose()}
         >
