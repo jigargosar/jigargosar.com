@@ -4,11 +4,9 @@ import {intercept, setter} from '../lib/mobx-decorators'
 import {
   compose,
   defaultTo,
-  equals,
   is,
   mergeWith,
   propOr,
-  type,
   unless,
 } from '../lib/ramda'
 import {overProp} from '../lib/little-ramda'
