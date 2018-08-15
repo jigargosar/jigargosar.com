@@ -1,7 +1,7 @@
 import {observer} from './little-react'
 import React, {Component} from 'react'
 import {wrapDisplayName} from './recompose'
-import {Disposers} from './little-mst'
+import {Disposers} from './little-mobx'
 import {pick} from './ramda'
 
 export const disposable = BaseComponent =>
