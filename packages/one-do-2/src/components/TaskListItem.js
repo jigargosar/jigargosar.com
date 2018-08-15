@@ -22,7 +22,7 @@ class TaskListItem extends Component {
 
   @computed
   get isOpen() {
-    return Boolean(this.anchorEl)
+    return taskViewStore.isTaskMenuOpen
   }
 
   handleClose = (action = identity) => () => {
