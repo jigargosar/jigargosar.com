@@ -15,7 +15,7 @@ class AppFrame extends Component {
           focusTrapOptions={{
             // returnFocusOnDeactivate: false,
             fallbackFocus: document,
-            initialFocus: `#${taskViewStore.selectedTaskId}`,
+            // initialFocus: `#${taskViewStore.selectedTaskId}`,
           }}
         >
           <DebugDialog />
