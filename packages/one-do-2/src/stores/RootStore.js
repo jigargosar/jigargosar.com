@@ -25,7 +25,7 @@ class RootStore {
 
   @action
   saveToLS() {
-    storage.set('rootStore', this.toJSON)
+    storage.set('rootStore', this.toJS)
   }
 
   @action
