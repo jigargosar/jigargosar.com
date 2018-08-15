@@ -1,16 +1,9 @@
-import {action, observable} from '../lib/mobx'
+import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {intercept, setter} from '../lib/mobx-decorators'
-import {
-  compose,
-  defaultTo,
-  isNil,
-  mergeWith,
-  prop,
-  propOr,
-  unless,
-} from '../lib/ramda'
+import {compose, defaultTo, mergeWith, propOr} from '../lib/ramda'
 import {overProp} from '../lib/little-ramda'
+import {taskStore} from './index'
 
 @autobind
 class TaskViewStore {
@@ -21,6 +14,11 @@ class TaskViewStore {
   @setter('setSelectedTask')
   @observable
   selectedTaskId = null
+
+  @computed
+  get selectedTask() {
+    return taskStore.findById(this.selectedTaskId)
+  }
 
   @action
   applySnapshot(snapshot) {
