@@ -16,3 +16,7 @@ html, body {
 .fa{
   flex: auto;
 }
+
+.usn{
+  user-select: none;
+}
