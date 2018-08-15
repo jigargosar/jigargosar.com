@@ -8,8 +8,8 @@ export const taskStore = rootStore.taskStore
 export const store = rootStore
 
 const disposers = Disposers(module)
+rootStore.loadFromLS()
 
 disposers.autorun(() => {
-  rootStore.loadFromLS()
   rootStore.saveToLS()
 })

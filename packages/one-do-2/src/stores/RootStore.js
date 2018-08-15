@@ -28,20 +28,17 @@ class RootStore {
     storage.set('rootStore', this.toJS)
   }
 
+  @action
   loadFromLS() {
     const snapshot = defaultTo({})(storage.get('rootStore'))
-    console.log(`loading snapshot`, snapshot)
+    console.debug(`loading snapshot`, snapshot)
     this.applySnapshot(snapshot)
   }
 
   @action
   applySnapshot(snapshot) {
-    const rootStoreProps = pick(['title'])(snapshot)
-    console.log(`rootStoreProps`, rootStoreProps)
-    Object.assign(this, rootStoreProps)
-    const taskStoreSnapshot = propOr({})('taskStore')(snapshot)
-    console.log(`taskStoreSnapshot`, taskStoreSnapshot)
-    this.taskStore.applySnapshot(taskStoreSnapshot)
+    Object.assign(this, pick(['title'])(snapshot))
+    this.taskStore.applySnapshot(propOr({})('taskStore')(snapshot))
   }
 }
 
