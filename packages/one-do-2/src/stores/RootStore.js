@@ -54,6 +54,7 @@ class RootStore {
       //
       whenKeyPD('`')(this.debugStore.toggleDebugView),
       whenKeyPD('down')(this.taskViewStore.selectNextTask),
+      whenKeyPD('up')(this.taskViewStore.selectPrevTask),
     )
   }
 }
