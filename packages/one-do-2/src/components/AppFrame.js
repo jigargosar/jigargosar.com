@@ -15,12 +15,13 @@ class AppFrame extends Component {
     return (
       <Fragment>
         <FocusTrap
-          paused={rootStore.isFocusTrapPaused}
+          // paused={rootStore.isFocusTrapPaused}
           focusTrapOptions={{
             // returnFocusOnDeactivate: false,
             fallbackFocus: document,
             // initialFocus: `#${taskViewStore.selectedTaskId}`,
           }}
+          active={!rootStore.isFocusTrapPaused}
         >
           <DebugDialog />
           <EventListener
