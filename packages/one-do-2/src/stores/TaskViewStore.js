@@ -23,6 +23,15 @@ function findByIdOrHead(id, list) {
   )
 }
 
+function tryFocusDOMId(id) {
+  const el = document.getElementById(id)
+  if (el) {
+    el.focus()
+  } else {
+    console.warn('[focus] id not found', id)
+  }
+}
+
 @autobind
 class TaskViewStore {
   @intercept(overProp('newValue')(unless(is(String))(propOr(null)('id'))))
@@ -54,6 +63,9 @@ class TaskViewStore {
     )(this.tasks)
 
     this.setSelectedTask(next)
+    if (next) {
+      tryFocusDOMId(next.id)
+    }
   }
 
   @action
