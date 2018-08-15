@@ -109,3 +109,7 @@ export const defineDelegatePropertyGetter = curry(
 )
 
 export const prettyJSONStringify = o => JSON.stringify(o, null, 2)
+export const indexOfOrNaN = compose(
+  _when(equals(-1))(always(NaN)),
+  indexOf,
+)

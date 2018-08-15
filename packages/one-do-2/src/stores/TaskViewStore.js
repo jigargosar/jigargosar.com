@@ -5,13 +5,12 @@ import {
   compose,
   defaultTo,
   head,
-  indexOf,
   is,
   mergeWith,
   propOr,
   unless,
 } from '../lib/ramda'
-import {findById, overProp} from '../lib/little-ramda'
+import {findById, indexOfOrNaN, overProp} from '../lib/little-ramda'
 import {taskStore} from './index'
 
 function findByIdOrHead(id, list) {
@@ -48,7 +47,7 @@ class TaskViewStore {
 
   @action
   selectNextTask() {
-    const idx = indexOf(this.selectedTaskId)(this.tasks)
+    const idx = indexOfOrNaN(this.selectedTaskId)(this.tasks)
     this.setSelectedTask()(this.tasks)
   }
 
