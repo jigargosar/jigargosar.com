@@ -12,6 +12,7 @@ dependencies:
   focus-trap-react: 4.0.0
   is-hotkey: 0.1.3
   mobx: 5.0.3
+  mobx-decorators: 5.0.2
   mobx-react: 5.2.5
   mobx-state-tree: 3.1.1
   mobx-utils: 5.0.0
@@ -49,6 +50,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-vP9XV2VP013UEyZdU9eWClCsm6rQPUYHVNCfmpcv5uKviW7mKmUZq71Y5cr5dYsFKfnGDxSo8h6plUGR60lwHg==
+  /@babel/runtime/7.0.0-rc.1:
+    dependencies:
+      regenerator-runtime: 0.12.1
+    dev: false
+    resolution:
+      integrity: sha512-Nifv2kwP/nwR39cAOasNxzjYfpeuf/ZbZNtQz5eYxWTC9yHARU9wItFnAwz1GTZ62MU+AtSjzZPMbLK5Q9hmbg==
   /@firebase/app-types/0.3.2:
     dev: false
     resolution:
@@ -5406,6 +5413,14 @@ packages:
     dev: false
     resolution:
       integrity: sha1-0JF4cW/+pN3p5ft7N/bwgCJ0WAw=
+  /lodash.difference/4.5.0:
+    dev: false
+    resolution:
+      integrity: sha1-nMtOUF1Ia5FlE0V3KIWi3yf9AXw=
+  /lodash.intersection/4.4.0:
+    dev: false
+    resolution:
+      integrity: sha1-ChG6Yx0OlcI8fy9Mu5ppLtF45wU=
   /lodash.memoize/4.1.2:
     dev: false
     resolution:
@@ -5711,6 +5726,16 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
+  /mobx-decorators/5.0.2:
+    dependencies:
+      '@babel/runtime': 7.0.0-rc.1
+      lodash.difference: 4.5.0
+      lodash.intersection: 4.4.0
+    dev: false
+    peerDependencies:
+      mobx: ^4.1.1
+    resolution:
+      integrity: sha512-cSmQBKrLS4IA724cUZUWxNZZNLd6NbI0MNpo27Hwk3u8rU9W+UHV/qJ4MQxSCP7MspUUXRjDyoYTlwXbYBYKbg==
   /mobx-react/5.2.5:
     dependencies:
       hoist-non-react-statics: 2.5.5
@@ -9029,6 +9054,7 @@ specifiers:
   focus-trap-react: ^4.0.0
   is-hotkey: ^0.1.3
   mobx: ^5.0.3
+  mobx-decorators: ^5.0.2
   mobx-react: ^5.2.3
   mobx-state-tree: ^3.0.2
   mobx-utils: ^5.0.0
