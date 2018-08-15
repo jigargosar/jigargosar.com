@@ -1,9 +1,9 @@
-import React from 'react'
-import {Component} from '../lib/little-mobx-react'
+import React, {Component} from 'react'
 import {taskStore} from '../stores'
-import {renderKeyedById} from '../lib/little-react'
+import {observer, renderKeyedById} from '../lib/little-react'
 import TaskListItem from './TaskListItem'
 
+@observer
 class TaskList extends Component {
   render() {
     return (
