@@ -1,9 +1,6 @@
-import {action, computed, observable, toJS} from '../lib/mobx'
-import {overProp, prettyJSONStringify} from '../lib/little-ramda'
+import {action, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
-import TaskStore from './TaskStore'
-import {storage} from '../lib/storage'
-import {compose, defaultTo, merge, pick, propOr} from '../lib/ramda'
+import {compose, merge} from '../lib/ramda'
 import {toggle} from 'mobx-decorators'
 
 @autobind

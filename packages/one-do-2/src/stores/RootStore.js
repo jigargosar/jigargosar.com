@@ -4,13 +4,17 @@ import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
 import {defaultTo, pick, propOr} from '../lib/ramda'
+import DebugStore from './DebugStore'
 
 @autobind
 class RootStore {
   @observable title = 'One Do'
   @observable taskStore = null
+  @observable debugStore = null
+
   constructor() {
     this.taskStore = new TaskStore()
+    this.debugStore = new DebugStore()
   }
 
   @computed
