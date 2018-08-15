@@ -6,7 +6,7 @@ import {cn, observer} from '../lib/little-react'
 class TaskListItem extends Component {
   render() {
     const {task} = this.props
-    return <div className={cn('')}>{task.title}</div>
+    return <div className={cn('f4')}>{task.title}</div>
   }
 }
 
