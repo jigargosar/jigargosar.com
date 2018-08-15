@@ -3,16 +3,7 @@ import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {setter} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
-import {
-  compose,
-  construct,
-  constructN,
-  defaultTo,
-  map,
-  merge,
-  mergeWith,
-  pick,
-} from '../lib/ramda'
+import {compose, construct, map, merge} from '../lib/ramda'
 import {overProp} from '../lib/little-ramda'
 
 @autobind
@@ -27,10 +18,12 @@ class Task {
   @observable
   isDeleted = false
 
-  constructor(snapshot = {}) {
+  constructor(snapshot) {
     Object.assign(this, snapshot)
   }
 }
+
+const TaskConstructor = construct(Task)
 
 @autobind
 class TaskStore {
@@ -43,7 +36,6 @@ class TaskStore {
 
   @action
   applySnapshot(snapshot) {
-    const TaskConstructor = constructN(1, Task)
     const toObj = compose(
       //
       overProp('tasks')(map(TaskConstructor)),
