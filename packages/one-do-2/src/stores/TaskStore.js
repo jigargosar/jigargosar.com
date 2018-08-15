@@ -21,7 +21,7 @@ class TaskStore {
   @observable tasks = []
 
   @action
-  addTask() {
+  addNewTask() {
     this.tasks.unshift(new Task())
   }
 }
