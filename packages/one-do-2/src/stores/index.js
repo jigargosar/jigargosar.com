@@ -4,4 +4,5 @@ import {observable} from '../lib/mobx'
 import TaskStore from './TaskStore'
 
 export const tasksStore = observable(new TaskStore())
-export const store = observable(new RootStore({tasksStore}))
+export const rootStore = observable(new RootStore({tasksStore}))
+export const store = rootStore
