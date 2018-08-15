@@ -2,11 +2,14 @@ import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {intercept, setter} from '../lib/mobx-decorators'
 import {
+  __,
   compose,
   defaultTo,
   head,
+  inc,
   indexBy,
   is,
+  mathMod,
   mergeWith,
   propOr,
   unless,
@@ -48,8 +51,13 @@ class TaskViewStore {
 
   @action
   selectNextTask() {
-    const idx = indexOfOrNaN(this.selectedTask)(this.tasks)
-    this.setSelectedTask(indexBy)(this.tasks)
+    const idx = compose(
+      mathMod(__, this.tasks.length),
+      inc,
+      indexOfOrNaN(this.selectedTask),
+    )(this.tasks)
+
+    this.setSelectedTask(this.tasks[idx])
   }
 
   @action
