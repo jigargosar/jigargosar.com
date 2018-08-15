@@ -5,16 +5,20 @@ import {FlexRow} from '../lib/UI'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import {observable} from '../lib/mobx'
+import {setter} from '../lib/mobx-decorators'
 
 @observer
 class TaskListItem extends Component {
-  @observable anchorEl = null
+  @setter('setAnchorEl')
+  @observable
+  anchorEl = null
 
   onMenuOpen = e => {
-    this.anchorEl = e.currentTarget
+    this.setAnchorEl(e.currentTarget)
   }
+
   handleClose = () => {
-    this.anchorEl = null
+    this.setAnchorEl(null)
   }
   render() {
     const {task} = this.props
