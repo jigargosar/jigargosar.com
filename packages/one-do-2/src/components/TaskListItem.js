@@ -59,7 +59,6 @@ class TaskListItem extends Component {
           </div>
         </FlexRow>
         <Menu
-          id="simple-menu"
           anchorEl={this.anchorEl}
           open={this.isOpen}
           onClose={this.handleClose()}
