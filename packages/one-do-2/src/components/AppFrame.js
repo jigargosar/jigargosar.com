@@ -11,12 +11,12 @@ class AppFrame extends Component {
   render() {
     return (
       <FocusTrap paused={true} active={false}>
+        <DebugDialog />
         <EventListener target={document} onKeyDown={rootStore.onKeyDown} />
         <FlexRow className={cn('ma3')}>
           <Btn onClick={taskStore.addNewTask}>Add New Task</Btn>
         </FlexRow>
         <TaskList />
-        <DebugDialog />
       </FocusTrap>
     )
   }
