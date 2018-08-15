@@ -18,6 +18,12 @@ class Task {
   @observable
   isDeleted = false
 
+  @setter('markDone', true)
+  @setter('markUnDone', false)
+  @toggle('toggleDone')
+  @observable
+  isDone = false
+
   constructor(snapshot) {
     Object.assign(this, snapshot)
   }
