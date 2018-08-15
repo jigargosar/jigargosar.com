@@ -8,9 +8,11 @@ class TaskListItem extends Component {
   render() {
     const {task} = this.props
     return (
-      <FlexRow className={cn('mv2', 'bb b--moon-gray')}>
+      <FlexRow className={cn('mv2')}>
         <div className={cn('mr2 code')}>{`[ ]`}</div>
-        <div className={cn('mr2 f4 flex-auto')}>{task.title}</div>
+        <div className={cn('ph1 flex-auto', 'f4 ', 'bb b--moon-gray')}>
+          {task.title}
+        </div>
       </FlexRow>
     )
   }
