@@ -7,10 +7,10 @@ import {
   defaultTo,
   head,
   inc,
-  indexBy,
   is,
   mathMod,
   mergeWith,
+  prop,
   propOr,
   unless,
 } from '../lib/ramda'
@@ -51,13 +51,14 @@ class TaskViewStore {
 
   @action
   selectNextTask() {
-    const idx = compose(
+    const next = compose(
+      prop(__, this.tasks),
       mathMod(__, this.tasks.length),
       inc,
       indexOfOrNaN(this.selectedTask),
     )(this.tasks)
 
-    this.setSelectedTask(this.tasks[idx])
+    this.setSelectedTask(next)
   }
 
   @action
