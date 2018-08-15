@@ -6,7 +6,7 @@ import {pick} from './lib/ramda'
 
 export const store = observable({
   title: 'One Do',
-  get asJSOn() {
+  get asJSON() {
     return storeAsJSON()
   },
 })
