@@ -6,7 +6,7 @@ import {taskViewStore} from '../stores'
 
 @observer
 class TaskListItem extends Component {
-  handleSetSelected = task => () => {
+  handleOnFocus = task => () => {
     taskViewStore.setSelectedTask(task)
   }
 
@@ -15,8 +15,8 @@ class TaskListItem extends Component {
     return (
       <div
         className={cn('pv1 link', {'bg-light-blue': task.isSelected})}
-        tabIndex={task.isSelected ? 0 : null}
-        onClick={this.handleSetSelected(task)}
+        tabIndex={task.isSelected ? 0 : -1}
+        onFocus={this.handleOnFocus(task)}
       >
         <FlexRow className={cn('pv2')}>
           <div
