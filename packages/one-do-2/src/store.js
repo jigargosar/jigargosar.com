@@ -7,7 +7,15 @@ import {prettyJSONStringify} from './lib/little-ramda'
 @autobind
 class Store {
   @observable title = 'One Do'
-  disposers = Disposers(module)
+
+  constructor() {
+    Object.defineProperty(this, 'disposers', {
+      value: Disposers(module),
+      enumerable: false,
+      configurable: false,
+      writable: false,
+    })
+  }
 
   get toJSON() {
     return prettyJSONStringify(this.toJS)
