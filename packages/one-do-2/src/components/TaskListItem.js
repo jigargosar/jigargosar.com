@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {cn, observer} from '../lib/little-react'
 import {FlexRow} from '../lib/UI'
 import {taskViewStore} from '../stores'
-import FocusChild from '../lib/FocusChild'
 
 @observer
 class TaskListItem extends Component {
