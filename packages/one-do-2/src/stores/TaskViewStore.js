@@ -44,7 +44,6 @@ class TaskViewStore {
       // overProp('tasks')(map(TaskConstructor)),
       mergeWith(defaultTo)({
         selectedTaskId: null,
-        isTaskMenuOpen: false,
       }),
     )
     Object.assign(this, toObj(snapshot))
