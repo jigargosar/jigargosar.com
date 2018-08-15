@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {debugStore, rootStore, taskViewStore} from '../stores'
+import {rootStore} from '../stores'
 import {EventListener, FocusTrap, observer} from '../lib/little-react'
 import TaskList from './TaskList'
 import DebugDialog from './DebugDialog'
