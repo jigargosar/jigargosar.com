@@ -1,4 +1,4 @@
-import {action, computed, observable} from '../lib/mobx'
+import {action, observable} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {setter} from 'mobx-decorators'
