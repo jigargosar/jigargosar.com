@@ -26,10 +26,9 @@ class AppFrame extends Component {
             onDeactivate() {
               console.log('onDeactivate')
             },
-            // initialFocus: `#${taskViewStore.selectedTaskId}`,
           }}
-          // active={!rootStore.isFocusTrapPaused}
-          active={true}
+          active={!rootStore.isFocusTrapPaused}
+          // active={true}
         >
           <DebugDialog />
           <EventListener
