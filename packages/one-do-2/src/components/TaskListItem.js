@@ -25,34 +25,36 @@ class TaskListItem extends Component {
   render() {
     const {task} = this.props
     return (
-      <FlexRow className={cn('mv2 pv2', 'link')} tabIndex={0}>
-        <div
-          className={cn('pr1 mr1', 'code usn pointer')}
-          onClick={task.toggleDone}
-        >
-          {task.isDone ? `[x]` : `[ ]`}
-        </div>
-        <div className={cn('ph1 flex-auto', 'f4 ', 'bb b--moon-gray')}>
-          {task.title}
-        </div>
-        <div className={cn('ph2', 'pointer')} onClick={this.onMenuOpen}>
-          ...
-        </div>
-        <Menu
-          id="simple-menu"
-          anchorEl={this.anchorEl}
-          open={Boolean(this.anchorEl)}
-          onClose={this.handleClose()}
-        >
-          <MenuItem onClick={this.handleClose(task.toggleDelete)}>
-            Delete
-          </MenuItem>
-          <MenuItem onClick={this.handleClose(task.toggleDone)}>
-            Done
-          </MenuItem>
-          <MenuItem onClick={this.handleClose()}>Select</MenuItem>
-        </Menu>
-      </FlexRow>
+      <div className={cn('pv1')}>
+        <FlexRow className={cn('pv2', 'link')} tabIndex={0}>
+          <div
+            className={cn('pr1 mr1', 'code usn pointer')}
+            onClick={task.toggleDone}
+          >
+            {task.isDone ? `[x]` : `[ ]`}
+          </div>
+          <div className={cn('ph1 flex-auto', 'f4 ', 'bb b--moon-gray')}>
+            {task.title}
+          </div>
+          <div className={cn('ph2', 'pointer')} onClick={this.onMenuOpen}>
+            ...
+          </div>
+          <Menu
+            id="simple-menu"
+            anchorEl={this.anchorEl}
+            open={Boolean(this.anchorEl)}
+            onClose={this.handleClose()}
+          >
+            <MenuItem onClick={this.handleClose(task.toggleDelete)}>
+              Delete
+            </MenuItem>
+            <MenuItem onClick={this.handleClose(task.toggleDone)}>
+              Done
+            </MenuItem>
+            <MenuItem onClick={this.handleClose()}>Select</MenuItem>
+          </Menu>
+        </FlexRow>
+      </div>
     )
   }
 }
