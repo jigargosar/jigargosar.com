@@ -20,10 +20,14 @@ class Task {
 @autobind
 class TaskStore {
   @observable tasks = []
+  @observable root
+
+  constructor({root}) {
+    this.root = root
+  }
 
   @action
   addNewTask() {
-    debugger
     this.tasks.unshift(new Task())
   }
 }
