@@ -6,6 +6,7 @@ import {autobind} from '../lib/autobind'
 import {
   compose,
   construct,
+  constructN,
   defaultTo,
   map,
   merge,
@@ -42,10 +43,10 @@ class TaskStore {
 
   @action
   applySnapshot(snapshot) {
-    const TaskConstructor = construct(Task)
+    const TaskConstructor = constructN(1, Task)
     const toObj = compose(
       //
-      overProp('tasks')(map(snapshot => new Task(snapshot))),
+      overProp('tasks')(map(TaskConstructor)),
       merge({tasks: []}),
     )
     Object.assign(this, toObj(snapshot))
