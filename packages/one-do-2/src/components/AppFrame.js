@@ -6,7 +6,6 @@ import {cn, EventListener, observer} from '../lib/little-react'
 import TaskList from './TaskList'
 import DebugDialog from './DebugDialog'
 
-@observer
 @withFocusTrap
 @observer
 class AppFrame extends Component {
@@ -27,7 +26,7 @@ class AppFrame extends Component {
 export default AppFrame
 
 function withFocusTrap(BaseComponent) {
-  return function withFocusTrap(props) {
+  return observer(function withFocusTrap(props) {
     return <BaseComponent {...props} />
-  }
+  })
 }
