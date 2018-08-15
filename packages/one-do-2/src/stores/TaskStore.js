@@ -1,10 +1,11 @@
-import {action, observable} from '../lib/mobx'
+import {action, computed, observable} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {setter, toggle} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
 import {compose, construct, defaultTo, map, mergeWith} from '../lib/ramda'
 import {findById, overProp} from '../lib/little-ramda'
+import {taskViewStore} from './index'
 
 @autobind
 class Task {
@@ -26,6 +27,11 @@ class Task {
 
   constructor(snapshot) {
     Object.assign(this, snapshot)
+  }
+
+  @computed
+  get isSelected() {
+    return taskViewStore.isTaskSelected(this)
   }
 }
 

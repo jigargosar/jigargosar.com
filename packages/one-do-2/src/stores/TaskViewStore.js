@@ -20,6 +20,10 @@ class TaskViewStore {
     return taskStore.findById(this.selectedTaskId)
   }
 
+  isTaskSelected({id}) {
+    return this.selectedTaskId === id
+  }
+
   @action
   applySnapshot(snapshot) {
     const toObj = compose(
