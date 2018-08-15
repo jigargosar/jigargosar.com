@@ -5,6 +5,7 @@ import {
   compose,
   defaultTo,
   head,
+  indexBy,
   is,
   mergeWith,
   propOr,
@@ -47,8 +48,8 @@ class TaskViewStore {
 
   @action
   selectNextTask() {
-    const idx = indexOfOrNaN(this.selectedTaskId)(this.tasks)
-    this.setSelectedTask()(this.tasks)
+    const idx = indexOfOrNaN(this.selectedTask)(this.tasks)
+    this.setSelectedTask(indexBy)(this.tasks)
   }
 
   @action
