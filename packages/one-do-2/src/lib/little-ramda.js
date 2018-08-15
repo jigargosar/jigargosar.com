@@ -24,6 +24,7 @@ import {
   mergeDeepRight,
   nAry,
   over,
+  partial,
   prop,
   propEq,
   reduce,
@@ -129,13 +130,8 @@ export function findByIdOrHead(id, list) {
   )
 }
 
-export function nextEl(el, list) {
-  return elByOffsetFn(inc, el, list)
-}
-
-export function prevEl(el, list) {
-  return elByOffsetFn(dec, el, list)
-}
+export const nextEl = partial(elByOffsetFn, [inc])
+export const prevEl = partial(elByOffsetFn, [dec])
 
 export function elByOffsetFn(offsetFn, el, list) {
   return compose(
