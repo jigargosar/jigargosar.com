@@ -34,9 +34,7 @@ class TaskViewStore {
 
   @computed
   get selectedTask() {
-    const id = this.selectedTaskId
-    const list = this.tasks
-    return findByIdOrHead(id, list)
+    return findByIdOrHead(this.selectedTaskId, this.tasks)
   }
 
   @computed
