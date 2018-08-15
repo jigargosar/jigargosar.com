@@ -14,21 +14,19 @@ class TaskListItem extends Component {
   render() {
     const {task} = this.props
     return (
-      <FocusChild shouldFocus={task.isSelected}>
-        <FlexRow
-          className={cn('ph1', 'link', {'bg-light-blue': task.isSelected})}
-          tabIndex={task.isSelected ? 0 : -1}
-          onFocus={this.handleOnFocus(task)}
+      <FlexRow
+        className={cn('ph1', 'link', {'bg-light-blue': task.isSelected})}
+        tabIndex={task.isSelected ? 0 : -1}
+        onFocus={this.handleOnFocus(task)}
+      >
+        <div
+          className={cn('pa2', 'code usn pointer')}
+          onClick={task.toggleDone}
         >
-          <div
-            className={cn('pa2', 'code usn pointer')}
-            onClick={task.toggleDone}
-          >
-            {task.isDone ? `[x]` : `[ ]`}
-          </div>
-          <div className={cn('pa2 flex-auto', 'f4 ')}>{task.title}</div>
-        </FlexRow>
-      </FocusChild>
+          {task.isDone ? `[x]` : `[ ]`}
+        </div>
+        <div className={cn('pa2 flex-auto', 'f4 ')}>{task.title}</div>
+      </FlexRow>
     )
   }
 }
