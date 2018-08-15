@@ -13,7 +13,7 @@ const rootStorage = mobxStorage({
   store,
   key: 'rootStore',
   disposers,
-  preProcessStorageJS: pick(['title']),
+  preProcessStorageJS: pick(Object.getOwnPropertyNames(store)),
 })
 rootStorage.loadAndStart()
 
