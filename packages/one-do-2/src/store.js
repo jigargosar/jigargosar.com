@@ -4,14 +4,16 @@ import {mobxStorage} from './lib/little-mobx'
 import {toJS} from './lib/mobx'
 import {pick} from './lib/ramda'
 
-export const store = observable({})
+export const store = observable({
+  title: 'One Do',
+})
 const disposers = Disposers(module)
 
 const rootStorage = mobxStorage({
   store,
   key: 'rootStore',
   disposers,
-  preProcessStorageJS: pick(['counter']),
+  preProcessStorageJS: pick(['title']),
 })
 rootStorage.loadAndStart()
 
