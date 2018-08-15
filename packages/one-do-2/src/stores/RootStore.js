@@ -7,6 +7,10 @@ import {autobind} from '../lib/autobind'
 class RootStore {
   @observable title = 'One Do'
 
+  constructor(stores) {
+    this.tasks = stores.tasksStore
+  }
+
   @computed
   get toJSON() {
     return prettyJSONStringify(this.toJS)

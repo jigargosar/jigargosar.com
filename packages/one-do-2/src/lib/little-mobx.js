@@ -58,6 +58,6 @@ export function Disposers(module) {
     autorun: compose(addDisposer, autorun),
     reaction: compose(addDisposer, reaction),
     setInterval: compose(addDisposer, setIntervalDisposable),
-    spy: compose(spy, setIntervalDisposable),
+    spy: compose(addDisposer, spy),
   }
 }

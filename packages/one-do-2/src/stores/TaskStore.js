@@ -1,6 +1,4 @@
-import {computed, observable, toJS} from '../lib/mobx'
-import {prettyJSONStringify} from '../lib/little-ramda'
-import {pick} from '../lib/ramda'
+import {observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 
 @autobind
