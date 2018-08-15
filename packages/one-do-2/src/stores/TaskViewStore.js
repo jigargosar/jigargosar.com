@@ -38,6 +38,10 @@ class TaskViewStore {
     return this.selectedTaskId === id
   }
 
+  isTaskMenuOpenFor(task) {
+    return this.isTaskSelected(task) && this.isTaskMenuOpen
+  }
+
   @action
   applySnapshot(snapshot) {
     const toObj = compose(
