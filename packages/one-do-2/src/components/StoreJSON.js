@@ -2,7 +2,7 @@ import React from 'react'
 import {Component} from '../lib/little-mobx-react'
 import {Fr} from '../lib/little-react'
 import cn from 'classnames'
-import {store} from '../store'
+import {store} from '../stores'
 
 class StoreJSON extends Component {
   ren() {

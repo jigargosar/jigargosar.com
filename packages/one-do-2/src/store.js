@@ -3,7 +3,6 @@ import {
   isComputed,
   isComputedProp,
   observable,
-  spy,
   toJS,
 } from './lib/mobx'
 import {Disposers} from './lib/little-mobx'
@@ -31,14 +30,11 @@ class Store {
   }
 }
 
-export const store = observable(new Store())
+const store = observable(new Store())
+export default store
 
 logIsComputedProp('toJS')
 logIsComputedProp('toJSON')
-
-spy(change => {
-  console.log(`change2`, change)
-})
 
 console.debug(`isComputed(store.toJSON)`, isComputed(store.toJSON))
 
