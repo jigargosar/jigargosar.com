@@ -7,6 +7,8 @@ import TaskList from './TaskList'
 import DebugDialog from './DebugDialog'
 
 @observer
+@withFocusTrap
+@observer
 class AppFrame extends Component {
   render() {
     return (
@@ -23,3 +25,9 @@ class AppFrame extends Component {
 }
 
 export default AppFrame
+
+function withFocusTrap(BaseComponent) {
+  return function withFocusTrap(props) {
+    return <BaseComponent {...props} />
+  }
+}
