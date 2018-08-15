@@ -1,9 +1,11 @@
 import {autobind} from './lib/little-react'
 import {
   computed,
+  decorate,
   isComputed,
   isComputedProp,
   observable,
+  spy,
   toJS,
 } from './lib/mobx'
 import {Disposers} from './lib/little-mobx'
@@ -17,14 +19,20 @@ const Store = class Store {
         value: Disposers(module),
       },
       toJSON: {
-        value: computed(() => prettyJSONStringify(this.toJS)),
+        get() {
+          return prettyJSONStringify(this.toJS)
+        },
+        configurable: true,
+      },
+      toJS: {
+        get() {
+          return toJS(this)
+        },
+        configurable: true,
       },
     })
   }
 
-  get toJS() {
-    return toJS(this)
-  }
   // get toJSForLS() {
   //   return pick(['title'], toJS(this))
   // }
@@ -34,14 +42,24 @@ autobind(Store)
 
 export const store = new Store()
 
+decorate(store, {
+  toJS: computed,
+  toJSON: computed,
+})
+
+logIsComputedProp('toJS')
+
+logIsComputedProp('toJSON')
+//
+spy(change => {
+  console.log(`change`, change)
+})
+
+console.debug(`isComputed(store.toJSON)`, isComputed(store.toJSON))
+
 function logIsComputedProp(propName) {
   console.log(
     `isComputedProp(store,${propName})`,
     isComputedProp(store, propName),
   )
 }
-
-logIsComputedProp('toJS')
-logIsComputedProp('toJSON')
-
-console.log(`isComputed(store.toJSON)`, isComputed(store.toJSON))
