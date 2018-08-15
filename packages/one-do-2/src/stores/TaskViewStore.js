@@ -1,7 +1,16 @@
 import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {intercept, setter} from '../lib/mobx-decorators'
-import {compose, defaultTo, mergeWith, propOr} from '../lib/ramda'
+import {
+  compose,
+  defaultTo,
+  equals,
+  is,
+  mergeWith,
+  propOr,
+  type,
+  unless,
+} from '../lib/ramda'
 import {overProp} from '../lib/little-ramda'
 import {taskStore} from './index'
 
@@ -9,7 +18,9 @@ import {taskStore} from './index'
 class TaskViewStore {
   @intercept(change => {
     console.log(`change`, change)
-    return overProp('newValue')(propOr(null)('id'))(change)
+    return overProp('newValue')(unless(is(String))(propOr(null)('id')))(
+      change,
+    )
   })
   @setter('setSelectedTask')
   @observable
