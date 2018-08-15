@@ -1,7 +1,7 @@
 import {action, observable} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
-import {setter} from 'mobx-decorators'
+import {setter, toggle} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
 import {compose, construct, map, merge} from '../lib/ramda'
 import {overProp} from '../lib/little-ramda'
@@ -14,7 +14,7 @@ class Task {
   @observable
   title = ''
 
-  @setter
+  @toggle('toggleDeleted')
   @observable
   isDeleted = false
 
