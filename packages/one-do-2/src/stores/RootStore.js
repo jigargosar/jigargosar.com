@@ -57,6 +57,7 @@ class RootStore {
       whenKeyPD('down')(this.taskViewStore.selectNextTask),
       whenKeyPD('up')(this.taskViewStore.selectPrevTask),
       whenKeyPD('space')(toggleDone),
+      whenKeyPD('x')(toggleDone),
     )
   }
 }
