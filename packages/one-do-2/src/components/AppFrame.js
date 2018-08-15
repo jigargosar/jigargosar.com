@@ -18,9 +18,6 @@ class AppFrame extends Component {
             target={document}
             onKeyDown={rootStore.onKeyDown}
           />
-          <FlexRow className={cn('pa3')}>
-            <Btn onClick={taskStore.addNewTask}>Add New Task</Btn>
-          </FlexRow>
           <TaskList />
         </FocusTrap>
       </Fragment>
