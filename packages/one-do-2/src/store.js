@@ -1,12 +1,17 @@
 import {observable} from 'mobx'
 import {Disposers} from './lib/little-mst'
 import {mobxStorage} from './lib/little-mobx'
-import {toJS} from './lib/mobx'
+import {extendObservable, toJS} from './lib/mobx'
 import {pick} from './lib/ramda'
 
 export const store = observable({
   title: 'One Do',
 })
+
+// extendObservable(store, {
+//   counter: 10,
+// })
+
 const disposers = Disposers(module)
 
 const rootStorage = mobxStorage({
