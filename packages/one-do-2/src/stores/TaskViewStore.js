@@ -29,6 +29,16 @@ class TaskViewStore {
   @observable
   isTaskMenuOpen = false
 
+  @setter('onTransitionEntering', true)
+  @setter('onTransitionExited', false)
+  @observable
+  isMenuTransitionInProgress = false
+
+  @computed
+  get isFocusTrapPaused() {
+    return this.isMenuTransitionInProgress
+  }
+
   @computed
   get selectedTask() {
     return taskStore.findById(this.selectedTaskId)
