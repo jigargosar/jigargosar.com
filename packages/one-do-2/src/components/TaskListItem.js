@@ -33,30 +33,28 @@ class TaskListItem extends Component {
           >
             {task.isDone ? `[x]` : `[ ]`}
           </div>
-          <div className={cn('ph1 flex-auto', 'f4 ')}>
-            {task.title}
-          </div>
+          <div className={cn('ph1 flex-auto', 'f4 ')}>{task.title}</div>
           <div
             className={cn('ph2', 'usn pointer')}
             onClick={this.onMenuOpen}
           >
             ...
           </div>
-          <Menu
-            id="simple-menu"
-            anchorEl={this.anchorEl}
-            open={Boolean(this.anchorEl)}
-            onClose={this.handleClose()}
-          >
-            <MenuItem onClick={this.handleClose(task.toggleDelete)}>
-              Delete
-            </MenuItem>
-            <MenuItem onClick={this.handleClose(task.toggleDone)}>
-              Done
-            </MenuItem>
-            <MenuItem onClick={this.handleClose()}>Select</MenuItem>
-          </Menu>
         </FlexRow>
+        <Menu
+          id="simple-menu"
+          anchorEl={this.anchorEl}
+          open={Boolean(this.anchorEl)}
+          onClose={this.handleClose()}
+        >
+          <MenuItem onClick={this.handleClose(task.toggleDelete)}>
+            Delete
+          </MenuItem>
+          <MenuItem onClick={this.handleClose(task.toggleDone)}>
+            Done
+          </MenuItem>
+          <MenuItem onClick={this.handleClose()}>Select</MenuItem>
+        </Menu>
       </div>
     )
   }
