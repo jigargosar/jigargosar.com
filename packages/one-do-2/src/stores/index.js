@@ -9,4 +9,7 @@ export const store = rootStore
 
 const disposers = Disposers(module)
 
-disposers.reaction(() => [rootStore.toJS], () => rootStore.saveToLS())
+disposers.autorun(() => {
+  rootStore.loadFromLS()
+  rootStore.saveToLS()
+})

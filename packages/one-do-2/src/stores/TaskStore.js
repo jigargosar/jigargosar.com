@@ -3,6 +3,7 @@ import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {setter} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
+import {pick} from '../lib/ramda'
 
 @autobind
 class Task {
@@ -24,6 +25,11 @@ class TaskStore {
   @action
   addNewTask() {
     this.tasks.unshift(new Task())
+  }
+
+  @action
+  applySnapshot(snapshot) {
+    Object.assign(this, pick(['tasks'])(snapshot))
   }
 }
 
