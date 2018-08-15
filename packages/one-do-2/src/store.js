@@ -1,6 +1,5 @@
-import {observable} from './lib/little-mst'
 import {autobind} from './lib/little-react'
-import {toJS} from './lib/mobx'
+import {observable, toJS} from './lib/mobx'
 import {Disposers} from './lib/little-mobx'
 
 @autobind
