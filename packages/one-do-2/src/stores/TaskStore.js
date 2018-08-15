@@ -5,7 +5,7 @@ import {fWord} from '../lib/fake'
 
 class Task {
   id = `Task_${nanoid()}`
-  name = fWord()
+  title = fWord()
 }
 
 @autobind
