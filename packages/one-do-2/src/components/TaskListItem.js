@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import {observable} from '../lib/mobx'
 import {setter} from '../lib/mobx-decorators'
 import {identity} from '../lib/ramda'
+import {taskViewStore} from '../stores'
 
 @observer
 class TaskListItem extends Component {
@@ -22,10 +23,19 @@ class TaskListItem extends Component {
     action()
     this.setAnchorEl(null)
   }
+
+  handleOnFocus = task => () => {
+    taskViewStore.setSelectedTask(task)
+  }
+
   render() {
     const {task} = this.props
     return (
-      <div className={cn('pv1 link')} tabIndex={0}>
+      <div
+        className={cn('pv1 link')}
+        tabIndex={0}
+        onFocus={this.handleOnFocus(task)}
+      >
         <FlexRow className={cn('pv2')}>
           <div
             className={cn('pr1 mr1', 'code usn pointer')}

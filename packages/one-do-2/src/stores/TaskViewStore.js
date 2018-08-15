@@ -7,12 +7,17 @@ import {
   isNil,
   mergeWith,
   prop,
+  propOr,
   unless,
 } from '../lib/ramda'
+import {overProp} from '../lib/little-ramda'
 
 @autobind
 class TaskViewStore {
-  @intercept(unless(isNil)(prop('id')))
+  @intercept(change => {
+    console.log(`change`, change)
+    return overProp('newValue')(propOr(null)('id'))(change)
+  })
   @setter('setSelectedTask')
   @observable
   selectedTaskId = null
