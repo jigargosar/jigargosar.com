@@ -10,7 +10,7 @@ class TaskListItem extends Component {
     return (
       <FlexRow className={cn('mv2')}>
         <div
-          className={cn('mr2', 'code usn pointer')}
+          className={cn('pr1 mr1', 'code usn pointer')}
           onClick={task.toggleDone}
         >
           {task.isDone ? `[x]` : `[ ]`}
