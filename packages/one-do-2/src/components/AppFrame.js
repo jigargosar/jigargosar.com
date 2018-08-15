@@ -1,14 +1,14 @@
-import React, {Fragment} from 'react'
-import {Component} from '../lib/little-mobx-react'
+import React, {Component, Fragment} from 'react'
 import StoreJSON from './StoreJSON'
 import {Btn} from '../lib/Btn'
 import {taskStore} from '../stores'
 import {FlexRow} from '../lib/UI'
-import {cn} from '../lib/little-react'
+import {cn, observer} from '../lib/little-react'
 import TaskList from './TaskList'
 
+@observer
 class AppFrame extends Component {
-  ren() {
+  render() {
     return (
       <Fragment>
         <FlexRow className={cn('ma3')}>

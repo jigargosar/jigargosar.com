@@ -1,20 +1,18 @@
-import React from 'react'
-import {Component} from '../lib/little-mobx-react'
-import {Fr} from '../lib/little-react'
+import React, {Component, Fragment} from 'react'
 import cn from 'classnames'
 import {store} from '../stores'
 
 class StoreJSON extends Component {
-  ren() {
+  render() {
     return (
-      <Fr>
+      <Fragment>
         <h1 className={cn('ma3')}>Store JSON</h1>
         <div className={cn('ma3')}>
           <pre className={cn('pa3 bg-light-gray')}>
             <code className={cn('code')}>{store.toJSON}</code>
           </pre>
         </div>
-      </Fr>
+      </Fragment>
     )
   }
 }
