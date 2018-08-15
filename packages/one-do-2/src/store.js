@@ -1,14 +1,20 @@
 import {observable} from 'mobx'
 import {Disposers} from './lib/little-mst'
-import {mobxStorage, storeAsPrettyJSON} from './lib/little-mobx'
-import {pick} from './lib/ramda'
+import {compose, defaultTo, pick} from './lib/ramda'
+import {autobind} from './lib/little-react'
+import {storage} from './lib/storage'
+import {toJS} from './lib/mobx'
 
-export const store = observable({
-  title: 'One Do',
+@autobind
+class Store {
+  @observable title = 'One Do'
+
   get asJSON() {
-    return storeAsPrettyJSON(store)
-  },
-})
+    return storeAsPrettyJSON(this)
+  }
+}
+
+export const store = new Store()
 
 // extendObservable(store, {
 //   counter: 10,
@@ -23,3 +29,30 @@ const rootStorage = mobxStorage({
   preProcessStorageJS: pick(Object.getOwnPropertyNames(store)),
 })
 rootStorage.loadAndStart()
+
+function mobxStorage({store, key, disposers, preProcessStorageJS}) {
+  function startStoring() {
+    disposers.autorun(() => {
+      // console.log(`toJS(store)`, toJS(store))
+      compose(storage.set(key), toJS)(store)
+    })
+  }
+
+  function loadStore() {
+    const source = compose(preProcessStorageJS, defaultTo({}))(
+      storage.get(key),
+    )
+    Object.assign(store, source)
+  }
+
+  return {
+    loadAndStart() {
+      loadStore()
+      startStoring()
+    },
+  }
+}
+
+export function storeAsPrettyJSON(store) {
+  return JSON.stringify(toJS(store), null, 2)
+}
