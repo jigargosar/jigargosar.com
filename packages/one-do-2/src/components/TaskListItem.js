@@ -5,7 +5,8 @@ import {observer} from '../lib/little-react'
 @observer
 class TaskListItem extends Component {
   render() {
-    return <div>{'aa'}</div>
+    const {task} = this.props
+    return <div>{task.title}</div>
   }
 }
 
