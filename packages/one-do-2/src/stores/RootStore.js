@@ -53,6 +53,7 @@ class RootStore {
     return withKeyEvent(
       //
       whenKeyPD('`')(this.debugStore.toggleDebugView),
+      whenKeyPD('down')(this.taskViewStore.selectNextTask),
     )
   }
 }
