@@ -9,7 +9,9 @@ class TaskListItem extends Component {
     const {task} = this.props
     return (
       <FlexRow className={cn('mv2')}>
-        <div className={cn('mr2 code')}>{`[ ]`}</div>
+        <div className={cn('mr2 code')} onClick={task.toggleDone}>
+          {task.isDone ? `[x]` : `[ ]`}
+        </div>
         <div className={cn('ph1 flex-auto', 'f4 ', 'bb b--moon-gray')}>
           {task.title}
         </div>
