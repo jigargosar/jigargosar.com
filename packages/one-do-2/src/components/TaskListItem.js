@@ -42,23 +42,21 @@ class TaskListItem extends Component {
           >
             ...
           </div>
-          <FocusTrap paused={true} active={false}>
-            <Menu
-              // disablePortal={true}
-              id="simple-menu"
-              anchorEl={this.anchorEl}
-              open={Boolean(this.anchorEl)}
-              onClose={this.handleClose()}
-            >
-              <MenuItem onClick={this.handleClose(task.toggleDelete)}>
-                Delete
-              </MenuItem>
-              <MenuItem onClick={this.handleClose(task.toggleDone)}>
-                Done
-              </MenuItem>
-              <MenuItem onClick={this.handleClose()}>Select</MenuItem>
-            </Menu>
-          </FocusTrap>
+          <Menu
+            // disablePortal={true}
+            id="simple-menu"
+            anchorEl={this.anchorEl}
+            open={Boolean(this.anchorEl)}
+            onClose={this.handleClose()}
+          >
+            <MenuItem onClick={this.handleClose(task.toggleDelete)}>
+              Delete
+            </MenuItem>
+            <MenuItem onClick={this.handleClose(task.toggleDone)}>
+              Done
+            </MenuItem>
+            <MenuItem onClick={this.handleClose()}>Select</MenuItem>
+          </Menu>
         </FlexRow>
       </div>
     )
