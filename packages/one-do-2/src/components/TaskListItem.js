@@ -33,7 +33,7 @@ class TaskListItem extends Component {
           >
             {task.isDone ? `[x]` : `[ ]`}
           </div>
-          <div className={cn('ph1 flex-auto', 'f4 ', 'bb_ b--moon-gray')}>
+          <div className={cn('ph1 flex-auto', 'f4 ')}>
             {task.title}
           </div>
           <div
