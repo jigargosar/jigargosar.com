@@ -72,8 +72,14 @@ class TaskViewStore {
   @action
   navigateToTask(next) {
     this.setSelectedTask(next)
-    if (next) {
-      tryFocusDOMId(next.id)
+    this.tryFocusSelectedTask()
+  }
+
+  @action
+  tryFocusSelectedTask() {
+    const task = this.selectedTask
+    if (task) {
+      tryFocusDOMId(task.id)
     }
   }
 

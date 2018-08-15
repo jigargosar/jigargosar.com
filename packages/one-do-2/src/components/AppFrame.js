@@ -7,6 +7,10 @@ import {FocusTrap} from '../lib/focus-trap-react'
 
 @observer
 class AppFrame extends Component {
+  componentDidMount() {
+    taskViewStore.tryFocusSelectedTask()
+  }
+
   render() {
     return (
       <Fragment>
