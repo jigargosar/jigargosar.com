@@ -17,6 +17,7 @@ class TaskListItem extends Component {
 
   onMenuOpen = e => {
     this.setAnchorEl(e.currentTarget)
+    taskViewStore.openTaskMenu()
   }
 
   @computed
@@ -27,6 +28,7 @@ class TaskListItem extends Component {
   handleClose = (action = identity) => () => {
     action()
     this.setAnchorEl(null)
+    taskViewStore.closeTaskMenu()
   }
 
   handleOnFocus = task => () => {

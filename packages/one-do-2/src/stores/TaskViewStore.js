@@ -24,6 +24,11 @@ class TaskViewStore {
   @observable
   selectedTaskId = null
 
+  @setter('openTaskMenu', true)
+  @setter('closeTaskMenu', false)
+  @observable
+  isTaskMenuOpen = false
+
   @computed
   get selectedTask() {
     return taskStore.findById(this.selectedTaskId)
@@ -38,7 +43,10 @@ class TaskViewStore {
     const toObj = compose(
       //
       // overProp('tasks')(map(TaskConstructor)),
-      mergeWith(defaultTo)({selectedTaskId: null}),
+      mergeWith(defaultTo)({
+        selectedTaskId: null,
+        isTaskMenuOpen: false,
+      }),
     )
     Object.assign(this, toObj(snapshot))
   }
