@@ -1,7 +1,6 @@
 import {observable} from 'mobx'
 import {Disposers} from './lib/little-mst'
-import {mobxStorage} from './lib/little-mobx'
-import {extendObservable, toJS} from './lib/mobx'
+import {mobxStorage, storeAsPrettyJSON} from './lib/little-mobx'
 import {pick} from './lib/ramda'
 
 export const store = observable({
@@ -24,7 +23,3 @@ const rootStorage = mobxStorage({
   preProcessStorageJS: pick(Object.getOwnPropertyNames(store)),
 })
 rootStorage.loadAndStart()
-
-export function storeAsPrettyJSON(store) {
-  return JSON.stringify(toJS(store), null, 2)
-}

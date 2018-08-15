@@ -24,3 +24,7 @@ export function mobxStorage({store, key, disposers, preProcessStorageJS}) {
     },
   }
 }
+
+export function storeAsPrettyJSON(store) {
+  return JSON.stringify(toJS(store), null, 2)
+}
