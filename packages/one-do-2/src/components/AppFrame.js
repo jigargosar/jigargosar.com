@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {rootStore} from '../stores'
+import {debugStore, rootStore} from '../stores'
 import {EventListener, FocusTrap, observer} from '../lib/little-react'
 import TaskList from './TaskList'
 import DebugDialog from './DebugDialog'
@@ -10,7 +10,7 @@ class AppFrame extends Component {
   render() {
     return (
       <Fragment>
-        <FocusTrap>
+        <FocusTrap paused={debugStore.isDebugViewOpen}>
           <DebugDialog />
           <EventListener
             target={document}

@@ -15,6 +15,7 @@ class DebugDialog extends Component {
   render() {
     return (
       <Dialog
+        disableEnforceFocus={!debugStore.isDebugViewOpen}
         open={debugStore.isDebugViewOpen}
         onClose={debugStore.toggleDebugView}
         scroll={'body'}
