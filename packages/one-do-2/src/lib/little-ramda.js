@@ -107,3 +107,5 @@ export const defineDelegatePropertyGetter = curry(
       enumerable: true,
     }),
 )
+
+export const prettyJSONStringify = o => JSON.stringify(o, null, 2)
