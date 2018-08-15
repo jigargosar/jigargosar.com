@@ -10,7 +10,7 @@ class TaskListItem extends Component {
     return (
       <FlexRow>
         <div className={cn('mr2 code')}>{`[ ]`}</div>
-        <div className={cn('mr2 f4')}>{task.title}</div>
+        <div className={cn('mr2 f4 flex-auto')}>{task.title}</div>
       </FlexRow>
     )
   }
