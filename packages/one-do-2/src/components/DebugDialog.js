@@ -14,7 +14,10 @@ import StoreJSON from './StoreJSON'
 class DebugDialog extends Component {
   render() {
     return (
-      <Dialog open={debugStore.isDebugViewOpen}>
+      <Dialog
+        open={debugStore.isDebugViewOpen}
+        onClose={debugStore.toggleDebugView}
+      >
         {false && <DialogTitle> </DialogTitle>}
         <StoreJSON />
         {false && (

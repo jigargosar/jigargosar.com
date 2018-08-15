@@ -51,7 +51,7 @@ class RootStore {
   get onKeyDown() {
     return withKeyEvent(
       //
-      whenKeyPD('`')(() => this.debugStore.toggleIsDebugViewOpen()),
+      whenKeyPD('`')(() => this.debugStore.toggleDebugView()),
     )
   }
 }

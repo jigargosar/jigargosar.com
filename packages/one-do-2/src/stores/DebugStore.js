@@ -5,7 +5,7 @@ import {toggle} from 'mobx-decorators'
 
 @autobind
 class DebugStore {
-  @toggle
+  @toggle('toggleDebugView')
   @observable
   isDebugViewOpen = false
 
