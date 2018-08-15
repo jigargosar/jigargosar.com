@@ -47,6 +47,10 @@ class TaskViewStore {
     return this.selectedTaskId === id
   }
 
+  selectedTaskInvoker(fnName) {
+    return () => this.invokeOnSelectedTask(fnName)
+  }
+
   @action
   selectNextTask() {
     this.navigateToTask(nextEl(this.selectedTask, this.tasks))
@@ -55,11 +59,6 @@ class TaskViewStore {
   @action
   selectPrevTask() {
     this.navigateToTask(prevEl(this.selectedTask, this.tasks))
-  }
-
-  @action
-  selectedTaskInvoker(fnName) {
-    return () => this.invokeOnSelectedTask(fnName)
   }
 
   @action
