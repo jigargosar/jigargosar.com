@@ -4,31 +4,10 @@ import {cn, observer} from '../lib/little-react'
 import {FlexRow} from '../lib/UI'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import {computed, observable} from '../lib/mobx'
-import {setter} from '../lib/mobx-decorators'
-import {identity} from '../lib/ramda'
 import {taskViewStore} from '../stores'
 
 @observer
 class TaskListItem extends Component {
-  @setter('setMenuBtnRef')
-  @observable
-  menuBtnRef = null
-
-  handleMenuOpen = e => {
-    this.setMenuBtnRef(e.currentTarget)
-  }
-
-  @computed
-  get isOpen() {
-    return Boolean(this.menuBtnRef)
-  }
-
-  handleClose = (action = identity) => () => {
-    action()
-    this.setMenuBtnRef(null)
-  }
-
   handleOnFocus = task => () => {
     taskViewStore.setSelectedTask(task)
   }
@@ -49,27 +28,7 @@ class TaskListItem extends Component {
             {task.isDone ? `[x]` : `[ ]`}
           </div>
           <div className={cn('ph1 flex-auto', 'f4 ')}>{task.title}</div>
-          <div
-            className={cn('ph2', 'usn pointer')}
-            onClick={this.handleMenuOpen}
-          >
-            ...
-          </div>
         </FlexRow>
-        <Menu
-          disableRestoreFocus
-          anchorEl={this.menuBtnRef}
-          open={this.isOpen}
-          onClose={this.handleClose()}
-        >
-          <MenuItem onClick={this.handleClose(task.toggleDelete)}>
-            Delete
-          </MenuItem>
-          <MenuItem onClick={this.handleClose(task.toggleDone)}>
-            Done
-          </MenuItem>
-          <MenuItem onClick={this.handleClose()}>Select</MenuItem>
-        </Menu>
       </div>
     )
   }
