@@ -5,8 +5,8 @@ import TaskStore from './TaskStore'
 import {Disposers, mobxStorage} from '../lib/little-mobx'
 import {identity} from '../lib/ramda'
 
-export const tasksStore = observable(new TaskStore())
-export const rootStore = observable(new RootStore({tasksStore}))
+export const taskStore = new TaskStore()
+export const rootStore = new RootStore({taskStore})
 export const store = rootStore
 
 const rootStoreLS = mobxStorage({

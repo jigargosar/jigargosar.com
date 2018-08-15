@@ -6,9 +6,9 @@ import {autobind} from '../lib/autobind'
 @autobind
 class RootStore {
   @observable title = 'One Do'
-
+  @observable tasks = null
   constructor(stores) {
-    this.tasks = stores.tasksStore
+    this.tasks = stores.taskStore
   }
 
   @computed

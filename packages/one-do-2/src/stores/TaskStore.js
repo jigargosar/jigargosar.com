@@ -16,12 +16,12 @@ class Task {
   isDeleted = false
 }
 
-@autobind
 class TaskStore {
   @observable tasks = []
 
-  @action
+  @action.bound
   addNewTask() {
+    debugger
     this.tasks.unshift(new Task())
   }
 }
