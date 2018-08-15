@@ -5,6 +5,7 @@ import {Disposers} from '../lib/little-mobx'
 
 export const rootStore = observable(new RootStore())
 export const taskStore = rootStore.taskStore
+export const debugStore = rootStore.debugStore
 export const store = rootStore
 
 const disposers = Disposers(module)
