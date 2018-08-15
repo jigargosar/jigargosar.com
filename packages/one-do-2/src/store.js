@@ -7,7 +7,7 @@ import {pick} from './lib/ramda'
 export const store = observable({
   title: 'One Do',
   get asJSON() {
-    return storeAsJSON()
+    return storeAsPrettyJSON(store)
   },
 })
 
@@ -25,6 +25,6 @@ const rootStorage = mobxStorage({
 })
 rootStorage.loadAndStart()
 
-export function storeAsJSON() {
+export function storeAsPrettyJSON(store) {
   return JSON.stringify(toJS(store), null, 2)
 }
