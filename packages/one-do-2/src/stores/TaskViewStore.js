@@ -1,13 +1,13 @@
-import {action} from '../lib/mobx'
+import {action, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
-import {allObservable, intercept, setter} from '../lib/mobx-decorators'
+import {intercept, setter} from '../lib/mobx-decorators'
 import {isNil, prop, unless} from '../lib/ramda'
 
 @autobind
-@allObservable
 class TaskViewStore {
   @intercept(unless(isNil)(prop('id')))
   @setter('setSelectedTask')
+  @observable
   selectedTaskId = null
 
   @action

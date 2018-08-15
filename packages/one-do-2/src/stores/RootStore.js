@@ -3,20 +3,16 @@ import {prettyJSONStringify} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
-import {defaultTo, pick, propOr} from '../lib/ramda'
+import {defaultTo, propOr} from '../lib/ramda'
 import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
+import TaskViewStore from './TaskViewStore'
 
 @autobind
 class RootStore {
-  @observable title = 'One Do'
-  @observable taskStore = null
-  @observable debugStore = null
-
-  constructor() {
-    this.taskStore = new TaskStore()
-    this.debugStore = new DebugStore()
-  }
+  @observable taskStore = new TaskStore()
+  @observable debugStore = new DebugStore()
+  @observable taskViewStore = new TaskViewStore()
 
   @computed
   get toJSON() {
@@ -42,16 +38,16 @@ class RootStore {
 
   @action
   applySnapshot(snapshot) {
-    Object.assign(this, pick(['title'])(snapshot))
     this.taskStore.applySnapshot(propOr({})('taskStore')(snapshot))
     this.debugStore.applySnapshot(propOr({})('debugStore')(snapshot))
+    this.taskViewStore.applySnapshot(propOr({})('taskViewStore')(snapshot))
   }
 
   @computed
   get onKeyDown() {
     return withKeyEvent(
       //
-      whenKeyPD('`')(() => this.debugStore.toggleDebugView()),
+      whenKeyPD('`')(this.debugStore.toggleDebugView),
     )
   }
 }
