@@ -1,10 +1,10 @@
 import React, {Component, Fragment} from 'react'
-import StoreJSON from './StoreJSON'
 import {Btn} from '../lib/Btn'
 import {rootStore, taskStore} from '../stores'
 import {FlexRow} from '../lib/UI'
 import {cn, EventListener, observer} from '../lib/little-react'
 import TaskList from './TaskList'
+import DebugDialog from './DebugDialog'
 
 @observer
 class AppFrame extends Component {
@@ -16,7 +16,7 @@ class AppFrame extends Component {
           <Btn onClick={taskStore.addNewTask}>Add New Task</Btn>
         </FlexRow>
         <TaskList />
-        <StoreJSON />
+        <DebugDialog />
       </Fragment>
     )
   }
