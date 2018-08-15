@@ -12,7 +12,7 @@ class Task {
 
   @setter
   @observable
-  title = fWord()
+  title = ''
 
   @setter
   @observable
@@ -31,7 +31,7 @@ class TaskStore {
 
   @action
   addNewTask() {
-    this.tasks.unshift(new Task())
+    this.tasks.unshift(new Task({title: fWord()}))
   }
 
   @action
