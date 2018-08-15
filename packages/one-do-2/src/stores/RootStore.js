@@ -58,6 +58,7 @@ class RootStore {
       whenKeyPD('up')(this.taskViewStore.selectPrevTask),
       whenKeyPD('space')(toggleDone),
       whenKeyPD('x')(toggleDone),
+      whenKeyPD('mod+right')(toggleDone),
     )
   }
 }
