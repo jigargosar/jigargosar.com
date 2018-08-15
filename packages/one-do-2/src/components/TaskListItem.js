@@ -4,7 +4,7 @@ import {cn, observer} from '../lib/little-react'
 import {FlexRow} from '../lib/UI'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import {observable} from '../lib/mobx'
+import {computed, observable} from '../lib/mobx'
 import {setter} from '../lib/mobx-decorators'
 import {identity} from '../lib/ramda'
 import {taskViewStore} from '../stores'
@@ -17,6 +17,11 @@ class TaskListItem extends Component {
 
   onMenuOpen = e => {
     this.setAnchorEl(e.currentTarget)
+  }
+
+  @computed
+  get isOpen() {
+    return Boolean(this.anchorEl)
   }
 
   handleClose = (action = identity) => () => {
@@ -54,7 +59,7 @@ class TaskListItem extends Component {
         <Menu
           id="simple-menu"
           anchorEl={this.anchorEl}
-          open={Boolean(this.anchorEl)}
+          open={this.isOpen}
           onClose={this.handleClose()}
         >
           <MenuItem onClick={this.handleClose(task.toggleDelete)}>
