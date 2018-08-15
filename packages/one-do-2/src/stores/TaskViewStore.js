@@ -25,12 +25,7 @@ function findByIdOrHead(id, list) {
 
 @autobind
 class TaskViewStore {
-  @intercept(change => {
-    console.debug(`change`, change)
-    return overProp('newValue')(unless(is(String))(propOr(null)('id')))(
-      change,
-    )
-  })
+  @intercept(overProp('newValue')(unless(is(String))(propOr(null)('id'))))
   @setter('setSelectedTask')
   @observable
   selectedTaskId = null
