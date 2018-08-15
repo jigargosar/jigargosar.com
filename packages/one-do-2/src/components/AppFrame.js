@@ -1,8 +1,9 @@
 import React, {Component, Fragment} from 'react'
 import {rootStore} from '../stores'
-import {EventListener, FocusTrap, observer} from '../lib/little-react'
+import {EventListener, observer} from '../lib/little-react'
 import TaskList from './TaskList'
 import DebugDialog from './DebugDialog'
+import {FocusTrap} from '../lib/focus-trap-react'
 
 @withFocusTrap
 @observer
@@ -10,7 +11,10 @@ class AppFrame extends Component {
   render() {
     return (
       <Fragment>
-        <FocusTrap paused={rootStore.isFocusTrapPaused}>
+        <FocusTrap
+          paused={rootStore.isFocusTrapPaused}
+          focustrapOptions={{}}
+        >
           <DebugDialog />
           <EventListener
             target={document}

@@ -24,7 +24,6 @@ export {cn}
 export const EventListener = ReactEventListener
 
 export {Fr, RC, observer, Observer, inject, isHotKey}
-export {default as FocusTrap} from 'focus-trap-react'
 export {PropTypes}
 
 export const isAnyHotKey = R.compose(
