@@ -8,6 +8,7 @@ import {
   compose,
   curry,
   curryN,
+  dec,
   defaultTo,
   equals,
   forEach,
@@ -129,19 +130,18 @@ export function findByIdOrHead(id, list) {
 }
 
 export function nextEl(el, list) {
-  return compose(
-    prop(__, list),
-    mathMod(__, list.length),
-    inc,
-    indexOfOrNaN(el),
-  )(list)
+  return elByOffsetFn(inc, el, list)
 }
 
 export function prevEl(el, list) {
+  return elByOffsetFn(dec, el, list)
+}
+
+export function elByOffsetFn(offsetFn, el, list) {
   return compose(
     prop(__, list),
     mathMod(__, list.length),
-    inc,
+    offsetFn,
     indexOfOrNaN(el),
   )(list)
 }
