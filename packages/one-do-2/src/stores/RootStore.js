@@ -1,6 +1,6 @@
 import {computed, observable, toJS} from '../lib/mobx'
 import {prettyJSONStringify} from '../lib/little-ramda'
-import {pick} from '../lib/ramda'
+import {merge, pick} from '../lib/ramda'
 import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 
@@ -14,7 +14,7 @@ class RootStore {
 
   @computed
   get toJSON() {
-    return prettyJSONStringify(this.toJS)
+    return prettyJSONStringify(this.toJSForLS)
   }
 
   @computed
@@ -23,7 +23,10 @@ class RootStore {
   }
   @computed
   get toJSForLS() {
-    return pick(['title'], toJS(this))
+    return merge(
+      {taskStore: this.taskStore.toJSForLS},
+      pick(['title'], this),
+    )
   }
 }
 
