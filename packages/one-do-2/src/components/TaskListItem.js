@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {cn, observer} from '../lib/little-react'
 import {FlexRow} from '../lib/UI'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
 import {taskViewStore} from '../stores'
 
 @observer
