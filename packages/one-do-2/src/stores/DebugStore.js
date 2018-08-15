@@ -1,6 +1,6 @@
 import {action, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
-import {compose, defaultTo, merge, mergeWith} from '../lib/ramda'
+import {compose, defaultTo, mergeWith} from '../lib/ramda'
 import {toggle} from 'mobx-decorators'
 
 @autobind
