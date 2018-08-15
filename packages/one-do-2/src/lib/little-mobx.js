@@ -1,5 +1,5 @@
 import {storage} from './storage'
-import {autorun, reaction, toJS} from './mobx'
+import {autorun, reaction, spy, toJS} from './mobx'
 import {call, compose, defaultTo} from './ramda'
 import {hotDispose} from './hot'
 
@@ -58,5 +58,6 @@ export function Disposers(module) {
     autorun: compose(addDisposer, autorun),
     reaction: compose(addDisposer, reaction),
     setInterval: compose(addDisposer, setIntervalDisposable),
+    spy: compose(spy, setIntervalDisposable),
   }
 }

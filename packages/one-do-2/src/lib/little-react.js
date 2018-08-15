@@ -23,7 +23,6 @@ export {cn}
 
 export const EventListener = ReactEventListener
 
-export {default as autobind} from 'autobind'
 export {Fr, RC, observer, Observer, inject, isHotKey}
 export {default as FocusTrap} from 'focus-trap-react'
 export {PropTypes}
