@@ -2,26 +2,15 @@ import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {intercept, setter} from '../lib/mobx-decorators'
 import {
-  __,
   compose,
   defaultTo,
-  head,
-  inc,
   is,
-  mathMod,
   mergeWith,
-  prop,
   propOr,
   unless,
 } from '../lib/ramda'
-import {findById, indexOfOrNaN, overProp} from '../lib/little-ramda'
+import {findByIdOrHead, nextEl, overProp} from '../lib/little-ramda'
 import {taskStore} from './index'
-
-function findByIdOrHead(id, list) {
-  return compose(defaultTo(null), defaultTo(head(list)), findById(id))(
-    list,
-  )
-}
 
 function tryFocusDOMId(id) {
   const el = document.getElementById(id)
@@ -30,15 +19,6 @@ function tryFocusDOMId(id) {
   } else {
     console.warn('[focus] id not found', id)
   }
-}
-
-function nextEl(el, list) {
-  return compose(
-    prop(__, list),
-    mathMod(__, list.length),
-    inc,
-    indexOfOrNaN(el),
-  )(list)
 }
 
 @autobind

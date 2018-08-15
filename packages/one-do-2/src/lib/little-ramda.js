@@ -1,4 +1,5 @@
 import {
+  __,
   _compose,
   _when,
   addIndex,
@@ -10,15 +11,19 @@ import {
   defaultTo,
   equals,
   forEach,
+  head,
+  inc,
   indexOf,
   isEmpty,
   length,
   lensPath,
   lensProp,
   map,
+  mathMod,
   mergeDeepRight,
   nAry,
   over,
+  prop,
   propEq,
   reduce,
   tap,
@@ -116,3 +121,18 @@ export const indexOfOrNaN = compose(
   _when(equals(-1))(always(NaN)),
   indexOf,
 )
+
+export function findByIdOrHead(id, list) {
+  return compose(defaultTo(null), defaultTo(head(list)), findById(id))(
+    list,
+  )
+}
+
+export function nextEl(el, list) {
+  return compose(
+    prop(__, list),
+    mathMod(__, list.length),
+    inc,
+    indexOfOrNaN(el),
+  )(list)
+}
