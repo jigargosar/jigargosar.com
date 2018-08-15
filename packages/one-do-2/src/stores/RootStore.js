@@ -55,8 +55,8 @@ class RootStore {
       whenKeyPD('`')(this.debugStore.toggleDebugView),
       whenKeyPD('down')(this.taskViewStore.selectNextTask),
       whenKeyPD('up')(this.taskViewStore.selectPrevTask),
-      whenKeyPD('space')(() =>
-        this.taskViewStore.invokeOnSelected('toggleDone'),
+      whenKeyPD('space')(
+        this.taskViewStore.selectedTaskInvoker('toggleDone'),
       ),
     )
   }

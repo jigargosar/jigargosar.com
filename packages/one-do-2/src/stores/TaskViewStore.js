@@ -58,10 +58,12 @@ class TaskViewStore {
   }
 
   @action
-  invokeOnSelected(fnName) {
-    const task = this.selectedTask
-    if (task) {
-      task[fnName]()
+  selectedTaskInvoker(fnName) {
+    return () => {
+      const task = this.selectedTask
+      if (task) {
+        task[fnName]()
+      }
     }
   }
 
