@@ -1,39 +1,47 @@
 import {autobind} from './lib/little-react'
-import {observable, toJS} from './lib/mobx'
+import {
+  computed,
+  isComputed,
+  isComputedProp,
+  observable,
+  toJS,
+} from './lib/mobx'
 import {Disposers} from './lib/little-mobx'
-import {pick} from './lib/ramda'
 import {prettyJSONStringify} from './lib/little-ramda'
 
-@autobind
-class Store {
+const Store = class Store {
   @observable title = 'One Do'
-  disposers = Disposers(module)
   constructor() {
-    Object.defineProperty(this, 'disposers', {
-      // value: Disposers(module),
-      enumerable: true,
-      configurable: false,
-      writable: false,
-    })
-    Object.defineProperty(this, 'toJSON', {
-      get() {
-        return prettyJSONStringify(this.toJS)
+    Object.defineProperties(this, {
+      disposers: {
+        value: Disposers(module),
       },
-      enumerable: false,
-      configurable: false,
-      // writable: false,
+      toJSON: {
+        value: computed(() => prettyJSONStringify(this.toJS)),
+      },
     })
   }
 
-  get toJSON() {
-    return prettyJSONStringify(this.toJS)
-  }
   get toJS() {
     return toJS(this)
   }
-  get toJSForLS() {
-    return pick(['title'], toJS(this))
-  }
+  // get toJSForLS() {
+  //   return pick(['title'], toJS(this))
+  // }
 }
 
+autobind(Store)
+
 export const store = new Store()
+
+function logIsComputedProp(propName) {
+  console.log(
+    `isComputedProp(store,${propName})`,
+    isComputedProp(store, propName),
+  )
+}
+
+logIsComputedProp('toJS')
+logIsComputedProp('toJSON')
+
+console.log(`isComputed(store.toJSON)`, isComputed(store.toJSON))
