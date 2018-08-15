@@ -12,8 +12,12 @@ class TaskList extends Component {
       <div className={cn('pv2')}>
         <div className={cn('pv1 ph3', 'f2 b')}>Task List</div>
         <FlexRow className={cn('pv1 ph3')}>
-          <Btn onClick={taskStore.addNewTask}>Add Task</Btn>
-          <Btn onClick={rootStore.resetLS}>Reset LS</Btn>
+          <div className={cn('mh1')}>
+            <Btn onClick={taskStore.addNewTask}>Add Task</Btn>
+          </div>
+          <div className={cn('mh1')}>
+            <Btn onClick={rootStore.resetLS}>Reset LS</Btn>
+          </div>
         </FlexRow>
         <div>{renderKeyedById(TaskListItem, 'task', taskStore.tasks)}</div>
       </div>
