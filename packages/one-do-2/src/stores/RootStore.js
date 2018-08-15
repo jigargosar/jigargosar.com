@@ -5,6 +5,7 @@ import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
 import {defaultTo, pick, propOr} from '../lib/ramda'
 import DebugStore from './DebugStore'
+import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 
 @autobind
 class RootStore {
@@ -43,6 +44,15 @@ class RootStore {
   applySnapshot(snapshot) {
     Object.assign(this, pick(['title'])(snapshot))
     this.taskStore.applySnapshot(propOr({})('taskStore')(snapshot))
+    this.debugStore.applySnapshot(propOr({})('debugStore')(snapshot))
+  }
+
+  @computed
+  get onKeyDown() {
+    return withKeyEvent(
+      //
+      whenKeyPD('`')(() => this.debugStore.toggleIsDebugViewOpen()),
+    )
   }
 }
 
