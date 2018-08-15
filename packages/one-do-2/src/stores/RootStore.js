@@ -50,14 +50,13 @@ class RootStore {
 
   @computed
   get onKeyDown() {
+    const toggleDone = this.taskViewStore.selectedTaskInvoker('toggleDone')
     return withKeyEvent(
       //
       whenKeyPD('`')(this.debugStore.toggleDebugView),
       whenKeyPD('down')(this.taskViewStore.selectNextTask),
       whenKeyPD('up')(this.taskViewStore.selectPrevTask),
-      whenKeyPD('space')(
-        this.taskViewStore.selectedTaskInvoker('toggleDone'),
-      ),
+      whenKeyPD('space')(toggleDone),
     )
   }
 }
