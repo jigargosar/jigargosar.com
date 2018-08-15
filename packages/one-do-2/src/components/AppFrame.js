@@ -13,7 +13,7 @@ class AppFrame extends Component {
         <FocusTrap
           paused={rootStore.isFocusTrapPaused}
           focusTrapOptions={{
-            returnFocusOnDeactivate: false,
+            // returnFocusOnDeactivate: false,
             fallbackFocus: document,
             initialFocus: `#${taskViewStore.selectedTaskId}`,
           }}
