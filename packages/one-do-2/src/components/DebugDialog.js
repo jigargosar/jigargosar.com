@@ -17,6 +17,7 @@ class DebugDialog extends Component {
       <Dialog
         open={debugStore.isDebugViewOpen}
         onClose={debugStore.toggleDebugView}
+        scroll={'body'}
       >
         {false && <DialogTitle> </DialogTitle>}
         <StoreJSON />
