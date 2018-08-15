@@ -16,10 +16,6 @@ class Store {
 
 export const store = new Store()
 
-// extendObservable(store, {
-//   counter: 10,
-// })
-
 const disposers = Disposers(module)
 
 const rootStorage = mobxStorage({
