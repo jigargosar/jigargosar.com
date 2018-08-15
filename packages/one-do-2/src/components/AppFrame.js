@@ -10,7 +10,7 @@ import DebugDialog from './DebugDialog'
 class AppFrame extends Component {
   render() {
     return (
-      <FocusTrap>
+      <FocusTrap paused={true} active={false}>
         <EventListener target={document} onKeyDown={rootStore.onKeyDown} />
         <FlexRow className={cn('ma3')}>
           <Btn onClick={taskStore.addNewTask}>Add New Task</Btn>

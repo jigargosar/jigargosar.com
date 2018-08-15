@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {cn, observer} from '../lib/little-react'
+import {cn, FocusTrap, observer} from '../lib/little-react'
 import {FlexRow} from '../lib/UI'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -42,20 +42,23 @@ class TaskListItem extends Component {
           >
             ...
           </div>
-          <Menu
-            id="simple-menu"
-            anchorEl={this.anchorEl}
-            open={Boolean(this.anchorEl)}
-            onClose={this.handleClose()}
-          >
-            <MenuItem onClick={this.handleClose(task.toggleDelete)}>
-              Delete
-            </MenuItem>
-            <MenuItem onClick={this.handleClose(task.toggleDone)}>
-              Done
-            </MenuItem>
-            <MenuItem onClick={this.handleClose()}>Select</MenuItem>
-          </Menu>
+          <FocusTrap paused={true} active={false}>
+            <Menu
+              // disablePortal={true}
+              id="simple-menu"
+              anchorEl={this.anchorEl}
+              open={Boolean(this.anchorEl)}
+              onClose={this.handleClose()}
+            >
+              <MenuItem onClick={this.handleClose(task.toggleDelete)}>
+                Delete
+              </MenuItem>
+              <MenuItem onClick={this.handleClose(task.toggleDone)}>
+                Done
+              </MenuItem>
+              <MenuItem onClick={this.handleClose()}>Select</MenuItem>
+            </Menu>
+          </FocusTrap>
         </FlexRow>
       </div>
     )
