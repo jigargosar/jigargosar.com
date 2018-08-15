@@ -18,6 +18,7 @@ class TaskListItem extends Component {
         <div className={cn('ph1 flex-auto', 'f4 ', 'bb b--moon-gray')}>
           {task.title}
         </div>
+        <div className={cn('ph2', 'pointer')}>...</div>
       </FlexRow>
     )
   }
