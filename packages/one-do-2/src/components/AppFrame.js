@@ -1,10 +1,10 @@
 import React from 'react'
 import {Component} from '../lib/little-mobx-react'
-import {store} from '../store'
+import {storeAsJSON} from '../store'
 
 class AppFrame extends Component {
   ren() {
-    return <div>{store.counter}</div>
+    return <div>{storeAsJSON()}</div>
   }
 }
 

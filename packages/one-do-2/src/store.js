@@ -9,6 +9,6 @@ const disposers = Disposers(module)
 const rootStorage = mobxStorage(store, 'rootStore', disposers)
 rootStorage.loadAndStart()
 
-function storeAsJSON() {
-  return toJS(store)
+export function storeAsJSON() {
+  return JSON.stringify(toJS(store), null, 2)
 }
