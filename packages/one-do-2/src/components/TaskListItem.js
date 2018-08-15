@@ -1,12 +1,18 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {cn, observer} from '../lib/little-react'
+import {FlexRow} from '../lib/UI'
 
 @observer
 class TaskListItem extends Component {
   render() {
     const {task} = this.props
-    return <div className={cn('f4')}>{task.title}</div>
+    return (
+      <FlexRow>
+        <div className={cn('mr2 code')}>{`[ ]`}</div>
+        <div className={cn('mr2 f4')}>{task.title}</div>
+      </FlexRow>
+    )
   }
 }
 
