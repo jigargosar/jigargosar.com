@@ -30,6 +30,11 @@ class RootStore {
   }
 
   @action
+  resetLS() {
+    this.applySnapshot({})
+  }
+
+  @action
   loadFromLS() {
     const snapshot = defaultTo({})(storage.get('rootStore'))
     console.debug(`[RS] loading snapshot`, snapshot)
