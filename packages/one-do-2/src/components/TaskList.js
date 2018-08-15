@@ -9,9 +9,7 @@ class TaskList extends Component {
     return (
       <div>
         <h1>Task List</h1>
-        <div>
-          {renderKeyedById(TaskListItem, 'task', taskStore.allTasks)}
-        </div>
+        <div>{renderKeyedById(TaskListItem, 'task', taskStore.tasks)}</div>
       </div>
     )
   }

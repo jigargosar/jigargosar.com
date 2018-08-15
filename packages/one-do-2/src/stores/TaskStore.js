@@ -21,11 +21,6 @@ class Task {
 class TaskStore {
   @observable tasks = []
 
-  @computed
-  get allTasks() {
-    return Array.from(this.tasks)
-  }
-
   @action
   addNewTask() {
     this.tasks.unshift(new Task())
