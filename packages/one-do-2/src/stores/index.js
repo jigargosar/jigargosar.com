@@ -1,7 +1,9 @@
 import './spy'
 import RootStore from './RootStore'
-import {observable} from '../lib/mobx'
+import {configure, observable} from '../lib/mobx'
 import {Disposers} from '../lib/little-mobx'
+
+configure({computedRequiresReaction: true, enforceActions: true})
 
 export const rootStore = observable(new RootStore())
 export const taskStore = rootStore.taskStore
