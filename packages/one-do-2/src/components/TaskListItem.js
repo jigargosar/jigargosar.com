@@ -42,9 +42,9 @@ class TaskListItem extends Component {
           open={Boolean(this.anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-          <MenuItem onClick={this.handleClose}>My account</MenuItem>
-          <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+          <MenuItem onClick={this.handleClose}>Delete</MenuItem>
+          <MenuItem onClick={this.handleClose}>Move</MenuItem>
+          <MenuItem onClick={this.handleClose}>Select</MenuItem>
         </Menu>
       </FlexRow>
     )
