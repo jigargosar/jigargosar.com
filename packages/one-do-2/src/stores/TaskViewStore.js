@@ -1,7 +1,14 @@
 import {action, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {intercept, setter} from '../lib/mobx-decorators'
-import {isNil, prop, unless} from '../lib/ramda'
+import {
+  compose,
+  defaultTo,
+  isNil,
+  mergeWith,
+  prop,
+  unless,
+} from '../lib/ramda'
 
 @autobind
 class TaskViewStore {
@@ -12,12 +19,12 @@ class TaskViewStore {
 
   @action
   applySnapshot(snapshot) {
-    // const toObj = compose(
-    //   //
-    //   overProp('tasks')(map(TaskConstructor)),
-    //   merge({tasks: []}),
-    // )
-    // Object.assign(this, toObj(snapshot))
+    const toObj = compose(
+      //
+      // overProp('tasks')(map(TaskConstructor)),
+      mergeWith(defaultTo)({selectedTaskId: null}),
+    )
+    Object.assign(this, toObj(snapshot))
   }
 }
 

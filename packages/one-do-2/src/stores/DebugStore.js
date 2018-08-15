@@ -1,6 +1,6 @@
 import {action, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
-import {compose, merge} from '../lib/ramda'
+import {compose, defaultTo, merge, mergeWith} from '../lib/ramda'
 import {toggle} from 'mobx-decorators'
 
 @autobind
@@ -13,7 +13,7 @@ class DebugStore {
   applySnapshot(snapshot) {
     const toObj = compose(
       //
-      merge({isDebugViewOpen: false}),
+      mergeWith(defaultTo)({isDebugViewOpen: false}),
     )
     Object.assign(this, toObj(snapshot))
   }

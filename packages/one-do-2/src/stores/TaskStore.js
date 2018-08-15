@@ -3,7 +3,14 @@ import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {setter, toggle} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
-import {compose, construct, map, merge} from '../lib/ramda'
+import {
+  compose,
+  construct,
+  defaultTo,
+  map,
+  merge,
+  mergeWith,
+} from '../lib/ramda'
 import {overProp} from '../lib/little-ramda'
 
 @autobind
@@ -45,7 +52,7 @@ class TaskStore {
     const toObj = compose(
       //
       overProp('tasks')(map(TaskConstructor)),
-      merge({tasks: []}),
+      mergeWith(defaultTo)({tasks: []}),
     )
     Object.assign(this, toObj(snapshot))
   }
