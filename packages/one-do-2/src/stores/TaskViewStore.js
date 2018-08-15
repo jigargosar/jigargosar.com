@@ -4,6 +4,7 @@ import {intercept, setter} from '../lib/mobx-decorators'
 import {
   compose,
   defaultTo,
+  invoker,
   is,
   mergeWith,
   propOr,
@@ -55,6 +56,14 @@ class TaskViewStore {
   @action
   selectPrevTask() {
     this.navigateToTask(prevEl(this.selectedTask, this.tasks))
+  }
+
+  @action
+  invokeOnSelected(fnName) {
+    const task = this.selectedTask
+    if (task) {
+      task[fnName]()
+    }
   }
 
   @action
