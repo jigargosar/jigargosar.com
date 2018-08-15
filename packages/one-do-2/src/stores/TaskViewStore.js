@@ -1,6 +1,6 @@
 import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
-import {intercept, setter} from '../lib/mobx-decorators'
+import {intercept, setter, toggle} from '../lib/mobx-decorators'
 import {
   compose,
   defaultTo,
@@ -26,13 +26,9 @@ class TaskViewStore {
 
   @setter('openTaskMenu', true)
   @setter('closeTaskMenu', false)
+  @toggle('toggleTaskMenu')
   @observable
   isTaskMenuOpen = false
-
-  @setter('onTransitionEntering', true)
-  @setter('onTransitionExited', false)
-  @observable
-  isMenuTransitionInProgress = false
 
   @computed
   get isFocusTrapPaused() {

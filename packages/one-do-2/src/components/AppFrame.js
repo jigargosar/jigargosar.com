@@ -10,7 +10,10 @@ import DebugDialog from './DebugDialog'
 class AppFrame extends Component {
   render() {
     return (
-      <FocusTrap paused={taskViewStore.isFocusTrapPaused}>
+      <FocusTrap
+        paused={taskViewStore.isFocusTrapPaused}
+        active={!taskViewStore.isFocusTrapPaused}
+      >
         <DebugDialog />
         <EventListener target={document} onKeyDown={rootStore.onKeyDown} />
         <FlexRow className={cn('ma3')}>

@@ -67,7 +67,8 @@ class TaskListItem extends Component {
           anchorEl={this.menuBtnRef}
           open={this.isOpen}
           onClose={this.handleClose()}
-          onExited={taskViewStore.enableFocusTrap}
+          onEntering={taskViewStore.onTransitionEntering}
+          onExited={taskViewStore.onTransitionExited}
         >
           <MenuItem onClick={this.handleClose(task.toggleDelete)}>
             Delete
