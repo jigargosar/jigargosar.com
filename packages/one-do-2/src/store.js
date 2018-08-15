@@ -6,13 +6,4 @@ export const store = observable({})
 const disposers = Disposers(module)
 
 const rootStorage = mobxStorage(store, 'rootStore', disposers)
-
-export function startStoreReactions() {
-  disposers.dispose()
-
-  rootStorage.loadAndStart()
-}
-
-export function stopStoreReactions() {
-  disposers.dispose()
-}
+rootStorage.loadAndStart()
