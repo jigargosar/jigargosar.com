@@ -25,8 +25,8 @@ class TaskListItem extends Component {
   render() {
     const {task} = this.props
     return (
-      <div className={cn('pv1')}>
-        <FlexRow className={cn('pv2', 'link')} tabIndex={0}>
+      <div className={cn('pv1 link')} tabIndex={0}>
+        <FlexRow className={cn('pv2')}>
           <div
             className={cn('pr1 mr1', 'code usn pointer')}
             onClick={task.toggleDone}
@@ -36,7 +36,10 @@ class TaskListItem extends Component {
           <div className={cn('ph1 flex-auto', 'f4 ', 'bb b--moon-gray')}>
             {task.title}
           </div>
-          <div className={cn('ph2', 'pointer')} onClick={this.onMenuOpen}>
+          <div
+            className={cn('ph2', 'usn pointer')}
+            onClick={this.onMenuOpen}
+          >
             ...
           </div>
           <Menu
