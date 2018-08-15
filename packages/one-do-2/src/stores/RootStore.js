@@ -7,6 +7,7 @@ import {defaultTo, propOr} from '../lib/ramda'
 import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
+import {debugStore} from './index'
 
 @autobind
 class RootStore {
@@ -22,6 +23,11 @@ class RootStore {
   @computed
   get toJS() {
     return toJS(this)
+  }
+
+  @computed
+  get isFocusTrapPaused() {
+    return debugStore.isDebugViewOpen
   }
 
   saveToLS() {
