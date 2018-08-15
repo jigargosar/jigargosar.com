@@ -24,14 +24,14 @@ class RootStore {
   }
 
   saveToLS() {
-    console.debug(`saving snapshot`, this.toJS)
+    console.debug(`[RS] saving snapshot`, this.toJS)
     storage.set('rootStore', this.toJS)
   }
 
   @action
   loadFromLS() {
     const snapshot = defaultTo({})(storage.get('rootStore'))
-    console.debug(`loading snapshot`, snapshot)
+    console.debug(`[RS] loading snapshot`, snapshot)
     this.applySnapshot(snapshot)
   }
 
