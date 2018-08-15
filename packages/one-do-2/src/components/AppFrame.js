@@ -22,6 +22,7 @@ class AppFrame extends Component {
             // initialFocus: `#${taskViewStore.selectedTaskId}`,
           }}
           // active={!rootStore.isFocusTrapPaused}
+          active={true}
         >
           <DebugDialog />
           <EventListener
