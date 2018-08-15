@@ -25,7 +25,7 @@ class RootStore {
   }
 
   saveToLS() {
-    console.debug(`[RS] saving snapshot`, this.toJS)
+    // console.debug(`[RS] saving snapshot`, this.toJS)
     storage.set('rootStore', this.toJS)
   }
 
