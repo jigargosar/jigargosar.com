@@ -11,8 +11,11 @@ class Store {
   get asJSON() {
     return JSON.stringify(toJS(this), null, 2)
   }
-  get snapshotForLS() {
+  get toJSForLS() {
     return pick(['title'], toJS(this))
+  }
+  get toJS() {
+    return toJS(this)
   }
 }
 
