@@ -3,7 +3,7 @@ import {Component} from '../lib/little-mobx-react'
 import {store} from '../store'
 import {cn, Fr} from '../lib/little-react'
 
-class AppFrame extends Component {
+class StoreJSON extends Component {
   ren() {
     return (
       <Fr>
@@ -15,6 +15,12 @@ class AppFrame extends Component {
         </div>
       </Fr>
     )
+  }
+}
+
+class AppFrame extends Component {
+  ren() {
+    return <StoreJSON />
   }
 }
 
