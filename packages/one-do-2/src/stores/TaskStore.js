@@ -1,5 +1,4 @@
 import {action, observable} from '../lib/mobx'
-import {autobind} from '../lib/autobind'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {setter} from 'mobx-decorators'

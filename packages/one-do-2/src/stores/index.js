@@ -1,6 +1,5 @@
 import './spy'
 import RootStore from './RootStore'
-import {observable} from '../lib/mobx'
 import TaskStore from './TaskStore'
 import {Disposers, mobxStorage} from '../lib/little-mobx'
 import {identity} from '../lib/ramda'
