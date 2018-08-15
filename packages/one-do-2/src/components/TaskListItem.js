@@ -15,23 +15,18 @@ class TaskListItem extends Component {
   @observable
   menuBtnRef = null
 
-  onMenuOpen = e => {
-    // this.setMenuBtnRef(e.currentTarget)
-    taskViewStore.openTaskMenu()
+  handleMenuOpen = e => {
+    this.setMenuBtnRef(e.currentTarget)
   }
 
   @computed
   get isOpen() {
-    return (
-      taskViewStore.isTaskMenuOpenFor(this.props.task) &&
-      Boolean(this.menuBtnRef)
-    )
+    return Boolean(this.menuBtnRef)
   }
 
   handleClose = (action = identity) => () => {
     action()
     this.setMenuBtnRef(null)
-    taskViewStore.closeTaskMenu()
   }
 
   handleOnFocus = task => () => {
@@ -55,9 +50,8 @@ class TaskListItem extends Component {
           </div>
           <div className={cn('ph1 flex-auto', 'f4 ')}>{task.title}</div>
           <div
-            ref={this.setMenuBtnRef}
             className={cn('ph2', 'usn pointer')}
-            onClick={this.onMenuOpen}
+            onClick={this.handleMenuOpen}
           >
             ...
           </div>
