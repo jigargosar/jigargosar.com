@@ -9,7 +9,12 @@ import {
   propOr,
   unless,
 } from '../lib/ramda'
-import {findByIdOrHead, nextEl, overProp} from '../lib/little-ramda'
+import {
+  findByIdOrHead,
+  nextEl,
+  overProp,
+  prevEl,
+} from '../lib/little-ramda'
 import {taskStore} from './index'
 
 function tryFocusDOMId(id) {
@@ -45,6 +50,11 @@ class TaskViewStore {
   @action
   selectNextTask() {
     this.navigateToTask(nextEl(this.selectedTask, this.tasks))
+  }
+
+  @action
+  selectPrevTask() {
+    this.navigateToTask(prevEl(this.selectedTask, this.tasks))
   }
 
   @action

@@ -136,3 +136,12 @@ export function nextEl(el, list) {
     indexOfOrNaN(el),
   )(list)
 }
+
+export function prevEl(el, list) {
+  return compose(
+    prop(__, list),
+    mathMod(__, list.length),
+    inc,
+    indexOfOrNaN(el),
+  )(list)
+}
