@@ -14,8 +14,9 @@ class TaskListItem extends Component {
     const {task} = this.props
     return (
       <FlexRow
-        className={cn('ph1', 'link', {'bg-light-blue': task.isSelected})}
+        id={task.id}
         tabIndex={task.isSelected ? 0 : -1}
+        className={cn('ph1', 'link', {'bg-light-blue': task.isSelected})}
         onFocus={this.handleOnFocus(task)}
       >
         <div
