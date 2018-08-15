@@ -11,7 +11,7 @@ class AppFrame extends Component {
     return (
       <Fragment>
         <FlexRow className={cn('ma3')}>
-          <Btn onClick={store.tasks.addNewTask}>Add Task</Btn>
+          <Btn onClick={store.tasks.addNewTask}>Add New Task</Btn>
         </FlexRow>
         <StoreJSON />
       </Fragment>
