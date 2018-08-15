@@ -15,7 +15,7 @@ class TaskListItem extends Component {
     return (
       <div
         className={cn('pv1 link', {'bg-light-blue': task.isSelected})}
-        tabIndex={0}
+        tabIndex={task.isSelected ? 0 : null}
         onFocus={this.handleOnFocus(task)}
       >
         <FlexRow className={cn('pv2')}>
