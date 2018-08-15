@@ -17,7 +17,7 @@ import {taskStore} from './index'
 @autobind
 class TaskViewStore {
   @intercept(change => {
-    console.log(`change`, change)
+    console.debug(`change`, change)
     return overProp('newValue')(unless(is(String))(propOr(null)('id')))(
       change,
     )
