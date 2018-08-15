@@ -3,7 +3,8 @@ import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {setter} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
-import {pick} from '../lib/ramda'
+import {compose, construct, defaultTo, map, pick} from '../lib/ramda'
+import {overProp} from '../lib/little-ramda'
 
 @autobind
 class Task {
@@ -29,7 +30,12 @@ class TaskStore {
 
   @action
   applySnapshot(snapshot) {
-    Object.assign(this, pick(['tasks'])(snapshot))
+    const TaskConstructor = construct(Task)
+    const toObj = compose(
+      //
+      overProp('tasks')(map(TaskConstructor)(defaultTo([]))),
+    )
+    Object.assign(this, toObj(snapshot))
   }
 }
 
