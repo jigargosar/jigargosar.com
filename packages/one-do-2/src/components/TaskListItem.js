@@ -63,6 +63,7 @@ class TaskListItem extends Component {
           </div>
         </FlexRow>
         <Menu
+          disableRestoreFocus
           anchorEl={this.menuBtnRef}
           open={this.isOpen}
           onClose={this.handleClose()}

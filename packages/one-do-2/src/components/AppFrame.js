@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Btn} from '../lib/Btn'
-import {rootStore, taskStore} from '../stores'
+import {rootStore, taskStore, taskViewStore} from '../stores'
 import {FlexRow} from '../lib/UI'
 import {cn, EventListener, FocusTrap, observer} from '../lib/little-react'
 import TaskList from './TaskList'
@@ -10,7 +10,7 @@ import DebugDialog from './DebugDialog'
 class AppFrame extends Component {
   render() {
     return (
-      <FocusTrap paused={true} active={false}>
+      <FocusTrap paused={taskViewStore.isTaskMenuOpen}>
         <DebugDialog />
         <EventListener target={document} onKeyDown={rootStore.onKeyDown} />
         <FlexRow className={cn('ma3')}>
