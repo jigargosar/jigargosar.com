@@ -16,6 +16,7 @@ import {
 } from '../lib/ramda'
 import {findById, indexOfOrNaN, overProp} from '../lib/little-ramda'
 import {taskStore} from './index'
+import {__, compose, inc, mathMod, prop} from 'ramda'
 
 function findByIdOrHead(id, list) {
   return compose(defaultTo(null), defaultTo(head(list)), findById(id))(
@@ -30,6 +31,15 @@ function tryFocusDOMId(id) {
   } else {
     console.warn('[focus] id not found', id)
   }
+}
+
+function nextEl(el, list) {
+  return compose(
+    prop(__, list),
+    mathMod(__, list.length),
+    inc,
+    indexOfOrNaN(el),
+  )(list)
 }
 
 @autobind
@@ -55,12 +65,9 @@ class TaskViewStore {
 
   @action
   selectNextTask() {
-    const next = compose(
-      prop(__, this.tasks),
-      mathMod(__, this.tasks.length),
-      inc,
-      indexOfOrNaN(this.selectedTask),
-    )(this.tasks)
+    const list = this.tasks
+    const el = this.selectedTask
+    const next = nextEl(el, list)
 
     this.setSelectedTask(next)
     if (next) {
