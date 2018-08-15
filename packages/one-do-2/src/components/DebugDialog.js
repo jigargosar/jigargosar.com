@@ -15,12 +15,18 @@ class DebugDialog extends Component {
   render() {
     return (
       <Dialog open={debugStore.isDebugViewOpen}>
-        <DialogTitle>DEBUG</DialogTitle>
-        <DialogContent>
-          <DialogContentText>CONTENT TEXT</DialogContentText>
-          <StoreJSON />
-        </DialogContent>
-        <DialogActions>ACTIONS</DialogActions>
+        {false && <DialogTitle> </DialogTitle>}
+        <StoreJSON />
+        {false && (
+          <DialogContent>
+            {false && <DialogContentText> </DialogContentText>}
+          </DialogContent>
+        )}
+        {false && (
+          <DialogActions>
+            <div> </div>
+          </DialogActions>
+        )}
       </Dialog>
     )
   }
