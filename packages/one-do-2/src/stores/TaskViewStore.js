@@ -13,7 +13,6 @@ import {
 } from '../lib/ramda'
 import {findById, overProp} from '../lib/little-ramda'
 import {taskStore} from './index'
-import {compose, defaultTo, head} from 'ramda'
 
 function findByIdOrHead(id, list) {
   return compose(defaultTo(null), defaultTo(head(list)), findById(id))(
