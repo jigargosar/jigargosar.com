@@ -4,7 +4,6 @@ import {intercept, setter} from '../lib/mobx-decorators'
 import {
   compose,
   defaultTo,
-  invoker,
   is,
   mergeWith,
   propOr,
