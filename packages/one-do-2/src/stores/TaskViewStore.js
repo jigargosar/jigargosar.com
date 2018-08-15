@@ -44,9 +44,7 @@ class TaskViewStore {
 
   @action
   selectNextTask() {
-    const list = this.tasks
-    const el = this.selectedTask
-    const next = nextEl(el, list)
+    const next = nextEl(this.selectedTask, this.tasks)
 
     this.setSelectedTask(next)
     if (next) {
