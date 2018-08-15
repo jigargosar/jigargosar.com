@@ -34,11 +34,6 @@ class TaskViewStore {
   }
 
   @action
-  onTaskFocus(task) {
-    this.setSelectedTask(task)
-  }
-
-  @action
   applySnapshot(snapshot) {
     const toObj = compose(
       // overProp('tasks')(map(TaskConstructor)),
