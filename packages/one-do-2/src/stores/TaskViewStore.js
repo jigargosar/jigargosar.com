@@ -41,7 +41,6 @@ class TaskViewStore {
   @action
   applySnapshot(snapshot) {
     const toObj = compose(
-      //
       // overProp('tasks')(map(TaskConstructor)),
       mergeWith(defaultTo)({
         selectedTaskId: null,
