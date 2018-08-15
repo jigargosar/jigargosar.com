@@ -20,15 +20,15 @@ class AppFrame extends Component {
             returnFocusOnDeactivate: false,
             escapeDeactivates: false,
             fallbackFocus: document,
-            onActivate() {
-              console.log('onActivate')
-            },
-            onDeactivate() {
-              console.log('onDeactivate')
-            },
+            // onActivate() {
+            //   console.log('onActivate')
+            // },
+            // onDeactivate() {
+            //   console.log('onDeactivate')
+            // },
           }}
-          active={!rootStore.isFocusTrapPaused}
-          // active={true}
+          // active={!rootStore.isFocusTrapPaused}
+          active={true}
         >
           <DebugDialog />
           <EventListener
