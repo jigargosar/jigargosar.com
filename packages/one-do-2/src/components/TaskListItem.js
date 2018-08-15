@@ -6,6 +6,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import {observable} from '../lib/mobx'
 import {setter} from '../lib/mobx-decorators'
+import {identity} from '../lib/ramda'
 
 @observer
 class TaskListItem extends Component {
@@ -17,7 +18,8 @@ class TaskListItem extends Component {
     this.setAnchorEl(e.currentTarget)
   }
 
-  handleClose = () => {
+  handleClose = (action = identity) => () => {
+    action()
     this.setAnchorEl(null)
   }
   render() {
@@ -40,11 +42,15 @@ class TaskListItem extends Component {
           id="simple-menu"
           anchorEl={this.anchorEl}
           open={Boolean(this.anchorEl)}
-          onClose={this.handleClose}
+          onClose={this.handleClose()}
         >
-          <MenuItem onClick={this.handleClose}>Delete</MenuItem>
-          <MenuItem onClick={this.handleClose}>Move</MenuItem>
-          <MenuItem onClick={this.handleClose}>Select</MenuItem>
+          <MenuItem onClick={this.handleClose(task.toggleDelete)}>
+            Delete
+          </MenuItem>
+          <MenuItem onClick={this.handleClose(task.toggleDone)}>
+            Done
+          </MenuItem>
+          <MenuItem onClick={this.handleClose()}>Select</MenuItem>
         </Menu>
       </FlexRow>
     )
