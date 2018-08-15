@@ -32,7 +32,7 @@ class TaskListItem extends Component {
     const {task} = this.props
     return (
       <div
-        className={cn('pv1 link')}
+        className={cn('pv1 link', {'bg-light-blue': task.isSelected})}
         tabIndex={0}
         onFocus={this.handleOnFocus(task)}
       >
