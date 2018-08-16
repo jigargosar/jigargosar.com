@@ -1,6 +1,7 @@
 import {observer, whenKeyPD, whenKeySP, withKeyEvent} from './little-react'
 import React, {Component} from 'react'
 import cn from 'classnames'
+import {identity} from './ramda'
 
 @observer
 export class Btn extends Component {
@@ -29,7 +30,7 @@ export class Btn extends Component {
             : withKeyEvent(
                 //
                 whenKeyPD('enter')(onClick),
-                whenKeyPD('enter')(onClick),
+                whenKeyPD('space')(identity),
               )
         }
         onKeyUp={
