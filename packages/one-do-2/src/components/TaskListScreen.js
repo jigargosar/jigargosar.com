@@ -16,7 +16,9 @@ class TaskListScreen extends Component {
           <div className={cn('mh1')}>
             <Btn onClick={taskViewStore.addNewTask}>Add Task</Btn>
           </div>
-          <Button onClick={taskViewStore.addNewTask}>Add Task</Button>
+          <Button role={'button'} onClick={taskViewStore.addNewTask}>
+            Add Task
+          </Button>
           <div className={cn('mh1')}>
             <Btn onClick={rootStore.resetLS}>Reset LS</Btn>
           </div>
