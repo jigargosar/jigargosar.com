@@ -7,13 +7,17 @@ import {
   compose,
   construct,
   defaultTo,
+  descend,
   map,
   mergeWith,
   pick,
+  prop,
+  sortWith,
 } from '../lib/ramda'
 import {
   filterDeleted,
   findById,
+  propIsDone,
   overProp,
   rejectDeleted,
 } from '../lib/little-ramda'
@@ -55,7 +59,7 @@ class TaskStore {
 
   @computed
   get sortedAllTasks() {
-    return this.allTasks
+    return sortWith([descend(propIsDone)])(this.allTasks)
   }
 
   @computed
