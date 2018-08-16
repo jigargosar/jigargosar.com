@@ -4,11 +4,13 @@ import {EventListener, observer} from '../lib/little-react'
 import DebugDialog from './DebugDialog'
 import {FocusTrap} from '../lib/focus-trap-react'
 import TaskListScreen from './TaskListScreen'
+import {disposable} from '../lib/hoc'
 
+@disposable
 @observer
 class AppFrame extends Component {
   componentDidMount() {
-    taskViewStore.tryFocusSelectedTask()
+    this.props.disposers.autorun(taskViewStore.getFocusManagerAutoRunner())
   }
 
   render() {

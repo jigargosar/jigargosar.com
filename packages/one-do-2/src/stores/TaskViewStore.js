@@ -89,13 +89,7 @@ class TaskViewStore {
     return () => this.invokeOnSelectedTask(fnName)
   }
 
-  @action
-  startManagingFocus() {
-    return this.disposers.autorun(this.manageFocusRunner)
-  }
-
-  @action
-  manageFocusRunner() {
+  getFocusManagerAutoRunner() {
     let lastIdx = NaN
     return () => {
       const newIdx = indexOf(this.selectedTask)(this.navigationTasks)
