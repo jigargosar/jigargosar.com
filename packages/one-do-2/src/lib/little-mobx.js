@@ -78,5 +78,5 @@ export const logChange = change => {
     concat('.'),
   )(name)}`
   console.log(`[${type}] ${qualifiedName} ${oldValue} -> ${newValue}`)
-  console.debug(change)
+  console.log(change)
 }
