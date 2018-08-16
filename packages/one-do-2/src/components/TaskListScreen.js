@@ -5,6 +5,14 @@ import {FlexRow} from '../lib/UI'
 import TaskList from './TaskList'
 import {Button} from '@material-ui/core'
 
+function renderButton(label, onClick) {
+  return (
+    <Button className={cn('blue')} color={'inherit'} onClick={onClick}>
+      {label}
+    </Button>
+  )
+}
+
 @observer
 class TaskListScreen extends Component {
   render() {
@@ -21,20 +29,8 @@ class TaskListScreen extends Component {
           >{`(${pendingCount}/${totalCount})`}</span>
         </div>
         <FlexRow className={cn('pv1')}>
-          <Button
-            className={cn('blue')}
-            color={'inherit'}
-            onClick={taskViewStore.addNewTask}
-          >
-            Add Task
-          </Button>
-          <Button
-            className={cn('blue')}
-            color={'inherit'}
-            onClick={rootStore.resetLS}
-          >
-            Reset LS
-          </Button>
+          {renderButton('Add Task', taskViewStore.addNewTask)}
+          {renderButton('Reset LS', rootStore.resetLS)}
         </FlexRow>
 
         <TaskList tasks={pendingTasks} />
