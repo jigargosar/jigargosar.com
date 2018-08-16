@@ -95,7 +95,7 @@ class TaskViewStore {
     return this.disposers.autorun(() => {
       const newIdx = indexOf(this.selectedTask)(this.navigationTasks)
       if (lastIdx !== newIdx) {
-        this.tryFocusSelectedTask()
+        requestAnimationFrame(() => this.tryFocusSelectedTask())
       }
     })
   }
