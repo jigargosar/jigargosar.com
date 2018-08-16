@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {rootStore, taskViewStore} from '../stores'
 import {cn, observer} from '../lib/little-react'
-import {Btn} from '../lib/Btn'
 import {FlexRow} from '../lib/UI'
 import TaskList from './TaskList'
 import {Button} from '@material-ui/core'
@@ -22,9 +21,6 @@ class TaskListScreen extends Component {
           >{`(${pendingCount}/${totalCount})`}</span>
         </div>
         <FlexRow className={cn('pv1 ph3')}>
-          <div className={cn('mh1')}>
-            <Btn onClick={taskViewStore.addNewTask}>Add Task</Btn>
-          </div>
           <Button
             className={cn('blue')}
             color={'inherit'}
@@ -32,9 +28,13 @@ class TaskListScreen extends Component {
           >
             Add Task
           </Button>
-          <div className={cn('mh1')}>
-            <Btn onClick={rootStore.resetLS}>Reset LS</Btn>
-          </div>
+          <Button
+            className={cn('blue')}
+            color={'inherit'}
+            onClick={rootStore.resetLS}
+          >
+            Reset LS
+          </Button>
         </FlexRow>
 
         <TaskList tasks={pendingTasks} />
