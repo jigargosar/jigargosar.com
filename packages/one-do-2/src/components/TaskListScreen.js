@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {rootStore, taskStore, taskViewStore} from '../stores'
+import {rootStore, taskViewStore} from '../stores'
 import {cn, observer} from '../lib/little-react'
 import {Btn} from '../lib/Btn'
 import {FlexRow} from '../lib/UI'

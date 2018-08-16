@@ -24,7 +24,13 @@ export class Btn extends Component {
         )}
         style={{userSelect: 'none' /*fontSize: 'inherit'*/}}
         onKeyDown={
-          disabled ? null : withKeyEvent(whenKeyPD('enter')(onClick))
+          disabled
+            ? null
+            : withKeyEvent(
+                //
+                whenKeyPD('enter')(onClick),
+                whenKeyPD('enter')(onClick),
+              )
         }
         onKeyUp={
           disabled ? null : withKeyEvent(whenKeyPD('space')(onClick))
