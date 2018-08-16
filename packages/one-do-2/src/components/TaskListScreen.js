@@ -4,6 +4,7 @@ import {cn, observer} from '../lib/little-react'
 import {Btn} from '../lib/Btn'
 import {FlexRow} from '../lib/UI'
 import TaskList from './TaskList'
+import {Button} from '@material-ui/core'
 
 @observer
 class TaskListScreen extends Component {
@@ -15,6 +16,7 @@ class TaskListScreen extends Component {
           <div className={cn('mh1')}>
             <Btn onClick={taskViewStore.addNewTask}>Add Task</Btn>
           </div>
+          <Button onClick={taskViewStore.addNewTask}>Add Task</Button>
           <div className={cn('mh1')}>
             <Btn onClick={rootStore.resetLS}>Reset LS</Btn>
           </div>
