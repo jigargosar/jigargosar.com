@@ -2,6 +2,7 @@ import {storage} from './storage'
 import {autorun, reaction, spy, toJS} from './mobx'
 import {call, compose, defaultTo} from './ramda'
 import {hotDispose} from './hot'
+import {intercept, observe} from './mobx-decorators'
 
 export function mobxStorage({store, key, disposers, preProcessStorageJS}) {
   function startStoring() {
@@ -59,6 +60,8 @@ export function Disposers(module) {
     reaction: compose(addDisposer, reaction),
     setInterval: compose(addDisposer, setIntervalDisposable),
     spy: compose(addDisposer, spy),
+    observe: compose(addDisposer, observe),
+    intercept: compose(addDisposer, intercept),
   }
 }
 
