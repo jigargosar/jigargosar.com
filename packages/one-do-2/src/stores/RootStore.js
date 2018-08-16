@@ -16,7 +16,7 @@ import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
 import {debugStore} from './index'
-import {isTargetButton, isTargetRoleButton} from '../lib/little-dom'
+import {isTargetButton} from '../lib/little-dom'
 
 @autobind
 class RootStore {
