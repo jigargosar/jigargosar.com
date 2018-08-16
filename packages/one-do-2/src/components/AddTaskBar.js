@@ -12,6 +12,7 @@ class AddTaskBar extends Component {
         <div className={cn('flex items-center pa1 bg-light-yellow')}>
           <div className={cn('ph1 flex-auto')}>
             <TextField
+              id={'add-task-input'}
               className={cn('br-pill bw0 ba bg-white-90')}
               InputProps={{disableUnderline: true}}
               inputProps={{className: cn('ph3 pv1 f5')}}

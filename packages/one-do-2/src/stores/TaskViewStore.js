@@ -26,15 +26,7 @@ import {
 } from '../lib/little-ramda'
 import {taskStore} from './index'
 import {Disposers} from '../lib/little-mobx'
-
-function tryFocusDOMId(id) {
-  const el = document.getElementById(id)
-  if (el) {
-    el.focus()
-  } else {
-    console.warn('[focus] id not found', id)
-  }
-}
+import {tryFocusDOMId} from '../lib/little-dom'
 
 @autobind
 class TaskViewStore {

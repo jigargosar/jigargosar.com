@@ -2,6 +2,7 @@ import {autobind} from '../lib/autobind'
 import {action, observable} from '../lib/mobx'
 import {taskView} from './index'
 import {isEmpty, pick} from '../lib/ramda'
+import {tryFocusDOMId} from '../lib/little-dom'
 
 @autobind
 export class AddTaskViewStore {
@@ -21,8 +22,7 @@ export class AddTaskViewStore {
 
   @action
   addTaskAndKeepAdding() {
-    if (isEmpty(this.title)) return
-    taskView.addTask(pick(['title'])(this))
-    this.title = ''
+    this.addTask()
+    requestAnimationFrame(() => tryFocusDOMId('add-task-input'))
   }
 }

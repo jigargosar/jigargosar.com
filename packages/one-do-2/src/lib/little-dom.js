@@ -23,3 +23,12 @@ export function isTargetAnyInput(e) {
     ['BUTTON', 'INPUT', 'TEXTAREA'].includes(targetTagName(e))
   )
 }
+
+export function tryFocusDOMId(id) {
+  const el = document.getElementById(id)
+  if (el) {
+    el.focus()
+  } else {
+    console.warn('[focus] id not found', id)
+  }
+}
