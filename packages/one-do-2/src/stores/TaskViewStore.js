@@ -79,12 +79,12 @@ class TaskViewStore {
 
   @computed
   get pendingTasks() {
-    return rejectDone(rejectDeleted(this.navigationTasks))
+    return rejectDone(this.navigationTasks)
   }
 
   @computed
   get doneTasks() {
-    return filterDone(rejectDeleted(this.navigationTasks))
+    return filterDone(this.navigationTasks)
   }
 
   isTaskSelected(task) {
