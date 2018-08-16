@@ -54,17 +54,22 @@ class TaskStore {
   @observable allTasks = []
 
   @computed
+  get sortedAllTasks() {
+    return this.allTasks
+  }
+
+  @computed
   get tasks() {
-    return rejectDeleted(this.allTasks)
+    return rejectDeleted(this.sortedAllTasks)
   }
 
   @computed
   get deletedTasks() {
-    return filterDeleted(this.allTasks)
+    return filterDeleted(this.sortedAllTasks)
   }
 
   findById(id) {
-    return findById(id)(this.allTasks)
+    return findById(id)(this.sortedAllTasks)
   }
 
   @action
