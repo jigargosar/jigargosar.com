@@ -2,8 +2,7 @@ import {action, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {compose, defaultTo, mergeWith} from '../lib/ramda'
 import {toggle} from 'mobx-decorators'
-import {observe, setter} from '../lib/mobx-decorators'
-import {logChange} from '../lib/little-mobx'
+import {setter} from '../lib/mobx-decorators'
 
 @autobind
 class DebugStore {
