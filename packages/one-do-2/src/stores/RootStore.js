@@ -1,5 +1,9 @@
 import {action, computed, observable, toJS} from '../lib/mobx'
-import {prettyJSONStringify} from '../lib/little-ramda'
+import {
+  composeTapLog2,
+  prettyJSONStringify,
+  tapLog2,
+} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
@@ -85,7 +89,7 @@ class RootStore {
       whenKeyPD('d')(toggleDelete),
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
-    return unless(isTargetButton)(
+    return unless(composeTapLog2('isTargetButton')(isTargetButton))(
       withKeyEvent(...globalShortcuts, ...shortcuts),
     )
   }
