@@ -6,6 +6,8 @@ import {autobind} from '../lib/autobind'
 import {compose, construct, defaultTo, map, mergeWith} from '../lib/ramda'
 import {findById, overProp} from '../lib/little-ramda'
 import {taskViewStore} from './index'
+import {observe} from '../lib/mobx-decorators'
+import {logChange} from '../lib/little-mobx'
 
 @autobind
 class Task {
@@ -15,6 +17,7 @@ class Task {
   @observable
   title = ''
 
+  @observe(logChange)
   @toggle('toggleDelete')
   @observable
   isDeleted = false
