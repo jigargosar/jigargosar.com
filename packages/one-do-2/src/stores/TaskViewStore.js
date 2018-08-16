@@ -9,6 +9,7 @@ import {
   indexOf,
   is,
   mergeWith,
+  omit,
   propOr,
   unless,
 } from '../lib/ramda'
@@ -91,7 +92,8 @@ class TaskViewStore {
   @action
   startManagingFocus() {
     let lastIdx = NaN
-    this.disposers.autorun(() => {
+    debugger
+    return this.disposers.autorun(() => {
       const newIdx = indexOf(this.selectedTask)(this.navigationTasks)
       if (lastIdx !== newIdx) {
         this.tryFocusSelectedTask()
@@ -140,6 +142,7 @@ class TaskViewStore {
   @action
   applySnapshot(snapshot) {
     const toObj = compose(
+      omit(['disposers']),
       // overProp('tasks')(map(TaskConstructor)),
       mergeWith(defaultTo)({
         selectedTaskId: null,
