@@ -83,7 +83,10 @@ class RootStore {
       whenKeyPD('d')(toggleDelete),
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
-    return withKeyEvent(...globalShortcuts, ...shortcuts)
+    return e => {
+      if (e.defaultPrevented) return e
+      return withKeyEvent(...globalShortcuts, ...shortcuts)(e)
+    }
   }
 }
 
