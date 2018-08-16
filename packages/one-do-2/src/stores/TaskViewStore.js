@@ -92,7 +92,6 @@ class TaskViewStore {
   @action
   startManagingFocus() {
     let lastIdx = NaN
-    debugger
     return this.disposers.autorun(() => {
       const newIdx = indexOf(this.selectedTask)(this.navigationTasks)
       if (lastIdx !== newIdx) {
