@@ -12,7 +12,6 @@ import {
   reduce,
   reduced,
 } from './ramda'
-import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
 import {mapIndexed} from './little-ramda'
@@ -24,7 +23,6 @@ export {cn}
 export const EventListener = ReactEventListener
 
 export {Fr, RC, observer, Observer, inject, isHotKey}
-export {PropTypes}
 
 export const isAnyHotKey = R.compose(
   R.anyPass,

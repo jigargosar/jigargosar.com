@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react'
-import {observer, PropTypes, renderKeyedById} from '../lib/little-react'
+import {observer, renderKeyedById} from '../lib/little-react'
 import TaskListItem from './TaskListItem'
+import {PropTypes} from '../lib/prop-types'
 
 class TaskList extends Component {
   static propTypes = {
