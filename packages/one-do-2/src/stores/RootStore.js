@@ -1,9 +1,5 @@
 import {action, computed, observable, toJS} from '../lib/mobx'
-import {
-  composeTapLog2,
-  prettyJSONStringify,
-  tapLog2,
-} from '../lib/little-ramda'
+import {composeTapLog2, prettyJSONStringify} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
