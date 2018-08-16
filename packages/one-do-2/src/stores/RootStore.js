@@ -36,11 +36,6 @@ class RootStore {
   }
 
   @action
-  startReactions() {
-    return [this.taskViewStore.startManagingFocus()]
-  }
-
-  @action
   resetLS() {
     this.applySnapshot({})
   }
