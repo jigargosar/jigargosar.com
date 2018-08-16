@@ -32,8 +32,8 @@ class AppFrame extends Component {
           }}
           // active={!rootStore.isFocusTrapPaused}
           active={true}
-          // onFocus={logPersistEvent}
-          // onBlur={logPersistEvent}
+          onFocus={logPersistEvent}
+          onBlur={logPersistEvent}
         >
           <DebugDialog />
           <EventListener
