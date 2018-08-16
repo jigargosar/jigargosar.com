@@ -83,18 +83,20 @@ class TaskViewStore {
   }
 
   @computed
+  get navigationTasks() {
+    return [
+      ...this.pendingTasks,
+      ...(this.isDoneHidden ? [] : this.doneTasks),
+    ]
+  }
+
+  @computed
   get selectedTask() {
     const tasks = this.navigationTasks
     return compose(
       defaultTo(findByIdOrHead(this.lastSelectedTaskId)(tasks)),
       findById(this.selectedTaskId),
     )(tasks)
-  }
-
-  @computed
-  get navigationTasks() {
-    const filters = [this.isDoneHidden ? complement(propIsDone) : T]
-    return filter(allPass(filters))(this.sortedTasks)
   }
 
   isTaskSelected(task) {
