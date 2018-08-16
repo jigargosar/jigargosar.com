@@ -69,7 +69,12 @@ class TaskStore {
 
   @action
   addNewTask() {
-    const task = new Task({title: fWord()})
+    return this.addTask({title: fWord()})
+  }
+
+  @action
+  addTask({title}) {
+    const task = new Task({title})
     this.allTasks.unshift(task)
     return task
   }

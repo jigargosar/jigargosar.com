@@ -22,6 +22,7 @@ class AddTaskBar extends Component {
           </div>
           <div className={cn('ph1_')}>
             <IconButton
+              onClick={addTaskView.addTask}
               className={cn('f3 blue')}
               style={{
                 width: '1.3em',
