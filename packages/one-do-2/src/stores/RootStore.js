@@ -8,7 +8,7 @@ import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
 import {debugStore} from './index'
-import {isTargetButton} from '../lib/little-dom'
+import {isTargetAnyInput} from '../lib/little-dom'
 import {AddTaskViewStore} from './AddTaskViewStore'
 
 @autobind
@@ -76,7 +76,7 @@ class RootStore {
       whenKeyPD('q')(taskView.addNewTask),
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
-    return unless(isTargetButton)(
+    return unless(isTargetAnyInput)(
       withKeyEvent(...globalShortcuts, ...shortcuts),
     )
   }

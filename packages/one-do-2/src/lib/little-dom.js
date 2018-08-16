@@ -17,3 +17,9 @@ export function isTargetTagButton(e) {
 export function isTargetButton(e) {
   return isTargetTagButton(e) || isTargetRoleButton(e)
 }
+export function isTargetAnyInput(e) {
+  return (
+    isTargetRoleButton(e) ||
+    ['BUTTON', 'INPUT', 'TEXTAREA'].includes(targetTagName(e))
+  )
+}
