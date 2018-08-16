@@ -3,6 +3,7 @@ import {autobind} from '../lib/autobind'
 import {intercept, setter} from '../lib/mobx-decorators'
 import {
   compose,
+  concat,
   defaultTo,
   identity,
   is,
@@ -51,6 +52,11 @@ class TaskViewStore {
   }
 
   @computed
+  get navigationTasks() {
+    return concat(this.pendingTasks)(this.doneTasks)
+  }
+
+  @computed
   get tasks() {
     return rejectDeleted(taskStore.tasks)
   }
@@ -87,11 +93,11 @@ class TaskViewStore {
 
   @action
   selectNextTask() {
-    this.navigateToTask(nextEl(this.selectedTask, this.tasks))
+    this.navigateToTask(nextEl(this.selectedTask, this.navigationTasks))
   }
   @action
   selectPrevTask() {
-    this.navigateToTask(prevEl(this.selectedTask, this.tasks))
+    this.navigateToTask(prevEl(this.selectedTask, this.navigationTasks))
   }
 
   @action
