@@ -91,24 +91,18 @@ class TaskViewStore {
 
   @action
   startManagingFocus() {
-    let lastIdx = NaN
-    return this.disposers.autorun(() => {
-      const newIdx = indexOf(this.selectedTask)(this.navigationTasks)
-      if (lastIdx !== newIdx) {
-        requestAnimationFrame(() => this.tryFocusSelectedTask())
-      }
-    })
+    return this.disposers.autorun(this.manageFocusRunner)
   }
 
   @action
-  manageFocus() {
+  manageFocusRunner() {
     let lastIdx = NaN
-    return this.disposers.autorun(() => {
+    return () => {
       const newIdx = indexOf(this.selectedTask)(this.navigationTasks)
       if (lastIdx !== newIdx && this.selectedTask) {
         requestAnimationFrame(() => this.tryFocusSelectedTask())
       }
-    })
+    }
   }
 
   @action
