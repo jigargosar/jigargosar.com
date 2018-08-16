@@ -85,7 +85,6 @@ class RootStore {
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
     return e => {
-      console.log(`e.target.getAttribute("role")`, targetRole(e))
       if ('button' === targetRole(e)) return e
       return withKeyEvent(...globalShortcuts, ...shortcuts)(e)
     }
