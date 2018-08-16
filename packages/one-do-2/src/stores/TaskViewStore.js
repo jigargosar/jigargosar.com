@@ -18,6 +18,7 @@ import {
 } from '../lib/ramda'
 import {
   eqById,
+  filterDeleted,
   filterDone,
   findById,
   findByIdOrHead,
@@ -97,7 +98,7 @@ class TaskViewStore {
 
   @computed
   get deletedTasks() {
-    return taskStore.deletedTasks
+    return filterDeleted(this.navigationTasks)
   }
 
   isTaskSelected(task) {
