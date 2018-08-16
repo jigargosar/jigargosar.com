@@ -12,7 +12,11 @@ import {
   propOr,
 } from '../lib/ramda'
 import DebugStore from './DebugStore'
-import {whenKeyPD, withKeyEvent} from '../lib/little-react'
+import {
+  logPersistEvent,
+  whenKeyPD,
+  withKeyEvent,
+} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
 import {debugStore} from './index'
 
@@ -85,6 +89,7 @@ class RootStore {
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
     return e => {
       if (e.defaultPrevented) return e
+      logPersistEvent(e)
       return withKeyEvent(...globalShortcuts, ...shortcuts)(e)
     }
   }
