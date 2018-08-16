@@ -1,8 +1,7 @@
 import {storage} from './storage'
-import {autorun, reaction, spy, toJS} from './mobx'
+import {autorun, reaction, spy, toJS, intercept, observe} from './mobx'
 import {call, compose, defaultTo} from './ramda'
 import {hotDispose} from './hot'
-import {intercept, observe} from './mobx-decorators'
 
 export function mobxStorage({store, key, disposers, preProcessStorageJS}) {
   function startStoring() {
