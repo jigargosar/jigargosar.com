@@ -9,7 +9,7 @@ class AddTaskBar extends Component {
   render() {
     return (
       <Fragment>
-        <div className={cn('flex items-center pa1 bg-lightest-blue')}>
+        <div className={cn('flex items-center pa1 bg-light-yellow')}>
           <div className={cn('ph1 flex-auto')}>
             <TextField
               className={cn('br-pill bw0 ba bg-white-90')}
