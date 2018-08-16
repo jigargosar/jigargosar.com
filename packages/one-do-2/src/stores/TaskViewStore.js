@@ -52,22 +52,22 @@ class TaskViewStore {
 
   @computed
   get tasks() {
-    return filterDeleted(taskStore.tasks)
+    return rejectDeleted(taskStore.tasks)
   }
 
   @computed
   get pendingTasks() {
-    return filterDone(this.tasks)
-  }
-
-  @computed
-  get doneTasks() {
     return rejectDone(this.tasks)
   }
 
   @computed
+  get doneTasks() {
+    return filterDone(this.tasks)
+  }
+
+  @computed
   get deletedTasks() {
-    return rejectDeleted(taskStore.tasks)
+    return filterDeleted(taskStore.tasks)
   }
 
   isTaskSelected(task) {

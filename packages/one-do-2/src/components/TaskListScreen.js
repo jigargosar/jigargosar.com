@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-import {rootStore, taskStore} from '../stores'
-import {cn, observer, renderKeyedById} from '../lib/little-react'
-import TaskListItem from './TaskListItem'
+import {rootStore, taskStore, taskViewStore} from '../stores'
+import {cn, observer} from '../lib/little-react'
 import {Btn} from '../lib/Btn'
 import {FlexRow} from '../lib/UI'
+import TaskList from './TaskList'
 
 @observer
 class TaskListScreen extends Component {
@@ -19,7 +19,14 @@ class TaskListScreen extends Component {
             <Btn onClick={rootStore.resetLS}>Reset LS</Btn>
           </div>
         </FlexRow>
-        <div>{renderKeyedById(TaskListItem, 'task', taskStore.tasks)}</div>
+        <div>
+          <h1>Pending Tasks</h1>
+          <TaskList tasks={taskViewStore.pendingTasks} />
+        </div>
+        <div>
+          <h1>Done Tasks</h1>
+          <TaskList tasks={taskViewStore.doneTasks} />
+        </div>
       </div>
     )
   }
