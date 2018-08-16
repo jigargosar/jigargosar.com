@@ -89,7 +89,7 @@ class RootStore {
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
     return e => {
       if (e.defaultPrevented) return e
-      logPersistEvent(e)
+      console.log(`e`, e)
       return withKeyEvent(...globalShortcuts, ...shortcuts)(e)
     }
   }
