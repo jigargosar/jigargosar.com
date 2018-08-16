@@ -101,6 +101,17 @@ class TaskViewStore {
   }
 
   @action
+  manageFocus() {
+    let lastIdx = NaN
+    return this.disposers.autorun(() => {
+      const newIdx = indexOf(this.selectedTask)(this.navigationTasks)
+      if (lastIdx !== newIdx && this.selectedTask) {
+        requestAnimationFrame(() => this.tryFocusSelectedTask())
+      }
+    })
+  }
+
+  @action
   unSelectTask(task) {
     if (this.isTaskSelected(task)) {
       this.setSelectedTask(null)
