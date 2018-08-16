@@ -1,10 +1,14 @@
 import {action, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
-import {compose, defaultTo, mergeWith, partial, prop} from '../lib/ramda'
+import {compose, defaultTo, mergeWith} from '../lib/ramda'
 import {toggle} from 'mobx-decorators'
 import {observe, setter} from '../lib/mobx-decorators'
 
-const logNewValue = observe(compose(console.log))
+const logNewValue = observe(change => {
+  const {type, object, oldValue, newValue} = change
+  console.log(`[${type}] ${object.name} ${oldValue} -> ${newValue}`)
+  console.debug(change)
+})
 
 @autobind
 class DebugStore {
