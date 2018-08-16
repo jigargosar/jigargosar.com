@@ -11,6 +11,7 @@ function renderButton(label, onClick) {
       className={cn('blue sans-serif')}
       color={'inherit'}
       onClick={onClick}
+      variant={'flat'}
     >
       {label}
     </Button>
