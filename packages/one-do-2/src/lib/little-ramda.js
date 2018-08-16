@@ -127,8 +127,12 @@ export const indexOfOrNaN = compose(
   indexOf,
 )
 
-export const findByIdOrHead = id => list =>
-  compose(defaultTo(null), defaultTo(head(list)), findById(id))(list)
+export const findByIdOrHead = id => list => {
+  if (list.length === 0) {
+    return null
+  }
+  return compose(defaultTo(head(list)), findById(id))(list)
+}
 
 export const nextEl = partial(elByOffsetFn, [inc])
 export const prevEl = partial(elByOffsetFn, [dec])
