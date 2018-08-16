@@ -88,6 +88,11 @@ class TaskViewStore {
   }
 
   @computed
+  get totalCount() {
+    return this.pendingCount + this.doneCount
+  }
+
+  @computed
   get navigationTasks() {
     return [
       ...this.pendingTasks,
