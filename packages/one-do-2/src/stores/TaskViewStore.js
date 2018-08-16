@@ -2,19 +2,15 @@ import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {intercept, setter, toggle} from '../lib/mobx-decorators'
 import {
-  allPass,
   ascend,
-  complement,
   compose,
   defaultTo,
-  filter,
   indexOf,
   is,
   mergeWith,
   pick,
   propOr,
   sortWith,
-  T,
   unless,
 } from '../lib/ramda'
 import {
