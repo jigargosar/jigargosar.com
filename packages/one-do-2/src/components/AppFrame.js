@@ -1,9 +1,9 @@
 import React, {Component, Fragment} from 'react'
 import {rootStore, taskViewStore} from '../stores'
 import {EventListener, observer} from '../lib/little-react'
-import TaskList from './TaskList'
 import DebugDialog from './DebugDialog'
 import {FocusTrap} from '../lib/focus-trap-react'
+import TaskListScreen from './TaskListScreen'
 
 @observer
 class AppFrame extends Component {
@@ -35,7 +35,7 @@ class AppFrame extends Component {
             target={document}
             onKeyDown={rootStore.onKeyDown}
           />
-          <TaskList />
+          <TaskListScreen />
         </FocusTrap>
       </Fragment>
     )
