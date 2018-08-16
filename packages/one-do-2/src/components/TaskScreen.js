@@ -45,6 +45,9 @@ class TaskScreen extends Component {
             {renderButton('Reset LS', rootStore.resetLS)}
           </FlexRow>
         </div>
+        <div>
+          <AddTaskBar />
+        </div>
       </div>
     )
   }
