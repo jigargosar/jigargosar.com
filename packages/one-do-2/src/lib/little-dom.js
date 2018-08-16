@@ -7,9 +7,12 @@ export function targetTagName(e) {
 }
 
 export function isTargetRoleButton(e) {
+  // console.log(`isTargetTagButton(e)`, isTargetTagButton(e))
+  console.log(`e.target`, e.target)
+  console.log(`e.target`, e.target.tagName)
   return 'button' === targetRole(e)
 }
 
 export function isTargetTagButton(e) {
-  return 'button' === targetTagName(e)
+  return 'BUTTON' === targetTagName(e)
 }
