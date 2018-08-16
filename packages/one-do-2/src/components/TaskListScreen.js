@@ -12,11 +12,12 @@ class TaskListScreen extends Component {
     const pendingCount = taskViewStore.pendingCount
     const pendingTasks = taskViewStore.pendingTasks
     const doneTasks = taskViewStore.doneTasks
+    const totalCount = taskViewStore.totalCount
     return (
       <div className={cn('pv2')}>
         <div className={cn('pv1 ph1')}>
           <span className={cn('f2 b ph2')}>Task List</span>
-          <span>{`(${pendingCount}/${taskViewStore.totalCount})`}</span>
+          <span>{`(${pendingCount}/${totalCount})`}</span>
         </div>
         <FlexRow className={cn('pv1 ph3')}>
           <div className={cn('mh1')}>
