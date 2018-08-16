@@ -7,7 +7,7 @@ import {Button} from '@material-ui/core'
 
 function renderButton(label, onClick) {
   return (
-    <Button className={cn('blue')} color={'inherit'} onClick={onClick}>
+    <Button className={cn('blue ph2')} color={'inherit'} onClick={onClick}>
       {label}
     </Button>
   )
@@ -22,13 +22,13 @@ class TaskListScreen extends Component {
     const totalCount = taskViewStore.totalCount
     return (
       <div className={cn('pv2')}>
-        <div className={cn('pv1 ph1')}>
+        <div className={cn('pv1 ph1 relative')}>
           <span className={cn('f2 b ph2')}>Task List</span>
           <span
-            className={cn('black-50')}
+            className={cn('black-50 code relative bottom-1')}
           >{`(${pendingCount}/${totalCount})`}</span>
         </div>
-        <FlexRow className={cn('pv1')}>
+        <FlexRow className={cn('ph2')}>
           {renderButton('Add Task', taskViewStore.addNewTask)}
           {renderButton('Reset LS', rootStore.resetLS)}
         </FlexRow>
