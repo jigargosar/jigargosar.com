@@ -17,6 +17,7 @@ import {
   nextEl,
   overProp,
   prevEl,
+  rejectDeleted,
 } from '../lib/little-ramda'
 import {taskStore} from './index'
 
@@ -49,6 +50,10 @@ class TaskViewStore {
   @computed
   get tasks() {
     return taskStore.tasks
+  }
+  @computed
+  get deletedTasks() {
+    return rejectDeleted(taskStore.tasks)
   }
 
   isTaskSelected(task) {

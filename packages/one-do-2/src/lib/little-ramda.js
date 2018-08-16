@@ -12,6 +12,7 @@ import {
   defaultTo,
   eqBy,
   equals,
+  filter,
   forEach,
   head,
   inc,
@@ -33,6 +34,7 @@ import {
 } from './ramda'
 import Sugar from 'sugar'
 import pFinally from 'p-finally'
+import {propOr, reject} from 'ramda'
 
 export {default as pluralize} from 'pluralize'
 
@@ -142,3 +144,5 @@ export function elByOffsetFn(offsetFn, el, list) {
 
 export const eqById = eqBy(prop('id'))
 export const idEq = propEq('id')
+export const rejectDeleted = reject(propOr(false)('isDeleted'))
+export const filterDeleted = filter(propOr(false)('isDeleted'))
