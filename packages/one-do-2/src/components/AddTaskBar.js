@@ -1,12 +1,13 @@
 import React, {Component, Fragment} from 'react'
 import {addTaskView} from '../stores'
 
+import {TextField} from '@material-ui/core'
+
 class AddTaskBar extends Component {
   render() {
     return (
       <Fragment>
-        <input
-          type="text"
+        <TextField
           value={addTaskView.title}
           onChange={addTaskView.onTitleChange}
         />
