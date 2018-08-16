@@ -12,6 +12,7 @@ import {
 } from '../lib/ramda'
 import {
   eqById,
+  filterDeleted,
   findById,
   findByIdOrHead,
   nextEl,
@@ -49,7 +50,7 @@ class TaskViewStore {
 
   @computed
   get tasks() {
-    return taskStore.tasks
+    return filterDeleted(taskStore.tasks)
   }
   @computed
   get deletedTasks() {
