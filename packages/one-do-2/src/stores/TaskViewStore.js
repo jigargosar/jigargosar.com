@@ -13,14 +13,12 @@ import {
 } from '../lib/ramda'
 import {
   eqById,
-  filterDeleted,
   filterDone,
   findById,
   findByIdOrHead,
   nextEl,
   overProp,
   prevEl,
-  rejectDeleted,
   rejectDone,
 } from '../lib/little-ramda'
 import {taskStore} from './index'
