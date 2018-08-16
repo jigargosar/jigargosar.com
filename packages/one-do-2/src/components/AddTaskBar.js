@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react'
 import {addTaskView} from '../stores'
 
 import {TextField} from '@material-ui/core'
+import {observable} from '../lib/mobx'
 
 class AddTaskBar extends Component {
   render() {
@@ -18,4 +19,4 @@ class AddTaskBar extends Component {
 
 AddTaskBar.propTypes = {}
 
-export default AddTaskBar
+export default observable(AddTaskBar)
