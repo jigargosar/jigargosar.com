@@ -5,6 +5,7 @@ import {
   compose,
   concat,
   defaultTo,
+  flatten,
   indexOf,
   is,
   mergeWith,
@@ -57,7 +58,7 @@ class TaskViewStore {
 
   @computed
   get navigationTasks() {
-    return concat(this.pendingTasks)(this.doneTasks)
+    return [...this.pendingTasks, ...this.doneTasks, ...this.deletedTasks]
   }
 
   @computed
