@@ -1,21 +1,37 @@
 import React, {Component, Fragment} from 'react'
 import {addTaskView} from '../stores'
 
-import {TextField} from '@material-ui/core'
+import {IconButton, TextField} from '@material-ui/core'
 import {cn, observer} from '../lib/little-react'
+import {AddIcon} from '../lib/Icons'
 
 class AddTaskBar extends Component {
   render() {
     return (
       <Fragment>
-        <div className={cn('flex pa1')}>
-          <TextField
-            className={cn('br-pill ba ph2')}
-            InputProps={{disableUnderline: true}}
-            fullWidth
-            value={addTaskView.title}
-            onChange={addTaskView.onTitleChange}
-          />
+        <div className={cn('flex items-center pa1 bg-lightest-blue')}>
+          <div className={cn('ph1 flex-auto')}>
+            <TextField
+              className={cn('br-pill bw0 ba bg-white')}
+              InputProps={{disableUnderline: true}}
+              inputProps={{className: cn('ph3 pv1 f5')}}
+              fullWidth
+              value={addTaskView.title}
+              onChange={addTaskView.onTitleChange}
+            />
+          </div>
+          <div className={cn('ph1_')}>
+            <IconButton
+              className={cn('f3')}
+              style={{
+                width: '1.4em',
+                height: '1.4em',
+              }}
+              color={'secondary'}
+            >
+              <AddIcon fontSize={'inherit'} />
+            </IconButton>
+          </div>
         </div>
       </Fragment>
     )
