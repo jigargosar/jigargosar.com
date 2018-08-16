@@ -15,5 +15,6 @@ export class AddTaskViewStore {
   @action
   addTask() {
     taskView.addTask(pick(['title']))
+    this.title = ''
   }
 }
