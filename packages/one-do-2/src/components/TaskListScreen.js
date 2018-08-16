@@ -9,9 +9,13 @@ import {Button} from '@material-ui/core'
 @observer
 class TaskListScreen extends Component {
   render() {
+    const pendingCount = taskViewStore.pendingCount
     return (
       <div className={cn('pv2')}>
-        <div className={cn('pv1 ph3', 'f2 b')}>Task List</div>
+        <div className={cn('pv1 ph1')}>
+          <span className={cn('f2 b ph2')}>Task List</span>
+          <span>{`(${pendingCount}/${taskViewStore.totalCount})`}</span>
+        </div>
         <FlexRow className={cn('pv1 ph3')}>
           <div className={cn('mh1')}>
             <Btn onClick={taskViewStore.addNewTask}>Add Task</Btn>
