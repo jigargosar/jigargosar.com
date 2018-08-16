@@ -7,8 +7,8 @@ class AddTaskBar extends Component {
       <Fragment>
         <input
           type="text"
-          value={addTaskView.name}
-          onChange={addTaskView.onNameChange}
+          value={addTaskView.title}
+          onChange={addTaskView.onTitleChange}
         />
       </Fragment>
     )
