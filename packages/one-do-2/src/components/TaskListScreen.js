@@ -17,7 +17,9 @@ class TaskListScreen extends Component {
       <div className={cn('pv2')}>
         <div className={cn('pv1 ph1')}>
           <span className={cn('f2 b ph2')}>Task List</span>
-          <span>{`(${pendingCount}/${totalCount})`}</span>
+          <span
+            className={cn('black-50')}
+          >{`(${pendingCount}/${totalCount})`}</span>
         </div>
         <FlexRow className={cn('pv1 ph3')}>
           <div className={cn('mh1')}>
