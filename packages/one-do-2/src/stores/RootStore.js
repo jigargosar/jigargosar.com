@@ -22,7 +22,7 @@ import {isTargetButton} from '../lib/little-dom'
 class RootStore {
   @observable.ref taskStore = new TaskStore()
   @observable.ref debugStore = new DebugStore()
-  @observable.ref taskViewStore = new TaskViewStore()
+  @observable.ref taskView = new TaskViewStore()
 
   @computed
   get stores() {
@@ -65,12 +65,12 @@ class RootStore {
   applySnapshot(snapshot) {
     this.taskStore.applySnapshot(propOr({})('taskStore')(snapshot))
     this.debugStore.applySnapshot(propOr({})('debugStore')(snapshot))
-    this.taskViewStore.applySnapshot(propOr({})('taskViewStore')(snapshot))
+    this.taskView.applySnapshot(propOr({})('taskView')(snapshot))
   }
 
   @computed
   get onKeyDown() {
-    const taskViewStore = this.taskViewStore
+    const taskViewStore = this.taskView
     const selectedTaskInvoker = taskViewStore.selectedTaskInvoker
     const toggleDone = selectedTaskInvoker('toggleDone')
     const toggleDelete = selectedTaskInvoker('toggleDelete')

@@ -9,7 +9,7 @@ export const rootStore = observable(new RootStore())
 
 export const taskStore = rootStore.taskStore
 export const debugStore = rootStore.debugStore
-export const taskViewStore = rootStore.taskViewStore
+export const taskViewStore = rootStore.taskView
 export const store = rootStore
 
 const disposers = Disposers(module)
