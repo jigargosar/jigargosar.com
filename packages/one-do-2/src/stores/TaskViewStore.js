@@ -14,6 +14,7 @@ import {
   pick,
   propOr,
   sortWith,
+  T,
   unless,
 } from '../lib/ramda'
 import {
@@ -82,9 +83,7 @@ class TaskViewStore {
 
   @computed
   get navigationTasks() {
-    const filters = [
-      this.isDoneHidden ? complement(propIsDone) : propIsDone,
-    ]
+    const filters = [this.isDoneHidden ? complement(propIsDone) : T]
     return filter(allPass(filters))(this.sortedTasks)
   }
 
