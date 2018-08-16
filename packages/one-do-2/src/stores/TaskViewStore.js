@@ -6,7 +6,6 @@ import {
   defaultTo,
   identity,
   is,
-  isNil,
   mergeWith,
   propOr,
   unless,
@@ -78,7 +77,7 @@ class TaskViewStore {
 
   @action
   invokeOnSelectedTask(fnName) {
-    const fn = unless(isNil)(propOr(identity)(fnName))(this.selectedTask)
+    const fn = propOr(identity)(fnName)(this.selectedTask)
     fn()
   }
 
