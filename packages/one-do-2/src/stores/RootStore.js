@@ -15,6 +15,7 @@ import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
 import {debugStore} from './index'
+import {targetRole} from '../lib/little-dom'
 
 @autobind
 class RootStore {
@@ -84,7 +85,8 @@ class RootStore {
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
     return e => {
-      if (e.defaultPrevented) return e
+      console.log(`e.target.getAttribute("role")`, targetRole(e))
+      if ('button' === targetRole(e)) return e
       return withKeyEvent(...globalShortcuts, ...shortcuts)(e)
     }
   }
