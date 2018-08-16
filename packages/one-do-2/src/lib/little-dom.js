@@ -14,3 +14,7 @@ export function isTargetRoleButton(e) {
 export function isTargetTagButton(e) {
   return 'BUTTON' === targetTagName(e)
 }
+
+export function isTargetButton(e) {
+  return isTargetTagButton(e) || isTargetRoleButton(e)
+}
