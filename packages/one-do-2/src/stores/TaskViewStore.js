@@ -11,7 +11,7 @@ import {
   indexOf,
   is,
   mergeWith,
-  omit,
+  pick,
   propOr,
   sortWith,
   unless,
@@ -25,7 +25,6 @@ import {
   overProp,
   prevEl,
   propIsDone,
-  rejectDeleted,
   rejectDone,
 } from '../lib/little-ramda'
 import {taskStore} from './index'
@@ -51,7 +50,7 @@ class TaskViewStore {
 
   @toggle('toggleDoneGroup')
   @observable
-  isDoneHidden = true
+  isDoneHidden = false
 
   disposers = Disposers(module)
 
@@ -79,12 +78,12 @@ class TaskViewStore {
 
   @computed
   get pendingTasks() {
-    return rejectDone(this.navigationTasks)
+    return rejectDone(this.sortedTasks)
   }
 
   @computed
   get doneTasks() {
-    return filterDone(this.navigationTasks)
+    return filterDone(this.sortedTasks)
   }
 
   isTaskSelected(task) {
@@ -153,11 +152,11 @@ class TaskViewStore {
   @action
   applySnapshot(snapshot) {
     const toObj = compose(
-      omit(['disposers']),
       // overProp('tasks')(map(TaskConstructor)),
       mergeWith(defaultTo)({
         selectedTaskId: null,
       }),
+      pick(['selectedTaskId', 'lastSelectedTaskId']),
     )
     Object.assign(this, toObj(snapshot))
   }
