@@ -48,6 +48,18 @@ class TaskViewStore {
 
   @observable lastSelectedTaskId = null
 
+  @action
+  applySnapshot(snapshot) {
+    const toObj = compose(
+      // overProp('tasks')(map(TaskConstructor)),
+      mergeWith(defaultTo)({
+        selectedTaskId: null,
+      }),
+      pick(['selectedTaskId', 'lastSelectedTaskId']),
+    )
+    Object.assign(this, toObj(snapshot))
+  }
+
   @toggle('toggleDoneGroup')
   @observable
   isDoneHidden = false
@@ -147,18 +159,6 @@ class TaskViewStore {
     if (task) {
       tryFocusDOMId(task.id)
     }
-  }
-
-  @action
-  applySnapshot(snapshot) {
-    const toObj = compose(
-      // overProp('tasks')(map(TaskConstructor)),
-      mergeWith(defaultTo)({
-        selectedTaskId: null,
-      }),
-      pick(['selectedTaskId', 'lastSelectedTaskId']),
-    )
-    Object.assign(this, toObj(snapshot))
   }
 }
 
