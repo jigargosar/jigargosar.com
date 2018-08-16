@@ -134,6 +134,10 @@ class TaskViewStore {
   }
 
   @action
+  addTask(props) {
+    this.setSelectedTask(taskStore.addTask(props))
+  }
+  @action
   unSelectTask(task) {
     if (this.isTaskSelected(task)) {
       this.setSelectedTask(null)

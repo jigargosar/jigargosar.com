@@ -15,7 +15,7 @@ export class AddTaskViewStore {
   @action
   addTask() {
     if (isEmpty(this.title)) return
-    taskView.addTask(pick(['title']))
+    taskView.addTask(pick(['title'])(this))
     this.title = ''
   }
 }
