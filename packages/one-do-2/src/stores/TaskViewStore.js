@@ -4,7 +4,9 @@ import {intercept, setter} from '../lib/mobx-decorators'
 import {
   compose,
   defaultTo,
+  invoker,
   is,
+  isNil,
   mergeWith,
   propOr,
   unless,
@@ -76,10 +78,7 @@ class TaskViewStore {
 
   @action
   invokeOnSelectedTask(fnName) {
-    const task = this.selectedTask
-    if (task) {
-      task[fnName]()
-    }
+    unless(isNil)(invoker(0, fnName))(this.selectedTask)()
   }
 
   @action
