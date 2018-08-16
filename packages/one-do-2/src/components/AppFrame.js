@@ -20,6 +20,7 @@ class AppFrame extends Component {
             returnFocusOnDeactivate: false,
             escapeDeactivates: false,
             fallbackFocus: document,
+            // initialFocus: document,
             // onActivate() {
             //   console.log('onActivate')
             // },
@@ -29,6 +30,8 @@ class AppFrame extends Component {
           }}
           // active={!rootStore.isFocusTrapPaused}
           active={true}
+          onFocus={logPersistEvent}
+          onBlur={logPersistEvent}
         >
           <DebugDialog />
           <EventListener
@@ -43,3 +46,8 @@ class AppFrame extends Component {
 }
 
 export default AppFrame
+
+function logPersistEvent(e) {
+  e.persist()
+  console.debug(e)
+}
