@@ -86,7 +86,7 @@ class TaskViewStore {
     return () => {
       const newIdx = indexOf(this.selectedTask)(this.navigationTasks)
       if (lastIdx !== newIdx && this.selectedTask) {
-        requestAnimationFrame(() => this.tryFocusSelectedTask())
+        setTimeout(() => this.tryFocusSelectedTask(), 0)
       }
     }
   }

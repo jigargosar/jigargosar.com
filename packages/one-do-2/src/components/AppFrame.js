@@ -49,7 +49,3 @@ class AppFrame extends Component {
 
 export default AppFrame
 
-function logPersistEvent(e) {
-  e.persist()
-  console.debug(e)
-}
