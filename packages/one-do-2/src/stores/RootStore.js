@@ -1,5 +1,5 @@
 import {action, computed, observable, toJS} from '../lib/mobx'
-import {prettyJSONStringify, tapLog, tapLog2} from '../lib/little-ramda'
+import {prettyJSONStringify, tapLog2} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
