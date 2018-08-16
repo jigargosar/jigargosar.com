@@ -11,7 +11,6 @@ class DebugStore {
   @observable
   isDebugViewOpen = false
 
-  @observe(logChange, true)
   @setter('onEnter', true)
   @setter('onExited', false)
   @observable
