@@ -7,7 +7,6 @@ import {compose, construct, defaultTo, map, mergeWith} from '../lib/ramda'
 import {findById, overProp} from '../lib/little-ramda'
 import {taskViewStore} from './index'
 
-@autobind
 class Task {
   @observable id = `Task_${nanoid()}`
 
