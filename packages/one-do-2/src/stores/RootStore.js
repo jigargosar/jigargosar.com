@@ -3,7 +3,14 @@ import {prettyJSONStringify} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
-import {defaultTo, propOr} from '../lib/ramda'
+import {
+  compose,
+  defaultTo,
+  endsWith,
+  nthArg,
+  pickBy,
+  propOr,
+} from '../lib/ramda'
 import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
@@ -14,6 +21,11 @@ class RootStore {
   @observable.ref taskStore = new TaskStore()
   @observable.ref debugStore = new DebugStore()
   @observable.ref taskViewStore = new TaskViewStore()
+
+  @computed
+  get stores() {
+    return pickBy(compose(endsWith('Store'), nthArg(1)))(this)
+  }
 
   @computed
   get toJSON() {

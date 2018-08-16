@@ -1,5 +1,13 @@
 import {storage} from './storage'
-import {autorun, reaction, spy, toJS, intercept, observe} from './mobx'
+import {
+  autorun,
+  reaction,
+  spy,
+  toJS,
+  intercept,
+  observe,
+  getDebugName,
+} from './mobx'
 import {call, compose, defaultTo} from './ramda'
 import {hotDispose} from './hot'
 
@@ -66,6 +74,8 @@ export function Disposers(module) {
 
 export const logChange = change => {
   const {type, object, oldValue, newValue} = change
-  console.log(`[${type}] ${object.name} ${oldValue} -> ${newValue}`)
+  console.log(
+    `[${type}] ${getDebugName(object)} ${oldValue} -> ${newValue}`,
+  )
   console.debug(change)
 }
