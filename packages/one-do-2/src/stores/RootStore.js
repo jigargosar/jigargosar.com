@@ -11,9 +11,9 @@ import {debugStore} from './index'
 
 @autobind
 class RootStore {
-  @observable taskStore = new TaskStore()
-  @observable debugStore = new DebugStore()
-  @observable taskViewStore = new TaskViewStore()
+  @observable.ref taskStore = new TaskStore()
+  @observable.ref debugStore = new DebugStore()
+  @observable.ref taskViewStore = new TaskViewStore()
 
   @computed
   get toJSON() {
