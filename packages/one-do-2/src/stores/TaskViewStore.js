@@ -129,8 +129,7 @@ class TaskViewStore {
 
   @action
   addNewTask() {
-    const task = taskStore.addNewTask()
-    this.setSelectedTask(task)
+    this.setSelectedTask(taskStore.addNewTask())
   }
 
   @action
