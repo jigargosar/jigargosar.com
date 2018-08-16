@@ -15,7 +15,7 @@ class Task {
   @observable
   title = ''
 
-  @toggle('toggleDeleted')
+  @toggle('toggleDelete')
   @observable
   isDeleted = false
 
