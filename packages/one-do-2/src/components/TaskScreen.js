@@ -4,6 +4,7 @@ import {cn, observer} from '../lib/little-react'
 import {FlexRow} from '../lib/UI'
 import TaskList from './TaskList'
 import {Button} from '@material-ui/core'
+import AddTaskBar from './AddTaskBar'
 
 function renderButton(label, onClick) {
   return (
