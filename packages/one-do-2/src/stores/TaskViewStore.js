@@ -72,10 +72,19 @@ class TaskViewStore {
   get pendingTasks() {
     return rejectDone(this.sortedTasks)
   }
+  @computed
+  get pendingTaskCount() {
+    return this.pendingTasks.length
+  }
 
   @computed
   get doneTasks() {
     return filterDone(this.sortedTasks)
+  }
+
+  @computed
+  get doneTaskCount() {
+    return this.doneTasks.length
   }
 
   @computed
