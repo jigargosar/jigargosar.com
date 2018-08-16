@@ -55,16 +55,16 @@ class TaskStore {
 
   @computed
   get tasks() {
-    return rejectDeleted(this.sortedAllTasks)
+    return rejectDeleted(this.allTasks)
   }
 
   @computed
   get deletedTasks() {
-    return filterDeleted(this.sortedAllTasks)
+    return filterDeleted(this.allTasks)
   }
 
   findById(id) {
-    return findById(id)(this.sortedAllTasks)
+    return findById(id)(this.allTasks)
   }
 
   @action
