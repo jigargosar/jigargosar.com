@@ -1,6 +1,6 @@
 import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
-import {intercept, setter} from '../lib/mobx-decorators'
+import {intercept, setter, toggle} from '../lib/mobx-decorators'
 import {
   ascend,
   compose,
@@ -46,6 +46,14 @@ class TaskViewStore {
   selectedTaskId = null
 
   @observable lastSelectedTaskId = null
+
+  @toggle('toggleDeletedGroup')
+  @observable
+  isDeletedHidden = true
+
+  @toggle('toggleDoneGroup')
+  @observable
+  isDoneHidden = true
 
   disposers = Disposers(module)
 
