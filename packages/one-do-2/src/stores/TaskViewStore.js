@@ -23,6 +23,7 @@ import {
   prevEl,
   propIsDeleted,
   propIsDone,
+  rejectDeleted,
   rejectDone,
 } from '../lib/little-ramda'
 import {taskStore} from './index'
@@ -71,12 +72,12 @@ class TaskViewStore {
 
   @computed
   get pendingTasks() {
-    return rejectDone(taskStore.tasks)
+    return rejectDone(rejectDeleted(this.navigationTasks))
   }
 
   @computed
   get doneTasks() {
-    return filterDone(taskStore.tasks)
+    return filterDone(rejectDeleted(this.navigationTasks))
   }
 
   @computed
