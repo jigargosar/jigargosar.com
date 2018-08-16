@@ -3,15 +3,7 @@ import {prettyJSONStringify} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
-import {
-  compose,
-  defaultTo,
-  endsWith,
-  nthArg,
-  pickBy,
-  propOr,
-  unless,
-} from '../lib/ramda'
+import {defaultTo, propOr, unless} from '../lib/ramda'
 import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
