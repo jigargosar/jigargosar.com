@@ -68,23 +68,8 @@ class TaskViewStore {
   disposers = Disposers(module)
 
   @computed
-  get selectedTask() {
-    const tasks = this.navigationTasks
-    return compose(
-      defaultTo(findByIdOrHead(this.lastSelectedTaskId)(tasks)),
-      findById(this.selectedTaskId),
-    )(tasks)
-  }
-
-  @computed
   get sortedTasks() {
     return sortWith([ascend(propIsDone)])(taskStore.tasks)
-  }
-
-  @computed
-  get navigationTasks() {
-    const filters = [this.isDoneHidden ? complement(propIsDone) : T]
-    return filter(allPass(filters))(this.sortedTasks)
   }
 
   @computed
@@ -95,6 +80,21 @@ class TaskViewStore {
   @computed
   get doneTasks() {
     return filterDone(this.sortedTasks)
+  }
+
+  @computed
+  get selectedTask() {
+    const tasks = this.navigationTasks
+    return compose(
+      defaultTo(findByIdOrHead(this.lastSelectedTaskId)(tasks)),
+      findById(this.selectedTaskId),
+    )(tasks)
+  }
+
+  @computed
+  get navigationTasks() {
+    const filters = [this.isDoneHidden ? complement(propIsDone) : T]
+    return filter(allPass(filters))(this.sortedTasks)
   }
 
   isTaskSelected(task) {
