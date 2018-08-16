@@ -27,6 +27,10 @@ class TaskListScreen extends Component {
           <h1>Done Tasks</h1>
           <TaskList tasks={taskViewStore.doneTasks} />
         </div>
+        <div>
+          <h1>Deleted Tasks</h1>
+          <TaskList tasks={taskViewStore.deletedTasks} />
+        </div>
       </div>
     )
   }
