@@ -70,21 +70,21 @@ class RootStore {
 
   @computed
   get onKeyDown() {
-    const taskViewStore = this.taskView
-    const selectedTaskInvoker = taskViewStore.selectedTaskInvoker
+    const taskView = this.taskView
+    const selectedTaskInvoker = taskView.selectedTaskInvoker
     const toggleDone = selectedTaskInvoker('toggleDone')
     const toggleDelete = selectedTaskInvoker('toggleDelete')
     const globalShortcuts = [
       whenKeyPD('`')(this.debugStore.toggleDebugView),
     ]
     const noDialogShortcuts = [
-      whenKeyPD('down')(taskViewStore.selectNextTask),
-      whenKeyPD('up')(taskViewStore.selectPrevTask),
+      whenKeyPD('down')(taskView.selectNextTask),
+      whenKeyPD('up')(taskView.selectPrevTask),
       whenKeyPD('space')(toggleDone),
       whenKeyPD('x')(toggleDone),
       whenKeyPD('mod+right')(toggleDone),
       whenKeyPD('d')(toggleDelete),
-      whenKeyPD('q')(taskViewStore.addNewTask),
+      whenKeyPD('q')(taskView.addNewTask),
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
     return unless(isTargetButton)(
