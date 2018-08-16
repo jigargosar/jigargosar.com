@@ -5,7 +5,6 @@ import {
   compose,
   concat,
   defaultTo,
-  identity,
   indexOf,
   is,
   mergeWith,
