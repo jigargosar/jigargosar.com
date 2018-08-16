@@ -16,7 +16,11 @@ class TaskListScreen extends Component {
           <div className={cn('mh1')}>
             <Btn onClick={taskViewStore.addNewTask}>Add Task</Btn>
           </div>
-          <Button role={'button'} onClick={taskViewStore.addNewTask}>
+          <Button
+            role={'button'}
+            color={'primary'}
+            onClick={taskViewStore.addNewTask}
+          >
             Add Task
           </Button>
           <div className={cn('mh1')}>
