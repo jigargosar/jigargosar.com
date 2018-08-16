@@ -18,14 +18,12 @@ import {
 } from '../lib/ramda'
 import {
   eqById,
-  filterDeleted,
   filterDone,
   findById,
   findByIdOrHead,
   nextEl,
   overProp,
   prevEl,
-  propIsDeleted,
   propIsDone,
   rejectDeleted,
   rejectDone,
@@ -51,10 +49,6 @@ class TaskViewStore {
 
   @observable lastSelectedTaskId = null
 
-  @toggle('toggleDeletedGroup')
-  @observable
-  isDeletedHidden = true
-
   @toggle('toggleDoneGroup')
   @observable
   isDoneHidden = true
@@ -71,19 +65,16 @@ class TaskViewStore {
   }
 
   @computed
-  get sortedAllTasks() {
-    return sortWith([ascend(propIsDeleted), ascend(propIsDone)])(
-      taskStore.allTasks,
-    )
+  get sortedTasks() {
+    return sortWith([ascend(propIsDone)])(taskStore.tasks)
   }
 
   @computed
   get navigationTasks() {
     const filters = [
-      this.isDeletedHidden ? complement(propIsDeleted) : propIsDeleted,
       this.isDoneHidden ? complement(propIsDone) : propIsDone,
     ]
-    return filter(allPass(filters))(this.sortedAllTasks)
+    return filter(allPass(filters))(this.sortedTasks)
   }
 
   @computed
@@ -94,11 +85,6 @@ class TaskViewStore {
   @computed
   get doneTasks() {
     return filterDone(rejectDeleted(this.navigationTasks))
-  }
-
-  @computed
-  get deletedTasks() {
-    return filterDeleted(this.navigationTasks)
   }
 
   isTaskSelected(task) {
