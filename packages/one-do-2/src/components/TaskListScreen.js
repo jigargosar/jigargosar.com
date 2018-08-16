@@ -35,7 +35,7 @@ class TaskListScreen extends Component {
             >{`(${pendingCount}/${totalCount})`}</span>
           </div>
         </div>
-        <div className={cn('overflow-scroll')}>
+        <div className={cn('flex-auto overflow-scroll ')}>
           <TaskList tasks={pendingTasks} />
           <TaskList tasks={doneTasks} />
         </div>
