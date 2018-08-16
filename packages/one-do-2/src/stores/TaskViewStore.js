@@ -10,6 +10,7 @@ import {
   unless,
 } from '../lib/ramda'
 import {
+  findById,
   findByIdOrHead,
   nextEl,
   overProp,
@@ -37,7 +38,10 @@ class TaskViewStore {
 
   @computed
   get selectedTask() {
-    return findByIdOrHead(this.selectedTaskId, this.tasks)
+    return compose(
+      defaultTo(findByIdOrHead(this.lastSelectedTaskId)(this.tasks)),
+      findById(this.selectedTaskId),
+    )(this.tasks)
   }
 
   @computed
