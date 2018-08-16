@@ -45,6 +45,9 @@ if (module.hot) {
 export const tapLog2 = msg => tap(args => console.warn(msg, args))
 export const composeTapLog2 = msg => fn => compose(tapLog2(msg), fn)
 
+export const composeTapLog = fn =>
+  composeTapLog2(fn.name || 'composeTapLog')(fn)
+
 export const tapLog = tapLog2('tapLog')
 
 export function wrapLog(fn, name = 'wrapTapLog fn') {
