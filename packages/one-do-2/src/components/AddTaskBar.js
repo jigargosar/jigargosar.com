@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react'
 import {addTaskView} from '../stores'
 
 import {IconButton, TextField} from '@material-ui/core'
-import {cn, observer} from '../lib/little-react'
+import {cn, observer, whenKey, withKeyEvent} from '../lib/little-react'
 import {AddIcon} from '../lib/Icons'
 
 class AddTaskBar extends Component {
@@ -18,11 +18,15 @@ class AddTaskBar extends Component {
               fullWidth
               value={addTaskView.title}
               onChange={addTaskView.onTitleChange}
+              onKeyDown={withKeyEvent(
+                //
+                whenKey('enter')(addTaskView.addTask),
+              )}
             />
           </div>
           <div className={cn('ph1_')}>
             <IconButton
-              onClick={addTaskView.addTask}
+              onClick={addTaskView.addTaskAndKeepAdding}
               className={cn('f3 blue')}
               style={{
                 width: '1.3em',

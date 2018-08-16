@@ -18,4 +18,11 @@ export class AddTaskViewStore {
     taskView.addTask(pick(['title'])(this))
     this.title = ''
   }
+
+  @action
+  addTaskAndKeepAdding() {
+    if (isEmpty(this.title)) return
+    taskView.addTask(pick(['title'])(this))
+    this.title = ''
+  }
 }
