@@ -61,18 +61,18 @@ class TaskViewStore {
   }
 
   @computed
-  get tasks() {
+  get unDeletedTasks() {
     return rejectDeleted(taskStore.tasks)
   }
 
   @computed
   get pendingTasks() {
-    return rejectDone(this.tasks)
+    return rejectDone(this.unDeletedTasks)
   }
 
   @computed
   get doneTasks() {
-    return filterDone(this.tasks)
+    return filterDone(this.unDeletedTasks)
   }
 
   @computed
