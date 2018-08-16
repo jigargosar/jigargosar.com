@@ -46,6 +46,7 @@ export const tapLog2 = msg => tap(args => console.warn(msg, args))
 export const composeTapLog2 = msg => fn => compose(tapLog2(msg), fn)
 
 export const tapLog = tapLog2('tapLog')
+
 export function wrapLog(fn, name = 'wrapTapLog fn') {
   const fnName = _compose(_when(isEmpty)(always(name)), defaultTo(''))(
     fn.name,
