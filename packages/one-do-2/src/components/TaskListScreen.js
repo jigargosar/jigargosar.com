@@ -20,7 +20,7 @@ class TaskListScreen extends Component {
             className={cn('black-50')}
           >{`(${pendingCount}/${totalCount})`}</span>
         </div>
-        <FlexRow className={cn('pv1 ph3')}>
+        <FlexRow className={cn('pv1')}>
           <Button
             className={cn('blue')}
             color={'inherit'}
