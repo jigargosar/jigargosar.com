@@ -4,10 +4,10 @@ import {fWord} from '../lib/fake'
 import {setter, toggle} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
 import {
+  ascend,
   compose,
   construct,
   defaultTo,
-  descend,
   map,
   mergeWith,
   pick,
@@ -17,6 +17,7 @@ import {
   filterDeleted,
   findById,
   overProp,
+  propIsDeleted,
   propIsDone,
   rejectDeleted,
 } from '../lib/little-ramda'
@@ -58,7 +59,9 @@ class TaskStore {
 
   @computed
   get sortedAllTasks() {
-    return sortWith([descend(propIsDone)])(this.allTasks)
+    return sortWith([ascend(propIsDeleted), ascend(propIsDone)])(
+      this.allTasks,
+    )
   }
 
   @computed
