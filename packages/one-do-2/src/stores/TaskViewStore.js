@@ -119,8 +119,9 @@ class TaskViewStore {
 
   @action
   invokeOnSelectedTask(fnName) {
-    const fn = propOr(identity)(fnName)(this.selectedTask)
-    fn()
+    if (this.selectedTask) {
+      this.selectedTask[fnName]()
+    }
   }
 
   @action
