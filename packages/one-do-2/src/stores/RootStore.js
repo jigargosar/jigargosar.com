@@ -57,8 +57,10 @@ class RootStore {
   @computed
   get onKeyDown() {
     const toggleDone = this.taskViewStore.selectedTaskInvoker('toggleDone')
-    const noDialogShortcuts = [
+    const globalShortcuts = [
       whenKeyPD('`')(this.debugStore.toggleDebugView),
+    ]
+    const noDialogShortcuts = [
       whenKeyPD('down')(this.taskViewStore.selectNextTask),
       whenKeyPD('up')(this.taskViewStore.selectPrevTask),
       whenKeyPD('space')(toggleDone),
@@ -66,7 +68,7 @@ class RootStore {
       whenKeyPD('mod+right')(toggleDone),
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
-    return withKeyEvent(...shortcuts)
+    return withKeyEvent(...globalShortcuts, ...shortcuts)
   }
 }
 
