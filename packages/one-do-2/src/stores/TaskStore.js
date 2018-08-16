@@ -11,14 +11,13 @@ import {
   map,
   mergeWith,
   pick,
-  prop,
   sortWith,
 } from '../lib/ramda'
 import {
   filterDeleted,
   findById,
-  propIsDone,
   overProp,
+  propIsDone,
   rejectDeleted,
 } from '../lib/little-ramda'
 import {taskViewStore} from './index'
