@@ -9,12 +9,14 @@ import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
 import {debugStore} from './index'
 import {isTargetButton} from '../lib/little-dom'
+import {AddTaskViewStore} from './AddTaskViewStore'
 
 @autobind
 class RootStore {
   @observable.ref taskStore = new TaskStore()
   @observable.ref debugStore = new DebugStore()
   @observable.ref taskView = new TaskViewStore()
+  @observable.ref addTaskView = new AddTaskViewStore()
 
   @computed
   get toJSON() {
