@@ -23,7 +23,7 @@ class DebugStore {
   @setter('onEnter', true)
   @setter('onExited', false)
   @observable
-  inTransition = false
+  isInTransition = false
 
   @action
   applySnapshot(snapshot) {

@@ -27,7 +27,7 @@ class RootStore {
 
   @computed
   get isFocusTrapPaused() {
-    return debugStore.isDebugViewOpen
+    return debugStore.isInTransition
   }
 
   saveToLS() {
