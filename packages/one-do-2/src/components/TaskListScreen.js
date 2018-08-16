@@ -26,8 +26,8 @@ class TaskListScreen extends Component {
             <Btn onClick={taskViewStore.addNewTask}>Add Task</Btn>
           </div>
           <Button
-            role={'button'}
-            color={'primary'}
+            className={cn('blue')}
+            color={'inherit'}
             onClick={taskViewStore.addNewTask}
           >
             Add Task
