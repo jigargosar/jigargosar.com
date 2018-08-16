@@ -7,7 +7,11 @@ import {Button} from '@material-ui/core'
 
 function renderButton(label, onClick) {
   return (
-    <Button className={cn('blue ph2')} color={'inherit'} onClick={onClick}>
+    <Button
+      className={cn('blue ph2 sans-serif')}
+      color={'inherit'}
+      onClick={onClick}
+    >
       {label}
     </Button>
   )
