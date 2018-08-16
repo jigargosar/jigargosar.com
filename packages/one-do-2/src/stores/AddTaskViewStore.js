@@ -1,7 +1,7 @@
 import {autobind} from '../lib/autobind'
 import {action, observable} from '../lib/mobx'
 import {taskView} from './index'
-import {pick} from '../lib/ramda'
+import {isEmpty, pick} from '../lib/ramda'
 
 @autobind
 export class AddTaskViewStore {
@@ -14,6 +14,7 @@ export class AddTaskViewStore {
 
   @action
   addTask() {
+    if (isEmpty(this.title)) return
     taskView.addTask(pick(['title']))
     this.title = ''
   }
