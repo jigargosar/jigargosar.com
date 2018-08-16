@@ -2,16 +2,16 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {cn, observer} from '../lib/little-react'
 import {FlexRow} from '../lib/UI'
-import {taskViewStore} from '../stores'
+import {taskView} from '../stores'
 
 @observer
 class TaskListItem extends Component {
   handleOnFocus = task => () => {
-    taskViewStore.setSelectedTask(task)
+    taskView.setSelectedTask(task)
   }
 
   handleOnBlur = task => () => {
-    taskViewStore.unSelectTask(task)
+    taskView.unSelectTask(task)
   }
 
   render() {

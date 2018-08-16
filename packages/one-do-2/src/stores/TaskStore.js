@@ -17,7 +17,7 @@ import {
   overProp,
   rejectDeleted,
 } from '../lib/little-ramda'
-import {taskViewStore} from './index'
+import {taskView} from './index'
 
 @autobind
 class Task {
@@ -43,7 +43,7 @@ class Task {
 
   @computed
   get isSelected() {
-    return taskViewStore.isTaskSelected(this)
+    return taskView.isTaskSelected(this)
   }
 }
 

@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {rootStore, taskViewStore} from '../stores'
+import {rootStore, taskView} from '../stores'
 import {EventListener, observer} from '../lib/little-react'
 import DebugDialog from './DebugDialog'
 import {FocusTrap} from '../lib/focus-trap-react'
@@ -10,7 +10,7 @@ import {disposable} from '../lib/hoc'
 @observer
 class AppFrame extends Component {
   componentDidMount() {
-    this.props.disposers.autorun(taskViewStore.getFocusManagerAutoRunner())
+    this.props.disposers.autorun(taskView.getFocusManagerAutoRunner())
   }
 
   render() {
@@ -48,4 +48,3 @@ class AppFrame extends Component {
 }
 
 export default AppFrame
-

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {rootStore, taskViewStore} from '../stores'
+import {rootStore, taskView} from '../stores'
 import {cn, observer} from '../lib/little-react'
 import {FlexRow} from '../lib/UI'
 import TaskList from './TaskList'
@@ -21,10 +21,10 @@ function renderButton(label, onClick) {
 @observer
 class TaskListScreen extends Component {
   render() {
-    const pendingCount = taskViewStore.pendingCount
-    const pendingTasks = taskViewStore.pendingTasks
-    const doneTasks = taskViewStore.doneTasks
-    const totalCount = taskViewStore.totalCount
+    const pendingCount = taskView.pendingCount
+    const pendingTasks = taskView.pendingTasks
+    const doneTasks = taskView.doneTasks
+    const totalCount = taskView.totalCount
     return (
       <div className={cn('flex flex-column vh-100 overflow-hidden')}>
         <div className={cn('pv2')}>
@@ -41,7 +41,7 @@ class TaskListScreen extends Component {
         </div>
         <div>
           <FlexRow className={cn('ph2')}>
-            {renderButton('Add Task', taskViewStore.addNewTask)}
+            {renderButton('Add Task', taskView.addNewTask)}
             {renderButton('Reset LS', rootStore.resetLS)}
           </FlexRow>
         </div>
