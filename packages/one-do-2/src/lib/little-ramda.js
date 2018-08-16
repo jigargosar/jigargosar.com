@@ -148,3 +148,7 @@ export const idEq = propEq('id')
 const isDeletedPred = propOr(false)('isDeleted')
 export const rejectDeleted = reject(isDeletedPred)
 export const filterDeleted = filter(isDeletedPred)
+
+const isDonePred = propOr(false)('isDone')
+export const rejectDone = reject(isDonePred)
+export const filterDone = filter(isDonePred)

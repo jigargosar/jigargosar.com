@@ -13,12 +13,14 @@ import {
 import {
   eqById,
   filterDeleted,
+  filterDone,
   findById,
   findByIdOrHead,
   nextEl,
   overProp,
   prevEl,
   rejectDeleted,
+  rejectDone,
 } from '../lib/little-ramda'
 import {taskStore} from './index'
 
@@ -54,12 +56,12 @@ class TaskViewStore {
   }
   @computed
   get pendingTasks() {
-    return filterDeleted(this.tasks)
+    return filterDone(this.tasks)
   }
 
   @computed
   get doneTasks() {
-    return filterDeleted(this.tasks)
+    return rejectDone(this.tasks)
   }
 
   @computed
