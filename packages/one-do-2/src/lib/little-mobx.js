@@ -61,3 +61,9 @@ export function Disposers(module) {
     spy: compose(addDisposer, spy),
   }
 }
+
+export const logChange = change => {
+  const {type, object, oldValue, newValue} = change
+  console.log(`[${type}] ${object.name} ${oldValue} -> ${newValue}`)
+  console.debug(change)
+}

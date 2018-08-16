@@ -3,12 +3,7 @@ import {autobind} from '../lib/autobind'
 import {compose, defaultTo, mergeWith} from '../lib/ramda'
 import {toggle} from 'mobx-decorators'
 import {observe, setter} from '../lib/mobx-decorators'
-
-const logChange = change => {
-  const {type, object, oldValue, newValue} = change
-  console.log(`[${type}] ${object.name} ${oldValue} -> ${newValue}`)
-  console.debug(change)
-}
+import {logChange} from '../lib/little-mobx'
 
 @autobind
 class DebugStore {
