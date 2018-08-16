@@ -28,23 +28,25 @@ class TaskListScreen extends Component {
           </div>
         </FlexRow>
 
-        <div>
-          <h1>Sorted All Tasks</h1>
-          <TaskList tasks={taskViewStore.sortedAllTasks} />
-        </div>
+        {false && (
+          <div>
+            <h1>Sorted All Tasks</h1>
+            <TaskList tasks={taskViewStore.sortedAllTasks} />
+          </div>
+        )}
 
-        {/*<div>*/}
-        {/*<h1>Pending Tasks</h1>*/}
-        {/*<TaskList tasks={taskViewStore.pendingTasks} />*/}
-        {/*</div>*/}
-        {/*<div>*/}
-        {/*<h1>Done Tasks</h1>*/}
-        {/*<TaskList tasks={taskViewStore.doneTasks} />*/}
-        {/*</div>*/}
-        {/*<div>*/}
-        {/*<h1>Deleted Tasks</h1>*/}
-        {/*<TaskList tasks={taskViewStore.deletedTasks} />*/}
-        {/*</div>*/}
+        <div>
+          <h1>Pending Tasks</h1>
+          <TaskList tasks={taskViewStore.pendingTasks} />
+        </div>
+        <div>
+          <h1>Done Tasks</h1>
+          <TaskList tasks={taskViewStore.doneTasks} />
+        </div>
+        <div>
+          <h1>Deleted Tasks</h1>
+          <TaskList tasks={taskViewStore.deletedTasks} />
+        </div>
       </div>
     )
   }
