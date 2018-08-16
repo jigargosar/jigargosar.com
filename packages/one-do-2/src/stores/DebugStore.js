@@ -4,11 +4,11 @@ import {compose, defaultTo, mergeWith} from '../lib/ramda'
 import {toggle} from 'mobx-decorators'
 import {observe, setter} from '../lib/mobx-decorators'
 
-const logNewValue = observe(change => {
+const logChange = change => {
   const {type, object, oldValue, newValue} = change
   console.log(`[${type}] ${object.name} ${oldValue} -> ${newValue}`)
   console.debug(change)
-})
+}
 
 @autobind
 class DebugStore {
@@ -16,7 +16,7 @@ class DebugStore {
   @observable
   isDebugViewOpen = false
 
-  @logNewValue
+  @observe(logChange, true)
   @setter('onEnter', true)
   @setter('onExited', false)
   @observable
