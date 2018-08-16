@@ -28,21 +28,8 @@ class TaskListScreen extends Component {
           </div>
         </FlexRow>
 
-        {false && (
-          <div>
-            <h1>Sorted All Tasks</h1>
-            <TaskList tasks={taskViewStore.sortedTasks} />
-          </div>
-        )}
-
-        <div>
-          <h1>Pending Tasks</h1>
-          <TaskList tasks={taskViewStore.pendingTasks} />
-        </div>
-        <div>
-          <h1>Done Tasks</h1>
-          <TaskList tasks={taskViewStore.doneTasks} />
-        </div>
+        <TaskList tasks={taskViewStore.pendingTasks} />
+        <TaskList tasks={taskViewStore.doneTasks} />
       </div>
     )
   }
