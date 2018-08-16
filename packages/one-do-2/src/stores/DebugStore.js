@@ -4,15 +4,15 @@ import {compose, defaultTo, mergeWith, partial, prop} from '../lib/ramda'
 import {toggle} from 'mobx-decorators'
 import {observe, setter} from '../lib/mobx-decorators'
 
+const logNewValue = observe(compose(console.log))
+
 @autobind
 class DebugStore {
   @toggle('toggleDebugView')
   @observable
   isDebugViewOpen = false
 
-  @observe(
-    compose(partial(console.log, ['inTransition']), prop('newValue')),
-  )
+  @logNewValue
   @setter('onEnter', true)
   @setter('onExited', false)
   @observable
