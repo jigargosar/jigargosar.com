@@ -26,20 +26,25 @@ class TaskListScreen extends Component {
     const doneTasks = taskViewStore.doneTasks
     const totalCount = taskViewStore.totalCount
     return (
-      <div className={cn('pv2')}>
-        <div className={cn('pv1 ph1 relative')}>
-          <span className={cn('f2 b ph2')}>Task List</span>
-          <span
-            className={cn('black-50 code relative bottom-1')}
-          >{`(${pendingCount}/${totalCount})`}</span>
+      <div className={cn('flex flex-column vh-100 overflow-hidden')}>
+        <div className={cn('pv2')}>
+          <div className={cn('pv1 ph1 relative')}>
+            <span className={cn('f2 b ph2')}>Task List</span>
+            <span
+              className={cn('black-50 code relative bottom-1')}
+            >{`(${pendingCount}/${totalCount})`}</span>
+          </div>
         </div>
-        <FlexRow className={cn('ph2')}>
-          {renderButton('Add Task', taskViewStore.addNewTask)}
-          {renderButton('Reset LS', rootStore.resetLS)}
-        </FlexRow>
-
-        <TaskList tasks={pendingTasks} />
-        <TaskList tasks={doneTasks} />
+        <div className={cn('overflow-scroll')}>
+          <TaskList tasks={pendingTasks} />
+          <TaskList tasks={doneTasks} />
+        </div>
+        <div>
+          <FlexRow className={cn('ph2')}>
+            {renderButton('Add Task', taskViewStore.addNewTask)}
+            {renderButton('Reset LS', rootStore.resetLS)}
+          </FlexRow>
+        </div>
       </div>
     )
   }
