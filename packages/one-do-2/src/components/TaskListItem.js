@@ -16,11 +16,18 @@ class TaskListItem extends Component {
 
   render() {
     const {task} = this.props
+    const isDone = task.isDone
+    const isSelected = task.isSelected
     return (
       <FlexRow
         id={task.id}
-        tabIndex={task.isSelected ? 0 : -1}
-        className={cn('ph1', 'link', {'bg-light-blue': task.isSelected})}
+        tabIndex={isSelected ? 0 : -1}
+        className={cn(
+          'ph1',
+          'link',
+          {'bg-light-blue': isSelected},
+          {'black-50': isDone},
+        )}
         onFocus={this.handleOnFocus(task)}
         onBlur={this.handleOnBlur(task)}
       >
@@ -28,9 +35,11 @@ class TaskListItem extends Component {
           className={cn('pa2', 'code usn pointer')}
           onClick={task.toggleDone}
         >
-          {task.isDone ? `[x]` : `[ ]`}
+          {isDone ? `[x]` : `[ ]`}
         </div>
-        <div className={cn('pa2 flex-auto', 'f4 ')}>{task.title}</div>
+        <div className={cn('pa2 flex-auto', 'f4', {strike: isDone})}>
+          {task.title}
+        </div>
       </FlexRow>
     )
   }
