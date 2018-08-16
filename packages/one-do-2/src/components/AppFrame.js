@@ -3,7 +3,7 @@ import {rootStore, taskView} from '../stores'
 import {EventListener, observer} from '../lib/little-react'
 import DebugDialog from './DebugDialog'
 import {FocusTrap} from '../lib/focus-trap-react'
-import TaskListScreen from './TaskListScreen'
+import TaskScreen from './TaskScreen'
 import {disposable} from '../lib/hoc'
 
 @disposable
@@ -40,7 +40,7 @@ class AppFrame extends Component {
             target={document}
             onKeyDown={rootStore.onKeyDown}
           />
-          <TaskListScreen />
+          <TaskScreen />
         </FocusTrap>
       </Fragment>
     )

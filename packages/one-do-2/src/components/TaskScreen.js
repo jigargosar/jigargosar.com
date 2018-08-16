@@ -19,7 +19,7 @@ function renderButton(label, onClick) {
 }
 
 @observer
-class TaskListScreen extends Component {
+class TaskScreen extends Component {
   render() {
     const pendingCount = taskView.pendingCount
     const pendingTasks = taskView.pendingTasks
@@ -50,6 +50,6 @@ class TaskListScreen extends Component {
   }
 }
 
-TaskListScreen.propTypes = {}
+TaskScreen.propTypes = {}
 
-export default TaskListScreen
+export default TaskScreen
