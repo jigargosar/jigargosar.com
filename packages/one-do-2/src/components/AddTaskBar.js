@@ -13,18 +13,19 @@ class AddTaskBar extends Component {
           <div className={cn('ph1 flex-auto')}>
             <TextField
               className={cn('br-pill bw0 ba bg-white-90')}
-              InputProps={{disableUnderline: true}}
-              inputProps={{
-                id: 'add-task-input',
-                className: cn('ph3 pv1 f5'),
-              }}
               fullWidth
               value={addTaskView.title}
               onChange={addTaskView.onTitleChange}
-              onKeyDown={withKeyEvent(
-                //
-                whenKey('enter')(addTaskView.addTask),
-              )}
+              InputProps={{
+                disableUnderline: true,
+                inputProps: {
+                  id: 'add-task-input',
+                  className: cn('ph3 pv1 f5'),
+                  onKeyDown: withKeyEvent(
+                    whenKey('enter')(addTaskView.addTask),
+                  ),
+                },
+              }}
             />
           </div>
           <div className={cn('ph1_')}>

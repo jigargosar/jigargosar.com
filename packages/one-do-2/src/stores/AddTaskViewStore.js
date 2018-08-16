@@ -23,6 +23,8 @@ export class AddTaskViewStore {
   @action
   addTaskAndKeepAdding() {
     this.addTask()
-    requestAnimationFrame(() => tryFocusDOMId('add-task-input'))
+    setTimeout(() => {
+      tryFocusDOMId('add-task-input')
+    }, 1000)
   }
 }
