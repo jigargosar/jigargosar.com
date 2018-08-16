@@ -8,7 +8,7 @@ import {
   observe,
   getDebugName,
 } from './mobx'
-import {call, compose, defaultTo} from './ramda'
+import {call, compose, concat, defaultTo, isNil, unless} from './ramda'
 import {hotDispose} from './hot'
 
 export function mobxStorage({store, key, disposers, preProcessStorageJS}) {
@@ -73,9 +73,10 @@ export function Disposers(module) {
 }
 
 export const logChange = change => {
-  const {type, object, oldValue, newValue} = change
-  console.log(
-    `[${type}] ${getDebugName(object)} ${oldValue} -> ${newValue}`,
-  )
+  const {type, object, oldValue, newValue, name} = change
+  const qualifiedName = `${getDebugName(object)}${unless(isNil)(
+    concat('.'),
+  )(name)}`
+  console.log(`[${type}] ${qualifiedName} ${oldValue} -> ${newValue}`)
   console.debug(change)
 }
