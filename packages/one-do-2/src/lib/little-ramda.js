@@ -9,7 +9,8 @@ import {
   curry,
   curryN,
   dec,
-  defaultTo, eqBy,
+  defaultTo,
+  eqBy,
   equals,
   forEach,
   head,
@@ -140,3 +141,4 @@ export function elByOffsetFn(offsetFn, el, list) {
 }
 
 export const eqById = eqBy(prop('id'))
+export const idEq = propEq('id')
