@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {rootStore, taskViewStore} from '../stores'
-import {cn, observer} from '../lib/little-react'
+import {cn, observer, tapPD} from '../lib/little-react'
 import {Btn} from '../lib/Btn'
 import {FlexRow} from '../lib/UI'
 import TaskList from './TaskList'
@@ -13,7 +13,9 @@ class TaskListScreen extends Component {
         <div className={cn('pv1 ph3', 'f2 b')}>Task List</div>
         <FlexRow className={cn('pv1 ph3')}>
           <div className={cn('mh1')}>
-            <Btn onClick={taskViewStore.addNewTask}>Add Task</Btn>
+            <button onClick={tapPD(taskViewStore.addNewTask)}>
+              Add Task
+            </button>
           </div>
           <div className={cn('mh1')}>
             <Btn onClick={rootStore.resetLS}>Reset LS</Btn>
