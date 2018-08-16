@@ -212,7 +212,7 @@ export const onClickSP = fn => ({onClick: tapSP(fn)})
 
 export const observerDN = dn => compose(setDisplayName(dn), observer)
 
-function logPersistEvent(e) {
+export function logPersistEvent(e) {
   e.persist()
   console.debug(e)
 }
