@@ -16,7 +16,7 @@ import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
 import {debugStore} from './index'
-import {isTargetRoleButton} from '../lib/little-dom'
+import {isTargetButton, isTargetRoleButton} from '../lib/little-dom'
 
 @autobind
 class RootStore {
@@ -85,7 +85,7 @@ class RootStore {
       whenKeyPD('d')(toggleDelete),
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
-    return unless(isTargetRoleButton)(
+    return unless(isTargetButton)(
       withKeyEvent(...globalShortcuts, ...shortcuts),
     )
   }
