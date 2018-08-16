@@ -33,6 +33,8 @@ class TaskViewStore {
   @observable
   selectedTaskId = null
 
+  @observable lastSelectedTaskId = null
+
   @computed
   get selectedTask() {
     return findByIdOrHead(this.selectedTaskId, this.tasks)
@@ -51,6 +53,13 @@ class TaskViewStore {
     return () => this.invokeOnSelectedTask(fnName)
   }
 
+  @action
+  unSelectTask(task) {
+    if (this.isTaskSelected(task)) {
+      this.setSelectedTask(null)
+      this.lastSelectedTaskId = task.id
+    }
+  }
   @action
   selectNextTask() {
     this.navigateToTask(nextEl(this.selectedTask, this.tasks))

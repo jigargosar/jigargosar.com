@@ -10,6 +10,10 @@ class TaskListItem extends Component {
     taskViewStore.setSelectedTask(task)
   }
 
+  handleOnBlur = task => () => {
+    taskViewStore.unSelectTask(task)
+  }
+
   render() {
     const {task} = this.props
     return (
@@ -18,6 +22,7 @@ class TaskListItem extends Component {
         tabIndex={task.isSelected ? 0 : -1}
         className={cn('ph1', 'link', {'bg-light-blue': task.isSelected})}
         onFocus={this.handleOnFocus(task)}
+        onBlur={this.handleOnBlur(task)}
       >
         <div
           className={cn('pa2', 'code usn pointer')}
