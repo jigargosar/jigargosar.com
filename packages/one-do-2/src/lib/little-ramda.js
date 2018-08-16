@@ -144,6 +144,7 @@ export function elByOffsetFn(offsetFn, el, list) {
 
 export const eqById = eqBy(prop('id'))
 export const idEq = propEq('id')
+
 const isDeletedPred = propOr(false)('isDeleted')
 export const rejectDeleted = reject(isDeletedPred)
 export const filterDeleted = filter(isDeletedPred)
