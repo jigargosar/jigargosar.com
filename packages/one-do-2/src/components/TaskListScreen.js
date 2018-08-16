@@ -10,6 +10,8 @@ import {Button} from '@material-ui/core'
 class TaskListScreen extends Component {
   render() {
     const pendingCount = taskViewStore.pendingCount
+    const pendingTasks = taskViewStore.pendingTasks
+    const doneTasks = taskViewStore.doneTasks
     return (
       <div className={cn('pv2')}>
         <div className={cn('pv1 ph1')}>
@@ -32,8 +34,8 @@ class TaskListScreen extends Component {
           </div>
         </FlexRow>
 
-        <TaskList tasks={taskViewStore.pendingTasks} />
-        <TaskList tasks={taskViewStore.doneTasks} />
+        <TaskList tasks={pendingTasks} />
+        <TaskList tasks={doneTasks} />
       </div>
     )
   }
