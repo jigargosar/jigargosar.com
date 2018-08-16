@@ -4,7 +4,12 @@ import {fWord} from '../lib/fake'
 import {setter, toggle} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
 import {compose, construct, defaultTo, map, mergeWith} from '../lib/ramda'
-import {findById, overProp} from '../lib/little-ramda'
+import {
+  filterDeleted,
+  findById,
+  overProp,
+  rejectDeleted,
+} from '../lib/little-ramda'
 import {taskViewStore} from './index'
 
 @autobind
@@ -39,23 +44,33 @@ const TaskConstructor = construct(Task)
 
 @autobind
 class TaskStore {
-  @observable tasks = []
+  @observable allTasks = []
+
+  @computed
+  get tasks() {
+    return rejectDeleted(this.allTasks)
+  }
+
+  @computed
+  get deletedTasks() {
+    return filterDeleted(this.allTasks)
+  }
 
   findById(id) {
-    return findById(id)(this.tasks)
+    return findById(id)(this.allTasks)
   }
 
   @action
   addNewTask() {
-    this.tasks.unshift(new Task({title: fWord()}))
+    this.allTasks.unshift(new Task({title: fWord()}))
   }
 
   @action
   applySnapshot(snapshot) {
     const toObj = compose(
       //
-      overProp('tasks')(map(TaskConstructor)),
-      mergeWith(defaultTo)({tasks: []}),
+      overProp('allTasks')(map(TaskConstructor)),
+      mergeWith(defaultTo)({allTasks: []}),
     )
     Object.assign(this, toObj(snapshot))
   }
