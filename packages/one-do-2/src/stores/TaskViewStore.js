@@ -2,6 +2,7 @@ import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {intercept, setter} from '../lib/mobx-decorators'
 import {
+  ascend,
   compose,
   defaultTo,
   indexOf,
@@ -9,6 +10,7 @@ import {
   mergeWith,
   omit,
   propOr,
+  sortWith,
   unless,
 } from '../lib/ramda'
 import {
@@ -19,6 +21,8 @@ import {
   nextEl,
   overProp,
   prevEl,
+  propIsDeleted,
+  propIsDone,
   rejectDone,
 } from '../lib/little-ramda'
 import {taskStore} from './index'
@@ -54,8 +58,15 @@ class TaskViewStore {
   }
 
   @computed
+  get sortedAllTasks() {
+    return sortWith([ascend(propIsDeleted), ascend(propIsDone)])(
+      taskStore.allTasks,
+    )
+  }
+
+  @computed
   get navigationTasks() {
-    return [...this.pendingTasks, ...this.doneTasks, ...this.deletedTasks]
+    return taskStore.sortedAllTasks
   }
 
   @computed

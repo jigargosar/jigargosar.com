@@ -4,21 +4,17 @@ import {fWord} from '../lib/fake'
 import {setter, toggle} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
 import {
-  ascend,
   compose,
   construct,
   defaultTo,
   map,
   mergeWith,
   pick,
-  sortWith,
 } from '../lib/ramda'
 import {
   filterDeleted,
   findById,
   overProp,
-  propIsDeleted,
-  propIsDone,
   rejectDeleted,
 } from '../lib/little-ramda'
 import {taskViewStore} from './index'
@@ -56,13 +52,6 @@ const TaskConstructor = construct(Task)
 @autobind
 class TaskStore {
   @observable allTasks = []
-
-  @computed
-  get sortedAllTasks() {
-    return sortWith([ascend(propIsDeleted), ascend(propIsDone)])(
-      this.allTasks,
-    )
-  }
 
   @computed
   get tasks() {
