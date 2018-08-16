@@ -25,11 +25,6 @@ class RootStore {
   @observable.ref taskView = new TaskViewStore()
 
   @computed
-  get stores() {
-    return pickBy(compose(endsWith('Store'), nthArg(1)))(this)
-  }
-
-  @computed
   get toJSON() {
     return prettyJSONStringify(this.toJS)
   }
