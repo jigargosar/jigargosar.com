@@ -10,12 +10,13 @@ import {
   nthArg,
   pickBy,
   propOr,
+  unless,
 } from '../lib/ramda'
 import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
 import {debugStore} from './index'
-import {targetRole} from '../lib/little-dom'
+import {isTargetRoleButton} from '../lib/little-dom'
 
 @autobind
 class RootStore {
@@ -84,10 +85,9 @@ class RootStore {
       whenKeyPD('d')(toggleDelete),
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts
-    return e => {
-      if ('button' === targetRole(e)) return e
-      return withKeyEvent(...globalShortcuts, ...shortcuts)(e)
-    }
+    return unless(isTargetRoleButton)(
+      withKeyEvent(...globalShortcuts, ...shortcuts),
+    )
   }
 }
 
