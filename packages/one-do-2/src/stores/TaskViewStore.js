@@ -48,10 +48,11 @@ class TaskViewStore {
 
   @computed
   get selectedTask() {
+    const tasks = this.navigationTasks
     return compose(
-      defaultTo(findByIdOrHead(this.lastSelectedTaskId)(this.tasks)),
+      defaultTo(findByIdOrHead(this.lastSelectedTaskId)(tasks)),
       findById(this.selectedTaskId),
-    )(this.tasks)
+    )(tasks)
   }
 
   @computed
