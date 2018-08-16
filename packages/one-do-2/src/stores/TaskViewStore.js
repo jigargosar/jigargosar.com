@@ -54,6 +54,7 @@ class TaskViewStore {
   get tasks() {
     return filterDeleted(taskStore.tasks)
   }
+
   @computed
   get pendingTasks() {
     return filterDone(this.tasks)
