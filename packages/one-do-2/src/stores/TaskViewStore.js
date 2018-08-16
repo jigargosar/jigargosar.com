@@ -92,6 +92,12 @@ class TaskViewStore {
   }
 
   @action
+  addNewTask() {
+    const task = taskStore.addNewTask()
+    this.setSelectedTask(task)
+  }
+
+  @action
   unSelectTask(task) {
     if (this.isTaskSelected(task)) {
       this.setSelectedTask(null)
