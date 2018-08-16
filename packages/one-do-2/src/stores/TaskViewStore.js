@@ -3,9 +3,7 @@ import {autobind} from '../lib/autobind'
 import {intercept, setter} from '../lib/mobx-decorators'
 import {
   compose,
-  concat,
   defaultTo,
-  flatten,
   indexOf,
   is,
   mergeWith,
