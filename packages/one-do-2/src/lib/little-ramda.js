@@ -138,3 +138,5 @@ export function elByOffsetFn(offsetFn, el, list) {
     indexOfOrNaN(el),
   )(list)
 }
+
+export const eqById = eqBy(prop('id'))

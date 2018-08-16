@@ -10,6 +10,7 @@ import {
   unless,
 } from '../lib/ramda'
 import {
+  eqById,
   findById,
   findByIdOrHead,
   nextEl,
@@ -49,10 +50,9 @@ class TaskViewStore {
     return taskStore.tasks
   }
 
-  isTaskSelected({id}) {
-    return this.selectedTaskId === id
+  isTaskSelected(task) {
+    return eqById(this.selectedTask)(task)
   }
-
   selectedTaskInvoker(fnName) {
     return () => this.invokeOnSelectedTask(fnName)
   }
@@ -64,11 +64,11 @@ class TaskViewStore {
       this.lastSelectedTaskId = task.id
     }
   }
+
   @action
   selectNextTask() {
     this.navigateToTask(nextEl(this.selectedTask, this.tasks))
   }
-
   @action
   selectPrevTask() {
     this.navigateToTask(prevEl(this.selectedTask, this.tasks))
