@@ -55,7 +55,7 @@ class TaskViewStore {
 
   @computed
   get navigationTasks() {
-    return taskStore.allTasks
+    return [...this.pendingTasks, ...this.doneTasks, ...this.deletedTasks]
   }
 
   @computed
