@@ -6,6 +6,7 @@ import {
   concat,
   defaultTo,
   identity,
+  indexOf,
   is,
   mergeWith,
   propOr,
@@ -24,6 +25,7 @@ import {
   rejectDone,
 } from '../lib/little-ramda'
 import {taskStore} from './index'
+import {Disposers} from '../lib/little-mobx'
 
 function tryFocusDOMId(id) {
   const el = document.getElementById(id)
@@ -42,6 +44,8 @@ class TaskViewStore {
   selectedTaskId = null
 
   @observable lastSelectedTaskId = null
+
+  disposers = Disposers(module)
 
   @computed
   get selectedTask() {
@@ -79,8 +83,20 @@ class TaskViewStore {
   isTaskSelected(task) {
     return eqById(this.selectedTask)(task)
   }
+
   selectedTaskInvoker(fnName) {
     return () => this.invokeOnSelectedTask(fnName)
+  }
+
+  @action
+  startManagingFocus() {
+    let lastIdx = NaN
+    this.disposers.autorun(() => {
+      const newIdx = indexOf(this.selectedTask)(this.navigationTasks)
+      if (lastIdx !== newIdx) {
+        this.tryFocusSelectedTask()
+      }
+    })
   }
 
   @action
@@ -95,6 +111,7 @@ class TaskViewStore {
   selectNextTask() {
     this.navigateToTask(nextEl(this.selectedTask, this.navigationTasks))
   }
+
   @action
   selectPrevTask() {
     this.navigateToTask(prevEl(this.selectedTask, this.navigationTasks))
