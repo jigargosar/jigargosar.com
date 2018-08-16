@@ -66,7 +66,7 @@ class TaskViewStore {
 
   @computed
   get navigationTasks() {
-    return taskStore.sortedAllTasks
+    return this.sortedAllTasks
   }
 
   @computed
