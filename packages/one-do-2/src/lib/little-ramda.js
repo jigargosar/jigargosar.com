@@ -9,7 +9,7 @@ import {
   curry,
   curryN,
   dec,
-  defaultTo,
+  defaultTo, eqBy,
   equals,
   forEach,
   head,
