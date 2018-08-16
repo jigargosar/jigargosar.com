@@ -2,9 +2,12 @@ import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {intercept, setter, toggle} from '../lib/mobx-decorators'
 import {
+  allPass,
   ascend,
+  complement,
   compose,
   defaultTo,
+  filter,
   indexOf,
   is,
   mergeWith,
@@ -75,7 +78,11 @@ class TaskViewStore {
 
   @computed
   get navigationTasks() {
-    return rejectDeleted(this.sortedAllTasks)
+    const filters = [
+      this.isDeletedHidden ? complement(propIsDeleted) : propIsDeleted,
+      this.isDoneHidden ? complement(propIsDone) : propIsDone,
+    ]
+    return filter(allPass(filters))(this.sortedAllTasks)
   }
 
   @computed
