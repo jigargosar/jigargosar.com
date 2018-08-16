@@ -39,7 +39,7 @@ const TaskConstructor = construct(Task)
 
 @autobind
 class TaskStore {
-  @observable tasks = []
+  @observable.deep tasks = []
 
   findById(id) {
     return findById(id)(this.tasks)
