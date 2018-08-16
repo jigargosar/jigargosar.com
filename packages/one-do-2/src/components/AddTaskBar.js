@@ -22,12 +22,11 @@ class AddTaskBar extends Component {
           </div>
           <div className={cn('ph1_')}>
             <IconButton
-              className={cn('f3')}
+              className={cn('f3 blue')}
               style={{
-                width: '1.4em',
-                height: '1.4em',
+                width: '1.3em',
+                height: '1.3em',
               }}
-              color={'secondary'}
             >
               <AddIcon fontSize={'inherit'} />
             </IconButton>
