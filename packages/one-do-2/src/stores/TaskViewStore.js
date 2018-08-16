@@ -67,7 +67,7 @@ class TaskViewStore {
 
   @computed
   get navigationTasks() {
-    return this.sortedAllTasks
+    return rejectDeleted(this.sortedAllTasks)
   }
 
   @computed
