@@ -210,6 +210,4 @@ taskStore.lsFetch()
 
 disposers.autorun(taskStore.lsSave, {name: 'taskStore.lsSave'})
 
-// taskStore.addNewTask()
-
 export {taskStore}
