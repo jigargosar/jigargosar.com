@@ -85,6 +85,15 @@ class Collection {
     throw new Error('[Collection] lsKey not implemented')
   }
 
+  @action
+  lsFetch() {
+    this.applySnapshot(defaultTo({})(storage.get(this.lsKey)))
+  }
+
+  lsSave() {
+    return storage.set(this.lsKey, this.snapshot)
+  }
+
   indexOf(model) {
     return indexOfOrNaN(model)(this.models)
   }
@@ -106,6 +115,11 @@ class Collection {
 
 @autobind
 class TaskStore extends Collection {
+  @computed
+  get lsKey() {
+    return 'TaskCollection'
+  }
+
   @computed
   get tasks() {
     return this.models
