@@ -198,14 +198,7 @@ class TaskStore extends Collection {
 
   @action
   addNewTask() {
-    return this.pushProps({title: fWord()})
-  }
-
-  @action
-  addTask({title}) {
-    const task = new Task({title}, {collection: this})
-    this.models.unshift(task)
-    return task
+    return this.unshiftProps({title: fWord()})
   }
 }
 
