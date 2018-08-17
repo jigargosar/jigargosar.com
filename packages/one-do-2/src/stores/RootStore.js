@@ -1,20 +1,13 @@
 import {action, computed, observable, toJS} from '../lib/mobx'
-import {overProp, prettyJSONStringify} from '../lib/little-ramda'
+import {prettyJSONStringify} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
-import {
-  compose,
-  defaultTo,
-  merge,
-  prop,
-  propOr,
-  unless,
-} from '../lib/ramda'
+import {defaultTo, merge, propOr, unless} from '../lib/ramda'
 import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
-import {debugStore, taskStore} from './index'
+import {debugStore} from './index'
 import {isTargetAnyInput} from '../lib/little-dom'
 import {AddTaskViewStore} from './AddTaskViewStore'
 
@@ -37,8 +30,7 @@ class RootStore {
 
   @computed
   get snapshot() {
-    debugger
-    return merge(this.toJS)({taskStore: taskStore.snapshot})
+    return toJS(merge(this.toJS)({taskStore: this.taskStore.snapshot}))
   }
 
   @computed

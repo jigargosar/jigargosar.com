@@ -1,13 +1,21 @@
-import {action, computed, observable} from '../lib/mobx'
+import {
+  action,
+  computed,
+  observable,
+  observableGet,
+  toJS,
+} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
 import {
   compose,
+  construct,
+  constructN,
   defaultTo,
-  invoker,
   isNil,
   map,
+  merge,
   mergeWith,
   pick,
   prop,
@@ -43,7 +51,7 @@ class Model {
   }
 
   get(attribute) {
-    return this.attributes[attribute]
+    return observableGet(this.attributes, attribute)
   }
 
   @action
@@ -54,11 +62,6 @@ class Model {
   @autobind
   defaults() {
     return {}
-  }
-
-  @action
-  static create(attributes) {
-    return new Model(attributes || {})
   }
 }
 
@@ -84,6 +87,7 @@ class Task extends Model {
 
   @computed
   get title() {
+    debugger
     return this.get('title')
   }
 
@@ -132,7 +136,9 @@ class TaskStore {
 
   @computed
   get snapshot() {
-    return map(prop('attributes'))(this.allTasks)
+    return merge(toJS(this))({
+      allTasks: map(prop('attributes'))(this.allTasks),
+    })
   }
 
   @action
@@ -151,7 +157,7 @@ class TaskStore {
   applySnapshot(snapshot) {
     const toObj = compose(
       pick(['allTasks']),
-      overProp('allTasks')(map(Task.create)),
+      overProp('allTasks')(map(attributes => new Task(attributes))),
       mergeWith(defaultTo)({allTasks: []}),
     )
     Object.assign(this, toObj(snapshot))
