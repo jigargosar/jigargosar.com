@@ -34,6 +34,10 @@ class Model {
 
   @action.bound
   destroy() {
+    console.assert(
+      this.collection,
+      'Calling destroy on model without an associated collection has no effect',
+    )
     if (this.collection) {
       this.collection.destroy(this)
     }
