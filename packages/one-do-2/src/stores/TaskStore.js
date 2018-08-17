@@ -1,10 +1,4 @@
-import {
-  action,
-  computed,
-  observable,
-  observableKeys,
-  toJS,
-} from '../lib/mobx'
+import {action, computed, observable, observableKeys} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
@@ -37,12 +31,10 @@ class Task {
   }
 
   constructor(props) {
-    debugger
     const mergeWithDefaults = mergeWith(defaultTo)(this.defaults())
+    const modelKeys = observableKeys(this)
     this.set(
-      compose(mergeWithDefaults, pick(observableKeys), defaultTo({}))(
-        props,
-      ),
+      compose(mergeWithDefaults, pick(modelKeys), defaultTo({}))(props),
     )
   }
 
