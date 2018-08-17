@@ -67,7 +67,7 @@ class RootStore {
     const taskView = this.taskView
     const selectedTaskInvoker = taskView.selectedTaskInvoker
     const toggleDone = selectedTaskInvoker('toggleDone')
-    const toggleDelete = selectedTaskInvoker('toggleDelete')
+    const destroy = selectedTaskInvoker('destroy')
     const globalShortcuts = [
       whenKeyPD('`')(this.debugStore.toggleDebugView),
     ]
@@ -77,7 +77,7 @@ class RootStore {
       whenKeyPD('space')(toggleDone),
       whenKeyPD('x')(toggleDone),
       whenKeyPD('mod+right')(toggleDone),
-      whenKeyPD('d')(toggleDelete),
+      whenKeyPD('d')(destroy),
       whenKeyPD('q')(taskView.addNewTask),
     ]
     const shortcuts = debugStore.isDebugViewOpen ? [] : noDialogShortcuts

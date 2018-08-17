@@ -15,11 +15,13 @@ import {setObservableProps} from '../lib/little-mobx'
 class Task {
   @observable id = `Task_${nanoid()}`
   @observable title = ''
-  @observable isDeleted = false
   @observable isDone = false
 
-  constructor(props) {
+  collection = null
+
+  constructor(props = {}, {collection} = {}) {
     this.set(props)
+    this.collection = collection
   }
 
   @action
@@ -33,8 +35,10 @@ class Task {
   }
 
   @action.bound
-  toggleDelete() {
-    this.set({isDeleted: !this.isDeleted})
+  destroy() {
+    if (this.collection) {
+      this.collection.destroy(this)
+    }
   }
 
   @action.bound
