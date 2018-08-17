@@ -21,11 +21,9 @@ import {taskView} from './index'
 
 class Model {
   constructor(attributes) {
-    this.cid = `cid_${nanoid()}`
     this.set(mergeWith(defaultTo)(this.defaults())(attributes))
   }
 
-  @observable cid
   @observable attributes = {}
 
   @computed
@@ -34,8 +32,13 @@ class Model {
   }
 
   @computed
+  get sid() {
+    return this.attributes.sid
+  }
+
+  @computed
   get isNew() {
-    return isNil(this.id)
+    return isNil(this.sid)
   }
 
   get(attribute) {
@@ -58,17 +61,19 @@ class Model {
   }
 }
 
-class Task {
-  @observable id = `Task_${nanoid()}`
+class Task extends Model {
+  // @observable id = `Task_${nanoid()}`
+  //
+  // @observable title = ''
+  //
+  // @observable isDeleted = false
+  //
+  // @observable isDone = false
+  //
 
-  @observable title = ''
-
-  @observable isDeleted = false
-
-  @observable isDone = false
-
-  constructor(snapshot) {
-    Object.assign(this, snapshot)
+  @autobind
+  defaults() {
+    return {id: `Task_${nanoid()}`, title: ''}
   }
 
   @computed
