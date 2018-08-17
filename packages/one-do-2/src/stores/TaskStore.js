@@ -142,13 +142,9 @@ const taskStore = new TaskStore()
 
 const disposers = Disposers(module)
 
-taskStore.applySnapshot(defaultTo({})(storage.get('taskStore')))
+taskStore.lsFetch()
 
-disposers.autorun(() => {
-  console.table(taskStore.snapshot.models)
-  console.log(`ts.snapshot`, taskStore.snapshot)
-  storage.set('taskStore', taskStore.snapshot)
-})
+disposers.autorun(taskStore.lsSave, {name: 'taskStore.lsSave'})
 
 // taskStore.addNewTask()
 
