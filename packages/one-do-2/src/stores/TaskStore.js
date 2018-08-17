@@ -20,6 +20,10 @@ import {
 import {taskView} from './index'
 
 class Model {
+  constructor(attributes) {
+    this.set(mergeWith(defaultTo)(this.defaults())(attributes))
+  }
+
   @observable cid
   @observable attributes = {}
 
@@ -47,7 +51,10 @@ class Model {
     return {}
   }
 
-  static create(attributes) {}
+  @action
+  static create(attributes) {
+    return new Model(attributes)
+  }
 }
 
 class Task {
