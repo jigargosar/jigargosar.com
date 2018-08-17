@@ -1,8 +1,8 @@
-import {action, computed, observable} from '../lib/mobx'
+import {action, computed, observable, toJS} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {compose, map} from '../lib/ramda'
+import {compose, map, omit} from '../lib/ramda'
 import {
   filterDeleted,
   findById,
@@ -19,6 +19,11 @@ class Task {
 
   constructor(props = {}) {
     this.set(props)
+  }
+
+  @computed
+  get snapshot() {
+    return compose(omit(['collection']), toJS)(this)
   }
 
   @action
@@ -95,3 +100,5 @@ const ts = new TaskStore()
 const disposers = Disposers(module)
 
 disposers.autorun(() => console.log(`ts.snapshot`, ts.snapshot))
+
+ts.addNewTask()
