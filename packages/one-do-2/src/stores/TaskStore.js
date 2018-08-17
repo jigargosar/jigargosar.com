@@ -17,11 +17,8 @@ class Task {
   @observable title = ''
   @observable isDone = false
 
-  @observable collection = null
-
-  constructor(props = {}, {collection} = {}) {
+  constructor(props = {}) {
     this.set(props)
-    this.collection = collection
   }
 
   @action
@@ -72,7 +69,7 @@ class TaskStore {
 
   @action
   addTask({title}) {
-    const task = new Task({title}, {collection: this})
+    const task = new Task({title})
     this.allTasks.unshift(task)
     return task
   }
@@ -80,9 +77,7 @@ class TaskStore {
   @action
   applySnapshot(snapshot) {
     const props = compose(
-      overProp('allTasks')(
-        map(props => new Task(props, {collection: this})),
-      ),
+      overProp('allTasks')(map(props => new Task(props))),
     )(snapshot)
     setObservableProps(props, this)
   }
