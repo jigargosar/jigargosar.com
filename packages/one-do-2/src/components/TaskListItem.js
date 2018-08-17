@@ -7,7 +7,6 @@ import {taskView} from '../stores'
 @observer
 class TaskListItem extends Component {
   handleOnFocus = task => () => {
-    debugger
     taskView.setSelectedTask(task)
   }
 
