@@ -20,25 +20,15 @@ import {
 import {taskView} from './index'
 
 class Model {
-  @observable attrs = {}
+  @observable attributes = {}
 
-  get(attr) {
-    return this.attrs[attr]
+  get(attribute) {
+    return this.attributes[attribute]
   }
 
   @action
-  set(attr, val) {
-    this.updateAttrs({[attr]: val})
-  }
-
-  @action
-  toggle(attr) {
-    this.updateAttrs({[attr]: !Boolean(this.attrs[attr])})
-  }
-
-  @action
-  updateAttrs(attrs) {
-    Object.assign(this.attrs, attrs)
+  set(attributes) {
+    Object.assign(this.attributes, attributes)
   }
 }
 
