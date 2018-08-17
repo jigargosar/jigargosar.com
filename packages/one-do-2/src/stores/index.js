@@ -7,7 +7,6 @@ configure({computedRequiresReaction: true, enforceActions: true})
 
 export const rootStore = observable(new RootStore())
 
-export {taskStore} from './TaskStore'
 export const debugStore = rootStore.debugStore
 export const taskView = rootStore.taskView
 export const addTaskView = rootStore.addTaskView

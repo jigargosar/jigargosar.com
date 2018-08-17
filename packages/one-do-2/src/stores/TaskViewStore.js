@@ -19,9 +19,9 @@ import {
   propIsDone,
   rejectDone,
 } from '../lib/little-ramda'
-import {taskStore} from './index'
 import {Disposers} from '../lib/little-mobx'
 import {tryFocusDOMId} from '../lib/little-dom'
+import {taskStore} from './TaskStore'
 
 @autobind
 class TaskViewStore {

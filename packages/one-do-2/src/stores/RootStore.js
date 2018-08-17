@@ -1,7 +1,6 @@
 import {action, computed, observable, toJS} from '../lib/mobx'
 import {prettyJSONStringify} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
-import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
 import {defaultTo, propOr, unless} from '../lib/ramda'
 import DebugStore from './DebugStore'
