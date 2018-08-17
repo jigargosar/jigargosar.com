@@ -22,13 +22,13 @@ class Model {
   @observable cid
   @observable attributes = {}
 
-  get(attribute) {
-    return this.attributes[attribute]
-  }
-
   @computed
   get id() {
     return this.attributes.id
+  }
+
+  get(attribute) {
+    return this.attributes[attribute]
   }
 
   @action
