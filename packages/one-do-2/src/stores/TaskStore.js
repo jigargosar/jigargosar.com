@@ -132,7 +132,6 @@ class TaskStore {
 
   @computed
   get snapshot() {
-    debugger
     return map(prop('attributes'))(this.allTasks)
   }
 
