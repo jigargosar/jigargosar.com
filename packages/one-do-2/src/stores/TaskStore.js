@@ -21,7 +21,8 @@ class Model {
 
   @computed
   get snapshot() {
-    return compose(omit(['collection']), toJS)(this)
+    const ownPropNames = Object.getOwnPropertyNames(Model.prototype)
+    return compose(omit(ownPropNames), toJS)(this)
   }
 
   @action
@@ -34,11 +35,6 @@ class Task extends Model {
   @observable id = `Task_${nanoid()}`
   @observable title = ''
   @observable isDone = false
-
-  @computed
-  get snapshot() {
-    return compose(omit(['collection']), toJS)(this)
-  }
 
   @action
   set(props) {
