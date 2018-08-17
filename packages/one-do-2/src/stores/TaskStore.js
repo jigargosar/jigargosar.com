@@ -124,13 +124,25 @@ class Collection {
 
   @action
   pushAllProps(propsList) {
-    const models = map(this.modelFromProps)(propsList)
-    this.models.push(...this.modelFromPropsList(propsList))
+    const models = this.modelFromPropsList(propsList)
+    this.models.push(...models)
     return models
   }
 
   @action
   pushProps(props) {
+    return head(this.pushAllProps([props]))
+  }
+
+  @action
+  unshiftAllProps(propsList) {
+    const models = this.modelFromPropsList(propsList)
+    this.models.unshift(...models)
+    return models
+  }
+
+  @action
+  unshiftProps(props) {
     return head(this.pushAllProps([props]))
   }
 
