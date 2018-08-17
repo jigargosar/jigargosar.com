@@ -180,7 +180,7 @@ class Collection {
 }
 
 @autobind
-class TaskStore extends Collection {
+class TaskCollection extends Collection {
   @computed
   get lsKey() {
     return 'TaskCollection'
@@ -202,7 +202,7 @@ class TaskStore extends Collection {
   }
 }
 
-const taskStore = new TaskStore()
+const taskStore = new TaskCollection()
 
 const disposers = Disposers(module)
 
