@@ -7,6 +7,7 @@ import {
   compose,
   defaultTo,
   filter,
+  head,
   is,
   map,
   mergeWith,
@@ -116,10 +117,21 @@ class Collection {
     return new modelClass(props, {collection: this})
   }
 
+  @autobind
+  modelFromPropsList(propsList) {
+    return map(this.modelFromProps)(propsList)
+  }
+
   @action
   pushAllProps(propsList) {
     const models = map(this.modelFromProps)(propsList)
-    this.models.push(...models)
+    this.models.push(...this.modelFromPropsList(propsList))
+    return models
+  }
+
+  @action
+  pushProps(props) {
+    return head(this.pushAllProps([props]))
   }
 
   lsSave() {
@@ -174,7 +186,7 @@ class TaskStore extends Collection {
 
   @action
   addNewTask() {
-    return this.addTask({title: fWord()})
+    return this.pushProps({title: fWord()})
   }
 
   @action
