@@ -3,12 +3,7 @@ import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
 import {compose, defaultTo, map, mergeWith, omit} from '../lib/ramda'
-import {
-  filterDeleted,
-  findById,
-  overProp,
-  rejectDeleted,
-} from '../lib/little-ramda'
+import {findById, overProp} from '../lib/little-ramda'
 import {taskView} from './index'
 import {Disposers, setObservableProps} from '../lib/little-mobx'
 import {storage} from '../lib/storage'
@@ -71,12 +66,7 @@ class TaskStore {
 
   @computed
   get tasks() {
-    return rejectDeleted(this.models)
-  }
-
-  @computed
-  get deletedTasks() {
-    return filterDeleted(this.models)
+    return this.models
   }
 
   findById(id) {
