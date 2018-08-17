@@ -2,7 +2,7 @@ import {action, computed, observable, observableKeys} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {compose, defaultTo, map, mergeWith, pick} from '../lib/ramda'
+import {compose, map, pick} from '../lib/ramda'
 import {
   filterDeleted,
   findById,
@@ -10,6 +10,14 @@ import {
   rejectDeleted,
 } from '../lib/little-ramda'
 import {taskView} from './index'
+
+function pickObservableKeysOf(observableObj) {
+  return pick(observableKeys(observableObj))
+}
+
+function setObservableProps(props, obs) {
+  Object.assign(obs, pickObservableKeysOf(obs)(props))
+}
 
 class Task {
   @observable id = `Task_${nanoid()}`
@@ -23,7 +31,7 @@ class Task {
 
   @action
   set(props) {
-    Object.assign(this, pick(observableKeys(this))(props))
+    setObservableProps(props, this)
   }
 
   @computed
