@@ -6,10 +6,13 @@ import {
   always,
   compose,
   defaultTo,
+  filter,
   is,
+  isNil,
   map,
   mergeWith,
   omit,
+  reject,
   unless,
 } from '../lib/ramda'
 import {findById, indexOfOrNaN, overProp} from '../lib/little-ramda'
@@ -101,9 +104,11 @@ class Collection {
 
   @action
   lsFetch() {
-    const propsList = unless(is(Array))(always([]))(
-      storage.get(this.lsKey),
-    )
+    const propsList = compose(
+      //
+      filter(is(Object)),
+      unless(is(Array))(always([])),
+    )(storage.get(this.lsKey))
     this.removeAll()
     this.pushAllProps(propsList)
   }
