@@ -1,8 +1,8 @@
-import {action, computed, observable, observableKeys} from '../lib/mobx'
+import {action, computed, observable} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {compose, defaultTo, keys, map, mergeWith, pick} from '../lib/ramda'
+import {compose, defaultTo, map, mergeWith, pick} from '../lib/ramda'
 import {
   filterDeleted,
   findById,
@@ -31,11 +31,7 @@ class Task {
   }
 
   constructor(props) {
-    const defaultProps = this.defaults()
-    const mergeWithDefaults = mergeWith(defaultTo)(defaultProps)
-    const propsWithDefault = compose(mergeWithDefaults, defaultTo({}))(
-      props,
-    )
+    const propsWithDefault = mergeWith(defaultTo)(this.defaults())(props)
     this.set(propsWithDefault)
   }
 
