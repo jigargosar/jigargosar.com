@@ -8,11 +8,9 @@ import {
   defaultTo,
   filter,
   is,
-  isNil,
   map,
   mergeWith,
   omit,
-  reject,
   unless,
 } from '../lib/ramda'
 import {findById, indexOfOrNaN, overProp} from '../lib/little-ramda'
