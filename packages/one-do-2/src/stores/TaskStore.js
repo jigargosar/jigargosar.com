@@ -1,7 +1,6 @@
 import {action, computed, observable} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
-import {setter, toggle} from 'mobx-decorators'
 import {autobind} from '../lib/autobind'
 import {
   compose,
@@ -29,6 +28,11 @@ class Model {
   @action
   set(attributes) {
     Object.assign(this.attributes, attributes)
+  }
+
+  @autobind
+  defaults() {
+    return {}
   }
 
   static create(attributes) {}
