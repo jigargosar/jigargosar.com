@@ -60,6 +60,7 @@ class Task extends Model {
   }
 }
 
+@autobind
 class Collection {
   @observable models = []
 
@@ -77,6 +78,11 @@ class Collection {
   @computed
   get snapshot() {
     return compose(overProp('models')(map(model => model.snapshot)))(this)
+  }
+
+  @computed
+  get lsKey() {
+    throw new Error('[Collection] lsKey not implemented')
   }
 
   indexOf(model) {
