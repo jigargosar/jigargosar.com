@@ -13,11 +13,8 @@ import {taskView} from './index'
 
 class Task {
   @observable id
-
   @observable title
-
   @observable isDeleted
-
   @observable isDone
 
   @autobind
