@@ -12,24 +12,13 @@ import {
 import {taskView} from './index'
 
 class Task {
-  @observable id
-  @observable title
-  @observable isDeleted
-  @observable isDone
-
-  @autobind
-  defaults() {
-    return {
-      id: `Task_${nanoid()}`,
-      title: '',
-      isDone: false,
-      isDeleted: false,
-    }
-  }
+  @observable id = `Task_${nanoid()}`
+  @observable title = ''
+  @observable isDeleted = false
+  @observable isDone = false
 
   constructor(props) {
-    const propsWithDefault = mergeWith(defaultTo)(this.defaults())(props)
-    this.set(propsWithDefault)
+    this.set(props)
   }
 
   @action
