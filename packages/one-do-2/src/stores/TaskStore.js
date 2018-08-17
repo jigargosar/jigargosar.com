@@ -17,7 +17,7 @@ class Task {
   @observable title = ''
   @observable isDone = false
 
-  collection = null
+  @observable collection = null
 
   constructor(props = {}, {collection} = {}) {
     this.set(props)
