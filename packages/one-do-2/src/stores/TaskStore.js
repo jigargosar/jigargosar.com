@@ -133,6 +133,11 @@ class Collection {
     return head(this.pushAllProps([props]))
   }
 
+  @action
+  addProps(props) {
+    return this.pushProps(props)
+  }
+
   lsSave() {
     return storage.set(this.lsKey, this.snapshot)
   }
