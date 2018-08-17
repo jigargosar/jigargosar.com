@@ -19,6 +19,15 @@ import {
 } from '../lib/little-ramda'
 import {taskView} from './index'
 
+class Model {
+  @observable attributes = {}
+
+  @action
+  updateAttrs(attrs) {
+    Object.assign(this.attributes, attrs)
+  }
+}
+
 class Task {
   @observable id = `Task_${nanoid()}`
 
