@@ -111,9 +111,7 @@ class Collection {
   @autobind
   modelFromProps(props) {
     const modelClass = this.model
-    const model = new modelClass(props, {collection: this})
-    debugger
-    return model
+    return new modelClass(props, {collection: this})
   }
 
   @action
