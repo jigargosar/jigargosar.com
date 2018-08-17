@@ -73,7 +73,7 @@ class TaskStore {
   }
 
   @action
-  applySnapshot(snapshot = {}) {
+  applySnapshot(snapshot) {
     const toObj = compose(
       overProp('allTasks')(map(props => new Task(props))),
     )
