@@ -16,6 +16,4 @@ export const store = rootStore
 const disposers = Disposers(module)
 rootStore.loadFromLS()
 
-disposers.autorun(() => {
-  rootStore.saveToLS()
-})
+disposers.autorun(rootStore.saveToLS)
