@@ -5,16 +5,14 @@ import {autobind} from '../lib/autobind'
 import {
   always,
   compose,
-  defaultTo,
   filter,
   head,
   is,
   map,
-  mergeWith,
   omit,
   unless,
 } from '../lib/ramda'
-import {findById, indexOfOrNaN, overProp} from '../lib/little-ramda'
+import {findById, indexOfOrNaN} from '../lib/little-ramda'
 import {taskView} from './index'
 import {Disposers, setObservableProps} from '../lib/little-mobx'
 import {storage} from '../lib/storage'
