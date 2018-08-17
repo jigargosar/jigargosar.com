@@ -14,9 +14,10 @@ import {Disposers, setObservableProps} from '../lib/little-mobx'
 import {storage} from '../lib/storage'
 
 class Model {
-  @observable collection = {}
+  @observable collection
 
-  constructor(props = {}) {
+  constructor(props = {}, {collection = null} = {}) {
+    this.collection = collection
     this.set(props)
   }
 
@@ -85,7 +86,7 @@ class TaskStore {
 
   @action
   addTask({title}) {
-    const task = new Task({title})
+    const task = new Task({title}, {collection: this})
     this.allTasks.unshift(task)
     return task
   }
@@ -93,7 +94,9 @@ class TaskStore {
   @action
   applySnapshot(snapshot) {
     const props = compose(
-      overProp('allTasks')(map(props => new Task(props))),
+      overProp('allTasks')(
+        map(props => new Task(props, {collection: this})),
+      ),
       mergeWith(defaultTo)({allTasks: []}),
     )(snapshot)
     setObservableProps(props, this)
