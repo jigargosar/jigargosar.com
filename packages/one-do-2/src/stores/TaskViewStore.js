@@ -1,6 +1,5 @@
 import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
-import {intercept, setter, toggle} from '../lib/mobx-decorators'
 import {
   ascend,
   compose,
@@ -9,6 +8,7 @@ import {
   is,
   mergeWith,
   pick,
+  prop,
   propOr,
   sortWith,
   unless,
@@ -30,10 +30,12 @@ import {tryFocusDOMId} from '../lib/little-dom'
 
 @autobind
 class TaskViewStore {
-  @intercept(overProp('newValue')(unless(is(String))(propOr(null)('id'))))
-  @setter('setSelectedTask')
-  @observable
-  selectedTaskId = null
+  @observable selectedTaskId = null
+
+  @action
+  setSelectedTask(task) {
+    this.selectedTaskId = propOr(null)('id')(task)
+  }
 
   @observable lastSelectedTaskId = null
 
@@ -49,9 +51,7 @@ class TaskViewStore {
     Object.assign(this, toObj(snapshot))
   }
 
-  @toggle('toggleDoneGroup')
-  @observable
-  isDoneHidden = false
+  @observable isDoneHidden = false
 
   disposers = Disposers(module)
 
