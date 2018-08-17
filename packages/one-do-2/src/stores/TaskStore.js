@@ -27,9 +27,7 @@ class Task {
   @observable
   title = ''
 
-  @toggle('toggleDelete')
-  @observable
-  isDeleted = false
+  @observable isDeleted = false
 
   @setter('markDone', true)
   @setter('markUnDone', false)
@@ -44,6 +42,11 @@ class Task {
   @computed
   get isSelected() {
     return taskView.isTaskSelected(this)
+  }
+
+  @action
+  toggleDelete() {
+    this.isDeleted = !this.isDeleted
   }
 }
 
