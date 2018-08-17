@@ -92,8 +92,13 @@ class TaskStore {
   }
 
   @action
-  destroy(model) {
+  remove(model) {
     return this.models.splice(this.indexOf(model), 1)
+  }
+
+  @action
+  destroy(model) {
+    return this.remove(model)
   }
 
   @computed
