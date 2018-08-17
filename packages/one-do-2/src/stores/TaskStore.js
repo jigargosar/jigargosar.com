@@ -22,17 +22,11 @@ import {taskView} from './index'
 class Task {
   @observable id = `Task_${nanoid()}`
 
-  @setter
-  @observable
-  title = ''
+  @observable title = ''
 
   @observable isDeleted = false
 
-  @setter('markDone', true)
-  @setter('markUnDone', false)
-  @toggle('toggleDone')
-  @observable
-  isDone = false
+  @observable isDone = false
 
   constructor(snapshot) {
     Object.assign(this, snapshot)
@@ -46,6 +40,10 @@ class Task {
   @action.bound
   toggleDelete() {
     this.isDeleted = !this.isDeleted
+  }
+  @action.bound
+  toggleDone() {
+    this.isDone = !this.isDone
   }
 }
 
