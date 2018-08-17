@@ -1,4 +1,5 @@
 import {configureMobx, Disposers} from '../lib/little-mobx'
+import {enableLogging} from 'mobx-logger'
 
 configureMobx({computedRequiresReaction: true, enforceActions: true})
 
@@ -6,6 +7,17 @@ const disposers = Disposers(module)
 
 disposers.spy(change => {
   // console.debug(`change`, change)
+})
+
+enableLogging({
+  // action: true,
+  // reaction: true,
+  // compute: true,
+  // transaction: true,
+  predicate: (...args) => {
+    console.log(`args`, ...args)
+    return true
+  },
 })
 
 // disposers.spy(change => {
