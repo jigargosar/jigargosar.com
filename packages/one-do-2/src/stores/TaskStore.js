@@ -30,7 +30,7 @@ class Model {
 
   @computed
   get isNew() {
-    return isNil(this.attributes.id)
+    return isNil(this.id)
   }
 
   get(attribute) {
