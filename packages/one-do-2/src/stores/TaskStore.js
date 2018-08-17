@@ -2,8 +2,15 @@ import {action, computed, observable, toJS} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {compose, defaultTo, map, mergeWith, omit} from '../lib/ramda'
-import {findById, overProp} from '../lib/little-ramda'
+import {
+  compose,
+  defaultTo,
+  indexOf,
+  map,
+  mergeWith,
+  omit,
+} from '../lib/ramda'
+import {findById, indexOfOrNaN, overProp} from '../lib/little-ramda'
 import {taskView} from './index'
 import {Disposers, setObservableProps} from '../lib/little-mobx'
 import {storage} from '../lib/storage'
@@ -77,7 +84,16 @@ class TaskStore {
 
   @computed
   get snapshot() {
-    return compose(overProp('models')(map(task => task.snapshot)))(this)
+    return compose(overProp('models')(map(model => model.snapshot)))(this)
+  }
+
+  indexOf(model) {
+    return indexOfOrNaN(model)(this.models)
+  }
+
+  @action
+  destroy(model) {
+    return this.models.splice(this.indexOf(model), 1)
   }
 
   @computed
