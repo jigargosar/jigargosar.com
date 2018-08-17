@@ -35,7 +35,7 @@ class Task {
   isDone = false
 
   constructor(snapshot) {
-    Object.assign(this, snapshot)
+    Object.assign(this, pick(Object.getOwnPropertyNames(this))(snapshot))
   }
 
   @computed
