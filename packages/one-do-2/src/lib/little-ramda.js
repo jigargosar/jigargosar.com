@@ -34,7 +34,7 @@ import {
 } from './ramda'
 import Sugar from 'sugar'
 import pFinally from 'p-finally'
-import {propOr, reject} from 'ramda'
+import {isNil, propOr, reject, unless} from 'ramda'
 
 export {default as pluralize} from 'pluralize'
 
@@ -161,3 +161,4 @@ export const filterDeleted = filter(propIsDeleted)
 export const propIsDone = propOr(false)('isDone')
 export const rejectDone = reject(propIsDone)
 export const filterDone = filter(propIsDone)
+export const unlessNil = unless(isNil)
