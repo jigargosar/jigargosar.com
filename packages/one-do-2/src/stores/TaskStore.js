@@ -64,6 +64,22 @@ class Task extends Model {
 class TaskStore {
   @observable models = []
 
+  @action
+  applySnapshot(snapshot) {
+    const props = compose(
+      overProp('models')(
+        map(props => new Task(props, {collection: this})),
+      ),
+      mergeWith(defaultTo)({models: []}),
+    )(snapshot)
+    setObservableProps(props, this)
+  }
+
+  @computed
+  get snapshot() {
+    return compose(overProp('models')(map(task => task.snapshot)))(this)
+  }
+
   @computed
   get tasks() {
     return this.models
@@ -83,22 +99,6 @@ class TaskStore {
     const task = new Task({title}, {collection: this})
     this.models.unshift(task)
     return task
-  }
-
-  @action
-  applySnapshot(snapshot) {
-    const props = compose(
-      overProp('models')(
-        map(props => new Task(props, {collection: this})),
-      ),
-      mergeWith(defaultTo)({models: []}),
-    )(snapshot)
-    setObservableProps(props, this)
-  }
-
-  @computed
-  get snapshot() {
-    return compose(overProp('models')(map(task => task.snapshot)))(this)
   }
 }
 
