@@ -19,7 +19,6 @@ import {
 } from '../lib/little-ramda'
 import {taskView} from './index'
 
-@autobind
 class Task {
   @observable id = `Task_${nanoid()}`
 
@@ -44,7 +43,7 @@ class Task {
     return taskView.isTaskSelected(this)
   }
 
-  @action
+  @action.bound
   toggleDelete() {
     this.isDeleted = !this.isDeleted
   }
