@@ -25,6 +25,11 @@ class Model {
     return this.attributes[attribute]
   }
 
+  @computed
+  get id() {
+    return this.attributes.id
+  }
+
   @action
   set(attributes) {
     Object.assign(this.attributes, attributes)
