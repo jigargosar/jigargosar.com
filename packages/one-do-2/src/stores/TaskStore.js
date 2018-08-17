@@ -67,20 +67,20 @@ class Task extends Model {
 
 @autobind
 class TaskStore {
-  @observable allTasks = []
+  @observable models = []
 
   @computed
   get tasks() {
-    return rejectDeleted(this.allTasks)
+    return rejectDeleted(this.models)
   }
 
   @computed
   get deletedTasks() {
-    return filterDeleted(this.allTasks)
+    return filterDeleted(this.models)
   }
 
   findById(id) {
-    return findById(id)(this.allTasks)
+    return findById(id)(this.models)
   }
 
   @action
@@ -91,24 +91,24 @@ class TaskStore {
   @action
   addTask({title}) {
     const task = new Task({title}, {collection: this})
-    this.allTasks.unshift(task)
+    this.models.unshift(task)
     return task
   }
 
   @action
   applySnapshot(snapshot) {
     const props = compose(
-      overProp('allTasks')(
+      overProp('models')(
         map(props => new Task(props, {collection: this})),
       ),
-      mergeWith(defaultTo)({allTasks: []}),
+      mergeWith(defaultTo)({models: []}),
     )(snapshot)
     setObservableProps(props, this)
   }
 
   @computed
   get snapshot() {
-    return compose(overProp('allTasks')(map(task => task.snapshot)))(this)
+    return compose(overProp('models')(map(task => task.snapshot)))(this)
   }
 }
 
@@ -119,7 +119,7 @@ const disposers = Disposers(module)
 taskStore.applySnapshot(defaultTo({})(storage.get('taskStore')))
 
 disposers.autorun(() => {
-  console.table(taskStore.snapshot.allTasks)
+  console.table(taskStore.snapshot.models)
   console.log(`ts.snapshot`, taskStore.snapshot)
   storage.set('taskStore', taskStore.snapshot)
 })
