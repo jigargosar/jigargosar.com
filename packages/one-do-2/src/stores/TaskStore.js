@@ -10,7 +10,7 @@ import {
   rejectDeleted,
 } from '../lib/little-ramda'
 import {taskView} from './index'
-import {setObservableProps} from '../lib/little-mobx'
+import {Disposers, setObservableProps} from '../lib/little-mobx'
 
 class Task {
   @observable id = `Task_${nanoid()}`
@@ -81,6 +81,17 @@ class TaskStore {
     )(snapshot)
     setObservableProps(props, this)
   }
+
+  @computed
+  get snapshot() {
+    return this.allTasks.map(m => m.snapshot)
+  }
 }
 
 export default TaskStore
+
+const ts = new TaskStore()
+
+const disposers = Disposers(module)
+
+disposers.autorun(() => console.log(`ts.snapshot`, ts.snapshot))
