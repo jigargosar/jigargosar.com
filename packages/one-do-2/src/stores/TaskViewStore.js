@@ -22,6 +22,7 @@ import {
 import {Disposers} from '../lib/little-mobx'
 import {tryFocusDOMId} from '../lib/little-dom'
 import {taskStore} from './TaskStore'
+import {fWord} from '../lib/fake'
 
 @autobind
 class TaskViewStore {
@@ -118,7 +119,7 @@ class TaskViewStore {
 
   @action
   addNewTask() {
-    this.setSelectedTask(taskStore.addNewTask())
+    this.setSelectedTask(taskStore.unshiftProps({title: fWord()}))
   }
 
   @action
