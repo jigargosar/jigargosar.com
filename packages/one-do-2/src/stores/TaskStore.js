@@ -1,4 +1,4 @@
-import {action, computed, observable} from '../lib/mobx'
+import {action, computed, observable, observableKeys} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
@@ -23,7 +23,7 @@ class Task {
 
   @action
   set(props) {
-    Object.assign(this, props)
+    Object.assign(this, pick(observableKeys(this))(props))
   }
 
   @computed
