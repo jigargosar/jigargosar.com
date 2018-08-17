@@ -6,6 +6,7 @@ import {
   compose,
   construct,
   defaultTo,
+  isNil,
   map,
   mergeWith,
   pick,
@@ -25,6 +26,11 @@ class Model {
   @computed
   get id() {
     return this.attributes.id
+  }
+
+  @computed
+  get isNew() {
+    return isNil(this.attributes.id)
   }
 
   get(attribute) {
