@@ -19,6 +19,7 @@ import {
 import {taskView} from './index'
 
 class Model {
+  @observable cid
   @observable attributes = {}
 
   get(attribute) {
