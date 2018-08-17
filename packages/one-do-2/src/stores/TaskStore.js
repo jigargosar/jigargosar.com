@@ -103,7 +103,6 @@ class Collection {
   @action
   lsFetch() {
     const propsList = compose(
-      //
       filter(is(Object)),
       unless(is(Array))(always([])),
     )(storage.get(this.lsKey))
