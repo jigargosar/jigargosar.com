@@ -2,14 +2,7 @@ import {action, computed, observable, toJS} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {
-  compose,
-  defaultTo,
-  indexOf,
-  map,
-  mergeWith,
-  omit,
-} from '../lib/ramda'
+import {compose, defaultTo, map, mergeWith, omit} from '../lib/ramda'
 import {findById, indexOfOrNaN, overProp} from '../lib/little-ramda'
 import {taskView} from './index'
 import {Disposers, setObservableProps} from '../lib/little-mobx'
@@ -67,8 +60,7 @@ class Task extends Model {
   }
 }
 
-@autobind
-class TaskStore {
+class Collection {
   @observable models = []
 
   @action
@@ -100,7 +92,10 @@ class TaskStore {
   destroy(model) {
     return this.remove(model)
   }
+}
 
+@autobind
+class TaskStore extends Collection {
   @computed
   get tasks() {
     return this.models
