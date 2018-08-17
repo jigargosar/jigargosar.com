@@ -119,7 +119,7 @@ class TaskViewStore {
 
   @action
   addNewTask() {
-    this.setSelectedTask(taskStore.unshiftProps({title: fWord()}))
+    this.setSelectedTask(taskStore.add({title: fWord()}))
   }
 
   @action
