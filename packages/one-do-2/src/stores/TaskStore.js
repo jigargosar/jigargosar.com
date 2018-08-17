@@ -92,6 +92,10 @@ class Collection {
   destroy(model) {
     return this.remove(model)
   }
+
+  findById(id) {
+    return findById(id)(this.models)
+  }
 }
 
 @autobind
@@ -99,10 +103,6 @@ class TaskStore extends Collection {
   @computed
   get tasks() {
     return this.models
-  }
-
-  findById(id) {
-    return findById(id)(this.models)
   }
 
   @action
