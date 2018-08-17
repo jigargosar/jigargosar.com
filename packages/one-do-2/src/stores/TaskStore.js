@@ -31,6 +31,13 @@ class Model {
   set(props) {
     setObservableProps(props, this)
   }
+
+  @action.bound
+  destroy() {
+    if (this.collection) {
+      this.collection.destroy(this)
+    }
+  }
 }
 
 class Task extends Model {
@@ -49,20 +56,8 @@ class Task extends Model {
   }
 
   @action.bound
-  destroy() {
-    if (this.collection) {
-      this.collection.destroy(this)
-    }
-  }
-
-  @action.bound
   toggleDone() {
     this.set({isDone: !this.isDone})
-  }
-
-  @action.bound
-  destroy() {
-    return this
   }
 }
 
