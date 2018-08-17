@@ -21,6 +21,7 @@ import {taskView} from './index'
 
 class Model {
   constructor(attributes) {
+    this.cid = `cid_${nanoid()}`
     this.set(mergeWith(defaultTo)(this.defaults())(attributes))
   }
 
