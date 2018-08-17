@@ -2,7 +2,7 @@ import {action, computed, observable, toJS} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {compose, map, omit} from '../lib/ramda'
+import {compose, defaultTo, map, mergeWith, omit} from '../lib/ramda'
 import {
   filterDeleted,
   findById,
@@ -11,6 +11,7 @@ import {
 } from '../lib/little-ramda'
 import {taskView} from './index'
 import {Disposers, setObservableProps} from '../lib/little-mobx'
+import {storage} from '../lib/storage'
 
 class Model {
   @observable collection = {}
@@ -93,13 +94,14 @@ class TaskStore {
   applySnapshot(snapshot) {
     const props = compose(
       overProp('allTasks')(map(props => new Task(props))),
+      mergeWith(defaultTo)({allTasks: []}),
     )(snapshot)
     setObservableProps(props, this)
   }
 
   @computed
   get snapshot() {
-    return this.allTasks.map(m => m.snapshot)
+    return compose(overProp('allTasks')(map(task => task.snapshot)))(this)
   }
 }
 
@@ -109,6 +111,12 @@ const ts = new TaskStore()
 
 const disposers = Disposers(module)
 
-disposers.autorun(() => console.log(`ts.snapshot`, ts.snapshot))
+ts.applySnapshot(defaultTo({})(storage.get('taskStore')))
 
-ts.addNewTask()
+disposers.autorun(() => {
+  console.table(ts.snapshot.allTasks)
+  console.log(`ts.snapshot`, ts.snapshot)
+  storage.set('taskStore', ts.snapshot)
+})
+
+// ts.addNewTask()
