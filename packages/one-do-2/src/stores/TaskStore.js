@@ -17,7 +17,7 @@ class Task {
   @observable isDeleted = false
   @observable isDone = false
 
-  constructor(props = {}) {
+  constructor(props) {
     this.set(props)
   }
 
