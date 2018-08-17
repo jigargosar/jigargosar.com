@@ -17,7 +17,7 @@ class Task {
   @observable isDeleted = false
   @observable isDone = false
 
-  constructor(props) {
+  constructor(props = {}) {
     this.set(props)
   }
 
@@ -73,11 +73,9 @@ class TaskStore {
   }
 
   @action
-  applySnapshot(snapshot) {
+  applySnapshot(snapshot = {}) {
     const toObj = compose(
-      pick(['allTasks']),
       overProp('allTasks')(map(props => new Task(props))),
-      mergeWith(defaultTo)({allTasks: []}),
     )
     Object.assign(this, toObj(snapshot))
   }
