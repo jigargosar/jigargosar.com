@@ -2,7 +2,7 @@ import {action, computed, observable, observableKeys} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {compose, defaultTo, map, mergeWith, pick} from '../lib/ramda'
+import {compose, defaultTo, keys, map, mergeWith, pick} from '../lib/ramda'
 import {
   filterDeleted,
   findById,
@@ -31,11 +31,12 @@ class Task {
   }
 
   constructor(props) {
-    const mergeWithDefaults = mergeWith(defaultTo)(this.defaults())
-    const modelKeys = observableKeys(this)
-    this.set(
-      compose(mergeWithDefaults, pick(modelKeys), defaultTo({}))(props),
+    const defaultProps = this.defaults()
+    const mergeWithDefaults = mergeWith(defaultTo)(defaultProps)
+    const propsWithDefault = compose(mergeWithDefaults, defaultTo({}))(
+      props,
     )
+    this.set(propsWithDefault)
   }
 
   @action
@@ -52,6 +53,7 @@ class Task {
   toggleDelete() {
     this.set({isDeleted: !this.isDeleted})
   }
+
   @action.bound
   toggleDone() {
     this.set({isDone: !this.isDone})
