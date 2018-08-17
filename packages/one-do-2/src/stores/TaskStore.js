@@ -72,7 +72,7 @@ class TaskStore {
 
   @action
   addTask({title}) {
-    const task = new Task({title})
+    const task = new Task({title}, {collection: this})
     this.allTasks.unshift(task)
     return task
   }
@@ -80,7 +80,9 @@ class TaskStore {
   @action
   applySnapshot(snapshot) {
     const props = compose(
-      overProp('allTasks')(map(props => new Task(props))),
+      overProp('allTasks')(
+        map(props => new Task(props, {collection: this})),
+      ),
     )(snapshot)
     setObservableProps(props, this)
   }
