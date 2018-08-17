@@ -1,10 +1,9 @@
-import {action, computed, observable, observableGet} from '../lib/mobx'
+import {action, computed, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {
   ascend,
   compose,
   defaultTo,
-  flip,
   indexOf,
   mergeWith,
   pick,
@@ -19,7 +18,6 @@ import {
   prevEl,
   propIsDone,
   rejectDone,
-  unlessNil,
 } from '../lib/little-ramda'
 import {taskStore} from './index'
 import {Disposers} from '../lib/little-mobx'
@@ -33,7 +31,6 @@ class TaskViewStore {
   setSelectedTask(task) {
     if (task) {
       this.selectedTaskId = task.id
-      console.log(`this.selectedTaskId`, this.selectedTaskId)
     }
   }
 
