@@ -1,9 +1,9 @@
 import {action, computed, observable, toJS} from '../lib/mobx'
-import {prettyJSONStringify} from '../lib/little-ramda'
+import {overProp, prettyJSONStringify} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
 import TaskStore from './TaskStore'
 import {storage} from '../lib/storage'
-import {defaultTo, propOr, unless} from '../lib/ramda'
+import {compose, defaultTo, prop, propOr, unless} from '../lib/ramda'
 import DebugStore from './DebugStore'
 import {whenKeyPD, withKeyEvent} from '../lib/little-react'
 import TaskViewStore from './TaskViewStore'
@@ -29,13 +29,18 @@ class RootStore {
   }
 
   @computed
+  get snapshot() {
+    return compose(overProp('taskStore')(prop('snapshot')))(this.toJS)
+  }
+
+  @computed
   get isFocusTrapPaused() {
     return debugStore.isInTransition || debugStore.isDebugViewOpen
   }
 
   saveToLS() {
     // console.debug(`[RS] saving snapshot`, this.toJS)
-    storage.set('rootStore', this.toJS)
+    storage.set('rootStore', this.snapshot)
   }
 
   @action

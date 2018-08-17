@@ -4,12 +4,13 @@ import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
 import {
   compose,
-  construct,
   defaultTo,
+  invoker,
   isNil,
   map,
   mergeWith,
   pick,
+  prop,
 } from '../lib/ramda'
 import {
   filterDeleted,
@@ -24,7 +25,7 @@ class Model {
     this.set(mergeWith(defaultTo)(this.defaults())(attributes))
   }
 
-  @observable attributes = {}
+  @observable attributes = {id: null, sid: null}
 
   @computed
   get id() {
@@ -57,7 +58,7 @@ class Model {
 
   @action
   static create(attributes) {
-    return new Model(attributes)
+    return new Model(attributes || {})
   }
 }
 
@@ -73,7 +74,27 @@ class Task extends Model {
 
   @autobind
   defaults() {
-    return {id: `Task_${nanoid()}`, title: ''}
+    return {
+      id: `Task_${nanoid()}`,
+      title: '',
+      isDone: false,
+      isDeleted: false,
+    }
+  }
+
+  @computed
+  get title() {
+    return this.get('title')
+  }
+
+  @computed
+  get isDeleted() {
+    return this.get('isDeleted')
+  }
+
+  @computed
+  get isDone() {
+    return this.get('isDone')
   }
 
   @computed
@@ -83,15 +104,13 @@ class Task extends Model {
 
   @action.bound
   toggleDelete() {
-    this.isDeleted = !this.isDeleted
+    this.set({isDeleted: !this.isDeleted})
   }
   @action.bound
   toggleDone() {
-    this.isDone = !this.isDone
+    this.set({isDone: !this.isDone})
   }
 }
-
-const TaskConstructor = construct(Task)
 
 @autobind
 class TaskStore {
@@ -111,6 +130,12 @@ class TaskStore {
     return findById(id)(this.allTasks)
   }
 
+  @computed
+  get snapshot() {
+    debugger
+    return map(prop('attributes'))(this.allTasks)
+  }
+
   @action
   addNewTask() {
     return this.addTask({title: fWord()})
@@ -127,7 +152,7 @@ class TaskStore {
   applySnapshot(snapshot) {
     const toObj = compose(
       pick(['allTasks']),
-      overProp('allTasks')(map(TaskConstructor)),
+      overProp('allTasks')(map(Task.create)),
       mergeWith(defaultTo)({allTasks: []}),
     )
     Object.assign(this, toObj(snapshot))
