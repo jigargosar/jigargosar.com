@@ -1,8 +1,8 @@
-import {action, computed, observable, observableKeys} from '../lib/mobx'
+import {action, computed, observable} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {compose, map, pick} from '../lib/ramda'
+import {compose, map} from '../lib/ramda'
 import {
   filterDeleted,
   findById,
@@ -10,14 +10,7 @@ import {
   rejectDeleted,
 } from '../lib/little-ramda'
 import {taskView} from './index'
-
-function pickObservableKeysOf(observableObj) {
-  return pick(observableKeys(observableObj))
-}
-
-function setObservableProps(props, obs) {
-  Object.assign(obs, pickObservableKeysOf(obs)(props))
-}
+import {setObservableProps} from '../lib/little-mobx'
 
 class Task {
   @observable id = `Task_${nanoid()}`

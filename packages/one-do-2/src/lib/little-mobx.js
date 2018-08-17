@@ -1,15 +1,24 @@
 import {storage} from './storage'
 import {
   autorun,
+  configure,
   getDebugName,
   intercept,
+  observableKeys,
   observe,
   reaction,
   spy,
   toJS,
-  configure,
 } from './mobx'
-import {call, compose, concat, defaultTo, isNil, unless} from './ramda'
+import {
+  call,
+  compose,
+  concat,
+  defaultTo,
+  isNil,
+  pick,
+  unless,
+} from './ramda'
 import {hotDispose} from './hot'
 
 export function mobxStorage({store, key, disposers, preProcessStorageJS}) {
@@ -82,3 +91,11 @@ export const logChange = change => {
   console.log(change)
 }
 export const configureMobx = configure
+
+function pickObservableKeysOf(observableObj) {
+  return pick(observableKeys(observableObj))
+}
+
+export function setObservableProps(props, obs) {
+  Object.assign(obs, pickObservableKeysOf(obs)(props))
+}
