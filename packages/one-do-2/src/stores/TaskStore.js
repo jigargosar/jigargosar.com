@@ -59,6 +59,11 @@ class Task extends Model {
   toggleDone() {
     this.set({isDone: !this.isDone})
   }
+
+  @action.bound
+  destroy() {
+    return this
+  }
 }
 
 @autobind
@@ -107,7 +112,6 @@ class TaskStore {
     return compose(overProp('allTasks')(map(task => task.snapshot)))(this)
   }
 }
-
 
 const taskStore = new TaskStore()
 
