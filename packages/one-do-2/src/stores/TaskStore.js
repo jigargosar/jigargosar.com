@@ -10,8 +10,6 @@ import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
 import {
   compose,
-  construct,
-  constructN,
   defaultTo,
   isNil,
   map,
