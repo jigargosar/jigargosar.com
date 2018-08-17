@@ -9,6 +9,7 @@ import TaskViewStore from './TaskViewStore'
 import {debugStore} from './index'
 import {isTargetAnyInput} from '../lib/little-dom'
 import {AddTaskViewStore} from './AddTaskViewStore'
+import {taskStore} from './TaskStore'
 
 @autobind
 class RootStore {
@@ -44,6 +45,7 @@ class RootStore {
   @action
   resetLS() {
     this.applySnapshot({})
+    taskStore.applySnapshot({})
   }
 
   @action
