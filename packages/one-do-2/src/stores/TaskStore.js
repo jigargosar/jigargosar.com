@@ -20,11 +20,11 @@ import {
 import {taskView} from './index'
 
 class Model {
-  @observable attributes = {}
+  @observable attrs = {}
 
   @action
   updateAttrs(attrs) {
-    Object.assign(this.attributes, attrs)
+    Object.assign(this.attrs, attrs)
   }
 }
 
