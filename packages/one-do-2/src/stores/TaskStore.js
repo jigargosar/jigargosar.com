@@ -12,14 +12,28 @@ import {
 import {taskView} from './index'
 import {Disposers, setObservableProps} from '../lib/little-mobx'
 
-class Task {
-  @observable id = `Task_${nanoid()}`
-  @observable title = ''
-  @observable isDone = false
+class Model {
+  @observable collection = {}
 
   constructor(props = {}) {
     this.set(props)
   }
+
+  @computed
+  get snapshot() {
+    return compose(omit(['collection']), toJS)(this)
+  }
+
+  @action
+  set(props) {
+    setObservableProps(props, this)
+  }
+}
+
+class Task extends Model {
+  @observable id = `Task_${nanoid()}`
+  @observable title = ''
+  @observable isDone = false
 
   @computed
   get snapshot() {
