@@ -2,7 +2,16 @@ import {action, computed, observable, toJS} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {compose, defaultTo, map, mergeWith, omit} from '../lib/ramda'
+import {
+  always,
+  compose,
+  defaultTo,
+  is,
+  map,
+  mergeWith,
+  omit,
+  unless,
+} from '../lib/ramda'
 import {findById, indexOfOrNaN, overProp} from '../lib/little-ramda'
 import {taskView} from './index'
 import {Disposers, setObservableProps} from '../lib/little-mobx'
@@ -77,7 +86,7 @@ class Collection {
 
   @computed
   get snapshot() {
-    return compose(overProp('models')(map(model => model.snapshot)))(this)
+    return map(model => model.snapshot)(this.models)
   }
 
   @computed
@@ -85,9 +94,32 @@ class Collection {
     throw new Error('[Collection] lsKey not implemented')
   }
 
+  @computed
+  get model() {
+    throw new Error('[Collection] model not implemented')
+  }
+
   @action
   lsFetch() {
-    this.applySnapshot(defaultTo({})(storage.get(this.lsKey)))
+    const propsList = unless(is(Array))(always([]))(
+      storage.get(this.lsKey),
+    )
+    this.removeAll()
+    this.pushAllProps(propsList)
+  }
+
+  @autobind
+  modelFromProps(props) {
+    const modelClass = this.model
+    const model = new modelClass(props, {collection: this})
+    debugger
+    return model
+  }
+
+  @action
+  pushAllProps(propsList) {
+    const models = map(this.modelFromProps)(propsList)
+    this.models.push(...models)
   }
 
   lsSave() {
@@ -128,6 +160,11 @@ class TaskStore extends Collection {
   @computed
   get lsKey() {
     return 'TaskCollection'
+  }
+
+  @computed
+  get model() {
+    return Task
   }
 
   @computed
