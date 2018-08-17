@@ -2,22 +2,13 @@ import {
   action,
   computed,
   observable,
-  observableGet,
+  observableKeys,
   toJS,
 } from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
-import {
-  compose,
-  defaultTo,
-  isNil,
-  map,
-  merge,
-  mergeWith,
-  pick,
-  prop,
-} from '../lib/ramda'
+import {compose, defaultTo, map, mergeWith, pick} from '../lib/ramda'
 import {
   filterDeleted,
   findById,
@@ -26,52 +17,14 @@ import {
 } from '../lib/little-ramda'
 import {taskView} from './index'
 
-class Model {
-  constructor(attributes) {
-    this.set(mergeWith(defaultTo)(this.defaults())(attributes))
-  }
+class Task {
+  @observable id
 
-  @observable attributes = {id: null, sid: null}
+  @observable title
 
-  @computed
-  get id() {
-    return this.attributes.id
-  }
+  @observable isDeleted
 
-  @computed
-  get sid() {
-    return this.attributes.sid
-  }
-
-  @computed
-  get isNew() {
-    return isNil(this.sid)
-  }
-
-  get(attribute) {
-    return observableGet(this.attributes, attribute)
-  }
-
-  @action
-  set(attributes) {
-    Object.assign(this.attributes, attributes)
-  }
-
-  @autobind
-  defaults() {
-    return {}
-  }
-}
-
-class Task extends Model {
-  // @observable id = `Task_${nanoid()}`
-  //
-  // @observable title = ''
-  //
-  // @observable isDeleted = false
-  //
-  // @observable isDone = false
-  //
+  @observable isDone
 
   @autobind
   defaults() {
@@ -83,19 +36,19 @@ class Task extends Model {
     }
   }
 
-  @computed
-  get title() {
-    return this.get('title')
+  constructor(props) {
+    debugger
+    const mergeWithDefaults = mergeWith(defaultTo)(this.defaults())
+    this.set(
+      compose(mergeWithDefaults, pick(observableKeys), defaultTo({}))(
+        props,
+      ),
+    )
   }
 
-  @computed
-  get isDeleted() {
-    return this.get('isDeleted')
-  }
-
-  @computed
-  get isDone() {
-    return this.get('isDone')
+  @action
+  set(props) {
+    Object.assign(this, props)
   }
 
   @computed
@@ -131,13 +84,6 @@ class TaskStore {
     return findById(id)(this.allTasks)
   }
 
-  @computed
-  get snapshot() {
-    return merge(toJS(this))({
-      allTasks: map(prop('attributes'))(this.allTasks),
-    })
-  }
-
   @action
   addNewTask() {
     return this.addTask({title: fWord()})
@@ -154,7 +100,7 @@ class TaskStore {
   applySnapshot(snapshot) {
     const toObj = compose(
       pick(['allTasks']),
-      overProp('allTasks')(map(attributes => new Task(attributes))),
+      overProp('allTasks')(map(props => new Task(props))),
       mergeWith(defaultTo)({allTasks: []}),
     )
     Object.assign(this, toObj(snapshot))
