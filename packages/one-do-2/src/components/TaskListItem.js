@@ -18,7 +18,6 @@ class TaskListItem extends Component {
     const {task} = this.props
     const isDone = task.isDone
     const isSelected = task.isSelected
-    debugger
     return (
       <FlexRow
         id={task.id}

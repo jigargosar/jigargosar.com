@@ -87,7 +87,6 @@ class Task extends Model {
 
   @computed
   get title() {
-    debugger
     return this.get('title')
   }
 
