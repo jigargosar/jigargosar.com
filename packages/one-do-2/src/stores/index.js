@@ -1,4 +1,4 @@
-import './spy'
+import './init-mobx'
 import RootStore from './RootStore'
 import {configure, observable} from '../lib/mobx'
 import {Disposers} from '../lib/little-mobx'

@@ -1,12 +1,13 @@
 import {storage} from './storage'
 import {
   autorun,
+  getDebugName,
+  intercept,
+  observe,
   reaction,
   spy,
   toJS,
-  intercept,
-  observe,
-  getDebugName,
+  configure,
 } from './mobx'
 import {call, compose, concat, defaultTo, isNil, unless} from './ramda'
 import {hotDispose} from './hot'
@@ -80,3 +81,4 @@ export const logChange = change => {
   console.log(`[${type}] ${qualifiedName} ${oldValue} -> ${newValue}`)
   console.log(change)
 }
+export const configureMobx = configure

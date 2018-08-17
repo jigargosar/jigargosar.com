@@ -1,4 +1,6 @@
-import {Disposers} from '../lib/little-mobx'
+import {configureMobx, Disposers} from '../lib/little-mobx'
+
+configureMobx({computedRequiresReaction: true, enforceActions: true})
 
 const disposers = Disposers(module)
 
