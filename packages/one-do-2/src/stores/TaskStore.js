@@ -94,6 +94,16 @@ class Collection {
     return storage.set(this.lsKey, this.snapshot)
   }
 
+  @computed
+  get count() {
+    return this.models.length
+  }
+
+  @action
+  removeAll() {
+    this.models.splice(0, this.count)
+  }
+
   indexOf(model) {
     return indexOfOrNaN(model)(this.models)
   }

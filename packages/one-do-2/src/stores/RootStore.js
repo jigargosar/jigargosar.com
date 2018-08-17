@@ -45,7 +45,7 @@ class RootStore {
   @action
   resetLS() {
     this.applySnapshot({})
-    taskStore.applySnapshot({})
+    taskStore.removeAll()
   }
 
   @action
