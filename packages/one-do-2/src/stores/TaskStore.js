@@ -107,16 +107,18 @@ class TaskStore {
 
 export default TaskStore
 
-const ts = new TaskStore()
+const taskStore = new TaskStore()
 
 const disposers = Disposers(module)
 
-ts.applySnapshot(defaultTo({})(storage.get('taskStore')))
+taskStore.applySnapshot(defaultTo({})(storage.get('taskStore')))
 
 disposers.autorun(() => {
-  console.table(ts.snapshot.allTasks)
-  console.log(`ts.snapshot`, ts.snapshot)
-  storage.set('taskStore', ts.snapshot)
+  console.table(taskStore.snapshot.allTasks)
+  console.log(`ts.snapshot`, taskStore.snapshot)
+  storage.set('taskStore', taskStore.snapshot)
 })
 
-// ts.addNewTask()
+// taskStore.addNewTask()
+
+export {taskStore}

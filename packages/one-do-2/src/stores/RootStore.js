@@ -13,7 +13,6 @@ import {AddTaskViewStore} from './AddTaskViewStore'
 
 @autobind
 class RootStore {
-  @observable.ref taskStore = new TaskStore()
   @observable.ref debugStore = new DebugStore()
   @observable.ref taskView = new TaskViewStore()
   @observable.ref addTaskView = new AddTaskViewStore()
@@ -57,7 +56,6 @@ class RootStore {
 
   @action
   applySnapshot(snapshot) {
-    this.taskStore.applySnapshot(propOr({})('taskStore')(snapshot))
     this.debugStore.applySnapshot(propOr({})('debugStore')(snapshot))
     this.taskView.applySnapshot(propOr({})('taskView')(snapshot))
   }
