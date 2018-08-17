@@ -75,17 +75,6 @@ class Task extends Model {
 class Collection {
   @observable models = []
 
-  @action
-  applySnapshot(snapshot) {
-    const props = compose(
-      overProp('models')(
-        map(props => new Task(props, {collection: this})),
-      ),
-      mergeWith(defaultTo)({models: []}),
-    )(snapshot)
-    setObservableProps(props, this)
-  }
-
   @computed
   get snapshot() {
     return map(model => model.snapshot)(this.models)
