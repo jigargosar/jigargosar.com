@@ -30,6 +30,8 @@ class Model {
   set(attributes) {
     Object.assign(this.attributes, attributes)
   }
+
+  static create(attributes) {}
 }
 
 class Task {
