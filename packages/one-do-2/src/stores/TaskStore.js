@@ -108,7 +108,6 @@ class TaskStore {
   }
 }
 
-export default TaskStore
 
 const taskStore = new TaskStore()
 
