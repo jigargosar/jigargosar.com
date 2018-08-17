@@ -1,4 +1,11 @@
-import {action, computed, observable} from '../lib/mobx'
+import {
+  action,
+  computed,
+  isObservable,
+  isObservableProp,
+  observable,
+  observableKeys,
+} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
 import {fWord} from '../lib/fake'
 import {setter, toggle} from 'mobx-decorators'
@@ -6,7 +13,10 @@ import {autobind} from '../lib/autobind'
 import {
   compose,
   construct,
+  curry,
   defaultTo,
+  filter,
+  keys,
   map,
   mergeWith,
   pick,
@@ -20,22 +30,25 @@ import {
 import {taskView} from './index'
 
 class Task {
-  @observable id = `Task_${nanoid()}`
+  // @observable id
+  //
+  // @observable title
+  //
+  // @observable isDeleted
+  //
+  // @observable isDone
 
-  @setter
-  @observable
-  title = ''
-
-  @observable isDeleted = false
-
-  @setter('markDone', true)
-  @setter('markUnDone', false)
-  @toggle('toggleDone')
-  @observable
-  isDone = false
+  disp = {f: 1}
 
   constructor(snapshot) {
-    Object.assign(this, pick(Object.getOwnPropertyNames(this))(snapshot))
+    this.id = `Task_${nanoid()}`
+    this.title = ``
+    this.isDeleted = false
+    this.isDone = false
+    console.log('keys', observableKeys(this))
+    console.log(`Object.keys(this)`, Object.keys(this))
+    debugger
+    // Object.assign(this, pick(ownPropertyNames)(snapshot))
   }
 
   @computed
@@ -76,7 +89,7 @@ class TaskStore {
 
   @action
   addTask({title}) {
-    const task = new Task({title})
+    const task = TaskConstructor({title})
     this.allTasks.unshift(task)
     return task
   }

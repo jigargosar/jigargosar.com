@@ -14,6 +14,7 @@ export {
   decorate,
   remove,
   keys,
+  keys as observableKeys,
   when,
   isObservable,
   isObservableMap,
