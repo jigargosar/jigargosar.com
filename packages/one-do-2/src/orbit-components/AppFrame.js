@@ -32,12 +32,12 @@ class AppFrame extends Component {
     return (
       <Fragment>
         <h1>Orbit Tasks</h1>
-        <div>{`storeFP.status=${this.storeRes.state}`}</div>
-        {this.storeRes.case({
+        <div>{`storeRes.status=${this.storeRes.state}`}</div>
+        {`storeRes = ${this.storeRes.case({
           pending: () => 'pending',
           fulfilled: () => 'fulfilled',
           rejected: () => 'rejected',
-        })}
+        })}`}
       </Fragment>
     )
   }
