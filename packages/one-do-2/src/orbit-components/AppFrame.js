@@ -26,7 +26,7 @@ class AppFrame extends Component {
         {/*<ObsPromise label={'tasksOP'} p={this.tasksOP} />*/}
         <div>
           {this.tasksOP.case({
-            fulfilled: tasks => `tasks.length=${tasks.length}`,
+            fulfilled: tasks=><Tasks tasks={tasks}/>,
           })}
         </div>
       </div>
