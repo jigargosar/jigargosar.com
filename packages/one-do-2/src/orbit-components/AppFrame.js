@@ -42,16 +42,16 @@ function ObsPromise({p}) {
 @disposable
 @observer
 class AppFrame extends Component {
-  storeRes = fromPromise(createStore())
-  tasksRes = fromPromise(this.storeRes.then(fetchAllTasks))
+  storeOP = fromPromise(createStore())
+  tasksOP = fromPromise(this.storeOP.then(fetchAllTasks))
 
   componentDidMount() {
-    this.tasksRes.then(tap(logRecords)).catch(console.error)
+    this.tasksOP.then(tap(logRecords)).catch(console.error)
   }
 
   render() {
-    const tasksRes = this.tasksRes
-    const storeRes = this.storeRes
+    const tasksRes = this.tasksOP
+    const storeRes = this.storeOP
     return (
       <div className={cn('vh-100 overflow-scroll')}>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
