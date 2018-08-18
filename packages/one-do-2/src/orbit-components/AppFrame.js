@@ -50,15 +50,13 @@ class AppFrame extends Component {
   }
 
   render() {
-    const tasksRes = this.tasksOP
-    const storeRes = this.storeOP
     return (
       <div className={cn('vh-100 overflow-scroll')}>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
-        <ObsPromise p={storeRes} />
-        <ObsPromise p={tasksRes} />
+        <ObsPromise label={'storeOP'} p={this.storeOP} />
+        <ObsPromise label={'tasksOP'} p={this.tasksOP} />
         <div>
-          {tasksRes.case({
+          {this.tasksOP.case({
             fulfilled: tasks => `tasks.length=${tasks.length}`,
           })}
         </div>
