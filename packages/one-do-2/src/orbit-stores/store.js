@@ -1,6 +1,6 @@
-import {fWord} from '../lib/fake'
 import {length} from '../lib/ramda'
-import {loadBackupAndActivate, inMemorySource} from './coordinator'
+import {inMemorySource, loadBackupAndActivate} from './coordinator'
+import {TaskRecord} from './TaskRecord'
 
 const store = inMemorySource
 
@@ -27,16 +27,6 @@ async function bootStore() {
 }
 
 bootStore().catch(console.error)
-
-function TaskRecord() {
-  return {
-    type: 'task',
-    attributes: {
-      title: fWord(),
-      createdAt: Date.now(),
-    },
-  }
-}
 
 function addRecord(taskRecord, t) {
   return t.addRecord(taskRecord)
