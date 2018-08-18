@@ -7,6 +7,8 @@ const store = inMemorySource
 
 export {store}
 
+store.on('transform', console.log)
+
 async function bootStore() {
   await loadBackupAndActivate()
   const initialTasks = await store.query(q => q.findRecords('task'))
