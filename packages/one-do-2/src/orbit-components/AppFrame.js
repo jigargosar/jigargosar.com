@@ -45,6 +45,13 @@ class TasksPage extends Component {
       <div>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
         <Tasks tasks={tasks} />
+        <div className={cn('frc pv2')}>
+          <button
+            className={cn('ph3', 'input-reset bn pointer blue link ttu')}
+          >
+            Add
+          </button>
+        </div>
       </div>
     )
   }
