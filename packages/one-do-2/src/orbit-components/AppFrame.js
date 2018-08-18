@@ -10,13 +10,14 @@ import {
 } from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
 import {prettyStringifySafe} from '../lib/little-ramda'
+import {getDebugName, isObservable} from '../lib/mobx'
 
 function fetchAllTasks(store) {
   return findAllRecordsOfType('task')(store)
 }
 
-function renderObsPromise(obsPromise) {
-  const renderResult = obsPromise.case({
+function ObsPromise({p}) {
+  const renderResult = p.case({
     fulfilled: renderJSON,
     rejected: e => {
       console.error(`renderObsPromise`, e)
@@ -33,9 +34,7 @@ function renderObsPromise(obsPromise) {
   }
   return (
     <div className={cn('pa3')}>
-      <div className={cn('ph3 ', 'f6 ttu')}>{`status = ${
-        obsPromise.state
-      }`}</div>
+      <div className={cn('ph3 ', 'f6 ttu')}>{`status = ${p.state}`}</div>
       <div>{renderResult}</div>
     </div>
   )
@@ -62,13 +61,13 @@ class AppFrame extends Component {
     return (
       <div className={cn('vh-100 overflow-scroll')}>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
-        {renderObsPromise(storeRes)}
-        <div>{`tasksRes.status=${tasksRes.state}`}</div>
-        <div>{`tasksRes = ${tasksRes.case({
-          pending: () => 'pending',
-          fulfilled: tasks => `${tasks.length}`,
-          rejected: () => 'rejected',
-        })}`}</div>
+        <ObsPromise p={storeRes} />
+        <ObsPromise p={tasksRes} />
+        <div>
+          {tasksRes.case({
+            fulfilled: tasks => `tasks.length=${tasks.length}`,
+          })}
+        </div>
       </div>
     )
   }
