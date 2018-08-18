@@ -1,6 +1,7 @@
 import {length} from '../lib/ramda'
 import {inMemorySource, loadBackupAndActivate} from './coordinator'
 import {TaskRecord} from './TaskRecord'
+import {addRecord} from './little-orbit'
 
 const store = inMemorySource
 
@@ -27,7 +28,3 @@ async function bootStore() {
 }
 
 bootStore().catch(console.error)
-
-function addRecord(record, t) {
-  return t.addRecord(record)
-}
