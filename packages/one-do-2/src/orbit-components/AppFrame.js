@@ -2,18 +2,35 @@ import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
-import {createStore, findTasks} from '../orbit-stores/store'
+import {addNewTask, createStore, findTasks} from '../orbit-stores/store'
 import {tapLogRecords} from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
+import {action, observable} from '../lib/mobx'
 
 @disposable
 @observer
 class AppFrame extends Component {
-  storeOP = fromPromise(createStore())
-  tasksOP = fromPromise(this.storeOP.then(findTasks))
+  @observable storeOP = fromPromise(createStore())
+  @observable tasksOP
+
+  constructor(props, context) {
+    super(props, context)
+    this.fetchTasks()
+  }
+
+  @action.bound
+  fetchTasks() {
+    this.tasksOP = fromPromise(this.storeOP.then(findTasks))
+  }
 
   componentDidMount() {
     this.tasksOP.then(tapLogRecords).catch(console.error)
+
+    this.storeOP.then(s => s.on('transform', this.fetchTasks))
+
+    this.props.disposers.addDisposer(() =>
+      this.storeOP.then(s => s.off('transform')),
+    )
   }
 
   render() {
@@ -46,7 +63,7 @@ class TasksPage extends Component {
         <div className={cn('frc pv2')}>
           <button
             className={cn('ph3', 'input-reset bn pointer blue link ttu')}
-            onClick={() => store.update()}
+            onClick={() => addNewTask(store)}
           >
             Add
           </button>

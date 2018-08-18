@@ -3,8 +3,8 @@ import {schema} from './schema'
 import {TaskRecord} from './TaskRecord'
 import {findRecords} from './little-orbit'
 
-async function addNewTask(store) {
-  await store.update(t => t.addRecord(TaskRecord()))
+export function addNewTask(store) {
+  return store.update(t => t.addRecord(TaskRecord()))
 }
 
 export async function createStore() {
