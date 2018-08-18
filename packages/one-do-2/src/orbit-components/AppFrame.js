@@ -9,7 +9,6 @@ import {
   logRecords,
 } from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
-import {observable} from '../lib/mobx'
 
 function fetchAllTasks(store) {
   return findAllRecordsOfType('task')(store)
@@ -18,7 +17,7 @@ function fetchAllTasks(store) {
 @disposable
 @observer
 class AppFrame extends Component {
-  @observable fetchStoreResult = fetchStore()
+  fetchStoreResult = fetchStore()
 
   componentDidMount() {
     this.fetchStoreResult
