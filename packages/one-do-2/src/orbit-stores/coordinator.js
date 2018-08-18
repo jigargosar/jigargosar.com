@@ -4,10 +4,6 @@ import Store from '@orbit/store'
 import {schema} from './schema'
 
 const store = new Store({schema})
-const coordinator = new Coordinator({
-  sources: [store, backup],
-})
-
 const backupStoreSync = new SyncStrategy({
   source: 'store',
   target: 'backup',
@@ -21,5 +17,8 @@ async function loadBackupAndActivate() {
   await store.sync(backTransForms)
   await coordinator.activate()
 }
+const coordinator = new Coordinator({
+  sources: [store, backup],
+})
 
 export {store, loadBackupAndActivate}
