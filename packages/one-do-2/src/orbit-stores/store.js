@@ -13,8 +13,9 @@ async function testStore() {
       },
     }),
   ])
-  const recCt = store.cache.query(q => q.findRecords('task').sort('name'))
-    .length
+  const recCt = store.cache.query(q =>
+    q.findRecords('task').sort('createdAt'),
+  ).length
   console.log(`recCt`, recCt)
 }
 
