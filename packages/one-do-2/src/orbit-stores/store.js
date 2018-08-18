@@ -9,16 +9,20 @@ export {store}
 
 store.on('transform', console.log)
 
+function addTaskRecord() {
+  return addRecord(TaskRecord())
+}
+
 async function bootStore() {
   await loadBackupAndActivate()
   const initialTasks = await store.query(q => q.findRecords('task'))
 
   if (length(initialTasks) === 0) {
-    await store.update(t => [
-      addRecord(TaskRecord(), t),
-      addRecord(TaskRecord(), t),
-      addRecord(TaskRecord(), t),
-    ])
+    await store.update(t =>
+      [addTaskRecord, addTaskRecord, addTaskRecord, addTaskRecord].map(
+        fn => fn(t),
+      ),
+    )
   }
 
   const records = await store.query(q =>
