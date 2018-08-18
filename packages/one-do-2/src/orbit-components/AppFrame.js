@@ -19,8 +19,8 @@ function renderObsPromise(obsPromise) {
   const renderResult = obsPromise.case({
     fulfilled: renderJSON,
     rejected: e => {
-      console.log(`e`, e)
-      return renderJSON(e)
+      console.error(`renderObsPromise`, e)
+      return null
     },
   })
 
