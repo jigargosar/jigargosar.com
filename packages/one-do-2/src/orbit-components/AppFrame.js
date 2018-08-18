@@ -4,7 +4,10 @@ import {cn, observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
 import {tap} from '../lib/ramda'
-import {findAllRecordsOfType, logRecords} from '../orbit-stores/little-orbit'
+import {
+  findAllRecordsOfType,
+  logRecords,
+} from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
 import {prettyStringifySafe} from '../lib/little-ramda'
 
@@ -39,12 +42,7 @@ function ObsPromise({p}) {
 @disposable
 @observer
 class AppFrame extends Component {
-  storeRes = fromPromise(
-    (async function() {
-      throw new Error('Foo')
-    })(),
-  )
-  storeRes2 = fromPromise(createStore())
+  storeRes = fromPromise(createStore())
   tasksRes = fromPromise(this.storeRes.then(fetchAllTasks))
 
   componentDidMount() {
