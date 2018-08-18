@@ -17,13 +17,11 @@ function fetchAllTasks(store) {
 
 function renderObsPromise(obsPromise) {
   const renderResult = obsPromise.case({
-    pending: () => 'pending',
     fulfilled: data => (
       <pre className={cn('pa3', 'br4 f6 code bg-black-10')}>
         <code typeof={'JSON'}>{prettyStringifySafe(data)}</code>
       </pre>
     ),
-    rejected: () => 'rejected',
   })
   return (
     <div className={cn('pa3')}>
