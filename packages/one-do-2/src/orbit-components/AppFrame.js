@@ -4,28 +4,7 @@ import {observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {fetchStore} from '../orbit-stores/store'
 import {prettyJSONStringify} from '../lib/little-ramda'
-import {
-  apply,
-  chain,
-  fromPairs,
-  map,
-  partial,
-  toPairs,
-  type,
-} from '../lib/ramda'
-
-const flattenObj = obj => {
-  const go = obj_ =>
-    chain(([k, v]) => {
-      if (type(v) === 'Object' || type(v) === 'Array') {
-        return map(([k_, v_]) => [`${k}.${k_}`, v_], go(v))
-      } else {
-        return [[k, v]]
-      }
-    }, toPairs(obj_))
-
-  return fromPairs(go(obj))
-}
+import {apply, map, partial} from '../lib/ramda'
 
 const flattenRecord = ({attributes, ...rest}) => ({
   ...rest,

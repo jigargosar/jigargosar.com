@@ -34,8 +34,6 @@ import {
 } from './ramda'
 import Sugar from 'sugar'
 import pFinally from 'p-finally'
-import {isNil, propOr, reject, unless} from 'ramda'
-
 export {default as pluralize} from 'pluralize'
 
 if (module.hot) {
@@ -162,3 +160,15 @@ export const propIsDone = propOr(false)('isDone')
 export const rejectDone = reject(propIsDone)
 export const filterDone = filter(propIsDone)
 export const unlessNil = unless(isNil)
+export const flattenObj = obj => {
+  const go = obj_ =>
+    chain(([k, v]) => {
+      if (type(v) === 'Object' || type(v) === 'Array') {
+        return map(([k_, v_]) => [`${k}.${k_}`, v_], go(v))
+      } else {
+        return [[k, v]]
+      }
+    }, toPairs(obj_))
+
+  return fromPairs(go(obj))
+}
