@@ -48,7 +48,7 @@ class AppFrame extends Component {
     const storeRes = this.storeRes
     return (
       <div className={cn('vh-100 overflow-scroll')}>
-        <h1>Orbit Tasks</h1>
+        <div className={cn('pa3 f3')}>Orbit Tasks</div>
         {renderObsPromise(storeRes)}
         <div>{`tasksRes.status=${tasksRes.state}`}</div>
         <div>{`tasksRes = ${tasksRes.case({
