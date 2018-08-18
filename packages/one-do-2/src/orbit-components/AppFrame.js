@@ -3,14 +3,15 @@ import React, {Component, Fragment} from 'react'
 import {observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {fetchStore} from '../orbit-stores/store'
-import {tap} from '../lib/ramda'
+import {compose, tap} from '../lib/ramda'
 import {
   findAllRecordsOfType,
   logRecords,
 } from '../orbit-stores/little-orbit'
+import {fromPromise} from '../lib/mobx-utils'
 
-async function fetchAllTasks(store) {
-  return tap(logRecords)(await findAllRecordsOfType('task')(store))
+function fetchAllTasks(store) {
+  return findAllRecordsOfType('task')(store)
 }
 
 @disposable
@@ -19,7 +20,10 @@ class AppFrame extends Component {
   fetchStoreResult = fetchStore()
 
   componentDidMount() {
-    this.fetchStoreResult.then(fetchAllTasks).catch(console.error)
+    this.fetchStoreResult
+      .then(compose(tap(logRecords), fromPromise, fetchAllTasks))
+
+      .catch(console.error)
   }
 
   render() {
