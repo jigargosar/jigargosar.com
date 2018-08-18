@@ -8,7 +8,7 @@ const coordinator = new Coordinator({
   sources: [store, backup],
 })
 
-export const backupStoreSync = new SyncStrategy({
+const backupStoreSync = new SyncStrategy({
   source: 'store',
   target: 'backup',
   blocking: true,
@@ -16,10 +16,10 @@ export const backupStoreSync = new SyncStrategy({
 
 coordinator.addStrategy(backupStoreSync)
 
-export {store}
-
-export async function loadBackupAndActivate() {
+async function loadBackupAndActivate() {
   const backTransForms = await backup.pull(q => q.findRecords())
   await store.sync(backTransForms)
   await coordinator.activate()
 }
+
+export {store, loadBackupAndActivate}
