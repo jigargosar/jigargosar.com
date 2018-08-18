@@ -4,13 +4,9 @@ import {cn, observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
 import {tap} from '../lib/ramda'
-import {
-  findAllRecordsOfType,
-  logRecords,
-} from '../orbit-stores/little-orbit'
+import {findAllRecordsOfType, logRecords} from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
 import {prettyStringifySafe} from '../lib/little-ramda'
-import {getDebugName, isObservable} from '../lib/mobx'
 
 function fetchAllTasks(store) {
   return findAllRecordsOfType('task')(store)
