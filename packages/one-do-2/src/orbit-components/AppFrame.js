@@ -62,6 +62,11 @@ class Task extends Component {
   render() {
     const {task} = this.props
     const {title} = task.attributes
-    return <div className={cn('ph3 pv1')}>{title}</div>
+    return (
+      <div className={cn('ph3 pv1', 'frc')}>
+        <div className={cn('ph3', 'code pointer')}>{`[ ]`}</div>
+        <div>{title}</div>
+      </div>
+    )
   }
 }
