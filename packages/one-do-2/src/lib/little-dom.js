@@ -32,3 +32,8 @@ export function tryFocusDOMId(id) {
     console.warn('[focus] id not found', id)
   }
 }
+
+export function clearLSAndReload() {
+  localStorage.clear()
+  window.location.href = `${window.location.href}`
+}

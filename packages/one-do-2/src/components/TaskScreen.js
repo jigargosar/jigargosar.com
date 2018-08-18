@@ -6,6 +6,7 @@ import TaskList from './TaskList'
 import {Button} from '@material-ui/core'
 import AddTaskBar from './AddTaskBar'
 import {store} from '../orbit-stores/store'
+import {clearLSAndReload} from '../lib/little-dom'
 
 function renderButton(label, onClick) {
   return (
@@ -51,10 +52,7 @@ class TaskScreen extends Component {
           <FlexRow className={cn('ph2')}>
             {renderButton('Add Task', taskView.addNewTask)}
             {renderButton('Reset RS', rootStore.resetLS)}
-            {renderButton('Clear LS & Reload', () => {
-              localStorage.clear()
-              window.location.href = `${window.location.href}`
-            })}
+            {renderButton('Clear LS & Reload', clearLSAndReload)}
           </FlexRow>
         </div>
         <div>
