@@ -3,7 +3,7 @@ import React, {Component, Fragment} from 'react'
 import {observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
-import {compose, tap} from '../lib/ramda'
+import {tap} from '../lib/ramda'
 import {
   findAllRecordsOfType,
   logRecords,
@@ -21,10 +21,7 @@ class AppFrame extends Component {
   tasksRes = fromPromise(this.storeRes.then(fetchAllTasks))
 
   componentDidMount() {
-    this.storeRes
-      .then(compose(fromPromise, fetchAllTasks))
-      .then(tap(logRecords))
-      .catch(console.error)
+    this.tasksRes.then(tap(logRecords)).catch(console.error)
   }
 
   render() {
