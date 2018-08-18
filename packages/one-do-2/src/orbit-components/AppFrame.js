@@ -10,12 +10,13 @@ const flattenRecord = ({attributes, ...rest}) => ({
   ...rest,
   ...attributes,
 })
+
 function logRecords(records) {
-  console.log(`records`, ...records)
+  // console.log(`records`, ...records)
   const flatRecords = map(flattenRecord)(records)
-  apply(partial(console.log, ['records']), flatRecords)
+  // apply(partial(console.log, ['records']), flatRecords)
   console.table(flatRecords)
-  console.log(prettyJSONStringify(records))
+  console.debug(prettyJSONStringify(records))
 }
 
 async function fetchTasks(store) {
