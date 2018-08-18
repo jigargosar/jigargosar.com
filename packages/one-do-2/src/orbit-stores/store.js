@@ -2,12 +2,18 @@ import {length} from '../lib/ramda'
 import {inMemorySource, loadBackupAndActivate} from './coordinator'
 import {TaskRecord} from './TaskRecord'
 import {addRecord} from './little-orbit'
+import {Disposers} from '../lib/little-mobx'
+import {fromPromise} from '../lib/mobx-utils'
 
 const store = inMemorySource
 
 export {store}
 
+const disposers = Disposers(module)
+
 store.on('transform', console.log)
+
+disposers.addDisposer(() => store.off('transform'))
 
 function addNewTaskRecord(t) {
   return addRecord(TaskRecord(), t)
@@ -16,6 +22,7 @@ function addNewTaskRecord(t) {
 // localStorage.clear()
 
 async function bootStore() {
+  console.log('bootstrapping')
   await loadBackupAndActivate()
   const initialTasks = await store.query(q => q.findRecords('task'))
 
@@ -33,4 +40,6 @@ async function bootStore() {
   records.forEach(console.table)
 }
 
-bootStore().catch(console.error)
+export const bootPromise = bootStore()
+
+bootPromise.catch(console.error)

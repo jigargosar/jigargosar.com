@@ -2,6 +2,9 @@ import Coordinator, {SyncStrategy} from '@orbit/coordinator'
 import {backup} from './backup'
 import Store from '@orbit/store'
 import {schema} from './schema'
+import {Disposers} from '../lib/little-mobx'
+
+const disposers = Disposers(module)
 
 const inMemorySource = new Store({schema, name: 'inMemorySource'})
 
@@ -17,7 +20,9 @@ const backupStoreSync = new SyncStrategy({
 coordinator.addStrategy(backupStoreSync)
 
 function activate() {
-  return coordinator.activate()
+  const promise = coordinator.activate()
+  disposers.addDisposer(() => coordinator.deactivate())
+  return promise
 }
 
 async function loadBackupIntoStore() {
