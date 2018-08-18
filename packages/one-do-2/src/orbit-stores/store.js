@@ -1,17 +1,11 @@
 import Store from '@orbit/store'
 import {schema} from './schema'
-import LocalStorageSource from '@orbit/local-storage'
 import Coordinator, {SyncStrategy} from '@orbit/coordinator'
 import {fWord} from '../lib/fake'
 import {length} from '../lib/ramda'
+import {backup} from './backup'
 
 export const store = new Store({schema})
-
-const backup = new LocalStorageSource({
-  schema,
-  name: 'backup',
-  namespace: 'od2',
-})
 
 const coordinator = new Coordinator({
   sources: [store, backup],
