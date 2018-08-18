@@ -26,7 +26,7 @@ class AppFrame extends Component {
         {/*<ObsPromise label={'tasksOP'} p={this.tasksOP} />*/}
         <div>
           {this.tasksOP.case({
-            fulfilled: tasks=><Tasks tasks={tasks}/>,
+            fulfilled: tasks => <Tasks tasks={tasks} />,
           })}
         </div>
       </div>
@@ -44,6 +44,6 @@ const Tasks = observer(function Tasks(props) {
 class Task extends Component {
   render() {
     const {task} = this.props
-    return <div>{task.attributes.title}</div>
+    return <div className={cn('ph3 pv1')}>{task.attributes.title}</div>
   }
 }
