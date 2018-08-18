@@ -4,9 +4,12 @@ import {cn, observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
 import {tap} from '../lib/ramda'
-import {findRecords, logRecords} from '../orbit-stores/little-orbit'
+import {
+  findRecords,
+  logRecords,
+  tapLogRecords,
+} from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
-import {ObsPromise} from '../lib/little-mobx-react'
 
 const findTasks = findRecords('task')
 
@@ -17,7 +20,7 @@ class AppFrame extends Component {
   tasksOP = fromPromise(this.storeOP.then(findTasks))
 
   componentDidMount() {
-    this.tasksOP.then(tap(logRecords)).catch(console.error)
+    this.tasksOP.then(tapLogRecords).catch(console.error)
   }
 
   render() {
