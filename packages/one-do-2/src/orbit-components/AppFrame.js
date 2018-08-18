@@ -36,12 +36,10 @@ class AppFrame extends Component {
 
 export default AppFrame
 
-@observer
-class Tasks extends Component {
-  render() {
-    return renderKeyedById(Task, 'task', this.props.tasks)
-  }
-}
+const Tasks = observer(function Tasks(props) {
+  return renderKeyedById(Task, 'task', props.tasks)
+})
+
 @observer
 class Task extends Component {
   render() {
