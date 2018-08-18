@@ -1,6 +1,6 @@
-import React from 'react'
-import AppFrame from './components/AppFrame'
-import {Component} from './lib/little-mobx-react'
+import React , {Component}from 'react'
+import AppFrame from './orbit-components/AppFrame'
+import {observer} from './lib/little-react'
 
 class App extends Component {
   state = {hasError: false}
@@ -15,9 +15,10 @@ class App extends Component {
     this.setState({hasError: true, error, info})
   }
 
+  // noinspection JSMethodCanBeStatic
   renderError() {
     return <div>Error Occurred</div>
   }
 }
 
-export default App
+export default observer(App)
