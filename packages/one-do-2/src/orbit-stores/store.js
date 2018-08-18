@@ -13,10 +13,12 @@ async function testStore() {
       },
     }),
   ])
-  const recCt = store.cache.query(q =>
+  const records = store.cache.query(q =>
     q.findRecords('task').sort('createdAt'),
   )
-  console.log(`recCt`, recCt)
+  console.log(`records`, records)
+  console.log(`records.length`, records.length)
+  records.forEach(console.table)
 }
 
 testStore().catch(console.log)
