@@ -10,7 +10,7 @@ export const store = new Store({schema})
 const backup = new LocalStorageSource({
   schema,
   name: 'backup',
-  namespace: 'one-do-2',
+  namespace: 'od2',
 })
 
 const coordinator = new Coordinator({
