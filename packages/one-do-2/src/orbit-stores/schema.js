@@ -1,6 +1,5 @@
 import {Schema} from '@orbit/data'
 import {nanoid} from '../lib/nanoid'
-import {identity} from '../lib/ramda'
 
 const modelsDefinition = {
   task: {
