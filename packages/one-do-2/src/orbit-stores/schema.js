@@ -7,9 +7,6 @@ const schemaDefinition = {
         isDone: {type: 'boolean'},
         createdAt: {type: 'timestamp'},
       },
-      relationships: {
-        moons: {type: 'hasMany', model: 'moon', inverse: 'planet'},
-      },
     },
     planet: {
       attributes: {
