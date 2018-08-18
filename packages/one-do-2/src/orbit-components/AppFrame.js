@@ -9,9 +9,27 @@ import {
   logRecords,
 } from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
+import {prettyJSONStringify} from '../lib/little-ramda'
 
 function fetchAllTasks(store) {
   return findAllRecordsOfType('task')(store)
+}
+
+function renderObsPromise(obsPromise) {
+  return (
+    <Fragment>
+      <div>{`status=${obsPromise.state}`}</div>
+      <div>{`${obsPromise.case({
+        pending: () => 'pending',
+        fulfilled: data => (
+          <pre>
+            <code>{prettyJSONStringify(data)}</code>
+          </pre>
+        ),
+        rejected: () => 'rejected',
+      })}`}</div>
+    </Fragment>
+  )
 }
 
 @disposable
@@ -26,15 +44,11 @@ class AppFrame extends Component {
 
   render() {
     const tasksRes = this.tasksRes
+    const storeRes = this.storeRes
     return (
       <Fragment>
         <h1>Orbit Tasks</h1>
-        <div>{`storeRes.status=${this.storeRes.state}`}</div>
-        <div>{`storeRes = ${this.storeRes.case({
-          pending: () => 'pending',
-          fulfilled: () => 'fulfilled',
-          rejected: () => 'rejected',
-        })}`}</div>
+        {renderObsPromise(storeRes)}
         <div>{`tasksRes.status=${tasksRes.state}`}</div>
         <div>{`tasksRes = ${tasksRes.case({
           pending: () => 'pending',
