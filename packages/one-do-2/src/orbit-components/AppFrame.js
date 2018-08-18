@@ -17,12 +17,17 @@ function fetchAllTasks(store) {
 
 function renderObsPromise(obsPromise) {
   const renderResult = obsPromise.case({
-    fulfilled: data => (
+    fulfilled: renderJSON,
+    rejected: renderJSON,
+  })
+
+  function renderJSON(data) {
+    return (
       <pre className={cn('pa3', 'br4 f6 code bg-black-10')}>
         <code typeof={'JSON'}>{prettyStringifySafe(data)}</code>
       </pre>
-    ),
-  })
+    )
+  }
   return (
     <div className={cn('pa3')}>
       <div className={cn('ph3 ', 'f6 ttu')}>{`status = ${
@@ -36,7 +41,8 @@ function renderObsPromise(obsPromise) {
 @disposable
 @observer
 class AppFrame extends Component {
-  storeRes = fromPromise(createStore())
+  storeRes = fromPromise(Promise.reject('Foo'))
+  storeRes2 = fromPromise(createStore())
   tasksRes = fromPromise(this.storeRes.then(fetchAllTasks))
 
   componentDidMount() {
