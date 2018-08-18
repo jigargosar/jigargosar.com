@@ -41,7 +41,11 @@ function renderObsPromise(obsPromise) {
 @disposable
 @observer
 class AppFrame extends Component {
-  storeRes = fromPromise(Promise.reject('Foo'))
+  storeRes = fromPromise(
+    (async function() {
+      throw new Error('Foo')
+    })(),
+  )
   storeRes2 = fromPromise(createStore())
   tasksRes = fromPromise(this.storeRes.then(fetchAllTasks))
 
