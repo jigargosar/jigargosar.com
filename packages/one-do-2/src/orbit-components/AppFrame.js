@@ -2,11 +2,9 @@ import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
-import {createStore} from '../orbit-stores/store'
-import {findRecords, tapLogRecords} from '../orbit-stores/little-orbit'
+import {createStore, findTasks} from '../orbit-stores/store'
+import {tapLogRecords} from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
-
-const findTasks = findRecords('task')
 
 @disposable
 @observer
@@ -40,7 +38,7 @@ export default AppFrame
 @observer
 class TasksPage extends Component {
   render() {
-    const {tasks} = this.props
+    const {tasks, store} = this.props
     return (
       <div>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
@@ -48,6 +46,7 @@ class TasksPage extends Component {
         <div className={cn('frc pv2')}>
           <button
             className={cn('ph3', 'input-reset bn pointer blue link ttu')}
+            onClick={() => store.update()}
           >
             Add
           </button>
