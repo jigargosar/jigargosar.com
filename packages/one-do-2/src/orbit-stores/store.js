@@ -3,7 +3,6 @@ import {inMemorySource, loadBackupAndActivate} from './coordinator'
 import {TaskRecord} from './TaskRecord'
 import {addRecord} from './little-orbit'
 import {Disposers} from '../lib/little-mobx'
-import {fromPromise} from '../lib/mobx-utils'
 
 const store = inMemorySource
 
