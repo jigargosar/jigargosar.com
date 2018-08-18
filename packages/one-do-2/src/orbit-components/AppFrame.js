@@ -17,10 +17,10 @@ function fetchAllTasks(store) {
 @disposable
 @observer
 class AppFrame extends Component {
-  storeFP = fetchStore()
+  storeRes = fetchStore()
 
   componentDidMount() {
-    this.storeFP
+    this.storeRes
       .then(compose(fromPromise, fetchAllTasks))
       .then(tap(logRecords))
       .catch(console.error)
@@ -30,7 +30,7 @@ class AppFrame extends Component {
     return (
       <Fragment>
         <h1>Orbit Tasks</h1>
-        <div>{`storeFP.status=${this.storeFP.state}`}</div>
+        <div>{`storeFP.status=${this.storeRes.state}`}</div>
       </Fragment>
     )
   }
