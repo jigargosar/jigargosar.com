@@ -1,9 +1,7 @@
 import {fWord} from '../lib/fake'
 import {length} from '../lib/ramda'
 import {backup} from './backup'
-import {backupStoreSync, coordinator, store} from './coordinator'
-
-coordinator.addStrategy(backupStoreSync)
+import {coordinator, store} from './coordinator'
 
 async function testStore() {
   const backTransForms = await backup.pull(q => q.findRecords())
