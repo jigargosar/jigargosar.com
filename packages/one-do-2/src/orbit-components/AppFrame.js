@@ -42,7 +42,7 @@ class AppFrame extends Component {
         <div>{`tasksRes.status=${tasksRes.state}`}</div>
         <div>{`tasksRes = ${tasksRes.case({
           pending: () => 'pending',
-          fulfilled: tasks => `${tasksRes}`,
+          fulfilled: tasks => `${tasks.length}`,
           rejected: () => 'rejected',
         })}`}</div>
       </Fragment>
