@@ -13,6 +13,8 @@ function addNewTaskRecord(t) {
   return addRecord(TaskRecord(), t)
 }
 
+localStorage.clear()
+
 async function bootStore() {
   await loadBackupAndActivate()
   const initialTasks = await store.query(q => q.findRecords('task'))
