@@ -4,22 +4,29 @@ import Store from '@orbit/store'
 import {schema} from './schema'
 
 const store = new Store({schema})
-const backupStoreSync = new SyncStrategy({
-  source: 'store',
-  target: 'backup',
-  blocking: true,
-})
 
 const coordinator = new Coordinator({
   sources: [store, backup],
 })
 
-coordinator.addStrategy(backupStoreSync)
+async function activate() {
+  const backupStoreSync = new SyncStrategy({
+    source: 'store',
+    target: 'backup',
+    blocking: true,
+  })
+  coordinator.addStrategy(backupStoreSync)
+  await coordinator.activate()
+}
 
-async function loadBackupAndActivate() {
+async function loadBackupIntoStore() {
   const backTransForms = await backup.pull(q => q.findRecords())
   await store.sync(backTransForms)
-  await coordinator.activate()
+}
+
+async function loadBackupAndActivate() {
+  await loadBackupIntoStore()
+  await activate()
 }
 
 export {store, loadBackupAndActivate}
