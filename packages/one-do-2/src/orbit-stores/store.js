@@ -10,12 +10,13 @@ async function testStore() {
       id: 'task_1',
       attributes: {
         title: 'first task',
+        createdAt: Date.now(),
       },
     }),
   ])
   const recCt = store.cache.query(q =>
     q.findRecords('task').sort('createdAt'),
-  ).length
+  )
   console.log(`recCt`, recCt)
 }
 
