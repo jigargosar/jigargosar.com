@@ -23,23 +23,9 @@ const backupStoreSync = new SyncStrategy({
 })
 
 coordinator.addStrategy(backupStoreSync)
-coordinator.activate().catch(console.error)
-
-function TaskRecord() {
-  return {
-    type: 'task',
-    attributes: {
-      title: fWord(),
-      createdAt: Date.now(),
-    },
-  }
-}
-
-function addRecord(taskRecord, t) {
-  return t.addRecord(taskRecord)
-}
 
 async function testStore() {
+  await coordinator.activate()
   await store.update(t => [
     addRecord(TaskRecord(), t),
     addRecord(TaskRecord(), t),
@@ -54,3 +40,17 @@ async function testStore() {
 }
 
 testStore().catch(console.error)
+
+function TaskRecord() {
+  return {
+    type: 'task',
+    attributes: {
+      title: fWord(),
+      createdAt: Date.now(),
+    },
+  }
+}
+
+function addRecord(taskRecord, t) {
+  return t.addRecord(taskRecord)
+}
