@@ -8,15 +8,15 @@ dependencies:
   classnames: 2.2.6
   delay: 3.0.0
   faker: 4.1.0
-  firebase: 5.3.1
+  firebase: 5.4.0
   focus-trap-react: 4.0.0
   is-hotkey: 0.1.3
   mobx: 5.0.3
   mobx-react: 5.2.5
-  mobx-state-tree: 3.1.1
-  mobx-utils: 5.0.0
+  mobx-state-tree: 3.2.1
+  mobx-utils: 5.0.1
   mst-middlewares: 3.1.1
-  nanoid: 1.2.0
+  nanoid: 1.2.1
   p-cancelable: 0.5.0
   p-finally: 1.0.0
   p-forever: 1.0.1
@@ -30,12 +30,12 @@ dependencies:
   react-easy-state: 5.1.0
   react-event-listener: 0.6.2
   react-scripts: 1.1.4
-  react-scroll-into-view-if-needed: 2.1.5
+  react-scroll-into-view-if-needed: 2.1.6
   recompose: 0.28.2
   sugar: 2.0.4
   tachyons: 4.11.1
 devDependencies:
-  '@types/react': 16.4.9
+  '@types/react': 16.4.11
   '@types/react-dom': 16.0.7
   babel-plugin-transform-decorators-legacy: 1.3.5
 packages:
@@ -103,27 +103,27 @@ packages:
       '@firebase/app-types': 0.x
     resolution:
       integrity: sha512-xsQPk4MJq8KuuEq0QXYVWsQc+ksMeoYpmiYWM9UWIoT20PqmZ2WHmxLkVW7xFnM55wsawJ2FtW/Nan9uMhS1nw==
-  /@firebase/firestore-types/0.5.0:
+  /@firebase/firestore-types/0.6.0:
     dev: false
     peerDependencies:
       '@firebase/app-types': 0.x
     resolution:
-      integrity: sha512-BXqPnq/hm/YusKqtZUZ7ODSIUxOgHinxHJ07SJiIoP9Tq1uzHqrccv9++eClXWn47Rls7wehI8IYuZ1b2AVC5A==
-  /@firebase/firestore/0.6.1/@firebase!app@0.3.3:
+      integrity: sha512-ambC6YIczmYmtKzT2HyipkjUYDu6+Hw4fFDBqVP+ddPiqRSmMlh0XyCEEC9nAUk/3kUoLgU14h5WgG25IIy3Eg==
+  /@firebase/firestore/0.7.0/@firebase!app@0.3.3:
     dependencies:
       '@firebase/app': 0.3.3
-      '@firebase/firestore-types': 0.5.0
+      '@firebase/firestore-types': 0.6.0
       '@firebase/logger': 0.1.1
       '@firebase/webchannel-wrapper': 0.2.8
       grpc: 1.13.1
       tslib: 1.9.0
     dev: false
-    id: registry.npmjs.org/@firebase/firestore/0.6.1
+    id: registry.npmjs.org/@firebase/firestore/0.7.0
     peerDependencies:
       '@firebase/app': 0.x
       '@firebase/app-types': 0.x
     resolution:
-      integrity: sha512-gy8B3eKrbJt5c+kAMwjQpWrHBMAYPvXtiv4ptRMbrrzeoltQhLPBQzapkkxTQrFLUN6avObCt+HU8bcDOFSiuA==
+      integrity: sha512-rwWzNP3Ze4X0nOTQFCLERZX483miEdBN7MvnYAsyxd3l+r/74rArAjNH5Ok1a6gooNM9wCB6grcqwLakO9XJHg==
   /@firebase/functions-types/0.2.0:
     dev: false
     resolution:
@@ -286,6 +286,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-A3DV2+aU1P2/wD4r2Lz3lKTV8hFjUslWmT18gGhBdMtZ6FVOAJV7HyZA7dt+Kc+pa1jjevLBhHj344Gnh8yo1g==
+  /@types/react/16.4.11:
+    dependencies:
+      '@types/prop-types': 15.5.5
+      csstype: 2.5.6
+    dev: true
+    resolution:
+      integrity: sha512-1DQnmwO8u8N3ucvRX2ZLDEjQ2VctkAvL/rpbm2ev4uaZA0z4ysU+I0tk+K8ZLblC6p7MCgFyF+cQlSNIPUHzeQ==
   /@types/react/16.4.9:
     dependencies:
       '@types/prop-types': 15.5.5
@@ -3518,19 +3525,19 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-RdG35QbHF93UgndaK3eSCjwMV6c=
-  /firebase/5.3.1:
+  /firebase/5.4.0:
     dependencies:
       '@firebase/app': 0.3.3
       '@firebase/auth': /@firebase/auth/0.7.2/@firebase!app@0.3.3
       '@firebase/database': /@firebase/database/0.3.4/@firebase!app@0.3.3
-      '@firebase/firestore': /@firebase/firestore/0.6.1/@firebase!app@0.3.3
+      '@firebase/firestore': /@firebase/firestore/0.7.0/@firebase!app@0.3.3
       '@firebase/functions': /@firebase/functions/0.3.0/@firebase!app@0.3.3
       '@firebase/messaging': /@firebase/messaging/0.3.5/@firebase!app@0.3.3
       '@firebase/polyfill': 0.3.3
       '@firebase/storage': /@firebase/storage/0.2.3/@firebase!app@0.3.3
     dev: false
     resolution:
-      integrity: sha512-Po6BLFav9jwU5qHF95LepYheLb7XvTt4IKKvu2geExPtNvVIWPlUlXUStLezZZldj4Vscuf55WV7V177K3gx9g==
+      integrity: sha512-/Ig6JeUKz56Ry9+yM2OYiA4dUa23Pxi9LkKPjeB5izhTNzwrvIaaes6cZoMDxnnmT9+wvzAjCpYC5heGbTroHg==
   /flat-cache/1.3.0:
     dependencies:
       circular-json: 0.3.3
@@ -5711,18 +5718,18 @@ packages:
       react: ^0.13.0 || ^0.14.0 || ^15.0.0 || ^16.0.0
     resolution:
       integrity: sha512-vSwsjGwmaqTmaEsPWET/APccjirTiIIchQA3YVasKzaxIGv62BNJUHFjrkIAbGBLeqJma+ZgSu158OqQLK0vaQ==
-  /mobx-state-tree/3.1.1:
+  /mobx-state-tree/3.2.1:
     dev: false
     peerDependencies:
       mobx: ^4.3.1 || ^5.0.3
     resolution:
-      integrity: sha512-kNWDv1G6aBRb4PWw5heR+RykdL0wPql+T77p+qcjc0+OZ6XQri9cXVg+5ebr6QC8sSnLrvrbqFSQu0RCiD3nqQ==
-  /mobx-utils/5.0.0:
+      integrity: sha512-rpULNL+RBE/Vksd/CFcYMuzxU4KGVo/wsXOWqkBnmC3T0cdPoPkkiPYIvyhvWnbFzjMXhKTb6BGMemshKA9A3w==
+  /mobx-utils/5.0.1:
     dev: false
     peerDependencies:
       mobx: ^4.3.1 || ^5.0.0
     resolution:
-      integrity: sha1-OE6AUGTCN7mpRGeIqeaCeKNDdhA=
+      integrity: sha512-L4nUNOK2LJ1ca/jc7jQyMGhPHyBJ7yFi1P6k+4FfQgxT50IBMSGQTuxSUFFuSSz0pVU0SM5jbwPGrlJW3TWvEA==
   /mobx/5.0.3:
     dev: false
     resolution:
@@ -5756,10 +5763,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-bAdJv7fBLhWC+/Bls0Oza+mvTaNQtP+1RyhhhvD95pgUJz6XM5IzgmxOkItJ9tkoCiplvAnXI1tNmmUD/eScyA==
-  /nanoid/1.2.0:
+  /nanoid/1.2.1:
     dev: false
     resolution:
-      integrity: sha512-rJvd0q5Bq375+jrMAJh8vZk+0Q4lnHyuqZL2fbrc9moYy4DCld5VSycYLXvwFHbbut1+UcjA+fm0bq4ADVBYQg==
+      integrity: sha512-S1QSG+TQtsqr2/ujHZcNT0OxygffUaUT755qTc/SPKfQ0VJBlOO6qb1425UYoHXPvCZ3pWgMVCuy1t7+AoCxnQ==
   /nanomatch/1.2.13:
     dependencies:
       arr-diff: 4.0.0
@@ -7051,13 +7058,13 @@ packages:
       fsevents: 1.2.4
     resolution:
       integrity: sha512-UVZIujEIT9BGbx+NGvyfS92eOrNIIpqqFi1FP7a0O9l94A/XV7bhPk70SfDKaXZouCX81tFdXo0948DjhCEgGw==
-  /react-scroll-into-view-if-needed/2.1.5:
+  /react-scroll-into-view-if-needed/2.1.6:
     dev: false
     peerDependencies:
       prop-types: ^15.6.1
       react: ^16.0.0
     resolution:
-      integrity: sha512-ejrCGRT2w8H/dItbbwAow1tqs3Z9g97ZRnYrKJgvzf2MAuBlr9ST7GdmZqfkAsbvlHxLcb2KAVuOuO5Hb+CfpA==
+      integrity: sha512-xQLctawNIbT1kv+KKMCHr47D5da3bCS9qsginrWN+p61kCenJHm83jqD8htsdD0Kf0uJobq25gB/3iAllaukXg==
   /react-transition-group/2.4.0:
     dependencies:
       dom-helpers: 3.3.1
@@ -8994,7 +9001,7 @@ specifiers:
   '@firebase/app-types': ^0.3.2
   '@material-ui/core': ^1.4.3
   '@material-ui/icons': ^2.0.1
-  '@types/react': ^16.4.9
+  '@types/react': ^16.4.11
   '@types/react-dom': ^16.0.7
   autobind: ^1.0.3
   autosize: ^4.0.2
@@ -9003,15 +9010,15 @@ specifiers:
   classnames: ^2.2.6
   delay: ^3.0.0
   faker: ^4.1.0
-  firebase: ^5.3.1
+  firebase: ^5.4.0
   focus-trap-react: ^4.0.0
   is-hotkey: ^0.1.3
   mobx: ^5.0.3
   mobx-react: ^5.2.3
-  mobx-state-tree: ^3.0.2
-  mobx-utils: ^5.0.0
+  mobx-state-tree: ^3.2.1
+  mobx-utils: ^5.0.1
   mst-middlewares: ^3.0.2
-  nanoid: ^1.2.0
+  nanoid: ^1.2.1
   p-cancelable: ^0.5.0
   p-finally: ^1.0.0
   p-forever: ^1.0.1
@@ -9025,7 +9032,7 @@ specifiers:
   react-easy-state: ^5.1.0
   react-event-listener: ^0.6.2
   react-scripts: 1.1.4
-  react-scroll-into-view-if-needed: ^2.1.5
+  react-scroll-into-view-if-needed: ^2.1.6
   recompose: ^0.28.2
   sugar: ^2.0.4
   tachyons: ^4.11.1
