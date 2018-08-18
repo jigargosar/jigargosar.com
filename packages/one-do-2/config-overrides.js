@@ -1,6 +1,7 @@
-const rewireMobx = require('react-app-rewire-mobx')
-const {compose} = require('react-app-rewired')
+const {compose, injectBabelPlugin} = require('react-app-rewired')
 
 module.exports = {
-  webpack: compose(rewireMobx),
+  webpack: compose(config =>
+    injectBabelPlugin('transform-decorators-legacy', config),
+  ),
 }

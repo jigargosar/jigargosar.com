@@ -99,3 +99,10 @@ function pickObservableKeysOf(observableObj) {
 export function setObservableProps(props, obs) {
   Object.assign(obs, pickObservableKeysOf(obs)(props))
 }
+
+export function setObservableProp(key, value, obs) {
+  setObservableProps({[key]: value}, obs)
+}
+export function toggleObservableProp(key, obs) {
+  setObservableProps({[key]: !Boolean(obs[key])}, obs)
+}

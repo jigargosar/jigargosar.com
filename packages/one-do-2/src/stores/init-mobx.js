@@ -1,7 +1,6 @@
 import {configureMobx, Disposers} from '../lib/little-mobx'
-// import {enableLogging} from 'mobx-logger'
 
-configureMobx({computedRequiresReaction: true, enforceActions: true})
+configureMobx({computedRequiresReaction: true, enforceActions: 'strict'})
 
 const disposers = Disposers(module)
 

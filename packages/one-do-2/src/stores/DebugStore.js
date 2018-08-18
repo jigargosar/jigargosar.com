@@ -1,19 +1,28 @@
 import {action, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
 import {compose, defaultTo, mergeWith} from '../lib/ramda'
-import {toggle} from 'mobx-decorators'
-import {setter} from '../lib/mobx-decorators'
+import {setObservableProp, toggleObservableProp} from '../lib/little-mobx'
 
 @autobind
 class DebugStore {
-  @toggle('toggleDebugView')
-  @observable
-  isDebugViewOpen = false
+  @observable isDebugViewOpen = false
 
-  @setter('onEnter', true)
-  @setter('onExited', false)
-  @observable
-  isInTransition = false
+  @observable isInTransition = false
+
+  @action
+  toggleDebugView() {
+    toggleObservableProp('isDebugViewOpen', this)
+  }
+
+  @action
+  onEnter() {
+    setObservableProp('isInTransition', true)
+  }
+
+  @action
+  onExited() {
+    setObservableProp('isInTransition', false)
+  }
 
   @action
   applySnapshot(snapshot) {
