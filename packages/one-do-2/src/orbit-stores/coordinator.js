@@ -10,6 +10,10 @@ const backupStoreSync = new SyncStrategy({
   blocking: true,
 })
 
+const coordinator = new Coordinator({
+  sources: [store, backup],
+})
+
 coordinator.addStrategy(backupStoreSync)
 
 async function loadBackupAndActivate() {
@@ -17,8 +21,5 @@ async function loadBackupAndActivate() {
   await store.sync(backTransForms)
   await coordinator.activate()
 }
-const coordinator = new Coordinator({
-  sources: [store, backup],
-})
 
 export {store, loadBackupAndActivate}
