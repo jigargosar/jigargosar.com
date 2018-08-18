@@ -6,6 +6,7 @@ export function TaskRecord() {
     attributes: {
       title: fWord(),
       createdAt: Date.now(),
+      isDone: false,
     },
   }
 }
