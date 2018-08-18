@@ -50,7 +50,11 @@ class TaskScreen extends Component {
         <div>
           <FlexRow className={cn('ph2')}>
             {renderButton('Add Task', taskView.addNewTask)}
-            {renderButton('Reset LS', rootStore.resetLS)}
+            {renderButton('Reset RS', rootStore.resetLS)}
+            {renderButton('Clear LS & Reload', () => {
+              localStorage.clear()
+              window.location.href = `${window.location.href}`
+            })}
           </FlexRow>
         </div>
         <div>
