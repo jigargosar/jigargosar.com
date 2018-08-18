@@ -3,6 +3,7 @@ import {schema} from './schema'
 import LocalStorageSource from '@orbit/local-storage'
 import Coordinator, {SyncStrategy} from '@orbit/coordinator'
 import {fWord} from '../lib/fake'
+import {length} from '../lib/ramda'
 
 export const store = new Store({schema})
 
@@ -25,12 +26,20 @@ const backupStoreSync = new SyncStrategy({
 coordinator.addStrategy(backupStoreSync)
 
 async function testStore() {
+  const backTransForms = await backup.pull(q => q.findRecords())
+  await store.sync(backTransForms)
   await coordinator.activate()
-  await store.update(t => [
-    addRecord(TaskRecord(), t),
-    addRecord(TaskRecord(), t),
-    addRecord(TaskRecord(), t),
-  ])
+
+  const initialTasks = await store.query(q => q.findRecords('task'))
+
+  if (length(initialTasks) === 0) {
+    await store.update(t => [
+      addRecord(TaskRecord(), t),
+      addRecord(TaskRecord(), t),
+      addRecord(TaskRecord(), t),
+    ])
+  }
+
   const records = await store.query(q =>
     q.findRecords('task').sort('createdAt'),
   )
