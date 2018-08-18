@@ -12,5 +12,5 @@ export function logRecords(records) {
   console.debug(prettyStringifySafe(records))
 }
 
-export const findAllRecordsOfType = type => store =>
+export const findRecords = type => store =>
   store.query(q => q.findRecords(type))
