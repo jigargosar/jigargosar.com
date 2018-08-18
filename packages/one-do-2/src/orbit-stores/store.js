@@ -9,8 +9,8 @@ export {store}
 
 store.on('transform', console.log)
 
-function addTaskRecord() {
-  return addRecord(TaskRecord())
+function addNewTaskRecord(t) {
+  return addRecord(TaskRecord(), t)
 }
 
 async function bootStore() {
@@ -19,7 +19,7 @@ async function bootStore() {
 
   if (length(initialTasks) === 0) {
     await store.update(t =>
-      [addTaskRecord(), addTaskRecord()].map(fn => fn(t)),
+      [addNewTaskRecord, addNewTaskRecord].map(fn => fn(t)),
     )
   }
 
