@@ -1,5 +1,5 @@
 import '../stores/init-mobx'
-import React, {Component, Fragment} from 'react'
+import React, {Component} from 'react'
 import {cn, observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
@@ -19,8 +19,8 @@ function renderObsPromise(obsPromise) {
   const renderResult = obsPromise.case({
     pending: () => 'pending',
     fulfilled: data => (
-      <pre>
-        <code>{prettyStringifySafe(data)}</code>
+      <pre className={cn('pa3', 'br4 f6 code bg-black-10')}>
+        <code typeof={'JSON'}>{prettyStringifySafe(data)}</code>
       </pre>
     ),
     rejected: () => 'rejected',
