@@ -7,7 +7,6 @@ async function testStore() {
   await store.update(t => [
     t.addRecord({
       type: 'task',
-      id: 'task_1',
       attributes: {
         title: 'first task',
         createdAt: Date.now(),
