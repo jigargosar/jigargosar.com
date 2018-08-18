@@ -5,7 +5,6 @@ import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
 import {findRecords, tapLogRecords} from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
-import * as PropTypes from 'prop-types'
 
 const findTasks = findRecords('task')
 
