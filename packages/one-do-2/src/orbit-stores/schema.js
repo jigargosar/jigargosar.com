@@ -1,4 +1,6 @@
 import {Schema} from '@orbit/data'
+import {nanoid} from '../lib/nanoid'
+
 const schemaDefinition = {
   models: {
     task: {
@@ -27,4 +29,8 @@ const schemaDefinition = {
     },
   },
 }
-export const schema = new Schema(schemaDefinition)
+
+function generateId(type) {
+  return `${type}_${nanoid()}`
+}
+export const schema = new Schema({...schemaDefinition, generateId})
