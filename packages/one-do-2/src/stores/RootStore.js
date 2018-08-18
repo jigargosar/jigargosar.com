@@ -1,5 +1,5 @@
 import {action, computed, observable, toJS} from '../lib/mobx'
-import {prettyJSONStringify} from '../lib/little-ramda'
+import {prettyStringifySafe} from '../lib/little-ramda'
 import {autobind} from '../lib/autobind'
 import {storage} from '../lib/storage'
 import {defaultTo, propOr, unless} from '../lib/ramda'
@@ -19,7 +19,7 @@ class RootStore {
 
   @computed
   get toPrettyJSON() {
-    return prettyJSONStringify(this.toJS)
+    return prettyStringifySafe(this.toJS)
   }
 
   @computed

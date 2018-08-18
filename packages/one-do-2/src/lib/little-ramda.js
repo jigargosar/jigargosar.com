@@ -42,8 +42,9 @@ import {
 } from './ramda'
 import Sugar from 'sugar'
 import pFinally from 'p-finally'
-export {default as pluralize} from 'pluralize'
+import stringify from 'json-stringify-safe'
 
+export {default as pluralize} from 'pluralize'
 if (module.hot) {
   window._ = require('ramda')
 }
@@ -132,7 +133,9 @@ export const defineDelegatePropertyGetter = curry(
     }),
 )
 
-export const prettyJSONStringify = o => JSON.stringify(o, null, 2)
+export const prettyStringify = o => JSON.stringify(o, null, 2)
+export const prettyStringifySafe = o => stringify(o, null, 2)
+
 export const indexOfOrNaN = compose(
   _when(equals(-1))(always(NaN)),
   indexOf,

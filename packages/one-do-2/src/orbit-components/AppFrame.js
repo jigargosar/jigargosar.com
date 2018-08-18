@@ -9,7 +9,7 @@ import {
   logRecords,
 } from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
-import {prettyJSONStringify} from '../lib/little-ramda'
+import {prettyStringifySafe} from '../lib/little-ramda'
 
 function fetchAllTasks(store) {
   return findAllRecordsOfType('task')(store)
@@ -23,7 +23,7 @@ function renderObsPromise(obsPromise) {
         pending: () => 'pending',
         fulfilled: data => (
           <pre>
-            <code>{prettyJSONStringify(data)}</code>
+            <code>{prettyStringifySafe(data)}</code>
           </pre>
         ),
         rejected: () => 'rejected',
