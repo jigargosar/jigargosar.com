@@ -3,14 +3,14 @@ import {backup} from './backup'
 import Store from '@orbit/store'
 import {schema} from './schema'
 
-const store = new Store({schema})
+const inMemorySource = new Store({schema, name: 'inMemorySource'})
 
 const coordinator = new Coordinator({
-  sources: [store, backup],
+  sources: [inMemorySource, backup],
 })
 
 const backupStoreSync = new SyncStrategy({
-  source: 'store',
+  source: 'inMemorySource',
   target: 'backup',
   blocking: true,
 })
@@ -22,7 +22,7 @@ function activate() {
 
 async function loadBackupIntoStore() {
   const backTransForms = await backup.pull(q => q.findRecords())
-  return store.sync(backTransForms)
+  return inMemorySource.sync(backTransForms)
 }
 
 async function loadBackupAndActivate() {
@@ -30,4 +30,4 @@ async function loadBackupAndActivate() {
   await activate()
 }
 
-export {store, loadBackupAndActivate}
+export {inMemorySource, loadBackupAndActivate}
