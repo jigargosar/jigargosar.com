@@ -1,7 +1,8 @@
-import React , {Component}from 'react'
+import React, {Component} from 'react'
 import AppFrame from './orbit-components/AppFrame'
 import {observer} from './lib/little-react'
 
+@observer
 class App extends Component {
   state = {hasError: false}
   render() {
@@ -21,4 +22,4 @@ class App extends Component {
   }
 }
 
-export default observer(App)
+export default App
