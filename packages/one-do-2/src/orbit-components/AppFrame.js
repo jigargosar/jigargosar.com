@@ -24,8 +24,8 @@ class AppFrame extends Component {
     return (
       <div className={cn('vh-100 overflow-scroll')}>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
-        <ObsPromise label={'storeOP'} p={this.storeOP} />
-        <ObsPromise label={'tasksOP'} p={this.tasksOP} />
+        {/*<ObsPromise label={'storeOP'} p={this.storeOP} />*/}
+        {/*<ObsPromise label={'tasksOP'} p={this.tasksOP} />*/}
         <div>
           {this.tasksOP.case({
             fulfilled: tasks => `tasks.length=${tasks.length}`,
