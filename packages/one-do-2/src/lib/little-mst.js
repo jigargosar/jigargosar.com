@@ -60,19 +60,6 @@ export {
 } from 'mobx-state-tree'
 
 export {
-  observable,
-  values,
-  has,
-  get,
-  set,
-  autorun,
-  trace,
-  reaction,
-  computed,
-  action,
-} from 'mobx'
-
-export {
   UndoManager,
   TimeTraveller,
   connectReduxDevtools,
