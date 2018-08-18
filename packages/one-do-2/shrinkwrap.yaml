@@ -2,6 +2,16 @@ dependencies:
   '@firebase/app-types': 0.3.2
   '@material-ui/core': 1.5.0
   '@material-ui/icons': 2.0.2
+  '@orbit/coordinator': 0.15.19
+  '@orbit/core': 0.15.19
+  '@orbit/data': 0.15.19
+  '@orbit/indexeddb': 0.15.19
+  '@orbit/indexeddb-bucket': 0.15.19
+  '@orbit/jsonapi': 0.15.19
+  '@orbit/local-storage': 0.15.19
+  '@orbit/local-storage-bucket': 0.15.19
+  '@orbit/store': 0.15.19
+  '@orbit/utils': 0.15.19
   autobind: 1.0.3
   autosize: 4.0.2
   chance: 1.0.16
@@ -28,7 +38,6 @@ dependencies:
   react-app-rewired: 1.5.2
   react-dom: 16.4.2
   react-easy-state: 5.1.0
-  react-event-listener: 0.6.2
   react-scripts: 1.1.4
   react-scroll-into-view-if-needed: 2.1.6
   recompose: 0.28.2
@@ -257,6 +266,78 @@ packages:
       node: '>=6.5.0'
     resolution:
       integrity: sha512-G5SGobdqdyRm1OphNH1PX91N9Iqt92uiqxURSJGKh8nN6REFjfkBzGOrd3ASrN1OnUCfRt5ucEYDUkijQRLtFQ==
+  /@orbit/coordinator/0.15.19:
+    dev: false
+    resolution:
+      integrity: sha512-HYqgtXkAPTiHz2fa3rhnj3MYc1WNLPEgTN9zp86ViZxkfZx1HufCx9w/5HppzESTaY35DRECaiE/9ljD/CS+lA==
+  /@orbit/core/0.15.19:
+    dependencies:
+      '@orbit/utils': 0.15.19
+    dev: false
+    resolution:
+      integrity: sha512-PvTjug0+6qQUkVxAtNaioElbvZafWrJ4G4px7Ew6ByDG8V9NQ/SNeVUa6IAc/gK3vfqHS7phCNtYjbRM/LhJYA==
+  /@orbit/data/0.15.19:
+    dependencies:
+      '@orbit/core': 0.15.19
+      '@orbit/utils': 0.15.19
+    dev: false
+    resolution:
+      integrity: sha512-UO6IK6pbD2DzLXRtGk7J9NsuN1B3nJJg5SyS5RrT1PenalFK3OnSaOH3R+dj3ed24Xm2CCAbQSZ/DbdwgPYpug==
+  /@orbit/immutable/0.15.14:
+    dev: false
+    resolution:
+      integrity: sha512-FSEj15nZuakGDeya15gECkQHUDdrNflvyOrkw3Y+l7954zNvDgDndtqIOJd6OoNx7a8htAfrMGVdo/IJKzPbKQ==
+  /@orbit/indexeddb-bucket/0.15.19:
+    dependencies:
+      '@orbit/core': 0.15.19
+      '@orbit/utils': 0.15.19
+    dev: false
+    resolution:
+      integrity: sha512-iNz1qjQuBoRxa4apmlwDxpyoYVh5SoQEE8jxObWjbzhXfZIu2eYXvy3AU1oDnYAnmEScA4snV6BNj4iDMMr9Wg==
+  /@orbit/indexeddb/0.15.19:
+    dependencies:
+      '@orbit/core': 0.15.19
+      '@orbit/data': 0.15.19
+      '@orbit/utils': 0.15.19
+    dev: false
+    resolution:
+      integrity: sha512-zmkkSfnkq6r38VpuhedWSR9uZMCW1X9T97TaAo2LuGfuEmZCF7D6O1C5+O9b44V9EGxVflI5P7gKy7gcytZNIw==
+  /@orbit/jsonapi/0.15.19:
+    dependencies:
+      '@orbit/core': 0.15.19
+      '@orbit/data': 0.15.19
+      '@orbit/utils': 0.15.19
+    dev: false
+    resolution:
+      integrity: sha512-4t6dGq0kI0HKOP8U7joa5Vg1X4QTe1gDXDwCjOw8+qMgNRazn3CQtdXLElW7VFjqQ1NpK47WW7DbqP6Avc2jKQ==
+  /@orbit/local-storage-bucket/0.15.19:
+    dependencies:
+      '@orbit/core': 0.15.19
+      '@orbit/utils': 0.15.19
+    dev: false
+    resolution:
+      integrity: sha512-5AyVXnzfP9UflaVjN60u8BJpdM0HfG2PwfyBh9Y4bbLmsaE7VO4u1Li2p4ob1o9l3fCzmKyqxty/z6hIULwcCQ==
+  /@orbit/local-storage/0.15.19:
+    dependencies:
+      '@orbit/core': 0.15.19
+      '@orbit/data': 0.15.19
+      '@orbit/utils': 0.15.19
+    dev: false
+    resolution:
+      integrity: sha512-K+uNUwpfVUhhFDhe7cahg1JxE1qLaigP/DEivqyiPBdSaTSDyoT8f2rGdWCA9ucXX5z5kIR4BC8M6nXLPsGSVQ==
+  /@orbit/store/0.15.19:
+    dependencies:
+      '@orbit/core': 0.15.19
+      '@orbit/data': 0.15.19
+      '@orbit/immutable': 0.15.14
+      '@orbit/utils': 0.15.19
+    dev: false
+    resolution:
+      integrity: sha512-NWtidBXN8KCcMG25vKdYsLGa8lDpIxslAxCNfqd/RFiU9CYzs9+7b0EnGvf08hUbHZyghpuuzyaFeVkN+V+rHA==
+  /@orbit/utils/0.15.19:
+    dev: false
+    resolution:
+      integrity: sha512-cz8OCrVlbC2wrnNAakZvYOpHErRcSBoTdpxYiDDUgdNJ6kPxBK7cgCGYkvMCC/0MbzcQrx61DbVUQtUYeD0DCA==
   /@types/jss/9.5.4:
     dependencies:
       csstype: 2.5.6
@@ -9001,6 +9082,16 @@ specifiers:
   '@firebase/app-types': ^0.3.2
   '@material-ui/core': ^1.4.3
   '@material-ui/icons': ^2.0.1
+  '@orbit/coordinator': ^0.15.19
+  '@orbit/core': ^0.15.19
+  '@orbit/data': ^0.15.19
+  '@orbit/indexeddb': ^0.15.19
+  '@orbit/indexeddb-bucket': ^0.15.19
+  '@orbit/jsonapi': ^0.15.19
+  '@orbit/local-storage': ^0.15.19
+  '@orbit/local-storage-bucket': ^0.15.19
+  '@orbit/store': ^0.15.19
+  '@orbit/utils': ^0.15.19
   '@types/react': ^16.4.11
   '@types/react-dom': ^16.0.7
   autobind: ^1.0.3
@@ -9030,7 +9121,6 @@ specifiers:
   react-app-rewired: ^1.5.2
   react-dom: ^16.4.2
   react-easy-state: ^5.1.0
-  react-event-listener: ^0.6.2
   react-scripts: 1.1.4
   react-scroll-into-view-if-needed: ^2.1.6
   recompose: ^0.28.2
