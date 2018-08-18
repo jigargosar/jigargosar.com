@@ -3,22 +3,11 @@ import React, {Component, Fragment} from 'react'
 import {observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {fetchStore} from '../orbit-stores/store'
-import {prettyJSONStringify} from '../lib/little-ramda'
-import {map, tap} from '../lib/ramda'
-
-const flattenRecord = ({attributes, ...rest}) => ({
-  ...rest,
-  ...attributes,
-})
-
-function logRecords(records) {
-  const flatRecords = map(flattenRecord)(records)
-  console.table(flatRecords)
-  console.debug(prettyJSONStringify(records))
-}
-
-const findAllRecordsOfType = type => store =>
-  store.query(q => q.findRecords(type))
+import {tap} from '../lib/ramda'
+import {
+  findAllRecordsOfType,
+  logRecords,
+} from '../orbit-stores/little-orbit'
 
 async function fetchTasks(store) {
   return tap(logRecords)(await findAllRecordsOfType('task')(store))
