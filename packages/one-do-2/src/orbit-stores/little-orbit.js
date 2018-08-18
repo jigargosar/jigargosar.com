@@ -1,5 +1,6 @@
 import {map} from 'ramda'
 import {prettyJSONStringify} from '../lib/little-ramda'
+import {fromPromise} from '../lib/mobx-utils'
 
 const flattenRecord = ({attributes, ...rest}) => ({
   ...rest,
@@ -13,4 +14,4 @@ export function logRecords(records) {
 }
 
 export const findAllRecordsOfType = type => store =>
-  store.query(q => q.findRecords(type))
+  fromPromise(store.query(q => q.findRecords(type)))

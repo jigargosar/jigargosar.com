@@ -19,6 +19,8 @@ function fetchAllTasks(store) {
 class AppFrame extends Component {
   storeRes = fetchStore()
 
+  tasksRes = this.storeRes.then(fetchAllTasks)
+
   componentDidMount() {
     this.storeRes
       .then(compose(fromPromise, fetchAllTasks))
@@ -31,7 +33,7 @@ class AppFrame extends Component {
       <Fragment>
         <h1>Orbit Tasks</h1>
         <div>{`storeFP.status=${this.storeRes.state}`}</div>
-        {this.storeRes.case({
+        {this.tasksRes.case({
           pending: () => 'pending',
           fulfilled: () => 'fulfilled',
           rejected: () => 'rejected',
