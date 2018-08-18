@@ -4,7 +4,7 @@ import {observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {fetchStore} from '../orbit-stores/store'
 import {prettyJSONStringify} from '../lib/little-ramda'
-import {apply, map, partial} from '../lib/ramda'
+import {map} from '../lib/ramda'
 
 const flattenRecord = ({attributes, ...rest}) => ({
   ...rest,
@@ -14,7 +14,6 @@ const flattenRecord = ({attributes, ...rest}) => ({
 function logRecords(records) {
   // console.log(`records`, ...records)
   const flatRecords = map(flattenRecord)(records)
-  // apply(partial(console.log, ['records']), flatRecords)
   console.table(flatRecords)
   console.debug(prettyJSONStringify(records))
 }
