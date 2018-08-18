@@ -9,7 +9,7 @@ import {
   logRecords,
 } from '../orbit-stores/little-orbit'
 
-async function fetchTasks(store) {
+async function fetchAllTasks(store) {
   return tap(logRecords)(await findAllRecordsOfType('task')(store))
 }
 
@@ -19,7 +19,7 @@ class AppFrame extends Component {
   fetchStoreResult = fetchStore()
 
   componentDidMount() {
-    this.fetchStoreResult.then(fetchTasks).catch(console.error)
+    this.fetchStoreResult.then(fetchAllTasks).catch(console.error)
   }
 
   render() {
