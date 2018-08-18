@@ -4,7 +4,7 @@ import {observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {fetchStore} from '../orbit-stores/store'
 import {prettyJSONStringify} from '../lib/little-ramda'
-import {map} from '../lib/ramda'
+import {map, tap} from '../lib/ramda'
 
 const flattenRecord = ({attributes, ...rest}) => ({
   ...rest,
@@ -18,9 +18,7 @@ function logRecords(records) {
 }
 
 async function fetchTasks(store) {
-  const tasks = await store.query(q => q.findRecords('task'))
-  logRecords(tasks)
-  return tasks
+  return tap(logRecords)(await store.query(q => q.findRecords('task')))
 }
 
 @disposable
