@@ -28,6 +28,6 @@ async function bootStore() {
 
 bootStore().catch(console.error)
 
-function addRecord(taskRecord, t) {
-  return t.addRecord(taskRecord)
+function addRecord(record, t) {
+  return t.addRecord(record)
 }
