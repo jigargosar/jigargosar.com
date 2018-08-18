@@ -1,12 +1,9 @@
 import {fWord} from '../lib/fake'
 import {length} from '../lib/ramda'
-import {backup} from './backup'
-import {coordinator, store} from './coordinator'
+import {loadBackupAndActivate, store} from './coordinator'
 
 async function testStore() {
-  const backTransForms = await backup.pull(q => q.findRecords())
-  await store.sync(backTransForms)
-  await coordinator.activate()
+  await loadBackupAndActivate()
 
   const initialTasks = await store.query(q => q.findRecords('task'))
 
