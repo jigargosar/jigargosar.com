@@ -18,7 +18,10 @@ function fetchAllTasks(store) {
 function renderObsPromise(obsPromise) {
   const renderResult = obsPromise.case({
     fulfilled: renderJSON,
-    rejected: renderJSON,
+    rejected: e => {
+      console.log(`e`, e)
+      return renderJSON(e)
+    },
   })
 
   function renderJSON(data) {
