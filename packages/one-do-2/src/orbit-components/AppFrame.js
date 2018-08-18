@@ -2,7 +2,7 @@ import '../stores/init-mobx'
 import React, {Component, Fragment} from 'react'
 import {observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
-import {fetchStore} from '../orbit-stores/store'
+import {createStore} from '../orbit-stores/store'
 import {compose, tap} from '../lib/ramda'
 import {
   findAllRecordsOfType,
@@ -17,7 +17,7 @@ function fetchAllTasks(store) {
 @disposable
 @observer
 class AppFrame extends Component {
-  storeRes = fetchStore()
+  storeRes = fromPromise(createStore())
   tasksRes = fromPromise(this.storeRes.then(fetchAllTasks))
 
   componentDidMount() {

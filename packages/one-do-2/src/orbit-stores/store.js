@@ -15,5 +15,3 @@ export async function createStore() {
   console.log('store created')
   return store
 }
-
-export const fetchStore = () => fromPromise(createStore())
