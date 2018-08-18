@@ -23,7 +23,6 @@ class AppFrame extends Component {
     this.fetchStoreResult
       .then(compose(fromPromise, fetchAllTasks))
       .then(tap(logRecords))
-
       .catch(console.error)
   }
 
