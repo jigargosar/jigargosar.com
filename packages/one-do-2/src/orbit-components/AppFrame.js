@@ -5,6 +5,7 @@ import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
 import {findRecords, tapLogRecords} from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
+import * as PropTypes from 'prop-types'
 
 const findTasks = findRecords('task')
 
@@ -21,12 +22,13 @@ class AppFrame extends Component {
   render() {
     return (
       <div className={cn('vh-100 overflow-scroll')}>
-        <div className={cn('pa3 f3')}>Orbit Tasks</div>
         {/*<ObsPromise label={'storeOP'} p={this.storeOP} />*/}
         {/*<ObsPromise label={'tasksOP'} p={this.tasksOP} />*/}
         <div>
           {this.tasksOP.case({
-            fulfilled: tasks => <Tasks tasks={tasks} />,
+            fulfilled: tasks => (
+              <TasksPage store={this.storeOP.value} tasks={tasks} />
+            ),
           })}
         </div>
       </div>
@@ -36,9 +38,25 @@ class AppFrame extends Component {
 
 export default AppFrame
 
-const Tasks = observer(function Tasks(props) {
-  return renderKeyedById(Task, 'task', props.tasks)
-})
+@observer
+class TasksPage extends Component {
+  render() {
+    const {tasks} = this.props
+    return (
+      <div>
+        <div className={cn('pa3 f3')}>Orbit Tasks</div>
+        <Tasks task={tasks} />
+      </div>
+    )
+  }
+}
+
+@observer
+class Tasks extends Component {
+  render() {
+    return renderKeyedById(Task, 'task', this.props.tasks)
+  }
+}
 
 @observer
 class Task extends Component {
