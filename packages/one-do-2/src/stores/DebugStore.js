@@ -16,12 +16,12 @@ class DebugStore {
 
   @action
   onEnter() {
-    setObservableProp('isInTransition', true)
+    setObservableProp('isInTransition', true, this)
   }
 
   @action
   onExited() {
-    setObservableProp('isInTransition', false)
+    setObservableProp('isInTransition', false, this)
   }
 
   @action

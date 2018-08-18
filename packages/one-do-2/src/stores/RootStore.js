@@ -18,7 +18,7 @@ class RootStore {
   @observable.ref addTaskView = new AddTaskViewStore()
 
   @computed
-  get toJSON() {
+  get toPrettyJSON() {
     return prettyJSONStringify(this.toJS)
   }
 
