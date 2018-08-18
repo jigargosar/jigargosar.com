@@ -29,6 +29,7 @@ class AppFrame extends Component {
   }
 
   render() {
+    const tasksRes = this.tasksRes
     return (
       <Fragment>
         <h1>Orbit Tasks</h1>
@@ -38,10 +39,10 @@ class AppFrame extends Component {
         {/*fulfilled: () => 'fulfilled',*/}
         {/*rejected: () => 'rejected',*/}
         {/*})}`}</div>*/}
-        <div>{`tasksRes.status=${this.tasksRes.state}`}</div>
-        <div>{`tasksRes = ${this.tasksRes.case({
+        <div>{`tasksRes.status=${tasksRes.state}`}</div>
+        <div>{`tasksRes = ${tasksRes.case({
           pending: () => 'pending',
-          fulfilled: () => 'fulfilled',
+          fulfilled: tasks => `${tasksRes}`,
           rejected: () => 'rejected',
         })}`}</div>
       </Fragment>
