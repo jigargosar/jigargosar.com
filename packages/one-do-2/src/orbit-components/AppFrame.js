@@ -5,10 +5,16 @@ import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
 import {isNil} from '../lib/ramda'
 import {action, observable} from '../lib/mobx'
+import {prettyJSONStringify} from '../lib/little-ramda'
+
+function logRecords(records) {
+  console.log(`records`, records)
+  console.log(prettyJSONStringify(records))
+}
 
 async function fetchTasks(store) {
   const tasks = await store.query(q => q.findRecords('task'))
-  console.log(`tasks`, tasks)
+  logRecords(tasks)
   return tasks
 }
 
