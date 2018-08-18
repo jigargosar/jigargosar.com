@@ -3,7 +3,7 @@ import React, {Component, Fragment} from 'react'
 import {observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
-import {tap} from '../lib/ramda'
+import {compose, drop, dropWhile, tap} from '../lib/ramda'
 import {
   findAllRecordsOfType,
   logRecords,
@@ -16,18 +16,30 @@ function fetchAllTasks(store) {
 }
 
 function renderObsPromise(obsPromise) {
+  function getPrettyStringifySafe(data) {
+    const ret = prettyStringifySafe(data)
+    console.log(`ret`, ret)
+    console.log(`typeof ret`, typeof ret)
+    return ret
+  }
+
+  function extracted(data) {
+    return compose(drop(10), getPrettyStringifySafe)(data)
+  }
+
+  const renderResult = obsPromise.case({
+    pending: () => 'pending',
+    fulfilled: data => (
+      <pre>
+        <code>{getPrettyStringifySafe(data)}</code>
+      </pre>
+    ),
+    rejected: () => 'rejected',
+  })
   return (
     <Fragment>
       <div>{`status=${obsPromise.state}`}</div>
-      <div>{`${obsPromise.case({
-        pending: () => 'pending',
-        fulfilled: data => (
-          <pre>
-            <code>{prettyStringifySafe(data)}</code>
-          </pre>
-        ),
-        rejected: () => 'rejected',
-      })}`}</div>
+      <div>{renderResult}</div>
     </Fragment>
   )
 }
