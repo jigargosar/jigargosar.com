@@ -1,27 +1,24 @@
 import {fWord} from '../lib/fake'
 import {length} from '../lib/ramda'
-import {
-  loadBackupAndActivate,
-  inMemorySource as store,
-} from './coordinator'
+import {loadBackupAndActivate, inMemorySource} from './coordinator'
 
-export {inMemorySource}
+const store = inMemorySource
+
+export {store}
 
 async function testStore() {
   await loadBackupAndActivate()
-  const initialTasks = await inMemorySource.query(q =>
-    q.findRecords('task'),
-  )
+  const initialTasks = await store.query(q => q.findRecords('task'))
 
   if (length(initialTasks) === 0) {
-    await inMemorySource.update(t => [
+    await store.update(t => [
       addRecord(TaskRecord(), t),
       addRecord(TaskRecord(), t),
       addRecord(TaskRecord(), t),
     ])
   }
 
-  const records = await inMemorySource.query(q =>
+  const records = await store.query(q =>
     q.findRecords('task').sort('createdAt'),
   )
   console.log(`records`, records)
