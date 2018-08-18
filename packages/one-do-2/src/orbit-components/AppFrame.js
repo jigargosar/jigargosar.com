@@ -18,7 +18,6 @@ function fetchAllTasks(store) {
 @observer
 class AppFrame extends Component {
   storeRes = fetchStore()
-
   tasksRes = fromPromise(this.storeRes.then(fetchAllTasks))
 
   componentDidMount() {
