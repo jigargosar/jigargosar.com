@@ -19,9 +19,7 @@ async function bootStore() {
 
   if (length(initialTasks) === 0) {
     await store.update(t =>
-      [addTaskRecord, addTaskRecord, addTaskRecord, addTaskRecord].map(
-        fn => fn(t),
-      ),
+      [addTaskRecord(), addTaskRecord()].map(fn => fn(t)),
     )
   }
 
