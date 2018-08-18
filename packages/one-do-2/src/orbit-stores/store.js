@@ -6,7 +6,7 @@ const store = inMemorySource
 
 export {store}
 
-async function testStore() {
+async function bootStore() {
   await loadBackupAndActivate()
   const initialTasks = await store.query(q => q.findRecords('task'))
 
@@ -26,7 +26,7 @@ async function testStore() {
   records.forEach(console.table)
 }
 
-testStore().catch(console.error)
+bootStore().catch(console.error)
 
 function TaskRecord() {
   return {
