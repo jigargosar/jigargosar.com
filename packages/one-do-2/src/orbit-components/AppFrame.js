@@ -12,7 +12,6 @@ const flattenRecord = ({attributes, ...rest}) => ({
 })
 
 function logRecords(records) {
-  // console.log(`records`, ...records)
   const flatRecords = map(flattenRecord)(records)
   console.table(flatRecords)
   console.debug(prettyJSONStringify(records))
