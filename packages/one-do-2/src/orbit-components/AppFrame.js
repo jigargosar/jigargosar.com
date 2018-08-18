@@ -1,9 +1,9 @@
 import '../stores/init-mobx'
 import React, {Component, Fragment} from 'react'
-import {observer} from '../lib/little-react'
+import {cn, observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
-import {compose, drop, dropWhile, tap} from '../lib/ramda'
+import {tap} from '../lib/ramda'
 import {
   findAllRecordsOfType,
   logRecords,
@@ -16,31 +16,20 @@ function fetchAllTasks(store) {
 }
 
 function renderObsPromise(obsPromise) {
-  function getPrettyStringifySafe(data) {
-    const ret = prettyStringifySafe(data)
-    console.log(`ret`, ret)
-    console.log(`typeof ret`, typeof ret)
-    return ret
-  }
-
-  function extracted(data) {
-    return compose(drop(10), getPrettyStringifySafe)(data)
-  }
-
   const renderResult = obsPromise.case({
     pending: () => 'pending',
     fulfilled: data => (
       <pre>
-        <code>{getPrettyStringifySafe(data)}</code>
+        <code>{prettyStringifySafe(data)}</code>
       </pre>
     ),
     rejected: () => 'rejected',
   })
   return (
-    <Fragment>
-      <div>{`status=${obsPromise.state}`}</div>
+    <div className={cn('pa3')}>
+      <div className={cn(' f4 b')}>{`status=${obsPromise.state}`}</div>
       <div>{renderResult}</div>
-    </Fragment>
+    </div>
   )
 }
 
@@ -58,7 +47,7 @@ class AppFrame extends Component {
     const tasksRes = this.tasksRes
     const storeRes = this.storeRes
     return (
-      <Fragment>
+      <div className={cn('vh-100 overflow-scroll')}>
         <h1>Orbit Tasks</h1>
         {renderObsPromise(storeRes)}
         <div>{`tasksRes.status=${tasksRes.state}`}</div>
@@ -67,7 +56,7 @@ class AppFrame extends Component {
           fulfilled: tasks => `${tasks.length}`,
           rejected: () => 'rejected',
         })}`}</div>
-      </Fragment>
+      </div>
     )
   }
 }
