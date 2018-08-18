@@ -9,19 +9,20 @@ const coordinator = new Coordinator({
   sources: [store, backup],
 })
 
-async function activate() {
-  const backupStoreSync = new SyncStrategy({
-    source: 'store',
-    target: 'backup',
-    blocking: true,
-  })
-  coordinator.addStrategy(backupStoreSync)
-  await coordinator.activate()
+const backupStoreSync = new SyncStrategy({
+  source: 'store',
+  target: 'backup',
+  blocking: true,
+})
+coordinator.addStrategy(backupStoreSync)
+
+function activate() {
+  return coordinator.activate()
 }
 
 async function loadBackupIntoStore() {
   const backTransForms = await backup.pull(q => q.findRecords())
-  await store.sync(backTransForms)
+  return store.sync(backTransForms)
 }
 
 async function loadBackupAndActivate() {

@@ -3,6 +3,7 @@ import {length} from '../lib/ramda'
 import {loadBackupAndActivate, store} from './coordinator'
 
 async function testStore() {
+  debugger
   await loadBackupAndActivate()
 
   const initialTasks = await store.query(q => q.findRecords('task'))
