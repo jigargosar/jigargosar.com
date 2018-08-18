@@ -61,6 +61,7 @@ class Tasks extends Component {
 class Task extends Component {
   render() {
     const {task} = this.props
-    return <div className={cn('ph3 pv1')}>{task.attributes.title}</div>
+    const {title} = task.attributes
+    return <div className={cn('ph3 pv1')}>{title}</div>
   }
 }
