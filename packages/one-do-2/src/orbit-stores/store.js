@@ -13,7 +13,7 @@ function addNewTaskRecord(t) {
   return addRecord(TaskRecord(), t)
 }
 
-localStorage.clear()
+// localStorage.clear()
 
 async function bootStore() {
   await loadBackupAndActivate()
