@@ -10,8 +10,6 @@ export const rootStore = observable(new RootStore())
 export const debugStore = rootStore.debugStore
 export const taskView = rootStore.taskView
 export const addTaskView = rootStore.addTaskView
-export const store = rootStore
-
 const disposers = Disposers(module)
 rootStore.loadFromLS()
 

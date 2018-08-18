@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import cn from 'classnames'
-import {rootStore, store} from '../stores'
+import {rootStore} from '../stores'
 import {observer} from '../lib/little-react'
 
 @observer
