@@ -27,7 +27,7 @@ function renderObsPromise(obsPromise) {
   })
   return (
     <div className={cn('pa3')}>
-      <div className={cn(' f4 b')}>{`status=${obsPromise.state}`}</div>
+      <div className={cn('f4')}>{`status=${obsPromise.state}`}</div>
       <div>{renderResult}</div>
     </div>
   )
