@@ -5,7 +5,7 @@ export const store = new Store({schema})
 
 async function testStore() {
   await store.update(t => [
-    t.aRecord({
+    t.addRecord({
       type: 'task',
       id: 'task_1',
       attributes: {
@@ -13,6 +13,9 @@ async function testStore() {
       },
     }),
   ])
+  const recCt = store.cache.query(q => q.findRecords('task').sort('name'))
+    .length
+  console.log(`recCt`, recCt)
 }
 
 testStore().catch(console.log)
