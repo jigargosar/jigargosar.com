@@ -1,7 +1,6 @@
 import {Store} from './orbit'
 import {schema} from './schema'
 import {TaskRecord} from './TaskRecord'
-import {fromPromise} from '../lib/mobx-utils'
 
 async function addNewTask(store) {
   await store.update(t => t.addRecord(TaskRecord()))
