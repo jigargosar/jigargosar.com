@@ -1,21 +1,7 @@
-import Store from '@orbit/store'
-import {schema} from './schema'
-import Coordinator, {SyncStrategy} from '@orbit/coordinator'
 import {fWord} from '../lib/fake'
 import {length} from '../lib/ramda'
 import {backup} from './backup'
-
-export const store = new Store({schema})
-
-const coordinator = new Coordinator({
-  sources: [store, backup],
-})
-
-const backupStoreSync = new SyncStrategy({
-  source: 'store',
-  target: 'backup',
-  blocking: true,
-})
+import {backupStoreSync, coordinator, store} from './coordinator'
 
 coordinator.addStrategy(backupStoreSync)
 

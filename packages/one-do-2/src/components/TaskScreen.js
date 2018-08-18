@@ -5,7 +5,7 @@ import {FlexRow} from '../lib/UI'
 import TaskList from './TaskList'
 import {Button} from '@material-ui/core'
 import AddTaskBar from './AddTaskBar'
-import {store} from '../orbit-stores/store'
+import {store} from '../orbit-stores/coordinator'
 
 function renderButton(label, onClick) {
   return (
