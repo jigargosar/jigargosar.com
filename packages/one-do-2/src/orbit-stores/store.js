@@ -2,10 +2,10 @@ import {fWord} from '../lib/fake'
 import {length} from '../lib/ramda'
 import {loadBackupAndActivate, store} from './coordinator'
 
-async function testStore() {
-  debugger
-  await loadBackupAndActivate()
+export {store} from './coordinator'
 
+async function testStore() {
+  await loadBackupAndActivate()
   const initialTasks = await store.query(q => q.findRecords('task'))
 
   if (length(initialTasks) === 0) {
