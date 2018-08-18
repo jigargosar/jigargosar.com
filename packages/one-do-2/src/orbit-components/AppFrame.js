@@ -45,7 +45,7 @@ class TasksPage extends Component {
     return (
       <div>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
-        <Tasks task={tasks} />
+        <Tasks tasks={tasks} />
       </div>
     )
   }
