@@ -17,8 +17,11 @@ function logRecords(records) {
   console.debug(prettyJSONStringify(records))
 }
 
+const findAllRecordsOfType = type => store =>
+  store.query(q => q.findRecords(type))
+
 async function fetchTasks(store) {
-  return tap(logRecords)(await store.query(q => q.findRecords('task')))
+  return tap(logRecords)(await findAllRecordsOfType('task')(store))
 }
 
 @disposable
