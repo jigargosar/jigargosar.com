@@ -3,12 +3,7 @@ import React, {Component} from 'react'
 import {cn, observer} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {createStore} from '../orbit-stores/store'
-import {tap} from '../lib/ramda'
-import {
-  findRecords,
-  logRecords,
-  tapLogRecords,
-} from '../orbit-stores/little-orbit'
+import {findRecords, tapLogRecords} from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
 
 const findTasks = findRecords('task')
