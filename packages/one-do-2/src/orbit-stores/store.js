@@ -19,29 +19,32 @@ async function createStore() {
     _store: store,
     query: fn => store.query(fn),
     listeners: event => store.listeners(event),
-    on: (event, callback, binding) => {
-      console.log('[store] .on', event, callback.name || callback, binding)
-      store.on(event, callback, binding)
-
-      console.log(
-        `[store] .listeners(${event}).length`,
-        store.listeners(event).length,
-      )
-      disposers.addDisposer(onAutoDisposer)
-      return () => off(event, callback, binding)
-
-      function onAutoDisposer() {
-        console.log(
-          '[store] disposing: .on',
-          event,
-          callback.name || callback,
-          binding,
-        )
-        off(event, callback, binding)
-      }
-    },
+    on,
     off,
   }
+
+  function on(event, callback, binding) {
+    console.log('[store] .on', event, callback.name || callback, binding)
+    store.on(event, callback, binding)
+
+    console.log(
+      `[store] .listeners(${event}).length`,
+      store.listeners(event).length,
+    )
+    disposers.addDisposer(onAutoDisposer)
+    return () => off(event, callback, binding)
+
+    function onAutoDisposer() {
+      console.log(
+        '[store] disposing: .on',
+        event,
+        callback.name || callback,
+        binding,
+      )
+      off(event, callback, binding)
+    }
+  }
+
   console.debug('[Exiting] createStore')
   return storeWrapper
 
