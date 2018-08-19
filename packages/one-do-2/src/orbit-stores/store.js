@@ -37,17 +37,18 @@ function offWrapper(store) {
   }
 }
 
-function createTransformObservable(on) {
-  let transformDisposer = identity
+function createTransformObservable(store) {
+  let disposer = identity
 
   return fromResource(
-    sink =>
-      (transformDisposer = on('transform', function onStoreTransform(
-        transforms,
-      ) {
+    sink => {
+      function listener(transforms) {
         sink(transforms)
-      })),
-    transformDisposer,
+      }
+
+      store.on('transform', listener)
+    },
+    disposer,
     [],
   )
 }
@@ -58,7 +59,7 @@ async function createStore() {
   const on = onWrapper(store)
   const off = offWrapper(store)
 
-  const transforms = createTransformObservable(on)
+  const transforms = createTransformObservable(store)
 
   const storeWrapper = {
     _store: store,
