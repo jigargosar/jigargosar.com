@@ -38,6 +38,7 @@ if (module.hot) {
       }
       if (['dispose'].includes(status)) {
         console.groupEnd()
+        console.groupEnd()
         console.groupCollapsed('[HMR] disposing')
       } else if (['apply'].includes(status)) {
         console.groupEnd()

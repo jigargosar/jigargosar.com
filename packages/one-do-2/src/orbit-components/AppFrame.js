@@ -26,12 +26,9 @@ class AppFrame extends Component {
 
   componentDidMount() {
     // this.tasksOP.then(tapLogRecords).catch(console.error)
-    // this.tasksOP.then(tapLogRecords).catch(console.error)
 
     this.storeOP.then(s => {
-      this.props.disposers.addDisposer(
-        s.on('transform', this.fetchTasks, this),
-      )
+      this.props.disposers.add(s.on('transform', this.fetchTasks, this))
     })
   }
 
