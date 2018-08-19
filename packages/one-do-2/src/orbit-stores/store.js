@@ -3,7 +3,8 @@ import {schema} from './schema'
 import {TaskRecord} from './TaskRecord'
 import {findRecords} from './little-orbit'
 import {Disposers} from '../lib/little-mobx'
-import {partial} from '../lib/ramda'
+import {identity, partial} from '../lib/ramda'
+import {fromResource} from '../lib/mobx-utils'
 
 export function addNewTask(store) {
   return store.update(t => t.addRecord(TaskRecord()))
@@ -39,15 +40,26 @@ function offWrapper(store) {
 async function createStore() {
   debug('[Entering] createStore')
   const store = new Store({schema})
+  const on = onWrapper(store)
+  const off = offWrapper(store)
+
   await addNewTask(store)
   await addNewTask(store)
+
+  let transformDisposer = identity
+  const transforms = fromResource(
+    sink => (transformDisposer = on('transform', sink)),
+    transformDisposer,
+    [],
+  )
 
   const storeWrapper = {
     _store: store,
     query: fn => store.query(fn),
     listeners: event => store.listeners(event),
-    on: onWrapper(store),
-    off: offWrapper(store),
+    on: on,
+    off: off,
+    transforms,
   }
 
   debug('[Exiting] createStore')
