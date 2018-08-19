@@ -13,7 +13,11 @@ export async function createStore() {
   await addNewTask(store)
   await addNewTask(store)
   console.log('store created')
-  return store
+  return {
+    _store: store,
+    query: fn => store.query(fn),
+    listeners: event => store.listeners(event),
+  }
 }
 
 export const findTasks = findRecords('task')
