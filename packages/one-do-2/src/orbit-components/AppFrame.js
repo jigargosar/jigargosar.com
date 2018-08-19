@@ -29,7 +29,7 @@ class AppFrame extends Component {
     // this.tasksOP.then(tapLogRecords).catch(console.error)
 
     this.storeOP.then(s => {
-      this.props.disposers.add(s.on('transform', this.fetchTasks, this))
+      this.props.addDisposer(s.on('transform', this.fetchTasks, this))
     })
   }
 

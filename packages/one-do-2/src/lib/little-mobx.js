@@ -63,6 +63,11 @@ export function Disposers(module) {
 
   const dispose = () => {
     list.forEach(call)
+    list.forEach(call)
+    list.forEach(call)
+    list.forEach(call)
+    list.forEach(call)
+    list.forEach(call)
     list.splice(0, list.length)
   }
 
