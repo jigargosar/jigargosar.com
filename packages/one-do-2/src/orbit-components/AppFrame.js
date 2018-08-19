@@ -18,6 +18,7 @@ class AppFrame extends Component {
   }
 
   fetchTasks() {
+    console.log('[Entering] AppFrame.fetchTasks')
     runInAction(
       'fetchTasks',
       () => (this.tasksOP = fromPromise(storeOP.then(findTasks))),
