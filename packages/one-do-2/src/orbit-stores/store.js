@@ -55,9 +55,3 @@ async function createStore() {
 export const findTasks = findRecords('task')
 
 export const storeOP = createStore()
-
-if (module.hot) {
-  hotDispose(() => {
-    console.log('disposing store module')
-  }, module)
-}
