@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import AppFrame from './orbit-components/AppFrame'
 import {observer} from './lib/little-react'
+import {hotDispose} from './lib/hot'
 
 @observer
 class App extends Component {
@@ -23,3 +24,9 @@ class App extends Component {
 }
 
 export default App
+
+if (module.hot) {
+  hotDispose(() => {
+    debugger
+  }, module)
+}

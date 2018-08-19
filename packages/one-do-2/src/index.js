@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 // import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import {sugarExtend} from './lib/little-ramda'
+import {hotDispose} from './lib/hot'
 
 sugarExtend()
 
@@ -28,6 +29,10 @@ if (module.hot) {
       console.error('[index] hot accept', e)
     }
   })
+
+  hotDispose(() => {
+    debugger
+  }, module)
 }
 
 render()
