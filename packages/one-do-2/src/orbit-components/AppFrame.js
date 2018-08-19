@@ -28,33 +28,14 @@ class AppFrame extends Component {
     // this.tasksOP.then(tapLogRecords).catch(console.error)
 
     this.storeOP.then(s => {
-      console.log(
-        `on 1: s.listeners('transform')`,
-        s.listeners('transform'),
-      )
-
       s.on('transform', this.fetchTasks, this)
       s.on('transform', this.fetchTasks, this)
-      console.log(
-        `on 2: s.listeners('transform')`,
-        s.listeners('transform'),
-      )
-      console.log(`""`, '')
     })
 
     this.props.disposers.addDisposer(() =>
       this.storeOP.then(s => {
-        console.log(
-          `off 1: s.listeners('transform')`,
-          s.listeners('transform'),
-        )
         s.off('transform', this.fetchTasks, this)
         s.off('transform', this.fetchTasks, this)
-
-        console.log(
-          `off 2: s.listeners('transform')`,
-          s.listeners('transform'),
-        )
       }),
     )
   }
