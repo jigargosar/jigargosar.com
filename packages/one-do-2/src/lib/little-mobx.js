@@ -79,6 +79,7 @@ export function Disposers(module) {
     dispose,
     length: () => list.length,
     addDisposer,
+    add: addDisposer,
     autorun: compose(addDisposer, autorun),
     reaction: compose(addDisposer, reaction),
     setInterval: compose(addDisposer, setIntervalDisposable),
