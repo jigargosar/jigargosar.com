@@ -85,9 +85,9 @@ async function createStore() {
     observableQuery,
   }
 
-  disposers.autorun(() => {
-    log(`[autorun] transforms.current()`, transforms.current())
-  })
+  // disposers.autorun(() => {
+  //   log(`[autorun] transforms.current()`, transforms.current())
+  // })
   //aa
   await addNewTask(store)
   await addNewTask(store)
