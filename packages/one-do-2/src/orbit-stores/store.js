@@ -4,7 +4,8 @@ import {TaskRecord} from './TaskRecord'
 import {findRecords} from './little-orbit'
 import {Disposers} from '../lib/little-mobx'
 import {identity, partial} from '../lib/ramda'
-import {fromResource} from '../lib/mobx-utils'
+import {fromResource, lazyObservable} from '../lib/mobx-utils'
+import {autobind} from '../lib/autobind'
 
 export function addNewTask(store) {
   return store.update(t => t.addRecord(TaskRecord()))
@@ -56,16 +57,21 @@ function createTransformObservable(store) {
 
 async function createStore() {
   debug('[Entering] createStore')
+  autobind(Store)
   const store = new Store({schema})
   const on = onWrapper(store)
   const off = offWrapper(store)
 
   const transforms = createTransformObservable(store)
 
+  // function createLazyQuery(fn) {
+  //   lazyObservable()
+  // }
+
   const storeWrapper = {
     _store: store,
-    query: fn => store.query(fn),
-    listeners: event => store.listeners(event),
+    query: store.query,
+    listeners: store.listeners,
     on: on,
     off: off,
     transforms,
