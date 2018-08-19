@@ -34,14 +34,9 @@ function onWrapper(evented) {
 }
 
 function offWrapper(store) {
-  return (e, callback, binding) => {
-    console.log(
-      `[store${store.name}] .off`,
-      e,
-      callback.name || callback,
-      binding,
-    )
-    return store.off(e, callback, binding)
+  return (event, callback, binding) => {
+    log('.off', event, callback.name || callback, binding)
+    return store.off(event, callback, binding)
   }
 }
 
