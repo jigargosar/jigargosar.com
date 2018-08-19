@@ -19,21 +19,13 @@ function onWrapper(evented) {
 
     const logger = partial(log, [logNS])
 
-    logger(`${logNS} .on`, event, callback.name || callback, binding)
+    logger('.on', event, callback.name || callback, binding)
     evented.on(event, callback, binding)
 
-    logger(
-      `${logNS} .listeners(${event}).length`,
-      evented.listeners(event).length,
-    )
+    logger(`.listeners(${event}).length`, evented.listeners(event).length)
 
     return disposers.addDisposer(function() {
-      logger(
-        `${logNS} disposing: .on`,
-        event,
-        callback.name || callback,
-        binding,
-      )
+      logger(`disposing: .on`, event, callback.name || callback, binding)
       offWrapper(evented)(event, callback, binding)
     })
   }
