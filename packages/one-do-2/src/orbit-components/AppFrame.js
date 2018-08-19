@@ -20,7 +20,7 @@ class AppFrame extends Component {
   fetchTasks() {
     runInAction(
       'fetchTasks',
-      () => (this.tasksOP = fromPromise(this.storeOP.then(findTasks))),
+      () => (this.tasksOP = fromPromise(storeOP.then(findTasks))),
     )
   }
 
