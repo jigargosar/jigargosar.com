@@ -82,6 +82,7 @@ async function createStore() {
     on: on,
     off: off,
     transforms,
+    observableQuery,
   }
 
   disposers.autorun(() => {
