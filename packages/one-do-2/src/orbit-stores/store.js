@@ -20,6 +20,7 @@ export async function createStore() {
     query: fn => store.query(fn),
     listeners: event => store.listeners(event),
     on: (event, callback, binding) => {
+      console.log('store.on', event, callback.name || callback, binding)
       store.on(event, callback, binding)
       disposers.addDisposer(() => off(event, callback, binding))
     },
@@ -27,7 +28,7 @@ export async function createStore() {
   }
 
   function off(event, callback, binding) {
-    console.log('store.off', event, callback, binding)
+    console.log('store.off', event, callback.name || callback, binding)
     return store.off(event, callback, binding)
   }
 }
