@@ -3,6 +3,7 @@ import {schema} from './schema'
 import {TaskRecord} from './TaskRecord'
 import {findRecords} from './little-orbit'
 import {Disposers} from '../lib/little-mobx'
+import {partial} from '../lib/ramda'
 
 export function addNewTask(store) {
   return store.update(t => t.addRecord(TaskRecord()))
@@ -16,16 +17,18 @@ function onWrapper(evented) {
   return (event, callback, binding) => {
     const logNS = `[${evented.name || 'Evented'}]`
 
-    log(`${logNS} .on`, event, callback.name || callback, binding)
+    const logger = partial(log, [logNS])
+
+    logger(`${logNS} .on`, event, callback.name || callback, binding)
     evented.on(event, callback, binding)
 
-    log(
+    logger(
       `${logNS} .listeners(${event}).length`,
       evented.listeners(event).length,
     )
 
     return disposers.addDisposer(function() {
-      log(
+      logger(
         `${logNS} disposing: .on`,
         event,
         callback.name || callback,
