@@ -54,5 +54,5 @@ export const storeOP = createStore()
 if (module.hot) {
   hotDispose(() => {
     console.log('disposing store module')
-  })
+  }, module)
 }
