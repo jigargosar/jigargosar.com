@@ -47,6 +47,7 @@ function createTransformObservable(store) {
       }
 
       store.on('transform', listener)
+      disposer = listener
     },
     disposer,
     [],
