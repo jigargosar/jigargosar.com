@@ -9,13 +9,13 @@ export function addNewTask(store) {
 }
 
 export async function createStore() {
-  console.log('creating store')
+  console.groupCollapsed('creating store')
   const disposers = Disposers(module)
   const store = new Store({schema})
   await addNewTask(store)
   await addNewTask(store)
-  console.log('store created')
-  return {
+
+  const storeWrapper = {
     _store: store,
     query: fn => store.query(fn),
     listeners: event => store.listeners(event),
@@ -34,6 +34,9 @@ export async function createStore() {
     },
     off,
   }
+  console.log('store created')
+  console.groupEnd()
+  return storeWrapper
 
   function off(e, callback, binding) {
     console.log('[store] .off', e, callback.name || callback, binding)
