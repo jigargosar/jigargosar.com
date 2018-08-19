@@ -10,21 +10,8 @@ export function addNewTask(store) {
 
 const disposers = Disposers(module)
 
-async function createStore() {
-  console.debug('[Entering] createStore')
-  const store = new Store({schema})
-  await addNewTask(store)
-  await addNewTask(store)
-
-  const storeWrapper = {
-    _store: store,
-    query: fn => store.query(fn),
-    listeners: event => store.listeners(event),
-    on,
-    off,
-  }
-
-  function on(event, callback, binding) {
+function onWrapper(store) {
+  return (event, callback, binding) => {
     console.log('[store] .on', event, callback.name || callback, binding)
     store.on(event, callback, binding)
 
@@ -40,17 +27,34 @@ async function createStore() {
         callback.name || callback,
         binding,
       )
-      off(event, callback, binding)
+      offWrapper(store)(event, callback, binding)
     })
+  }
+}
+
+function offWrapper(store) {
+  return (e, callback, binding) => {
+    console.log('[store] .off', e, callback.name || callback, binding)
+    return store.off(e, callback, binding)
+  }
+}
+
+async function createStore() {
+  console.debug('[Entering] createStore')
+  const store = new Store({schema})
+  await addNewTask(store)
+  await addNewTask(store)
+
+  const storeWrapper = {
+    _store: store,
+    query: fn => store.query(fn),
+    listeners: event => store.listeners(event),
+    on: onWrapper(store),
+    off: offWrapper(store),
   }
 
   console.debug('[Exiting] createStore')
   return storeWrapper
-
-  function off(e, callback, binding) {
-    console.log('[store] .off', e, callback.name || callback, binding)
-    return store.off(e, callback, binding)
-  }
 }
 
 export const findTasks = findRecords('task')
