@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 // import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import {sugarExtend} from './lib/little-ramda'
+import {tryCatch} from './lib/ramda'
 
 sugarExtend()
 
@@ -19,28 +20,33 @@ function render() {
 
 if (module.hot) {
   console.log('Cold Boot')
-  module.hot.accept(['./App'], data => {
-    try {
-      // console.clear()
-      // console.log('Hot Reload', data)
+  module.hot.accept(
+    ['./App'],
+    tryCatch(data => {
       render()
-    } catch (e) {
-      console.error('[index] hot accept', e)
-    }
+    })(console.error),
+  )
 
-    // throw 'err'
-  })
-
-  module.hot.addStatusHandler(status => {
-    if (status === 'check') {
-      console.clear()
-      console.groupCollapsed('HMR check')
-    }
-    console.debug(`status`, status)
-    if (['abort', 'dispose'].includes(status)) {
-      console.groupEnd()
-    }
-  })
+  module.hot.addStatusHandler(
+    tryCatch(status => {
+      if (status === 'check') {
+        console.clear()
+        console.groupCollapsed('[HMR] checking')
+      }
+      if (status !== 'idle') {
+        console.debug(`status`, status)
+      }
+      if (['dispose'].includes(status)) {
+        console.groupEnd()
+        console.groupStart('[HMR] disposing')
+      } else if (['apply'].includes(status)) {
+        console.groupEnd()
+      } else if (['fail'].includes(status)) {
+        console.groupEnd()
+        console.warn('HMR failed reloading...')
+      }
+    })(console.error),
+  )
 }
 
 render()
