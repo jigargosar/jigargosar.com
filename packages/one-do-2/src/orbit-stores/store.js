@@ -67,7 +67,7 @@ async function createStore() {
     return lazyObservable(
       sink =>
         store
-          .query(q)
+          .query(q, o, id)
           .then(sink)
           .catch(console.error),
       ini,
