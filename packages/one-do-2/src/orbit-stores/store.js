@@ -33,10 +33,9 @@ async function createStore() {
       store.listeners(event).length,
     )
 
-    //a
-    return disposers.addDisposer(onAutoDisposer)
-
-    function onAutoDisposer() {
+    //aa
+    return disposers.addDisposer(function() {
+      debugger
       console.log(
         '[store] disposing: .on',
         event,
@@ -44,7 +43,7 @@ async function createStore() {
         binding,
       )
       off(event, callback, binding)
-    }
+    })
   }
 
   console.debug('[Exiting] createStore')

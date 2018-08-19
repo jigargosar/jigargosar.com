@@ -15,12 +15,14 @@ import {
   compose,
   concat,
   defaultTo,
+  head,
   isNil,
   once,
   pick,
   unless,
 } from './ramda'
 import {hotDispose} from './hot'
+import {validate} from './little-ramda'
 
 export function mobxStorage({store, key, disposers, preProcessStorageJS}) {
   function startStoring() {
@@ -51,14 +53,17 @@ export function storeAsPrettyJSON(store) {
 
 export function Disposers(module) {
   const list = []
-  const push = (...disposers) => {
+
+  function push(...disposers) {
     const onlyOnceDisposers = disposers.map(once)
-    return list.push(...onlyOnceDisposers)
+    list.push(...onlyOnceDisposers)
+    return onlyOnceDisposers
   }
 
-  const addDisposer = disposer => {
-    push(disposer)
-    return disposer
+  function addDisposer(disposer) {
+    validate('F', [disposer])
+
+    return head(push(disposer))
   }
 
   const dispose = () => {
