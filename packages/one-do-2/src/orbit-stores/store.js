@@ -15,9 +15,7 @@ const log = console.log.bind(console)
 
 function onWrapper(evented) {
   return (event, callback, binding) => {
-    const logNS = `[${evented.name || 'Evented'}]`
-
-    const logger = partial(log, [logNS])
+    const logger = partial(log, [`[${evented.name || 'Evented'}]`])
 
     logger('.on', event, callback.name || callback, binding)
     evented.on(event, callback, binding)
