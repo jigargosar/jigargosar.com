@@ -1,5 +1,5 @@
 export function assert(bool, msg) {
   if (!Boolean(bool)) {
-    throw new Error(`Assertion Failed: ${msg}`)
+    throw new Error(`Assertion Failed: ${msg || `msg not provided`}`)
   }
 }
