@@ -27,6 +27,6 @@ export default App
 
 if (module.hot) {
   hotDispose(() => {
-    debugger
+    // debugger
   }, module)
 }

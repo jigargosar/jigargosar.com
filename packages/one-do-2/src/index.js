@@ -22,7 +22,7 @@ if (module.hot) {
   console.log('Cold Boot')
   module.hot.accept(['./App'], data => {
     try {
-      console.clear()
+      // console.clear()
       // console.log('Hot Reload', data)
       render()
     } catch (e) {
@@ -30,9 +30,16 @@ if (module.hot) {
     }
   })
 
-  hotDispose(() => {
+  module.hot.accept(e => {
     debugger
-  }, module)
+  })
+
+  module.hot.addStatusHandler(status => {
+    if (status === 'check') {
+      console.clear()
+    }
+    console.warn(`status`, status)
+  })
 }
 
 render()
