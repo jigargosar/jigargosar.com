@@ -22,6 +22,11 @@ async function createStore() {
     listeners: event => store.listeners(event),
     on: (event, callback, binding) => {
       console.log('[store] .on', event, callback.name || callback, binding)
+      console.log(
+        `[store] .listeners(${event}).length`,
+        store.listeners(event).length,
+      )
+
       store.on(event, callback, binding)
       disposers.addDisposer(onAutoDisposer)
       return () => off(event, callback, binding)
