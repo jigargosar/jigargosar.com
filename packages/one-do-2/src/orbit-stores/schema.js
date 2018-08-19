@@ -1,5 +1,5 @@
-import {Schema} from '@orbit/data'
 import {nanoid} from '../lib/nanoid'
+import {Schema} from './orbit'
 
 const modelsDefinition = {
   task: {
