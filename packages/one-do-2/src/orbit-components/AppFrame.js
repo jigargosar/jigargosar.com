@@ -18,7 +18,7 @@ class AppFrame extends Component {
   }
 
   @action.bound
-  fetchTasks = () => {
+  fetchTasks() {
     this.tasksOP = fromPromise(this.storeOP.then(findTasks))
   }
 
