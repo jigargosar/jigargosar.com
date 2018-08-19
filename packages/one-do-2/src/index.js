@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom'
 // import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import {sugarExtend} from './lib/little-ramda'
-import {hotDispose} from './lib/hot'
 
 sugarExtend()
 
@@ -30,15 +29,12 @@ if (module.hot) {
     }
   })
 
-  module.hot.accept(e => {
-    debugger
-  })
-
   module.hot.addStatusHandler(status => {
-    if (status === 'check') {
+    if (status === 'dispose') {
       console.clear()
+      console.log('clearing on dispose')
     }
-    console.warn(`status`, status)
+    console.debug(`status`, status)
   })
 }
 

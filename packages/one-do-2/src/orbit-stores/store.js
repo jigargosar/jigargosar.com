@@ -35,9 +35,13 @@ export async function createStore() {
     off,
   }
 
-  function off(event, callback, binding) {
-    console.log('[store] .off', event, callback.name || callback, binding)
-    return store.off(event, callback, binding)
+  function off(e, callback, binding) {
+    console.log('[store] .off', e, callback.name || callback, binding)
+    // a
+
+    // a
+
+    return store.off(e, callback, binding)
   }
 }
 
