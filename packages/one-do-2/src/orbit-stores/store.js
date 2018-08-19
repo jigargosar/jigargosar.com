@@ -22,7 +22,10 @@ export async function createStore() {
     on: (event, callback, binding) => {
       console.log('[store] .on', event, callback.name || callback, binding)
       store.on(event, callback, binding)
-      return disposers.addDisposer(() => {
+      disposers.addDisposer(onAutoDisposer)
+      return () => off(event, callback, binding)
+
+      function onAutoDisposer() {
         console.log(
           '[store] disposing: .on',
           event,
@@ -30,7 +33,7 @@ export async function createStore() {
           binding,
         )
         off(event, callback, binding)
-      })
+      }
     },
     off,
   }
