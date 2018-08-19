@@ -64,9 +64,16 @@ async function createStore() {
 
   const transforms = createTransformObservable(store)
 
-  // function createLazyQuery(fn) {
-  //   lazyObservable()
-  // }
+  function observableQuery({q, o, id}, ini) {
+    return lazyObservable(
+      sink =>
+        store
+          .query(q, o, id)
+          .then(sink)
+          .catch(console.error),
+      ini,
+    )
+  }
 
   const storeWrapper = {
     _store: store,
