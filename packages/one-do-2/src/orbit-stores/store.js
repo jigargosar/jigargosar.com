@@ -57,14 +57,13 @@ function createTransformObservable(store) {
 
 async function createStore() {
   debug('[Entering] createStore')
-  autobind(Store)
   const store = new Store({schema})
   const on = onWrapper(store)
   const off = offWrapper(store)
 
   const transforms = createTransformObservable(store)
 
-  function observableQuery({q, o, id}, ini) {
+  function observableQuery({q, o, id, i: ini}) {
     return lazyObservable(
       sink =>
         store
@@ -77,8 +76,8 @@ async function createStore() {
 
   const storeWrapper = {
     _store: store,
-    query: store.query,
-    listeners: store.listeners,
+    query: store.query.bind(store),
+    listeners: store.listeners.bind(store),
     on: on,
     off: off,
     transforms,

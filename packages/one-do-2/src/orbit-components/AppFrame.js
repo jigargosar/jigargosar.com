@@ -5,12 +5,22 @@ import {disposable} from '../lib/disposable'
 import {addNewTask, findTasks, storeOP} from '../orbit-stores/store'
 import {fromPromise} from '../lib/mobx-utils'
 import {observable, runInAction} from '../lib/mobx'
+import {invoker} from '../lib/ramda'
 
 @disposable(module)
 @observer
 class AppFrame extends Component {
   @observable storeOP = storeOP
   @observable tasksOP
+  @observable
+  tasksLQ = fromPromise(
+    storeOP.then(
+      invoker(1, 'observableQuery')({
+        q: q => q.findRecords('tasks'),
+        i: [],
+      }),
+    ),
+  )
 
   constructor(props, context) {
     super(props, context)
@@ -19,6 +29,7 @@ class AppFrame extends Component {
 
   fetchTasks() {
     console.log('[Entering] AppFrame.fetchTasks')
+    this.tasksLQ.then(invoker(0, 'refresh'))
     runInAction(
       'fetchTasks',
       () => (this.tasksOP = fromPromise(storeOP.then(findTasks))),
@@ -39,6 +50,16 @@ class AppFrame extends Component {
         {/*<ObsPromise label={'storeOP'} p={this.storeOP} />*/}
         {/*<ObsPromise label={'tasksOP'} p={this.tasksOP} />*/}
         <div>
+          {this.tasksLQ.case({
+            fulfilled: tasks => {
+              return (
+                <TasksPage
+                  store={this.storeOP.value}
+                  tasks={tasks.current()}
+                />
+              )
+            },
+          })}
           {this.tasksOP.case({
             fulfilled: tasks => (
               <TasksPage store={this.storeOP.value} tasks={tasks} />
