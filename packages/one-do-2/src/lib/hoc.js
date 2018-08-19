@@ -30,3 +30,30 @@ export const disposable = BaseComponent =>
       }
     },
   )
+
+export const disposable2 = module => BaseComponent =>
+  observer(
+    class Disposable extends Component {
+      static displayName = wrapDisplayName(BaseComponent, 'Disposable')
+      disposers = Disposers(module)
+
+      componentWillUnmount() {
+        this.disposers.dispose()
+      }
+
+      render() {
+        return (
+          <BaseComponent
+            {...pick([
+              'addDisposer',
+              'autorun',
+              'reaction',
+              'setInterval',
+            ])(this.disposers)}
+            disposers={this.disposers}
+            {...this.props}
+          />
+        )
+      }
+    },
+  )
