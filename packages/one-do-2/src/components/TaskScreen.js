@@ -5,7 +5,7 @@ import {FlexRow} from '../lib/UI'
 import TaskList from './TaskList'
 import {Button} from '@material-ui/core'
 import AddTaskBar from './AddTaskBar'
-import {store} from '../orbit-stores/store'
+import {storeOP} from '../orbit-stores/store'
 import {clearLSAndReload} from '../lib/little-dom'
 
 function renderButton(label, onClick) {
@@ -28,7 +28,7 @@ class TaskScreen extends Component {
     const pendingTasks = taskView.pendingTasks
     const doneTasks = taskView.doneTasks
     const totalCount = taskView.totalCount
-    const recCt = store.cache.query(q =>
+    const recCt = storeOP.cache.query(q =>
       q.findRecords('task').sort('name'),
     ).length
     return (

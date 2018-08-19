@@ -2,14 +2,14 @@ import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
-import {addNewTask, createStore, findTasks} from '../orbit-stores/store'
+import {addNewTask, findTasks, storeOP} from '../orbit-stores/store'
 import {fromPromise} from '../lib/mobx-utils'
-import {observable, runInAction} from '../lib/mobx'
+import {action, observable} from '../lib/mobx'
 
 @disposable
 @observer
 class AppFrame extends Component {
-  @observable storeOP = fromPromise(createStore())
+  @observable storeOP = storeOP
   @observable tasksOP
 
   constructor(props, context) {
@@ -17,18 +17,16 @@ class AppFrame extends Component {
     this.fetchTasks()
   }
 
-  // @action.bound
-  fetchTasks() {
-    runInAction(() => {
-      this.tasksOP = fromPromise(this.storeOP.then(findTasks))
-    })
+  @action.bound
+  fetchTasks = () => {
+    this.tasksOP = fromPromise(this.storeOP.then(findTasks))
   }
 
   componentDidMount() {
     // this.tasksOP.then(tapLogRecords).catch(console.error)
 
     this.storeOP.then(s => {
-      s.on('transform', this.fetchTasks, this)
+      this.props.disposers.addDisposer(s.on('transform', this.fetchTasks))
     })
   }
 
