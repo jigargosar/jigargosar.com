@@ -39,9 +39,6 @@ export async function createStore() {
     console.log('[store] .off', e, callback.name || callback, binding)
     // a
 
-
-    // a
-
     return store.off(e, callback, binding)
   }
 }

@@ -27,15 +27,17 @@ if (module.hot) {
     } catch (e) {
       console.error('[index] hot accept', e)
     }
+
+    // throw 'err'
   })
 
   module.hot.addStatusHandler(status => {
     if (status === 'check') {
       console.clear()
-      console.groupCollapsed('HMR')
+      console.groupCollapsed('HMR check')
     }
     console.debug(`status`, status)
-    if (status === 'dispose') {
+    if (['abort', 'dispose'].includes(status)) {
       console.groupEnd()
     }
   })
