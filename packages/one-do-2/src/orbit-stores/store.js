@@ -15,20 +15,16 @@ const logPrefix = ['[store]']
 const log = partial(console.log.bind(console), logPrefix)
 const debug = partial(console.debug.bind(console), logPrefix)
 
-function onWrapper(evented) {
+function onWrapper(store) {
   return function on(event, callback, binding) {
-    const log = partial(console.log.bind(console), [
-      `[${evented.name || 'Evented'}]`,
-    ])
-
     log('.on', event, callback.name || callback, binding)
-    evented.on(event, callback, binding)
+    store.on(event, callback, binding)
 
-    log(`.listeners(${event}).length`, evented.listeners(event).length)
+    log(`.listeners(${event}).length`, store.listeners(event).length)
 
     return disposers.addDisposer(function() {
       log(`disposing: .on`, event, callback.name || callback, binding)
-      offWrapper(evented)(event, callback, binding)
+      offWrapper(store)(event, callback, binding)
     })
   }
 }
