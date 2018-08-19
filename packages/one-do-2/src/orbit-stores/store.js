@@ -33,9 +33,7 @@ async function createStore() {
       store.listeners(event).length,
     )
 
-    //aa
     return disposers.addDisposer(function() {
-      debugger
       console.log(
         '[store] disposing: .on',
         event,
