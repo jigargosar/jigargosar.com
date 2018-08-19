@@ -8,7 +8,7 @@ export function addNewTask(store) {
   return store.update(t => t.addRecord(TaskRecord()))
 }
 
-export async function createStore() {
+async function createStore() {
   console.debug('[Entering] createStore')
   const disposers = Disposers(module)
   const store = new Store({schema})
