@@ -27,6 +27,7 @@ export async function createStore() {
   }
 
   function off(...args) {
+    console.log('store.off', ...args)
     return store.off(...args)
   }
 }
