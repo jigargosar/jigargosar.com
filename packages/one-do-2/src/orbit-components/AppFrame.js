@@ -3,9 +3,8 @@ import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {addNewTask, createStore, findTasks} from '../orbit-stores/store'
-import {tapLogRecords} from '../orbit-stores/little-orbit'
 import {fromPromise} from '../lib/mobx-utils'
-import {action, observable} from '../lib/mobx'
+import {observable, runInAction} from '../lib/mobx'
 
 @disposable
 @observer
@@ -18,28 +17,42 @@ class AppFrame extends Component {
     this.fetchTasks()
   }
 
-  @action.bound
+  // @action.bound
   fetchTasks() {
-    this.tasksOP = fromPromise(this.storeOP.then(findTasks))
+    runInAction(() => {
+      this.tasksOP = fromPromise(this.storeOP.then(findTasks))
+    })
   }
 
   componentDidMount() {
-    this.tasksOP.then(tapLogRecords).catch(console.error)
+    // this.tasksOP.then(tapLogRecords).catch(console.error)
 
     this.storeOP.then(s => {
+      console.log(
+        `on 1: s.listeners('transform')`,
+        s.listeners('transform'),
+      )
+
       s.on('transform', this.fetchTasks, this)
+      s.on('transform', this.fetchTasks, this)
+      console.log(
+        `on 2: s.listeners('transform')`,
+        s.listeners('transform'),
+      )
+      console.log(`""`, '')
     })
 
     this.props.disposers.addDisposer(() =>
       this.storeOP.then(s => {
         console.log(
-          `1: s.listeners('transform')`,
+          `off 1: s.listeners('transform')`,
           s.listeners('transform'),
         )
-        s.off('transform', this.fetchTasks)
+        s.off('transform', this.fetchTasks, this)
+        s.off('transform', this.fetchTasks, this)
 
         console.log(
-          `2: s.listeners('transform')`,
+          `off 2: s.listeners('transform')`,
           s.listeners('transform'),
         )
       }),
