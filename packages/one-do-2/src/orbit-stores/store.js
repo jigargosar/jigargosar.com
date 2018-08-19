@@ -10,20 +10,22 @@ export function addNewTask(store) {
 
 const disposers = Disposers(module)
 
+const log = console.log.bind(console)
+
 function onWrapper(evented) {
   return (event, callback, binding) => {
     const logNS = `[${evented.name || 'Evented'}]`
 
-    console.log(`${logNS} .on`, event, callback.name || callback, binding)
+    log(`${logNS} .on`, event, callback.name || callback, binding)
     evented.on(event, callback, binding)
 
-    console.log(
+    log(
       `${logNS} .listeners(${event}).length`,
       evented.listeners(event).length,
     )
 
     return disposers.addDisposer(function() {
-      console.log(
+      log(
         `${logNS} disposing: .on`,
         event,
         callback.name || callback,
