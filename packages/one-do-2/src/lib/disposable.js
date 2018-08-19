@@ -1,17 +1,14 @@
-import {observer} from './little-react'
+import {observer} from 'mobx-react'
 import React, {Component} from 'react'
-import {wrapDisplayName} from './recompose'
+import {wrapDisplayName} from 'recompose'
 import {Disposers} from './little-mobx'
-import {pick} from './ramda'
+import {pick} from 'ramda'
 
-/**
- * @deprecated
- * */
-export const disposable = BaseComponent =>
+export const disposable = module => BaseComponent =>
   observer(
     class Disposable extends Component {
       static displayName = wrapDisplayName(BaseComponent, 'Disposable')
-      disposers = Disposers()
+      disposers = Disposers(module)
 
       componentWillUnmount() {
         this.disposers.dispose()

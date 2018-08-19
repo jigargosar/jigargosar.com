@@ -1,12 +1,12 @@
 import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
-import {disposable2} from '../lib/hoc'
+import {disposable} from '../lib/disposable'
 import {addNewTask, findTasks, storeOP} from '../orbit-stores/store'
 import {fromPromise} from '../lib/mobx-utils'
 import {observable, runInAction} from '../lib/mobx'
 
-@disposable2(module)
+@disposable(module)
 @observer
 class AppFrame extends Component {
   @observable storeOP = storeOP
