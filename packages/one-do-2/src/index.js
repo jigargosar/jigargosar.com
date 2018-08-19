@@ -30,11 +30,14 @@ if (module.hot) {
   })
 
   module.hot.addStatusHandler(status => {
-    if (status === 'dispose') {
+    if (status === 'check') {
       console.clear()
-      console.log('clearing on dispose')
+      console.groupCollapsed('HMR')
     }
     console.debug(`status`, status)
+    if (status === 'dispose') {
+      console.groupEnd()
+    }
   })
 }
 
