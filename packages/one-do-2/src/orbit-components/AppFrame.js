@@ -26,10 +26,23 @@ class AppFrame extends Component {
   componentDidMount() {
     this.tasksOP.then(tapLogRecords).catch(console.error)
 
-    this.storeOP.then(s => s.on('transform', this.fetchTasks))
+    this.storeOP.then(s => {
+      s.on('transform', this.fetchTasks, this)
+    })
 
     this.props.disposers.addDisposer(() =>
-      this.storeOP.then(s => s.off('transform')),
+      this.storeOP.then(s => {
+        console.log(
+          `1: s.listeners('transform')`,
+          s.listeners('transform'),
+        )
+        s.off('transform', this.fetchTasks)
+
+        console.log(
+          `2: s.listeners('transform')`,
+          s.listeners('transform'),
+        )
+      }),
     )
   }
 
