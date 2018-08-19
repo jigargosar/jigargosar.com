@@ -11,11 +11,14 @@ export function addNewTask(store) {
 
 const disposers = Disposers(module)
 
-const log = console.log.bind(console)
+const log = partial(console.log.bind(console), ['store'])
+const debug = partial(console.debug.bind(console), ['store'])
 
 function onWrapper(evented) {
   return (event, callback, binding) => {
-    const logger = partial(log, [`[${evented.name || 'Evented'}]`])
+    const logger = partial(console.log.bind(console), [
+      `[${evented.name || 'Evented'}]`,
+    ])
 
     logger('.on', event, callback.name || callback, binding)
     evented.on(event, callback, binding)
@@ -42,7 +45,7 @@ function offWrapper(store) {
 }
 
 async function createStore() {
-  console.debug('[Entering] createStore')
+  debug('[Entering] createStore')
   const store = new Store({schema})
   await addNewTask(store)
   await addNewTask(store)
@@ -55,7 +58,7 @@ async function createStore() {
     off: offWrapper(store),
   }
 
-  console.debug('[Exiting] createStore')
+  debug('[Exiting] createStore')
   return storeWrapper
 }
 
