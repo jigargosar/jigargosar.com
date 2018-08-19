@@ -17,17 +17,17 @@ const debug = partial(console.debug.bind(console), logPrefix)
 
 function onWrapper(evented) {
   return function on(event, callback, binding) {
-    const logger = partial(console.log.bind(console), [
+    const log = partial(console.log.bind(console), [
       `[${evented.name || 'Evented'}]`,
     ])
 
-    logger('.on', event, callback.name || callback, binding)
+    log('.on', event, callback.name || callback, binding)
     evented.on(event, callback, binding)
 
-    logger(`.listeners(${event}).length`, evented.listeners(event).length)
+    log(`.listeners(${event}).length`, evented.listeners(event).length)
 
     return disposers.addDisposer(function() {
-      logger(`disposing: .on`, event, callback.name || callback, binding)
+      log(`disposing: .on`, event, callback.name || callback, binding)
       offWrapper(evented)(event, callback, binding)
     })
   }
