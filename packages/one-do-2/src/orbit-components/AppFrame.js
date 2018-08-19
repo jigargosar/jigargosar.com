@@ -1,7 +1,7 @@
 import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
-import {disposable, disposable2} from '../lib/hoc'
+import {disposable2} from '../lib/hoc'
 import {addNewTask, findTasks, storeOP} from '../orbit-stores/store'
 import {fromPromise} from '../lib/mobx-utils'
 import {observable, runInAction} from '../lib/mobx'

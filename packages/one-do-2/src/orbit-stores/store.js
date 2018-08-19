@@ -33,6 +33,7 @@ async function createStore() {
       store.listeners(event).length,
     )
 
+    //a
     return disposers.addDisposer(onAutoDisposer)
 
     function onAutoDisposer() {
