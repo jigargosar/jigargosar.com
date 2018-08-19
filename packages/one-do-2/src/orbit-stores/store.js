@@ -16,7 +16,7 @@ const log = partial(console.log.bind(console), logPrefix)
 const debug = partial(console.debug.bind(console), logPrefix)
 
 function onWrapper(evented) {
-  return (event, callback, binding) => {
+  return function on(event, callback, binding) {
     const logger = partial(console.log.bind(console), [
       `[${evented.name || 'Evented'}]`,
     ])
@@ -34,7 +34,7 @@ function onWrapper(evented) {
 }
 
 function offWrapper(store) {
-  return (event, callback, binding) => {
+  return function off(event, callback, binding) {
     log('.off', event, callback.name || callback, binding)
     return store.off(event, callback, binding)
   }
