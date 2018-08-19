@@ -21,9 +21,13 @@ export async function createStore() {
     listeners: event => store.listeners(event),
     on: (event, callback, binding) => {
       store.on(event, callback, binding)
-      disposers.addDisposer(() => store.off(event, callback, binding))
+      disposers.addDisposer(() => off(event, callback, binding))
     },
-    off: (...args) => store.off(...args),
+    off,
+  }
+
+  function off(...args) {
+    return store.off(...args)
   }
 }
 

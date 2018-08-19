@@ -39,7 +39,6 @@ class AppFrame extends Component {
         `on 2: s.listeners('transform')`,
         s.listeners('transform'),
       )
-      console.log(`""`, '')
     })
 
     this.props.disposers.addDisposer(() =>
