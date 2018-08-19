@@ -16,6 +16,7 @@ import {
   concat,
   defaultTo,
   isNil,
+  once,
   pick,
   unless,
 } from './ramda'
@@ -50,11 +51,16 @@ export function storeAsPrettyJSON(store) {
 
 export function Disposers(module) {
   const list = []
-  const push = (...args) => list.push(...args)
+  const push = (...disposers) => {
+    const onlyOnceDisposers = disposers.map(once)
+    return list.push(...onlyOnceDisposers)
+  }
+
   const addDisposer = disposer => {
     push(disposer)
     return disposer
   }
+
   const dispose = () => {
     list.forEach(call)
     list.splice(0, list.length)
