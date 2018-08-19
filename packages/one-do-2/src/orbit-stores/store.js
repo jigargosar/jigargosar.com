@@ -24,7 +24,7 @@ function onWrapper(evented) {
 
     return disposers.addDisposer(function() {
       console.log(
-        '[evented] disposing: .on',
+        `${logNS} disposing: .on`,
         event,
         callback.name || callback,
         binding,
