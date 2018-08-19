@@ -4,7 +4,7 @@ import {cn, observer, renderKeyedById} from '../lib/little-react'
 import {disposable} from '../lib/hoc'
 import {addNewTask, findTasks, storeOP} from '../orbit-stores/store'
 import {fromPromise} from '../lib/mobx-utils'
-import {action, observable} from '../lib/mobx'
+import {observable, runInAction} from '../lib/mobx'
 
 @disposable
 @observer
@@ -17,16 +17,21 @@ class AppFrame extends Component {
     this.fetchTasks()
   }
 
-  @action.bound
   fetchTasks() {
-    this.tasksOP = fromPromise(this.storeOP.then(findTasks))
+    runInAction(
+      'fetchTasks',
+      () => (this.tasksOP = fromPromise(this.storeOP.then(findTasks))),
+    )
   }
 
   componentDidMount() {
     // this.tasksOP.then(tapLogRecords).catch(console.error)
+    // this.tasksOP.then(tapLogRecords).catch(console.error)
 
     this.storeOP.then(s => {
-      this.props.disposers.addDisposer(s.on('transform', this.fetchTasks))
+      this.props.disposers.addDisposer(
+        s.on('transform', this.fetchTasks, this),
+      )
     })
   }
 
