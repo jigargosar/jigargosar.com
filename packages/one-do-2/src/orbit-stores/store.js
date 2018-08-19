@@ -37,21 +37,28 @@ function offWrapper(store) {
   }
 }
 
+function createTransformObservable(on) {
+  let transformDisposer = identity
+
+  return fromResource(
+    sink =>
+      (transformDisposer = on('transform', function onStoreTransform(
+        transforms,
+      ) {
+        sink(transforms)
+      })),
+    transformDisposer,
+    [],
+  )
+}
+
 async function createStore() {
   debug('[Entering] createStore')
   const store = new Store({schema})
   const on = onWrapper(store)
   const off = offWrapper(store)
 
-  await addNewTask(store)
-  await addNewTask(store)
-
-  let transformDisposer = identity
-  const transforms = fromResource(
-    sink => (transformDisposer = on('transform', sink)),
-    transformDisposer,
-    [],
-  )
+  const transforms = createTransformObservable(on)
 
   const storeWrapper = {
     _store: store,
@@ -61,6 +68,13 @@ async function createStore() {
     off: off,
     transforms,
   }
+
+  disposers.autorun(() => {
+    log(`[autorun] transforms.current()`, transforms.current())
+  })
+  //aa
+  await addNewTask(store)
+  await addNewTask(store)
 
   debug('[Exiting] createStore')
   return storeWrapper
