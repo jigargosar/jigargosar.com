@@ -29,15 +29,7 @@ class AppFrame extends Component {
 
     this.storeOP.then(s => {
       s.on('transform', this.fetchTasks, this)
-      s.on('transform', this.fetchTasks, this)
     })
-
-    this.props.disposers.addDisposer(() =>
-      this.storeOP.then(s => {
-        s.off('transform', this.fetchTasks, this)
-        s.off('transform', this.fetchTasks, this)
-      }),
-    )
   }
 
   render() {

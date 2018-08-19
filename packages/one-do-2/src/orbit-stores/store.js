@@ -20,9 +20,17 @@ export async function createStore() {
     query: fn => store.query(fn),
     listeners: event => store.listeners(event),
     on: (event, callback, binding) => {
-      console.log('store.on', event, callback.name || callback, binding)
+      console.log('[store] .on', event, callback.name || callback, binding)
       store.on(event, callback, binding)
-      disposers.addDisposer(() => off(event, callback, binding))
+      disposers.addDisposer(() => {
+        console.log(
+          '[store] disposing: .on',
+          event,
+          callback.name || callback,
+          binding,
+        )
+        off(event, callback, binding)
+      })
     },
     off,
   }
