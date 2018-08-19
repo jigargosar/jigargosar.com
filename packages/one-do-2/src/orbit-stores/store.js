@@ -11,8 +11,9 @@ export function addNewTask(store) {
 
 const disposers = Disposers(module)
 
-const log = partial(console.log.bind(console), ['store'])
-const debug = partial(console.debug.bind(console), ['store'])
+const logPrefix = ['[store]']
+const log = partial(console.log.bind(console), logPrefix)
+const debug = partial(console.debug.bind(console), logPrefix)
 
 function onWrapper(evented) {
   return (event, callback, binding) => {
