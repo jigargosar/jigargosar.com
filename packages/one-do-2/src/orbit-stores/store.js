@@ -2,6 +2,7 @@ import {Store} from './orbit'
 import {schema} from './schema'
 import {TaskRecord} from './TaskRecord'
 import {findRecords} from './little-orbit'
+import {Disposers} from '../lib/little-mobx'
 
 export function addNewTask(store) {
   return store.update(t => t.addRecord(TaskRecord()))
@@ -9,6 +10,7 @@ export function addNewTask(store) {
 
 export async function createStore() {
   console.log('creating store')
+  const disposers = Disposers(module)
   const store = new Store({schema})
   await addNewTask(store)
   await addNewTask(store)
@@ -17,6 +19,11 @@ export async function createStore() {
     _store: store,
     query: fn => store.query(fn),
     listeners: event => store.listeners(event),
+    on: (event, callback, binding) => {
+      store.on(event, callback, binding)
+      disposers.addDisposer(() => store.off(event, callback, binding))
+    },
+    off: (...args) => store.off(...args),
   }
 }
 
