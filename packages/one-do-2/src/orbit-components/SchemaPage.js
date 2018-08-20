@@ -76,7 +76,7 @@ class Model extends Component {
           <TableBody>
             {map(r => (
               <Fragment key={r.id}>
-                <TableRow hover selected>
+                <TableRow hover>
                   <TableCell>{take(10)(r.id)}</TableCell>
                   {compose(
                     map(([name, attribute]) => {
