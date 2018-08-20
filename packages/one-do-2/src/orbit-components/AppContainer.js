@@ -85,6 +85,7 @@ class Task extends Component {
           <div className={cn('ph1')}>{`id:${take(10)(task.id)}`}</div>
           <div className={cn('ph1')}>{`type:${task.type}`}</div>
           <div className={cn('ph1')}>{`sortIdx:${TR.sortIdx(task)}`}</div>
+          <div className={cn('ph1')}>{`isDone:${TR.isDone(task)}`}</div>
           <div className={cn('ph1')}>
             {`createdAt:${TR.createdAt(task)}`}
           </div>
