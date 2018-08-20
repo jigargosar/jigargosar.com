@@ -7,6 +7,7 @@ export function TaskRecord() {
       title: fWord(),
       createdAt: Date.now(),
       isDone: false,
+      sortIdx: 0,
     },
   }
 }

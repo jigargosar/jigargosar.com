@@ -1,5 +1,6 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
+import {type} from '../lib/ramda'
 
 const modelsDefinition = {
   task: {
@@ -7,6 +8,7 @@ const modelsDefinition = {
       title: {type: 'string'},
       isDone: {type: 'boolean'},
       createdAt: {type: 'timestamp'},
+      sortIdx: {type: 'number'},
     },
   },
   planet: {
