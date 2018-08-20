@@ -70,12 +70,33 @@ class Tasks extends Component {
 }
 
 @observer
+class AsciiCheckButton extends Component {
+  render() {
+    const {
+      layout = 'ph3',
+      checked = false,
+      comp: ButtonComponent = 'button',
+      ...other
+    } = this.props
+    return (
+      <ButtonComponent className={cn(layout, buttonStyle)} {...other}>
+        <AsciiCheck checked={checked} />
+      </ButtonComponent>
+    )
+  }
+}
+
+@observer
 class Task extends Component {
   render() {
     const {task} = this.props
     return (
       <div className={cn('pv1')}>
         <div className={cn('frc lh-copy')}>
+          <AsciiCheckButton
+            checked={TR.isDone(task)}
+            onClick={() => updateToggleDone(task)}
+          />
           <button
             className={cn('ph3', buttonStyle)}
             onClick={() => updateToggleDone(task)}
