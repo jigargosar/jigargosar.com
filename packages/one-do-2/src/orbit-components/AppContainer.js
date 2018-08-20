@@ -98,9 +98,11 @@ class Task extends Component {
           </div>
           <div className={cn('flex-auto')}>{title}</div>
         </div>
-        <div className={cn('ph5', 'frc justify-end_')}>
-          <div className={cn('ph2', 'code f7 black-50')}>
-            {`i:${sortIdx} id:${task.id}`}
+        <div className={cn('ph3')}>
+          <div className={cn('pl4', 'frc justify-end_')}>
+            <div className={cn('ph2', 'code f7 black-50')}>
+              {`i:${sortIdx} id:${task.id}`}
+            </div>
           </div>
         </div>
       </div>
