@@ -4,7 +4,8 @@ import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
 import {observable} from '../lib/mobx'
 import {observer, Provider} from '../lib/mobx-react'
-import store, {addNewTask, sortedTasks} from '../orbit-store/Store'
+import store from '../orbit-store/Store'
+import {addNewTask, getSortedTasks} from '../orbit-store/TaskRecord'
 
 @observer
 class AppContainer extends Component {
@@ -22,7 +23,7 @@ export default AppContainer
 
 @observer
 class AppContent extends Component {
-  @observable tasks = sortedTasks()
+  @observable tasks = getSortedTasks()
 
   render() {
     return (

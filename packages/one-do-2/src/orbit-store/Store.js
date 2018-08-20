@@ -1,10 +1,8 @@
 import {Store} from './orbit'
 import {schema} from './schema'
-import {TaskRecord} from './TaskRecord'
 import {identity, isNil, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
-import {asc} from './little-orbit'
 
 const logPrefix = ['[store]']
 // const log = partial(console.log.bind(console), logPrefix)
@@ -84,24 +82,6 @@ export function getStore() {
 
 export default getStore()
 
-export function addNewTask() {
-  return addNewTaskAt(0)
-}
-
-export function addNewTaskAt(idx) {
-  const updateSortIdx = sortedTasks()
-    .current()
-    .map((task, idx) => t =>
-      t.replaceAttribute(task.id, 'sortIdx', idx + 1),
-    )
-
-  return getStore().update(t => [
-    //
-    t.addRecord(TaskRecord({sortIdx: 0})),
-    ...updateSortIdx(t),
-  ])
-}
-
 export function queryTasksExpr({sort = []}) {
   return getStore().liveQueryExpr({
     op: 'findRecords',
@@ -113,11 +93,5 @@ export function queryTasksExpr({sort = []}) {
       offset: 0,
       limit: Number.MAX_SAFE_INTEGER,
     },
-  })
-}
-
-export function sortedTasks() {
-  return queryTasksExpr({
-    sort: [asc('sortIdx') /*dsc('createdAt')*/],
   })
 }
