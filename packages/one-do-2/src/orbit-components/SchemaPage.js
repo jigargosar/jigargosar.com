@@ -52,17 +52,6 @@ class Model extends Component {
     return (
       <div className={cn('pv1')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
-        {compose(
-          map(([name, attribute]) => (
-            <Fragment key={name}>
-              <span className={cn('ph1')}>
-                <span>{`${name}: `}</span>
-                <span>{`${attribute.type},`}</span>
-              </span>
-            </Fragment>
-          )),
-          toPairs,
-        )(attributes)}
         <Table
           padding={'dense'}
           // className={cn('code')}
