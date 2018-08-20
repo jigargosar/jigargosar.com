@@ -55,14 +55,18 @@ export function replaceRecord(record) {
   return getStore().update(t => t.replaceRecord(record))
 }
 
-export const sortedTasksLazyObs = getStore().liveQuery({
-  op: 'findRecords',
-  type: 'task',
-  sort: [asc('sortIdx')],
-  filter: [],
-  page: {
-    kind: 'offsetLimit',
-    offset: 0,
-    limit: Number.MAX_SAFE_INTEGER,
-  },
-})
+function sortedTasksQuerOp() {
+  return {
+    op: 'findRecords',
+    type: 'task',
+    sort: [asc('sortIdx')],
+    filter: [],
+    page: {
+      kind: 'offsetLimit',
+      offset: 0,
+      limit: Number.MAX_SAFE_INTEGER,
+    },
+  }
+}
+
+export const sortedTasksLazyObs = getStore().liveQuery(sortedTasksQuerOp())
