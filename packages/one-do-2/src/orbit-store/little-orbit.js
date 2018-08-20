@@ -26,3 +26,7 @@ const sortSpecifier = (attribute, order) => ({
 
 export const asc = attribute => sortSpecifier(attribute, 'ascending')
 export const dsc = attribute => sortSpecifier(attribute, 'descending')
+
+export function replaceRecordOP(record) {
+  return t => t.replaceRecord(record)
+}
