@@ -2,30 +2,21 @@ import PropTypes from 'prop-types'
 import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
-import {observer, Provider} from '../lib/mobx-react'
+import {observer} from '../lib/mobx-react'
 import {
   getSortedTasks,
-  removeAllTasks,
   updateAddTask,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
-import {pSeries} from '../lib/p-fun'
 
 @disposable(module)
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    if (false && module.hot) {
+    if (module.hot) {
       this.props.addDisposer(startSimulation())
-    } else {
-      pSeries([
-        removeAllTasks,
-        updateAddTask,
-        updateAddTask,
-        updateAddTask,
-      ])
     }
   }
 

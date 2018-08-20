@@ -27,10 +27,19 @@ function getSimulationTasks({speed = 1000}) {
   ]
 }
 
-export function startSimulation() {
+export function startSimulation(dynamic = false) {
   const pQueue = PQueue({concurrency: 1})
-  pQueue.addAll(
-    compose(flatten, repeat(getSimulationTasks({speed: 2500})))(100),
-  )
+  if (dynamic) {
+    pQueue.addAll(
+      compose(flatten, repeat(getSimulationTasks({speed: 2500})))(100),
+    )
+  } else {
+    pQueue.addAll([
+      removeAllTasks,
+      updateAddTask,
+      updateAddTask,
+      updateAddTask,
+    ])
+  }
   return () => pQueue.clear()
 }
