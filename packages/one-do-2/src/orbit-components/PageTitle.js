@@ -5,6 +5,6 @@ import cn from 'classnames'
 @observer
 export class PageTitle extends Component {
   render() {
-    return <div className={cn('pa3 f3')}>{this.props.children}</div>
+    return <div className={cn('pa3 pt0 f3')}>{this.props.children}</div>
   }
 }

@@ -49,7 +49,7 @@ class AppContent extends Component {
 class SchemaPage extends Component {
   render() {
     return (
-      <div>
+      <div className={cn('pv3')}>
         <PageTitle>Schema</PageTitle>
       </div>
     )
@@ -60,7 +60,7 @@ class SchemaPage extends Component {
 class TasksPage extends Component {
   render() {
     return (
-      <div>
+      <div className={cn('pv3')}>
         <PageTitle>Orbit Tasks</PageTitle>
         <div className={cn('frc pb2')}>
           <button
