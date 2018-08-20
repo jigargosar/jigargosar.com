@@ -83,6 +83,7 @@ class Task extends Component {
           {!isDone ? `[x]` : `[ ]`}
         </div>
         <div>{title}</div>
+        <div className={cn('ph1', 'f7 black-50')}>{`id:${task.id}`}</div>
       </div>
     )
   }
