@@ -41,7 +41,6 @@ function createStore() {
   }
 
   const storeWrapper = {
-    _store: store,
     query: store.query.bind(store),
     listeners: store.listeners.bind(store),
     transforms,
