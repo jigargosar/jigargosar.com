@@ -1,5 +1,5 @@
 import {fWord} from '../lib/fake'
-import {findRecordsOfType, getStore, liveQuery} from './Store'
+import {findRecordsOfType, getStore, liveQuery, query} from './Store'
 import {map, not} from '../lib/ramda'
 import {overPath} from '../lib/little-ramda'
 import {asc, replaceRecordOP} from './little-orbit'
@@ -70,3 +70,5 @@ function sortedTasksQuery() {
 }
 
 export const sortedTasksLazyObs = liveQuery(sortedTasksQuery)
+
+export const querySortedTasks = query(sortedTasksQuery)

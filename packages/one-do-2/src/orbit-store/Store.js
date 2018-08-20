@@ -86,3 +86,4 @@ export function findRecordsOfType(type) {
 }
 
 export const liveQuery = getStore().liveQuery
+export const query = getStore().query
