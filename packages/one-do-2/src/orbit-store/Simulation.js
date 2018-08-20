@@ -35,7 +35,7 @@ export function startSimulation(dynamic = false) {
   const pQueue = PQueue({concurrency: 1})
   if (dynamic) {
     pQueue.addAll(
-      compose(flatten, repeat(getSimulationTasks({speed: 2500})))(100),
+      compose(flatten, repeat(getSimulationTasks({speed: 2000})))(100),
     )
   } else {
     pQueue.addAll([
