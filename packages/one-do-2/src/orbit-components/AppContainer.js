@@ -5,13 +5,13 @@ import {cn, renderKeyedById} from '../lib/little-react'
 import {observer, Provider} from '../lib/mobx-react'
 import store from '../orbit-store/Store'
 import {
-  updateAddTask,
   removeAllTasks,
   sortedTasksLazyObs,
+  updateAddTask,
   updateIsDone,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
-import {delay, PQueue} from '../lib/p-fun'
+import {delay} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
 
 async function startSimulation({speed = 1000}) {
