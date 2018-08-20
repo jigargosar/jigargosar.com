@@ -71,7 +71,6 @@ function queryAllTasks() {
 
 export async function removeAllTasks() {
   const all = await queryAllTasks()
-
   const removeRecords = t => map(removeRecordOP(__, t))(all)
   return updateStore(removeRecords)
 }
