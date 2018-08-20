@@ -52,8 +52,6 @@ function startSimulation() {
 class AppContainer extends Component {
   componentDidMount() {
     this.props.addDisposer(startSimulation())
-
-    // aaa
   }
 
   render() {
