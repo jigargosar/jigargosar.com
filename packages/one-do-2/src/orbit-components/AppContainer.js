@@ -22,10 +22,12 @@ async function startSimulation() {
   await pQueue.addAll([removeAllTasks, addNewTask, addNewTask])
   await delay(1000)
   pQueue.add(() => toggleDone(firstTask()))
-  await delay(1000)
-  pQueue.add(() => toggleDone(firstTask()))
+
   await delay(1000)
   pQueue.add(addNewTask)
+
+  await delay(1000)
+  pQueue.add(() => toggleDone(firstTask()))
 }
 
 @observer
