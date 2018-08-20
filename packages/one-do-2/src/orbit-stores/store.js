@@ -80,6 +80,7 @@ async function createStore() {
     off: off,
     transforms,
     lazyQuery,
+    update: store.update.bind(store),
   }
 
   // disposers.autorun(() => {
