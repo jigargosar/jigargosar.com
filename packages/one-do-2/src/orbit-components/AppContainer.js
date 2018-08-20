@@ -91,17 +91,15 @@ class Task extends Component {
     const {task} = this.props
     const {title, isDone, sortIdx} = task.attributes
     return (
-      <div>
-        <div className={cn('ph3 pv1', 'frc')}>
+      <div className={cn('ph3 pv1')}>
+        <div className={cn('frc')}>
           <div className={cn('ph2', 'code pointer')}>
             {!isDone ? `[x]` : `[ ]`}
           </div>
           <div className={cn('flex-auto')}>{title}</div>
         </div>
-        <div className={cn('pl4', 'frc justify-end_')}>
-          <div className={cn('ph2', 'code f7 black-50')}>
-            {`i:${sortIdx} id:${task.id}`}
-          </div>
+        <div className={cn('ph3', 'frc justify-end_', 'code f7 black-50')}>
+          {`i:${sortIdx} id:${task.id}`}
         </div>
       </div>
     )
