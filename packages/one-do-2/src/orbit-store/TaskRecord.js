@@ -38,7 +38,6 @@ export async function updateAddTask(props) {
   const newTask = TaskRecord(props)
   const updateSortIdx = t => {
     return compose(
-      tapLog,
       mapIndexed((task, idx) => replaceSortIdxOP(task, idx)(t)),
       tapLog,
       insert(newTask.sortIdx, newTask),

@@ -18,20 +18,21 @@ async function startSimulation() {
   await removeAllTasks()
 
   const [tasks1] = await updateAddTask()
+  await delay(1000)
   const [tasks2] = await updateAddTask()
   await updateIsDone(tasks2, false)
 
-  await delay(1000)
-  await updateIsDone(tasks1, true)
+  // await delay(1000)
+  // await updateIsDone(tasks1, true)
 
-  await delay(1000)
-  const [tasks3] = await updateAddTask()
-
-  await delay(1000)
-  await updateIsDone(tasks3, true)
-
-  await delay(1000)
-  await updateIsDone(tasks1, false)
+  // await delay(1000)
+  // const [tasks3] = await updateAddTask()
+  //
+  // await delay(1000)
+  // await updateIsDone(tasks3, true)
+  //
+  // await delay(1000)
+  // await updateIsDone(tasks1, false)
 
   //a
 }
