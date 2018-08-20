@@ -11,6 +11,10 @@ import {addNewTask, getSortedTasks} from '../orbit-store/TaskRecord'
 class AppContainer extends Component {
   store = store
 
+  componentDidMount() {
+    addNewTask()
+  }
+
   render() {
     return (
       <Provider store={this.store}>
