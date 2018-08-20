@@ -10,13 +10,26 @@ import {
   removeAllTasks,
   toggleDone,
 } from '../orbit-store/TaskRecord'
-import {PQueue} from '../lib/p-fun'
+import {delay, PQueue} from '../lib/p-fun'
+import {head} from '../lib/ramda'
+
+function firstTask() {
+  return head(getSortedTasks().current())
+}
+
+async function startSimulation() {
+  const pQueue = PQueue({concurrency: 1})
+  await pQueue.addAll([removeAllTasks, addNewTask, addNewTask])
+  await delay(1000)
+  pQueue.add(() => toggleDone(firstTask()))
+  await delay(1000)
+  pQueue.add(() => toggleDone(firstTask()))
+}
 
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    const pQueue = PQueue({concurrency: 1})
-    pQueue.addAll([removeAllTasks, addNewTask, addNewTask])
+    startSimulation().catch(console.error)
   }
 
   render() {
