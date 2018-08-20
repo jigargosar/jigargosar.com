@@ -6,6 +6,21 @@ import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
 import {compose, join, keys, map, toPairs} from '../lib/ramda'
+import {liveQuery} from '../orbit-store/Store'
+/*eslint-disable*/
+
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+} from '@material-ui/core'
+
+/*eslint-enable*/
 
 @observer
 export class SchemaPage extends Component {
@@ -27,6 +42,7 @@ export class SchemaPage extends Component {
 
 @observer
 class Model extends Component {
+  query = liveQuery(q => q.findRecords(this.props.type))
   render() {
     const {type} = this.props
     const modelDesc = schema.getModel(type)
@@ -45,6 +61,11 @@ class Model extends Component {
           )),
           toPairs,
         )(attributes)}
+        <Table />
+        <pre>
+          <code>{prettyStringifySafe(this.query.current())}</code>
+        </pre>
+
         {false &&
           map(([name, attribute]) => (
             <Attribute
