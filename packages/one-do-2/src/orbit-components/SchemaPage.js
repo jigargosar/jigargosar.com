@@ -62,6 +62,7 @@ class Model extends Component {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>{`id`}</TableCell>
               {compose(
                 map(([name, attribute]) => (
                   <Fragment key={name}>
@@ -76,6 +77,7 @@ class Model extends Component {
             {map(r => (
               <Fragment key={r.id}>
                 <TableRow>
+                  <TableCell>{r.id}</TableCell>
                   {compose(
                     map(([name, attribute]) => {
                       const val = recAttr(name)(r)
