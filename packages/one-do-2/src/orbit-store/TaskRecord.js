@@ -51,9 +51,15 @@ export async function removeAllTasks() {
   return updateStore(removeRecords)
 }
 
+const recordToRecordIdentity = pick(['id', 'type'])
+
 export function toggleDone(task) {
   return updateStore(
-    replaceAttributeOP(pick(['id', 'type'])(task), 'isDone', !task.isDone),
+    replaceAttributeOP(
+      recordToRecordIdentity(task),
+      'isDone',
+      !task.isDone,
+    ),
   )
 }
 
