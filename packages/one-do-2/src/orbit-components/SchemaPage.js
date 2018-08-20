@@ -6,6 +6,7 @@ import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
+import {compose, mapObjIndexed, values} from '../lib/ramda'
 
 @observer
 export class SchemaPage extends Component {
@@ -23,17 +24,43 @@ export class SchemaPage extends Component {
   }
 }
 
+@observer
 class Model extends Component {
   render() {
     const {type} = this.props
+    const modelDesc = schema.getModel(type)
+    const {attributes} = modelDesc
     return (
-      <div key={type}>
-        <div className={cn('pv1')}>
-          {type}
-          <pre>
-            <code>{prettyStringifySafe(schema.getModel(type))}</code>
-          </pre>
-        </div>
+      <div className={cn('pv1')}>
+        {type}
+        {compose(
+          values,
+          mapObjIndexed((attribute, name) => (
+            <Attribute
+              key={name}
+              attribute={attribute}
+              type={type}
+              name={name}
+            />
+          )),
+        )(attributes)}
+        <pre>
+          <code>{prettyStringifySafe(modelDesc)}</code>
+        </pre>
+      </div>
+    )
+  }
+}
+@observer
+class Attribute extends Component {
+  render() {
+    const {attribute, type, name} = this.props
+    return (
+      <div className={cn('pv1')}>
+        {`${type}.${name}`}
+        <pre>
+          <code>{prettyStringifySafe(attribute)}</code>
+        </pre>
       </div>
     )
   }
