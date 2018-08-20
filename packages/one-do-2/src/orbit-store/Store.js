@@ -34,6 +34,12 @@ function createStore() {
     return q
   }
 
+  function liveQueryExpr(expr) {
+    const q = lazyQuery({q: expr})
+    disposers.reaction(() => transforms.current(), () => q.refresh())
+    return q
+  }
+
   const storeWrapper = {
     _store: store,
     query: store.query.bind(store),
@@ -41,6 +47,7 @@ function createStore() {
     transforms,
     lazyQuery,
     liveQuery,
+    liveQueryExpr,
     update: store.update.bind(store),
   }
 

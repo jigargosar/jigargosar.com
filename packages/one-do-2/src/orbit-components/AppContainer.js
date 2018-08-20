@@ -23,21 +23,19 @@ export default AppContainer
 @observer
 class AppContent extends Component {
   @observable
-  tasksQuery = store.liveQuery({
-    q: {
-      op: 'findRecords',
-      type: 'task',
-      sort: [
-        //
-        {kind: 'attribute', attribute: 'sortIdx', order: 'ascending'},
-        {kind: 'attribute', attribute: 'createdAt', order: 'descending'},
-      ],
-      filter: [],
-      page: {
-        kind: 'offsetLimit',
-        offset: 0,
-        limit: Number.MAX_SAFE_INTEGER,
-      },
+  tasksQuery = store.liveQueryExpr({
+    op: 'findRecords',
+    type: 'task',
+    sort: [
+      //
+      {kind: 'attribute', attribute: 'sortIdx', order: 'ascending'},
+      {kind: 'attribute', attribute: 'createdAt', order: 'descending'},
+    ],
+    filter: [],
+    page: {
+      kind: 'offsetLimit',
+      offset: 0,
+      limit: Number.MAX_SAFE_INTEGER,
     },
   })
 
