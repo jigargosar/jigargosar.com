@@ -27,7 +27,9 @@ export async function removeAllTasks() {
   const all = await queryAllTasks()
 
   const removeRecords = t =>
-    compose(map(tap(console.warn), map(task => t.removeRecord(task))))
+    compose(map(tap(console.warn), map(record => t.removeRecord(record))))(
+      all,
+    )
 
   return getStore().update(removeRecords)
 }
