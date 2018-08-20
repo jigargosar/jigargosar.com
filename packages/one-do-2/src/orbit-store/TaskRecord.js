@@ -6,6 +6,8 @@ import {asc, dsc, recAttr, replaceAttributeOP} from './little-orbit'
 
 export const sortedTasksLazyObs = liveQuery(sortedTasksQuery)
 
+export const getSortedTasks = () => sortedTasksLazyObs.current()
+
 export function querySortedTasks() {
   return query(sortedTasksQuery)
 }
