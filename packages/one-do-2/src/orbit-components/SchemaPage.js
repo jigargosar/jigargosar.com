@@ -6,21 +6,17 @@ import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
 import {compose, join, keys, map, toPairs} from '../lib/ramda'
-import {liveQuery, query} from '../orbit-store/Store'
-/*eslint-disable*/
-
+import {liveQuery} from '../orbit-store/Store'
 import {
   Table,
-  TableHead,
   TableBody,
   TableCell,
-  TableFooter,
-  TablePagination,
+  TableHead,
   TableRow,
-  TableSortLabel,
 } from '@material-ui/core'
 import {recAttr} from '../orbit-store/little-orbit'
 import {computed} from '../lib/mobx'
+/*eslint-disable*/
 
 /*eslint-enable*/
 
