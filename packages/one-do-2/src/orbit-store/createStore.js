@@ -31,14 +31,7 @@ export function createStore() {
   function liveQuery(options) {
     const q = lazyQuery(options)
 
-    disposers.reaction(
-      () => transforms,
-      () => {
-        q.refresh()
-      },
-    )
-
-    return q
+    disposers.reaction(() => transforms, () => q.refresh())
   }
 
   const storeWrapper = {
