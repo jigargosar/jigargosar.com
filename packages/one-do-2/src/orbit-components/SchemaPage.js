@@ -77,14 +77,19 @@ class Model extends Component {
             {map(r => (
               <Fragment key={r.id}>
                 <TableRow>
-                  {map(name => {
-                    const val = recAttr(name)(r)
-                    return (
-                      <Fragment key={name}>
-                        <TableCell>{`${val}`}</TableCell>
-                      </Fragment>
-                    )
-                  })(attributeNames)}
+                  {compose(
+                    map(([name, attribute]) => {
+                      const val = recAttr(name)(r)
+                      return (
+                        <Fragment key={name}>
+                          <TableCell
+                            numeric={attribute.type === 'number'}
+                          >{`${val}`}</TableCell>
+                        </Fragment>
+                      )
+                    }),
+                    toPairs,
+                  )(attributes)}
                 </TableRow>
               </Fragment>
             ))(this.rows)}
