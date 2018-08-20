@@ -75,6 +75,10 @@ export async function updateRemoveAllTasks() {
   return updateStore(removeRecords)
 }
 
+export async function updateRemoveTasks(task) {
+  return updateStore(removeRecordOP(task))
+}
+
 export function updateToggleDone(task) {
   return updateIsDone(task, !TR.isDone(task))
 }

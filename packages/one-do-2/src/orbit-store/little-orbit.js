@@ -34,7 +34,7 @@ export function replaceRecordOP(record) {
 export function replaceAttributeOP(recordOrRId, name, value) {
   validate('OS', [recordOrRId, name])
 
-  const recordIdentity = recordToRecordIdentity(recordOrRId)
+  const recordIdentity = recordToRId(recordOrRId)
 
   return t => t.replaceAttribute(recordIdentity, name, value)
 }
@@ -43,10 +43,12 @@ export const validateRecordIdentity = ({id, type}) => {
   validate('SS', [id, type])
 }
 
-export const recordToRecordIdentity = compose(
+export const recordToRId = compose(
   tap(validateRecordIdentity),
   pick(['id', 'type']),
 )
 
 export const recAttr = name => _path(['attributes', name])
-export const removeRecordOP = curry((record, t) => t.removeRecord(record))
+export const removeRecordOP = curry((recordOrRId, t) =>
+  t.removeRecord(recordToRId),
+)
