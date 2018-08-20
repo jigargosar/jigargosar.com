@@ -2,31 +2,14 @@ import PropTypes from 'prop-types'
 import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
-import {disposable} from '../lib/disposable'
 import {observable} from '../lib/mobx'
 import {store} from '../orbit-store'
 import {addNewTask} from '../orbit-store/createStore'
 
 @observer
 class AppContainer extends Component {
-  @observable
-  tasksLQ = store.liveQuery({
-    q: q => q.findRecords('task'),
-  })
-
   render() {
-    return (
-      <div className={cn('vh-100 overflow-scroll')}>
-        <div>
-          <TasksPage
-            handleAddTask={() => {
-              addNewTask(store)
-            }}
-            tasks={this.tasksLQ.current()}
-          />
-        </div>
-      </div>
-    )
+    return <AppContent />
   }
 }
 export default AppContainer
