@@ -10,6 +10,7 @@ import {
 } from '../orbit-store/TaskRecord'
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
+import {buttonStyle} from '../lib/little-tachyons-style'
 
 @disposable(module)
 @observer
@@ -66,7 +67,6 @@ class Tasks extends Component {
   }
 }
 
-const buttonStyle = 'input-reset bn pointer link'
 @observer
 class Task extends Component {
   render() {
@@ -75,10 +75,12 @@ class Task extends Component {
       <div className={cn('pv1')}>
         <div className={cn('frc lh-copy')}>
           <button
-            className={cn('ph3', buttonStyle, 'code')}
+            className={cn('ph3', buttonStyle)}
             onClick={() => updateToggleDone(task)}
           >
-            {TR.isDone(task) ? `[x]` : `[ ]`}
+            <div className={cn('code')}>
+              {TR.isDone(task) ? `[x]` : `[ ]`}
+            </div>
           </button>
           <div className={cn('flex-auto')}>{TR.title(task)}</div>
         </div>
