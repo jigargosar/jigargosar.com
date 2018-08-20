@@ -44,7 +44,7 @@ function createStore() {
     update: store.update.bind(store),
   }
 
-  debug('[Exiting] createStore')
+  debug('[Exiting] createStore', storeWrapper)
   return storeWrapper
 }
 
@@ -76,6 +76,6 @@ export function getStore() {
 
 export default getStore()
 
-export function addNewTask(store = getStore()) {
-  return store.update(t => t.addRecord(TaskRecord()))
+export function addNewTask() {
+  return getStore().update(t => t.addRecord(TaskRecord()))
 }
