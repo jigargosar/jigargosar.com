@@ -42,7 +42,6 @@ class AppContent extends Component {
 @observer
 class TasksPage extends Component {
   render() {
-    const tasks = getSortedTasks()
     return (
       <div>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
@@ -54,7 +53,7 @@ class TasksPage extends Component {
             Add
           </button>
         </div>
-        <Tasks tasks={tasks} />
+        <Tasks tasks={getSortedTasks()} />
       </div>
     )
   }
