@@ -73,12 +73,12 @@ class Task extends Component {
     return (
       <div className={cn('pv1')}>
         <div className={cn('frc lh-copy')}>
-          <div
-            className={cn('ph3', 'code pointer')}
+          <button
+            className={cn('ph3', 'input-reset bn pointer link', 'code')}
             onClick={() => updateToggleDone(task)}
           >
             {!TR.isDone(task) ? `[x]` : `[ ]`}
-          </div>
+          </button>
           <div className={cn('flex-auto')}>{TR.title(task)}</div>
         </div>
         <div
