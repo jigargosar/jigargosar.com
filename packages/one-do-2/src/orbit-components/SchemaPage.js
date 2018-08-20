@@ -98,9 +98,11 @@ class Model extends Component {
             ))(this.rows)}
           </TableBody>
         </Table>
-        <pre>
-          <code>{prettyStringifySafe(this.rows)}</code>
-        </pre>
+        {false && (
+          <pre>
+            <code>{prettyStringifySafe(this.rows)}</code>
+          </pre>
+        )}
 
         {false && (
           <pre>
