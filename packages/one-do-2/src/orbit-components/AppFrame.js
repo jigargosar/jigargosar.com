@@ -24,7 +24,6 @@ class AppFrame extends Component {
           <TasksPage
             handleAddTask={() => {
               addNewTask(store)
-              this.tasksLQ.refresh()
             }}
             tasks={this.tasksLQ.current()}
           />
