@@ -62,7 +62,7 @@ class AppContent extends Component {
       <div className={cn('vh-100 overflow-scroll')}>
         <div>
           <TasksPage
-            handleAddTask={updateAddTask}
+            handleAddTask={() => updateAddTask()}
             tasks={sortedTasksLazyObs.current()}
           />
         </div>
