@@ -6,8 +6,8 @@ const modelsDefinition = {
     attributes: {
       title: {type: 'string'},
       isDone: {type: 'boolean'},
-      createdAt: {type: 'timestamp'},
       sortIdx: {type: 'number'},
+      createdAt: {type: 'timestamp'},
     },
   },
   planet: {
