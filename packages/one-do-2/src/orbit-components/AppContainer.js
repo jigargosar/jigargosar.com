@@ -11,10 +11,14 @@ import {
   toggleDone,
 } from '../orbit-store/TaskRecord'
 import {delay, PQueue} from '../lib/p-fun'
-import {head} from '../lib/ramda'
+import {head, last} from '../lib/ramda'
 
 function firstTask() {
   return head(getSortedTasks().current())
+}
+
+function lastTask() {
+  return last(getSortedTasks().current())
 }
 
 async function startSimulation() {
@@ -28,6 +32,7 @@ async function startSimulation() {
 
   await delay(1000)
   pQueue.add(() => toggleDone(firstTask()))
+  //a
 }
 
 @observer
