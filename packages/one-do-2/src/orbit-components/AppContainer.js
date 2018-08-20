@@ -54,7 +54,7 @@ class SchemaPage extends Component {
     return (
       <Page>
         <PageTitle>Schema</PageTitle>
-        {join(', ')(modelTypes)}
+        <div className={cn('pa3 pt0')}>{join(', ')(modelTypes)}</div>
       </Page>
     )
   }
