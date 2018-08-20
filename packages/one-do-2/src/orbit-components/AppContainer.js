@@ -15,16 +15,16 @@ import {disposable} from '../lib/disposable'
 
 async function startSimulation(pQueue) {
   await pQueue.addAll([removeAllTasks, addNewTask])
-  const tasks2 = await addNewTask()
+  const tasks2 = await pQueue.add(addNewTask)
 
   await delay(1000)
   await pQueue.add(() => toggleDone(tasks2[0]))
 
-  await delay(1000)
-  const tasks3 = await pQueue.add(addNewTask)
-
-  await delay(1000)
-  pQueue.add(() => toggleDone(tasks3[2]))
+  // await delay(1000)
+  // const tasks3 = await pQueue.add(addNewTask)
+  //
+  // await delay(1000)
+  // pQueue.add(() => toggleDone(tasks3[2]))
   //a
 }
 
