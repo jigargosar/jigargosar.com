@@ -4,6 +4,7 @@ import {identity, isNil, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
 import {validate} from '../lib/little-ramda'
+import {autoBind} from '../lib/auto-bind'
 
 const logPrefix = ['[store]']
 // const log = partial(console.log.bind(console), logPrefix)
@@ -13,7 +14,13 @@ const disposers = Disposers(module)
 
 function createStore() {
   debug('[Entering] createStore')
-  const store = new Store({schema})
+  const store = (function() {
+    const store = new Store({schema})
+    console.log(store)
+    autoBind(store)
+    console.log(store)
+    return store
+  })()
 
   const transforms = createTransformObservable(store)
 
@@ -41,13 +48,11 @@ function createStore() {
   }
 
   const storeWrapper = {
-    query: store.query.bind(store),
-    listeners: store.listeners.bind(store),
+    ...store,
     transforms,
     lazyQuery,
     liveQuery,
     liveQueryExpr,
-    update: store.update.bind(store),
   }
 
   debug('[Exiting] createStore', storeWrapper)
