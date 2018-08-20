@@ -5,18 +5,25 @@ import {cn, renderKeyedById} from '../lib/little-react'
 import {observer, Provider} from '../lib/mobx-react'
 import store from '../orbit-store/Store'
 import {addNewTask, getSortedTasks} from '../orbit-store/TaskRecord'
+import {_path, isNil} from '../lib/ramda'
 
 @observer
 class AppContainer extends Component {
-  store = store
-
   componentDidMount() {
+    const firstTId = _path([0, 'id'])(store._store.allTransforms())
+    if (!isNil(firstTId)) {
+      store._store.rollback(firstTId)
+    }
     addNewTask()
+    console.log(
+      `store._store.allTransforms()`,
+      store._store.allTransforms(),
+    )
   }
 
   render() {
     return (
-      <Provider store={this.store}>
+      <Provider store={store}>
         <AppContent />
       </Provider>
     )
