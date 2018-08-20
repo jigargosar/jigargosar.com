@@ -1,4 +1,5 @@
 import '../stores/init-mobx'
+import '../stores'
 import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
 import {observer} from '../lib/mobx-react'
