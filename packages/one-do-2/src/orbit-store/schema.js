@@ -1,6 +1,5 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
-import {type} from '../lib/ramda'
 
 const modelsDefinition = {
   task: {
