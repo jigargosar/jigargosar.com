@@ -10,21 +10,13 @@ import {
   removeAllTasks,
   toggleDone,
 } from '../orbit-store/TaskRecord'
-import {pEachSeries} from '../lib/p-fun'
-import {call} from '../lib/ramda'
+import {PQueue} from '../lib/p-fun'
 
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    pEachSeries(
-      [
-        //
-        removeAllTasks,
-        addNewTask,
-        addNewTask,
-      ],
-      call,
-    ).catch(console.error)
+    const pQueue = PQueue({concurrency: 1})
+    pQueue.addAll([removeAllTasks, addNewTask, addNewTask])
   }
 
   render() {
