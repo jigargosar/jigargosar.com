@@ -2,9 +2,9 @@ import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
 import {disposable} from '../lib/disposable'
-import {addNewTask, storeOP} from '../orbit-stores/store'
+import {addNewTask, findTasks, storeOP} from '../orbit-stores/store'
 import {fromPromise} from '../lib/mobx-utils'
-import {observable} from '../lib/mobx'
+import {observable, runInAction} from '../lib/mobx'
 import {invoker} from '../lib/ramda'
 
 @disposable(module)
@@ -15,7 +15,7 @@ class AppFrame extends Component {
   tasksLQ = fromPromise(
     storeOP.then(
       invoker(1, 'lazyQuery')({
-        q: {type: 'task', op: 'FetchAll'},
+        q: q => q.findRecords('task'),
         i: [],
       }),
     ),
