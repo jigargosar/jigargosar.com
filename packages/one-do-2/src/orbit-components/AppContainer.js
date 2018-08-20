@@ -5,8 +5,8 @@ import {cn, renderKeyedById} from '../lib/little-react'
 import {observer, Provider} from '../lib/mobx-react'
 import store from '../orbit-store/Store'
 import {
+  getSortedTasks,
   removeAllTasks,
-  sortedTasksLazyObs,
   updateAddTask,
   updateIsDone,
   updateToggleDone,
@@ -74,7 +74,7 @@ class AppContent extends Component {
         <div>
           <TasksPage
             handleAddTask={() => updateAddTask()}
-            tasks={sortedTasksLazyObs.current()}
+            tasks={getSortedTasks()}
           />
         </div>
       </div>
