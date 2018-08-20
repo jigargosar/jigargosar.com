@@ -15,6 +15,9 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TablePagination,
+  TableFooter,
+  TableSortLabel,
 } from '@material-ui/core'
 import {recAttr} from '../orbit-store/little-orbit'
 import {computed} from '../lib/mobx'
