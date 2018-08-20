@@ -1,12 +1,11 @@
 import {observer} from 'mobx-react'
 import React, {Component} from 'react'
-import {join, keys, map} from 'ramda'
 import {schema} from '../orbit-store/schema'
 import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
-import {toPairs} from '../lib/ramda'
+import {toPairs, join, keys, map} from '../lib/ramda'
 
 @observer
 export class SchemaPage extends Component {
