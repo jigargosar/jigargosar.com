@@ -16,9 +16,7 @@ function createStore() {
   debug('[Entering] createStore')
   const store = (function() {
     const store = new Store({schema})
-    console.log(store)
     autoBind(store)
-    console.log(store)
     return store
   })()
 
