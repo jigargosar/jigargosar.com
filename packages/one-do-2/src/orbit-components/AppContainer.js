@@ -11,9 +11,9 @@ import {
   updateIsDone,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
-import {delay, pEachSeries, pSeries} from '../lib/p-fun'
+import {delay, pSeries} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
-import {repeat, times} from '../lib/ramda'
+import {repeat} from '../lib/ramda'
 
 async function startSimulation({speed = 1000}) {
   await removeAllTasks()
