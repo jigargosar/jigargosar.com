@@ -11,9 +11,8 @@ import {addNewTask} from '../orbit-store/createStore'
 @observer
 class AppFrame extends Component {
   @observable
-  tasksLQ = store.lazyQuery({
+  tasksLQ = store.liveQuery({
     q: q => q.findRecords('task'),
-    i: [],
   })
 
   render() {

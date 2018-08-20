@@ -17,7 +17,7 @@ export function createStore() {
 
   const transforms = createTransformObservable(store)
 
-  function lazyQuery({q, o, id, i: ini}) {
+  function lazyQuery({q, o, id, i: ini = []}) {
     return lazyObservable(
       sink =>
         store
