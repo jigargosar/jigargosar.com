@@ -11,7 +11,7 @@ import {
   updateIsDone,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
-import {delay, pSeries} from '../lib/p-fun'
+import {delay, PQueue, pSeries} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
 import {repeat} from '../lib/ramda'
 
@@ -42,9 +42,11 @@ async function startSimulation({speed = 1000}) {
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    pSeries(repeat(() => startSimulation({speed: 1000}), 10)).catch(
-      console.error,
-    )
+    this.addDisposer(() => {
+      const pQueue = PQueue({concurrency: 1})
+      pQueue.addAll(repeat(() => startSimulation({speed: 1000}), 10))
+      return () => pQueue.clear()
+    })
   }
 
   render() {
