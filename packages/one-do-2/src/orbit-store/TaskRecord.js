@@ -1,14 +1,6 @@
 import {fWord} from '../lib/fake'
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
-import {
-  compose,
-  equals,
-  head,
-  insert,
-  map,
-  not,
-  reject,
-} from '../lib/ramda'
+import {compose, insert, map, not} from '../lib/ramda'
 import {mapIndexed, overPath} from '../lib/little-ramda'
 import {asc, replaceRecordOP} from './little-orbit'
 
@@ -38,8 +30,8 @@ export async function addNewTask(props = {}) {
       map(([task, sortIdx]) =>
         t.replaceAttribute(task, 'sortIdx', sortIdx),
       ),
-      reject(compose(equals(newTask), head)),
-      mapIndexed((task, idx) => [task, idx + 1]),
+      // reject(compose(equals(newTask), head)),
+      mapIndexed((task, idx) => [task, idx]),
       insert(newTask.sortIdx, newTask),
     )(all)
   }
