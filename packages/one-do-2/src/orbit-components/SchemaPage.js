@@ -5,7 +5,7 @@ import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
-import {toPairs, join, keys, map, compose, intersperse} from '../lib/ramda'
+import {compose, join, keys, map, toPairs} from '../lib/ramda'
 
 @observer
 export class SchemaPage extends Component {
