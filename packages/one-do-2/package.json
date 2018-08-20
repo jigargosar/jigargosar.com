@@ -29,7 +29,6 @@
     "autosize": "^4.0.2",
     "chance": "^1.0.16",
     "classnames": "^2.2.6",
-    "delay": "^3.0.0",
     "faker": "^4.1.0",
     "firebase": "^5.4.0",
     "focus-trap-react": "^4.0.0",
