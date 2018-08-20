@@ -9,32 +9,9 @@ export function addNewTask(store) {
   return store.update(t => t.addRecord(TaskRecord()))
 }
 
-const disposers = Disposers(module)
-
 const logPrefix = ['[store]']
-const log = partial(console.log.bind(console), logPrefix)
+// const log = partial(console.log.bind(console), logPrefix)
 const debug = partial(console.debug.bind(console), logPrefix)
-
-function onWrapper(store) {
-  return function on(event, callback, binding) {
-    log('.on', event, callback.name || callback, binding)
-    store.on(event, callback, binding)
-
-    log(`.listeners(${event}).length`, store.listeners(event).length)
-
-    return disposers.addDisposer(function() {
-      log(`disposing: .on`, event, callback.name || callback, binding)
-      offWrapper(store)(event, callback, binding)
-    })
-  }
-}
-
-function offWrapper(store) {
-  return function off(event, callback, binding) {
-    log('.off', event, callback.name || callback, binding)
-    return store.off(event, callback, binding)
-  }
-}
 
 function createTransformObservable(store) {
   let disposer = identity
@@ -56,8 +33,6 @@ function createTransformObservable(store) {
 export function createStore() {
   debug('[Entering] createStore')
   const store = new Store({schema})
-  const on = onWrapper(store)
-  const off = offWrapper(store)
 
   const transforms = createTransformObservable(store)
 
@@ -76,8 +51,6 @@ export function createStore() {
     _store: store,
     query: store.query.bind(store),
     listeners: store.listeners.bind(store),
-    on: on,
-    off: off,
     transforms,
     lazyQuery,
     update: store.update.bind(store),
