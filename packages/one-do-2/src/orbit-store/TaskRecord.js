@@ -1,7 +1,7 @@
 import {fWord} from '../lib/fake'
 import {asc} from './little-orbit'
 import {findRecordsOfType, getStore} from './Store'
-import {compose, isNil, map, tap} from '../lib/ramda'
+import {isNil, map} from '../lib/ramda'
 
 export function TaskRecord({sortIdx = 0} = {}) {
   return {
@@ -26,10 +26,7 @@ function findAllTask() {
 export async function removeAllTasks() {
   const all = await findAllTask()
 
-  const removeRecords = t =>
-    compose(map(tap(console.warn), map(record => t.removeRecord(record))))(
-      all,
-    )
+  const removeRecords = t => map(record => t.removeRecord(record))(all)
 
   return getStore().update(removeRecords)
 }
