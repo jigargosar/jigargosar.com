@@ -10,7 +10,7 @@ import {
   removeAllTasks,
 } from '../orbit-store/TaskRecord'
 import {pEachSeries} from '../lib/p-fun'
-import {identity} from '../lib/ramda'
+import {call} from '../lib/ramda'
 
 @observer
 class AppContainer extends Component {
@@ -22,7 +22,7 @@ class AppContainer extends Component {
         addNewTask,
         addNewTask,
       ],
-      identity,
+      call,
     ).catch(console.error)
   }
 
