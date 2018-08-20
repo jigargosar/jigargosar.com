@@ -7,7 +7,6 @@ import {observable} from '../lib/mobx'
 import {store} from '../orbit-store'
 import {addNewTask} from '../orbit-store/createStore'
 
-@disposable(module)
 @observer
 class AppContainer extends Component {
   @observable
@@ -18,8 +17,6 @@ class AppContainer extends Component {
   render() {
     return (
       <div className={cn('vh-100 overflow-scroll')}>
-        {/*<ObsPromise label={'storeOP'} p={this.storeOP} />*/}
-        {/*<ObsPromise label={'tasksOP'} p={this.tasksOP} />*/}
         <div>
           <TasksPage
             handleAddTask={() => {
@@ -32,8 +29,30 @@ class AppContainer extends Component {
     )
   }
 }
-
 export default AppContainer
+
+@observer
+class AppContent extends Component {
+  @observable
+  tasksLQ = store.liveQuery({
+    q: q => q.findRecords('task'),
+  })
+
+  render() {
+    return (
+      <div className={cn('vh-100 overflow-scroll')}>
+        <div>
+          <TasksPage
+            handleAddTask={() => {
+              addNewTask(store)
+            }}
+            tasks={this.tasksLQ.current()}
+          />
+        </div>
+      </div>
+    )
+  }
+}
 
 @observer
 class TasksPage extends Component {
