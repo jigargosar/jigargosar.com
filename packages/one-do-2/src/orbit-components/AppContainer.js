@@ -80,13 +80,7 @@ class Task extends Component {
           />
           <div className={cn('fa')}>{TR.title(task)}</div>
         </div>
-        <div
-          className={cn(
-            'ph3',
-            'frc justify-end_',
-            'code f7 lh-copy black-50',
-          )}
-        >
+        <div className={cn('ph3', 'frc', 'code f7 lh-copy black-50')}>
           {`sortIdx:${TR.sortIdx(task)} id:${
             task.id
           } createdAt:${TR.createdAt(task)}`}
