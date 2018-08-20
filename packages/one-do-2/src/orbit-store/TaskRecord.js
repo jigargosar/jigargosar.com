@@ -26,19 +26,19 @@ export function addNewTask() {
   return addNewTaskAt(0)
 }
 
-function findAllTask() {
+function queryAllTasks() {
   return queryRecordsOfType('task')
 }
 
 export async function removeAllTasks() {
-  const all = await findAllTask()
+  const all = await queryAllTasks()
 
   const removeRecords = t => map(record => t.removeRecord(record))(all)
   return updateStore(removeRecords)
 }
 
 export async function addNewTaskAt(idx) {
-  const all = await findAllTask()
+  const all = await queryAllTasks()
   const updateSortIdx = t => {
     return all.map((task, idx) => {
       return t.replaceAttribute(task, 'sortIdx', idx + 1)
