@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react'
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {schema} from '../orbit-store/schema'
 import {Page} from './Page'
 import {PageTitle} from './PageTitle'
@@ -35,8 +35,14 @@ class Model extends Component {
       <div className={cn('pv1')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
         {compose(
-          join(', '),
-          map(([name, attribute]) => `${name}:${attribute.type}`),
+          map(([name, attribute]) => (
+            <Fragment key={name}>
+              <span className={cn('ph1')}>
+                <strong>{`${name}`}</strong>
+                <em>{`${attribute.type}`}</em>
+              </span>
+            </Fragment>
+          )),
           toPairs,
         )(attributes)}
         {false &&
