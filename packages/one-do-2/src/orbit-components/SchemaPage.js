@@ -63,7 +63,10 @@ class Model extends Component {
           )),
           toPairs,
         )(attributes)}
-        <Table padding={'dense'} className={cn('code')}>
+        <Table
+          padding={'dense'}
+          // className={cn('code')}
+        >
           <TableHead>
             <TableRow>
               <TableCell>{`id`}</TableCell>
