@@ -13,27 +13,28 @@ import {
 } from '../orbit-store/TaskRecord'
 import {delay, PQueue} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
-import {repeat} from '../lib/ramda'
+import {compose, flatten, repeat} from '../lib/ramda'
 
-async function startSimulation({speed = 1000}) {
-  await removeAllTasks()
+function startSimulation({speed = 1000}) {
+  let tasks3
+  let tasks2
+  let tasks1
 
-  const tasks1 = await updateAddTask({title: 'First Task'})
-  await delay(speed)
-  const tasks2 = await updateAddTask({title: 'Second Task'})
-  await updateIsDone(tasks2, false)
-
-  await delay(speed)
-  await updateIsDone(tasks1, true)
-
-  await delay(speed)
-  const tasks3 = await updateAddTask({title: 'Third Task'})
-
-  await delay(speed)
-  await updateIsDone(tasks3, true)
-
-  await delay(speed)
-  await updateIsDone(tasks1, false)
+  return [
+    async () => await removeAllTasks(),
+    async () => (tasks1 = await updateAddTask({title: 'First Task'})),
+    async () => await delay(speed),
+    async () => (tasks2 = await updateAddTask({title: 'Second Task'})),
+    async () => await updateIsDone(tasks2, false),
+    async () => await delay(speed),
+    async () => await updateIsDone(tasks1, true),
+    async () => await delay(speed),
+    async () => (tasks3 = await updateAddTask({title: 'Third Task'})),
+    async () => await delay(speed),
+    async () => await updateIsDone(tasks3, true),
+    async () => await delay(speed),
+    async () => await updateIsDone(tasks1, false),
+  ]
 
   //aaa
 }
@@ -43,7 +44,9 @@ async function startSimulation({speed = 1000}) {
 class AppContainer extends Component {
   componentDidMount() {
     const pQueue = PQueue({concurrency: 1})
-    pQueue.addAll(repeat(() => startSimulation({speed: 1000}), 10))
+    pQueue.addAll(
+      compose(flatten, repeat(startSimulation({speed: 1000})))(10),
+    )
 
     this.props.addDisposer(() => pQueue.clear())
 
