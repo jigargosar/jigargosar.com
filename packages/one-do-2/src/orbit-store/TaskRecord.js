@@ -41,7 +41,6 @@ export async function updateAddTask(props) {
   const updateSortIdx = t => {
     return compose(
       mapIndexed((task, idx) => replaceSortIdxOP(task, idx)(t)),
-      tap(map(tapLog)),
       insert(getSortIdx(newTask), newTask),
       Array.from,
     )(all)
