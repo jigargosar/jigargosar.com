@@ -95,9 +95,9 @@ class Task extends Component {
         <div className={cn('ph2', 'code pointer')}>
           {!isDone ? `[x]` : `[ ]`}
         </div>
-        <div>{title}</div>
+        <div className={cn('flex-auto')}>{title}</div>
         <div className={'frc'}>
-          <div className={cn('ph2', 'f7 black-50')}>
+          <div className={cn('ph2', 'code f7 black-50')}>
             {`i:${sortIdx} id:${task.id}`}
           </div>
         </div>
