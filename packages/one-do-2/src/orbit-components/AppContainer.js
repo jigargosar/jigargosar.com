@@ -66,6 +66,7 @@ class Tasks extends Component {
   }
 }
 
+const buttonStyle = 'input-reset bn pointer link'
 @observer
 class Task extends Component {
   render() {
@@ -74,7 +75,7 @@ class Task extends Component {
       <div className={cn('pv1')}>
         <div className={cn('frc lh-copy')}>
           <button
-            className={cn('ph3', 'input-reset bn pointer link', 'code')}
+            className={cn('ph3', buttonStyle, 'code')}
             onClick={() => updateToggleDone(task)}
           >
             {TR.isDone(task) ? `[x]` : `[ ]`}
