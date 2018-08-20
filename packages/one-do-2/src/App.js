@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import AppFrame from './orbit-components/AppFrame'
+import AppContainer from './orbit-components/AppContainer'
 import {observer} from './lib/little-react'
 import {hotDispose} from './lib/hot'
 
@@ -10,7 +10,7 @@ class App extends Component {
     if (this.state.hasError) {
       return this.renderError()
     }
-    return <AppFrame />
+    return <AppContainer />
   }
 
   componentDidCatch(error, info) {

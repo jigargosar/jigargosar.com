@@ -9,7 +9,7 @@ import {addNewTask} from '../orbit-store/createStore'
 
 @disposable(module)
 @observer
-class AppFrame extends Component {
+class AppContainer extends Component {
   @observable
   tasksLQ = store.liveQuery({
     q: q => q.findRecords('task'),
@@ -33,7 +33,7 @@ class AppFrame extends Component {
   }
 }
 
-export default AppFrame
+export default AppContainer
 
 @observer
 class TasksPage extends Component {
