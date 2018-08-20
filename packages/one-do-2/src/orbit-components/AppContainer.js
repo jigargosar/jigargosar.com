@@ -3,7 +3,6 @@ import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
 import {observer, Provider} from '../lib/mobx-react'
-import store from '../orbit-store/Store'
 import {
   getSortedTasks,
   updateAddTask,
@@ -22,11 +21,7 @@ class AppContainer extends Component {
   }
 
   render() {
-    return (
-      <Provider store={store}>
-        <AppContent />
-      </Provider>
-    )
+    return <AppContent />
   }
 }
 export default AppContainer
