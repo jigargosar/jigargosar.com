@@ -4,8 +4,7 @@ import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
 import {observable} from '../lib/mobx'
 import {observer, Provider} from '../lib/mobx-react'
-import store, {addNewTask, queryTasksExpr} from '../orbit-store/Store'
-import {asc, dsc} from '../orbit-store/little-orbit'
+import store, {addNewTask, sortedTasks} from '../orbit-store/Store'
 
 @observer
 class AppContainer extends Component {
@@ -23,10 +22,7 @@ export default AppContainer
 
 @observer
 class AppContent extends Component {
-  @observable
-  tasksQuery = queryTasksExpr({
-    sort: [asc('sortIdx'), dsc('createdAt')],
-  })
+  @observable tasks = sortedTasks()
 
   render() {
     return (
@@ -34,7 +30,7 @@ class AppContent extends Component {
         <div>
           <TasksPage
             handleAddTask={addNewTask}
-            tasks={this.tasksQuery.current()}
+            tasks={this.tasks.current()}
           />
         </div>
       </div>

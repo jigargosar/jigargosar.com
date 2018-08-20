@@ -4,6 +4,7 @@ import {TaskRecord} from './TaskRecord'
 import {identity, isNil, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
+import {asc, dsc} from './little-orbit'
 
 const logPrefix = ['[store]']
 // const log = partial(console.log.bind(console), logPrefix)
@@ -87,15 +88,15 @@ export function addNewTask() {
   return getStore().update(t => t.addRecord(TaskRecord()))
 }
 
-export function queryTasksExpr() {
+export function addNewTaskAt(idx) {
+  return getStore().update(t => t.addRecord(TaskRecord()))
+}
+
+export function queryTasksExpr({sort = []}) {
   return getStore().liveQueryExpr({
     op: 'findRecords',
     type: 'task',
-    sort: [
-      //
-      {kind: 'attribute', attribute: 'sortIdx', order: 'ascending'},
-      {kind: 'attribute', attribute: 'createdAt', order: 'descending'},
-    ],
+    sort: sort,
     filter: [],
     page: {
       kind: 'offsetLimit',
@@ -103,5 +104,10 @@ export function queryTasksExpr() {
       limit: Number.MAX_SAFE_INTEGER,
     },
   })
+}
 
+export function sortedTasks() {
+  return queryTasksExpr({
+    sort: [asc('sortIdx'), dsc('createdAt')],
+  })
 }
