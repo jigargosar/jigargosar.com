@@ -1,7 +1,7 @@
 import {fWord} from '../lib/fake'
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
-import {compose, insert, map, tap} from '../lib/ramda'
-import {mapIndexed, tapLog} from '../lib/little-ramda'
+import {compose, insert, map} from '../lib/ramda'
+import {mapIndexed} from '../lib/little-ramda'
 import {asc, dsc, recAttr, replaceAttributeOP} from './little-orbit'
 
 export const sortedTasksLazyObs = liveQuery(sortedTasksQuery)
