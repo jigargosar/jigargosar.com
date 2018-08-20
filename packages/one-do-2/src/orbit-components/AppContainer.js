@@ -3,15 +3,17 @@ import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
 import {observable} from '../lib/mobx'
-import {store} from '../orbit-store'
+import {getStore, store} from '../orbit-store'
 import {addNewTask} from '../orbit-store/createStore'
 import {inject, observer, Provider} from '../lib/mobx-react'
 
 @observer
 class AppContainer extends Component {
+  store = getStore()
+
   render() {
     return (
-      <Provider store={1}>
+      <Provider store={this.store}>
         <AppContent />
       </Provider>
     )
@@ -23,7 +25,7 @@ export default AppContainer
 @observer
 class AppContent extends Component {
   @observable
-  tasksLQ = store.liveQuery({
+  tasksLQ = this.props.store.liveQuery({
     q: q => q.findRecords('task'),
   })
 

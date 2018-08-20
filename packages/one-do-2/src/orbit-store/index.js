@@ -1,6 +1,13 @@
-import {addNewTask, createStore} from './createStore'
+import {createStore} from './createStore'
+import {isNil} from '../lib/ramda'
 
-export const store = createStore()
+let store
 
-addNewTask(store)
-addNewTask(store)
+export function getStore() {
+  if (isNil(store)) {
+    store = createStore()
+  }
+  return store
+}
+
+export {store}
