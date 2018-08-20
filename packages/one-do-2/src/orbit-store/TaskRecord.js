@@ -51,8 +51,12 @@ export function toggleDone(task) {
   return replaceRecord(overPath(['attributes', 'isDone'])(not)(task))
 }
 
+function replaceRecordOP(record) {
+  return t => t.replaceRecord(record)
+}
+
 export function replaceRecord(record) {
-  return getStore().update(t => t.replaceRecord(record))
+  return getStore().update(replaceRecordOP(record))
 }
 
 function sortedTasksQuery() {
