@@ -21,8 +21,8 @@ class AppFrame extends Component {
     ),
   )
 
-  fetchTasks() {
-    console.log('[Entering] AppFrame.fetchTasks')
+  refreshTasksLQ() {
+    console.log('[Entering] AppFrame.refreshTasksLQ')
     this.tasksLQ.then(invoker(0, 'refresh'))
   }
 
@@ -30,7 +30,7 @@ class AppFrame extends Component {
     // this.tasksOP.then(tapLogRecords).catch(console.error)
 
     this.storeOP.then(s => {
-      this.props.addDisposer(s.on('transform', this.fetchTasks, this))
+      this.props.addDisposer(s.on('transform', this.refreshTasksLQ, this))
     })
   }
 
