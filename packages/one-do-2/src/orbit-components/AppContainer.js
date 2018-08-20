@@ -24,7 +24,17 @@ export default AppContainer
 class AppContent extends Component {
   @observable
   tasksQuery = store.liveQuery({
-    q: q => q.findRecords('task'),
+    q: {
+      op: 'findRecords',
+      type: 'task',
+      sort: [],
+      filter: [],
+      page: {
+        kind: 'offsetLimit',
+        offset: 0,
+        limit: Number.MAX_SAFE_INTEGER,
+      },
+    },
   })
 
   render() {
