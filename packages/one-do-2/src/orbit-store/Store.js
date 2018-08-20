@@ -4,7 +4,7 @@ import {TaskRecord} from './TaskRecord'
 import {identity, isNil, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
-import {asc, dsc} from './little-orbit'
+import {asc} from './little-orbit'
 
 const logPrefix = ['[store]']
 // const log = partial(console.log.bind(console), logPrefix)
@@ -89,11 +89,17 @@ export function addNewTask() {
 }
 
 export function addNewTaskAt(idx) {
-  const tasks = sortedTasks()
+  const updateSortIdx = sortedTasks()
     .current()
-    .map((t, i) => t => t.replaceAttribute(t.id, 'sortIdx', i + 1))
+    .map((task, idx) => t =>
+      t.replaceAttribute(task.id, 'sortIdx', idx + 1),
+    )
 
-  return getStore().update(t => [t.addRecord(TaskRecord({sortIdx: 0}))])
+  return getStore().update(t => [
+    //
+    t.addRecord(TaskRecord({sortIdx: 0})),
+    ...updateSortIdx(t),
+  ])
 }
 
 export function queryTasksExpr({sort = []}) {
