@@ -9,14 +9,22 @@ import {
   getSortedTasks,
   removeAllTasks,
 } from '../orbit-store/TaskRecord'
+import {pEachSeries} from '../lib/p-fun'
+import {identity} from '../lib/ramda'
 
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    removeAllTasks()
-    addNewTask()
-    addNewTask()
-    addNewTask()
+    pEachSeries(
+      [
+        //
+        removeAllTasks(),
+        addNewTask(),
+        addNewTask(),
+        addNewTask(),
+      ],
+      identity,
+    ).catch(console.error)
   }
 
   render() {
