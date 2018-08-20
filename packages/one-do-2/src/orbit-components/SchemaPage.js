@@ -6,7 +6,7 @@ import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
 import {compose, join, keys, map, toPairs} from '../lib/ramda'
-import {liveQuery} from '../orbit-store/Store'
+import {liveQuery, query} from '../orbit-store/Store'
 /*eslint-disable*/
 
 import {
@@ -19,6 +19,8 @@ import {
   TableRow,
   TableSortLabel,
 } from '@material-ui/core'
+import {recAttr} from '../orbit-store/little-orbit'
+import {computed} from '../lib/mobx'
 
 /*eslint-enable*/
 
@@ -47,6 +49,7 @@ class Model extends Component {
     const {type} = this.props
     const modelDesc = schema.getModel(type)
     const {attributes} = modelDesc
+    const attributeNames = keys(attributes)
     return (
       <div className={cn('pv1')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
@@ -74,9 +77,25 @@ class Model extends Component {
               )(attributes)}
             </TableRow>
           </TableHead>
+          <TableBody>
+            {map(r => (
+              <Fragment key={r.id}>
+                <TableRow>
+                  {map(name => {
+                    const val = recAttr(name)(r)
+                    return (
+                      <Fragment key={name}>
+                        <TableCell>{`${val}`}</TableCell>
+                      </Fragment>
+                    )
+                  })(attributeNames)}
+                </TableRow>
+              </Fragment>
+            ))(this.rows)}
+          </TableBody>
         </Table>
         <pre>
-          <code>{prettyStringifySafe(this.query.current())}</code>
+          <code>{prettyStringifySafe(this.rows)}</code>
         </pre>
 
         {false &&
@@ -95,6 +114,11 @@ class Model extends Component {
         )}
       </div>
     )
+  }
+
+  @computed
+  get rows() {
+    return this.query.current()
   }
 }
 @observer
