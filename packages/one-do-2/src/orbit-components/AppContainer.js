@@ -14,11 +14,8 @@ import {delay, PQueue} from '../lib/p-fun'
 
 async function startSimulation() {
   const pQueue = PQueue({concurrency: 1})
-  const [, , [t1, t2]] = await pQueue.addAll([
-    removeAllTasks,
-    addNewTask,
-    addNewTask,
-  ])
+  await pQueue.addAll([removeAllTasks, addNewTask])
+  const [t1, t2] = await pQueue.add(addNewTask)
   console.log(`t1,t2`, t1, t2)
 
   await delay(1000)
