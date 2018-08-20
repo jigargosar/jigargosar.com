@@ -11,7 +11,6 @@ import {
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
 import {buttonStyle} from '../lib/little-tachyons-style'
-import * as PropTypes from 'prop-types'
 
 @disposable(module)
 @observer
@@ -26,6 +25,7 @@ class AppContainer extends Component {
     return <AppContent />
   }
 }
+
 export default AppContainer
 
 @observer
@@ -68,6 +68,7 @@ class Tasks extends Component {
   }
 }
 
+@observer
 class AsciiCheck extends Component {
   render() {
     const {checked} = this.props
