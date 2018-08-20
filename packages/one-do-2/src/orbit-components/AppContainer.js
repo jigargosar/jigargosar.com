@@ -14,24 +14,24 @@ import {
 import {delay, PQueue} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
 
-async function startSimulation() {
+async function startSimulation({speed = 1000}) {
   await removeAllTasks()
 
   const [tasks1] = await updateAddTask({title: 'First Task'})
-  await delay(1000)
+  await delay(speed)
   const [tasks2] = await updateAddTask({title: 'Second Task'})
   await updateIsDone(tasks2, false)
 
-  await delay(1000)
+  await delay(speed)
   await updateIsDone(tasks1, true)
   //
-  await delay(1000)
+  await delay(speed)
   const [tasks3] = await updateAddTask({title: 'Third Task'})
 
-  await delay(1000)
+  await delay(speed)
   await updateIsDone(tasks3, true)
 
-  await delay(1000)
+  await delay(speed)
   await updateIsDone(tasks1, false)
 
   //a
@@ -41,7 +41,7 @@ async function startSimulation() {
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    startSimulation().catch(console.error)
+    startSimulation({speed: 1000}).catch(console.error)
   }
 
   render() {
