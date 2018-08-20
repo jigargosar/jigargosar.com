@@ -1,6 +1,6 @@
 import '../stores/init-mobx'
 import '../stores'
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
 import {observer} from '../lib/mobx-react'
 import {
@@ -16,6 +16,7 @@ import {take} from '../lib/ramda'
 import {PageTitle} from './PageTitle'
 import {Page} from './Page'
 import {SchemaPage} from './SchemaPage'
+import {CssBaseline} from '@material-ui/core'
 
 @disposable(module)
 @observer
@@ -25,7 +26,12 @@ class AppContainer extends Component {
   }
 
   render() {
-    return <AppContent />
+    return (
+      <Fragment>
+        <CssBaseline />
+        <AppContent />
+      </Fragment>
+    )
   }
 }
 
