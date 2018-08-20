@@ -6,47 +6,11 @@ import {observer, Provider} from '../lib/mobx-react'
 import store from '../orbit-store/Store'
 import {
   getSortedTasks,
-  removeAllTasks,
   updateAddTask,
-  updateIsDone,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
-import {delay, PQueue} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
-import {compose, flatten, repeat} from '../lib/ramda'
-
-function getSimulationTasks({speed = 1000}) {
-  let tasks3
-  let tasks2
-  let tasks1
-
-  return [
-    async () => await delay(speed),
-    async () => await removeAllTasks(),
-    async () => await delay(speed),
-    async () => (tasks1 = await updateAddTask({title: 'First Task'})),
-    async () => await delay(speed),
-    async () => (tasks2 = await updateAddTask({title: 'Second Task'})),
-    async () => await updateIsDone(tasks2, false),
-    async () => await delay(speed),
-    async () => await updateIsDone(tasks1, true),
-    async () => await delay(speed),
-    async () => (tasks3 = await updateAddTask({title: 'Third Task'})),
-    async () => await delay(speed),
-    async () => await updateIsDone(tasks3, true),
-    async () => await delay(speed),
-    async () => await updateIsDone(tasks1, false),
-    // async () => await delay(speed * 2),
-  ]
-}
-
-function startSimulation() {
-  const pQueue = PQueue({concurrency: 1})
-  pQueue.addAll(
-    compose(flatten, repeat(getSimulationTasks({speed: 2500})))(100),
-  )
-  return () => pQueue.clear()
-}
+import {startSimulation} from '../orbit-store/Simulation'
 
 @disposable(module)
 @observer
