@@ -1,6 +1,6 @@
 import {fWord} from '../lib/fake'
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
-import {compose, insert, map} from '../lib/ramda'
+import {compose, insert, map, tap} from '../lib/ramda'
 import {mapIndexed, tapLog} from '../lib/little-ramda'
 import {asc, dsc, replaceAttributeOP} from './little-orbit'
 
@@ -33,14 +33,19 @@ function replaceSortIdxOP(task, idx) {
   return replaceAttributeOP(task, 'sortIdx', idx)
 }
 
+function getSortIdx(task) {
+  return task.attribute.sortIdx
+}
+
 export async function updateAddTask(props) {
   const all = await querySortedTasks()
   const newTask = TaskRecord(props)
   const updateSortIdx = t => {
     return compose(
       mapIndexed((task, idx) => replaceSortIdxOP(task, idx)(t)),
-      tapLog,
-      insert(newTask.sortIdx, newTask),
+      tap(map(tapLog)),
+      insert(getSortIdx(newTask), newTask),
+      Array.from,
     )(all)
   }
   return updateStore(t => [
