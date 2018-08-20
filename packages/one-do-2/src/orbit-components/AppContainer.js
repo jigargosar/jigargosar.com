@@ -68,11 +68,12 @@ class Tasks extends Component {
   }
 }
 
-function AsciiCheck({checked}) {
-  return <div className={cn('code')}>{checked ? `[x]` : `[ ]`}</div>
+class AsciiCheck extends Component {
+  render() {
+    const {checked} = this.props
+    return <div className={cn('code')}>{checked ? `[x]` : `[ ]`}</div>
+  }
 }
-
-AsciiCheck.propTypes = {task: PropTypes.any}
 
 @observer
 class Task extends Component {
