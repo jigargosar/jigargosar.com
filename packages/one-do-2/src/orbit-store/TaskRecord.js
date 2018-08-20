@@ -1,8 +1,7 @@
 import {fWord} from '../lib/fake'
 import {asc} from './little-orbit'
-import {getStore, queryTasksExpr} from './Store'
+import {findRecordsOfType, getStore, queryTasksExpr} from './Store'
 import {compose, isNil, map, tap} from '../lib/ramda'
-import {validate} from '../lib/little-ramda'
 
 export function TaskRecord({sortIdx = 0} = {}) {
   return {
@@ -22,11 +21,6 @@ export function addNewTask() {
 
 function findAllTask() {
   return findRecordsOfType('task')
-}
-
-function findRecordsOfType(type) {
-  validate('S', [type])
-  return getStore().query(q => q.findRecords(type))
 }
 
 export async function removeAllTasks() {

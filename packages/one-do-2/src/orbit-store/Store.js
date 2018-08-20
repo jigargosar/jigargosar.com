@@ -3,6 +3,7 @@ import {schema} from './schema'
 import {identity, isNil, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
+import {validate} from '../lib/little-ramda'
 
 const logPrefix = ['[store]']
 // const log = partial(console.log.bind(console), logPrefix)
@@ -94,4 +95,9 @@ export function queryTasksExpr({sort = []}) {
       limit: Number.MAX_SAFE_INTEGER,
     },
   })
+}
+
+export function findRecordsOfType(type) {
+  validate('S', [type])
+  return getStore().query(q => q.findRecords(type))
 }
