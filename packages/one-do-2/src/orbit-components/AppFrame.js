@@ -12,7 +12,7 @@ import {invoker} from '../lib/ramda'
 @observer
 class AppFrame extends Component {
   @observable
-  tasksLQ = fromPromise(
+  tasksLQP = fromPromise(
     storeOP.then(
       invoker(1, 'lazyQuery')({
         q: q => q.findRecords('task'),
@@ -23,7 +23,7 @@ class AppFrame extends Component {
 
   refreshTasksLQ() {
     console.log('[Entering] AppFrame.refreshTasksLQ')
-    this.tasksLQ.then(invoker(0, 'refresh'))
+    this.tasksLQP.then(invoker(0, 'refresh'))
   }
 
   render() {
@@ -32,7 +32,7 @@ class AppFrame extends Component {
         {/*<ObsPromise label={'storeOP'} p={this.storeOP} />*/}
         {/*<ObsPromise label={'tasksOP'} p={this.tasksOP} />*/}
         <div>
-          {this.tasksLQ.case({
+          {this.tasksLQP.case({
             fulfilled: tasks => {
               const store = storeOP.value
               return (
