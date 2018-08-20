@@ -83,20 +83,6 @@ export function getStore() {
 
 export default getStore()
 
-export function queryTasksExpr({sort = []}) {
-  return getStore().liveQueryExpr({
-    op: 'findRecords',
-    type: 'task',
-    sort: sort,
-    filter: [],
-    page: {
-      kind: 'offsetLimit',
-      offset: 0,
-      limit: Number.MAX_SAFE_INTEGER,
-    },
-  })
-}
-
 export function findRecordsOfType(type) {
   validate('S', [type])
   return getStore().query(q => q.findRecords(type))

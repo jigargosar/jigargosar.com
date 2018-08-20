@@ -1,6 +1,6 @@
 import {fWord} from '../lib/fake'
 import {asc} from './little-orbit'
-import {findRecordsOfType, getStore, queryTasksExpr} from './Store'
+import {findRecordsOfType, getStore} from './Store'
 import {compose, isNil, map, tap} from '../lib/ramda'
 
 export function TaskRecord({sortIdx = 0} = {}) {
@@ -51,6 +51,21 @@ export function addNewTaskAt(idx) {
 }
 
 let sortedTasks = null
+
+export function queryTasksExpr({sort = []}) {
+  return getStore().liveQueryExpr({
+    op: 'findRecords',
+    type: 'task',
+    sort: sort,
+    filter: [],
+    page: {
+      kind: 'offsetLimit',
+      offset: 0,
+      limit: Number.MAX_SAFE_INTEGER,
+    },
+  })
+}
+
 export function getSortedTasks() {
   if (isNil(sortedTasks)) {
     sortedTasks = queryTasksExpr({
