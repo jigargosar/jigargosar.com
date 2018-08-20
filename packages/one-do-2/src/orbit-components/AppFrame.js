@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
@@ -35,10 +36,7 @@ class AppFrame extends Component {
           {this.tasksLQ.case({
             fulfilled: tasks => {
               return (
-                <TasksPage
-                  store={this.storeOP.value}
-                  tasks={tasks.current()}
-                />
+                <TasksPage store={this.storeOP} tasks={tasks.current()} />
               )
             },
           })}
@@ -52,8 +50,14 @@ export default AppFrame
 
 @observer
 class TasksPage extends Component {
+  static propTypes = {
+    store: PropTypes.object.isRequired,
+    tasks: PropTypes.array.isRequired,
+  }
+
   render() {
     const {tasks, store} = this.props
+    debugger
     return (
       <div>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
