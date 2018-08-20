@@ -46,6 +46,12 @@ export async function addNewTaskAt(idx) {
   ])
 }
 
+export function toggleDone(task) {
+  return getStore().update(t =>
+    t.replaceAttribute(task, 'isDone', !task.isDone),
+  )
+}
+
 export function queryTasksExpr({sort = []}) {
   return getStore().liveQueryExpr({
     op: 'findRecords',
