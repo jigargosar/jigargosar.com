@@ -22,7 +22,7 @@ export {cn}
 
 export const EventListener = ReactEventListener
 
-export {Fr, RC, observer, Observer, inject, isHotKey}
+export {Fr, RC, isHotKey}
 
 export const isAnyHotKey = R.compose(
   R.anyPass,

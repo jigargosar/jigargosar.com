@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
 import '../stores/init-mobx'
 import React, {Component} from 'react'
-import {cn, observer, renderKeyedById} from '../lib/little-react'
+import {cn, renderKeyedById} from '../lib/little-react'
 import {observable} from '../lib/mobx'
 import {store} from '../orbit-store'
 import {addNewTask} from '../orbit-store/createStore'
-import {Provider} from '../lib/mobx-react'
+import {inject, observer, Provider} from '../lib/mobx-react'
 
 @observer
 class AppContainer extends Component {
@@ -19,6 +19,7 @@ class AppContainer extends Component {
 }
 export default AppContainer
 
+@inject('store')
 @observer
 class AppContent extends Component {
   @observable

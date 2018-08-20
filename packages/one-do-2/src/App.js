@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import AppContainer from './orbit-components/AppContainer'
-import {observer} from './lib/little-react'
 import {hotDispose} from './lib/hot'
+import {observer} from './lib/mobx-react'
 
 @observer
 class App extends Component {
