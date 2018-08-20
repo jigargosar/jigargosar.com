@@ -69,4 +69,4 @@ function sortedTasksQuery() {
   }
 }
 
-export const sortedTasksLazyObs = getStore().liveQuery(sortedTasksQuery())
+export const sortedTasksLazyObs = getStore().liveQuery(sortedTasksQuery)
