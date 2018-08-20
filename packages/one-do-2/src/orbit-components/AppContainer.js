@@ -42,11 +42,12 @@ async function startSimulation({speed = 1000}) {
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    this.props.addDisposer(() => {
-      const pQueue = PQueue({concurrency: 1})
-      pQueue.addAll(repeat(() => startSimulation({speed: 1000}), 10))
-      return () => pQueue.clear()
-    })
+    const pQueue = PQueue({concurrency: 1})
+    pQueue.addAll(repeat(() => startSimulation({speed: 1000}), 10))
+
+    this.props.addDisposer(() => pQueue.clear())
+
+    // aa
   }
 
   render() {
