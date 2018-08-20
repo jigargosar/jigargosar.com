@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 import {observer} from 'mobx-react'
 import React, {Component, Fragment} from 'react'
 import {schema} from '../orbit-store/schema'
@@ -16,7 +18,6 @@ import {
 } from '@material-ui/core'
 import {recAttr} from '../orbit-store/little-orbit'
 import {computed} from '../lib/mobx'
-/*eslint-disable*/
 
 /*eslint-enable*/
 
