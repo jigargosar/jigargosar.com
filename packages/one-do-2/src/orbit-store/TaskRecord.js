@@ -1,8 +1,8 @@
 import {fWord} from '../lib/fake'
-import {asc} from './little-orbit'
 import {findRecordsOfType, getStore} from './Store'
 import {isNil, map, not} from '../lib/ramda'
 import {overPath} from '../lib/little-ramda'
+import {asc} from './little-orbit'
 
 export function TaskRecord({sortIdx = 0} = {}) {
   return {
@@ -55,26 +55,20 @@ export function replaceRecord(record) {
   return getStore().update(t => t.replaceRecord(record))
 }
 
-export function queryTasksExpr({sort = []}) {
-  return getStore().liveQueryExpr({
-    op: 'findRecords',
-    type: 'task',
-    sort: sort,
-    filter: [],
-    page: {
-      kind: 'offsetLimit',
-      offset: 0,
-      limit: Number.MAX_SAFE_INTEGER,
-    },
-  })
-}
-
 let sortedTasks = null
 
 export function getSortedTasks() {
   if (isNil(sortedTasks)) {
-    sortedTasks = queryTasksExpr({
-      sort: [asc('sortIdx') /*dsc('createdAt')*/],
+    sortedTasks = getStore().liveQuery({
+      op: 'findRecords',
+      type: 'task',
+      sort: [asc('sortIdx')],
+      filter: [],
+      page: {
+        kind: 'offsetLimit',
+        offset: 0,
+        limit: Number.MAX_SAFE_INTEGER,
+      },
     })
   }
   return sortedTasks

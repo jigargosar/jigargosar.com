@@ -24,25 +24,19 @@ function createStore() {
 
   const transforms = createTransformObservable(store)
 
-  function lazyQuery({q, o, id, i: ini = []}) {
+  function lazyQuery(query) {
     return lazyObservable(
       sink =>
         store
-          .query(q, o, id)
+          .query(query)
           .then(sink)
           .catch(console.error),
-      ini,
+      [],
     )
   }
 
-  function liveQuery(options) {
-    const q = lazyQuery(options)
-    disposers.reaction(() => transforms.current(), () => q.refresh())
-    return q
-  }
-
-  function liveQueryExpr(expr) {
-    const q = lazyQuery({q: expr})
+  function liveQuery(query) {
+    const q = lazyQuery(query)
     disposers.reaction(() => transforms.current(), () => q.refresh())
     return q
   }
@@ -52,7 +46,6 @@ function createStore() {
     transforms,
     lazyQuery,
     liveQuery,
-    liveQueryExpr,
   }
 
   debug('[Exiting] createStore', storeWrapper)
