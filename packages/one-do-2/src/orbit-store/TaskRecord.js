@@ -33,7 +33,7 @@ function replaceSortIdxOP(task, idx) {
   return replaceAttributeOP(task, 'sortIdx', idx)
 }
 
-export async function addNewTask(props) {
+export async function updateAddTask(props) {
   const all = await querySortedTasks()
   const newTask = TaskRecord(props)
   const updateSortIdx = t => {

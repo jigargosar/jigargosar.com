@@ -5,7 +5,7 @@ import {cn, renderKeyedById} from '../lib/little-react'
 import {observer, Provider} from '../lib/mobx-react'
 import store from '../orbit-store/Store'
 import {
-  addNewTask,
+  updateAddTask,
   removeAllTasks,
   sortedTasksLazyObs,
   updateIsDone,
@@ -17,15 +17,15 @@ import {disposable} from '../lib/disposable'
 async function startSimulation() {
   await removeAllTasks()
 
-  const [tasks1] = await addNewTask()
-  const [tasks2] = await addNewTask()
+  const [tasks1] = await updateAddTask()
+  const [tasks2] = await updateAddTask()
   await updateIsDone(tasks2, false)
 
   await delay(1000)
   await updateIsDone(tasks1, true)
 
   await delay(1000)
-  const [tasks3] = await addNewTask()
+  const [tasks3] = await updateAddTask()
 
   await delay(1000)
   await updateIsDone(tasks3, true)
@@ -62,7 +62,7 @@ class AppContent extends Component {
       <div className={cn('vh-100 overflow-scroll')}>
         <div>
           <TasksPage
-            handleAddTask={addNewTask}
+            handleAddTask={updateAddTask}
             tasks={sortedTasksLazyObs.current()}
           />
         </div>
