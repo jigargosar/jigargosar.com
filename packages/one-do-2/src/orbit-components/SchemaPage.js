@@ -5,7 +5,7 @@ import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
-import {compose, join, keys, map, toPairs} from '../lib/ramda'
+import {compose, join, keys, map, take, toPairs} from '../lib/ramda'
 import {liveQuery} from '../orbit-store/Store'
 import {
   Table,
@@ -59,7 +59,7 @@ class Model extends Component {
           )),
           toPairs,
         )(attributes)}
-        <Table>
+        <Table padding={'dense'}>
           <TableHead>
             <TableRow>
               <TableCell>{`id`}</TableCell>
@@ -77,7 +77,7 @@ class Model extends Component {
             {map(r => (
               <Fragment key={r.id}>
                 <TableRow>
-                  <TableCell>{r.id}</TableCell>
+                  <TableCell>{take(10)(r.id)}</TableCell>
                   {compose(
                     map(([name, attribute]) => {
                       const val = recAttr(name)(r)
