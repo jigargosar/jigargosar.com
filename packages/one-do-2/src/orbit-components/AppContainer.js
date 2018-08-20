@@ -43,7 +43,7 @@ function getSimulationTasks({speed = 1000}) {
 function startSimulation() {
   const pQueue = PQueue({concurrency: 1})
   pQueue.addAll(
-    compose(flatten, repeat(getSimulationTasks({speed: 1000})))(100),
+    compose(flatten, repeat(getSimulationTasks({speed: 1500})))(100),
   )
   return () => pQueue.clear()
 }
