@@ -51,7 +51,7 @@ function startSimulation() {
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    this.props.addDisposer(startSimulation)
+    this.props.addDisposer(startSimulation())
 
     // aaa
   }
