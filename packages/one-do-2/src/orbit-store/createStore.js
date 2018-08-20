@@ -3,10 +3,13 @@ import {schema} from './schema'
 import {TaskRecord} from './TaskRecord'
 import {identity, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
+import {Disposers} from '../lib/little-mobx'
 
 const logPrefix = ['[store]']
 // const log = partial(console.log.bind(console), logPrefix)
 const debug = partial(console.debug.bind(console), logPrefix)
+
+const disposers = Disposers(module)
 
 export function createStore() {
   debug('[Entering] createStore')
@@ -14,7 +17,7 @@ export function createStore() {
 
   const transforms = createTransformObservable(store)
 
-  function lazyQuery({q, o, id, i: ini}) {
+  function createLazyQuery({q, o, id, i: ini}) {
     return lazyObservable(
       sink =>
         store
@@ -25,16 +28,17 @@ export function createStore() {
     )
   }
 
-  function liveQuery({q, o, id, i: ini}) {
-    const liveQuery = lazyObservable(
-      sink =>
-        store
-          .query(q, o, id)
-          .then(sink)
-          .catch(console.error),
-      ini,
+  function liveQuery(options) {
+    const lazyQuery = createLazyQuery(options)
+
+    disposers.reaction(
+      () => transforms,
+      () => {
+        lazyQuery.refresh()
+      },
     )
-    return liveQuery
+
+    return lazyQuery
   }
 
   const storeWrapper = {
@@ -42,7 +46,7 @@ export function createStore() {
     query: store.query.bind(store),
     listeners: store.listeners.bind(store),
     transforms,
-    lazyQuery,
+    lazyQuery: createLazyQuery,
     liveQuery,
     update: store.update.bind(store),
   }
