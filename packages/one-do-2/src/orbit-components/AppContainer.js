@@ -11,29 +11,30 @@ import {
   toggleDone,
 } from '../orbit-store/TaskRecord'
 import {delay, PQueue} from '../lib/p-fun'
+import {disposable} from '../lib/disposable'
 
-async function startSimulation() {
-  const pQueue = PQueue({concurrency: 1})
+async function startSimulation(pQueue) {
   await pQueue.addAll([removeAllTasks, addNewTask])
-  const [t1, t2] = await pQueue.add(addNewTask)
-  console.log(`t1,t2`, t1, t2)
+  const tasks2 = await pQueue.add(addNewTask)
 
   await delay(1000)
-  pQueue.add(() => toggleDone(t1))
+  pQueue.add(() => toggleDone(tasks2[0]))
 
   await delay(1000)
-  const t3 = await pQueue.add(addNewTask)
-  console.log(`t3`, t3)
+  const tasks3 = await pQueue.add(addNewTask)
 
   await delay(1000)
-  pQueue.add(() => toggleDone(t2))
+  pQueue.add(() => toggleDone(tasks3[2]))
   //a
 }
 
+@disposable(module)
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    startSimulation().catch(console.error)
+    const pQueue = PQueue({concurrency: 1})
+    startSimulation(pQueue).catch(console.error)
+    this.props.addDisposer(() => pQueue.clear())
   }
 
   render() {
