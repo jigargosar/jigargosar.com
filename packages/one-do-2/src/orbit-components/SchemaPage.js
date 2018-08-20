@@ -35,12 +35,11 @@ class Model extends Component {
       <div className={cn('pv1')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
         {compose(
-          intersperse(','),
           map(([name, attribute]) => (
             <Fragment key={name}>
               <span className={cn('ph1')}>
                 <span>{`${name}: `}</span>
-                <span>{`${attribute.type}`}</span>
+                <span>{`${attribute.type},`}</span>
               </span>
             </Fragment>
           )),
