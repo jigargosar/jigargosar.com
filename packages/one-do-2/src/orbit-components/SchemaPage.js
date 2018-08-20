@@ -38,6 +38,10 @@ export class SchemaPage extends Component {
   }
 }
 
+function isAttributeNumeric(attribute) {
+  return attribute.type === 'number'
+}
+
 @observer
 class Model extends Component {
   query = liveQuery(q => q.findRecords(this.props.type))
@@ -66,7 +70,9 @@ class Model extends Component {
               {compose(
                 map(([name, attribute]) => (
                   <Fragment key={name}>
-                    <TableCell>{`${name}: ${attribute.type}`}</TableCell>
+                    <TableCell numeric={isAttributeNumeric(attribute)}>
+                      {`${name}: ${attribute.type}`}
+                    </TableCell>
                   </Fragment>
                 )),
                 toPairs,
@@ -84,8 +90,10 @@ class Model extends Component {
                       return (
                         <Fragment key={name}>
                           <TableCell
-                            numeric={attribute.type === 'number'}
-                          >{`${val}`}</TableCell>
+                            numeric={isAttributeNumeric(attribute)}
+                          >
+                            {`${val}`}
+                          </TableCell>
                         </Fragment>
                       )
                     }),
