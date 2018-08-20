@@ -17,17 +17,10 @@ async function startSimulation(pQueue) {
   const initialRes = await pQueue.addAll([removeAllTasks, addNewTask])
   console.log(`initialRes`, initialRes)
 
-  const [tasks2, ...rest] = await pQueue.add(async () => {
-    const newTask = await addNewTask()
-    console.log(`newTask`, newTask)
-    return newTask
-  })
+  const [tasks2] = await addNewTask()
 
-  console.log(`tasks2`, tasks2)
-  console.log(`rest`, ...rest)
-
-  await pQueue.add(() => delay(1000))
-  await pQueue.add(() => toggleDone(tasks2))
+  await delay(1000)
+  await toggleDone(tasks2)
 
   // await delay(1000)
   // const tasks3 = await pQueue.add(addNewTask)
