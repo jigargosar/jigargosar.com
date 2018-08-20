@@ -5,6 +5,7 @@ import {cn, renderKeyedById} from '../lib/little-react'
 import {observer, Provider} from '../lib/mobx-react'
 import {
   getSortedTasks,
+  removeAllTasks,
   updateAddTask,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
@@ -19,7 +20,12 @@ class AppContainer extends Component {
     if (false && module.hot) {
       this.props.addDisposer(startSimulation())
     } else {
-      pSeries([updateAddTask, updateAddTask, updateAddTask])
+      pSeries([
+        removeAllTasks,
+        updateAddTask,
+        updateAddTask,
+        updateAddTask,
+      ])
     }
   }
 
