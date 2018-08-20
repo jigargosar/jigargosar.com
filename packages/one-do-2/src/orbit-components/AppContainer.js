@@ -27,7 +27,11 @@ class AppContent extends Component {
     q: {
       op: 'findRecords',
       type: 'task',
-      sort: [],
+      sort: [
+        //
+        {kind: 'attribute', attribute: 'sortIdx', order: 'ascending'},
+        {kind: 'attribute', attribute: 'createdAt', order: 'descending'},
+      ],
       filter: [],
       page: {
         kind: 'offsetLimit',
