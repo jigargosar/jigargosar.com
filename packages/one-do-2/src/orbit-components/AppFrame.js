@@ -14,7 +14,7 @@ class AppFrame extends Component {
   @observable
   tasksLQ = fromPromise(
     storeOP.then(
-      invoker(1, 'observableQuery')({
+      invoker(1, 'lazyQuery')({
         q: q => q.findRecords('task'),
         i: [],
       }),
