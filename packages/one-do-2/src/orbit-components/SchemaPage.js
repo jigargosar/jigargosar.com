@@ -5,7 +5,7 @@ import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
-import {toPairs, join, keys, map} from '../lib/ramda'
+import {toPairs, join, keys, map, compose} from '../lib/ramda'
 
 @observer
 export class SchemaPage extends Component {
@@ -32,6 +32,7 @@ class Model extends Component {
     return (
       <div className={cn('pv1')}>
         {type}
+        {compose(join(', '), map(([name]) => name), toPairs)(attributes)}
         {map(([name, attribute]) => (
           <Attribute
             key={name}
