@@ -18,10 +18,9 @@ class AppContainer extends Component {
     pEachSeries(
       [
         //
-        removeAllTasks(),
-        addNewTask(),
-        addNewTask(),
-        addNewTask(),
+        removeAllTasks,
+        addNewTask,
+        addNewTask,
       ],
       identity,
     ).catch(console.error)
