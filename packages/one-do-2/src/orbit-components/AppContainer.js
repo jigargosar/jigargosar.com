@@ -15,7 +15,7 @@ import {startSimulation} from '../orbit-store/Simulation'
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    if (module.hot) {
+    if (false && module.hot) {
       this.props.addDisposer(startSimulation())
     }
   }
