@@ -11,7 +11,6 @@ import {invoker} from '../lib/ramda'
 @observer
 class AppFrame extends Component {
   @observable storeOP = storeOP
-  @observable tasksOP
   @observable
   tasksLQ = fromPromise(
     storeOP.then(
@@ -30,10 +29,6 @@ class AppFrame extends Component {
   fetchTasks() {
     console.log('[Entering] AppFrame.fetchTasks')
     this.tasksLQ.then(invoker(0, 'refresh'))
-    runInAction(
-      'fetchTasks',
-      () => (this.tasksOP = fromPromise(storeOP.then(findTasks))),
-    )
   }
 
   componentDidMount() {
@@ -59,11 +54,6 @@ class AppFrame extends Component {
                 />
               )
             },
-          })}
-          {this.tasksOP.case({
-            fulfilled: tasks => (
-              <TasksPage store={this.storeOP.value} tasks={tasks} />
-            ),
           })}
         </div>
       </div>
