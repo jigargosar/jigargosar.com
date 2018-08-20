@@ -1,6 +1,6 @@
 import {map, pick} from 'ramda'
 import {prettyStringifySafe, validate} from '../lib/little-ramda'
-import {compose, tap} from '../lib/ramda'
+import {_path, compose, tap} from '../lib/ramda'
 
 const flattenRecord = ({attributes, ...rest}) => ({
   ...rest,
@@ -47,3 +47,5 @@ export const recordToRecordIdentity = compose(
   tap(validateRecordIdentity),
   pick(['id', 'type']),
 )
+
+export const recAttr = name => _path(['attributes', name])
