@@ -45,7 +45,6 @@ class Model extends Component {
     const {type} = this.props
     const modelDesc = schema.getModel(type)
     const {attributes} = modelDesc
-    const attributeNames = keys(attributes)
     return (
       <div className={cn('pv1')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
