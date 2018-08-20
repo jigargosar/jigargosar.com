@@ -23,7 +23,7 @@ export function TaskRecord({sortIdx = 0} = {}) {
 }
 
 export async function addNewTask(props = {}) {
-  const all = await queryAllTasks()
+  const all = await querySortedTasks()
   const newTask = TaskRecord(props)
   const updateSortIdx = t => {
     return compose(
