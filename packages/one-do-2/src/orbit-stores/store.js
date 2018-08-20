@@ -90,6 +90,4 @@ async function createStore() {
   return storeWrapper
 }
 
-export const findTasks = store => store.query(q => q.findRecords('task'))
-
 export const storeOP = fromPromise(createStore())
