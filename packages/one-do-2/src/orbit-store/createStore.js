@@ -46,7 +46,7 @@ export function createStore() {
     query: store.query.bind(store),
     listeners: store.listeners.bind(store),
     transforms,
-    lazyQuery: lazyQuery,
+    lazyQuery,
     liveQuery,
     update: store.update.bind(store),
   }
