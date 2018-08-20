@@ -11,27 +11,20 @@ import {
   toggleDone,
 } from '../orbit-store/TaskRecord'
 import {delay, PQueue} from '../lib/p-fun'
-import {head, last} from '../lib/ramda'
-
-function firstTask() {
-  return head(sortedTasksLazyObs.current())
-}
-
-function lastTask() {
-  return last(sortedTasksLazyObs.current())
-}
+import {head} from '../lib/ramda'
 
 async function startSimulation() {
   const pQueue = PQueue({concurrency: 1})
   await pQueue.addAll([removeAllTasks, addNewTask, addNewTask])
   await delay(1000)
-  pQueue.add(() => toggleDone(firstTask()))
+  const tasks = sortedTasksLazyObs.current()
+  pQueue.add(() => toggleDone(head(tasks)))
 
   await delay(1000)
   pQueue.add(addNewTask)
 
   await delay(1000)
-  pQueue.add(() => toggleDone(firstTask()))
+  pQueue.add(() => toggleDone(head(tasks)))
   //a
 }
 
