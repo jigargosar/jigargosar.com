@@ -11,8 +11,7 @@ import {
 } from '../orbit-store/TaskRecord'
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
-import {buttonStyle} from '../lib/little-tachyons-style'
-import {AsciiCheck} from '../lib/AsciiCheck'
+import {AsciiCheckButton} from '../lib/AsciiCheckButton'
 
 @disposable(module)
 @observer
@@ -65,23 +64,6 @@ class TasksPage extends Component {
 class Tasks extends Component {
   render() {
     return renderKeyedById(Task, 'task', this.props.tasks)
-  }
-}
-
-@observer
-class AsciiCheckButton extends Component {
-  render() {
-    const {
-      layout = 'ph3',
-      checked = false,
-      comp: ButtonComponent = 'button',
-      ...other
-    } = this.props
-    return (
-      <ButtonComponent className={cn(layout, buttonStyle)} {...other}>
-        <AsciiCheck checked={checked} />
-      </ButtonComponent>
-    )
   }
 }
 
