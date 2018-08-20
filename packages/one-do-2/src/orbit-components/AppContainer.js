@@ -97,12 +97,6 @@ class Task extends Component {
             checked={TR.isDone(task)}
             onClick={() => updateToggleDone(task)}
           />
-          <button
-            className={cn('ph3', buttonStyle)}
-            onClick={() => updateToggleDone(task)}
-          >
-            <AsciiCheck checked={TR.isDone(task)} />
-          </button>
           <div className={cn('flex-auto')}>{TR.title(task)}</div>
         </div>
         <div
