@@ -52,7 +52,7 @@ class Model extends Component {
     const modelDesc = schema.getModel(type)
     const {attributes} = modelDesc
     return (
-      <div className={cn('pb2')}>
+      <div className={cn('pb3')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
         <Table
           padding={'dense'}
