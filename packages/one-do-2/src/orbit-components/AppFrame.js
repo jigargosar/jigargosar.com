@@ -3,8 +3,9 @@ import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
 import {disposable} from '../lib/disposable'
-import {addNewTask, store} from '../orbit-stores/store'
 import {observable} from '../lib/mobx'
+import {store} from '../orbit-store'
+import {addNewTask} from '../orbit-store/createStore'
 
 @disposable(module)
 @observer
