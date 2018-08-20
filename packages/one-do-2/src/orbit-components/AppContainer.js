@@ -20,13 +20,17 @@ class AppContainer extends Component {
 }
 export default AppContainer
 
-function sortSpecifier(attribute, order) {
-  return {kind: 'attribute', attribute, order}
-}
+export const sortSpecifier = (attribute, order) => ({
+  kind: 'attribute',
+  attribute,
+  order,
+})
 
 const ASC = 'ascending'
 
 const DSC = 'descending'
+export const sortASC = attribute => sortSpecifier(attribute, ASC)
+export const sortDSC = attribute => sortSpecifier(attribute, DSC)
 
 @observer
 class AppContent extends Component {
@@ -34,8 +38,8 @@ class AppContent extends Component {
   tasksQuery = queryTasksExpr({
     sort: [
       //
-      sortSpecifier('sortIdx', ASC),
-      sortSpecifier('createdAt', DSC),
+      sortASC('sortIdx'),
+      sortDSC('createdAt'),
     ],
   })
 
