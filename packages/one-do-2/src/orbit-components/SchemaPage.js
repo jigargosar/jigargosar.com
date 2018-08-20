@@ -32,7 +32,11 @@ class Model extends Component {
     return (
       <div className={cn('pv1')}>
         <div className={cn('f4')}>{type}</div>
-        {compose(join(', '), map(([name]) => name), toPairs)(attributes)}
+        {compose(
+          join(', '),
+          map(([name, attribute]) => `${name}:${attribute.type}`),
+          toPairs,
+        )(attributes)}
         {false &&
           map(([name, attribute]) => (
             <Attribute
