@@ -72,7 +72,7 @@ export function queryRecordsOfType(type) {
   return store.query(q => q.findRecords(type))
 }
 
-export const store = createStore()
+const store = createStore()
 
 export default store
 
