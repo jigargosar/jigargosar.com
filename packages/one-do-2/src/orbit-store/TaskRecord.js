@@ -22,8 +22,19 @@ export function TaskRecord({sortIdx = 0} = {}) {
   }
 }
 
-export function addNewTask() {
-  return addNewTaskAt(0)
+export async function addNewTask(props = {}) {
+  const all = await queryAllTasks()
+  const updateSortIdx = t => {
+    return all.map((task, idx) => {
+      return t.replaceAttribute(task, 'sortIdx', idx + 1)
+    })
+  }
+
+  return updateStore(t => [
+    //
+    t.addRecord(TaskRecord(props)),
+    ...updateSortIdx(t),
+  ])
 }
 
 function queryAllTasks() {
@@ -35,21 +46,6 @@ export async function removeAllTasks() {
 
   const removeRecords = t => map(record => t.removeRecord(record))(all)
   return updateStore(removeRecords)
-}
-
-export async function addNewTaskAt(idx) {
-  const all = await queryAllTasks()
-  const updateSortIdx = t => {
-    return all.map((task, idx) => {
-      return t.replaceAttribute(task, 'sortIdx', idx + 1)
-    })
-  }
-
-  return updateStore(t => [
-    //
-    t.addRecord(TaskRecord({sortIdx: 0})),
-    ...updateSortIdx(t),
-  ])
 }
 
 export function toggleDone(task) {
