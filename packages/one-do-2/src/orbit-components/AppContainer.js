@@ -2,12 +2,13 @@ import PropTypes from 'prop-types'
 import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
-import {inject, observer, Provider} from '../lib/mobx-react'
+import {observer, Provider} from '../lib/mobx-react'
 import store from '../orbit-store/Store'
 import {
   addNewTask,
   getSortedTasks,
   removeAllTasks,
+  toggleDone,
 } from '../orbit-store/TaskRecord'
 import {pEachSeries} from '../lib/p-fun'
 import {call} from '../lib/ramda'
@@ -85,18 +86,19 @@ class Tasks extends Component {
   }
 }
 
-@inject((s, {task}) => ({...task.attributes, ...task}))
 @observer
 class Task extends Component {
   render() {
-    // const {task} = this.props
-    // const {title, isDone, sortIdx} = task.attributes
-    // const id = task.id
-    const {title, isDone, sortIdx, id} = this.props
+    const {task} = this.props
+    const {title, isDone, sortIdx} = task.attributes
+    const id = task.id
     return (
       <div className={cn('pv1')}>
         <div className={cn('frc lh-copy')}>
-          <div className={cn('ph3', 'code pointer')}>
+          <div
+            className={cn('ph3', 'code pointer')}
+            onClick={() => toggleDone({task})}
+          >
             {!isDone ? `[x]` : `[ ]`}
           </div>
           <div className={cn('flex-auto')}>{title}</div>
