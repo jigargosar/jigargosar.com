@@ -32,7 +32,7 @@ class AppContent extends Component {
     return (
       <div className={cn('vh-100 overflow-scroll')}>
         <div>
-          <TasksPage tasks={getSortedTasks()} />
+          <TasksPage />
         </div>
       </div>
     )
@@ -41,12 +41,8 @@ class AppContent extends Component {
 
 @observer
 class TasksPage extends Component {
-  static propTypes = {
-    tasks: PropTypes.array.isRequired,
-  }
-
   render() {
-    const {tasks} = this.props
+    const tasks = getSortedTasks()
     return (
       <div>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
