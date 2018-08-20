@@ -13,7 +13,8 @@ import {
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    removeAllTasks().then(addNewTask)
+    // removeAllTasks().then(addNewTask)
+    addNewTask()
   }
 
   render() {
