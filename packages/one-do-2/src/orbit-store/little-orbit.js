@@ -1,4 +1,4 @@
-import {map, pick} from 'ramda'
+import {curry, map, pick} from 'ramda'
 import {prettyStringifySafe, validate} from '../lib/little-ramda'
 import {_path, compose, tap} from '../lib/ramda'
 
@@ -49,3 +49,4 @@ export const recordToRecordIdentity = compose(
 )
 
 export const recAttr = name => _path(['attributes', name])
+export const removeRecordOP = curry((record, t) => t.removeRecord(record))
