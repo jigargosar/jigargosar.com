@@ -31,8 +31,9 @@ export function replaceRecordOP(record) {
   return t => t.replaceRecord(record)
 }
 
-export function replaceAttributeOP(record, name, value) {
-  return t => t.replaceRecord(record, name, value)
+export function replaceAttributeOP(recordOrRId, name, value) {
+  return t =>
+    t.replaceRecord(recordToRecordIdentity(recordOrRId), name, value)
 }
 
 export const validateRecordIdentity = ({id, type}) => {
