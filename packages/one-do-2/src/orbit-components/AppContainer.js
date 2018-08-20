@@ -11,7 +11,7 @@ import {
   updateIsDone,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
-import {delay, PQueue, pSeries} from '../lib/p-fun'
+import {delay, PQueue} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
 import {repeat} from '../lib/ramda'
 
