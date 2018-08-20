@@ -17,3 +17,12 @@ export const tapLogRecords = compose(tap, logRecords)
 
 export const findRecords = type => store =>
   store.query(q => q.findRecords(type))
+
+const sortSpecifier = (attribute, order) => ({
+  kind: 'attribute',
+  attribute,
+  order,
+})
+
+export const asc = attribute => sortSpecifier(attribute, 'ascending')
+export const dsc = attribute => sortSpecifier(attribute, 'descending')

@@ -5,6 +5,7 @@ import {cn, renderKeyedById} from '../lib/little-react'
 import {observable} from '../lib/mobx'
 import {observer, Provider} from '../lib/mobx-react'
 import store, {addNewTask, queryTasksExpr} from '../orbit-store/Store'
+import {asc, dsc} from '../orbit-store/little-orbit'
 
 @observer
 class AppContainer extends Component {
@@ -20,27 +21,11 @@ class AppContainer extends Component {
 }
 export default AppContainer
 
-export const sortSpecifier = (attribute, order) => ({
-  kind: 'attribute',
-  attribute,
-  order,
-})
-
-const ASC = 'ascending'
-
-const DSC = 'descending'
-export const sortASC = attribute => sortSpecifier(attribute, ASC)
-export const sortDSC = attribute => sortSpecifier(attribute, DSC)
-
 @observer
 class AppContent extends Component {
   @observable
   tasksQuery = queryTasksExpr({
-    sort: [
-      //
-      sortASC('sortIdx'),
-      sortDSC('createdAt'),
-    ],
+    sort: [asc('sortIdx'), dsc('createdAt')],
   })
 
   render() {
