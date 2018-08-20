@@ -10,13 +10,18 @@ export function querySortedTasks() {
   return query(sortedTasksQuery)
 }
 
-export function TaskRecord({sortIdx = 0} = {}) {
+export function TaskRecord({
+  title = fWord(),
+  createdAt = Date.now(),
+  isDone = false,
+  sortIdx = 0,
+} = {}) {
   return {
     type: 'task',
     attributes: {
-      title: fWord(),
-      createdAt: Date.now(),
-      isDone: false,
+      title,
+      createdAt,
+      isDone,
       sortIdx,
     },
   }
