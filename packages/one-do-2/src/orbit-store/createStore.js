@@ -26,7 +26,7 @@ export function createStore() {
   }
 
   function liveQuery({q, o, id, i: ini}) {
-    return lazyObservable(
+    const liveQuery = lazyObservable(
       sink =>
         store
           .query(q, o, id)
@@ -34,6 +34,7 @@ export function createStore() {
           .catch(console.error),
       ini,
     )
+    return liveQuery
   }
 
   const storeWrapper = {
@@ -42,6 +43,7 @@ export function createStore() {
     listeners: store.listeners.bind(store),
     transforms,
     lazyQuery,
+    liveQuery,
     update: store.update.bind(store),
   }
 
