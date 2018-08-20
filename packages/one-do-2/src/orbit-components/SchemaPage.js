@@ -31,7 +31,7 @@ export class SchemaPage extends Component {
     return (
       <Page>
         <PageTitle>Schema</PageTitle>
-        {false && (
+        {(
           <div className={cn('pa3 pt0')}>{join(', ')(modelTypes)}</div>
         )}
         <div className={cn('ph3')}>
