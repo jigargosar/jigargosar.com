@@ -1,6 +1,6 @@
 import {fWord} from '../lib/fake'
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
-import {compose, head, insert, map} from '../lib/ramda'
+import {compose, curry, head, insert, map} from '../lib/ramda'
 import {mapIndexed} from '../lib/little-ramda'
 import {asc, dsc, recAttr, replaceAttributeOP} from './little-orbit'
 
@@ -63,10 +63,13 @@ function queryAllTasks() {
   return queryRecordsOfType('task')
 }
 
+const removeRecordOP = curry((record, t) => {
+  return t.removeRecord(record)
+})
 export async function removeAllTasks() {
   const all = await queryAllTasks()
 
-  const removeRecords = t => map(record => t.removeRecord(record))(all)
+  const removeRecords = t => map(removeRecordOP(_.__, t))(all)
   return updateStore(removeRecords)
 }
 
