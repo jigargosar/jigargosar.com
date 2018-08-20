@@ -13,6 +13,7 @@ import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
 import {AsciiCheckButton} from '../lib/AsciiCheckButton'
 import {take} from '../lib/ramda'
+import {PageTitle} from './PageTitle'
 
 @disposable(module)
 @observer
@@ -41,13 +42,6 @@ class AppContent extends Component {
         </div>
       </div>
     )
-  }
-}
-
-@observer
-class PageTitle extends Component {
-  render() {
-    return <div className={cn('pa3 f3')}>{this.props.children}</div>
   }
 }
 
