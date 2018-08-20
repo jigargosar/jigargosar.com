@@ -46,9 +46,11 @@ class Model extends Component {
               name={name}
             />
           ))(toPairs(attributes))}
-        <pre>
-          <code>{prettyStringifySafe(modelDesc)}</code>
-        </pre>
+        {false && (
+          <pre>
+            <code>{prettyStringifySafe(modelDesc)}</code>
+          </pre>
+        )}
       </div>
     )
   }
