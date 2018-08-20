@@ -61,7 +61,20 @@ class Model extends Component {
           )),
           toPairs,
         )(attributes)}
-        <Table />
+        <Table>
+          <TableHead>
+            <TableRow>
+              {compose(
+                map(([name, attribute]) => (
+                  <Fragment key={name}>
+                    <TableCell>{`${name}: ${attribute.type}`}</TableCell>
+                  </Fragment>
+                )),
+                toPairs,
+              )(attributes)}
+            </TableRow>
+          </TableHead>
+        </Table>
         <pre>
           <code>{prettyStringifySafe(this.query.current())}</code>
         </pre>
