@@ -11,7 +11,6 @@ import {invoker} from '../lib/ramda'
 @disposable(module)
 @observer
 class AppFrame extends Component {
-  @observable storeOP = storeOP
   @observable
   tasksLQ = fromPromise(
     storeOP.then(
@@ -35,9 +34,13 @@ class AppFrame extends Component {
         <div>
           {this.tasksLQ.case({
             fulfilled: tasks => {
+              const store = storeOP.value
               return (
                 <TasksPage
-                  store={this.storeOP.value}
+                  handleAddTask={() => {
+                    addNewTask(store)
+                    tasks.refresh()
+                  }}
                   tasks={tasks.current()}
                 />
               )
@@ -54,19 +57,19 @@ export default AppFrame
 @observer
 class TasksPage extends Component {
   static propTypes = {
-    store: PropTypes.object.isRequired,
+    handleAddTask: PropTypes.func.isRequired,
     tasks: PropTypes.array.isRequired,
   }
 
   render() {
-    const {tasks, store} = this.props
+    const {tasks, handleAddTask} = this.props
     return (
       <div>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
         <div className={cn('frc pv2')}>
           <button
             className={cn('ph3', 'input-reset bn pointer blue link ttu')}
-            onClick={() => addNewTask(store)}
+            onClick={handleAddTask}
           >
             Add
           </button>
