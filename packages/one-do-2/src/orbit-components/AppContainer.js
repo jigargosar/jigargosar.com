@@ -13,7 +13,6 @@ import {
 } from '../orbit-store/TaskRecord'
 import {delay} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
-import {head} from '../lib/ramda'
 
 async function startSimulation({speed = 1000}) {
   await removeAllTasks()
