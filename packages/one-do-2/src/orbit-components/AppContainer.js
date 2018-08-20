@@ -49,7 +49,7 @@ class TasksPage extends Component {
         <div className={cn('frc pv2')}>
           <button
             className={cn('ph3', 'input-reset bn pointer blue link ttu')}
-            onClick={updateAddTask}
+            onClick={() => updateAddTask()}
           >
             Add
           </button>
