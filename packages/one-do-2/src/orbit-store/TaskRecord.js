@@ -11,12 +11,14 @@ export function querySortedTasks() {
 }
 
 export function TaskRecord({
+  id,
   title = fWord(),
   createdAt = Date.now(),
   isDone = false,
   sortIdx = 0,
 } = {}) {
   return {
+    id,
     type: 'task',
     attributes: {
       title,
