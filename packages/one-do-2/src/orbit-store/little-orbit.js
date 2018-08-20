@@ -30,3 +30,7 @@ export const dsc = attribute => sortSpecifier(attribute, 'descending')
 export function replaceRecordOP(record) {
   return t => t.replaceRecord(record)
 }
+
+export function replaceAttributeOP(record, name, value) {
+  return t => t.replaceRecord(record, name, value)
+}

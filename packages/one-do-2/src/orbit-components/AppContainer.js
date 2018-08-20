@@ -14,11 +14,20 @@ import {delay, PQueue} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
 
 async function startSimulation(pQueue) {
-  await pQueue.addAll([removeAllTasks, addNewTask])
-  const tasks2 = await pQueue.add(addNewTask)
+  const initialRes = await pQueue.addAll([removeAllTasks, addNewTask])
+  console.log(`initialRes`, initialRes)
 
-  await delay(1000)
-  await pQueue.add(() => toggleDone(tasks2[0]))
+  const [tasks2, ...rest] = await pQueue.add(async () => {
+    const newTask = await addNewTask()
+    console.log(`newTask`, newTask)
+    return newTask
+  })
+
+  console.log(`tasks2`, tasks2)
+  console.log(`rest`, ...rest)
+
+  await pQueue.add(() => delay(1000))
+  await pQueue.add(() => toggleDone(tasks2))
 
   // await delay(1000)
   // const tasks3 = await pQueue.add(addNewTask)
