@@ -75,10 +75,11 @@ class Tasks extends Component {
 class Task extends Component {
   render() {
     const {task} = this.props
-    const {title, isDone} = task.attributes
+    const {title, isDone, sortIdx} = task.attributes
     return (
       <div className={cn('ph3 pv1', 'frc')}>
-        <div className={cn('ph3', 'code pointer')}>
+        <div className={cn('ph1', 'f7 black-50')}>{`i:${sortIdx}`}</div>
+        <div className={cn('ph2', 'code pointer')}>
           {!isDone ? `[x]` : `[ ]`}
         </div>
         <div>{title}</div>

@@ -89,7 +89,11 @@ export function addNewTask() {
 }
 
 export function addNewTaskAt(idx) {
-  return getStore().update(t => t.addRecord(TaskRecord()))
+  const tasks = sortedTasks()
+    .current()
+    .map((t, i) => t => t.replaceAttribute(t.id, 'sortIdx', i + 1))
+
+  return getStore().update(t => [t.addRecord(TaskRecord({sortIdx: 0}))])
 }
 
 export function queryTasksExpr({sort = []}) {
@@ -108,6 +112,6 @@ export function queryTasksExpr({sort = []}) {
 
 export function sortedTasks() {
   return queryTasksExpr({
-    sort: [asc('sortIdx'), dsc('createdAt')],
+    sort: [asc('sortIdx') /*dsc('createdAt')*/],
   })
 }
