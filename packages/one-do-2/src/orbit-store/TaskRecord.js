@@ -9,7 +9,7 @@ import {
   not,
   reject,
 } from '../lib/ramda'
-import {overPath} from '../lib/little-ramda'
+import {mapIndexed, overPath} from '../lib/little-ramda'
 import {asc, replaceRecordOP} from './little-orbit'
 
 export const sortedTasksLazyObs = liveQuery(sortedTasksQuery)
@@ -39,7 +39,7 @@ export async function addNewTask(props = {}) {
         t.replaceAttribute(task, 'sortIdx', sortIdx),
       ),
       reject(compose(equals(newTask), head)),
-      map((task, idx) => [task, idx + 1]),
+      mapIndexed((task, idx) => [task, idx + 1]),
       insert(newTask.sortIdx, newTask),
     )(all)
   }
