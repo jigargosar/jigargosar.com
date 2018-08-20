@@ -13,8 +13,9 @@ import {
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    removeAllTasks().then(addNewTask)
-    // addNewTask()
+    removeAllTasks()
+    addNewTask()
+    addNewTask()
   }
 
   render() {
