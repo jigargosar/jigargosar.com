@@ -51,7 +51,9 @@ function startSimulation() {
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    this.props.addDisposer(startSimulation())
+    if (module.hot) {
+      this.props.addDisposer(startSimulation())
+    }
   }
 
   render() {
