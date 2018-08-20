@@ -14,6 +14,7 @@ import {startSimulation} from '../orbit-store/Simulation'
 import {AsciiCheckButton} from '../lib/AsciiCheckButton'
 import {take} from '../lib/ramda'
 import {PageTitle} from './PageTitle'
+import {Page} from './Page'
 
 @disposable(module)
 @observer
@@ -49,9 +50,9 @@ class AppContent extends Component {
 class SchemaPage extends Component {
   render() {
     return (
-      <div className={cn('pv3')}>
+      <Page>
         <PageTitle>Schema</PageTitle>
-      </div>
+      </Page>
     )
   }
 }
@@ -60,7 +61,7 @@ class SchemaPage extends Component {
 class TasksPage extends Component {
   render() {
     return (
-      <div className={cn('pv3')}>
+      <Page>
         <PageTitle>Orbit Tasks</PageTitle>
         <div className={cn('frc pb2')}>
           <button
@@ -71,7 +72,7 @@ class TasksPage extends Component {
           </button>
         </div>
         <Tasks tasks={getSortedTasks()} />
-      </div>
+      </Page>
     )
   }
 }
