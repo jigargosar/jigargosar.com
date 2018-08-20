@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
-import {observer, Provider} from '../lib/mobx-react'
+import {inject, observer, Provider} from '../lib/mobx-react'
 import store from '../orbit-store/Store'
 import {
   addNewTask,
@@ -85,11 +85,14 @@ class Tasks extends Component {
   }
 }
 
+@inject((s, {task}) => ({...task.attributes, ...task}))
 @observer
 class Task extends Component {
   render() {
-    const {task} = this.props
-    const {title, isDone, sortIdx} = task.attributes
+    // const {task} = this.props
+    // const {title, isDone, sortIdx} = task.attributes
+    // const id = task.id
+    const {title, isDone, sortIdx, id} = this.props
     return (
       <div className={cn('pv1')}>
         <div className={cn('frc lh-copy')}>
@@ -105,7 +108,7 @@ class Task extends Component {
             'code f7 lh-copy black-50',
           )}
         >
-          {`i:${sortIdx} id:${task.id}`}
+          {`i:${sortIdx} id:${id}`}
         </div>
       </div>
     )
