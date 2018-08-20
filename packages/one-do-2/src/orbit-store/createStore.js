@@ -17,7 +17,7 @@ export function createStore() {
 
   const transforms = createTransformObservable(store)
 
-  function createLazyQuery({q, o, id, i: ini}) {
+  function lazyQuery({q, o, id, i: ini}) {
     return lazyObservable(
       sink =>
         store
@@ -29,16 +29,16 @@ export function createStore() {
   }
 
   function liveQuery(options) {
-    const lazyQuery = createLazyQuery(options)
+    const q = lazyQuery(options)
 
     disposers.reaction(
       () => transforms,
       () => {
-        lazyQuery.refresh()
+        q.refresh()
       },
     )
 
-    return lazyQuery
+    return q
   }
 
   const storeWrapper = {
@@ -46,7 +46,7 @@ export function createStore() {
     query: store.query.bind(store),
     listeners: store.listeners.bind(store),
     transforms,
-    lazyQuery: createLazyQuery,
+    lazyQuery: lazyQuery,
     liveQuery,
     update: store.update.bind(store),
   }
