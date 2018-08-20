@@ -21,7 +21,8 @@ async function startSimulation(pQueue) {
   const [tasks2] = await addNewTask()
 
   await delay(1000)
-  await updateIsDone(tasks1, false)
+  await updateIsDone(tasks1, true)
+  await updateToggleDone(tasks1)
 
   // await delay(1000)
   // const tasks3 = await pQueue.add(addNewTask)
