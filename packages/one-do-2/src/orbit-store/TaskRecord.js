@@ -71,7 +71,7 @@ export async function removeAllTasks() {
 }
 
 export function updateToggleDone(task) {
-  return updateIsDone(task, !task.isDone)
+  return updateIsDone(task, !TR.isDone(task))
 }
 
 export function updateIsDone(task, value) {
