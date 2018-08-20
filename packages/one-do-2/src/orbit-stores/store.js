@@ -5,7 +5,6 @@ import {findRecords} from './little-orbit'
 import {Disposers} from '../lib/little-mobx'
 import {identity, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
-import {lazyObservable} from 'mobx-utils'
 
 export function addNewTask(store) {
   return store.update(t => t.addRecord(TaskRecord()))
