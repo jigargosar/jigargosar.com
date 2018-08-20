@@ -86,3 +86,22 @@ export default getStore()
 export function addNewTask() {
   return getStore().update(t => t.addRecord(TaskRecord()))
 }
+
+export function queryTasksExpr() {
+  return getStore().liveQueryExpr({
+    op: 'findRecords',
+    type: 'task',
+    sort: [
+      //
+      {kind: 'attribute', attribute: 'sortIdx', order: 'ascending'},
+      {kind: 'attribute', attribute: 'createdAt', order: 'descending'},
+    ],
+    filter: [],
+    page: {
+      kind: 'offsetLimit',
+      offset: 0,
+      limit: Number.MAX_SAFE_INTEGER,
+    },
+  })
+
+}

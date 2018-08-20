@@ -4,7 +4,7 @@ import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
 import {observable} from '../lib/mobx'
 import {observer, Provider} from '../lib/mobx-react'
-import store, {addNewTask} from '../orbit-store/Store'
+import store, {addNewTask, queryTasksExpr} from '../orbit-store/Store'
 
 @observer
 class AppContainer extends Component {
@@ -23,20 +23,12 @@ export default AppContainer
 @observer
 class AppContent extends Component {
   @observable
-  tasksQuery = store.liveQueryExpr({
-    op: 'findRecords',
-    type: 'task',
+  tasksQuery = queryTasksExpr({
     sort: [
       //
       {kind: 'attribute', attribute: 'sortIdx', order: 'ascending'},
       {kind: 'attribute', attribute: 'createdAt', order: 'descending'},
     ],
-    filter: [],
-    page: {
-      kind: 'offsetLimit',
-      offset: 0,
-      limit: Number.MAX_SAFE_INTEGER,
-    },
   })
 
   render() {
