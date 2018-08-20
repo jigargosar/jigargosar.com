@@ -16,18 +16,25 @@ export class SchemaPage extends Component {
         <PageTitle>Schema</PageTitle>
         <div className={cn('pa3 pt0')}>{join(', ')(modelTypes)}</div>
         <div className={cn('ph3')}>
-          {map(type => (
-            <div key={type}>
-              <div className={cn('pv1')}>
-                {type}
-                <pre>
-                  <code>{prettyStringifySafe(schema.getModel(type))}</code>
-                </pre>
-              </div>
-            </div>
-          ))(modelTypes)}
+          {map(type => <Model key={type} />)(modelTypes)}
         </div>
       </Page>
+    )
+  }
+}
+
+class Model extends Component {
+  render() {
+    const {type} = this.props
+    return (
+      <div key={type}>
+        <div className={cn('pv1')}>
+          {type}
+          <pre>
+            <code>{prettyStringifySafe(schema.getModel(type))}</code>
+          </pre>
+        </div>
+      </div>
     )
   }
 }
