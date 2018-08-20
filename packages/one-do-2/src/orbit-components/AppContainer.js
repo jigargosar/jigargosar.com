@@ -18,7 +18,7 @@ import {AsciiCheck} from '../lib/AsciiCheck'
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    this.props.disposers.add(startSimulation(true))
+    this.props.disposers.add(startSimulation(false))
   }
 
   render() {
