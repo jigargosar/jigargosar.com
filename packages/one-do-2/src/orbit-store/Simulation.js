@@ -1,5 +1,9 @@
 import {delay, PQueue} from '../lib/p-fun'
-import {removeAllTasks, updateAddTask, updateIsDone} from './TaskRecord'
+import {
+  updateRemoveAllTasks,
+  updateAddTask,
+  updateIsDone,
+} from './TaskRecord'
 import {compose, flatten, repeat} from 'ramda'
 
 function getSimulationTasks({speed = 1000}) {
@@ -9,7 +13,7 @@ function getSimulationTasks({speed = 1000}) {
 
   return [
     async () => await delay(speed),
-    async () => await removeAllTasks(),
+    async () => await updateRemoveAllTasks(),
     async () => await delay(speed),
     async () => (tasks1 = await updateAddTask({title: 'First Task'})),
     async () => await delay(speed),
@@ -35,7 +39,7 @@ export function startSimulation(dynamic = false) {
     )
   } else {
     pQueue.addAll([
-      removeAllTasks,
+      updateRemoveAllTasks,
       updateAddTask,
       updateAddTask,
       updateAddTask,

@@ -69,7 +69,7 @@ function queryAllTasks() {
   return queryRecordsOfType('task')
 }
 
-export async function removeAllTasks() {
+export async function updateRemoveAllTasks() {
   const all = await queryAllTasks()
   const removeRecords = t => map(removeRecordOP(__, t))(all)
   return updateStore(removeRecords)
