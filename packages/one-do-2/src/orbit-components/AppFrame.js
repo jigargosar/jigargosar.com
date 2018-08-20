@@ -26,14 +26,6 @@ class AppFrame extends Component {
     this.tasksLQ.then(invoker(0, 'refresh'))
   }
 
-  componentDidMount() {
-    // this.tasksOP.then(tapLogRecords).catch(console.error)
-
-    this.storeOP.then(s => {
-      this.props.addDisposer(s.on('transform', this.refreshTasksLQ, this))
-    })
-  }
-
   render() {
     return (
       <div className={cn('vh-100 overflow-scroll')}>
