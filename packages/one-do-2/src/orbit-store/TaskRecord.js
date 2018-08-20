@@ -41,7 +41,7 @@ export async function updateAddTask(props) {
       tapLog,
       mapIndexed((task, idx) => replaceSortIdxOP(task, idx)(t)),
       tapLog,
-      insert(newTask.sortIdx - 1, newTask),
+      insert(newTask.sortIdx, newTask),
     )(all)
   }
   return updateStore(t => [
