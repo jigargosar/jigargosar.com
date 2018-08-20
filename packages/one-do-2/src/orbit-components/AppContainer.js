@@ -14,11 +14,12 @@ import {
 import {delay, PQueue} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
 
-async function startSimulation(pQueue) {
+async function startSimulation() {
   await removeAllTasks()
 
   const [tasks1] = await addNewTask()
   const [tasks2] = await addNewTask()
+  await updateIsDone(tasks2, false)
 
   await delay(1000)
   await updateIsDone(tasks1, true)
