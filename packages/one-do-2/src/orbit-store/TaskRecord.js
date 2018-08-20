@@ -32,7 +32,6 @@ export function TaskRecord({
 }
 
 export const TR = {
-  id: _prop('id'),
   sortIdx: recAttr('sortIdx'),
   isDone: recAttr('isDone'),
   title: recAttr('title'),

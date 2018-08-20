@@ -4,6 +4,7 @@ import {cn, renderKeyedById} from '../lib/little-react'
 import {observer} from '../lib/mobx-react'
 import {
   getSortedTasks,
+  TR,
   updateAddTask,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
@@ -70,8 +71,6 @@ class Tasks extends Component {
 class Task extends Component {
   render() {
     const {task} = this.props
-    const {title, isDone, sortIdx} = task.attributes
-    const id = task.id
     return (
       <div className={cn('pv1')}>
         <div className={cn('frc lh-copy')}>
@@ -79,9 +78,9 @@ class Task extends Component {
             className={cn('ph3', 'code pointer')}
             onClick={() => updateToggleDone(task)}
           >
-            {!isDone ? `[x]` : `[ ]`}
+            {!TR.isDone(task) ? `[x]` : `[ ]`}
           </div>
-          <div className={cn('flex-auto')}>{title}</div>
+          <div className={cn('flex-auto')}>{TR.title(task)}</div>
         </div>
         <div
           className={cn(
@@ -90,7 +89,7 @@ class Task extends Component {
             'code f7 lh-copy black-50',
           )}
         >
-          {`i:${sortIdx} id:${id}`}
+          {`i:${TR.sortIdx(task)} id:${task.id}`}
         </div>
       </div>
     )
