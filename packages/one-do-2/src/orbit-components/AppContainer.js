@@ -10,6 +10,7 @@ import {
 } from '../orbit-store/TaskRecord'
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
+import {pSeries} from '../lib/p-fun'
 
 @disposable(module)
 @observer
@@ -17,6 +18,8 @@ class AppContainer extends Component {
   componentDidMount() {
     if (false && module.hot) {
       this.props.addDisposer(startSimulation())
+    } else {
+      pSeries([updateAddTask, updateAddTask, updateAddTask])
     }
   }
 
@@ -33,7 +36,7 @@ class AppContent extends Component {
       <div className={cn('vh-100 overflow-scroll')}>
         <div>
           <TasksPage
-            handleAddTask={() => updateAddTask()}
+            handleAddTask={updateAddTask}
             tasks={getSortedTasks()}
           />
         </div>
