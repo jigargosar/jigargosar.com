@@ -16,6 +16,7 @@ import {join, keys, map, take} from '../lib/ramda'
 import {PageTitle} from './PageTitle'
 import {Page} from './Page'
 import {schema} from '../orbit-store/schema'
+import {prettyStringifySafe} from '../lib/little-ramda'
 
 @disposable(module)
 @observer
@@ -58,7 +59,12 @@ class SchemaPage extends Component {
         <div className={cn('ph3')}>
           {map(type => (
             <div key={type}>
-              <div className={cn('pv1')}>{type}</div>
+              <div className={cn('pv1')}>
+                {type}
+                <pre>
+                  <code>{prettyStringifySafe(schema.getModel(type))}</code>
+                </pre>
+              </div>
             </div>
           ))(modelTypes)}
         </div>
