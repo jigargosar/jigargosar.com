@@ -48,9 +48,11 @@ export async function addNewTaskAt(idx) {
 
 export function toggleDone(task) {
   debugger
-  return getStore().update(t =>
-    t.replaceAttribute(task, 'isDone', !task.isDone),
-  )
+  return getStore()
+    .update(t => t.replaceAttribute(task, 'isDone', !task.isDone))
+    .catch(e => {
+      debugger
+    })
 }
 
 export function queryTasksExpr({sort = []}) {

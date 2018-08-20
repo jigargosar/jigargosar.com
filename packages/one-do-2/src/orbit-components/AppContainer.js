@@ -97,7 +97,7 @@ class Task extends Component {
         <div className={cn('frc lh-copy')}>
           <div
             className={cn('ph3', 'code pointer')}
-            onClick={() => toggleDone({task})}
+            onClick={() => toggleDone(task)}
           >
             {!isDone ? `[x]` : `[ ]`}
           </div>
