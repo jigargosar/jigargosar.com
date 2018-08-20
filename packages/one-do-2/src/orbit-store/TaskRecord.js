@@ -24,15 +24,15 @@ export function TaskRecord({sortIdx = 0} = {}) {
 
 export async function addNewTask(props = {}) {
   const all = await queryAllTasks()
+  const newTask = TaskRecord(props)
   const updateSortIdx = t => {
     return all.map((task, idx) => {
       return t.replaceAttribute(task, 'sortIdx', idx + 1)
     })
   }
-
   return updateStore(t => [
     //
-    t.addRecord(TaskRecord(props)),
+    t.addRecord(newTask),
     ...updateSortIdx(t),
   ])
 }
