@@ -33,15 +33,15 @@ class AppFrame extends Component {
         {/*<ObsPromise label={'tasksOP'} p={this.tasksOP} />*/}
         <div>
           {this.tasksLQP.case({
-            fulfilled: tasks => {
+            fulfilled: tasksLQ => {
               const store = storeOP.value
               return (
                 <TasksPage
                   handleAddTask={() => {
                     addNewTask(store)
-                    tasks.refresh()
+                    tasksLQ.refresh()
                   }}
-                  tasks={tasks.current()}
+                  tasks={tasksLQ.current()}
                 />
               )
             },
