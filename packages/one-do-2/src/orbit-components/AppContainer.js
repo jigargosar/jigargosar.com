@@ -12,9 +12,10 @@ import {
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
 import {AsciiCheckButton} from '../lib/AsciiCheckButton'
-import {take} from '../lib/ramda'
+import {join, keys, take} from '../lib/ramda'
 import {PageTitle} from './PageTitle'
 import {Page} from './Page'
+import {schema} from '../orbit-store/schema'
 
 @disposable(module)
 @observer
@@ -49,9 +50,11 @@ class AppContent extends Component {
 @observer
 class SchemaPage extends Component {
   render() {
+    const modelTypes = keys(schema.models)
     return (
       <Page>
         <PageTitle>Schema</PageTitle>
+        {join(', ')(modelTypes)}
       </Page>
     )
   }
