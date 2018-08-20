@@ -53,7 +53,7 @@ function createTransformObservable(store) {
   )
 }
 
-function createStore() {
+export function createStore() {
   debug('[Entering] createStore')
   const store = new Store({schema})
   const on = onWrapper(store)
@@ -86,8 +86,3 @@ function createStore() {
   debug('[Exiting] createStore')
   return storeWrapper
 }
-
-export const store = createStore()
-
-// addNewTask(store)
-// addNewTask(store)
