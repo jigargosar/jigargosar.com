@@ -20,14 +20,18 @@ class AppContainer extends Component {
 }
 export default AppContainer
 
+function sortSpecifier(attribute, order) {
+  return {kind: 'attribute', attribute, order}
+}
+
 @observer
 class AppContent extends Component {
   @observable
   tasksQuery = queryTasksExpr({
     sort: [
       //
-      {kind: 'attribute', attribute: 'sortIdx', order: 'ascending'},
-      {kind: 'attribute', attribute: 'createdAt', order: 'descending'},
+      sortSpecifier('sortIdx', 'ascending'),
+      sortSpecifier('createdAt', 'descending'),
     ],
   })
 
