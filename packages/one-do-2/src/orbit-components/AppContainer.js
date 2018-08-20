@@ -5,11 +5,16 @@ import {cn, observer, renderKeyedById} from '../lib/little-react'
 import {observable} from '../lib/mobx'
 import {store} from '../orbit-store'
 import {addNewTask} from '../orbit-store/createStore'
+import {Provider} from '../lib/mobx-react'
 
 @observer
 class AppContainer extends Component {
   render() {
-    return <AppContent />
+    return (
+      <Provider store={1}>
+        <AppContent />
+      </Provider>
+    )
   }
 }
 export default AppContainer
