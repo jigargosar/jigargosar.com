@@ -3,28 +3,17 @@ import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, observer, renderKeyedById} from '../lib/little-react'
 import {disposable} from '../lib/disposable'
-import {addNewTask, storeOP} from '../orbit-stores/store'
-import {fromPromise} from '../lib/mobx-utils'
+import {addNewTask, store} from '../orbit-stores/store'
 import {observable} from '../lib/mobx'
-import {invoker} from '../lib/ramda'
 
 @disposable(module)
 @observer
 class AppFrame extends Component {
   @observable
-  tasksLQP = fromPromise(
-    storeOP.then(
-      invoker(1, 'lazyQuery')({
-        q: q => q.findRecords('task'),
-        i: [],
-      }),
-    ),
-  )
-
-  refreshTasksLQ() {
-    console.log('[Entering] AppFrame.refreshTasksLQ')
-    this.tasksLQP.then(invoker(0, 'refresh'))
-  }
+  tasksLQ = store.lazyQuery({
+    q: q => q.findRecords('task'),
+    i: [],
+  })
 
   render() {
     return (
@@ -32,20 +21,13 @@ class AppFrame extends Component {
         {/*<ObsPromise label={'storeOP'} p={this.storeOP} />*/}
         {/*<ObsPromise label={'tasksOP'} p={this.tasksOP} />*/}
         <div>
-          {this.tasksLQP.case({
-            fulfilled: tasksLQ => {
-              const store = storeOP.value
-              return (
-                <TasksPage
-                  handleAddTask={() => {
-                    addNewTask(store)
-                    tasksLQ.refresh()
-                  }}
-                  tasks={tasksLQ.current()}
-                />
-              )
-            },
-          })}
+          <TasksPage
+            handleAddTask={() => {
+              addNewTask(store)
+              this.tasksLQ.refresh()
+            }}
+            tasks={this.tasksLQ.current()}
+          />
         </div>
       </div>
     )

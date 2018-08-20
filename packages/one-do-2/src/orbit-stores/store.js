@@ -53,7 +53,7 @@ function createTransformObservable(store) {
   )
 }
 
-async function createStore() {
+function createStore() {
   debug('[Entering] createStore')
   const store = new Store({schema})
   const on = onWrapper(store)
@@ -83,11 +83,11 @@ async function createStore() {
     update: store.update.bind(store),
   }
 
-  await addNewTask(store)
-  await addNewTask(store)
-
   debug('[Exiting] createStore')
   return storeWrapper
 }
 
-export const storeOP = fromPromise(createStore())
+export const store = createStore()
+
+addNewTask(store)
+addNewTask(store)
