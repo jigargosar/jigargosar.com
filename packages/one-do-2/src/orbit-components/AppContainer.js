@@ -7,24 +7,18 @@ import {
   getSortedTasks,
   TR,
   updateAddTask,
-  updateRemoveAllTasks,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
 import {disposable} from '../lib/disposable'
+import {startSimulation} from '../orbit-store/Simulation'
 import {buttonStyle} from '../lib/little-tachyons-style'
 import {AsciiCheck} from '../lib/AsciiCheck'
-import {pSeries} from '../lib/p-fun'
 
 @disposable(module)
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    pSeries([
-      updateRemoveAllTasks,
-      updateAddTask,
-      updateAddTask,
-      updateAddTask,
-    ])
+    this.props.disposers.add(startSimulation(true))
   }
 
   render() {
