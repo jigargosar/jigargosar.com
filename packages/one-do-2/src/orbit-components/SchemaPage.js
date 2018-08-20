@@ -6,7 +6,7 @@ import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
-import {compose, mapObjIndexed, values} from '../lib/ramda'
+import {toPairs} from '../lib/ramda'
 
 @observer
 export class SchemaPage extends Component {
@@ -33,17 +33,14 @@ class Model extends Component {
     return (
       <div className={cn('pv1')}>
         {type}
-        {compose(
-          values,
-          mapObjIndexed((attribute, name) => (
-            <Attribute
-              key={name}
-              attribute={attribute}
-              type={type}
-              name={name}
-            />
-          )),
-        )(attributes)}
+        {map(([name, attribute]) => (
+          <Attribute
+            key={name}
+            attribute={attribute}
+            type={type}
+            name={name}
+          />
+        ))(toPairs(attributes))}
         <pre>
           <code>{prettyStringifySafe(modelDesc)}</code>
         </pre>
