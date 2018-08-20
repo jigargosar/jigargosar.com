@@ -71,18 +71,15 @@ function createTransformObservable(store) {
 
 export function queryRecordsOfType(type) {
   validate('S', [type])
-  return getStore().query(q => q.findRecords(type))
+  return store.query(q => q.findRecords(type))
 }
 
 export const store = createStore()
 
-export function getStore() {
-  return store
-}
+export default store
 
-export default getStore()
-export const liveQuery = getStore().liveQuery
+export const liveQuery = store.liveQuery
 
-export const query = getStore().query
+export const query = store.query
 
-export const updateStore = getStore().update
+export const updateStore = store.update
