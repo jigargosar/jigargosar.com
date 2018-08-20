@@ -1,6 +1,6 @@
 import {fWord} from '../lib/fake'
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
-import {compose, head, insert, map} from '../lib/ramda'
+import {_prop, compose, head, insert, map} from '../lib/ramda'
 import {mapIndexed} from '../lib/little-ramda'
 import {asc, dsc, recAttr, replaceAttributeOP} from './little-orbit'
 
@@ -32,6 +32,7 @@ export function TaskRecord({
 }
 
 export const TR = {
+  id: _prop('id'),
   sortIdx: recAttr('sortIdx'),
   isDone: recAttr('isDone'),
   title: recAttr('title'),
