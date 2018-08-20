@@ -21,7 +21,9 @@ function getSimulationTasks({speed = 1000}) {
   let tasks1
 
   return [
+    async () => await delay(speed),
     async () => await removeAllTasks(),
+    async () => await delay(speed),
     async () => (tasks1 = await updateAddTask({title: 'First Task'})),
     async () => await delay(speed),
     async () => (tasks2 = await updateAddTask({title: 'Second Task'})),
