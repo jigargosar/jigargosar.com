@@ -4,30 +4,9 @@ import {TaskRecord} from './TaskRecord'
 import {identity, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 
-export function addNewTask(store) {
-  return store.update(t => t.addRecord(TaskRecord()))
-}
-
 const logPrefix = ['[store]']
 // const log = partial(console.log.bind(console), logPrefix)
 const debug = partial(console.debug.bind(console), logPrefix)
-
-function createTransformObservable(store) {
-  let disposer = identity
-
-  return fromResource(
-    sink => {
-      function listener(transforms) {
-        sink(transforms)
-      }
-
-      store.on('transform', listener)
-      disposer = listener
-    },
-    disposer,
-    [],
-  )
-}
 
 export function createStore() {
   debug('[Entering] createStore')
@@ -36,6 +15,17 @@ export function createStore() {
   const transforms = createTransformObservable(store)
 
   function lazyQuery({q, o, id, i: ini}) {
+    return lazyObservable(
+      sink =>
+        store
+          .query(q, o, id)
+          .then(sink)
+          .catch(console.error),
+      ini,
+    )
+  }
+
+  function liveQuery({q, o, id, i: ini}) {
     return lazyObservable(
       sink =>
         store
@@ -57,4 +47,25 @@ export function createStore() {
 
   debug('[Exiting] createStore')
   return storeWrapper
+}
+
+export function addNewTask(store) {
+  return store.update(t => t.addRecord(TaskRecord()))
+}
+
+function createTransformObservable(store) {
+  let disposer = identity
+
+  return fromResource(
+    sink => {
+      function listener(transforms) {
+        sink(transforms)
+      }
+
+      store.on('transform', listener)
+      disposer = listener
+    },
+    disposer,
+    [],
+  )
 }
