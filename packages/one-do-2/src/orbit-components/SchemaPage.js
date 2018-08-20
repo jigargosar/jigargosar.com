@@ -38,7 +38,7 @@ class Model extends Component {
           map(([name, attribute]) => (
             <Fragment key={name}>
               <span className={cn('ph1')}>
-                <strong>{`${name}`}</strong>
+                <strong>{`${name}:`}</strong>
                 <em>{`${attribute.type}`}</em>
               </span>
             </Fragment>
