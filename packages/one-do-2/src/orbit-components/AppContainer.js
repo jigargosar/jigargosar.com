@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
-import {observable} from '../lib/mobx'
 import {observer, Provider} from '../lib/mobx-react'
 import store from '../orbit-store/Store'
 import {addNewTask, getSortedTasks} from '../orbit-store/TaskRecord'
@@ -27,15 +26,13 @@ export default AppContainer
 
 @observer
 class AppContent extends Component {
-  @observable tasks = getSortedTasks()
-
   render() {
     return (
       <div className={cn('vh-100 overflow-scroll')}>
         <div>
           <TasksPage
             handleAddTask={addNewTask}
-            tasks={this.tasks.current()}
+            tasks={getSortedTasks().current()}
           />
         </div>
       </div>
