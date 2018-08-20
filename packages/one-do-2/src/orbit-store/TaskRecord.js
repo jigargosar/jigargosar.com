@@ -34,7 +34,7 @@ function replaceSortIdxOP(task, idx) {
 }
 
 function getSortIdx(task) {
-  return task.attribute.sortIdx
+  return task.attributes.sortIdx
 }
 
 export async function updateAddTask(props) {
