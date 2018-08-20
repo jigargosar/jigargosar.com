@@ -22,7 +22,7 @@ export function TaskRecord({sortIdx = 0} = {}) {
   }
 }
 
-function replaceSortIdx(task, idx) {
+function replaceSortIdxOP(task, idx) {
   return replaceAttributeOP(task, 'sortIdx', idx)
 }
 
@@ -31,7 +31,7 @@ export async function addNewTask(props = {}) {
   const newTask = TaskRecord(props)
   const updateSortIdx = t => {
     return compose(
-      mapIndexed((task, idx) => replaceSortIdx(task, idx)(t)),
+      mapIndexed((task, idx) => replaceSortIdxOP(task, idx)(t)),
       insert(newTask.sortIdx, newTask),
     )(all)
   }
