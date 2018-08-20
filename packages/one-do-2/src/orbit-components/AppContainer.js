@@ -39,16 +39,19 @@ function getSimulationTasks({speed = 1000}) {
   //aaa
 }
 
+function startSimulation() {
+  const pQueue = PQueue({concurrency: 1})
+  pQueue.addAll(
+    compose(flatten, repeat(getSimulationTasks({speed: 500})))(100),
+  )
+  return () => pQueue.clear()
+}
+
 @disposable(module)
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    const pQueue = PQueue({concurrency: 1})
-    pQueue.addAll(
-      compose(flatten, repeat(getSimulationTasks({speed: 500})))(100),
-    )
-
-    this.props.addDisposer(() => pQueue.clear())
+    this.props.addDisposer(startSimulation)
 
     // aaa
   }
