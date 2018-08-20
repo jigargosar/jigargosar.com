@@ -1,7 +1,7 @@
 import {Store} from './orbit'
 import {schema} from './schema'
 import {TaskRecord} from './TaskRecord'
-import {identity, partial} from '../lib/ramda'
+import {identity, isNil, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
 
@@ -11,7 +11,7 @@ const debug = partial(console.debug.bind(console), logPrefix)
 
 const disposers = Disposers(module)
 
-export function createStore() {
+function createStore() {
   debug('[Entering] createStore')
   const store = new Store({schema})
 
@@ -48,10 +48,6 @@ export function createStore() {
   return storeWrapper
 }
 
-export function addNewTask(store) {
-  return store.update(t => t.addRecord(TaskRecord()))
-}
-
 function createTransformObservable(store) {
   let disposer = identity
 
@@ -67,4 +63,19 @@ function createTransformObservable(store) {
     disposer,
     [],
   )
+}
+
+let store
+
+export function getStore() {
+  if (isNil(store)) {
+    store = createStore()
+  }
+  return store
+}
+
+export default getStore()
+
+export function addNewTask(store = getStore()) {
+  return store.update(t => t.addRecord(TaskRecord()))
 }

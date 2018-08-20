@@ -3,13 +3,12 @@ import '../stores/init-mobx'
 import React, {Component} from 'react'
 import {cn, renderKeyedById} from '../lib/little-react'
 import {observable} from '../lib/mobx'
-import {getStore, store} from '../orbit-store'
-import {addNewTask} from '../orbit-store/createStore'
-import {inject, observer, Provider} from '../lib/mobx-react'
+import {observer, Provider} from '../lib/mobx-react'
+import store, {addNewTask} from '../orbit-store/Store'
 
 @observer
 class AppContainer extends Component {
-  store = getStore()
+  store = store
 
   render() {
     return (
@@ -21,11 +20,10 @@ class AppContainer extends Component {
 }
 export default AppContainer
 
-@inject('store')
 @observer
 class AppContent extends Component {
   @observable
-  tasksLQ = this.props.store.liveQuery({
+  tasksQuery = store.liveQuery({
     q: q => q.findRecords('task'),
   })
 
@@ -34,10 +32,8 @@ class AppContent extends Component {
       <div className={cn('vh-100 overflow-scroll')}>
         <div>
           <TasksPage
-            handleAddTask={() => {
-              addNewTask(store)
-            }}
-            tasks={this.tasksLQ.current()}
+            handleAddTask={addNewTask}
+            tasks={this.tasksQuery.current()}
           />
         </div>
       </div>
