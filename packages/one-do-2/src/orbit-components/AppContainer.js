@@ -88,7 +88,9 @@ class Task extends Component {
             'code f7 lh-copy black-50',
           )}
         >
-          {`i:${TR.sortIdx(task)} id:${task.id}`}
+          {`sortIdz:${TR.sortIdx(task)} id:${
+            task.id
+          } createdAt:${TR.createdAt(task)}`}
         </div>
       </div>
     )
