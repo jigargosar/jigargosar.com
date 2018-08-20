@@ -13,20 +13,21 @@ import {
 } from '../orbit-store/TaskRecord'
 import {delay} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
+import {head} from '../lib/ramda'
 
 async function startSimulation({speed = 1000}) {
   await removeAllTasks()
 
-  const [tasks1] = await updateAddTask({title: 'First Task'})
+  const tasks1 = await updateAddTask({title: 'First Task'})
   await delay(speed)
-  const [tasks2] = await updateAddTask({title: 'Second Task'})
+  const tasks2 = await updateAddTask({title: 'Second Task'})
   await updateIsDone(tasks2, false)
 
   await delay(speed)
   await updateIsDone(tasks1, true)
 
   await delay(speed)
-  const [tasks3] = await updateAddTask({title: 'Third Task'})
+  const tasks3 = await updateAddTask({title: 'Third Task'})
 
   await delay(speed)
   await updateIsDone(tasks3, true)
