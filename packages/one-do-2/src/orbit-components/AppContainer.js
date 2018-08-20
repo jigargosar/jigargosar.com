@@ -17,16 +17,16 @@ import {disposable} from '../lib/disposable'
 async function startSimulation() {
   await removeAllTasks()
 
-  const [tasks1] = await updateAddTask()
+  const [tasks1] = await updateAddTask({title: 'First Task'})
   await delay(1000)
-  const [tasks2] = await updateAddTask()
+  const [tasks2] = await updateAddTask({title: 'Second Task'})
   await updateIsDone(tasks2, false)
 
   await delay(1000)
   await updateIsDone(tasks1, true)
   //
   await delay(1000)
-  const [tasks3] = await updateAddTask()
+  const [tasks3] = await updateAddTask({title: 'Third Task'})
 
   await delay(1000)
   await updateIsDone(tasks3, true)
