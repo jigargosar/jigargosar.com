@@ -24,7 +24,7 @@ async function startSimulation({speed = 1000}) {
 
   await delay(speed)
   await updateIsDone(tasks1, true)
-  //
+
   await delay(speed)
   const [tasks3] = await updateAddTask({title: 'Third Task'})
 
