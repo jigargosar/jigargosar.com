@@ -11,8 +11,9 @@ import {
   updateIsDone,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
-import {delay} from '../lib/p-fun'
+import {delay, pEachSeries, pSeries} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
+import {repeat, times} from '../lib/ramda'
 
 async function startSimulation({speed = 1000}) {
   await removeAllTasks()
@@ -41,7 +42,9 @@ async function startSimulation({speed = 1000}) {
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    startSimulation({speed: 1000}).catch(console.error)
+    pSeries(repeat(() => startSimulation({speed: 1000}), 10)).catch(
+      console.error,
+    )
   }
 
   render() {
