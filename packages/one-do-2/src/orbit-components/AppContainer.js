@@ -32,10 +32,7 @@ class AppContent extends Component {
     return (
       <div className={cn('vh-100 overflow-scroll')}>
         <div>
-          <TasksPage
-            handleAddTask={updateAddTask}
-            tasks={getSortedTasks()}
-          />
+          <TasksPage tasks={getSortedTasks()} />
         </div>
       </div>
     )
@@ -45,19 +42,18 @@ class AppContent extends Component {
 @observer
 class TasksPage extends Component {
   static propTypes = {
-    handleAddTask: PropTypes.func.isRequired,
     tasks: PropTypes.array.isRequired,
   }
 
   render() {
-    const {tasks, handleAddTask} = this.props
+    const {tasks} = this.props
     return (
       <div>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
         <div className={cn('frc pv2')}>
           <button
             className={cn('ph3', 'input-reset bn pointer blue link ttu')}
-            onClick={handleAddTask}
+            onClick={updateAddTask}
           >
             Add
           </button>
