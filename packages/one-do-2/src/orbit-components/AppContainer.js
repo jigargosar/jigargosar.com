@@ -15,7 +15,7 @@ import {delay, PQueue} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
 import {compose, flatten, repeat} from '../lib/ramda'
 
-function startSimulation({speed = 1000}) {
+function getSimulationTasks({speed = 1000}) {
   let tasks3
   let tasks2
   let tasks1
@@ -45,7 +45,7 @@ class AppContainer extends Component {
   componentDidMount() {
     const pQueue = PQueue({concurrency: 1})
     pQueue.addAll(
-      compose(flatten, repeat(startSimulation({speed: 1000})))(10),
+      compose(flatten, repeat(getSimulationTasks({speed: 1000})))(10),
     )
 
     this.props.addDisposer(() => pQueue.clear())
