@@ -21,11 +21,6 @@ class AppFrame extends Component {
     ),
   )
 
-  constructor(props, context) {
-    super(props, context)
-    this.fetchTasks()
-  }
-
   fetchTasks() {
     console.log('[Entering] AppFrame.fetchTasks')
     this.tasksLQ.then(invoker(0, 'refresh'))
