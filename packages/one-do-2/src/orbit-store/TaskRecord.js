@@ -2,7 +2,7 @@ import {fWord} from '../lib/fake'
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
 import {compose, insert, map, not} from '../lib/ramda'
 import {mapIndexed, overPath} from '../lib/little-ramda'
-import {asc, replaceRecordOP} from './little-orbit'
+import {asc, dsc, replaceRecordOP} from './little-orbit'
 
 export const sortedTasksLazyObs = liveQuery(sortedTasksQuery)
 
@@ -27,9 +27,7 @@ export async function addNewTask(props = {}) {
   const newTask = TaskRecord(props)
   const updateSortIdx = t => {
     return compose(
-      map(([task, idx]) =>
-        t.replaceAttribute(task, 'sortIdx', idx),
-      ),
+      map(([task, idx]) => t.replaceAttribute(task, 'sortIdx', idx)),
       // reject(compose(equals(newTask), head)),
       mapIndexed((task, idx) => [task, idx]),
       insert(newTask.sortIdx, newTask),
@@ -63,7 +61,7 @@ function sortedTasksQuery() {
   return {
     op: 'findRecords',
     type: 'task',
-    sort: [asc('sortIdx')],
+    sort: [asc('sortIdx'), dsc('createdAt')],
     filter: [],
     page: {
       kind: 'offsetLimit',
