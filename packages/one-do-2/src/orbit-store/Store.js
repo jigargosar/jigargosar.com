@@ -85,7 +85,7 @@ export function getStore() {
 export default getStore()
 
 export function addNewTask() {
-  return getStore().update(t => t.addRecord(TaskRecord()))
+  return addNewTaskAt(0)
 }
 
 export function addNewTaskAt(idx) {
