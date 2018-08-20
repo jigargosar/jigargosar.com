@@ -6,19 +6,19 @@ import {observer, Provider} from '../lib/mobx-react'
 import store from '../orbit-store/Store'
 import {
   addNewTask,
-  getSortedTasks,
   removeAllTasks,
+  sortedTasks,
   toggleDone,
 } from '../orbit-store/TaskRecord'
 import {delay, PQueue} from '../lib/p-fun'
 import {head, last} from '../lib/ramda'
 
 function firstTask() {
-  return head(getSortedTasks().current())
+  return head(sortedTasks.current())
 }
 
 function lastTask() {
-  return last(getSortedTasks().current())
+  return last(sortedTasks.current())
 }
 
 async function startSimulation() {
@@ -59,7 +59,7 @@ class AppContent extends Component {
         <div>
           <TasksPage
             handleAddTask={addNewTask}
-            tasks={getSortedTasks().current()}
+            tasks={sortedTasks.current()}
           />
         </div>
       </div>
