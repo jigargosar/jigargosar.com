@@ -35,6 +35,7 @@ export const TR = {
   sortIdx: recAttr('sortIdx'),
   isDone: recAttr('isDone'),
   title: recAttr('title'),
+  createdAt: recAttr('createdAt'),
 }
 
 function replaceSortIdxOP(task, idx) {
