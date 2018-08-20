@@ -3,7 +3,7 @@ import {schema} from './schema'
 import {TaskRecord} from './TaskRecord'
 import {Disposers} from '../lib/little-mobx'
 import {identity, partial} from '../lib/ramda'
-import {fromPromise, fromResource, lazyObservable} from '../lib/mobx-utils'
+import {fromResource, lazyObservable} from '../lib/mobx-utils'
 
 export function addNewTask(store) {
   return store.update(t => t.addRecord(TaskRecord()))
@@ -89,5 +89,5 @@ function createStore() {
 
 export const store = createStore()
 
-addNewTask(store)
-addNewTask(store)
+// addNewTask(store)
+// addNewTask(store)
