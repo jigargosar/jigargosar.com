@@ -12,11 +12,10 @@ import {
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
 import {AsciiCheckButton} from '../lib/AsciiCheckButton'
-import {join, keys, map, take} from '../lib/ramda'
+import {take} from '../lib/ramda'
 import {PageTitle} from './PageTitle'
 import {Page} from './Page'
-import {schema} from '../orbit-store/schema'
-import {prettyStringifySafe} from '../lib/little-ramda'
+import {SchemaPage} from './SchemaPage'
 
 @disposable(module)
 @observer
@@ -44,31 +43,6 @@ class AppContent extends Component {
           <TasksPage />
         </div>
       </div>
-    )
-  }
-}
-
-@observer
-class SchemaPage extends Component {
-  render() {
-    const modelTypes = keys(schema.models)
-    return (
-      <Page>
-        <PageTitle>Schema</PageTitle>
-        <div className={cn('pa3 pt0')}>{join(', ')(modelTypes)}</div>
-        <div className={cn('ph3')}>
-          {map(type => (
-            <div key={type}>
-              <div className={cn('pv1')}>
-                {type}
-                <pre>
-                  <code>{prettyStringifySafe(schema.getModel(type))}</code>
-                </pre>
-              </div>
-            </div>
-          ))(modelTypes)}
-        </div>
-      </Page>
     )
   }
 }
