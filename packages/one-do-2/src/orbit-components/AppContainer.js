@@ -41,9 +41,7 @@ async function startSimulation() {
 @observer
 class AppContainer extends Component {
   componentDidMount() {
-    const pQueue = PQueue({concurrency: 1})
-    startSimulation(pQueue).catch(console.error)
-    this.props.addDisposer(() => pQueue.clear())
+    startSimulation().catch(console.error)
   }
 
   render() {
