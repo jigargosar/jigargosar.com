@@ -15,6 +15,8 @@ class AppContainer extends Component {
   componentDidMount() {
     removeAllTasks()
     addNewTask()
+    addNewTask()
+    addNewTask()
   }
 
   render() {
