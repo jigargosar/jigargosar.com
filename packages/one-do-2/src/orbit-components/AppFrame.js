@@ -36,7 +36,10 @@ class AppFrame extends Component {
           {this.tasksLQ.case({
             fulfilled: tasks => {
               return (
-                <TasksPage store={this.storeOP} tasks={tasks.current()} />
+                <TasksPage
+                  store={this.storeOP.value}
+                  tasks={tasks.current()}
+                />
               )
             },
           })}
@@ -57,7 +60,6 @@ class TasksPage extends Component {
 
   render() {
     const {tasks, store} = this.props
-    debugger
     return (
       <div>
         <div className={cn('pa3 f3')}>Orbit Tasks</div>
