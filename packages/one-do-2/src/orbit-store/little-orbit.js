@@ -1,5 +1,5 @@
-import {map} from 'ramda'
-import {prettyStringifySafe} from '../lib/little-ramda'
+import {map, pick} from 'ramda'
+import {prettyStringifySafe, validate} from '../lib/little-ramda'
 import {compose, tap} from '../lib/ramda'
 
 const flattenRecord = ({attributes, ...rest}) => ({
@@ -34,3 +34,12 @@ export function replaceRecordOP(record) {
 export function replaceAttributeOP(record, name, value) {
   return t => t.replaceRecord(record, name, value)
 }
+
+export const validateRecordIdentity = ({id, type}) => {
+  validate('SS', [id, type])
+}
+
+export const recordToRecordIdentity = compose(
+  tap(validateRecordIdentity),
+  pick(['id', 'type']),
+)

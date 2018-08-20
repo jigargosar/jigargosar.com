@@ -1,8 +1,13 @@
 import {fWord} from '../lib/fake'
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
-import {compose, insert, map, omit, pick} from '../lib/ramda'
+import {compose, insert, map} from '../lib/ramda'
 import {mapIndexed} from '../lib/little-ramda'
-import {asc, dsc, replaceAttributeOP} from './little-orbit'
+import {
+  asc,
+  dsc,
+  recordToRecordIdentity,
+  replaceAttributeOP,
+} from './little-orbit'
 
 export const sortedTasksLazyObs = liveQuery(sortedTasksQuery)
 
@@ -50,8 +55,6 @@ export async function removeAllTasks() {
   const removeRecords = t => map(record => t.removeRecord(record))(all)
   return updateStore(removeRecords)
 }
-
-const recordToRecordIdentity = pick(['id', 'type'])
 
 export function toggleDone(task) {
   return updateStore(
