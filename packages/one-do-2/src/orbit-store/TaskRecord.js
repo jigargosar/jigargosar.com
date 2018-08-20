@@ -2,6 +2,7 @@ import {fWord} from '../lib/fake'
 import {asc} from './little-orbit'
 import {findRecordsOfType, getStore} from './Store'
 import {compose, isNil, map, tap} from '../lib/ramda'
+import {asyncAction} from '../lib/mobx-utils'
 
 export function TaskRecord({sortIdx = 0} = {}) {
   return {
@@ -34,13 +35,12 @@ export async function removeAllTasks() {
   return getStore().update(removeRecords)
 }
 
-export function addNewTaskAt(idx) {
+export async function addNewTaskAt(idx) {
+  const all = await findAllTask()
   const updateSortIdx = t => {
-    return getSortedTasks()
-      .current()
-      .map((task, idx) => {
-        return t.replaceAttribute(task, 'sortIdx', idx + 1)
-      })
+    return all.map((task, idx) => {
+      return t.replaceAttribute(task, 'sortIdx', idx + 1)
+    })
   }
 
   return getStore().update(t => [
