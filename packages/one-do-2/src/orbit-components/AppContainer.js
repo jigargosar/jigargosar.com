@@ -8,19 +8,20 @@ import {
   addNewTask,
   removeAllTasks,
   sortedTasksLazyObs,
+  updateIsDone,
   updateToggleDone,
 } from '../orbit-store/TaskRecord'
 import {delay, PQueue} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
 
 async function startSimulation(pQueue) {
-  const initialRes = await pQueue.addAll([removeAllTasks, addNewTask])
-  console.log(`initialRes`, initialRes)
+  await removeAllTasks()
 
+  const [tasks1] = await addNewTask()
   const [tasks2] = await addNewTask()
 
   await delay(1000)
-  await updateToggleDone(tasks2)
+  await updateIsDone(tasks1, false)
 
   // await delay(1000)
   // const tasks3 = await pQueue.add(addNewTask)
