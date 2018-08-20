@@ -34,8 +34,21 @@ class AppContent extends Component {
     return (
       <div className={cn('vh-100 overflow-scroll')}>
         <div>
+          <SchemaPage />
+        </div>
+        <div>
           <TasksPage />
         </div>
+      </div>
+    )
+  }
+}
+
+class SchemaPage extends Component {
+  render() {
+    return (
+      <div>
+        <div className={cn('pa3 f3')}>Schema</div>
       </div>
     )
   }
