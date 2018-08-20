@@ -77,7 +77,7 @@ class Task extends Component {
             className={cn('ph3', 'input-reset bn pointer link', 'code')}
             onClick={() => updateToggleDone(task)}
           >
-            {!TR.isDone(task) ? `[x]` : `[ ]`}
+            {TR.isDone(task) ? `[x]` : `[ ]`}
           </button>
           <div className={cn('flex-auto')}>{TR.title(task)}</div>
         </div>
