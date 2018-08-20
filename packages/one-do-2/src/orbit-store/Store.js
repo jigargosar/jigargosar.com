@@ -84,3 +84,5 @@ export function findRecordsOfType(type) {
   validate('S', [type])
   return getStore().query(q => q.findRecords(type))
 }
+
+export const liveQuery = getStore().liveQuery
