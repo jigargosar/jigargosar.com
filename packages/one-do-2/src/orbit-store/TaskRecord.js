@@ -1,7 +1,8 @@
 import {fWord} from '../lib/fake'
 import {asc} from './little-orbit'
 import {findRecordsOfType, getStore} from './Store'
-import {isNil, map} from '../lib/ramda'
+import {isNil, map, not} from '../lib/ramda'
+import {overPath} from '../lib/little-ramda'
 
 export function TaskRecord({sortIdx = 0} = {}) {
   return {
@@ -47,9 +48,11 @@ export async function addNewTaskAt(idx) {
 }
 
 export function toggleDone(task) {
-  return getStore().update(t =>
-    t.replaceAttribute(task, 'isDone', !task.isDone),
-  )
+  return replaceRecord(overPath(['attributes', 'isDone'])(not)(task))
+}
+
+export function replaceRecord(record) {
+  return getStore().update(t => t.replaceRecord(record))
 }
 
 export function queryTasksExpr({sort = []}) {
