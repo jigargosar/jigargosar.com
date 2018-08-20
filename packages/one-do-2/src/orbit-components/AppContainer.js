@@ -81,11 +81,13 @@ class Task extends Component {
           <div className={cn('fa')}>{TR.title(task)}</div>
         </div>
         <div className={cn('ph3', 'frc', 'code f7 lh-copy black-50')}>
-          <div className={cn('ph1')}>{`sortIdx:${TR.sortIdx(task)}`}</div>
           <div className={cn('ph1')}>{`id:${task.id}`}</div>
+          <div className={cn('ph1')}>{`type:${task.type}`}</div>
+          <div className={cn('ph1')}>{`sortIdx:${TR.sortIdx(task)}`}</div>
           <div className={cn('ph1')}>
             {`createdAt:${TR.createdAt(task)}`}
           </div>
+          <div className={cn('ph1')}>{`title:${TR.title(task)}`}</div>
         </div>
       </div>
     )
