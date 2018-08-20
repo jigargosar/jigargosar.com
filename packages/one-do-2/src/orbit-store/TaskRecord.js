@@ -1,6 +1,6 @@
 import {fWord} from '../lib/fake'
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
-import {_prop, compose, head, insert, map} from '../lib/ramda'
+import {compose, head, insert, map} from '../lib/ramda'
 import {mapIndexed} from '../lib/little-ramda'
 import {asc, dsc, recAttr, replaceAttributeOP} from './little-orbit'
 
