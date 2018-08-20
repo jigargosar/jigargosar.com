@@ -33,7 +33,7 @@ class Model extends Component {
     const {attributes} = modelDesc
     return (
       <div className={cn('pv1')}>
-        <div className={cn('f4')}>{`type ${type}`}</div>
+        <div className={cn('f4 b')}>{`${type}`}</div>
         {compose(
           join(', '),
           map(([name, attribute]) => `${name}:${attribute.type}`),
