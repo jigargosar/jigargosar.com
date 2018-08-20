@@ -62,7 +62,7 @@ class TasksPage extends Component {
     return (
       <div>
         <PageTitle>Orbit Tasks</PageTitle>
-        <div className={cn('frc pv2')}>
+        <div className={cn('frc pb2')}>
           <button
             className={cn('ph3', 'input-reset bn pointer blue link ttu')}
             onClick={() => updateAddTask()}
