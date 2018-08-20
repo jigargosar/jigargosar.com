@@ -1,4 +1,4 @@
-import {addNewTask, createStore} from './store'
+import {addNewTask, createStore} from './createStore'
 
 export const store = createStore()
 
