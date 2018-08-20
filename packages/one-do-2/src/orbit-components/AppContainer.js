@@ -24,14 +24,18 @@ function sortSpecifier(attribute, order) {
   return {kind: 'attribute', attribute, order}
 }
 
+const ASC = 'ascending'
+
+const DSC = 'descending'
+
 @observer
 class AppContent extends Component {
   @observable
   tasksQuery = queryTasksExpr({
     sort: [
       //
-      sortSpecifier('sortIdx', 'ascending'),
-      sortSpecifier('createdAt', 'descending'),
+      sortSpecifier('sortIdx', ASC),
+      sortSpecifier('createdAt', DSC),
     ],
   })
 
