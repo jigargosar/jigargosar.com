@@ -5,7 +5,7 @@ import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
-import {toPairs, join, keys, map, compose} from '../lib/ramda'
+import {toPairs, join, keys, map, compose, intersperse} from '../lib/ramda'
 
 @observer
 export class SchemaPage extends Component {
@@ -35,11 +35,12 @@ class Model extends Component {
       <div className={cn('pv1')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
         {compose(
+          intersperse(','),
           map(([name, attribute]) => (
             <Fragment key={name}>
               <span className={cn('ph1')}>
-                <span>{`${name} : `}</span>
-                <em>{`${attribute.type}`}</em>
+                <span>{`${name}: `}</span>
+                <span>{`${attribute.type}`}</span>
               </span>
             </Fragment>
           )),
