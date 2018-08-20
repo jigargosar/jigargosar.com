@@ -7,18 +7,18 @@ import store from '../orbit-store/Store'
 import {
   addNewTask,
   removeAllTasks,
-  sortedTasks,
+  sortedTasksLazyObs,
   toggleDone,
 } from '../orbit-store/TaskRecord'
 import {delay, PQueue} from '../lib/p-fun'
 import {head, last} from '../lib/ramda'
 
 function firstTask() {
-  return head(sortedTasks.current())
+  return head(sortedTasksLazyObs.current())
 }
 
 function lastTask() {
-  return last(sortedTasks.current())
+  return last(sortedTasksLazyObs.current())
 }
 
 async function startSimulation() {
@@ -59,7 +59,7 @@ class AppContent extends Component {
         <div>
           <TasksPage
             handleAddTask={addNewTask}
-            tasks={sortedTasks.current()}
+            tasks={sortedTasksLazyObs.current()}
           />
         </div>
       </div>

@@ -55,7 +55,7 @@ export function replaceRecord(record) {
   return getStore().update(t => t.replaceRecord(record))
 }
 
-export const sortedTasks = getStore().liveQuery({
+export const sortedTasksLazyObs = getStore().liveQuery({
   op: 'findRecords',
   type: 'task',
   sort: [asc('sortIdx')],
