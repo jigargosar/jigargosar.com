@@ -31,16 +31,17 @@ class Model extends Component {
     const {attributes} = modelDesc
     return (
       <div className={cn('pv1')}>
-        {type}
+        <div className={cn('f4')}>{type}</div>
         {compose(join(', '), map(([name]) => name), toPairs)(attributes)}
-        {map(([name, attribute]) => (
-          <Attribute
-            key={name}
-            attribute={attribute}
-            type={type}
-            name={name}
-          />
-        ))(toPairs(attributes))}
+        {false &&
+          map(([name, attribute]) => (
+            <Attribute
+              key={name}
+              attribute={attribute}
+              type={type}
+              name={name}
+            />
+          ))(toPairs(attributes))}
         <pre>
           <code>{prettyStringifySafe(modelDesc)}</code>
         </pre>
