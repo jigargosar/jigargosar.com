@@ -12,6 +12,7 @@ import {
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
 import {AsciiCheckButton} from '../lib/AsciiCheckButton'
+import {take} from '../lib/ramda'
 
 @disposable(module)
 @observer
@@ -81,7 +82,7 @@ class Task extends Component {
           <div className={cn('fa')}>{TR.title(task)}</div>
         </div>
         <div className={cn('ph3', 'frc', 'code f7 lh-copy black-50')}>
-          <div className={cn('ph1')}>{`id:${task.id}`}</div>
+          <div className={cn('ph1')}>{`id:${take(10)(task.id)}`}</div>
           <div className={cn('ph1')}>{`type:${task.type}`}</div>
           <div className={cn('ph1')}>{`sortIdx:${TR.sortIdx(task)}`}</div>
           <div className={cn('ph1')}>
