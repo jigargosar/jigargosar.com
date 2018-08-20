@@ -16,7 +16,7 @@ export class SchemaPage extends Component {
         <PageTitle>Schema</PageTitle>
         <div className={cn('pa3 pt0')}>{join(', ')(modelTypes)}</div>
         <div className={cn('ph3')}>
-          {map(type => <Model key={type} />)(modelTypes)}
+          {map(type => <Model key={type} type={type} />)(modelTypes)}
         </div>
       </Page>
     )
