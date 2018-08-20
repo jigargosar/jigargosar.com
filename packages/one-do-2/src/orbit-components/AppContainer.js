@@ -97,7 +97,7 @@ class Task extends Component {
             checked={TR.isDone(task)}
             onClick={() => updateToggleDone(task)}
           />
-          <div className={cn('flex-auto')}>{TR.title(task)}</div>
+          <div className={cn('fa')}>{TR.title(task)}</div>
         </div>
         <div
           className={cn(
