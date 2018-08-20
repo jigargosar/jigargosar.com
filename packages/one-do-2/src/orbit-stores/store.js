@@ -83,10 +83,6 @@ async function createStore() {
     update: store.update.bind(store),
   }
 
-  // disposers.autorun(() => {
-  //   log(`[autorun] transforms.current()`, transforms.current())
-  // })
-  //aa
   await addNewTask(store)
   await addNewTask(store)
 
