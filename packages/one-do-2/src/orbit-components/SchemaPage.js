@@ -102,15 +102,6 @@ class Model extends Component {
           <code>{prettyStringifySafe(this.rows)}</code>
         </pre>
 
-        {false &&
-          map(([name, attribute]) => (
-            <Attribute
-              key={name}
-              attribute={attribute}
-              type={type}
-              name={name}
-            />
-          ))(toPairs(attributes))}
         {false && (
           <pre>
             <code>{prettyStringifySafe(modelDesc)}</code>
@@ -123,19 +114,5 @@ class Model extends Component {
   @computed
   get rows() {
     return this.query.current()
-  }
-}
-@observer
-class Attribute extends Component {
-  render() {
-    const {attribute, type, name} = this.props
-    return (
-      <div className={cn('pv1')}>
-        {`${type}.${name}`}
-        <pre>
-          <code>{prettyStringifySafe(attribute)}</code>
-        </pre>
-      </div>
-    )
   }
 }
