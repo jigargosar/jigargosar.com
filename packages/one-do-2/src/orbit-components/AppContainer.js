@@ -11,6 +11,7 @@ import {
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
 import {buttonStyle} from '../lib/little-tachyons-style'
+import * as PropTypes from 'prop-types'
 
 @disposable(module)
 @observer
@@ -67,6 +68,12 @@ class Tasks extends Component {
   }
 }
 
+function AsciiCheck({checked}) {
+  return <div className={cn('code')}>{checked ? `[x]` : `[ ]`}</div>
+}
+
+AsciiCheck.propTypes = {task: PropTypes.any}
+
 @observer
 class Task extends Component {
   render() {
@@ -78,9 +85,7 @@ class Task extends Component {
             className={cn('ph3', buttonStyle)}
             onClick={() => updateToggleDone(task)}
           >
-            <div className={cn('code')}>
-              {TR.isDone(task) ? `[x]` : `[ ]`}
-            </div>
+            <AsciiCheck checked={TR.isDone(task)} />
           </button>
           <div className={cn('flex-auto')}>{TR.title(task)}</div>
         </div>
