@@ -50,8 +50,6 @@ export function addNewTaskAt(idx) {
   ])
 }
 
-let sortedTasks = null
-
 export function queryTasksExpr({sort = []}) {
   return getStore().liveQueryExpr({
     op: 'findRecords',
@@ -65,6 +63,8 @@ export function queryTasksExpr({sort = []}) {
     },
   })
 }
+
+let sortedTasks = null
 
 export function getSortedTasks() {
   if (isNil(sortedTasks)) {
