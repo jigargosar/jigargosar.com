@@ -1,6 +1,6 @@
 import {Store} from './orbit'
 import {schema} from './schema'
-import {identity, isNil, partial} from '../lib/ramda'
+import {identity, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
 import {validate} from '../lib/little-ramda'
@@ -69,21 +69,20 @@ function createTransformObservable(store) {
   )
 }
 
-let store
-
-export function getStore() {
-  if (isNil(store)) {
-    store = createStore()
-  }
-  return store
-}
-
-export default getStore()
-
-export function findRecordsOfType(type) {
+export function queryRecordsOfType(type) {
   validate('S', [type])
   return getStore().query(q => q.findRecords(type))
 }
 
+export const store = createStore()
+
+export function getStore() {
+  return store
+}
+
+export default getStore()
 export const liveQuery = getStore().liveQuery
+
 export const query = getStore().query
+
+export const updateStore = getStore().update

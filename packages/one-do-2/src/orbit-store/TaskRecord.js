@@ -1,8 +1,14 @@
 import {fWord} from '../lib/fake'
-import {findRecordsOfType, getStore, liveQuery, query} from './Store'
+import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
 import {map, not} from '../lib/ramda'
 import {overPath} from '../lib/little-ramda'
 import {asc, replaceRecordOP} from './little-orbit'
+
+export const sortedTasksLazyObs = liveQuery(sortedTasksQuery)
+
+function querySortedTasks() {
+  return query(sortedTasksQuery)
+}
 
 export function TaskRecord({sortIdx = 0} = {}) {
   return {
@@ -21,15 +27,14 @@ export function addNewTask() {
 }
 
 function findAllTask() {
-  return findRecordsOfType('task')
+  return queryRecordsOfType('task')
 }
 
 export async function removeAllTasks() {
   const all = await findAllTask()
 
   const removeRecords = t => map(record => t.removeRecord(record))(all)
-
-  return getStore().update(removeRecords)
+  return updateStore(removeRecords)
 }
 
 export async function addNewTaskAt(idx) {
@@ -40,7 +45,7 @@ export async function addNewTaskAt(idx) {
     })
   }
 
-  return getStore().update(t => [
+  return updateStore(t => [
     //
     t.addRecord(TaskRecord({sortIdx: 0})),
     ...updateSortIdx(t),
@@ -48,11 +53,9 @@ export async function addNewTaskAt(idx) {
 }
 
 export function toggleDone(task) {
-  return replaceRecord(overPath(['attributes', 'isDone'])(not)(task))
-}
-
-export function replaceRecord(record) {
-  return getStore().update(replaceRecordOP(record))
+  return updateStore(
+    replaceRecordOP(overPath(['attributes', 'isDone'])(not)(task)),
+  )
 }
 
 function sortedTasksQuery() {
@@ -68,7 +71,3 @@ function sortedTasksQuery() {
     },
   }
 }
-
-export const sortedTasksLazyObs = liveQuery(sortedTasksQuery)
-
-export const querySortedTasks = query(sortedTasksQuery)
