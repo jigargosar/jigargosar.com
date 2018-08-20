@@ -36,7 +36,7 @@ function getSimulationTasks({speed = 1000}) {
     async () => await updateIsDone(tasks3, true),
     async () => await delay(speed),
     async () => await updateIsDone(tasks1, false),
-    async () => await delay(speed * 2),
+    // async () => await delay(speed * 2),
   ]
 }
 
