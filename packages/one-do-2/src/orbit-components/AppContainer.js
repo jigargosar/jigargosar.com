@@ -22,6 +22,7 @@ async function startSimulation(pQueue) {
 
   await delay(1000)
   await updateIsDone(tasks1, true)
+  await delay(1000)
   await updateToggleDone(tasks2)
 
   // await delay(1000)
