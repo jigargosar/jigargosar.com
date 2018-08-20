@@ -45,7 +45,7 @@ class AppContainer extends Component {
   componentDidMount() {
     const pQueue = PQueue({concurrency: 1})
     pQueue.addAll(
-      compose(flatten, repeat(getSimulationTasks({speed: 1000})))(100),
+      compose(flatten, repeat(getSimulationTasks({speed: 500})))(100),
     )
 
     this.props.addDisposer(() => pQueue.clear())
