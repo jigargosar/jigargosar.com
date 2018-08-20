@@ -44,11 +44,19 @@ class AppContent extends Component {
   }
 }
 
+@observer
+class PageTitle extends Component {
+  render() {
+    return <div className={cn('pa3 f3')}>{this.props.children}</div>
+  }
+}
+
+@observer
 class SchemaPage extends Component {
   render() {
     return (
       <div>
-        <div className={cn('pa3 f3')}>Schema</div>
+        <PageTitle>Schema</PageTitle>
       </div>
     )
   }
