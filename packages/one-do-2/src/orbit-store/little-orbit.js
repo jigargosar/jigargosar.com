@@ -49,6 +49,7 @@ export const recordToRId = compose(
 )
 
 export const recAttr = name => _path(['attributes', name])
+
 export const removeRecordOP = curry((recordOrRId, t) =>
-  t.removeRecord(recordToRId),
+  t.removeRecord(recordToRId(recordOrRId)),
 )
