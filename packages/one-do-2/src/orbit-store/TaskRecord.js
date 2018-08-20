@@ -51,8 +51,12 @@ export async function removeAllTasks() {
   return updateStore(removeRecords)
 }
 
-export function toggleDone(task) {
-  return updateStore(replaceAttributeOP(task, 'isDone', !task.isDone))
+export function updateToggleDone(task) {
+  return updateIsDone(task, !task.isDone)
+}
+
+export function updateIsDone(task, value) {
+  return updateStore(replaceAttributeOP(task, 'isDone', value))
 }
 
 function sortedTasksQuery() {

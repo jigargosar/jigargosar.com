@@ -8,7 +8,7 @@ import {
   addNewTask,
   removeAllTasks,
   sortedTasksLazyObs,
-  toggleDone,
+  updateToggleDone,
 } from '../orbit-store/TaskRecord'
 import {delay, PQueue} from '../lib/p-fun'
 import {disposable} from '../lib/disposable'
@@ -20,7 +20,7 @@ async function startSimulation(pQueue) {
   const [tasks2] = await addNewTask()
 
   await delay(1000)
-  await toggleDone(tasks2)
+  await updateToggleDone(tasks2)
 
   // await delay(1000)
   // const tasks3 = await pQueue.add(addNewTask)
@@ -109,7 +109,7 @@ class Task extends Component {
         <div className={cn('frc lh-copy')}>
           <div
             className={cn('ph3', 'code pointer')}
-            onClick={() => toggleDone(task)}
+            onClick={() => updateToggleDone(task)}
           >
             {!isDone ? `[x]` : `[ ]`}
           </div>

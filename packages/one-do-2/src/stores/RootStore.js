@@ -65,7 +65,7 @@ class RootStore {
   get onKeyDown() {
     const taskView = this.taskView
     const selectedTaskInvoker = taskView.selectedTaskInvoker
-    const toggleDone = selectedTaskInvoker('toggleDone')
+    const toggleDone = selectedTaskInvoker('updateToggleDone')
     const destroy = selectedTaskInvoker('destroy')
     const globalShortcuts = [
       whenKeyPD('`')(this.debugStore.toggleDebugView),
