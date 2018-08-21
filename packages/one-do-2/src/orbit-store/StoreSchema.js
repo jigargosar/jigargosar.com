@@ -1,4 +1,4 @@
-import {keys, map} from '../lib/ramda'
+import {keys, map, values} from '../lib/ramda'
 
 function SchemaModel(schema, model) {
   return {}
@@ -6,10 +6,10 @@ function SchemaModel(schema, model) {
 
 export function StoreSchema(store) {
   const schema = store.schema
-  const models = map(model => SchemaModel(schema, model))(schema.models)
+  const modelLookup = map(model => SchemaModel(schema, model))(schema.models)
   return {
-    models: models,
-    getModel: type => models[type],
-    modelTypes: keys(models),
+    models: values(modelLookup),
+    getModel: type => modelLookup[type],
+    modelTypes: keys(modelLookup),
   }
 }
