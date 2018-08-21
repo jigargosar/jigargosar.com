@@ -3,6 +3,8 @@ import {Schema} from './orbit'
 import {validate} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
 import {compose} from '../lib/ramda'
+import {extendObservable} from '../lib/mobx'
+import {autoBind} from '../lib/auto-bind'
 
 const modelsDefinition = {
   task: {
@@ -35,11 +37,6 @@ function generateId(type) {
   return `${type}_${nanoid()}`
 }
 
-export const schema = new Schema({
-  models: modelsDefinition,
-  generateId,
-})
-
 export function modelDescFromType(type) {
   validate('S', [type])
 
@@ -62,3 +59,17 @@ export const attributeDescFromRecord = name => record => {
 
   return compose(attributeDesc(name), typeOfRecord)(record)
 }
+
+export function ObservableSchema(options) {
+  const schema = new Schema(Schema)
+  autoBind(schema)
+  extendObservable({}, schema)
+  return schema
+}
+
+const createDefaultSchema = () =>
+  new Schema({
+    models: modelsDefinition,
+    generateId,
+  })
+export const schema = createDefaultSchema()
