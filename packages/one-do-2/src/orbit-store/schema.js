@@ -67,8 +67,14 @@ export function ObservableSchema(options) {
   return schema
 }
 
+class CustomSchema extends Schema {
+  initializeRecord(record) {
+    return super.initializeRecord(record)
+  }
+}
+
 function createDefaultSchema() {
-  return new Schema({
+  return new CustomSchema({
     models: modelsDefinition,
     generateId,
   })
