@@ -31,6 +31,7 @@ import {
 } from '@material-ui/core'
 import {recAttr, typeOfRecord} from '../orbit-store/little-orbit'
 import {computed, observable} from '../lib/mobx'
+import {renderKeyedById} from '../lib/little-react'
 
 /*eslint-enable*/
 
@@ -98,7 +99,9 @@ class Model extends Component {
         {renderHeader()}
         <Table padding={'dense'}>
           <TableHead>{renderHeaderRow()}</TableHead>
-          <TableBody>{renderBodyRows()}</TableBody>
+          <TableBody>
+            {renderKeyedById(RecordRow, 'record', this.rows)}
+          </TableBody>
         </Table>
       </div>
     )
@@ -106,15 +109,8 @@ class Model extends Component {
     function renderHeader() {
       return <div className={cn('f4 b')}>{`${type}`}</div>
     }
-
-    function renderBodyRows() {
-      return map(record => (
-        <Fragment key={record.id}>{renderBodyRow(record)}</Fragment>
-      ))(rows)
-    }
-
     function renderBodyRow(record) {
-      return <BodyRow record={record} />
+      return <RecordRow record={record} />
     }
 
     function renderHeaderRow() {
@@ -150,7 +146,7 @@ class Model extends Component {
 }
 
 @observer
-class BodyRow extends Component {
+class RecordRow extends Component {
   render() {
     const {
       record,
