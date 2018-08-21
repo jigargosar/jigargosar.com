@@ -61,13 +61,6 @@ export const attributeDescFromRecord = name => record => {
   return compose(attributeDesc(name), typeOfRecord)(record)
 }
 
-export function ObservableSchema(options) {
-  const schema = new Schema(Schema)
-  autoBind(schema)
-  extendObservable({}, schema)
-  return schema
-}
-
 class CustomSchema extends Schema {
   initializeRecord(record) {
     super.initializeRecord(record)
