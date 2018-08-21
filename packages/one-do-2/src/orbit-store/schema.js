@@ -2,9 +2,10 @@ import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
 import {validate} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
-import {compose} from '../lib/ramda'
+import {compose, defaultTo, mergeWith} from '../lib/ramda'
 import {extendObservable} from '../lib/mobx'
 import {autoBind} from '../lib/auto-bind'
+import {fWord} from '../lib/fake'
 
 const modelsDefinition = {
   task: {
@@ -69,7 +70,18 @@ export function ObservableSchema(options) {
 
 class CustomSchema extends Schema {
   initializeRecord(record) {
-    return super.initializeRecord(record)
+    super.initializeRecord(record)
+    if (record.type === 'task') {
+      Object.assign(
+        record.attributes,
+        mergeWith(defaultTo)({
+          title: fWord(),
+          createdAt: Date.now(),
+          isDone: false,
+          sortIdx: 0,
+        })(record.attributes),
+      )
+    }
   }
 }
 
