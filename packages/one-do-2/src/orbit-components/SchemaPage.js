@@ -71,12 +71,16 @@ function getModel(type) {
   return schema.getModel(type)
 }
 
+function getModelAttributePairs(type) {
+  toPairs(getModel(type).attributes)
+}
+
 @observer
 class Model extends Component {
   query = liveQuery(q => q.findRecords(this.props.type))
   render() {
     const {type} = this.props
-    const attrPairs = toPairs(getModel(type).attributes)
+    const attrPairs = getModelAttributePairs(type)
 
     const rows = this.rows
 
