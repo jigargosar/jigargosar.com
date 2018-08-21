@@ -76,6 +76,23 @@ class Model extends Component {
     const modelDesc = schema.getModel(type)
     const attrPairs = toPairs(modelDesc.attributes)
 
+    return (
+      <div className={cn('pb4')}>
+        <div className={cn('f4 b')}>{`${type}`}</div>
+        <Table
+          padding={'dense'}
+          // className={cn('code')}
+        >
+          <TableHead>{renderHeaderRow()}</TableHead>
+          <TableBody>
+            {map(record => (
+              <Fragment key={record.id}>{renderBodyRow(record)}</Fragment>
+            ))(this.rows)}
+          </TableBody>
+        </Table>
+      </div>
+    )
+
     function renderBodyRow(record) {
       return (
         <TableRow hover>
@@ -92,29 +109,16 @@ class Model extends Component {
       )
     }
 
-    return (
-      <div className={cn('pb4')}>
-        <div className={cn('f4 b')}>{`${type}`}</div>
-        <Table
-          padding={'dense'}
-          // className={cn('code')}
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell>{`id`}</TableCell>
-              {map(([name, attribute]) => (
-                <HeaderCell key={name} name={name} attribute={attribute} />
-              ))(attrPairs)}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {map(record => (
-              <Fragment key={record.id}>{renderBodyRow(record)}</Fragment>
-            ))(this.rows)}
-          </TableBody>
-        </Table>
-      </div>
-    )
+    function renderHeaderRow() {
+      return (
+        <TableRow>
+          <TableCell>{`id`}</TableCell>
+          {map(([name, attribute]) => (
+            <HeaderCell key={name} name={name} attribute={attribute} />
+          ))(attrPairs)}
+        </TableRow>
+      )
+    }
   }
 
   @computed
