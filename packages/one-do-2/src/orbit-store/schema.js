@@ -74,8 +74,7 @@ class CustomSchema extends Schema {
     if (record.type === 'task') {
       const setDefaultProps = compose(
         tapLog,
-        overProp(
-          'attributes',
+        overProp('attributes')(
           mergeWith(defaultTo)({
             title: fWord(),
             createdAt: Date.now(),
@@ -85,6 +84,7 @@ class CustomSchema extends Schema {
         ),
         tapLog,
         mergeWith(defaultTo)({attributes: {}}),
+        tapLog,
       )
       Object.assign(record, setDefaultProps(record))
     }
