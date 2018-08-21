@@ -141,13 +141,18 @@ class Model extends Component {
     const {type} = this.props
     return (
       <TableRow>
-        <HeaderCell label={'id'} active={equals(this.sortPath, ['id'])} />
+        <HeaderCell
+          label={'id'}
+          active={equals(this.sortPath, ['id'])}
+          sortDirection={this.sortDirectionString}
+        />
         {map(([name, attribute]) => (
           <HeaderCell
             key={name}
             label={name}
             numeric={isAttributeTypeNumeric(attribute)}
             active={equals(this.sortPath, ['attributes', name])}
+            sortDirection={this.sortDirectionString}
           />
         ))(attrPairsFromType(type))}
       </TableRow>
