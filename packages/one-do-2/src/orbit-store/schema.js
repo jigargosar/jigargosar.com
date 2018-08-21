@@ -72,16 +72,19 @@ class CustomSchema extends Schema {
   initializeRecord(record) {
     super.initializeRecord(record)
     if (record.type === 'task') {
-      const mergeWithDefaultProps = overProp(
-        'attributes',
-        mergeWith(defaultTo)({
-          title: fWord(),
-          createdAt: Date.now(),
-          isDone: false,
-          sortIdx: 0,
-        }),
+      const mergeWithDefaultProps = compose(
+        overProp(
+          'attributes',
+          mergeWith(defaultTo)({
+            title: fWord(),
+            createdAt: Date.now(),
+            isDone: false,
+            sortIdx: 0,
+          }),
+        ),
+        mergeWith(defaultTo, {attributes: {}}),
       )
-      Object.assign(record.attributes, mergeWithDefaultProps(record))
+      Object.assign(record, mergeWithDefaultProps(record))
     }
   }
 }
