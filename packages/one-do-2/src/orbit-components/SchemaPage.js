@@ -109,6 +109,7 @@ class Model extends Component {
     function renderHeader() {
       return <div className={cn('f4 b')}>{`${type}`}</div>
     }
+
     function renderBodyRow(record) {
       return <RecordRow record={record} />
     }
