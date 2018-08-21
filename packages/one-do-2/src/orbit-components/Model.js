@@ -40,8 +40,13 @@ export class Model extends Component {
   @observable sortDirFn = ascend
 
   @computed
+  get modelType() {
+    return this.props.model.type
+  }
+
+  @computed
   get query() {
-    return liveQuery(q => q.findRecords(this.props.type))
+    return liveQuery(q => q.findRecords(this.modelType))
   }
 
   @computed
@@ -67,7 +72,9 @@ export class Model extends Component {
       <div className={cn('pb4')}>
         <Button
           color={'primary'}
-          onClick={() => updateStore(t => t.addRecord({type}))}
+          onClick={() =>
+            updateStore(t => t.addRecord({type: this.modelType}))
+          }
         >
           add <AddIcon />
         </Button>
@@ -112,7 +119,7 @@ export class Model extends Component {
               onClick: () => this.onSortLabelClicked(attributePath(name)),
             }}
           />
-        ))(attrPairsFromType(type))}
+        ))(attributesOfType(type)(schema))}
       </TableRow>
     )
   }
@@ -162,17 +169,13 @@ class BodyCell extends Component {
   }
 }
 
-function attrPairsFromType(type) {
-  return attributesOfType(type)(schema)
-}
-
 @observer
 class RecordRow extends Component {
   render() {
     const {
       record,
       type = typeOfRecord(record),
-      attrPairs = attrPairsFromType(type),
+      attrPairs = attributesOfType(type)(schema),
     } = this.props
     return (
       <Fragment>
