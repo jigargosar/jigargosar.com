@@ -61,9 +61,12 @@ class BodyCell extends Component {
   render() {
     const {attribute, name, record} = this.props
     return (
-      <TableCell numeric={isAttributeNumeric(attribute)}>
-        {`${recAttr(name)(record)}`}
-      </TableCell>
+      <Fragment>
+        <TableCell>{take(10)(record.id)}</TableCell>
+        <TableCell numeric={isAttributeNumeric(attribute)}>
+          {`${recAttr(name)(record)}`}
+        </TableCell>
+      </Fragment>
     )
   }
 }
@@ -105,10 +108,7 @@ class Model extends Component {
           <TableBody>
             {map(record => (
               <Fragment key={record.id}>
-                <TableRow hover>
-                  <TableCell>{take(10)(record.id)}</TableCell>
-                  {renderBodyCells(record)}
-                </TableRow>
+                <TableRow hover>{renderBodyCells(record)}</TableRow>
               </Fragment>
             ))(this.rows)}
           </TableBody>
