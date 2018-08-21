@@ -96,8 +96,11 @@ function attrPairsFromType(type) {
 class Model extends Component {
   @observable query = liveQuery(q => q.findRecords(this.props.type))
   @observable sortAttribute = 'sortIdx'
+
   render() {
     const {type} = this.props
+
+    const rows = sortWith([ascend(_prop('sortIdx'))])(this.query.current())
 
     return (
       <div className={cn('pb4')}>
@@ -105,7 +108,7 @@ class Model extends Component {
         <Table padding={'dense'}>
           <TableHead>{renderHeaderRow()}</TableHead>
           <TableBody>
-            {renderKeyedById(RecordRow, 'record', this.rows)}
+            {renderKeyedById(RecordRow, 'record', rows)}
           </TableBody>
         </Table>
       </div>
@@ -135,7 +138,8 @@ class Model extends Component {
   }
 
   get sortComparators() {
-    return [ascend(_prop(this.sortAttribute))]
+    // return [ascend(_prop(this.sortAttribute))]
+    return [ascend(_prop('sortIdx'))]
   }
 
   get sortedRows() {
