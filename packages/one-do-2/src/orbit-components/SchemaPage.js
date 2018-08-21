@@ -166,7 +166,7 @@ class Model extends Component {
           label={'id'}
           active={equals(this.sortPath, idPath)}
           sortDirection={this.sortDirectionString}
-          sortLabelProp={{onClick: () => this.onSortLabelClicked(idPath)}}
+          sortLabelProps={{onClick: () => this.onSortLabelClicked(idPath)}}
         />
         {map(([name, attribute]) => (
           <HeaderCell
@@ -175,8 +175,8 @@ class Model extends Component {
             numeric={isAttributeTypeNumeric(attribute)}
             active={equals(this.sortPath, attributePath(name))}
             sortDirection={this.sortDirectionString}
-            sortLabelProp={{
-              onClick: () => this.onSortLabelClicked(idPath),
+            sortLabelProps={{
+              onClick: () => this.onSortLabelClicked(attributePath(name)),
             }}
           />
         ))(attrPairsFromType(type))}
