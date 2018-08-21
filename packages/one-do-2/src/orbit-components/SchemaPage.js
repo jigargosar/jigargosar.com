@@ -129,8 +129,6 @@ const getAttributes = type => schema =>
   compose(toPairs, _prop('attributes'), modelDefOfType(type))(schema)
 
 function attrPairsFromType(type) {
-  // const attrPairsFromModelDef = compose(toPairs, _prop('attributes'))
-  // return compose(attrPairsFromModelDef, modelDefOfType(type))(schema)
   return getAttributes(type)(schema)
 }
 
