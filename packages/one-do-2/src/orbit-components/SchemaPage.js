@@ -92,7 +92,7 @@ class Model extends Component {
     )
 
     function renderBodyRows() {
-      map(record => (
+      return map(record => (
         <Fragment key={record.id}>{renderBodyRow(record)}</Fragment>
       ))(rows)
     }
