@@ -1,6 +1,6 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
-import {overProp, tapLog, validate} from '../lib/little-ramda'
+import {overProp, validate} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
 import {compose, defaultTo, mergeWith} from '../lib/ramda'
 import {extendObservable} from '../lib/mobx'
