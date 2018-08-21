@@ -1,6 +1,14 @@
-import {compose, curry, keys, map, pick} from 'ramda'
+import {
+  curry,
+  keys,
+  map,
+  pick,
+  _path,
+  _prop,
+  compose,
+  tap,
+} from '../lib/ramda'
 import {prettyStringifySafe, validate} from '../lib/little-ramda'
-import {_path, _prop, compose, tap} from '../lib/ramda'
 
 const flattenRecord = ({attributes, ...rest}) => ({
   ...rest,
