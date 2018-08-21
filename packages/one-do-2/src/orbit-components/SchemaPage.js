@@ -78,7 +78,7 @@ class HeaderCell extends Component {
     } = this.props
     return (
       <TableCell numeric={numeric}>
-        <Tooltip title={tooltipTitle}>
+        <Tooltip title={tooltipTitle} enterDelay={2000}>
           <TableSortLabel
             direction={sortDirection}
             active={active}
