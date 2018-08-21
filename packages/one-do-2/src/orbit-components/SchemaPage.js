@@ -17,7 +17,7 @@ import {
   sortWith,
   take,
 } from '../lib/ramda'
-import {liveQuery} from '../orbit-store/Store'
+import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   Tab,
   Table,
@@ -41,6 +41,8 @@ import {
 } from '../orbit-store/little-orbit'
 import {action, computed, observable} from '../lib/mobx'
 import {renderKeyedById} from '../lib/little-react'
+import {AddIcon} from '../lib/Icons'
+import {updateAddTask} from '../orbit-store/TaskRecord'
 
 /*eslint-enable*/
 
@@ -161,10 +163,16 @@ class Model extends Component {
 
   render() {
     const rows = this.sortedRows
+    const {type} = this.props
 
     return (
       <div className={cn('pb4')}>
-        <Button color={'primary'}>add</Button>
+        <Button
+          color={'primary'}
+          onClick={() => updateStore(t => t.addRecord({type}))}
+        >
+          add <AddIcon />
+        </Button>
         <Table padding={'dense'}>
           <TableHead>{this.renderHeaderRow()}</TableHead>
           <TableBody>
