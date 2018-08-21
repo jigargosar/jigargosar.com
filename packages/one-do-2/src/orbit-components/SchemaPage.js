@@ -18,6 +18,7 @@ import {
   TablePagination,
   TableFooter,
   TableSortLabel,
+  Tooltip,
 } from '@material-ui/core'
 import {recAttr} from '../orbit-store/little-orbit'
 import {computed} from '../lib/mobx'
@@ -51,6 +52,7 @@ class Model extends Component {
     const {type} = this.props
     const modelDesc = schema.getModel(type)
     const {attributes} = modelDesc
+    const attrPairs = toPairs(attributes)
     return (
       <div className={cn('pb4')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
@@ -61,16 +63,15 @@ class Model extends Component {
           <TableHead>
             <TableRow>
               <TableCell>{`id`}</TableCell>
-              {compose(
-                map(([name, attribute]) => (
-                  <Fragment key={name}>
-                    <TableCell numeric={isAttributeNumeric(attribute)}>
-                      {`${name}: ${attribute.type}`}
-                    </TableCell>
-                  </Fragment>
-                )),
-                toPairs,
-              )(attributes)}
+              {map(([name, attribute]) => (
+                <Fragment key={name}>
+                  <TableCell numeric={isAttributeNumeric(attribute)}>
+                    <Tooltip title={attribute.type}>
+                      <div>{name}</div>
+                    </Tooltip>
+                  </TableCell>
+                </Fragment>
+              ))(attrPairs)}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -78,21 +79,16 @@ class Model extends Component {
               <Fragment key={r.id}>
                 <TableRow hover>
                   <TableCell>{take(10)(r.id)}</TableCell>
-                  {compose(
-                    map(([name, attribute]) => {
-                      const val = recAttr(name)(r)
-                      return (
-                        <Fragment key={name}>
-                          <TableCell
-                            numeric={isAttributeNumeric(attribute)}
-                          >
-                            {`${val}`}
-                          </TableCell>
-                        </Fragment>
-                      )
-                    }),
-                    toPairs,
-                  )(attributes)}
+                  {map(([name, attribute]) => {
+                    const val = recAttr(name)(r)
+                    return (
+                      <Fragment key={name}>
+                        <TableCell numeric={isAttributeNumeric(attribute)}>
+                          {`${val}`}
+                        </TableCell>
+                      </Fragment>
+                    )
+                  })(attrPairs)}
                 </TableRow>
               </Fragment>
             ))(this.rows)}
