@@ -121,6 +121,15 @@ class Model extends Component {
 
   @computed
   get rows() {
+    return this.sortedRows
+  }
+  @computed
+  get allRows() {
+    return this.query.current()
+  }
+
+  @computed
+  get sortedRows() {
     return this.query.current()
   }
 }
