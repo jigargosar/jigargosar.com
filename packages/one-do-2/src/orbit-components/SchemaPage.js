@@ -57,7 +57,7 @@ class HeaderCell extends Component {
 }
 
 @observer
-class RowCell extends Component {
+class BodyCell extends Component {
   render() {
     const {attribute, name, record} = this.props
     return (
@@ -96,7 +96,7 @@ class Model extends Component {
                 <TableRow hover>
                   <TableCell>{take(10)(record.id)}</TableCell>
                   {map(([name, attribute]) => (
-                    <RowCell
+                    <BodyCell
                       key={name}
                       name={name}
                       attribute={attribute}
