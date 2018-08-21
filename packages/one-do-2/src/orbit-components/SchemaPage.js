@@ -46,6 +46,20 @@ function isAttributeNumeric(attribute) {
 }
 
 @observer
+class HeaderCell extends Component {
+  render() {
+    const {attribute, name} = this.props
+    return (
+      <TableCell numeric={isAttributeNumeric(attribute)}>
+        <Tooltip title={attribute.type}>
+          <div>{name}</div>
+        </Tooltip>
+      </TableCell>
+    )
+  }
+}
+
+@observer
 class Model extends Component {
   query = liveQuery(q => q.findRecords(this.props.type))
   render() {
@@ -63,13 +77,7 @@ class Model extends Component {
             <TableRow>
               <TableCell>{`id`}</TableCell>
               {map(([name, attribute]) => (
-                <Fragment key={name}>
-                  <TableCell numeric={isAttributeNumeric(attribute)}>
-                    <Tooltip title={attribute.type}>
-                      <div>{name}</div>
-                    </Tooltip>
-                  </TableCell>
-                </Fragment>
+                <HeaderCell key={name} name={name} attribute={attribute} />
               ))(attrPairs)}
             </TableRow>
           </TableHead>
