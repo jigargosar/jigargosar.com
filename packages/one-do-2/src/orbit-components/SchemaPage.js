@@ -11,6 +11,7 @@ import {
   _prop,
   ascend,
   compose,
+  descend,
   equals,
   join,
   keys,
@@ -38,7 +39,7 @@ import {
   recAttr,
   typeOfRecord,
 } from '../orbit-store/little-orbit'
-import {computed, observable} from '../lib/mobx'
+import {action, computed, observable} from '../lib/mobx'
 import {renderKeyedById} from '../lib/little-react'
 
 /*eslint-enable*/
@@ -78,7 +79,6 @@ class HeaderCell extends Component {
     return (
       <TableCell numeric={numeric}>
         <Tooltip title={tooltipTitle}>
-          {/*<div>{name}</div>*/}
           <TableSortLabel
             direction={sortDirection}
             active={active}
@@ -114,6 +114,12 @@ function attrPairsFromType(type) {
   return getAttributes(type)(schema)
 }
 
+function attributePath(name) {
+  return ['attributes', name]
+}
+
+const idPath = ['id']
+
 @observer
 class Model extends Component {
   @observable query = liveQuery(q => q.findRecords(this.props.type))
@@ -142,22 +148,34 @@ class Model extends Component {
     }
   }
 
+  @action
+  onSortLabelClicked(sortPath) {
+    if (equals(this.sortPath, sortPath)) {
+      this.sortDirFn = this.sortDirFn === ascend ? descend : ascend
+    } else {
+    }
+  }
+
   renderHeaderRow() {
     const {type} = this.props
     return (
       <TableRow>
         <HeaderCell
           label={'id'}
-          active={equals(this.sortPath, ['id'])}
+          active={equals(this.sortPath, idPath)}
           sortDirection={this.sortDirectionString}
+          sortLabelProp={{onClick: () => this.onSortLabelClicked(idPath)}}
         />
         {map(([name, attribute]) => (
           <HeaderCell
             key={name}
             label={name}
             numeric={isAttributeTypeNumeric(attribute)}
-            active={equals(this.sortPath, ['attributes', name])}
+            active={equals(this.sortPath, attributePath(name))}
             sortDirection={this.sortDirectionString}
+            sortLabelProp={{
+              onClick: () => this.onSortLabelClicked(idPath),
+            }}
           />
         ))(attrPairsFromType(type))}
       </TableRow>
