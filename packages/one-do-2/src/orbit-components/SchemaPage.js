@@ -21,6 +21,7 @@ import {
 import {liveQuery} from '../orbit-store/Store'
 
 // @formatter:off
+
 import {
   Table,
   TableBody,
