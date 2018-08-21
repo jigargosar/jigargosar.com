@@ -131,3 +131,25 @@ class Model extends Component {
     return this.query.current()
   }
 }
+
+@observer
+class BodyRow extends Component {
+  render() {
+    const {record, attrPairs} = this.props
+    return (
+      <div>
+        <TableRow hover>
+          <TableCell>{take(10)(record.id)}</TableCell>
+          {map(([name, attribute]) => (
+            <BodyCell
+              key={name}
+              name={name}
+              attribute={attribute}
+              record={record}
+            />
+          ))(attrPairs)}
+        </TableRow>
+      </div>
+    )
+  }
+}
