@@ -17,7 +17,7 @@ import {
   sortWith,
   take,
 } from '../lib/ramda'
-import {liveQuery, updateStore} from '../orbit-store/Store'
+import store, {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   Button,
   Tab,
@@ -42,7 +42,6 @@ import {
 import {action, computed, observable} from '../lib/mobx'
 import {renderKeyedById} from '../lib/little-react'
 import {AddIcon} from '../lib/Icons'
-import store from '../orbit-store/Store'
 
 /*eslint-enable*/
 
@@ -65,7 +64,6 @@ export class SchemaPage extends Component {
   }
 
   render() {
-    const modelTypes = store.schema.modelTypes
     return (
       <Page>
         <PageTitle>Schema</PageTitle>
@@ -76,7 +74,7 @@ export class SchemaPage extends Component {
           >
             {map(name => {
               return <Tab key={name} label={name} value={name} />
-            })(modelTypes)}
+            })(store.schema.modelTypes)}
           </Tabs>
         </Toolbar>
         <div className={cn('ph3')}>
