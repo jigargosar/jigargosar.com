@@ -125,7 +125,6 @@ class Model extends Component {
     }
   }
 
-  @computed
   get rows() {
     return this.sortedRows
   }
