@@ -76,9 +76,11 @@ class HeaderCell extends Component {
     return (
       <TableCell numeric={isAttributeTypeNumeric(attribute)}>
         {/*<Tooltip title={attribute.type}>*/}
-        <div>{name}</div>
+        {/*<div>{name}</div>*/}
         {/*</Tooltip>*/}
-        TSL
+        <TableSortLabel direction={'asc'} active={true}>
+          {name}
+        </TableSortLabel>
       </TableCell>
     )
   }
