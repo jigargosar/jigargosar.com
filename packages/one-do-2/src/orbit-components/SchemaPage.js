@@ -20,7 +20,7 @@ import {
   TableRow,
   Tooltip,
 } from '@material-ui/core'
-import {recAttr} from '../orbit-store/little-orbit'
+import {recAttr, typeOfRecord} from '../orbit-store/little-orbit'
 import {computed} from '../lib/mobx'
 
 /*eslint-enable*/
@@ -130,7 +130,7 @@ class BodyRow extends Component {
   render() {
     const {
       record,
-      type,
+      type = typeOfRecord(record),
       attrPairs = getModelAttributePairs(type),
     } = this.props
     return (

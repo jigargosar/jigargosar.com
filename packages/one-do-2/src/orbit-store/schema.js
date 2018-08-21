@@ -1,7 +1,7 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
 import {validate} from '../lib/little-ramda'
-import {recordType} from './little-orbit'
+import {typeOfRecord} from './little-orbit'
 import {compose} from '../lib/ramda'
 
 const modelsDefinition = {
@@ -54,11 +54,11 @@ export const attributeDesc = name => type =>
 
 export const modelDescFromRec = record => {
   validate('O', [record])
-  return compose(modelDescFromType, recordType)(record)
+  return compose(modelDescFromType, typeOfRecord)(record)
 }
 
 export const attributeDescFromRecord = name => record => {
   validate('SO', [name, record])
 
-  return compose(attributeDesc(name), recordType)(record)
+  return compose(attributeDesc(name), typeOfRecord)(record)
 }

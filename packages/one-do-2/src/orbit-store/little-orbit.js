@@ -54,7 +54,7 @@ export const removeRecordOP = curry((recordOrRId, t) =>
   t.removeRecord(recordToRId(recordOrRId)),
 )
 
-export function recordType(record) {
+export function typeOfRecord(record) {
   validate('O', [record])
   const type = record.type
   validate('S', [type])
