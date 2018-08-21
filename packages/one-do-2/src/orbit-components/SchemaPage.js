@@ -76,6 +76,8 @@ class Model extends Component {
     const modelDesc = schema.getModel(type)
     const attrPairs = toPairs(modelDesc.attributes)
 
+    const rows = this.rows
+
     return (
       <div className={cn('pb4')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
@@ -84,14 +86,16 @@ class Model extends Component {
           // className={cn('code')}
         >
           <TableHead>{renderHeaderRow()}</TableHead>
-          <TableBody>
-            {map(record => (
-              <Fragment key={record.id}>{renderBodyRow(record)}</Fragment>
-            ))(this.rows)}
-          </TableBody>
+          <TableBody>{renderBodyRows()}</TableBody>
         </Table>
       </div>
     )
+
+    function renderBodyRows() {
+      map(record => (
+        <Fragment key={record.id}>{renderBodyRow(record)}</Fragment>
+      ))(rows)
+    }
 
     function renderBodyRow(record) {
       return (
