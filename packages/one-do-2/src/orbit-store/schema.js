@@ -72,7 +72,7 @@ class CustomSchema extends Schema {
   initializeRecord(record) {
     super.initializeRecord(record)
     if (record.type === 'task') {
-      const mergeWithDefaultProps = compose(
+      const setDefaultProps = compose(
         overProp(
           'attributes',
           mergeWith(defaultTo)({
@@ -84,7 +84,7 @@ class CustomSchema extends Schema {
         ),
         mergeWith(defaultTo, {attributes: {}}),
       )
-      Object.assign(record, mergeWithDefaultProps(record))
+      Object.assign(record, setDefaultProps(record))
     }
   }
 }
