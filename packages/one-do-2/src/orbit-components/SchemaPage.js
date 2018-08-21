@@ -19,6 +19,7 @@ import {
 } from '../lib/ramda'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
+  Button,
   Tab,
   Table,
   TableBody,
@@ -29,7 +30,6 @@ import {
   Tabs,
   Toolbar,
   Tooltip,
-  Button,
 } from '@material-ui/core'
 import {
   attributePath,
@@ -42,7 +42,6 @@ import {
 import {action, computed, observable} from '../lib/mobx'
 import {renderKeyedById} from '../lib/little-react'
 import {AddIcon} from '../lib/Icons'
-import {updateAddTask} from '../orbit-store/TaskRecord'
 
 /*eslint-enable*/
 
