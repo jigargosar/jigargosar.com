@@ -36,6 +36,10 @@ import {renderKeyedById} from '../lib/little-react'
 
 /*eslint-enable*/
 
+function isAttributeTypeNumeric(attribute) {
+  return attribute.type === 'number'
+}
+
 @observer
 export class SchemaPage extends Component {
   render() {
@@ -50,10 +54,6 @@ export class SchemaPage extends Component {
       </Page>
     )
   }
-}
-
-function isAttributeTypeNumeric(attribute) {
-  return attribute.type === 'number'
 }
 
 @observer
@@ -134,7 +134,6 @@ class Model extends Component {
     return this.query.current()
   }
 
-  @computed
   get sortComparators() {
     return [ascend(_prop(this.sortAttribute))]
   }
