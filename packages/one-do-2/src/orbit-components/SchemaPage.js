@@ -72,7 +72,7 @@ function getModel(type) {
 }
 
 function getModelAttributePairs(type) {
-  toPairs(getModel(type).attributes)
+  return toPairs(getModel(type).attributes)
 }
 
 @observer
@@ -80,8 +80,6 @@ class Model extends Component {
   query = liveQuery(q => q.findRecords(this.props.type))
   render() {
     const {type} = this.props
-    const attrPairs = getModelAttributePairs(type)
-
     const rows = this.rows
 
     return (
@@ -115,7 +113,7 @@ class Model extends Component {
               attribute={attribute}
               record={record}
             />
-          ))(attrPairs)}
+          ))(getModelAttributePairs(type))}
         </TableRow>
       )
     }
@@ -126,7 +124,7 @@ class Model extends Component {
           <TableCell>{`id`}</TableCell>
           {map(([name, attribute]) => (
             <HeaderCell key={name} name={name} attribute={attribute} />
-          ))(attrPairs)}
+          ))(getModelAttributePairs(type))}
         </TableRow>
       )
     }
