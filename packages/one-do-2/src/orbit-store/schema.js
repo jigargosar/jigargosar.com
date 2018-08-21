@@ -3,8 +3,6 @@ import {Schema} from './orbit'
 import {overProp, validate} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
 import {compose, defaultTo, mergeWith} from '../lib/ramda'
-import {extendObservable} from '../lib/mobx'
-import {autoBind} from '../lib/auto-bind'
 import {fWord} from '../lib/fake'
 
 const modelsDefinition = {
