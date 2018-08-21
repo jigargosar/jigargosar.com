@@ -2,11 +2,7 @@
 
 import {observer} from 'mobx-react'
 import React, {Component, Fragment} from 'react'
-import {
-  attributeDescFromRecord,
-  modelDescFromType,
-  schema,
-} from '../orbit-store/schema'
+import {attributeDescFromRecord, schema} from '../orbit-store/schema'
 import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
@@ -89,7 +85,8 @@ class BodyCell extends Component {
 
 const attrPairsFromModelDef = compose(toPairs, _prop('attributes'))
 
-const getModelAttributes = attrPairsFromModelDef
+const getAttributes = type => schema =>
+  compose(toPairs, _prop('attributes'), modelDefOfType(type))(schema)
 
 function attrPairsFromType(type) {
   return compose(attrPairsFromModelDef, modelDefOfType(type))(schema)
