@@ -29,6 +29,7 @@ import {
   Tabs,
   Toolbar,
   Tooltip,
+  Button,
 } from '@material-ui/core'
 import {
   attributePath,
@@ -163,6 +164,7 @@ class Model extends Component {
 
     return (
       <div className={cn('pb4')}>
+        <Button color={'primary'}>add</Button>
         <Table padding={'dense'}>
           <TableHead>{this.renderHeaderRow()}</TableHead>
           <TableBody>
