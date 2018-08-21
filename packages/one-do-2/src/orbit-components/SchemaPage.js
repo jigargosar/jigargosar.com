@@ -17,7 +17,10 @@ export class SchemaPage extends Component {
 
   @computed
   get selectedModelType() {
-    return this._selectedModelType || compose(head, getModelTypes)(schema)
+    return (
+      this._selectedModelType ||
+      compose(head, store.schema.modelTypes)(schema)
+    )
   }
 
   @action.bound
