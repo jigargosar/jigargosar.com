@@ -10,7 +10,16 @@ import {
 import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
-import {join, keys, map, take, toPairs} from '../lib/ramda'
+import {
+  _prop,
+  ascend,
+  join,
+  keys,
+  map,
+  sortBy,
+  take,
+  toPairs,
+} from '../lib/ramda'
 import {liveQuery} from '../orbit-store/Store'
 import {
   Table,
@@ -130,7 +139,7 @@ class Model extends Component {
 
   @computed
   get sortedRows() {
-    return this.query.current()
+    return sortBy([ascend(_prop('sortIdx'))])(this.allRows)
   }
 }
 
