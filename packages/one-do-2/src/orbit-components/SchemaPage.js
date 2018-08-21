@@ -42,6 +42,7 @@ import {
 import {action, computed, observable} from '../lib/mobx'
 import {renderKeyedById} from '../lib/little-react'
 import {AddIcon} from '../lib/Icons'
+import store from '../orbit-store/Store'
 
 /*eslint-enable*/
 
@@ -64,7 +65,7 @@ export class SchemaPage extends Component {
   }
 
   render() {
-    const modelTypes = getModelTypes(schema)
+    const modelTypes = store.schema.modelTypes
     return (
       <Page>
         <PageTitle>Schema</PageTitle>
