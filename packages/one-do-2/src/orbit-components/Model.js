@@ -119,7 +119,7 @@ export class Model extends Component {
               onClick: () => this.onSortLabelClicked(attributePath(name)),
             }}
           />
-        ))(this.attributes())}
+        ))(this.attributes)}
       </TableRow>
     )
   }
