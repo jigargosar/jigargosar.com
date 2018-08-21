@@ -139,6 +139,11 @@ class Model extends Component {
   }
 
   @computed
+  get sortComparators() {
+    return [ascend(_prop(this.sortAttribute))]
+  }
+
+  @computed
   get sortedRows() {
     return sortWith([ascend(_prop(this.sortAttribute))])(this.allRows)
   }
