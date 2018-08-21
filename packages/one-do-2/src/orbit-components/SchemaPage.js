@@ -4,7 +4,7 @@ import {observer} from 'mobx-react'
 import React, {Component, Fragment} from 'react'
 import {
   attributeDescFromRecord,
-  getModel,
+  modelDescFromType,
   schema,
 } from '../orbit-store/schema'
 import {Page} from './Page'
@@ -73,7 +73,7 @@ class BodyCell extends Component {
 }
 
 function getModelAttributePairs(type) {
-  return toPairs(getModel(type).attributes)
+  return toPairs(modelDescFromType(type).attributes)
 }
 
 @observer

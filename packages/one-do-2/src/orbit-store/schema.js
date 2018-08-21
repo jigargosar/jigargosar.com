@@ -40,16 +40,16 @@ export const schema = new Schema({
   generateId,
 })
 
-export function getModel(type) {
+export function modelDescFromType(type) {
   return schema.getModel(type)
 }
 
 export const attributeDesc = name => type =>
-  getModel(type).attributes[name]
+  modelDescFromType(type).attributes[name]
 
 export const modelDescFromRec = record => {
   validate('O', [record])
-  return compose(getModel, recordType)(record)
+  return compose(modelDescFromType, recordType)(record)
 }
 
 export const attributeDescFromRecord = name => record => {
