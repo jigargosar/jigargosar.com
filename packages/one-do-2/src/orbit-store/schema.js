@@ -1,6 +1,6 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
-import {overProp, validate} from '../lib/little-ramda'
+import {overProp, tapLog, validate} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
 import {compose, defaultTo, mergeWith} from '../lib/ramda'
 import {extendObservable} from '../lib/mobx'
@@ -73,6 +73,7 @@ class CustomSchema extends Schema {
     super.initializeRecord(record)
     if (record.type === 'task') {
       const setDefaultProps = compose(
+        tapLog,
         overProp(
           'attributes',
           mergeWith(defaultTo)({
@@ -82,7 +83,8 @@ class CustomSchema extends Schema {
             sortIdx: 0,
           }),
         ),
-        mergeWith(defaultTo, {attributes: {}}),
+        tapLog,
+        mergeWith(defaultTo)({attributes: {}}),
       )
       Object.assign(record, setDefaultProps(record))
     }
