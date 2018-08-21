@@ -119,9 +119,14 @@ export class Model extends Component {
               onClick: () => this.onSortLabelClicked(attributePath(name)),
             }}
           />
-        ))(attributesOfType(type)(schema))}
+        ))(this.attributes())}
       </TableRow>
     )
+  }
+
+  @computed
+  get attributes() {
+    return attributesOfType(this.modelType)(schema)
   }
 }
 
