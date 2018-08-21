@@ -1,4 +1,3 @@
-import {fWord} from '../lib/fake'
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
 import {__, compose, head, insert, map} from '../lib/ramda'
 import {mapIndexed} from '../lib/little-ramda'
@@ -18,13 +17,7 @@ export function querySortedTasks() {
   return query(sortedTasksQuery)
 }
 
-export function TaskRecord({
-  id,
-  title = fWord(),
-  createdAt = Date.now(),
-  isDone = false,
-  sortIdx = 0,
-} = {}) {
+export function TaskRecord({id, title, createdAt, isDone, sortIdx} = {}) {
   return {
     id,
     type: 'task',
