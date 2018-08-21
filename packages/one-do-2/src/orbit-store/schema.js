@@ -81,6 +81,7 @@ class CustomSchema extends Schema {
             sortIdx: 0,
           }),
         ),
+        mergeWith(defaultTo)({attributes: {}}),
       )
       Object.assign(record, setDefaultProps(record))
     }
