@@ -72,15 +72,21 @@ export class SchemaPage extends Component {
 @observer
 class HeaderCell extends Component {
   render() {
-    const {attribute, name} = this.props
+    const {
+      numeric,
+      label,
+      sortDirection,
+      active,
+      tooltipTitle,
+    } = this.props
     return (
-      <TableCell numeric={isAttributeTypeNumeric(attribute)}>
-        {/*<Tooltip title={attribute.type}>*/}
-        {/*<div>{name}</div>*/}
-        {/*</Tooltip>*/}
-        <TableSortLabel direction={'asc'} active={true}>
-          {name}
-        </TableSortLabel>
+      <TableCell numeric={numeric}>
+        <Tooltip title={tooltipTitle}>
+          {/*<div>{name}</div>*/}
+          <TableSortLabel direction={sortDirection} active={active}>
+            {label}
+          </TableSortLabel>
+        </Tooltip>
       </TableCell>
     )
   }
@@ -139,7 +145,11 @@ class Model extends Component {
         <TableRow>
           <TableCell>{`id`}</TableCell>
           {map(([name, attribute]) => (
-            <HeaderCell key={name} name={name} attribute={attribute} />
+            <HeaderCell
+              key={name}
+              label={name}
+              numeric={isAttributeTypeNumeric(attribute)}
+            />
           ))(attrPairsFromType(type))}
         </TableRow>
       )
