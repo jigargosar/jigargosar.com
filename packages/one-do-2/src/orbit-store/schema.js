@@ -73,7 +73,6 @@ class CustomSchema extends Schema {
     super.initializeRecord(record)
     if (record.type === 'task') {
       const setDefaultProps = compose(
-        tapLog,
         overProp('attributes')(
           mergeWith(defaultTo)({
             title: fWord(),
@@ -82,9 +81,7 @@ class CustomSchema extends Schema {
             sortIdx: 0,
           }),
         ),
-        tapLog,
         mergeWith(defaultTo)({attributes: {}}),
-        tapLog,
       )
       Object.assign(record, setDefaultProps(record))
     }
