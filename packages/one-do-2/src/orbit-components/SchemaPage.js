@@ -26,6 +26,11 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  TableSortLabel,
+  TableFooter,
+  Tab,
+  TablePagination,
+  Tabs,
 } from '@material-ui/core'
 import {
   modelDefOfType,
@@ -67,6 +72,7 @@ class HeaderCell extends Component {
         {/*<Tooltip title={attribute.type}>*/}
         <div>{name}</div>
         {/*</Tooltip>*/}
+        TSL
       </TableCell>
     )
   }
