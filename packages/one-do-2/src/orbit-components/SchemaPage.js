@@ -73,11 +73,11 @@ export class SchemaPage extends Component {
 class HeaderCell extends Component {
   render() {
     const {
-      numeric,
-      label,
+      numeric = false,
+      label = 'INVALID_LABEL',
       sortDirection,
-      active,
-      tooltipTitle,
+      active = true,
+      tooltipTitle = <Fragment />,
     } = this.props
     return (
       <TableCell numeric={numeric}>
