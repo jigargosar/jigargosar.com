@@ -136,7 +136,9 @@ class BodyRow extends Component {
     return (
       <Fragment>
         <TableRow hover>
-          <TableCell>{take(10)(record.id)}</TableCell>
+          <TableCell className={cn('code')}>
+            {take(10)(record.id)}
+          </TableCell>
           {map(([name, attribute]) => (
             <BodyCell
               key={name}
