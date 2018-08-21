@@ -49,16 +49,16 @@ function isAttributeTypeNumeric(attribute) {
 
 @observer
 export class SchemaPage extends Component {
-  @observable selectedModelType = null
+  @observable _selectedModelType = null
 
   @computed
-  get currentTabValue() {
-    return this.selectedModelType || compose(head, getModelTypes)(schema)
+  get selectedModelType() {
+    return this._selectedModelType || compose(head, getModelTypes)(schema)
   }
 
   @action.bound
   handleTabsChange(e, value) {
-    this.selectedModelType = value
+    this._selectedModelType = value
   }
 
   render() {
@@ -68,7 +68,7 @@ export class SchemaPage extends Component {
         <PageTitle>Schema</PageTitle>
         <Toolbar>
           <Tabs
-            value={this.currentTabValue}
+            value={this.selectedModelType}
             onChange={this.handleTabsChange}
           >
             {map(name => {
@@ -78,7 +78,9 @@ export class SchemaPage extends Component {
         </Toolbar>
         <div className={cn('ph3')}>
           {/*{map(type => <Model key={type} type={type} />)(modelTypes)}*/}
-          <Model type={'task'} />
+          {this.selectedModelType && (
+            <Model type={this.selectedModelType} />
+          )}
         </div>
       </Page>
     )
