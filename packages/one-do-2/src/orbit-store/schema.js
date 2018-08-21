@@ -41,7 +41,12 @@ export const schema = new Schema({
 })
 
 export function modelDescFromType(type) {
-  return schema.getModel(type)
+  validate('S', [type])
+
+  const modelDesc = schema.models[type]
+  validate('O', [modelDesc])
+
+  return modelDesc
 }
 
 export const attributeDesc = name => type =>
