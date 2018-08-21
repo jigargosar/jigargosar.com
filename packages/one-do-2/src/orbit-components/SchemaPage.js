@@ -16,7 +16,7 @@ import {
   join,
   keys,
   map,
-  sortBy,
+  sortWith,
   take,
   toPairs,
 } from '../lib/ramda'
@@ -139,7 +139,7 @@ class Model extends Component {
 
   @computed
   get sortedRows() {
-    return sortBy([ascend(_prop('sortIdx'))])(this.allRows)
+    return sortWith([ascend(_prop('sortIdx'))])(this.allRows)
   }
 }
 
