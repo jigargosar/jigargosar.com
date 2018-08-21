@@ -2,7 +2,11 @@
 
 import {observer} from 'mobx-react'
 import React, {Component, Fragment} from 'react'
-import {getModel, schema} from '../orbit-store/schema'
+import {
+  attributeDescFromRecord,
+  getModel,
+  schema,
+} from '../orbit-store/schema'
 import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
@@ -58,9 +62,10 @@ class HeaderCell extends Component {
 @observer
 class BodyCell extends Component {
   render() {
-    const {attribute, name, record} = this.props
+    const {name, record} = this.props
+    const attrDesc = attributeDescFromRecord(name)(record)
     return (
-      <TableCell numeric={isAttributeTypeNumeric(attribute)}>
+      <TableCell numeric={isAttributeTypeNumeric(attrDesc)}>
         {`${recAttr(name)(record)}`}
       </TableCell>
     )
