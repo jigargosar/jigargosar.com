@@ -67,9 +67,11 @@ export function ObservableSchema(options) {
   return schema
 }
 
-const createDefaultSchema = () =>
-  new Schema({
+function createDefaultSchema() {
+  return new Schema({
     models: modelsDefinition,
     generateId,
   })
+}
+
 export const schema = createDefaultSchema()
