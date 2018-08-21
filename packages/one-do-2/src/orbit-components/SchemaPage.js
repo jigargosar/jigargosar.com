@@ -64,9 +64,9 @@ class HeaderCell extends Component {
     const {attribute, name} = this.props
     return (
       <TableCell numeric={isAttributeTypeNumeric(attribute)}>
-        <Tooltip title={attribute.type}>
-          <div>{name}</div>
-        </Tooltip>
+        {/*<Tooltip title={attribute.type}>*/}
+        <div>{name}</div>
+        {/*</Tooltip>*/}
       </TableCell>
     )
   }
