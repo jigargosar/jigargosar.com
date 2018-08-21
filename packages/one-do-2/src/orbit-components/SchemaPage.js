@@ -75,6 +75,7 @@ export class SchemaPage extends Component {
               return <Tab key={name} label={name} value={name} />
             })(modelTypes)}
           </Tabs>
+          <button>Add</button>
         </Toolbar>
         <div className={cn('ph3')}>
           {/*{map(type => <Model key={type} type={type} />)(modelTypes)}*/}
