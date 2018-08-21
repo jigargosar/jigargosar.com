@@ -13,6 +13,7 @@ import cn from 'classnames'
 import {
   _prop,
   ascend,
+  compose,
   join,
   keys,
   map,
@@ -83,7 +84,7 @@ class BodyCell extends Component {
 }
 
 function attrPairsFromType(type) {
-  return toPairs(modelDescFromType(type).attributes)
+  return compose(toPairs, _prop('attributes'), modelDescFromType)(type)
 }
 
 @observer
