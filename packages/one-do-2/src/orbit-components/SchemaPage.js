@@ -155,6 +155,11 @@ class Model extends Component {
   }
 
   @computed
+  get sortDirectionString() {
+    return this.sortDirFn === ascend ? 'asc' : 'desc'
+  }
+
+  @computed
   get sortComparator() {
     return compose(this.sortDirFn, _path)(this.sortPath)
   }
