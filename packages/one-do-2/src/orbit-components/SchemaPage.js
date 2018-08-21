@@ -13,6 +13,7 @@ import {
   compose,
   descend,
   equals,
+  head,
   map,
   sortWith,
   take,
@@ -48,14 +49,19 @@ function isAttributeTypeNumeric(attribute) {
 
 @observer
 export class SchemaPage extends Component {
-  @observable selectedModelType = ''
+  @observable selectedModelType = null
+
+  @computed
+  get currentTabValue() {
+    return this.selectedModelType || compose(head, getModelTypes)(schema)
+  }
   render() {
     const modelTypes = getModelTypes(schema)
     return (
       <Page>
         <PageTitle>Schema</PageTitle>
         <Toolbar>
-          <Tabs value={this.selectedModelType}>
+          <Tabs value={this.currentTabValue}>
             {map(name => {
               return <Tab key={name} label={name} value={name} />
             })(modelTypes)}
