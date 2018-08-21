@@ -87,10 +87,10 @@ class BodyCell extends Component {
   }
 }
 
+const attrPairsFromModelDef = compose(toPairs, _prop('attributes'))
+
 function attrPairsFromType(type) {
-  return compose(toPairs, _prop('attributes'), modelDefOfType(type))(
-    schema,
-  )
+  return compose(attrPairsFromModelDef, modelDefOfType(type))(schema)
 }
 
 @observer
