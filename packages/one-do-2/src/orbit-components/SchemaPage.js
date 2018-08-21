@@ -58,8 +58,8 @@ export class SchemaPage extends Component {
   }
 
   @action.bound
-  handleTabsChange(e) {
-    console.log(e.name, e.value, e)
+  handleTabsChange(e, value) {
+    this.selectedModelType = value
   }
 
   render() {
