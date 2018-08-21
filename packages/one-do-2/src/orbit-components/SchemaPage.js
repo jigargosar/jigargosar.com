@@ -104,7 +104,7 @@ class Model extends Component {
     }
 
     function renderBodyRow(record) {
-      return <BodyRow record={record} type={type} />
+      return <BodyRow record={record} />
     }
 
     function renderHeaderRow() {
