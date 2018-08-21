@@ -1,5 +1,3 @@
-/*eslint-disable*/
-
 import {observer} from 'mobx-react'
 import React, {Component} from 'react'
 import {schema} from '../orbit-store/schema'
@@ -12,8 +10,6 @@ import {Tab, Tabs, Toolbar} from '@material-ui/core'
 import {getModelTypes} from '../orbit-store/little-orbit'
 import {action, computed, observable} from '../lib/mobx'
 import {Model} from './Model'
-
-/*eslint-enable*/
 
 @observer
 export class SchemaPage extends Component {
