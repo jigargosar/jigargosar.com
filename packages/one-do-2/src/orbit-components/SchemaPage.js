@@ -94,7 +94,7 @@ function attrPairsFromType(type) {
 
 @observer
 class Model extends Component {
-  query = liveQuery(q => q.findRecords(this.props.type))
+  @observable query = liveQuery(q => q.findRecords(this.props.type))
   @observable sortAttribute = 'sortIdx'
   render() {
     const {type} = this.props
@@ -129,6 +129,7 @@ class Model extends Component {
   get rows() {
     return this.sortedRows
   }
+
   get allRows() {
     return this.query.current()
   }
