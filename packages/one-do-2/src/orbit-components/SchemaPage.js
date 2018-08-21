@@ -104,19 +104,7 @@ class Model extends Component {
     }
 
     function renderBodyRow(record) {
-      return (
-        <TableRow hover>
-          <TableCell>{take(10)(record.id)}</TableCell>
-          {map(([name, attribute]) => (
-            <BodyCell
-              key={name}
-              name={name}
-              attribute={attribute}
-              record={record}
-            />
-          ))(getModelAttributePairs(type))}
-        </TableRow>
-      )
+      return <BodyRow record={record} type={type} />
     }
 
     function renderHeaderRow() {
@@ -140,9 +128,13 @@ class Model extends Component {
 @observer
 class BodyRow extends Component {
   render() {
-    const {record, attrPairs} = this.props
+    const {
+      record,
+      type,
+      attrPairs = getModelAttributePairs(type),
+    } = this.props
     return (
-      <div>
+      <Fragment>
         <TableRow hover>
           <TableCell>{take(10)(record.id)}</TableCell>
           {map(([name, attribute]) => (
@@ -154,7 +146,7 @@ class BodyRow extends Component {
             />
           ))(attrPairs)}
         </TableRow>
-      </div>
+      </Fragment>
     )
   }
 }
