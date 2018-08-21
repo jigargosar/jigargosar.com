@@ -30,7 +30,11 @@ import {
   TableRow,
   Tooltip,
 } from '@material-ui/core'
-import {recAttr, typeOfRecord} from '../orbit-store/little-orbit'
+import {
+  modelDefOfType,
+  recAttr,
+  typeOfRecord,
+} from '../orbit-store/little-orbit'
 import {computed, observable} from '../lib/mobx'
 import {renderKeyedById} from '../lib/little-react'
 
@@ -84,7 +88,9 @@ class BodyCell extends Component {
 }
 
 function attrPairsFromType(type) {
-  return compose(toPairs, _prop('attributes'), modelDescFromType)(type)
+  return compose(toPairs, _prop('attributes'), modelDefOfType(type))(
+    schema,
+  )
 }
 
 @observer

@@ -2,7 +2,7 @@ import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
 import {validate} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
-import {_path, compose} from '../lib/ramda'
+import {compose} from '../lib/ramda'
 
 const modelsDefinition = {
   task: {
@@ -46,12 +46,6 @@ export function modelDescFromType(type) {
   const modelDesc = schema.models[type]
   validate('O', [modelDesc])
 
-  return modelDesc
-}
-
-export const getModelDef = type => schema => {
-  const modelDesc = _path(['models', type])(schema)
-  validate('SOO', [type, schema, modelDesc])
   return modelDesc
 }
 

@@ -60,3 +60,9 @@ export function typeOfRecord(record) {
   validate('S', [type])
   return type
 }
+
+export const modelDefOfType = type => schema => {
+  const modelDesc = _path(['models', type])(schema)
+  validate('SOO', [type, schema, modelDesc])
+  return modelDesc
+}
