@@ -1,4 +1,4 @@
-import {keys, map, mapObjIndexed, values} from '../lib/ramda'
+import {keys, mapObjIndexed, values} from '../lib/ramda'
 
 function SchemaModel(schema, model, type) {
   return {
