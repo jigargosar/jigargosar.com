@@ -1,6 +1,6 @@
-import {curry, map, pick} from 'ramda'
+import {compose, curry, keys, map, pick} from 'ramda'
 import {prettyStringifySafe, validate} from '../lib/little-ramda'
-import {_path, compose, tap} from '../lib/ramda'
+import {_path, _prop, compose, tap} from '../lib/ramda'
 
 const flattenRecord = ({attributes, ...rest}) => ({
   ...rest,
@@ -66,3 +66,4 @@ export const modelDefOfType = type => schema => {
   validate('SOO', [type, schema, modelDesc])
   return modelDesc
 }
+export const getModelTypes = compose(keys, _prop('models'))

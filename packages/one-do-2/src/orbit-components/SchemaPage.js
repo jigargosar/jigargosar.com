@@ -13,8 +13,6 @@ import {
   compose,
   descend,
   equals,
-  join,
-  keys,
   map,
   sortWith,
   take,
@@ -22,20 +20,17 @@ import {
 } from '../lib/ramda'
 import {liveQuery} from '../orbit-store/Store'
 import {
+  Tab,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Tooltip,
   TableSortLabel,
-  TableFooter,
-  Tab,
-  TablePagination,
-  Tabs,
-  RootRef,
+  Tooltip,
 } from '@material-ui/core'
 import {
+  getModelTypes,
   modelDefOfType,
   recAttr,
   typeOfRecord,
@@ -51,8 +46,9 @@ function isAttributeTypeNumeric(attribute) {
 
 @observer
 export class SchemaPage extends Component {
+  @observable selectedModelType = ''
   render() {
-    const modelTypes = keys(schema.models)
+    const modelTypes = getModelTypes(schema)
     return (
       <Page>
         <PageTitle>Schema</PageTitle>
