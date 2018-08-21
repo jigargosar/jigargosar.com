@@ -2,9 +2,7 @@ import {keys, mapObjIndexed, values} from '../lib/ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
-  const modelLookup = mapObjIndexed((model, type) =>
-    SchemaModel(model, type),
-  )(schema.models)
+  const modelLookup = mapObjIndexed(SchemaModel)(schema.models)
   return {
     models: values(modelLookup),
     getModel: type => modelLookup[type],
@@ -16,9 +14,7 @@ export function StoreSchema(store) {
       return {name, attribute}
     }
 
-    const attributeLookup = mapObjIndexed((attribute, name) =>
-      ModelAttribute(attribute, name),
-    )(model.attributes)
+    const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
     return {
       type,
       attributes: attributeLookup,
