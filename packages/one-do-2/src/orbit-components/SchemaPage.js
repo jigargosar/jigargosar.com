@@ -72,7 +72,7 @@ class HeaderCell extends Component {
       label = 'INVALID_LABEL',
       sortDirection,
       active = false,
-      tooltipTitle = <Fragment />,
+      tooltipTitle = label,
     } = this.props
     return (
       <TableCell numeric={numeric}>
