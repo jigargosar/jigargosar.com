@@ -74,7 +74,7 @@ class HeaderCell extends Component {
       sortDirection,
       active = false,
       tooltipTitle = label,
-      sortLabelProps = {},
+      SortLabelProps = {},
     } = this.props
     return (
       <TableCell numeric={numeric}>
@@ -82,7 +82,7 @@ class HeaderCell extends Component {
           <TableSortLabel
             direction={sortDirection}
             active={active}
-            {...sortLabelProps}
+            {...SortLabelProps}
           >
             {label}
           </TableSortLabel>
@@ -166,7 +166,7 @@ class Model extends Component {
           label={'id'}
           active={equals(this.sortPath, idPath)}
           sortDirection={this.sortDirectionString}
-          sortLabelProps={{onClick: () => this.onSortLabelClicked(idPath)}}
+          SortLabelProps={{onClick: () => this.onSortLabelClicked(idPath)}}
         />
         {map(([name, attribute]) => (
           <HeaderCell
@@ -175,7 +175,7 @@ class Model extends Component {
             numeric={isAttributeTypeNumeric(attribute)}
             active={equals(this.sortPath, attributePath(name))}
             sortDirection={this.sortDirectionString}
-            sortLabelProps={{
+            SortLabelProps={{
               onClick: () => this.onSortLabelClicked(attributePath(name)),
             }}
           />
