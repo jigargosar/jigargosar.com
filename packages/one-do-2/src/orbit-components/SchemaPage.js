@@ -61,12 +61,9 @@ class BodyCell extends Component {
   render() {
     const {attribute, name, record} = this.props
     return (
-      <Fragment>
-        <TableCell>{take(10)(record.id)}</TableCell>
-        <TableCell numeric={isAttributeNumeric(attribute)}>
-          {`${recAttr(name)(record)}`}
-        </TableCell>
-      </Fragment>
+      <TableCell numeric={isAttributeNumeric(attribute)}>
+        {`${recAttr(name)(record)}`}
+      </TableCell>
     )
   }
 }
@@ -80,14 +77,19 @@ class Model extends Component {
     const attrPairs = toPairs(modelDesc.attributes)
 
     function renderBodyCells(record) {
-      return map(([name, attribute]) => (
-        <BodyCell
-          key={name}
-          name={name}
-          attribute={attribute}
-          record={record}
-        />
-      ))(attrPairs)
+      return (
+        <Fragment>
+          <TableCell>{take(10)(record.id)}</TableCell>
+          {map(([name, attribute]) => (
+            <BodyCell
+              key={name}
+              name={name}
+              attribute={attribute}
+              record={record}
+            />
+          ))(attrPairs)}
+        </Fragment>
+      )
     }
 
     return (
