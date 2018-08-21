@@ -79,3 +79,7 @@ export const getModelTypes = compose(keys, _prop('models'))
 
 export const attributesOfType = type => schema =>
   compose(toPairs, _prop('attributes'), modelDefOfType(type))(schema)
+
+export function attributePath(name) {
+  return ['attributes', name]
+}

@@ -31,6 +31,7 @@ import {
   Tooltip,
 } from '@material-ui/core'
 import {
+  attributePath,
   attributesOfType,
   getModelTypes,
   recAttr,
@@ -125,10 +126,6 @@ class BodyCell extends Component {
 
 function attrPairsFromType(type) {
   return attributesOfType(type)(schema)
-}
-
-function attributePath(name) {
-  return ['attributes', name]
 }
 
 const idPath = ['id']
