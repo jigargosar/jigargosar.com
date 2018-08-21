@@ -15,6 +15,7 @@ import {
   equals,
   head,
   map,
+  pick,
   sortWith,
   take,
   toPairs,
@@ -55,13 +56,22 @@ export class SchemaPage extends Component {
   get currentTabValue() {
     return this.selectedModelType || compose(head, getModelTypes)(schema)
   }
+
+  @action.bound
+  handleTabsChange(e) {
+    console.log(e.name, e.value, e)
+  }
+
   render() {
     const modelTypes = getModelTypes(schema)
     return (
       <Page>
         <PageTitle>Schema</PageTitle>
         <Toolbar>
-          <Tabs value={this.currentTabValue}>
+          <Tabs
+            value={this.currentTabValue}
+            onChange={this.handleTabsChange}
+          >
             {map(name => {
               return <Tab key={name} label={name} value={name} />
             })(modelTypes)}
