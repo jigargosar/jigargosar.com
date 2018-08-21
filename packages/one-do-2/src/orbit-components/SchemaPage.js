@@ -76,9 +76,9 @@ class Model extends Component {
     const modelDesc = schema.getModel(type)
     const attrPairs = toPairs(modelDesc.attributes)
 
-    function renderBodyCells(record) {
+    function renderBodyRow(record) {
       return (
-        <Fragment>
+        <TableRow hover>
           <TableCell>{take(10)(record.id)}</TableCell>
           {map(([name, attribute]) => (
             <BodyCell
@@ -88,7 +88,7 @@ class Model extends Component {
               record={record}
             />
           ))(attrPairs)}
-        </Fragment>
+        </TableRow>
       )
     }
 
@@ -109,9 +109,7 @@ class Model extends Component {
           </TableHead>
           <TableBody>
             {map(record => (
-              <Fragment key={record.id}>
-                <TableRow hover>{renderBodyCells(record)}</TableRow>
-              </Fragment>
+              <Fragment key={record.id}>{renderBodyRow(record)}</Fragment>
             ))(this.rows)}
           </TableBody>
         </Table>
