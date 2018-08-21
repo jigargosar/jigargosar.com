@@ -34,54 +34,6 @@ import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import {renderKeyedById} from '../lib/little-react'
 
-function isAttributeTypeNumeric(attribute) {
-  return attribute.type === 'number'
-}
-
-@observer
-class HeaderCell extends Component {
-  render() {
-    const {
-      numeric = false,
-      label = 'INVALID_LABEL',
-      sortDirection,
-      active = false,
-      tooltipTitle = label,
-      SortLabelProps = {},
-    } = this.props
-    return (
-      <TableCell numeric={numeric}>
-        <Tooltip title={tooltipTitle} enterDelay={1500}>
-          <TableSortLabel
-            direction={sortDirection}
-            active={active}
-            {...SortLabelProps}
-          >
-            {label}
-          </TableSortLabel>
-        </Tooltip>
-      </TableCell>
-    )
-  }
-}
-
-@observer
-class BodyCell extends Component {
-  render() {
-    const {name, record} = this.props
-    const attrDesc = attributeDescFromRecord(name)(record)
-    return (
-      <TableCell numeric={isAttributeTypeNumeric(attrDesc)}>
-        {`${recAttr(name)(record)}`}
-      </TableCell>
-    )
-  }
-}
-
-function attrPairsFromType(type) {
-  return attributesOfType(type)(schema)
-}
-
 @observer
 export class Model extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
@@ -164,6 +116,54 @@ export class Model extends Component {
       </TableRow>
     )
   }
+}
+
+function isAttributeTypeNumeric(attribute) {
+  return attribute.type === 'number'
+}
+
+@observer
+class HeaderCell extends Component {
+  render() {
+    const {
+      numeric = false,
+      label = 'INVALID_LABEL',
+      sortDirection,
+      active = false,
+      tooltipTitle = label,
+      SortLabelProps = {},
+    } = this.props
+    return (
+      <TableCell numeric={numeric}>
+        <Tooltip title={tooltipTitle} enterDelay={1500}>
+          <TableSortLabel
+            direction={sortDirection}
+            active={active}
+            {...SortLabelProps}
+          >
+            {label}
+          </TableSortLabel>
+        </Tooltip>
+      </TableCell>
+    )
+  }
+}
+
+@observer
+class BodyCell extends Component {
+  render() {
+    const {name, record} = this.props
+    const attrDesc = attributeDescFromRecord(name)(record)
+    return (
+      <TableCell numeric={isAttributeTypeNumeric(attrDesc)}>
+        {`${recAttr(name)(record)}`}
+      </TableCell>
+    )
+  }
+}
+
+function attrPairsFromType(type) {
+  return attributesOfType(type)(schema)
 }
 
 @observer
