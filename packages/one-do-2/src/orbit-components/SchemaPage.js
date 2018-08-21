@@ -131,8 +131,18 @@ class Model extends Component {
   }
 
   @computed
+  get sortDirectionFn() {
+    return ascend
+  }
+
+  @computed
+  get sortComparator() {
+    return this.sortDirectionFn(recAttr(this.sortAttribute))
+  }
+
+  @computed
   get sortedRows() {
-    return sortWith([ascend(recAttr('sortIdx'))])(this.query.current())
+    return sortWith([this.sortComparator])(this.query.current())
   }
 }
 
