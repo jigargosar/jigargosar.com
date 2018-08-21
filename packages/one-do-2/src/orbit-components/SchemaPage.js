@@ -49,7 +49,8 @@ export class SchemaPage extends Component {
         <PageTitle>Schema</PageTitle>
         <div className={cn('pa3 pt0')}>{join(', ')(modelTypes)}</div>
         <div className={cn('ph3')}>
-          {map(type => <Model key={type} type={type} />)(modelTypes)}
+          {/*{map(type => <Model key={type} type={type} />)(modelTypes)}*/}
+          <Model type={'task'} />
         </div>
       </Page>
     )
@@ -131,14 +132,19 @@ class Model extends Component {
 
   @computed
   get currentRows() {
-    trace()
     return this.query.current()
   }
 
   @computed
   get sortedRows() {
     // return sortWith([ascend(_prop('sortIdx'))])(this.query.current())
-    return sortWith([ascend(_prop('sortIdx'))])(this.currentRows)
+
+    const sortedRows = sortWith([ascend(recAttr('sortIdx'))])(
+      this.currentRows,
+    )
+    trace()
+    console.log(`sortedRows`, sortedRows)
+    return sortedRows
   }
 }
 
