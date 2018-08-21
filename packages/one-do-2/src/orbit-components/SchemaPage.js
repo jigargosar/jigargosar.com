@@ -123,20 +123,7 @@ class Model extends Component {
       <div className={cn('pb4')}>
         {renderHeader.call(this)}
         <Table padding={'dense'}>
-          <TableHead>
-            {
-              <TableRow>
-                <HeaderCell label={'id'} active={this.sortPath} />
-                {map(([name, attribute]) => (
-                  <HeaderCell
-                    key={name}
-                    label={name}
-                    numeric={isAttributeTypeNumeric(attribute)}
-                  />
-                ))(attrPairsFromType(type))}
-              </TableRow>
-            }
-          </TableHead>
+          <TableHead>{this.renderHeaderRow()}</TableHead>
           <TableBody>
             {renderKeyedById(RecordRow, 'record', rows)}
           </TableBody>
@@ -147,6 +134,22 @@ class Model extends Component {
     function renderHeader() {
       return <div className={cn('f4 b')}>{`${type}`}</div>
     }
+  }
+
+  renderHeaderRow() {
+    const {type} = this.props
+    return (
+      <TableRow>
+        <HeaderCell label={'id'} active={this.sortPath} />
+        {map(([name, attribute]) => (
+          <HeaderCell
+            key={name}
+            label={name}
+            numeric={isAttributeTypeNumeric(attribute)}
+          />
+        ))(attrPairsFromType(type))}
+      </TableRow>
+    )
   }
 
   @computed
