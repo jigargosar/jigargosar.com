@@ -80,7 +80,10 @@ export class SchemaPage extends Component {
         <div className={cn('ph3')}>
           {/*{map(type => <Model key={type} type={type} />)(modelTypes)}*/}
           {this.selectedModelType && (
-            <Model type={this.selectedModelType} />
+            <Model
+              key={this.selectedModelType}
+              type={this.selectedModelType}
+            />
           )}
         </div>
       </Page>
