@@ -80,13 +80,17 @@ class Model extends Component {
 
     return (
       <div className={cn('pb4')}>
-        <div className={cn('f4 b')}>{`${type}`}</div>
+        {renderHeader()}
         <Table padding={'dense'}>
           <TableHead>{renderHeaderRow()}</TableHead>
           <TableBody>{renderBodyRows()}</TableBody>
         </Table>
       </div>
     )
+
+    function renderHeader() {
+      return <div className={cn('f4 b')}>{`${type}`}</div>
+    }
 
     function renderBodyRows() {
       return map(record => (
