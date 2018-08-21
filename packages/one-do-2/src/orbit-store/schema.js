@@ -49,7 +49,7 @@ export const attributeDesc = name => type =>
 
 export const modelDescFromRec = record => {
   validate('O', [record])
-  return getModel(recordType(record))
+  return compose(getModel, recordType)(record)
 }
 
 export const attributeDescFromRecord = name => record => {
