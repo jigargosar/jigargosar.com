@@ -18,7 +18,7 @@ import {
   recAttr,
   typeOfRecord,
 } from '../orbit-store/little-orbit'
-import {action, computed, observable} from 'mobx'
+import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   _path,
