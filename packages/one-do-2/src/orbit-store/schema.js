@@ -1,5 +1,6 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
+import {type} from '../lib/ramda'
 
 const modelsDefinition = {
   task: {
@@ -40,3 +41,6 @@ export const schema = new Schema({
 export function getModel(type) {
   return schema.getModel(type)
 }
+
+export const getModelAttributeDesc = type => name =>
+  getModel(type).attributes[name]
