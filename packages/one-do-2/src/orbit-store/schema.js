@@ -36,3 +36,7 @@ export const schema = new Schema({
   models: modelsDefinition,
   generateId,
 })
+
+export function getModel(type) {
+  return schema.getModel(type)
+}

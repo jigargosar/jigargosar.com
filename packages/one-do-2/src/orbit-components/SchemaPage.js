@@ -2,7 +2,7 @@
 
 import {observer} from 'mobx-react'
 import React, {Component, Fragment} from 'react'
-import {schema} from '../orbit-store/schema'
+import {getModel, schema} from '../orbit-store/schema'
 import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
@@ -65,10 +65,6 @@ class BodyCell extends Component {
       </TableCell>
     )
   }
-}
-
-function getModel(type) {
-  return schema.getModel(type)
 }
 
 function getModelAttributePairs(type) {
