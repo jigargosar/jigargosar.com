@@ -7,9 +7,9 @@ import {
   map,
   pick,
   tap,
+  toPairs,
 } from '../lib/ramda'
 import {prettyStringifySafe, validate} from '../lib/little-ramda'
-import {compose, toPairs} from 'ramda'
 
 const flattenRecord = ({attributes, ...rest}) => ({
   ...rest,
