@@ -73,12 +73,17 @@ class HeaderCell extends Component {
       sortDirection,
       active = false,
       tooltipTitle = label,
+      sortLabelProps = {},
     } = this.props
     return (
       <TableCell numeric={numeric}>
         <Tooltip title={tooltipTitle}>
           {/*<div>{name}</div>*/}
-          <TableSortLabel direction={sortDirection} active={active}>
+          <TableSortLabel
+            direction={sortDirection}
+            active={active}
+            {...sortLabelProps}
+          >
             {label}
           </TableSortLabel>
         </Tooltip>
