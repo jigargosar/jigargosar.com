@@ -77,7 +77,6 @@ export class SchemaPage extends Component {
           </Tabs>
         </Toolbar>
         <div className={cn('ph3')}>
-          {/*{map(type => <Model key={type} type={type} />)(modelTypes)}*/}
           {this.selectedModelType && (
             <Model
               key={this.selectedModelType}
