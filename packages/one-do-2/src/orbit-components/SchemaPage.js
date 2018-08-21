@@ -72,8 +72,8 @@ export class SchemaPage extends Component {
             value={this.selectedModelType}
             onChange={this.handleTabsChange}
           >
-            {map(name => {
-              return <Tab key={name} label={name} value={name} />
+            {map(type => {
+              return <Tab key={type} label={type} value={type} />
             })(store.schema.modelTypes)}
           </Tabs>
         </Toolbar>
