@@ -145,7 +145,7 @@ class Model extends Component {
 
   @computed
   get sortedRows() {
-    return sortWith([this.sortComparators])(this.allRows)
+    return sortWith(this.sortComparators)(this.allRows)
   }
 }
 
