@@ -11,6 +11,7 @@ import {
   _prop,
   ascend,
   compose,
+  equals,
   join,
   keys,
   map,
@@ -140,7 +141,7 @@ class Model extends Component {
     const {type} = this.props
     return (
       <TableRow>
-        <HeaderCell label={'id'} active={this.sortPath} />
+        <HeaderCell label={'id'} active={equals(this.sortPath, ['id'])} />
         {map(([name, attribute]) => (
           <HeaderCell
             key={name}
