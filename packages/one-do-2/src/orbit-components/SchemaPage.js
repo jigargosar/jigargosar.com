@@ -141,6 +141,21 @@ class Model extends Component {
     return liveQuery(q => q.findRecords(this.props.type))
   }
 
+  @computed
+  get sortDirectionString() {
+    return this.sortDirFn === ascend ? 'asc' : 'desc'
+  }
+
+  @computed
+  get sortComparator() {
+    return compose(this.sortDirFn, _path)(this.sortPath)
+  }
+
+  @computed
+  get sortedRows() {
+    return sortWith([this.sortComparator])(this.query.current())
+  }
+
   render() {
     const rows = this.sortedRows
 
@@ -190,21 +205,6 @@ class Model extends Component {
         ))(attrPairsFromType(type))}
       </TableRow>
     )
-  }
-
-  @computed
-  get sortDirectionString() {
-    return this.sortDirFn === ascend ? 'asc' : 'desc'
-  }
-
-  @computed
-  get sortComparator() {
-    return compose(this.sortDirFn, _path)(this.sortPath)
-  }
-
-  @computed
-  get sortedRows() {
-    return sortWith([this.sortComparator])(this.query.current())
   }
 }
 
