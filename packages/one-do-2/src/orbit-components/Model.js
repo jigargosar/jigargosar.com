@@ -108,25 +108,28 @@ export class Model extends Component {
           sortDirection={this.sortDirectionString}
           SortLabelProps={{onClick: () => this.onSortLabelClicked(idPath)}}
         />
-        {map(([name, attribute]) => (
-          <HeaderCell
-            key={name}
-            label={name}
-            numeric={isAttributeTypeNumeric(attribute)}
-            active={equals(this.sortPath, attributePath(name))}
-            sortDirection={this.sortDirectionString}
-            SortLabelProps={{
-              onClick: () => this.onSortLabelClicked(attributePath(name)),
-            }}
-          />
-        ))(this.attributes)}
+        {map(attribute => {
+          const {name} = attribute
+          return (
+            <HeaderCell
+              key={name}
+              label={name}
+              numeric={isAttributeTypeNumeric(attribute)}
+              active={equals(this.sortPath, attributePath(name))}
+              sortDirection={this.sortDirectionString}
+              SortLabelProps={{
+                onClick: () =>
+                  this.onSortLabelClicked(attributePath(name)),
+              }}
+            />
+          )
+        })(this.attributes)}
       </TableRow>
     )
   }
 
-  @computed
   get attributes() {
-    return attributesOfType(this.modelType)(schema)
+    return this.props.model.attributes
   }
 }
 
