@@ -37,7 +37,7 @@ export class SchemaPage extends Component {
   }
 }
 
-function isAttributeNumeric(attribute) {
+function isAttributeTypeNumeric(attribute) {
   return attribute.type === 'number'
 }
 
@@ -46,7 +46,7 @@ class HeaderCell extends Component {
   render() {
     const {attribute, name} = this.props
     return (
-      <TableCell numeric={isAttributeNumeric(attribute)}>
+      <TableCell numeric={isAttributeTypeNumeric(attribute)}>
         <Tooltip title={attribute.type}>
           <div>{name}</div>
         </Tooltip>
@@ -60,7 +60,7 @@ class BodyCell extends Component {
   render() {
     const {attribute, name, record} = this.props
     return (
-      <TableCell numeric={isAttributeNumeric(attribute)}>
+      <TableCell numeric={isAttributeTypeNumeric(attribute)}>
         {`${recAttr(name)(record)}`}
       </TableCell>
     )
