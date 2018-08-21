@@ -31,8 +31,9 @@ import {
   recAttr,
   typeOfRecord,
 } from '../orbit-store/little-orbit'
-import {computed, observable, trace} from '../lib/mobx'
+import {computed, observable} from '../lib/mobx'
 import {renderKeyedById} from '../lib/little-react'
+import {ascend, sortWith} from 'ramda'
 
 /*eslint-enable*/
 
@@ -131,20 +132,8 @@ class Model extends Component {
   }
 
   @computed
-  get currentRows() {
-    return this.query.current()
-  }
-
-  @computed
   get sortedRows() {
-    // return sortWith([ascend(_prop('sortIdx'))])(this.query.current())
-
-    const sortedRows = sortWith([ascend(recAttr('sortIdx'))])(
-      this.currentRows,
-    )
-    trace()
-    console.log(`sortedRows`, sortedRows)
-    return sortedRows
+    return sortWith([ascend(recAttr('sortIdx'))])(this.query.current())
   }
 }
 
