@@ -15,7 +15,6 @@ import {
   equals,
   head,
   map,
-  pick,
   sortWith,
   take,
   toPairs,
@@ -29,9 +28,9 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Tooltip,
-  Toolbar,
   Tabs,
+  Toolbar,
+  Tooltip,
 } from '@material-ui/core'
 import {
   getModelTypes,
@@ -148,8 +147,6 @@ class Model extends Component {
   @observable sortDirFn = ascend
 
   render() {
-    const {type} = this.props
-
     const rows = this.sortedRows
 
     return (
