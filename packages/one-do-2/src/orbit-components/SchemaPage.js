@@ -27,7 +27,7 @@ export class SchemaPage extends Component {
 
   @computed
   get selectedModel() {
-    return this.store.schema.getModel(this.selectedModelType)
+    return store.schema.getModel(this.selectedModelType)
   }
 
   render() {
