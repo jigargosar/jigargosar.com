@@ -138,7 +138,7 @@ class Model extends Component {
 
   @computed
   get sortComparator() {
-    return this.sortDirectionFn(_path(this.sortPath))
+    return compose(this.sortDirectionFn, _path)(this.sortPath)
   }
 
   @computed
