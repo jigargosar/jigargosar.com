@@ -19,6 +19,8 @@ import {
   toPairs,
 } from '../lib/ramda'
 import {liveQuery} from '../orbit-store/Store'
+
+// @formatter:off
 import {
   Table,
   TableBody,
@@ -32,6 +34,9 @@ import {
   TablePagination,
   Tabs,
 } from '@material-ui/core'
+
+// @formatter:on
+
 import {
   modelDefOfType,
   recAttr,
