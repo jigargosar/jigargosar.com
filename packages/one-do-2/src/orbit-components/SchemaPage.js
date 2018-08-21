@@ -19,9 +19,6 @@ import {
   toPairs,
 } from '../lib/ramda'
 import {liveQuery} from '../orbit-store/Store'
-
-// @formatter:off
-
 import {
   Table,
   TableBody,
@@ -35,9 +32,6 @@ import {
   TablePagination,
   Tabs,
 } from '@material-ui/core'
-
-// @formatter:on
-
 import {
   modelDefOfType,
   recAttr,
@@ -76,7 +70,7 @@ class HeaderCell extends Component {
       numeric = false,
       label = 'INVALID_LABEL',
       sortDirection,
-      active = true,
+      active = false,
       tooltipTitle = <Fragment />,
     } = this.props
     return (
@@ -127,9 +121,22 @@ class Model extends Component {
 
     return (
       <div className={cn('pb4')}>
-        {renderHeader()}
+        {renderHeader.call(this)}
         <Table padding={'dense'}>
-          <TableHead>{renderHeaderRow()}</TableHead>
+          <TableHead>
+            {
+              <TableRow>
+                <HeaderCell label={'id'} active={this.sortPath} />
+                {map(([name, attribute]) => (
+                  <HeaderCell
+                    key={name}
+                    label={name}
+                    numeric={isAttributeTypeNumeric(attribute)}
+                  />
+                ))(attrPairsFromType(type))}
+              </TableRow>
+            }
+          </TableHead>
           <TableBody>
             {renderKeyedById(RecordRow, 'record', rows)}
           </TableBody>
@@ -139,20 +146,6 @@ class Model extends Component {
 
     function renderHeader() {
       return <div className={cn('f4 b')}>{`${type}`}</div>
-    }
-    function renderHeaderRow() {
-      return (
-        <TableRow>
-          <TableCell>{`id`}</TableCell>
-          {map(([name, attribute]) => (
-            <HeaderCell
-              key={name}
-              label={name}
-              numeric={isAttributeTypeNumeric(attribute)}
-            />
-          ))(attrPairsFromType(type))}
-        </TableRow>
-      )
     }
   }
 
