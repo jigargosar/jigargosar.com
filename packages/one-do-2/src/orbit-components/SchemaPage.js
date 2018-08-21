@@ -25,6 +25,11 @@ export class SchemaPage extends Component {
     this._selectedModelType = value
   }
 
+  @computed
+  get selectedModel() {
+    return this.store.schema.getModel(this.selectedModelType)
+  }
+
   render() {
     return (
       <Page>
@@ -44,6 +49,7 @@ export class SchemaPage extends Component {
             <Model
               key={this.selectedModelType}
               type={this.selectedModelType}
+              model={this.selectedModel}
             />
           )}
         </div>
