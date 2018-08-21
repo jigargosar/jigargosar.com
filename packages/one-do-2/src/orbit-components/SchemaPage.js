@@ -7,7 +7,7 @@ import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
-import {join, keys, map, take, toPairs} from '../lib/ramda'
+import {join, keys, map, partial, take, toPairs} from '../lib/ramda'
 import {liveQuery} from '../orbit-store/Store'
 import {
   Table,
@@ -75,6 +75,18 @@ class Model extends Component {
     const {type} = this.props
     const modelDesc = schema.getModel(type)
     const attrPairs = toPairs(modelDesc.attributes)
+
+    function renderBodyCells(record) {
+      return map(([name, attribute]) => (
+        <BodyCell
+          key={name}
+          name={name}
+          attribute={attribute}
+          record={record}
+        />
+      ))(attrPairs)
+    }
+
     return (
       <div className={cn('pb4')}>
         <div className={cn('f4 b')}>{`${type}`}</div>
@@ -95,14 +107,7 @@ class Model extends Component {
               <Fragment key={record.id}>
                 <TableRow hover>
                   <TableCell>{take(10)(record.id)}</TableCell>
-                  {map(([name, attribute]) => (
-                    <BodyCell
-                      key={name}
-                      name={name}
-                      attribute={attribute}
-                      record={record}
-                    />
-                  ))(attrPairs)}
+                  {renderBodyCells(record)}
                 </TableRow>
               </Fragment>
             ))(this.rows)}
