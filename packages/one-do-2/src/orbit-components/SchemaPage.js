@@ -143,6 +143,11 @@ class Model extends Component {
   }
 
   @computed
+  get rawRows() {
+    return this.query.current()
+  }
+
+  @computed
   get sortDirectionString() {
     return this.sortDirFn === ascend ? 'asc' : 'desc'
   }
@@ -154,7 +159,7 @@ class Model extends Component {
 
   @computed
   get sortedRows() {
-    return sortWith([this.sortComparator])(this.query.current())
+    return sortWith([this.sortComparator])(this.rawRows)
   }
 
   render() {
