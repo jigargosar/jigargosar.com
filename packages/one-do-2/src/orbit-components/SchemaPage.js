@@ -83,7 +83,6 @@ class Model extends Component {
         <div className={cn('f4 b')}>{`${type}`}</div>
         <Table
           padding={'dense'}
-          // className={cn('code')}
         >
           <TableHead>{renderHeaderRow()}</TableHead>
           <TableBody>{renderBodyRows()}</TableBody>
