@@ -82,7 +82,7 @@ class BodyCell extends Component {
   }
 }
 
-function getModelAttributePairs(type) {
+function attrPairsFromType(type) {
   return toPairs(modelDescFromType(type).attributes)
 }
 
@@ -114,7 +114,7 @@ class Model extends Component {
           <TableCell>{`id`}</TableCell>
           {map(([name, attribute]) => (
             <HeaderCell key={name} name={name} attribute={attribute} />
-          ))(getModelAttributePairs(type))}
+          ))(attrPairsFromType(type))}
         </TableRow>
       )
     }
@@ -144,7 +144,7 @@ class RecordRow extends Component {
     const {
       record,
       type = typeOfRecord(record),
-      attrPairs = getModelAttributePairs(type),
+      attrPairs = attrPairsFromType(type),
     } = this.props
     return (
       <Fragment>
