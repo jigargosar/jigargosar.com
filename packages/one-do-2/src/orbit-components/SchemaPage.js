@@ -7,7 +7,7 @@ import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {prettyStringifySafe} from '../lib/little-ramda'
-import {compose, join, keys, map, take, toPairs} from '../lib/ramda'
+import {join, keys, map, take, toPairs} from '../lib/ramda'
 import {liveQuery} from '../orbit-store/Store'
 import {
   Table,
@@ -15,9 +15,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TablePagination,
-  TableFooter,
-  TableSortLabel,
   Tooltip,
 } from '@material-ui/core'
 import {recAttr} from '../orbit-store/little-orbit'
@@ -60,6 +57,18 @@ class HeaderCell extends Component {
 }
 
 @observer
+class RowCell extends Component {
+  render() {
+    const {attribute, name, record} = this.props
+    return (
+      <TableCell numeric={isAttributeNumeric(attribute)}>
+        {`${recAttr(name)(record)}`}
+      </TableCell>
+    )
+  }
+}
+
+@observer
 class Model extends Component {
   query = liveQuery(q => q.findRecords(this.props.type))
   render() {
@@ -82,20 +91,18 @@ class Model extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {map(r => (
-              <Fragment key={r.id}>
+            {map(record => (
+              <Fragment key={record.id}>
                 <TableRow hover>
-                  <TableCell>{take(10)(r.id)}</TableCell>
-                  {map(([name, attribute]) => {
-                    const val = recAttr(name)(r)
-                    return (
-                      <Fragment key={name}>
-                        <TableCell numeric={isAttributeNumeric(attribute)}>
-                          {`${val}`}
-                        </TableCell>
-                      </Fragment>
-                    )
-                  })(attrPairs)}
+                  <TableCell>{take(10)(record.id)}</TableCell>
+                  {map(([name, attribute]) => (
+                    <RowCell
+                      key={name}
+                      name={name}
+                      attribute={attribute}
+                      record={record}
+                    />
+                  ))(attrPairs)}
                 </TableRow>
               </Fragment>
             ))(this.rows)}
