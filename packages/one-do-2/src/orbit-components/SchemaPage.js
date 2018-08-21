@@ -33,7 +33,6 @@ import {
 } from '../orbit-store/little-orbit'
 import {computed, observable} from '../lib/mobx'
 import {renderKeyedById} from '../lib/little-react'
-import {ascend, sortWith} from 'ramda'
 
 /*eslint-enable*/
 
