@@ -34,6 +34,7 @@ import {
   attributePath,
   attributesOfType,
   getModelTypes,
+  idPath,
   recAttr,
   typeOfRecord,
 } from '../orbit-store/little-orbit'
@@ -127,8 +128,6 @@ class BodyCell extends Component {
 function attrPairsFromType(type) {
   return attributesOfType(type)(schema)
 }
-
-const idPath = ['id']
 
 @observer
 class Model extends Component {

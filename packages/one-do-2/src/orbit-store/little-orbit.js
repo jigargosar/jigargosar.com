@@ -83,3 +83,5 @@ export const attributesOfType = type => schema =>
 export function attributePath(name) {
   return ['attributes', name]
 }
+
+export const idPath = ['id']
