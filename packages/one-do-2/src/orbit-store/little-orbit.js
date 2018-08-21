@@ -53,3 +53,10 @@ export const recAttr = name => _path(['attributes', name])
 export const removeRecordOP = curry((recordOrRId, t) =>
   t.removeRecord(recordToRId(recordOrRId)),
 )
+
+export function recordType(record) {
+  validate('O', [record])
+  const type = record.type
+  validate('S', [type])
+  return type
+}
