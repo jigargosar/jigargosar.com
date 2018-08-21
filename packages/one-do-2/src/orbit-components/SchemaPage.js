@@ -154,7 +154,6 @@ class Model extends Component {
 
     return (
       <div className={cn('pb4')}>
-        {renderHeader.call(this)}
         <Table padding={'dense'}>
           <TableHead>{this.renderHeaderRow()}</TableHead>
           <TableBody>
@@ -163,10 +162,6 @@ class Model extends Component {
         </Table>
       </div>
     )
-
-    function renderHeader() {
-      return <div className={cn('f4 b')}>{`${type}`}</div>
-    }
   }
 
   @action
