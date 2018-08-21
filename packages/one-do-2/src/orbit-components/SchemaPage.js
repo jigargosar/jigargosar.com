@@ -92,7 +92,6 @@ class Model extends Component {
   @observable sortAttribute = 'sortIdx'
   render() {
     const {type} = this.props
-    const rows = this.rows
 
     return (
       <div className={cn('pb4')}>
