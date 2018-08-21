@@ -5,6 +5,7 @@ import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
 import {validate} from '../lib/little-ramda'
 import {autoBind} from '../lib/auto-bind'
+import {StoreSchema} from './StoreSchema'
 
 const logPrefix = ['[store]']
 // const log = partial(console.log.bind(console), logPrefix)
@@ -44,6 +45,7 @@ function createStore() {
     transforms,
     lazyQuery,
     liveQuery,
+    schema: StoreSchema(store),
   }
 
   debug('[Exiting] createStore', storeWrapper)
