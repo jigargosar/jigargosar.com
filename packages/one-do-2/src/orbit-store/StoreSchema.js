@@ -17,7 +17,7 @@ export function StoreSchema(store) {
     const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
     return {
       type,
-      attributes: attributeLookup,
+      attributes: values(attributeLookup),
     }
   }
 }
