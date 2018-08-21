@@ -6,8 +6,7 @@ import {schema} from '../orbit-store/schema'
 import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
-import {prettyStringifySafe} from '../lib/little-ramda'
-import {join, keys, map, partial, take, toPairs} from '../lib/ramda'
+import {join, keys, map, take, toPairs} from '../lib/ramda'
 import {liveQuery} from '../orbit-store/Store'
 import {
   Table,
@@ -68,13 +67,16 @@ class BodyCell extends Component {
   }
 }
 
+function getModel(type) {
+  return schema.getModel(type)
+}
+
 @observer
 class Model extends Component {
   query = liveQuery(q => q.findRecords(this.props.type))
   render() {
     const {type} = this.props
-    const modelDesc = schema.getModel(type)
-    const attrPairs = toPairs(modelDesc.attributes)
+    const attrPairs = toPairs(getModel(type).attributes)
 
     const rows = this.rows
 
