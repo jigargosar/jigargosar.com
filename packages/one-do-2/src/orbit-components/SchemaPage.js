@@ -147,6 +147,7 @@ class Model extends Component {
             key={name}
             label={name}
             numeric={isAttributeTypeNumeric(attribute)}
+            active={equals(this.sortPath, ['attributes', name])}
           />
         ))(attrPairsFromType(type))}
       </TableRow>
