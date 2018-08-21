@@ -153,6 +153,8 @@ class Model extends Component {
     if (equals(this.sortPath, sortPath)) {
       this.sortDirFn = this.sortDirFn === ascend ? descend : ascend
     } else {
+      this.sortDirFn = ascend
+      this.sortPath = sortPath
     }
   }
 
