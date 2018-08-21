@@ -8,7 +8,6 @@ import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {
   _path,
-  _prop,
   ascend,
   compose,
   descend,
@@ -17,7 +16,6 @@ import {
   map,
   sortWith,
   take,
-  toPairs,
 } from '../lib/ramda'
 import {liveQuery} from '../orbit-store/Store'
 import {
@@ -33,8 +31,8 @@ import {
   Tooltip,
 } from '@material-ui/core'
 import {
+  attributesOfType,
   getModelTypes,
-  modelDefOfType,
   recAttr,
   typeOfRecord,
 } from '../orbit-store/little-orbit'
@@ -125,11 +123,8 @@ class BodyCell extends Component {
   }
 }
 
-const getAttributes = type => schema =>
-  compose(toPairs, _prop('attributes'), modelDefOfType(type))(schema)
-
 function attrPairsFromType(type) {
-  return getAttributes(type)(schema)
+  return attributesOfType(type)(schema)
 }
 
 function attributePath(name) {
