@@ -100,7 +100,7 @@ class Model extends Component {
   render() {
     const {type} = this.props
 
-    const rows = sortWith([ascend(_prop('sortIdx'))])(this.query.current())
+    const rows = this.sortedRows
 
     return (
       <div className={cn('pb4')}>
@@ -129,21 +129,9 @@ class Model extends Component {
     }
   }
 
-  get rows() {
-    return this.sortedRows
-  }
-
-  get allRows() {
-    return this.query.current()
-  }
-
-  get sortComparators() {
-    // return [ascend(_prop(this.sortAttribute))]
-    return [ascend(_prop('sortIdx'))]
-  }
-
+  @computed
   get sortedRows() {
-    return sortWith(this.sortComparators)(this.allRows)
+    return sortWith([ascend(_prop('sortIdx'))])(this.query.current())
   }
 }
 
