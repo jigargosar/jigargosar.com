@@ -54,7 +54,7 @@ export class SchemaPage extends Component {
         <PageTitle>Schema</PageTitle>
         <div className={cn('pa3 pt0')}>
           {map(name => {
-            return <Tab label={name} />
+            return <Tab key={name} label={name} />
           })(modelTypes)}
         </div>
         <div className={cn('ph3')}>
