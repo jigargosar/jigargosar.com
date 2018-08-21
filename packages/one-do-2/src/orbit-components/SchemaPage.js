@@ -30,7 +30,7 @@ import {
   Tooltip,
 } from '@material-ui/core'
 import {recAttr, typeOfRecord} from '../orbit-store/little-orbit'
-import {computed} from '../lib/mobx'
+import {computed, observable} from '../lib/mobx'
 
 /*eslint-enable*/
 
@@ -88,6 +88,7 @@ function getModelAttributePairs(type) {
 @observer
 class Model extends Component {
   query = liveQuery(q => q.findRecords(this.props.type))
+  @observable sortAttribute = 'sortIdx'
   render() {
     const {type} = this.props
     const rows = this.rows
@@ -139,7 +140,7 @@ class Model extends Component {
 
   @computed
   get sortedRows() {
-    return sortWith([ascend(_prop('sortIdx'))])(this.allRows)
+    return sortWith([ascend(_prop(this.sortAttribute))])(this.allRows)
   }
 }
 
