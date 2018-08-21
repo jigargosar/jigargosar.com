@@ -7,6 +7,7 @@ import {Page} from './Page'
 import {PageTitle} from './PageTitle'
 import cn from 'classnames'
 import {
+  _path,
   _prop,
   ascend,
   compose,
@@ -96,7 +97,7 @@ function attrPairsFromType(type) {
 @observer
 class Model extends Component {
   @observable query = liveQuery(q => q.findRecords(this.props.type))
-  @observable sortAttribute = 'sortIdx'
+  @observable sortPath = ['attributes', 'sortIdx']
 
   render() {
     const {type} = this.props
@@ -137,7 +138,7 @@ class Model extends Component {
 
   @computed
   get sortComparator() {
-    return this.sortDirectionFn(recAttr(this.sortAttribute))
+    return this.sortDirectionFn(_path(this.sortPath))
   }
 
   @computed
