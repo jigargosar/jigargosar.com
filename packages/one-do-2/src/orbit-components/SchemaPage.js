@@ -28,6 +28,8 @@ import {
   TableRow,
   TableSortLabel,
   Tooltip,
+  Toolbar,
+  Tabs,
 } from '@material-ui/core'
 import {
   getModelTypes,
@@ -52,11 +54,13 @@ export class SchemaPage extends Component {
     return (
       <Page>
         <PageTitle>Schema</PageTitle>
-        <div className={cn('pa3 pt0')}>
-          {map(name => {
-            return <Tab key={name} label={name} />
-          })(modelTypes)}
-        </div>
+        <Toolbar>
+          <Tabs value={this.selectedModelType}>
+            {map(name => {
+              return <Tab key={name} label={name} value={name} />
+            })(modelTypes)}
+          </Tabs>
+        </Toolbar>
         <div className={cn('ph3')}>
           {/*{map(type => <Model key={type} type={type} />)(modelTypes)}*/}
           <Model type={'task'} />
