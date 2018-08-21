@@ -87,7 +87,7 @@ function getModelAttributePairs(type) {
 
 @observer
 class Model extends Component {
-  query = liveQuery(q => q.findRecords(this.props.type))
+  @observable query = liveQuery(q => q.findRecords(this.props.type))
   @observable sortAttribute = 'sortIdx'
   render() {
     const {type} = this.props
