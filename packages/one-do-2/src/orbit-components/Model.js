@@ -160,7 +160,7 @@ class ViewSelection extends Component {
     return (
       <FormControl>
         <Select
-          className={cn('w4')}
+          style={{minWidth: 180}}
           value={this.name}
           onChange={this.onChange}
         >

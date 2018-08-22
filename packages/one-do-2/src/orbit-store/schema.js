@@ -9,7 +9,7 @@ import {assert} from '../lib/assert'
 const modelsDefinition = {
   task: {
     views: {
-      view1: {
+      'Grid Without Id': {
         showId: false,
       },
     },
