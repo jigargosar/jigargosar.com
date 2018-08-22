@@ -80,7 +80,7 @@ export class Model extends Component {
           </Button>
         </Toolbar>
         <ModelGrid
-          view={this.props.model.views[1]}
+          view={this.props.model.views[0]}
           model={this.props.model}
         />
       </Fragment>
