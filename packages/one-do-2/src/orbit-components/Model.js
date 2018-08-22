@@ -144,13 +144,20 @@ export class Model extends Component {
   }
 }
 
+@observer
 class ViewSelection extends Component {
+  @observable name = head(this.props.model.views).name
+
+  @action.bound
+  onChange(e) {
+    this.name = e.target.value
+  }
   render() {
     const {
       model: {views},
     } = this.props
     return (
-      <Select value={head(views).name}>
+      <Select value={this.name} onChange={this.onChange}>
         {map(({name}) => (
           <MenuItem key={name} value={name}>
             {name}
