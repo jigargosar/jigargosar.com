@@ -98,7 +98,6 @@ export class Model extends Component {
   }
 
   renderHeaderRow() {
-    const {type} = this.props
     return (
       <TableRow>
         <HeaderCell
