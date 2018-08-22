@@ -24,14 +24,14 @@ function columnConfigFromAttribute(attribute) {
   return {
     isNumeric: attribute.type === 'number',
     getCellData: row => row.attributes[name],
-    columnId: join('.')(['attributes', name]),
+    cellDataPath: join('.')(['attributes', name]),
     label: name,
   }
 }
 
 @observer
 export class Model extends Component {
-  @observable sortColumnId = 'attributes.sortIdx'
+  @observable sortPath = ['attributes', 'sortIdx']
   @observable sortDirFn = ascend
 
   @computed
@@ -51,7 +51,7 @@ export class Model extends Component {
 
   @computed
   get sortComparator() {
-    return compose(this.sortDirFn, _path)(this.sortColumnId)
+    return compose(this.sortDirFn, _path)(this.sortPath)
   }
 
   @computed
@@ -71,7 +71,7 @@ export class Model extends Component {
                 <TableCell>
                   <TableSortLabel
                     direction={this.direction}
-                    active={equals(this.sortColumnId, idPath)}
+                    active={equals(this.sortPath, idPath)}
                     onClick={() => this.onSortLabelClicked(idPath)}
                   >
                     id
@@ -86,14 +86,14 @@ export class Model extends Component {
             },
             ...map(attribute => {
               const config = columnConfigFromAttribute(attribute)
-              const {isNumeric, getCellData, label, columnId} = config
+              const {isNumeric, getCellData, label, cellDataPath} = config
               return {
                 renderHeaderCell: () => (
                   <TableCell numeric={isNumeric}>
                     <TableSortLabel
                       direction={this.direction}
-                      active={equals(this.sortColumnId, columnId)}
-                      onClick={() => this.onSortLabelClicked(columnId)}
+                      active={equals(this.sortPath, cellDataPath)}
+                      onClick={() => this.onSortLabelClicked(cellDataPath)}
                     >
                       {`${label}`}
                     </TableSortLabel>
@@ -121,12 +121,12 @@ export class Model extends Component {
   }
 
   @action
-  onSortLabelClicked(sortColumnId) {
-    if (equals(this.sortColumnId, sortColumnId)) {
+  onSortLabelClicked(sortPath) {
+    if (equals(this.sortPath, sortPath)) {
       this.sortDirFn = this.sortDirFn === ascend ? descend : ascend
     } else {
       this.sortDirFn = ascend
-      this.sortColumnId = sortColumnId
+      this.sortPath = sortPath
     }
   }
 
