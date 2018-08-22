@@ -22,7 +22,6 @@ import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   _path,
-  _prop,
   ascend,
   compose,
   descend,
@@ -35,13 +34,6 @@ import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import {renderKeyedById} from '../lib/little-react'
 import DataGrid from './DataGrid'
-
-function createSimpleColumn({label, path}) {
-  return {
-    renderHeaderCell: () => label,
-    renderCell: compose(_path(['row', ...path])),
-  }
-}
 
 @observer
 export class Model extends Component {
