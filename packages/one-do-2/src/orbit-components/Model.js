@@ -12,6 +12,7 @@ import {
   map,
   merge,
   sortWith,
+  take,
 } from '../lib/ramda'
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
@@ -80,7 +81,9 @@ export class Model extends Component {
   render() {
     const idColumnConfig = {
       isNumeric: false,
-      getCellData: row => row.id,
+      getCellData: row => (
+        <div className={cn('code')}>take(10)(row.id)</div>
+      ),
       cellDataPath: ['id'],
       label: 'id',
     }
