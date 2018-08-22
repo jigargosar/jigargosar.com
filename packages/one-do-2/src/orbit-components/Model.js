@@ -132,8 +132,3 @@ export class Model extends Component {
     return this.props.model.attributes
   }
 }
-
-const AT = {
-  isNumeric: compose(equals('number'), _prop('type')),
-  path: compose(append(__, ['attribute']), _prop('name')),
-}
