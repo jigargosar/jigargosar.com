@@ -1,6 +1,11 @@
 import {observer} from 'mobx-react'
-import React, {Component} from 'react'
-import {Button, TableCell, TableSortLabel} from '@material-ui/core'
+import React, {Component, Fragment} from 'react'
+import {
+  Button,
+  TableCell,
+  TableSortLabel,
+  Toolbar,
+} from '@material-ui/core'
 import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
@@ -15,7 +20,7 @@ import {
   take,
 } from '../lib/ramda'
 import cn from 'classnames'
-import {CreateIcon, NewIcon} from '../lib/Icons'
+import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
 
 function attributesToColumnConfigs(attribute) {
@@ -78,22 +83,24 @@ export class Model extends Component {
 
   render() {
     return (
-      <div className={cn('pb4')}>
+      <Fragment>
         <DataGrid
           rows={this.sortedRows}
           columns={columnsFromConfigs(this.columnConfigs)}
         />
-        <Button
-          // variant={'extendedFab'}
-          color={'secondary'}
-          // size={'small'}
-          onClick={() =>
-            updateStore(t => t.addRecord({type: this.props.model.type}))
-          }
-        >
-          NEW <CreateIcon />
-        </Button>
-      </div>
+        <Toolbar variant={'dense'}>
+          <Button
+            // variant={'contained'}
+            color={'primary'}
+            // size={'small'}
+            onClick={() =>
+              updateStore(t => t.addRecord({type: this.props.model.type}))
+            }
+          >
+            NEW <AddIcon />
+          </Button>
+        </Toolbar>
+      </Fragment>
     )
   }
 
