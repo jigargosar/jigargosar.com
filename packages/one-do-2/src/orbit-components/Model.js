@@ -33,6 +33,7 @@ import {
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import {renderKeyedById} from '../lib/little-react'
+import DataGrid from './DataGrid'
 
 @observer
 export class Model extends Component {
@@ -69,6 +70,9 @@ export class Model extends Component {
 
     return (
       <div className={cn('pb4')}>
+        <div>
+          <DataGrid rows={this.sortedRows} columns={[]} />
+        </div>
         <Button
           color={'primary'}
           onClick={() =>
