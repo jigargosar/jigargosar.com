@@ -39,11 +39,7 @@ class GridRow extends Component {
     return (
       <TableRow>
         {R.map(column => (
-          <RowCell
-            key={column.id || column.key}
-            column={column}
-            row={row}
-          />
+          <RowCell key={row.id || row.key} column={column} row={row} />
         ))(columns)}
       </TableRow>
     )
