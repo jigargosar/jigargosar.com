@@ -16,8 +16,8 @@ const modelsDefinition = {
   },
   planet: {
     attributes: {
-      name: {type: 'string'},
-      classification: {type: 'string'},
+      name: {type: 'string', label: 'Name'},
+      classification: {type: 'string', label: 'Classification'},
     },
     relationships: {
       moons: {type: 'hasMany', model: 'moon', inverse: 'planet'},
@@ -25,7 +25,7 @@ const modelsDefinition = {
   },
   moon: {
     attributes: {
-      name: {type: 'string'},
+      name: {type: 'string', label: 'Name'},
     },
     relationships: {
       planet: {type: 'hasOne', model: 'planet', inverse: 'moons'},
