@@ -79,7 +79,7 @@ export class Model extends Component {
             ...map(attribute => {
               const config = {
                 isNumeric: AT.isNumeric(attribute),
-                attributePath: ['row', 'attributes', attribute.name],
+                attributePath: ['attributes', attribute.name],
                 name: attribute.name,
               }
               const {isNumeric, attributePath, name} = config
@@ -99,7 +99,7 @@ export class Model extends Component {
                 ),
                 renderCell: ({row}) => (
                   <TableCell key={row.id} numeric={isNumeric}>
-                    {_path(attributePath)(row)}
+                    {`${_path(attributePath)(row)}`}
                   </TableCell>
                 ),
               }
