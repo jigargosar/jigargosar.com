@@ -81,7 +81,16 @@ export class Model extends Component {
         <div>
           <DataGrid
             rows={this.sortedRows}
-            columns={[createSimpleColumn({path: ['id'], label: 'id'})]}
+            columns={[
+              //
+              createSimpleColumn({path: ['id'], label: 'id'}),
+              ...map(attribute =>
+                createSimpleColumn({
+                  path: attributePath(attribute.name),
+                  label: attribute.name,
+                }),
+              )(this.attributes),
+            ]}
           />
         </div>
         <Button
