@@ -117,6 +117,7 @@ export class Model extends Component {
     }
   }
 }
+
 @observer
 export class ModelGrid extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
