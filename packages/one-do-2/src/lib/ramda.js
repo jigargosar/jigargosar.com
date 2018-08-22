@@ -250,13 +250,11 @@ import {
 
 export {
   map as _map,
-  forEachObjIndexed as _forEachObjIndexed,
   type as _type,
   contains as _contains,
   times as _times,
   append as _append,
   compose as _compose,
-  pipe as _pipe,
   startsWith as _startsWith,
   path as _path,
   tap as _tap,
