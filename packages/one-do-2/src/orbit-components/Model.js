@@ -63,19 +63,16 @@ function columnsFromConfigs(configs) {
 
 @observer
 export class Model extends Component {
+  @action.bound
+  handleAddRecord(e) {
+    return updateStore(t => t.addRecord({type: this.props.model.type}))
+  }
   render() {
     return (
       <Fragment>
         <Toolbar variant={'regular'}>
           <ViewSelection model={this.props.model} />
-          <Button
-            // variant={'contained'}
-            color={'primary'}
-            // size={'small'}
-            onClick={() =>
-              updateStore(t => t.addRecord({type: this.props.model.type}))
-            }
-          >
+          <Button color={'primary'} onClick={this.handleAddRecord}>
             NEW <AddIcon />
           </Button>
         </Toolbar>
