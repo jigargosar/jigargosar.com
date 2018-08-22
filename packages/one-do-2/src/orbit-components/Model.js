@@ -2,6 +2,8 @@ import {observer} from 'mobx-react'
 import React, {Component, Fragment} from 'react'
 import {
   Button,
+  MenuItem,
+  Select,
   TableCell,
   TableSortLabel,
   Toolbar,
@@ -14,6 +16,7 @@ import {
   compose,
   descend,
   equals,
+  head,
   map,
   merge,
   sortWith,
@@ -85,6 +88,7 @@ export class Model extends Component {
     return (
       <Fragment>
         <Toolbar variant={'dense'}>
+          <ViewSelection model={this.props.model} />
           <Button
             // variant={'contained'}
             color={'primary'}
@@ -137,5 +141,22 @@ export class Model extends Component {
 
   get attributes() {
     return this.props.model.attributes
+  }
+}
+
+class ViewSelection extends Component {
+  render() {
+    const {
+      model: {views},
+    } = this.props
+    return (
+      <Select value={head(views).name}>
+        {map(({name}) => (
+          <MenuItem key={name} value={name}>
+            {name}
+          </MenuItem>
+        ))(views)}
+      </Select>
+    )
   }
 }
