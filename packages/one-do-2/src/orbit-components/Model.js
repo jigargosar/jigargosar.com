@@ -51,60 +51,58 @@ export class Model extends Component {
   render() {
     return (
       <div className={cn('pb4')}>
-        <div>
-          <DataGrid
-            rows={this.sortedRows}
-            columns={[
-              //
-              {
-                renderHeaderCell: () => (
-                  <TableCell>
-                    <TableSortLabel
-                      direction={this.sortDirectionString}
-                      active={equals(this.sortPath, idPath)}
-                      onClick={() => this.onSortLabelClicked(idPath)}
-                    >
-                      id
-                    </TableSortLabel>
-                  </TableCell>
-                ),
-                renderCell: compose(
-                  data => <TableCell>{data}</TableCell>,
-                  take(10),
-                  _path(['row', 'id']),
-                ),
-              },
-              ...map(attribute => ({
-                renderHeaderCell: () => (
-                  <TableCell numeric={isAttribute(attribute)}>
-                    <TableSortLabel
-                      direction={this.sortDirectionString}
-                      active={equals(
-                        this.sortPath,
+        <DataGrid
+          rows={this.sortedRows}
+          columns={[
+            //
+            {
+              renderHeaderCell: () => (
+                <TableCell>
+                  <TableSortLabel
+                    direction={this.sortDirectionString}
+                    active={equals(this.sortPath, idPath)}
+                    onClick={() => this.onSortLabelClicked(idPath)}
+                  >
+                    id
+                  </TableSortLabel>
+                </TableCell>
+              ),
+              renderCell: compose(
+                data => <TableCell>{data}</TableCell>,
+                take(10),
+                _path(['row', 'id']),
+              ),
+            },
+            ...map(attribute => ({
+              renderHeaderCell: () => (
+                <TableCell numeric={isAttribute(attribute)}>
+                  <TableSortLabel
+                    direction={this.sortDirectionString}
+                    active={equals(
+                      this.sortPath,
+                      attributePath(attribute.name),
+                    )}
+                    onClick={() =>
+                      this.onSortLabelClicked(
                         attributePath(attribute.name),
-                      )}
-                      onClick={() =>
-                        this.onSortLabelClicked(
-                          attributePath(attribute.name),
-                        )
-                      }
-                    >
-                      {`${attribute.name}`}
-                    </TableSortLabel>
+                      )
+                    }
+                  >
+                    {`${attribute.name}`}
+                  </TableSortLabel>
+                </TableCell>
+              ),
+              renderCell: compose(
+                data => (
+                  <TableCell numeric={isAttribute(attribute)}>
+                    {`${data}`}
                   </TableCell>
                 ),
-                renderCell: compose(
-                  data => (
-                    <TableCell numeric={isAttribute(attribute)}>
-                      {`${data}`}
-                    </TableCell>
-                  ),
-                  _path(['row', ...attributePath(attribute.name)]),
-                ),
-              }))(this.attributes),
-            ]}
-          />
-        </div>
+                _path(['row', ...attributePath(attribute.name)]),
+              ),
+            }))(this.attributes),
+          ]}
+        />
         <Button
           color={'primary'}
           onClick={() =>
