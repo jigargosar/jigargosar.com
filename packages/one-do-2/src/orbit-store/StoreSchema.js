@@ -1,7 +1,6 @@
 import {
   compose,
   defaultTo,
-  equals,
   find,
   keys,
   mapObjIndexed,
@@ -10,7 +9,6 @@ import {
   prepend,
   propEq,
   values,
-  view,
 } from '../lib/ramda'
 import {mergeDefaults} from '../lib/little-ramda'
 
