@@ -84,8 +84,9 @@ export class Model extends Component {
           columns={columnsFromConfigs(this.columnConfigs)}
         />
         <Button
-          variant={'extendedFab'}
-          color={'primary'}
+          // variant={'extendedFab'}
+          color={'secondary'}
+          // size={'small'}
           onClick={() =>
             updateStore(t => t.addRecord({type: this.props.model.type}))
           }
