@@ -2,6 +2,7 @@ import {observer} from 'mobx-react'
 import React, {Component, Fragment} from 'react'
 import {
   Button,
+  FormControl,
   MenuItem,
   Select,
   TableCell,
@@ -157,17 +158,19 @@ class ViewSelection extends Component {
       model: {views},
     } = this.props
     return (
-      <Select
-        className={cn('w4')}
-        value={this.name}
-        onChange={this.onChange}
-      >
-        {map(({name}) => (
-          <MenuItem key={name} value={name}>
-            {name}
-          </MenuItem>
-        ))(views)}
-      </Select>
+      <FormControl>
+        <Select
+          className={cn('w4')}
+          value={this.name}
+          onChange={this.onChange}
+        >
+          {map(({name}) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))(views)}
+        </Select>
+      </FormControl>
     )
   }
 }

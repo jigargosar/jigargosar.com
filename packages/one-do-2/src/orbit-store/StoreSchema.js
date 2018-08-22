@@ -27,7 +27,7 @@ export function StoreSchema(store) {
       type,
       attributes,
       views: compose(
-        prepend(ModelView({}, 'default')),
+        prepend(ModelView({}, 'Default Grid')),
         values,
         mapObjIndexed(ModelView),
         defaultTo([]),
