@@ -66,7 +66,6 @@ export class Model extends Component {
 
   render() {
     const rows = this.sortedRows
-    const {type} = this.props
 
     return (
       <div className={cn('pb4')}>
