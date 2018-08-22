@@ -18,7 +18,6 @@ import {
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
-import {join} from 'ramda'
 
 function columnConfigFromAttribute(attribute) {
   const name = attribute.name
