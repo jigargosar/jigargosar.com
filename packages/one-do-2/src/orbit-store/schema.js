@@ -8,10 +8,10 @@ import {fWord} from '../lib/fake'
 const modelsDefinition = {
   task: {
     attributes: {
-      title: {type: 'string'},
-      isDone: {type: 'boolean'},
-      sortIdx: {type: 'number'},
-      createdAt: {type: 'timestamp'},
+      title: {type: 'string', label: 'Title'},
+      isDone: {type: 'boolean', label: 'Done'},
+      sortIdx: {type: 'number', label: 'Order'},
+      createdAt: {type: 'timestamp', label: 'Created'},
     },
   },
   planet: {

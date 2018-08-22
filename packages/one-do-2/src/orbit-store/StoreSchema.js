@@ -1,4 +1,4 @@
-import {keys, mapObjIndexed, values} from '../lib/ramda'
+import {keys, mapObjIndexed, values, pick, merge} from '../lib/ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -11,7 +11,7 @@ export function StoreSchema(store) {
 
   function SchemaModel(model, type) {
     function ModelAttribute(attribute, name) {
-      return {name, type: attribute.type}
+      return merge({name}, attribute)
     }
 
     const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)

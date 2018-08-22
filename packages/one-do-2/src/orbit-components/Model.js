@@ -1,6 +1,11 @@
 import {observer} from 'mobx-react'
 import React, {Component, Fragment} from 'react'
-import {Button, TableCell, TableSortLabel, Toolbar} from '@material-ui/core'
+import {
+  Button,
+  TableCell,
+  TableSortLabel,
+  Toolbar,
+} from '@material-ui/core'
 import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
@@ -20,11 +25,12 @@ import DataGrid from './DataGrid'
 
 function attributesToColumnConfigs(attribute) {
   const name = attribute.name
+  console.log(`attribute`, attribute)
   return {
     isNumeric: attribute.type === 'number',
     getCellData: row => `${row.attributes[name]}`,
     cellDataPath: ['attributes', name],
-    label: name,
+    label: attribute.label,
   }
 }
 
@@ -106,7 +112,7 @@ export class Model extends Component {
       getCellData: row => take(10)(row.id),
       rowCellProps: {className: cn('code')},
       cellDataPath: ['id'],
-      label: 'id',
+      label: 'ID',
     }
     return map(c =>
       merge({
