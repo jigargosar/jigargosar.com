@@ -46,7 +46,6 @@ export class SchemaPage extends Component {
           {this.selectedModelType && (
             <Model
               key={this.selectedModelType}
-              type={this.selectedModelType}
               model={this.selectedModel}
             />
           )}
