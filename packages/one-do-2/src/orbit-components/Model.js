@@ -77,7 +77,7 @@ export class Model extends Component {
             columns={[
               {
                 renderHeaderCell: () => 'id',
-                renderCell: compose(take(10)(_prop('id'))),
+                renderCell: compose(take(10), _prop('id')),
               },
             ]}
           />
