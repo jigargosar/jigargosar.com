@@ -76,6 +76,7 @@ export class Model extends Component {
     return updateStore(t => t.addRecord({type: this.props.model.type}))
   }
   render() {
+    console.log(`this.props`, this.props)
     return (
       <Fragment>
         <Toolbar variant={'regular'}>
@@ -89,7 +90,7 @@ export class Model extends Component {
           </Button>
         </Toolbar>
         <ModelGrid
-          view={this.props.model.views[0]}
+          view={this.props.selectedView}
           model={this.props.model}
         />
       </Fragment>
