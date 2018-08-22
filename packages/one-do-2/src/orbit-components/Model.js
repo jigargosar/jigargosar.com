@@ -165,7 +165,10 @@ export class ModelGrid extends Component {
           direction: this.direction,
         },
       })(c),
-    )([idColumnConfig, ...map(attributesToColumnConfigs)(this.attributes)])
+    )([
+      idColumnConfig,
+      ...map(attributesToColumnConfigs)(this.props.model.attributes),
+    ])
   }
 
   @action
@@ -177,9 +180,5 @@ export class ModelGrid extends Component {
       this.sortDirFn = ascend
       this.sortPath = sortPath
     }
-  }
-
-  get attributes() {
-    return this.props.model.attributes
   }
 }
