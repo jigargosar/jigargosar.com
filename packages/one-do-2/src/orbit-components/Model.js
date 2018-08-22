@@ -125,7 +125,7 @@ class ValueSelection extends Component {
 @observer
 export class ModelGrid extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
-  @observable sortDirFn = ascend
+  @observable direction = 'asc'
 
   @computed
   get query() {
@@ -133,18 +133,14 @@ export class ModelGrid extends Component {
   }
 
   @computed
-  get direction() {
-    return this.sortDirFn === ascend ? 'asc' : 'desc'
-  }
-
-  @computed
-  get sortComparator() {
-    return compose(this.sortDirFn, _path)(this.sortPath)
+  get sortDirFn() {
+    return this.direction === 'asc' ? ascend : descend
   }
 
   @computed
   get sortedRows() {
-    return sortWith([this.sortComparator])(this.query.current())
+    const sortComparator = compose(this.sortDirFn, _path)(this.sortPath)
+    return sortWith([sortComparator])(this.query.current())
   }
 
   render() {
@@ -186,9 +182,9 @@ export class ModelGrid extends Component {
   onSortLabelClicked(columnConfig) {
     const sortPath = columnConfig.cellDataPath
     if (equals(this.sortPath, sortPath)) {
-      this.sortDirFn = this.sortDirFn === ascend ? descend : ascend
+      this.direction = this.direction === 'asc' ? 'desc' : 'asc'
     } else {
-      this.sortDirFn = ascend
+      this.direction = 'asc'
       this.sortPath = sortPath
     }
   }
