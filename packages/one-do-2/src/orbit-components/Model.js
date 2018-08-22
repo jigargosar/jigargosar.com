@@ -83,7 +83,6 @@ export class Model extends Component {
               isNumeric,
               getCellData,
               label,
-              cellDataPath,
               sort,
             } = config
             return {
