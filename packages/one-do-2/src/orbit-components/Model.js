@@ -97,20 +97,22 @@ export class Model extends Component {
               },
               ...map(attribute => ({
                 renderHeaderCell: () => (
-                  <TableSortLabel
-                    direction={this.sortDirectionString}
-                    active={equals(
-                      this.sortPath,
-                      attributePath(attribute.name),
-                    )}
-                    onClick={() =>
-                      this.onSortLabelClicked(
+                  <TableCell>
+                    <TableSortLabel
+                      direction={this.sortDirectionString}
+                      active={equals(
+                        this.sortPath,
                         attributePath(attribute.name),
-                      )
-                    }
-                  >
-                    {attribute.name}
-                  </TableSortLabel>
+                      )}
+                      onClick={() =>
+                        this.onSortLabelClicked(
+                          attributePath(attribute.name),
+                        )
+                      }
+                    >
+                      {attribute.name}
+                    </TableSortLabel>
+                  </TableCell>
                 ),
                 renderCell: _path([
                   'row',
