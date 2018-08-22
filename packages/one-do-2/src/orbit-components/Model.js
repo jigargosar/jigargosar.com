@@ -83,9 +83,8 @@ export class Model extends Component {
   render() {
     const idColumnConfig = {
       isNumeric: false,
-      getCellData: row => (
-        <div className={cn('code')}>{take(10)(row.id)}</div>
-      ),
+      getCellData: row => take(10)(row.id),
+      rowCellProps: {className: 'code'},
       cellDataPath: ['id'],
       label: 'id',
     }
