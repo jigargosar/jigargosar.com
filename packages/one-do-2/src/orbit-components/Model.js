@@ -24,7 +24,7 @@ function attributesToColumnConfigs(attribute) {
     isNumeric: attribute.type === 'number',
     getCellData: row => row.attributes[name],
     cellDataPath: ['attributes', name],
-    label: name,
+    label: `${name}`,
   }
 }
 
@@ -43,7 +43,7 @@ function columnsFromConfigs(configs) {
         </TableCell>
       ),
       renderCell: ({row}) => (
-        <TableCell numeric={isNumeric}>{`${getCellData(row)}`}</TableCell>
+        <TableCell numeric={isNumeric}>{getCellData(row)}</TableCell>
       ),
     }
   })(configs)
