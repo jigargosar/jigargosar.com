@@ -19,6 +19,16 @@ import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
 
+function columnConfigFromAttribute(attribute) {
+  const config = {
+    isNumeric: attribute.type === 'number',
+    cellDataPath: ['attributes', attribute.name],
+    columnId: join('.')(['attributes', attribute.name]),
+    name: attribute.name,
+  }
+  return config
+}
+
 @observer
 export class Model extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
@@ -75,12 +85,7 @@ export class Model extends Component {
               ),
             },
             ...map(attribute => {
-              const config = {
-                isNumeric: attribute.type === 'number',
-                cellDataPath: ['attributes', attribute.name],
-                columnId: join('.')(['attributes', attribute.name]),
-                name: attribute.name,
-              }
+              const config = columnConfigFromAttribute(attribute)
               const {isNumeric, cellDataPath, name, columnId} = config
               return {
                 renderHeaderCell: () => (
