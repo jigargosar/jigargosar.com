@@ -79,12 +79,13 @@ export class Model extends Component {
             ...map(attribute => {
               const config = {
                 isNumeric: AT.isNumeric(attribute),
-                attributePath: AT.path(attribute),
+                attributePath: ['row', 'attributes', attribute.name],
+                name: attribute.name,
               }
-              const {isNumeric, attributePath} = config
+              const {isNumeric, attributePath, name} = config
               return {
                 renderHeaderCell: () => (
-                  <TableCell numeric={isNumeric}>
+                  <TableCell key={name} numeric={isNumeric}>
                     <TableSortLabel
                       direction={this.direction}
                       active={equals(this.sortPath, attributePath)}
@@ -92,15 +93,14 @@ export class Model extends Component {
                         this.onSortLabelClicked(attributePath)
                       }
                     >
-                      {`${attribute.name}`}
+                      {`${name}`}
                     </TableSortLabel>
                   </TableCell>
                 ),
-                renderCell: compose(
-                  data => (
-                    <TableCell numeric={isNumeric}>{`${data}`}</TableCell>
-                  ),
-                  _path(['row', 'attribute', attribute.name]),
+                renderCell: ({row}) => (
+                  <TableCell numeric={isNumeric}>
+                    {row.attributes[name]}
+                  </TableCell>
                 ),
               }
             })(this.attributes),
