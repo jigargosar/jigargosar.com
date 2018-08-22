@@ -17,7 +17,6 @@ import {
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
-import {equals, map, merge} from 'ramda'
 
 function attributesToColumnConfigs(attribute) {
   const name = attribute.name
@@ -86,7 +85,7 @@ export class Model extends Component {
       <div className={cn('pb4')}>
         <DataGrid
           rows={this.sortedRows}
-          columns={columnsFromConfigs(this.getColumnConfigs())}
+          columns={columnsFromConfigs(this.columnConfigs)}
         />
         <Button
           color={'primary'}
@@ -101,7 +100,7 @@ export class Model extends Component {
   }
 
   @computed
-  getColumnConfigs() {
+  get columnConfigs() {
     const idColumnConfig = {
       isNumeric: false,
       getCellData: row => take(10)(row.id),
