@@ -84,7 +84,7 @@ export class Model extends Component {
               //
               {
                 renderHeaderCell: () => 'id',
-                renderCell: compose(take(7), _path(['row', 'id'])),
+                renderCell: compose(take(10), _path(['row', 'id'])),
               },
               ...map(attribute =>
                 createSimpleColumn({
