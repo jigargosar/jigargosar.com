@@ -109,13 +109,13 @@ export class Model extends Component {
                       )
                     }
                   >
-                    id
+                    {attribute.name}
                   </TableSortLabel>
                 ),
-                renderCell: compose(
-                  attributePath(attribute.name),
-                  _prop('row'),
-                ),
+                renderCell: _path([
+                  'row',
+                  ...attributePath(attribute.name),
+                ]),
               }))(this.attributes),
             ]}
           />
