@@ -18,7 +18,7 @@ import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
 
-function columnConfigFromAttribute(attribute) {
+function columnConfigsFromAttribute(attribute) {
   const name = attribute.name
   return {
     isNumeric: attribute.type === 'number',
@@ -61,57 +61,39 @@ export class Model extends Component {
   render() {
     const idColumnConfig = {
       isNumeric: false,
-      getCellData: row => row.attributes['id'],
-      cellDataPath: ['attributes', 'id'],
+      getCellData: row => row.id,
+      cellDataPath: ['id'],
       label: 'id',
     }
+    const configs = [
+      idColumnConfig,
+      ...map(columnConfigsFromAttribute)(this.attributes),
+    ]
     return (
       <div className={cn('pb4')}>
         <DataGrid
           rows={this.sortedRows}
-          columns={[
-            //
-            {
+          columns={map(config => {
+            const {isNumeric, getCellData, label, cellDataPath} = config
+            return {
               renderHeaderCell: () => (
-                <TableCell>
+                <TableCell numeric={isNumeric}>
                   <TableSortLabel
                     direction={this.direction}
-                    active={equals(this.sortPath, idPath)}
-                    onClick={() => this.onSortLabelClicked(idPath)}
+                    active={equals(this.sortPath, cellDataPath)}
+                    onClick={() => this.onSortLabelClicked(cellDataPath)}
                   >
-                    id
+                    {`${label}`}
                   </TableSortLabel>
                 </TableCell>
               ),
-              renderCell: compose(
-                data => <TableCell>{data}</TableCell>,
-                take(10),
-                _path(['row', 'id']),
+              renderCell: ({row}) => (
+                <TableCell numeric={isNumeric}>
+                  {`${getCellData(row)}`}
+                </TableCell>
               ),
-            },
-            ...map(attribute => {
-              const config = columnConfigFromAttribute(attribute)
-              const {isNumeric, getCellData, label, cellDataPath} = config
-              return {
-                renderHeaderCell: () => (
-                  <TableCell numeric={isNumeric}>
-                    <TableSortLabel
-                      direction={this.direction}
-                      active={equals(this.sortPath, cellDataPath)}
-                      onClick={() => this.onSortLabelClicked(cellDataPath)}
-                    >
-                      {`${label}`}
-                    </TableSortLabel>
-                  </TableCell>
-                ),
-                renderCell: ({row}) => (
-                  <TableCell numeric={isNumeric}>
-                    {`${getCellData(row)}`}
-                  </TableCell>
-                ),
-              }
-            })(this.attributes),
-          ]}
+            }
+          })(configs)}
         />
         <Button
           color={'primary'}
