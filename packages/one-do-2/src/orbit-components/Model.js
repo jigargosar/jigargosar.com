@@ -27,6 +27,27 @@ function attributesToColumnConfigs(attribute) {
   }
 }
 
+function columnsFromConfigs(configs) {
+  return map(({isNumeric, getCellData, label, sort}) => {
+    return {
+      renderHeaderCell: () => (
+        <TableCell numeric={isNumeric}>
+          <TableSortLabel
+            direction={sort.direction}
+            active={sort.active}
+            onClick={sort.onClick}
+          >
+            {`${label}`}
+          </TableSortLabel>
+        </TableCell>
+      ),
+      renderCell: ({row}) => (
+        <TableCell numeric={isNumeric}>{`${getCellData(row)}`}</TableCell>
+      ),
+    }
+  })(configs)
+}
+
 @observer
 export class Model extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
@@ -78,26 +99,7 @@ export class Model extends Component {
       <div className={cn('pb4')}>
         <DataGrid
           rows={this.sortedRows}
-          columns={map(({isNumeric, getCellData, label, sort}) => {
-            return {
-              renderHeaderCell: () => (
-                <TableCell numeric={isNumeric}>
-                  <TableSortLabel
-                    direction={sort.direction}
-                    active={sort.active}
-                    onClick={sort.onClick}
-                  >
-                    {`${label}`}
-                  </TableSortLabel>
-                </TableCell>
-              ),
-              renderCell: ({row}) => (
-                <TableCell numeric={isNumeric}>
-                  {`${getCellData(row)}`}
-                </TableCell>
-              ),
-            }
-          })(configs)}
+          columns={columnsFromConfigs(configs)}
         />
         <Button
           color={'primary'}
