@@ -81,12 +81,6 @@ export class Model extends Component {
     return (
       <Fragment>
         <Toolbar variant={'regular'}>
-          <ViewSelection
-            selectedView={this.props.selectedView}
-            views={model.views}
-            handleViewChange={this.props.handleViewChange}
-          />
-
           <ValueSelection
             value={this.props.selectedView.name}
             values={model.viewNames}
@@ -102,31 +96,6 @@ export class Model extends Component {
   }
 }
 
-@observer
-class ViewSelection extends Component {
-  @action.bound
-  onChange(e) {
-    this.props.handleViewChange(e.target.value)
-  }
-  render() {
-    const {views, selectedView} = this.props
-    return (
-      <FormControl>
-        <Select
-          style={{minWidth: 180}}
-          value={selectedView.name}
-          onChange={this.onChange}
-        >
-          {map(({name}) => (
-            <MenuItem key={name} value={name}>
-              {name}
-            </MenuItem>
-          ))(views)}
-        </Select>
-      </FormControl>
-    )
-  }
-}
 @observer
 class ValueSelection extends Component {
   @action.bound
