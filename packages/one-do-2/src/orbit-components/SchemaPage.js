@@ -43,9 +43,9 @@ export class SchemaPage extends Component {
           </Tabs>
         </Toolbar>
         <div className={cn('ph3')}>
-          {this.selectedModelType && (
+          {this.selectedModel.type && (
             <Model
-              key={this.selectedModelType}
+              key={this.selectedModel.type}
               model={this.selectedModel}
             />
           )}
