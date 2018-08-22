@@ -4,6 +4,7 @@ import {
   keys,
   mapObjIndexed,
   merge,
+  pluck,
   prepend,
   values,
 } from '../lib/ramda'
@@ -39,7 +40,10 @@ export function StoreSchema(store) {
     }
 
     function ModelView(view, name) {
-      return mergeDefaults({name, showId: true, columns: []}, view)
+      return mergeDefaults(
+        {name, showId: true, columns: pluck('name')(attributes)},
+        view,
+      )
     }
   }
 }
