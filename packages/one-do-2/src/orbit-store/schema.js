@@ -9,7 +9,7 @@ import {assert} from '../lib/assert'
 const modelsDefinition = {
   task: {
     views: {
-      default: {
+      view1: {
         showId: false,
       },
     },
