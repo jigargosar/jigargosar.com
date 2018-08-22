@@ -163,7 +163,6 @@ export class ModelGrid extends Component {
       label: 'ID',
     }
     const showId = this.props.view.showId
-    debugger
     return map(c =>
       merge({
         sort: {
