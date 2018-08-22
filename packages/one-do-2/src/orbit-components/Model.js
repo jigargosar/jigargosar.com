@@ -85,13 +85,15 @@ export class Model extends Component {
               //
               {
                 renderHeaderCell: () => (
-                  <TableSortLabel
-                    direction={this.sortDirectionString}
-                    active={equals(this.sortPath, idPath)}
-                    onClick={() => this.onSortLabelClicked(idPath)}
-                  >
-                    id
-                  </TableSortLabel>
+                  <TableCell>
+                    <TableSortLabel
+                      direction={this.sortDirectionString}
+                      active={equals(this.sortPath, idPath)}
+                      onClick={() => this.onSortLabelClicked(idPath)}
+                    >
+                      id
+                    </TableSortLabel>
+                  </TableCell>
                 ),
                 renderCell: compose(take(10), _path(['row', 'id'])),
               },
