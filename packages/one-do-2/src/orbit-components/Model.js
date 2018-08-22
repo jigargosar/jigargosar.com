@@ -25,7 +25,6 @@ import DataGrid from './DataGrid'
 
 function attributesToColumnConfigs(attribute) {
   const name = attribute.name
-  console.log(`attribute`, attribute)
   return {
     isNumeric: attribute.type === 'number',
     getCellData: row => `${row.attributes[name]}`,

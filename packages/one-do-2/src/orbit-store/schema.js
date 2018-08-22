@@ -8,6 +8,11 @@ import {assert} from '../lib/assert'
 
 const modelsDefinition = {
   task: {
+    views: {
+      default: {
+        showId: false,
+      },
+    },
     attributes: {
       title: {type: 'string', label: 'Title'},
       isDone: {type: 'boolean', label: 'Done'},
