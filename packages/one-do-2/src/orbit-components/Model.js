@@ -95,7 +95,11 @@ export class Model extends Component {
                     </TableSortLabel>
                   </TableCell>
                 ),
-                renderCell: compose(take(10), _path(['row', 'id'])),
+                renderCell: compose(
+                  data => <TableCell>{data}</TableCell>,
+                  take(10),
+                  _path(['row', 'id']),
+                ),
               },
               ...map(attribute => ({
                 renderHeaderCell: () => (
@@ -118,10 +122,10 @@ export class Model extends Component {
                     </TableSortLabel>
                   </TableCell>
                 ),
-                renderCell: _path([
-                  'row',
-                  ...attributePath(attribute.name),
-                ]),
+                renderCell: compose(
+                  data => <TableCell>{data}</TableCell>,
+                  _path(['row', ...attributePath(attribute.name)]),
+                ),
               }))(this.attributes),
             ]}
           />
