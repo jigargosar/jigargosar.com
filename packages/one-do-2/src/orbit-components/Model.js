@@ -79,7 +79,11 @@ export class Model extends Component {
     return (
       <Fragment>
         <Toolbar variant={'regular'}>
-          <ViewSelection model={this.props.model} />
+          <ViewSelection
+            selectedView={this.props.selectedView}
+            views={this.props.model.views}
+            onChange={this.props.handleViewChange}
+          />
           <Button color={'primary'} onClick={this.handleAddRecord}>
             NEW <AddIcon />
           </Button>
@@ -95,21 +99,17 @@ export class Model extends Component {
 
 @observer
 class ViewSelection extends Component {
-  @observable name = head(this.props.model.views).name
-
   @action.bound
   onChange(e) {
-    this.name = e.target.value
+    this.props.handleViewChange(e.target.value)
   }
   render() {
-    const {
-      model: {views},
-    } = this.props
+    const {views, selectedView} = this.props
     return (
       <FormControl>
         <Select
           style={{minWidth: 180}}
-          value={this.name}
+          value={selectedView.name}
           onChange={this.onChange}
         >
           {map(({name}) => (
