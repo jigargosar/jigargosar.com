@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react'
 import React, {Component} from 'react'
 import {Button, TableCell, TableSortLabel} from '@material-ui/core'
-import {attributePath, idPath} from '../orbit-store/little-orbit'
+import {idPath} from '../orbit-store/little-orbit'
 import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
@@ -77,9 +77,11 @@ export class Model extends Component {
               ),
             },
             ...map(attribute => {
-              const config = {isNumeric: AT.isNumeric(attribute)}
-              const {isNumeric} = config
-              const attributePath = attributePath(attribute.name)
+              const config = {
+                isNumeric: AT.isNumeric(attribute),
+                attributePath: AT.path(attribute),
+              }
+              const {isNumeric, attributePath} = config
               return {
                 renderHeaderCell: () => (
                   <TableCell numeric={isNumeric}>
@@ -98,7 +100,7 @@ export class Model extends Component {
                   data => (
                     <TableCell numeric={isNumeric}>{`${data}`}</TableCell>
                   ),
-                  _path(['row', ...attributePath]),
+                  _path(['row', 'attribute', attribute.name]),
                 ),
               }
             })(this.attributes),
