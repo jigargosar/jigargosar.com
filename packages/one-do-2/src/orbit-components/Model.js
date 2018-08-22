@@ -81,7 +81,7 @@ export class Model extends Component {
           </Button>
         </Toolbar>
         <ModelGrid
-          view={this.props.model.views}
+          view={this.props.model.views[1]}
           model={this.props.model}
         />
       </Fragment>
@@ -162,7 +162,8 @@ export class ModelGrid extends Component {
       cellDataPath: ['id'],
       label: 'ID',
     }
-    const showId = propOr(true, this.props.view.showId)
+    const showId = this.props.view.showId
+    debugger
     return map(c =>
       merge({
         sort: {
