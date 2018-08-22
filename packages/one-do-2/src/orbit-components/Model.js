@@ -75,7 +75,7 @@ export class Model extends Component {
             },
             ...map(attribute => ({
               renderHeaderCell: () => (
-                <TableCell numeric={isAttribute(attribute)}>
+                <TableCell numeric={isAttributeNumeric(attribute)}>
                   <TableSortLabel
                     direction={this.direction}
                     active={equals(
@@ -94,7 +94,7 @@ export class Model extends Component {
               ),
               renderCell: compose(
                 data => (
-                  <TableCell numeric={isAttribute(attribute)}>
+                  <TableCell numeric={isAttributeNumeric(attribute)}>
                     {`${data}`}
                   </TableCell>
                 ),
@@ -130,6 +130,6 @@ export class Model extends Component {
   }
 }
 
-function isAttribute(attribute) {
+function isAttributeNumeric(attribute) {
   return attribute.type === 'number'
 }
