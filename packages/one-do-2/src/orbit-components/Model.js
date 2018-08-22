@@ -77,11 +77,12 @@ export class Model extends Component {
   }
   render() {
     const model = this.props.model
+    const selectedView = this.props.selectedView
     return (
       <Fragment>
         <Toolbar variant={'regular'}>
           <ValueSelection
-            value={this.props.selectedView.name}
+            value={selectedView.name}
             values={model.viewNames}
             onChange={this.props.handleViewChange}
           />
@@ -89,7 +90,7 @@ export class Model extends Component {
             NEW <AddIcon />
           </Button>
         </Toolbar>
-        <ModelGrid view={this.props.selectedView} model={model} />
+        <ModelGrid view={selectedView} model={model} />
       </Fragment>
     )
   }
