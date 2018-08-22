@@ -62,6 +62,63 @@ function columnsFromConfigs(configs) {
 
 @observer
 export class Model extends Component {
+  render() {
+    return (
+      <Fragment>
+        <Toolbar variant={'dense'}>
+          <ViewSelection model={this.props.model} />
+          <Button
+            // variant={'contained'}
+            color={'primary'}
+            // size={'small'}
+            onClick={() =>
+              updateStore(t => t.addRecord({type: this.props.model.type}))
+            }
+          >
+            NEW <AddIcon />
+          </Button>
+        </Toolbar>
+        <ModelGrid model={this.props.model} />
+      </Fragment>
+    )
+  }
+
+  @computed
+  get columnConfigs() {
+    const idColumnConfig = {
+      isNumeric: false,
+      getCellData: row => take(10)(row.id),
+      rowCellProps: {className: cn('code')},
+      cellDataPath: ['id'],
+      label: 'ID',
+    }
+    return map(c =>
+      merge({
+        sort: {
+          active: equals(this.sortPath, c.cellDataPath),
+          onClick: () => this.onSortLabelClicked(c),
+          direction: this.direction,
+        },
+      })(c),
+    )([
+      idColumnConfig,
+      ...map(attributesToColumnConfigs)(this.props.model.attributes),
+    ])
+  }
+
+  @action
+  onSortLabelClicked(columnConfig) {
+    const sortPath = columnConfig.cellDataPath
+    if (equals(this.sortPath, sortPath)) {
+      this.sortDirFn = this.sortDirFn === ascend ? descend : ascend
+    } else {
+      this.sortDirFn = ascend
+      this.sortPath = sortPath
+    }
+  }
+}
+@observer
+export class ModelGrid extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
   @observable sortDirFn = ascend
 
@@ -87,25 +144,10 @@ export class Model extends Component {
 
   render() {
     return (
-      <Fragment>
-        <Toolbar variant={'dense'}>
-          <ViewSelection model={this.props.model} />
-          <Button
-            // variant={'contained'}
-            color={'primary'}
-            // size={'small'}
-            onClick={() =>
-              updateStore(t => t.addRecord({type: this.props.model.type}))
-            }
-          >
-            NEW <AddIcon />
-          </Button>
-        </Toolbar>
-        <DataGrid
-          rows={this.sortedRows}
-          columns={columnsFromConfigs(this.columnConfigs)}
-        />
-      </Fragment>
+      <DataGrid
+        rows={this.sortedRows}
+        columns={columnsFromConfigs(this.columnConfigs)}
+      />
     )
   }
 
