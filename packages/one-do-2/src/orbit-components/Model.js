@@ -25,7 +25,7 @@ function columnConfigFromAttribute(attribute) {
     isNumeric: attribute.type === 'number',
     getCellData: row => row.attributes[name],
     columnId: join('.')(['attributes', name]),
-    name: name,
+    label: name,
   }
 }
 
@@ -86,7 +86,7 @@ export class Model extends Component {
             },
             ...map(attribute => {
               const config = columnConfigFromAttribute(attribute)
-              const {isNumeric, getCellData, name, columnId} = config
+              const {isNumeric, getCellData, label, columnId} = config
               return {
                 renderHeaderCell: () => (
                   <TableCell numeric={isNumeric}>
@@ -95,7 +95,7 @@ export class Model extends Component {
                       active={equals(this.sortPath, columnId)}
                       onClick={() => this.onSortLabelClicked(columnId)}
                     >
-                      {`${name}`}
+                      {`${label}`}
                     </TableSortLabel>
                   </TableCell>
                 ),
