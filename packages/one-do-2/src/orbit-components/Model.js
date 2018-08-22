@@ -161,7 +161,7 @@ export class ModelGrid extends Component {
       cellDataPath: ['id'],
       label: 'ID',
     }
-    const showId = this.props.view.showId
+    const hideId = this.props.view.showId
     return map(c =>
       merge({
         sort: {
@@ -172,7 +172,7 @@ export class ModelGrid extends Component {
       })(c),
     )(
       concat(
-        showId ? [idColumnConfig] : [],
+        hideId ? [] : [idColumnConfig],
         map(attributesToColumnConfigs)(this.props.model.attributes),
       ),
     )

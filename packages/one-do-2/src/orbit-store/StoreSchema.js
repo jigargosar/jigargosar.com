@@ -40,7 +40,7 @@ export function StoreSchema(store) {
 
     function ModelView(view, name) {
       return mergeDefaults(
-        {name, showId: true, columns: pluck('name')(attributes)},
+        {name, hideId: false, columns: pluck('name')(attributes)},
         view,
       )
     }

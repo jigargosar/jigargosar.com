@@ -10,7 +10,7 @@ const modelsDefinition = {
   task: {
     views: {
       'Grid Without Id': {
-        showId: false,
+        hideId: true,
       },
     },
     attributes: {
