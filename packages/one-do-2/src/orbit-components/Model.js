@@ -64,7 +64,7 @@ function columnsFromConfigs(configs) {
 @observer
 export class Model extends Component {
   @action.bound
-  handleAddRecord(e) {
+  handleAddRecord() {
     return updateStore(t => t.addRecord({type: this.props.model.type}))
   }
   render() {
