@@ -24,7 +24,7 @@ function columnConfigFromAttribute(attribute) {
   return {
     isNumeric: attribute.type === 'number',
     getCellData: row => row.attributes[name],
-    cellDataPath: join('.')(['attributes', name]),
+    cellDataPath: (['attributes', name]),
     label: name,
   }
 }
