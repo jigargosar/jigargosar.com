@@ -84,10 +84,6 @@ export class Model extends Component {
   render() {
     return (
       <Fragment>
-        <DataGrid
-          rows={this.sortedRows}
-          columns={columnsFromConfigs(this.columnConfigs)}
-        />
         <Toolbar variant={'dense'}>
           <Button
             // variant={'contained'}
@@ -100,6 +96,10 @@ export class Model extends Component {
             NEW <AddIcon />
           </Button>
         </Toolbar>
+        <DataGrid
+          rows={this.sortedRows}
+          columns={columnsFromConfigs(this.columnConfigs)}
+        />
       </Fragment>
     )
   }
