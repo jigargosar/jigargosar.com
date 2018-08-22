@@ -26,7 +26,7 @@ import {
   lensProp,
   map,
   mathMod,
-  mergeDeepRight,
+  mergeDeepRight, mergeWith,
   nAry,
   over,
   partial,
