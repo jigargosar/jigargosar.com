@@ -64,9 +64,12 @@ function columnsFromConfigs(configs) {
 
 @compose(
   withStateHandlers(({model}) => ({selectedView: head(model.views)}), {
-    handleViewChange: (state, {model}) => viewName => ({
-      selectedView: model.getView(viewName),
-    }),
+    handleViewChange: (state, {model}) => (e, viewName) => {
+      debugger
+      return {
+        selectedView: model.getView(viewName),
+      }
+    },
   }),
   observer,
 )
@@ -84,7 +87,7 @@ export class Model extends Component {
           <ValueSelection
             value={this.props.selectedView.name}
             values={model.viewNames}
-            handleValueChange={this.props.handleViewChange}
+            onChange={this.props.handleViewChange}
           />
           <Button color={'primary'} onClick={this.handleAddRecord}>
             NEW <AddIcon />
@@ -100,7 +103,7 @@ export class Model extends Component {
 class ValueSelection extends Component {
   @action.bound
   onChange(e) {
-    this.props.handleValueChange(e.target.value)
+    this.props.onChange(e, e.target.value)
   }
   render() {
     const {values, value} = this.props
@@ -109,7 +112,7 @@ class ValueSelection extends Component {
         <Select
           style={{minWidth: 180}}
           value={value}
-          onChange={this.onChange}
+          onChange={this.props.onChange}
         >
           {map(value => (
             <MenuItem key={value} value={value}>
