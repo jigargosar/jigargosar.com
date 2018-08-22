@@ -5,10 +5,7 @@ import {idPath} from '../orbit-store/little-orbit'
 import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
-  __,
   _path,
-  _prop,
-  append,
   ascend,
   compose,
   descend,
