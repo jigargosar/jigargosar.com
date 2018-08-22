@@ -49,8 +49,6 @@ export class Model extends Component {
   }
 
   render() {
-    const rows = this.sortedRows
-
     return (
       <div className={cn('pb4')}>
         <div>
