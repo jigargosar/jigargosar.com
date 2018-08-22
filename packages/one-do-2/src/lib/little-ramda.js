@@ -183,3 +183,4 @@ export const flattenObj = obj => {
 
   return fromPairs(go(obj))
 }
+export const mergeDefaults = mergeWith(defaultTo)

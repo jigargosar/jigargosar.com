@@ -1,9 +1,10 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
-import {overProp, validate} from '../lib/little-ramda'
+import {mergeDefaults, overProp, validate} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
-import {compose, defaultTo, mergeWith} from '../lib/ramda'
+import {always, compose, cond, equals, isNil, map} from '../lib/ramda'
 import {fWord} from '../lib/fake'
+import {assert} from '../lib/assert'
 
 const modelsDefinition = {
   task: {
@@ -59,23 +60,33 @@ export const attributeDescFromRecord = name => record => {
   return compose(attributeDesc(name), typeOfRecord)(record)
 }
 
+function getDefaultValueForAttribute(a) {
+  return cond([
+    //
+    [equals('number'), always(0)],
+    [equals('string'), fWord],
+    [equals('boolean'), always(false)],
+    [equals('timestamp'), Date.now],
+  ])(a.type)
+}
+
 class CustomSchema extends Schema {
   initializeRecord(record) {
     super.initializeRecord(record)
-    if (record.type === 'task') {
-      const setDefaultProps = compose(
-        overProp('attributes')(
-          mergeWith(defaultTo)({
-            title: fWord(),
-            createdAt: Date.now(),
-            isDone: false,
-            sortIdx: 0,
-          }),
-        ),
-        mergeWith(defaultTo)({attributes: {}}),
-      )
-      Object.assign(record, setDefaultProps(record))
-    }
+    const type = record.type
+
+    validate('S', [type])
+    const model = this.getModel(type)
+    assert(!isNil(model))
+
+    const defaultAttributed = map(getDefaultValueForAttribute)(
+      model.attributes,
+    )
+    const setDefaultProps = compose(
+      overProp('attributes')(mergeDefaults(defaultAttributed)),
+      mergeDefaults({attributes: {}}),
+    )
+    Object.assign(record, setDefaultProps(record))
   }
 }
 
