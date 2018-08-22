@@ -123,7 +123,13 @@ export class Model extends Component {
                   </TableCell>
                 ),
                 renderCell: compose(
-                  data => <TableCell>{data}</TableCell>,
+                  data => (
+                    <TableCell
+                      numeric={isAttributeTypeNumeric(attribute.type)}
+                    >
+                      {data}
+                    </TableCell>
+                  ),
                   _path(['row', ...attributePath(attribute.name)]),
                 ),
               }))(this.attributes),
