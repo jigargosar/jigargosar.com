@@ -36,6 +36,13 @@ import {AddIcon} from '../lib/Icons'
 import {renderKeyedById} from '../lib/little-react'
 import DataGrid from './DataGrid'
 
+function createSimpleColumn({label, path}) {
+  return {
+    renderHeaderCell: () => label,
+    renderCell: compose(_path(['row', ...path])),
+  }
+}
+
 @observer
 export class Model extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
@@ -74,12 +81,7 @@ export class Model extends Component {
         <div>
           <DataGrid
             rows={this.sortedRows}
-            columns={[
-              {
-                renderHeaderCell: () => 'id',
-                renderCell: compose(take(10), _path(['row', 'id'])),
-              },
-            ]}
+            columns={[createSimpleColumn({path: ['id'], label: 'id'})]}
           />
         </div>
         <Button
