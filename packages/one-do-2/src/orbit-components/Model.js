@@ -1,7 +1,6 @@
 import {observer} from 'mobx-react'
 import React, {Component} from 'react'
 import {Button, TableCell, TableSortLabel} from '@material-ui/core'
-import {idPath} from '../orbit-store/little-orbit'
 import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
@@ -12,7 +11,6 @@ import {
   equals,
   map,
   sortWith,
-  take,
 } from '../lib/ramda'
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
