@@ -80,6 +80,6 @@ class HeaderCell extends Component {
 class GridCell extends Component {
   render() {
     const {row, column} = this.props
-    return <TableCell>{column.renderCell({row})}</TableCell>
+    return column.renderCell({row})
   }
 }
