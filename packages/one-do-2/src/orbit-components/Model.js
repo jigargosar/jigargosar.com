@@ -64,7 +64,7 @@ function columnsFromConfigs(configs) {
 
 @compose(
   withStateHandlers(({model}) => ({selectedView: head(model.views)}), {
-    handleViewChange: ({model}) => viewName => ({
+    handleViewChange: (state, {model}) => viewName => ({
       selectedView: model.getView(viewName),
     }),
   }),
@@ -82,7 +82,7 @@ export class Model extends Component {
           <ViewSelection
             selectedView={this.props.selectedView}
             views={this.props.model.views}
-            onChange={this.props.handleViewChange}
+            handleViewChange={this.props.handleViewChange}
           />
           <Button color={'primary'} onClick={this.handleAddRecord}>
             NEW <AddIcon />
