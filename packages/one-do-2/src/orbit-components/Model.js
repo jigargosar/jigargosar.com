@@ -99,7 +99,9 @@ export class Model extends Component {
               },
               ...map(attribute => ({
                 renderHeaderCell: () => (
-                  <TableCell>
+                  <TableCell
+                    numeric={isAttributeTypeNumeric(attribute.type)}
+                  >
                     <TableSortLabel
                       direction={this.sortDirectionString}
                       active={equals(
