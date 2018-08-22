@@ -56,13 +56,9 @@ export class Model extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
   @observable sortDirFn = ascend
 
-  get modelType() {
-    return this.props.model.type
-  }
-
   @computed
   get query() {
-    return liveQuery(q => q.findRecords(this.modelType))
+    return liveQuery(q => q.findRecords(this.props.model.type))
   }
 
   @computed
@@ -90,7 +86,7 @@ export class Model extends Component {
         <Button
           color={'primary'}
           onClick={() =>
-            updateStore(t => t.addRecord({type: this.modelType}))
+            updateStore(t => t.addRecord({type: this.props.model.type}))
           }
         >
           add <AddIcon />
