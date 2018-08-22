@@ -4,6 +4,7 @@ import * as R from '../lib/ramda'
 import {map} from '../lib/ramda'
 import {observer} from '../lib/mobx-react'
 import {Table, TableBody, TableHead, TableRow} from '@material-ui/core'
+import {mapIndexed} from '../lib/little-ramda'
 
 @observer
 class DataGrid extends Component {
@@ -55,8 +56,8 @@ class HeaderRow extends Component {
     const {columns} = this.props
     return (
       <TableRow>
-        {R.map(column => (
-          <HeaderCell key={column.id || column.key} column={column} />
+        {mapIndexed((column, idx) => (
+          <HeaderCell key={idx} column={column} />
         ))(columns)}
       </TableRow>
     )
