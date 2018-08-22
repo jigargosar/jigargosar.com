@@ -23,13 +23,7 @@ class DataGrid extends Component {
     return (
       <Table padding={'dense'}>
         <TableHead>
-          {map(row => (
-            <HeaderRow
-              key={row.id || row.key}
-              row={row}
-              columns={columns}
-            />
-          ))(rows)}
+          <HeaderRow columns={columns} />
         </TableHead>
         <TableBody>
           {map(row => (
@@ -64,15 +58,11 @@ class GridRow extends Component {
 @observer
 class HeaderRow extends Component {
   render() {
-    const {row, columns} = this.props
+    const {columns} = this.props
     return (
       <TableRow>
         {R.map(column => (
-          <HeaderCell
-            key={column.id || column.key}
-            column={column}
-            row={row}
-          />
+          <HeaderCell key={column.id || column.key} column={column} />
         ))(columns)}
       </TableRow>
     )
