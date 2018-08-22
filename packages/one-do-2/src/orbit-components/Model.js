@@ -22,6 +22,7 @@ import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   _path,
+  _prop,
   ascend,
   compose,
   descend,
@@ -83,15 +84,39 @@ export class Model extends Component {
             columns={[
               //
               {
-                renderHeaderCell: () => 'id',
+                renderHeaderCell: () => (
+                  <TableSortLabel
+                    direction={this.sortDirectionString}
+                    active={equals(this.sortPath, idPath)}
+                    onClick={() => this.onSortLabelClicked(idPath)}
+                  >
+                    id
+                  </TableSortLabel>
+                ),
                 renderCell: compose(take(10), _path(['row', 'id'])),
               },
-              ...map(attribute =>
-                createSimpleColumn({
-                  path: attributePath(attribute.name),
-                  label: attribute.name,
-                }),
-              )(this.attributes),
+              ...map(attribute => ({
+                renderHeaderCell: () => (
+                  <TableSortLabel
+                    direction={this.sortDirectionString}
+                    active={equals(
+                      this.sortPath,
+                      attributePath(attribute.name),
+                    )}
+                    onClick={() =>
+                      this.onSortLabelClicked(
+                        attributePath(attribute.name),
+                      )
+                    }
+                  >
+                    id
+                  </TableSortLabel>
+                ),
+                renderCell: compose(
+                  attributePath(attribute.name),
+                  _prop('row'),
+                ),
+              }))(this.attributes),
             ]}
           />
         </div>
