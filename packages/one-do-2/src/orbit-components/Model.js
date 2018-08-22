@@ -109,7 +109,7 @@ class ValueSelection extends Component {
         <Select
           style={{minWidth: 180}}
           value={value}
-          onChange={this.props.onChange}
+          onChange={this.onChange}
         >
           {map(value => (
             <MenuItem key={value} value={value}>
