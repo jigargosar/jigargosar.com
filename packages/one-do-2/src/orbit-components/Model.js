@@ -15,11 +15,13 @@ import {
   _path,
   ascend,
   compose,
+  concat,
   descend,
   equals,
   head,
   map,
   merge,
+  propOr,
   sortWith,
   take,
 } from '../lib/ramda'
@@ -157,6 +159,7 @@ export class ModelGrid extends Component {
       cellDataPath: ['id'],
       label: 'ID',
     }
+    const showId = propOr(true, this.props.view.showId)
     return map(c =>
       merge({
         sort: {
@@ -165,10 +168,12 @@ export class ModelGrid extends Component {
           direction: this.direction,
         },
       })(c),
-    )([
-      idColumnConfig,
-      ...map(attributesToColumnConfigs)(this.props.model.attributes),
-    ])
+    )(
+      concat(
+        showId ? [idColumnConfig] : [],
+        ...map(attributesToColumnConfigs)(this.props.model.attributes),
+      ),
+    )
   }
 
   @action
