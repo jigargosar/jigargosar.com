@@ -22,9 +22,9 @@ function attributesToColumnConfigs(attribute) {
   const name = attribute.name
   return {
     isNumeric: attribute.type === 'number',
-    getCellData: row => row.attributes[name],
+    getCellData: row => `${row.attributes[name]}`,
     cellDataPath: ['attributes', name],
-    label: `${name}`,
+    label: name,
   }
 }
 
