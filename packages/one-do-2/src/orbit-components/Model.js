@@ -79,7 +79,7 @@ export class Model extends Component {
             },
             ...map(attribute => {
               const config = {
-                isNumeric: AT.isNumeric(attribute),
+                isNumeric: attribute.type === 'number',
                 cellDataPath: ['attributes', attribute.name],
                 columnId: join('.')(['attributes', attribute.name]),
                 name: attribute.name,
