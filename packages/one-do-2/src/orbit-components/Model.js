@@ -78,13 +78,7 @@ export class Model extends Component {
       <div className={cn('pb4')}>
         <DataGrid
           rows={this.sortedRows}
-          columns={map(config => {
-            const {
-              isNumeric,
-              getCellData,
-              label,
-              sort,
-            } = config
+          columns={map(({isNumeric, getCellData, label, sort}) => {
             return {
               renderHeaderCell: () => (
                 <TableCell numeric={isNumeric}>
