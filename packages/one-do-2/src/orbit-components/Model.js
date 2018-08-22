@@ -53,7 +53,6 @@ export class Model extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
   @observable sortDirFn = ascend
 
-  @computed
   get modelType() {
     return this.props.model.type
   }
