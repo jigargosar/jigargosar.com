@@ -17,6 +17,7 @@ import {
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
+import {equals, map, merge} from 'ramda'
 
 function attributesToColumnConfigs(attribute) {
   const name = attribute.name
@@ -81,28 +82,11 @@ export class Model extends Component {
   }
 
   render() {
-    const idColumnConfig = {
-      isNumeric: false,
-      getCellData: row => take(10)(row.id),
-      rowCellProps: {className: cn('code')},
-      cellDataPath: ['id'],
-      label: 'id',
-    }
-    const configs = map(c =>
-      merge({
-        sort: {
-          active: equals(this.sortPath, c.cellDataPath),
-          onClick: () => this.onSortLabelClicked(c),
-          direction: this.direction,
-        },
-      })(c),
-    )([idColumnConfig, ...map(attributesToColumnConfigs)(this.attributes)])
-
     return (
       <div className={cn('pb4')}>
         <DataGrid
           rows={this.sortedRows}
-          columns={columnsFromConfigs(configs)}
+          columns={columnsFromConfigs(this.getColumnConfigs())}
         />
         <Button
           color={'primary'}
@@ -114,6 +98,26 @@ export class Model extends Component {
         </Button>
       </div>
     )
+  }
+
+  @computed
+  getColumnConfigs() {
+    const idColumnConfig = {
+      isNumeric: false,
+      getCellData: row => take(10)(row.id),
+      rowCellProps: {className: cn('code')},
+      cellDataPath: ['id'],
+      label: 'id',
+    }
+    return map(c =>
+      merge({
+        sort: {
+          active: equals(this.sortPath, c.cellDataPath),
+          onClick: () => this.onSortLabelClicked(c),
+          direction: this.direction,
+        },
+      })(c),
+    )([idColumnConfig, ...map(attributesToColumnConfigs)(this.attributes)])
   }
 
   @action
