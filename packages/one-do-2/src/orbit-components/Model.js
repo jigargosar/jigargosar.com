@@ -18,15 +18,16 @@ import {
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
+import {join} from 'ramda'
 
 function columnConfigFromAttribute(attribute) {
-  const config = {
+  const name = attribute.name
+  return {
     isNumeric: attribute.type === 'number',
-    cellDataPath: ['attributes', attribute.name],
-    columnId: join('.')(['attributes', attribute.name]),
-    name: attribute.name,
+    cellDataPath: ['attributes', name],
+    columnId: join('.')(['attributes', name]),
+    name: name,
   }
-  return config
 }
 
 @observer
