@@ -6,7 +6,6 @@ import {
   merge,
   prepend,
   values,
-  mapObjIndexed,
 } from '../lib/ramda'
 import {mergeDefaults} from '../lib/little-ramda'
 
