@@ -10,7 +10,6 @@ import {
   compose,
   descend,
   equals,
-  join,
   map,
   sortWith,
   take,
@@ -24,7 +23,7 @@ function columnConfigFromAttribute(attribute) {
   return {
     isNumeric: attribute.type === 'number',
     getCellData: row => row.attributes[name],
-    cellDataPath: (['attributes', name]),
+    cellDataPath: ['attributes', name],
     label: name,
   }
 }
