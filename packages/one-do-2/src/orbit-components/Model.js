@@ -81,17 +81,17 @@ export class Model extends Component {
               const config = {
                 isNumeric: AT.isNumeric(attribute),
                 cellDataPath: ['attributes', attribute.name],
-                columnKey: join('.')(['attributes', attribute.name]),
+                columnId: join('.')(['attributes', attribute.name]),
                 name: attribute.name,
               }
-              const {isNumeric, cellDataPath, name, columnKey} = config
+              const {isNumeric, cellDataPath, name, columnId} = config
               return {
                 renderHeaderCell: () => (
                   <TableCell numeric={isNumeric}>
                     <TableSortLabel
                       direction={this.direction}
-                      active={equals(this.sortPath, columnKey)}
-                      onClick={() => this.onSortLabelClicked(columnKey)}
+                      active={equals(this.sortPath, columnId)}
+                      onClick={() => this.onSortLabelClicked(columnId)}
                     >
                       {`${name}`}
                     </TableSortLabel>
