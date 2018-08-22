@@ -15,7 +15,7 @@ import {
   take,
 } from '../lib/ramda'
 import cn from 'classnames'
-import {AddIcon} from '../lib/Icons'
+import {CreateIcon, NewIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
 
 function attributesToColumnConfigs(attribute) {
@@ -91,7 +91,7 @@ export class Model extends Component {
             updateStore(t => t.addRecord({type: this.props.model.type}))
           }
         >
-          add <AddIcon />
+          NEW <CreateIcon />
         </Button>
       </div>
     )
