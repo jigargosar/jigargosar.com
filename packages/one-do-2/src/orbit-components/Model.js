@@ -76,7 +76,6 @@ export class Model extends Component {
     return updateStore(t => t.addRecord({type: this.props.model.type}))
   }
   render() {
-    console.log(`this.props`, this.props)
     const model = this.props.model
     return (
       <Fragment>
