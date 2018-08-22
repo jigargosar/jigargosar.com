@@ -103,9 +103,7 @@ export class Model extends Component {
               },
               ...map(attribute => ({
                 renderHeaderCell: () => (
-                  <TableCell
-                    numeric={isAttributeTypeNumeric(attribute.type)}
-                  >
+                  <TableCell numeric={isAttribute(attribute)}>
                     <TableSortLabel
                       direction={this.sortDirectionString}
                       active={equals(
@@ -124,9 +122,7 @@ export class Model extends Component {
                 ),
                 renderCell: compose(
                   data => (
-                    <TableCell
-                      numeric={isAttributeTypeNumeric(attribute.type)}
-                    >
+                    <TableCell numeric={isAttribute(attribute)}>
                       {data}
                     </TableCell>
                   ),
@@ -179,7 +175,7 @@ export class Model extends Component {
             <HeaderCell
               key={name}
               label={name}
-              numeric={isAttributeTypeNumeric(attribute)}
+              numeric={isAttribute(attribute)}
               active={equals(this.sortPath, attributePath(name))}
               sortDirection={this.sortDirectionString}
               SortLabelProps={{
@@ -198,7 +194,7 @@ export class Model extends Component {
   }
 }
 
-function isAttributeTypeNumeric(attribute) {
+function isAttribute(attribute) {
   return attribute.type === 'number'
 }
 
@@ -235,7 +231,7 @@ class BodyCell extends Component {
     const {name, record} = this.props
     const attrDesc = attributeDescFromRecord(name)(record)
     return (
-      <TableCell numeric={isAttributeTypeNumeric(attrDesc)}>
+      <TableCell numeric={isAttribute(attrDesc)}>
         {`${recAttr(name)(record)}`}
       </TableCell>
     )
