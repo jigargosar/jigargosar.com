@@ -157,7 +157,11 @@ class ViewSelection extends Component {
       model: {views},
     } = this.props
     return (
-      <Select value={this.name} onChange={this.onChange}>
+      <Select
+        className={cn('w4')}
+        value={this.name}
+        onChange={this.onChange}
+      >
         {map(({name}) => (
           <MenuItem key={name} value={name}>
             {name}
