@@ -73,7 +73,7 @@ class HeaderRow extends Component {
 class HeaderCell extends Component {
   render() {
     const {column} = this.props
-    return <TableCell>{column.renderHeaderCell()}</TableCell>
+    return column.renderHeaderCell()
   }
 }
 @observer
