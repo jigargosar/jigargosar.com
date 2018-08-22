@@ -6,6 +6,7 @@ import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   _path,
+  _prop,
   ascend,
   compose,
   descend,
@@ -75,7 +76,7 @@ export class Model extends Component {
             },
             ...map(attribute => ({
               renderHeaderCell: () => (
-                <TableCell numeric={isAttributeNumeric(attribute)}>
+                <TableCell numeric={AT.isNumeric(attribute)}>
                   <TableSortLabel
                     direction={this.direction}
                     active={equals(
@@ -94,7 +95,7 @@ export class Model extends Component {
               ),
               renderCell: compose(
                 data => (
-                  <TableCell numeric={isAttributeNumeric(attribute)}>
+                  <TableCell numeric={AT.isNumeric(attribute)}>
                     {`${data}`}
                   </TableCell>
                 ),
@@ -130,6 +131,6 @@ export class Model extends Component {
   }
 }
 
-function isAttributeNumeric(attribute) {
-  return attribute.type === 'number'
+const AT = {
+  isNumeric: compose(equals('number'), _prop('type')),
 }
