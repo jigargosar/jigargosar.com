@@ -146,35 +146,6 @@ export class Model extends Component {
     }
   }
 
-  renderHeaderRow() {
-    return (
-      <TableRow>
-        <HeaderCell
-          label={'id'}
-          active={equals(this.sortPath, idPath)}
-          sortDirection={this.sortDirectionString}
-          SortLabelProps={{onClick: () => this.onSortLabelClicked(idPath)}}
-        />
-        {map(attribute => {
-          const {name} = attribute
-          return (
-            <HeaderCell
-              key={name}
-              label={name}
-              numeric={isAttribute(attribute)}
-              active={equals(this.sortPath, attributePath(name))}
-              sortDirection={this.sortDirectionString}
-              SortLabelProps={{
-                onClick: () =>
-                  this.onSortLabelClicked(attributePath(name)),
-              }}
-            />
-          )
-        })(this.attributes)}
-      </TableRow>
-    )
-  }
-
   get attributes() {
     return this.props.model.attributes
   }
@@ -182,72 +153,4 @@ export class Model extends Component {
 
 function isAttribute(attribute) {
   return attribute.type === 'number'
-}
-
-@observer
-class HeaderCell extends Component {
-  render() {
-    const {
-      numeric = false,
-      label = 'INVALID_LABEL',
-      sortDirection,
-      active = false,
-      tooltipTitle = label,
-      SortLabelProps = {},
-    } = this.props
-    return (
-      <TableCell numeric={numeric}>
-        <Tooltip title={tooltipTitle} enterDelay={1500}>
-          <TableSortLabel
-            direction={sortDirection}
-            active={active}
-            {...SortLabelProps}
-          >
-            {label}
-          </TableSortLabel>
-        </Tooltip>
-      </TableCell>
-    )
-  }
-}
-
-@observer
-class BodyCell extends Component {
-  render() {
-    const {name, record} = this.props
-    const attrDesc = attributeDescFromRecord(name)(record)
-    return (
-      <TableCell numeric={isAttribute(attrDesc)}>
-        {`${recAttr(name)(record)}`}
-      </TableCell>
-    )
-  }
-}
-
-@observer
-class RecordRow extends Component {
-  render() {
-    const {
-      record,
-      type = typeOfRecord(record),
-      attrPairs = attributesOfType(type)(schema),
-    } = this.props
-    return (
-      <Fragment>
-        <TableRow hover>
-          <TableCell className={cn('code')}>
-            {take(10)(record.id)}
-          </TableCell>
-          {map(([name, attribute]) => (
-            <BodyCell
-              key={name}
-              name={name}
-              attribute={attribute}
-              record={record}
-            />
-          ))(attrPairs)}
-        </TableRow>
-      </Fragment>
-    )
-  }
 }
