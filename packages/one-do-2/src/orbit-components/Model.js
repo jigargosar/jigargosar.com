@@ -82,39 +82,35 @@ export class Model extends Component {
       </Fragment>
     )
   }
+}
 
-  @computed
-  get columnConfigs() {
-    const idColumnConfig = {
-      isNumeric: false,
-      getCellData: row => take(10)(row.id),
-      rowCellProps: {className: cn('code')},
-      cellDataPath: ['id'],
-      label: 'ID',
-    }
-    return map(c =>
-      merge({
-        sort: {
-          active: equals(this.sortPath, c.cellDataPath),
-          onClick: () => this.onSortLabelClicked(c),
-          direction: this.direction,
-        },
-      })(c),
-    )([
-      idColumnConfig,
-      ...map(attributesToColumnConfigs)(this.props.model.attributes),
-    ])
+@observer
+class ViewSelection extends Component {
+  @observable name = head(this.props.model.views).name
+
+  @action.bound
+  onChange(e) {
+    this.name = e.target.value
   }
-
-  @action
-  onSortLabelClicked(columnConfig) {
-    const sortPath = columnConfig.cellDataPath
-    if (equals(this.sortPath, sortPath)) {
-      this.sortDirFn = this.sortDirFn === ascend ? descend : ascend
-    } else {
-      this.sortDirFn = ascend
-      this.sortPath = sortPath
-    }
+  render() {
+    const {
+      model: {views},
+    } = this.props
+    return (
+      <FormControl>
+        <Select
+          style={{minWidth: 180}}
+          value={this.name}
+          onChange={this.onChange}
+        >
+          {map(({name}) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))(views)}
+        </Select>
+      </FormControl>
+    )
   }
 }
 
@@ -185,35 +181,5 @@ export class ModelGrid extends Component {
 
   get attributes() {
     return this.props.model.attributes
-  }
-}
-
-@observer
-class ViewSelection extends Component {
-  @observable name = head(this.props.model.views).name
-
-  @action.bound
-  onChange(e) {
-    this.name = e.target.value
-  }
-  render() {
-    const {
-      model: {views},
-    } = this.props
-    return (
-      <FormControl>
-        <Select
-          style={{minWidth: 180}}
-          value={this.name}
-          onChange={this.onChange}
-        >
-          {map(({name}) => (
-            <MenuItem key={name} value={name}>
-              {name}
-            </MenuItem>
-          ))(views)}
-        </Select>
-      </FormControl>
-    )
   }
 }
