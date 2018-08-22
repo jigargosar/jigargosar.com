@@ -80,7 +80,7 @@ export class Model extends Component {
             ...map(attribute => {
               const config = {
                 isNumeric: AT.isNumeric(attribute),
-                attributePath: ['attributes', attribute.name],
+                cellDataPath: ['attributes', attribute.name],
                 columnKey: join('.')(['attributes', attribute.name]),
                 name: attribute.name,
               }
