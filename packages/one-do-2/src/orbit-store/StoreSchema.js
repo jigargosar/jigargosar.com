@@ -20,7 +20,6 @@ export function StoreSchema(store) {
   }
 
   function SchemaModel(model, type) {
-    console.log(`model`, model)
     const attributes = compose(values, mapObjIndexed(ModelAttribute))(
       model.attributes,
     )
