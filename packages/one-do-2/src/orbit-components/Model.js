@@ -98,7 +98,7 @@ export class Model extends Component {
                   </TableCell>
                 ),
                 renderCell: ({row}) => (
-                  <TableCell numeric={isNumeric}>
+                  <TableCell key={row.id} numeric={isNumeric}>
                     {_path(attributePath)(row)}
                   </TableCell>
                 ),
