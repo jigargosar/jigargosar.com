@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React, {Component} from 'react'
-import * as R from '../lib/ramda'
 import {map} from '../lib/ramda'
 import {observer} from '../lib/mobx-react'
 import {Table, TableBody, TableHead, TableRow} from '@material-ui/core'
