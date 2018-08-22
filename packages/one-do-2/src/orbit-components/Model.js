@@ -80,7 +80,10 @@ export class Model extends Component {
             NEW <AddIcon />
           </Button>
         </Toolbar>
-        <ModelGrid model={this.props.model} />
+        <ModelGrid
+          view={this.props.model.views}
+          model={this.props.model}
+        />
       </Fragment>
     )
   }
@@ -171,7 +174,7 @@ export class ModelGrid extends Component {
     )(
       concat(
         showId ? [idColumnConfig] : [],
-        ...map(attributesToColumnConfigs)(this.props.model.attributes),
+        map(attributesToColumnConfigs)(this.props.model.attributes),
       ),
     )
   }
