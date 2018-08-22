@@ -22,7 +22,6 @@ import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   _path,
-  _prop,
   ascend,
   compose,
   descend,
@@ -83,7 +82,10 @@ export class Model extends Component {
             rows={this.sortedRows}
             columns={[
               //
-              createSimpleColumn({path: ['id'], label: 'id'}),
+              {
+                renderHeaderCell: () => 'id',
+                renderCell: compose(_path(['row', 'id'])),
+              },
               ...map(attribute =>
                 createSimpleColumn({
                   path: attributePath(attribute.name),
