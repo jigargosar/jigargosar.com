@@ -31,7 +31,7 @@ function columnConfigFromAttribute(attribute) {
 
 @observer
 export class Model extends Component {
-  @observable sortPath = ['attributes', 'sortIdx']
+  @observable sortPath = 'attributes.sortIdx'
   @observable sortDirFn = ascend
 
   @computed
