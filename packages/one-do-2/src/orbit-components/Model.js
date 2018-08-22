@@ -132,12 +132,6 @@ export class Model extends Component {
         >
           add <AddIcon />
         </Button>
-        <Table padding={'dense'}>
-          <TableHead>{this.renderHeaderRow()}</TableHead>
-          <TableBody>
-            {renderKeyedById(RecordRow, 'record', rows)}
-          </TableBody>
-        </Table>
       </div>
     )
   }
