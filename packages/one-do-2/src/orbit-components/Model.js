@@ -21,7 +21,6 @@ import {
   head,
   map,
   merge,
-  propOr,
   sortWith,
   take,
 } from '../lib/ramda'
