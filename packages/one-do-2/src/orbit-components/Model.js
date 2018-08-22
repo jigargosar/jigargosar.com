@@ -10,6 +10,7 @@ import {
   descend,
   equals,
   map,
+  merge,
   sortWith,
 } from '../lib/ramda'
 import cn from 'classnames'
@@ -63,23 +64,35 @@ export class Model extends Component {
       cellDataPath: ['id'],
       label: 'id',
     }
-    const configs = [
-      idColumnConfig,
-      ...map(attributesToColumnConfigs)(this.attributes),
-    ]
+    const configs = map(c =>
+      merge({
+        sort: {
+          active: equals(this.sortPath, c.cellDataPath),
+          onClick: () => this.onSortLabelClicked(c.cellDataPath),
+          direction: this.direction,
+        },
+      })(c),
+    )([idColumnConfig, ...map(attributesToColumnConfigs)(this.attributes)])
+
     return (
       <div className={cn('pb4')}>
         <DataGrid
           rows={this.sortedRows}
           columns={map(config => {
-            const {isNumeric, getCellData, label, cellDataPath} = config
+            const {
+              isNumeric,
+              getCellData,
+              label,
+              cellDataPath,
+              sort,
+            } = config
             return {
               renderHeaderCell: () => (
                 <TableCell numeric={isNumeric}>
                   <TableSortLabel
-                    direction={this.direction}
-                    active={equals(this.sortPath, cellDataPath)}
-                    onClick={() => this.onSortLabelClicked(cellDataPath)}
+                    direction={sort.direction}
+                    active={sort.active}
+                    onClick={sort.onClick}
                   >
                     {`${label}`}
                   </TableSortLabel>
