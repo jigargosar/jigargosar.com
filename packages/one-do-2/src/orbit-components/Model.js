@@ -38,7 +38,7 @@ function columnsFromConfigs(configs) {
             active={sort.active}
             onClick={sort.onClick}
           >
-            {`${label}`}
+            {label}
           </TableSortLabel>
         </TableCell>
       ),
@@ -81,9 +81,10 @@ export class Model extends Component {
   render() {
     const idColumnConfig = {
       isNumeric: false,
-      getCellData: row => (
-        <div className={cn('code')}>{`${take(10)(row.id)}`}</div>
-      ),
+      getCellData: row => {
+        console.log(row.id)
+        return <div className={cn('code')}>{take(10)(row.id)}</div>
+      },
       cellDataPath: ['id'],
       label: 'id',
     }
