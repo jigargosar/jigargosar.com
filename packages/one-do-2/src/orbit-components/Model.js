@@ -82,7 +82,7 @@ export class Model extends Component {
     const idColumnConfig = {
       isNumeric: false,
       getCellData: row => (
-        <div className={cn('code')}>take(10)(row.id)</div>
+        <div className={cn('code')}>{take(10)(row.id)}</div>
       ),
       cellDataPath: ['id'],
       label: 'id',
