@@ -23,7 +23,7 @@ function columnConfigFromAttribute(attribute) {
   const name = attribute.name
   return {
     isNumeric: attribute.type === 'number',
-    cellDataPath: ['attributes', name],
+    getCellData: row => row.attributes[name],
     columnId: join('.')(['attributes', name]),
     name: name,
   }
@@ -86,7 +86,7 @@ export class Model extends Component {
             },
             ...map(attribute => {
               const config = columnConfigFromAttribute(attribute)
-              const {isNumeric, cellDataPath, name, columnId} = config
+              const {isNumeric, getCellData, name, columnId} = config
               return {
                 renderHeaderCell: () => (
                   <TableCell numeric={isNumeric}>
@@ -101,7 +101,7 @@ export class Model extends Component {
                 ),
                 renderCell: ({row}) => (
                   <TableCell numeric={isNumeric}>
-                    {`${_path(cellDataPath)(row)}`}
+                    {`${getCellData(row)}`}
                   </TableCell>
                 ),
               }
