@@ -116,14 +116,14 @@ export class Model extends Component {
                         )
                       }
                     >
-                      {attribute.name}
+                      {`${attribute.name}`}
                     </TableSortLabel>
                   </TableCell>
                 ),
                 renderCell: compose(
                   data => (
                     <TableCell numeric={isAttribute(attribute)}>
-                      {data}
+                      {`${data}`}
                     </TableCell>
                   ),
                   _path(['row', ...attributePath(attribute.name)]),
