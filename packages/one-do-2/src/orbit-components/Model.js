@@ -79,7 +79,7 @@ export class Model extends Component {
                   return 'id'
                 },
                 renderCell({row}) {
-                  return null
+                  return take(10)(row.id)
                 },
               },
             ]}
