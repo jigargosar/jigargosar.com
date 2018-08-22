@@ -10,7 +10,7 @@ const modelsDefinition = {
     attributes: {
       title: {type: 'string', label: 'Title'},
       isDone: {type: 'boolean', label: 'Done'},
-      sortIdx: {type: 'number', label: 'Order'},
+      sortIdx: {type: 'number', label: 'Sort Index'},
       createdAt: {type: 'timestamp', label: 'Created'},
     },
   },
