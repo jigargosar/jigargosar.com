@@ -65,7 +65,7 @@ export class Model extends Component {
   render() {
     return (
       <Fragment>
-        <Toolbar variant={'dense'}>
+        <Toolbar variant={'regular'}>
           <ViewSelection model={this.props.model} />
           <Button
             // variant={'contained'}
