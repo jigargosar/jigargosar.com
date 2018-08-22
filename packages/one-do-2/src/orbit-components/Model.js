@@ -161,7 +161,7 @@ export class ModelGrid extends Component {
       cellDataPath: ['id'],
       label: 'ID',
     }
-    const hideId = this.props.view.showId
+    const hideId = this.props.view.hideId
     return map(c =>
       merge({
         sort: {
