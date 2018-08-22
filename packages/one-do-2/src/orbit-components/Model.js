@@ -59,6 +59,12 @@ export class Model extends Component {
   }
 
   render() {
+    const idColumnConfig = {
+      isNumeric: false,
+      getCellData: row => row.attributes['id'],
+      cellDataPath: ['attributes', 'id'],
+      label: 'id',
+    }
     return (
       <div className={cn('pb4')}>
         <DataGrid
