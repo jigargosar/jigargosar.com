@@ -44,7 +44,7 @@ class GridRow extends Component {
     return (
       <TableRow>
         {R.map(column => (
-          <GridCell
+          <RowCell
             key={column.id || column.key}
             column={column}
             row={row}
@@ -77,7 +77,7 @@ class HeaderCell extends Component {
   }
 }
 @observer
-class GridCell extends Component {
+class RowCell extends Component {
   render() {
     const {row, column} = this.props
     return column.renderCell({row})
