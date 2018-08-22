@@ -70,7 +70,6 @@ function columnsFromConfigs(configs) {
   }),
   observer,
 )
-@observer
 export class Model extends Component {
   @action.bound
   handleAddRecord() {
