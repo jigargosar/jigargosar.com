@@ -71,7 +71,19 @@ export class Model extends Component {
     return (
       <div className={cn('pb4')}>
         <div>
-          <DataGrid rows={this.sortedRows} columns={[]} />
+          <DataGrid
+            rows={this.sortedRows}
+            columns={[
+              {
+                renderHeaderCell() {
+                  return 'id'
+                },
+                renderCell({row}) {
+                  return null
+                },
+              },
+            ]}
+          />
         </div>
         <Button
           color={'primary'}
