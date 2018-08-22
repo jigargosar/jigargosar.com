@@ -5,8 +5,10 @@ import {attributePath, idPath} from '../orbit-store/little-orbit'
 import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
+  __,
   _path,
   _prop,
+  append,
   ascend,
   compose,
   descend,
@@ -74,34 +76,32 @@ export class Model extends Component {
                 _path(['row', 'id']),
               ),
             },
-            ...map(attribute => ({
-              renderHeaderCell: () => (
-                <TableCell numeric={AT.isNumeric(attribute)}>
-                  <TableSortLabel
-                    direction={this.direction}
-                    active={equals(
-                      this.sortPath,
-                      attributePath(attribute.name),
-                    )}
-                    onClick={() =>
-                      this.onSortLabelClicked(
-                        attributePath(attribute.name),
-                      )
-                    }
-                  >
-                    {`${attribute.name}`}
-                  </TableSortLabel>
-                </TableCell>
-              ),
-              renderCell: compose(
-                data => (
-                  <TableCell numeric={AT.isNumeric(attribute)}>
-                    {`${data}`}
+            ...map(attribute => {
+              const config = {isNumeric: AT.isNumeric(attribute)}
+              const {isNumeric} = config
+              const attributePath = attributePath(attribute.name)
+              return {
+                renderHeaderCell: () => (
+                  <TableCell numeric={isNumeric}>
+                    <TableSortLabel
+                      direction={this.direction}
+                      active={equals(this.sortPath, attributePath)}
+                      onClick={() =>
+                        this.onSortLabelClicked(attributePath)
+                      }
+                    >
+                      {`${attribute.name}`}
+                    </TableSortLabel>
                   </TableCell>
                 ),
-                _path(['row', ...attributePath(attribute.name)]),
-              ),
-            }))(this.attributes),
+                renderCell: compose(
+                  data => (
+                    <TableCell numeric={isNumeric}>{`${data}`}</TableCell>
+                  ),
+                  _path(['row', ...attributePath]),
+                ),
+              }
+            })(this.attributes),
           ]}
         />
         <Button
@@ -133,4 +133,5 @@ export class Model extends Component {
 
 const AT = {
   isNumeric: compose(equals('number'), _prop('type')),
+  path: compose(append(__, ['attribute']), _prop('name')),
 }
