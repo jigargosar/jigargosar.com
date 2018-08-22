@@ -4,8 +4,11 @@ import {
   keys,
   mapObjIndexed,
   merge,
+  prepend,
   values,
+  mapObjIndexed,
 } from '../lib/ramda'
+import {mergeDefaults} from '../lib/little-ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -18,14 +21,18 @@ export function StoreSchema(store) {
 
   function SchemaModel(model, type) {
     console.log(`model`, model)
-    const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
-
+    const attributes = compose(values, mapObjIndexed(ModelAttribute))(
+      model.attributes,
+    )
     return {
       type,
-      attributes: values(attributeLookup),
-      views: compose(values, mapObjIndexed(ModelView), defaultTo([]))(
-        model.views,
-      ),
+      attributes,
+      views: compose(
+        prepend(ModelView({}, 'default')),
+        values,
+        mapObjIndexed(ModelView),
+        defaultTo([]),
+      )(model.views),
     }
 
     function ModelAttribute(attribute, name) {
@@ -33,7 +40,7 @@ export function StoreSchema(store) {
     }
 
     function ModelView(view, name) {
-      return merge({name}, view)
+      return mergeDefaults({name, showId: true, columns: []}, view)
     }
   }
 }
