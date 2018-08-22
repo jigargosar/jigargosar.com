@@ -34,7 +34,7 @@ export class Model extends Component {
   }
 
   @computed
-  get sortDirectionString() {
+  get direction() {
     return this.sortDirFn === ascend ? 'asc' : 'desc'
   }
 
@@ -59,7 +59,7 @@ export class Model extends Component {
               renderHeaderCell: () => (
                 <TableCell>
                   <TableSortLabel
-                    direction={this.sortDirectionString}
+                    direction={this.direction}
                     active={equals(this.sortPath, idPath)}
                     onClick={() => this.onSortLabelClicked(idPath)}
                   >
@@ -77,7 +77,7 @@ export class Model extends Component {
               renderHeaderCell: () => (
                 <TableCell numeric={isAttribute(attribute)}>
                   <TableSortLabel
-                    direction={this.sortDirectionString}
+                    direction={this.direction}
                     active={equals(
                       this.sortPath,
                       attributePath(attribute.name),
