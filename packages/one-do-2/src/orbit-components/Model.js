@@ -81,10 +81,9 @@ export class Model extends Component {
   render() {
     const idColumnConfig = {
       isNumeric: false,
-      getCellData: row => {
-        console.log(row.id)
-        return <div className={cn('code')}>{take(10)(row.id)}</div>
-      },
+      getCellData: row => (
+        <div className={cn('code')}>{take(10)(row.id)}</div>
+      ),
       cellDataPath: ['id'],
       label: 'id',
     }
@@ -92,7 +91,7 @@ export class Model extends Component {
       merge({
         sort: {
           active: equals(this.sortPath, c.cellDataPath),
-          onClick: () => this.onSortLabelClicked(c.cellDataPath),
+          onClick: () => this.onSortLabelClicked(c),
           direction: this.direction,
         },
       })(c),
@@ -117,7 +116,8 @@ export class Model extends Component {
   }
 
   @action
-  onSortLabelClicked(sortPath) {
+  onSortLabelClicked(columnConfig) {
+    const sortPath = columnConfig.cellDataPath
     if (equals(this.sortPath, sortPath)) {
       this.sortDirFn = this.sortDirFn === ascend ? descend : ascend
     } else {
