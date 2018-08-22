@@ -64,9 +64,11 @@ function columnsFromConfigs(configs) {
 
 @compose(
   withStateHandlers(({model}) => ({selectedView: head(model.views)}), {
-    handleViewChange: (state, {model}) => viewName => ({
-      selectedView: model.getView(viewName),
-    }),
+    handleViewChange: (state, {model}) => viewName => {
+      return {
+        selectedView: model.getView(viewName),
+      }
+    },
   }),
   observer,
 )
