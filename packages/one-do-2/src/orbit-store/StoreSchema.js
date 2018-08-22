@@ -1,12 +1,16 @@
 import {
   compose,
   defaultTo,
+  equals,
+  find,
   keys,
   mapObjIndexed,
   merge,
   pluck,
   prepend,
+  propEq,
   values,
+  view,
 } from '../lib/ramda'
 import {mergeDefaults} from '../lib/little-ramda'
 
@@ -23,15 +27,17 @@ export function StoreSchema(store) {
     const attributes = compose(values, mapObjIndexed(ModelAttribute))(
       model.attributes,
     )
+    const views = compose(
+      prepend(ModelView({}, 'Default Grid')),
+      values,
+      mapObjIndexed(ModelView),
+      defaultTo([]),
+    )(model.views)
     return {
       type,
       attributes,
-      views: compose(
-        prepend(ModelView({}, 'Default Grid')),
-        values,
-        mapObjIndexed(ModelView),
-        defaultTo([]),
-      )(model.views),
+      views,
+      getView: viewName => find(propEq('name', viewName))(views),
     }
 
     function ModelAttribute(attribute, name) {

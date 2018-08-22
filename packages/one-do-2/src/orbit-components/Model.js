@@ -27,6 +27,7 @@ import {
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
+import {withProps, withStateHandlers} from '../lib/recompose'
 
 function attributesToColumnConfigs(attribute) {
   const name = attribute.name
@@ -61,7 +62,14 @@ function columnsFromConfigs(configs) {
   })(configs)
 }
 
-@observer
+@compose(
+  withStateHandlers(({model}) => ({selectedView: head(model.views)}), {
+    handleViewChange: ({model}) => viewName => ({
+      selectedView: model.getView(viewName),
+    }),
+  }),
+  observer,
+)
 export class Model extends Component {
   @action.bound
   handleAddRecord() {
