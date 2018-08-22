@@ -42,7 +42,7 @@ export class SchemaPage extends Component {
             })(store.schema.modelTypes)}
           </Tabs>
         </Toolbar>
-        <div className={cn('ph3')}>
+        <div>
           {this.selectedModel && (
             <Model
               key={this.selectedModel.type}
