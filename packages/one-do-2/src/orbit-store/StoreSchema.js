@@ -31,10 +31,13 @@ export function StoreSchema(store) {
       mapObjIndexed(ModelView),
       defaultTo([]),
     )(model.views)
+
+    const viewNames = pluck('name')(views)
     return {
       type,
       attributes,
       views,
+      viewNames,
       getView: viewName => find(propEq('name', viewName))(views),
     }
 

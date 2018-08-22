@@ -77,22 +77,26 @@ export class Model extends Component {
   }
   render() {
     console.log(`this.props`, this.props)
+    const model = this.props.model
     return (
       <Fragment>
         <Toolbar variant={'regular'}>
           <ViewSelection
             selectedView={this.props.selectedView}
-            views={this.props.model.views}
+            views={model.views}
             handleViewChange={this.props.handleViewChange}
+          />
+
+          <ValueSelection
+            value={this.props.selectedView.name}
+            values={model.viewNames}
+            handleValueChange={this.props.handleViewChange}
           />
           <Button color={'primary'} onClick={this.handleAddRecord}>
             NEW <AddIcon />
           </Button>
         </Toolbar>
-        <ModelGrid
-          view={this.props.selectedView}
-          model={this.props.model}
-        />
+        <ModelGrid view={this.props.selectedView} model={model} />
       </Fragment>
     )
   }
@@ -118,6 +122,31 @@ class ViewSelection extends Component {
               {name}
             </MenuItem>
           ))(views)}
+        </Select>
+      </FormControl>
+    )
+  }
+}
+@observer
+class ValueSelection extends Component {
+  @action.bound
+  onChange(e) {
+    this.props.handleValueChange(e.target.value)
+  }
+  render() {
+    const {values, value} = this.props
+    return (
+      <FormControl>
+        <Select
+          style={{minWidth: 180}}
+          value={value}
+          onChange={this.onChange}
+        >
+          {map(value => (
+            <MenuItem key={value} value={value}>
+              {value}
+            </MenuItem>
+          ))(values)}
         </Select>
       </FormControl>
     )
