@@ -13,6 +13,7 @@ import {
   compose,
   descend,
   equals,
+  join,
   map,
   sortWith,
   take,
@@ -80,18 +81,17 @@ export class Model extends Component {
               const config = {
                 isNumeric: AT.isNumeric(attribute),
                 attributePath: ['attributes', attribute.name],
+                columnKey: join('.')(['attributes', attribute.name]),
                 name: attribute.name,
               }
-              const {isNumeric, attributePath, name} = config
+              const {isNumeric, attributePath, name, columnKey} = config
               return {
                 renderHeaderCell: () => (
                   <TableCell key={name} numeric={isNumeric}>
                     <TableSortLabel
                       direction={this.direction}
-                      active={equals(this.sortPath, attributePath)}
-                      onClick={() =>
-                        this.onSortLabelClicked(attributePath)
-                      }
+                      active={equals(this.sortPath, columnKey)}
+                      onClick={() => this.onSortLabelClicked(columnKey)}
                     >
                       {`${name}`}
                     </TableSortLabel>
