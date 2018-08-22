@@ -16,7 +16,7 @@ import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
 
-function columnConfigsFromAttribute(attribute) {
+function attributesToColumnConfigs(attribute) {
   const name = attribute.name
   return {
     isNumeric: attribute.type === 'number',
@@ -65,7 +65,7 @@ export class Model extends Component {
     }
     const configs = [
       idColumnConfig,
-      ...map(columnConfigsFromAttribute)(this.attributes),
+      ...map(attributesToColumnConfigs)(this.attributes),
     ]
     return (
       <div className={cn('pb4')}>
