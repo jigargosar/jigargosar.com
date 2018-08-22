@@ -29,7 +29,7 @@ function attributesToColumnConfigs(attribute) {
 }
 
 function columnsFromConfigs(configs) {
-  return map(({isNumeric, getCellData, label, sort}) => {
+  return map(({isNumeric, getCellData, rowCellProps, label, sort}) => {
     return {
       renderHeaderCell: () => (
         <TableCell numeric={isNumeric}>
@@ -43,7 +43,9 @@ function columnsFromConfigs(configs) {
         </TableCell>
       ),
       renderCell: ({row}) => (
-        <TableCell numeric={isNumeric}>{getCellData(row)}</TableCell>
+        <TableCell numeric={isNumeric} {...rowCellProps}>
+          {getCellData(row)}
+        </TableCell>
       ),
     }
   })(configs)
