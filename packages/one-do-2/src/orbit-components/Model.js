@@ -83,7 +83,6 @@ export class Model extends Component {
                 name: attribute.name,
               }
               const {isNumeric, attributePath, name} = config
-              const value = row.attributes[name]
               return {
                 renderHeaderCell: () => (
                   <TableCell key={name} numeric={isNumeric}>
@@ -99,7 +98,9 @@ export class Model extends Component {
                   </TableCell>
                 ),
                 renderCell: ({row}) => (
-                  <TableCell numeric={isNumeric}>{value}</TableCell>
+                  <TableCell numeric={isNumeric}>
+                    {_path(attributePath)(row)}
+                  </TableCell>
                 ),
               }
             })(this.attributes),
