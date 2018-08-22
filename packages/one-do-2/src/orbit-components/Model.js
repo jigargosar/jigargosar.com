@@ -87,7 +87,7 @@ export class Model extends Component {
               const {isNumeric, attributePath, name, columnKey} = config
               return {
                 renderHeaderCell: () => (
-                  <TableCell key={name} numeric={isNumeric}>
+                  <TableCell numeric={isNumeric}>
                     <TableSortLabel
                       direction={this.direction}
                       active={equals(this.sortPath, columnKey)}
@@ -98,7 +98,7 @@ export class Model extends Component {
                   </TableCell>
                 ),
                 renderCell: ({row}) => (
-                  <TableCell key={row.id} numeric={isNumeric}>
+                  <TableCell numeric={isNumeric}>
                     {`${_path(attributePath)(row)}`}
                   </TableCell>
                 ),

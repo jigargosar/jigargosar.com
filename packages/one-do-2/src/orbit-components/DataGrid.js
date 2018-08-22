@@ -38,8 +38,8 @@ class GridRow extends Component {
     const {row, columns} = this.props
     return (
       <TableRow>
-        {R.map(column => (
-          <RowCell key={row.id || row.key} column={column} row={row} />
+        {mapIndexed((column, idx) => (
+          <RowCell key={idx} column={column} row={row} />
         ))(columns)}
       </TableRow>
     )
