@@ -108,7 +108,7 @@ async function addRecord(model) {
         : {}),
     }),
   )
-  console.log(`addResult`, addResult)
+  console.debug(`addResult`, addResult)
   return addResult
 }
 
@@ -126,6 +126,7 @@ export class SModel extends Component {
 
   render() {
     const model = this.props.model
+    // console.log(`this.query.current()`, this.query.current())
     return (
       <StringValue defaultValue={model.defaultView.name}>
         {([viewName, setViewName]) => (
