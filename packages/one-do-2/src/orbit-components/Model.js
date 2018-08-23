@@ -16,6 +16,7 @@ import {
   compose,
   concat,
   equals,
+  identity,
   map,
   merge,
   sortWith,
@@ -195,19 +196,28 @@ class SelectDropDown extends Component {
 
   render() {
     const {values, value, label} = this.props
+    const {
+      items = values,
+      toValue = identity,
+      toContent = identity,
+    } = this.props
     return (
       <FormControl>
         {label && <InputLabel>{label}</InputLabel>}
         <Select
           style={{minWidth: 180}}
-          value={value}
-          onChange={this.onChange}
+          value={toValue(items)}
+          onChange={e => this.props.onChange(e.target.value)}
         >
-          {map(value => (
-            <MenuItem key={value} value={value}>
-              {value}
-            </MenuItem>
-          ))(values)}
+          {map(item => {
+            const value = toValue(item)
+            const content = toContent(item)
+            return (
+              <MenuItem key={value} value={value}>
+                {content}
+              </MenuItem>
+            )
+          })(items)}
         </Select>
       </FormControl>
     )
