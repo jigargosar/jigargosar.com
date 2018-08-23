@@ -20,7 +20,6 @@ import {Observer} from '../lib/mobx-react'
 import {withProps} from 'recompose'
 import {
   compose,
-  concat,
   equals,
   filter,
   flatten,
@@ -28,9 +27,9 @@ import {
   head,
   identity,
   keys,
-  pick,
   map,
   mapObjIndexed,
+  pick,
   prop,
   propEq,
   sortWith,
@@ -230,7 +229,6 @@ export class ModelGridView extends Component {
         ...colConfig,
         sort: sortPropsFor(colConfig.cellDataPath),
       })),
-      concat(view.hideId ? [] : [idColumnConfig]),
       map(
         c =>
           c.type === 'attribute'
