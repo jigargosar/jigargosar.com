@@ -22,21 +22,19 @@ import {
   compose,
   concat,
   equals,
+  filter,
   flatten,
   groupBy,
+  head,
   identity,
+  keys,
   map,
   mapObjIndexed,
+  prop,
+  propEq,
   sortWith,
   take,
   values,
-  pathEq,
-  propEq,
-  find,
-  filter,
-  keys,
-  head,
-  prop,
 } from 'ramda'
 import {DataGrid} from '../shared-components/DataGrid'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
@@ -85,8 +83,12 @@ async function addRecord(model) {
     filter(propEq('type')('hasOne')),
     prop('relationships'),
   )(model)
-  console.log(`firstHasOneRel`, firstHasOneType)
-  const addResult = await updateStore(t => t.addRecord({type: model.type}))
+  const addResult = await updateStore(t =>
+    t.addRecord({
+      type: model.type,
+      relationships: {[firstHasOneType]: {data: {type: firstHasOneType}}},
+    }),
+  )
   console.log(`addResult`, addResult)
   return addResult
 }
