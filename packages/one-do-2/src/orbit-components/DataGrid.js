@@ -4,13 +4,7 @@ import {map} from '../lib/ramda'
 import {observer} from '../lib/mobx-react'
 import {Table, TableBody, TableHead, TableRow} from '@material-ui/core'
 import {mapIndexed} from '../lib/little-ramda'
-
-export const defaultRowRenderer = function defaultRowRenderer({
-  row,
-  columns,
-}) {
-  return <GridRow row={row} columns={columns} />
-}
+import {defaultRowRenderer} from './defaultRowRenderer'
 
 @observer
 export class DataGrid extends Component {
@@ -37,28 +31,6 @@ export class DataGrid extends Component {
         </TableBody>
       </Table>
     )
-  }
-}
-
-@observer
-class GridRow extends Component {
-  render() {
-    const {row, columns} = this.props
-    return (
-      <TableRow>
-        {mapIndexed((column, idx) => (
-          <RowCell key={idx} column={column} row={row} />
-        ))(columns)}
-      </TableRow>
-    )
-  }
-}
-
-@observer
-class RowCell extends Component {
-  render() {
-    const {row, column} = this.props
-    return column.renderCell({row})
   }
 }
 

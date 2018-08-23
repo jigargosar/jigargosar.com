@@ -31,7 +31,8 @@ import {
   take,
   values,
 } from 'ramda'
-import {DataGrid, defaultRowRenderer} from './DataGrid'
+import {DataGrid} from './DataGrid'
+import {defaultRowRenderer} from './defaultRowRenderer'
 
 function attributeToColConfig(attribute) {
   const name = attribute.name
