@@ -39,16 +39,6 @@ import {
 import {DataGrid} from '../shared-components/DataGrid'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
 
-function attributeToColConfig(attribute) {
-  const name = attribute.name
-  return {
-    isNumeric: attribute.type === 'number',
-    getCellData: row => `${row.attributes[name]}`,
-    cellDataPath: ['attributes', name],
-    label: attribute.label,
-  }
-}
-
 function colConfigToColumnProp({
   isNumeric,
   getCellData,
@@ -209,13 +199,6 @@ export class ModelGridView extends Component {
 
   @computed
   get columnConfigs() {
-    const idColumnConfig = {
-      isNumeric: false,
-      getCellData: row => take(10)(row.id),
-      rowCellProps: {className: cn('code')},
-      cellDataPath: ['id'],
-      label: 'ID',
-    }
     const {sort, view} = this.props
 
     const sortPropsFor = path => ({
@@ -232,10 +215,30 @@ export class ModelGridView extends Component {
       map(
         name =>
           name === 'id'
-            ? idColumnConfig
+            ? idColumnConfig()
             : attributeToColConfig(view.getAttribute(name)),
       ),
     )(view.columnNames)
+
+    function attributeToColConfig(attribute) {
+      const name = attribute.name
+      return {
+        isNumeric: attribute.type === 'number',
+        getCellData: row => `${row.attributes[name]}`,
+        cellDataPath: ['attributes', name],
+        label: attribute.label,
+      }
+    }
+
+    function idColumnConfig() {
+      return {
+        isNumeric: false,
+        getCellData: row => take(10)(row.id),
+        rowCellProps: {className: cn('code')},
+        cellDataPath: ['id'],
+        label: 'ID',
+      }
+    }
   }
 }
 
