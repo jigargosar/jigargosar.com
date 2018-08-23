@@ -29,7 +29,7 @@ import {
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
-import {withStateHandlers} from '../lib/recompose'
+import {withProps, withStateHandlers} from '../lib/recompose'
 import {overPath} from '../lib/little-ramda'
 
 function attributesToColumnConfigs(attribute) {
@@ -115,6 +115,15 @@ export class Model extends Component {
       setSortState: () => objOf('sort'),
     },
   ),
+  withProps(({sort}) => ({
+    sort: {
+      ...sort,
+      comparator: compose(
+        sort.direction === 'asc' ? ascend : descend,
+        _path,
+      )(sort.path),
+    },
+  })),
   observer,
 )
 export class ModelGrid extends Component {
@@ -138,7 +147,7 @@ export class ModelGrid extends Component {
 
   @computed
   get sortedRows() {
-    const sortComparator = compose(this.sortDirFn, _path)(this.sortPath)
+    const sortComparator = this.props.sort.comparator
     return sortWith([sortComparator])(this.query.current())
   }
 
