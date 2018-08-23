@@ -13,16 +13,20 @@ class DataGrid extends Component {
   }
 
   render() {
-    const {rows, columns} = this.props
+    const {
+      rows,
+      columns,
+      rowRenderer = ({row, columns}) => (
+        <GridRow key={row.id || row.key} row={row} columns={columns} />
+      ),
+    } = this.props
     return (
       <Table padding={'dense'}>
         <TableHead>
           <HeaderRow columns={columns} />
         </TableHead>
         <TableBody>
-          {map(row => (
-            <GridRow key={row.id || row.key} row={row} columns={columns} />
-          ))(rows)}
+          {map(row => rowRenderer({row, columns}))(rows)}
         </TableBody>
       </Table>
     )
