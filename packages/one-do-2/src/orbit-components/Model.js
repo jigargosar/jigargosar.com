@@ -27,6 +27,7 @@ import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
 import {withStateHandlers} from '../lib/recompose'
 import {withSortStateHandlers} from './withSortStateHandlers'
+import {validate} from '../lib/little-ramda'
 
 function attributeToColumnConfig(attribute) {
   const name = attribute.name
@@ -154,6 +155,9 @@ export class ModelGrid extends Component {
     const view = this.props.view
     const hideId = view.hideId
     const model = this.props.model
+    const columns = view.columns
+    validate('A', [columns])
+
     return map(c =>
       merge({
         sort: {
@@ -168,7 +172,7 @@ export class ModelGrid extends Component {
         map(
           //
           compose(attributeToColumnConfig, model.getAttribute),
-        )(view.columns),
+        )(columns),
       ),
     )
   }
