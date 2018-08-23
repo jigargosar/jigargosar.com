@@ -96,7 +96,7 @@ export class Model extends Component {
   render() {
     const model = this.props.model
     return (
-      <StringValue defaultValue={model.defaultViewName}>
+      <StringValue defaultValue={model.defaultView.name}>
         {([viewName, setViewName]) => {
           return (
             <Fragment>
