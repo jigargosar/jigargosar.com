@@ -34,6 +34,8 @@ export function StoreSchema(store) {
     const attributeList = values(attributeLookup)
     const attributeNames = pluck('name')(attributeList)
 
+    const relationships = defaultTo({})(model.relationships)
+
     const viewsLookup = compose(
       mapObjIndexed(ModelView),
       merge({[`Default ${fstToUpper(type)} Grid`]: {}}),
@@ -46,7 +48,6 @@ export function StoreSchema(store) {
     validate('A', [viewNames])
     validate('A', [attributeNames])
 
-    const relationships = defaultTo({})(model.relationships)
     return {
       type,
       attributeNames,

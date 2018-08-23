@@ -19,26 +19,32 @@ import {withSortStateHandlers} from './withSortStateHandlers'
 import {Observer} from '../lib/mobx-react'
 import {withProps} from 'recompose'
 import {
-  merge,
-  compose,
-  contains,
   __,
-  T,
+  compose,
+  cond,
+  contains,
   equals,
   filter,
   flatten,
   groupBy,
   head,
   identity,
+  ifElse,
+  is,
+  isNil,
   keys,
   map,
-  cond,
   mapObjIndexed,
+  merge,
+  path,
   pick,
+  pluck,
   prop,
   propEq,
   sortWith,
+  T,
   take,
+  unless,
   values,
 } from 'ramda'
 import {prettyStringifySafe} from '../lib/little-ramda'
@@ -213,6 +219,8 @@ export class ModelGridView extends Component {
       onClick: () => this.props.handleSortPathClicked(path),
       direction: sort.direction,
     })
+    const hasRelationship = contains(__, keys(view.relationships))
+    // debugger
     return compose(
       //
       map(colConfig => ({
@@ -228,7 +236,7 @@ export class ModelGridView extends Component {
             compose(attributeToColConfig, view.getAttribute),
           ],
           [
-            contains(__, keys(view.relationships)),
+            hasRelationship,
             compose(relationshipToColConfig, name =>
               merge({name}, view.relationships[name]),
             ),
@@ -247,7 +255,12 @@ export class ModelGridView extends Component {
       const name = relationship.name
       return {
         isNumeric: false,
-        getCellData: row => prettyStringifySafe(row.relationships[name]),
+        getCellData: row =>
+          compose(
+            unless(isNil)(prettyStringifySafe),
+            ifElse(is(Array))(pluck('id'))(prop('id')),
+            path(['relationships', name, 'data']),
+          )(row),
         cellDataPath: ['relationship', name],
         label: name,
       }
