@@ -231,8 +231,13 @@ export class ModelGridView extends Component {
         sort: sortPropsFor(colConfig.cellDataPath),
       })),
       concat(view.hideId ? [] : [idColumnConfig]),
-      map(attributeToColConfig),
-    )(view.columnAttributes)
+      map(
+        c =>
+          c.type === 'attribute'
+            ? attributeToColConfig(c.data)
+            : idColumnConfig,
+      ),
+    )(view.columns)
   }
 }
 

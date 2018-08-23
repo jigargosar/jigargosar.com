@@ -19,14 +19,12 @@ import {
   values,
 } from 'ramda'
 
-import {attributePath} from './little-orbit'
-
 function idColumn() {
-  return {type: 'id', path: ['id']}
+  return {type: 'id'}
 }
 
-function attributeColumn(name) {
-  return {type: 'attribute', name, path: attributePath(name)}
+function attributeColumn(data) {
+  return {type: 'attribute', data}
 }
 
 export function StoreSchema(store) {
@@ -40,7 +38,8 @@ export function StoreSchema(store) {
 
   function SchemaModel(model, type) {
     const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
-    const attributeNames = pluck('name')(values(attributeLookup))
+    const attributeList = values(attributeLookup)
+    const attributeNames = pluck('name')(attributeList)
 
     const viewsLookup = compose(
       mapObjIndexed(ModelView),
@@ -82,7 +81,7 @@ export function StoreSchema(store) {
       const viewProps = mergeDefaults(
         {
           name,
-          columns: [idColumn(), map(attributeColumn)(attributeNames)],
+          columns: [idColumn(), ...map(attributeColumn)(attributeList)],
           hideId: false,
           type: 'grid',
           filters: [],
