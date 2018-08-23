@@ -23,6 +23,8 @@ const modelsDefinition = {
         hideId: true,
         columns: ['title', 'dueAt'],
         groupBy: _path(attributePath('isDone')),
+        groupKeyToTitle: groupKey =>
+          JSON.parse(groupKey) ? 'Completed' : 'Pending',
       },
       'Pending Tasks': {
         hideId: true,

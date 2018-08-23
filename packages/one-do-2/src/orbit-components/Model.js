@@ -124,7 +124,7 @@ export class Model extends Component {
         {
           id: groupKey,
           isGroupRow: true,
-          title: JSON.parse(groupKey) ? 'Completed' : 'Pending',
+          title: view.groupKeyToTitle(groupKey),
           count: records.length,
         },
         ...records,
