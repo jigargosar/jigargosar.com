@@ -1,6 +1,11 @@
+import {fstToUpper, mergeDefaults} from '../lib/little-ramda'
+import {assert} from '../lib/assert'
+import {validate} from '../lib/validate'
 import {
+  allPass,
   compose,
   defaultTo,
+  filter,
   has,
   head,
   isEmpty,
@@ -11,10 +16,7 @@ import {
   pluck,
   propOr,
   values,
-} from '../lib/ramda'
-import {fstToUpper, mergeDefaults} from '../lib/little-ramda'
-import {assert} from '../lib/assert'
-import {validate} from '../lib/validate'
+} from 'ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -71,12 +73,14 @@ export function StoreSchema(store) {
           hideId: false,
           columns: attributeNames,
           type: 'grid',
+          filters: [],
         },
         view,
       )
       return {
         ...viewProps,
         columnAttributes: map(getAttribute)(viewProps.columns),
+        filterRecords: filter(allPass(viewProps.filters)),
       }
     }
   }
