@@ -28,6 +28,7 @@ import {
   head,
   identity,
   keys,
+  pick,
   map,
   mapObjIndexed,
   prop,
@@ -83,10 +84,28 @@ async function addRecord(model) {
     filter(propEq('type')('hasOne')),
     prop('relationships'),
   )(model)
+
+  let hasOneRecord = null
+  if (firstHasOneType) {
+    hasOneRecord = await updateStore(t =>
+      t.addRecord({
+        type: firstHasOneType,
+      }),
+    )
+  }
+
   const addResult = await updateStore(t =>
     t.addRecord({
       type: model.type,
-      relationships: {[firstHasOneType]: {data: {type: firstHasOneType}}},
+      ...(firstHasOneType
+        ? {
+            relationships: {
+              [firstHasOneType]: {
+                data: pick(['type', 'id'])(hasOneRecord),
+              },
+            },
+          }
+        : {}),
     }),
   )
   console.log(`addResult`, addResult)
