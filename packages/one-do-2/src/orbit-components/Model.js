@@ -149,10 +149,7 @@ export class ModelGrid extends Component {
     return map(c => merge(this.getSortProps(sort, c.cellDataPath))(c))(
       concat(
         view.hideId ? [] : [idColumnConfig],
-        map(
-          //
-          compose(attributeToColumnConfig),
-        )(view.columnAttributes),
+        map(attributeToColumnConfig)(view.columnAttributes),
       ),
     )
   }
