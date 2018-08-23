@@ -27,6 +27,7 @@ import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {Observer} from '../lib/mobx-react'
+import {withProps} from 'recompose'
 
 function attributeToColumnConfig(attribute) {
   const name = attribute.name
@@ -104,7 +105,14 @@ export class Model extends Component {
   }
 }
 
-@compose(withSortStateHandlers, observer)
+@compose(
+  withSortStateHandlers,
+  observer,
+  withProps(({records, sort}) => ({
+    sortedRecords: sortWith([sort.comparator])(records),
+  })),
+  observer,
+)
 export class ModelGrid extends Component {
   get sortPath() {
     return this.props.sort.path
