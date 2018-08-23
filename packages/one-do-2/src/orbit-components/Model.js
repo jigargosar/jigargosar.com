@@ -24,7 +24,6 @@ import {
   equals,
   identity,
   map,
-  merge,
   sortWith,
   take,
 } from 'ramda'
@@ -147,17 +146,16 @@ export class ModelGrid extends Component {
     const {sort, view} = this.props
 
     const sortPropsFor = path => ({
-      sort: {
-        active: equals(sort.path, path),
-        onClick: () => this.props.handleSortPathClicked(path),
-        direction: sort.direction,
-      },
+      active: equals(sort.path, path),
+      onClick: () => this.props.handleSortPathClicked(path),
+      direction: sort.direction,
     })
     return compose(
       //
-      map(colConfig =>
-        merge(sortPropsFor(colConfig.cellDataPath))(colConfig),
-      ),
+      map(colConfig => ({
+        ...colConfig,
+        sort: sortPropsFor(colConfig.cellDataPath),
+      })),
       concat(view.hideId ? [] : [idColumnConfig]),
       map(attributeToColConfig),
     )(view.columnAttributes)
