@@ -117,6 +117,12 @@ export class ModelGrid extends Component {
     return sortWith([sortComparator])(this.query.current())
   }
 
+  @computed
+  get sortedThenFilteredRows() {
+    const sortComparator = this.props.sort.comparator
+    return sortWith([sortComparator])(this.query.current())
+  }
+
   render() {
     return (
       <DataGrid
