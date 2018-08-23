@@ -17,18 +17,19 @@ import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {Observer} from '../lib/mobx-react'
+import {tapLog} from '../lib/little-ramda'
 import {withProps} from 'recompose'
 import {
   compose,
   concat,
   equals,
+  flatten,
+  groupBy,
   identity,
   map,
+  mapObjIndexed,
   sortWith,
   take,
-  groupBy,
-  mapObjIndexed,
-  flatten,
   values,
 } from 'ramda'
 import {DataGrid, defaultRowRenderer} from './DataGrid'
@@ -116,18 +117,22 @@ export class Model extends Component {
   withProps(({records, sort, view}) => {
     const sortedRecords = sortWith([sort.comparator])(records)
     const sortedAndFilteredRecords = view.filterRecords(sortedRecords)
+    const groupRecords = compose(
+      flatten,
+      values,
+      mapObjIndexed((records, groupId) => [
+        {id: groupId, isGroupRow: true},
+        ...records,
+      ]),
+      tapLog,
+      groupBy(view.groupBy),
+    )
     return {
       sortedRecords,
       sortedAndFilteredRecords,
-      sortedFilteredAndGroupedRecords: compose(
-        flatten,
-        values,
-        mapObjIndexed((records, groupId) => [
-          {id: groupId, isGrouped: true},
-          ...records,
-        ]),
-        groupBy(view.groupBy),
-      )(sortedAndFilteredRecords),
+      sortedFilteredAndGroupedRecords: view.groupBy
+        ? groupRecords(sortedAndFilteredRecords)
+        : sortedAndFilteredRecords,
     }
   }),
   observer,
@@ -136,7 +141,7 @@ export class ModelGridView extends Component {
   render() {
     return (
       <DataGrid
-        rows={this.props.sortedAndFilteredRecords}
+        rows={this.props.sortedFilteredAndGroupedRecords}
         columns={map(colConfigToColumnProp)(this.columnConfigs)}
         rowRenderer={this.rowRenderer}
       />
