@@ -135,9 +135,7 @@ export class ModelGridView extends Component {
     if (row.isGroupRow) {
       return (
         <TableRow>
-          {mapIndexed((column, idx) => <TableCell>Group Row</TableCell>)(
-            columns,
-          )}
+          <TableCell>Group Row</TableCell>
         </TableRow>
       )
     }
