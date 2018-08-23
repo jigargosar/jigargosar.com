@@ -121,8 +121,12 @@ export class Model extends Component {
       tapLog,
       flatten,
       values,
-      mapObjIndexed((records, groupId) => [
-        {id: groupId, isGroupRow: true},
+      mapObjIndexed((records, groupKey) => [
+        {
+          id: groupKey,
+          isGroupRow: true,
+          title: groupKey ? 'Completed' : 'Pending',
+        },
         ...records,
       ]),
       tapLog,
@@ -154,7 +158,7 @@ export class ModelGridView extends Component {
     if (row.isGroupRow) {
       return (
         <TableRow>
-          <TableCell colSpan={3}>{`Group Row`}</TableCell>
+          <TableCell colSpan={3}>{row.title || `Group Row`}</TableCell>
         </TableRow>
       )
     }
