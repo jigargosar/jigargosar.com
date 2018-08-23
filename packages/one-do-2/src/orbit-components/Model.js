@@ -182,11 +182,11 @@ export class ModelGrid extends Component {
 
   @action
   onSortLabelClicked(columnConfig) {
-    const sortPath = columnConfig.cellDataPath
-    if (equals(this.sortPath, sortPath)) {
+    const path = columnConfig.cellDataPath
+    if (equals(this.sortPath, path)) {
       this.props.toggleSortDirection()
     } else {
-      this.props.setSortState({direction: 'asc', sortPath})
+      this.props.setSortState({direction: 'asc', path})
     }
   }
 }
