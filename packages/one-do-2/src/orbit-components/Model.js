@@ -29,7 +29,7 @@ import {
   take,
 } from 'ramda'
 
-function attributeToColumnConfig(attribute) {
+function attributeToColConfig(attribute) {
   const name = attribute.name
   return {
     isNumeric: attribute.type === 'number',
@@ -159,7 +159,7 @@ export class ModelGrid extends Component {
         merge(sortPropsFor(colConfig.cellDataPath))(colConfig),
       ),
       concat(view.hideId ? [] : [idColumnConfig]),
-      map(attributeToColumnConfig),
+      map(attributeToColConfig),
     )(view.columnAttributes)
   }
 
