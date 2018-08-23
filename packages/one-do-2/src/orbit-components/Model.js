@@ -257,8 +257,9 @@ export class ModelGridView extends Component {
         isNumeric: false,
         getCellData: row =>
           compose(
-            unless(isNil)(prettyStringifySafe),
-            ifElse(is(Array))(pluck('id'))(prop('id')),
+            ifElse(is(Array))(compose(prettyStringifySafe, pluck('id')))(
+              prop('id'),
+            ),
             path(['relationships', name, 'data']),
           )(row),
         cellDataPath: ['relationship', name],
