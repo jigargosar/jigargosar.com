@@ -3,7 +3,7 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
 import {mergeDefaults, overProp} from '../lib/little-ramda'
-import {attributePath, typeOfRecord} from './little-orbit'
+import {attributePath} from './little-orbit'
 import {
   _path,
   always,
@@ -93,29 +93,6 @@ const modelsDefinition = {
 
 function generateId(type) {
   return `${type}_${nanoid()}`
-}
-
-export function modelDescFromType(type) {
-  validate('S', [type])
-
-  const modelDesc = schema.models[type]
-  validate('O', [modelDesc])
-
-  return modelDesc
-}
-
-export const attributeDesc = name => type =>
-  modelDescFromType(type).attributes[name]
-
-export const modelDescFromRec = record => {
-  validate('O', [record])
-  return compose(modelDescFromType, typeOfRecord)(record)
-}
-
-export const attributeDescFromRecord = name => record => {
-  validate('SO', [name, record])
-
-  return compose(attributeDesc(name), typeOfRecord)(record)
 }
 
 function getDefaultValueForAttribute(a) {
