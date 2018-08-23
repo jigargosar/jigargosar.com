@@ -3,6 +3,7 @@ import {Schema} from './orbit'
 import {mergeDefaults, overProp} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
 import {
+  _prop,
   always,
   compose,
   cond,
@@ -14,6 +15,7 @@ import {
 import {randomBool, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
 import {validate} from '../lib/validate'
+import {groupBy} from 'ramda'
 
 const modelsDefinition = {
   task: {
@@ -22,6 +24,7 @@ const modelsDefinition = {
         hideId: true,
         columns: ['isDone', 'title', 'dueAt'],
         filters: [pathEq(['attributes', 'isDone'], false)],
+        groupBy: groupBy(_prop('isDone')),
       },
       'All Tasks': {
         hideId: true,
@@ -57,6 +60,7 @@ const modelsDefinition = {
     },
   },
 }
+
 function generateId(type) {
   return `${type}_${nanoid()}`
 }
