@@ -132,11 +132,6 @@ export class ModelGrid extends Component {
     return liveQuery(q => q.findRecords(this.props.model.type))
   }
 
-  @computed
-  get sortDirFn() {
-    return this.direction === 'asc' ? ascend : descend
-  }
-
   get sortPath() {
     return this.props.sort.path
   }
