@@ -89,7 +89,7 @@ export class Model extends Component {
             onChange={this.props.handleViewChange}
           />
           <Button color={'primary'} onClick={this.handleAddRecord}>
-            NEW <AddIcon />
+            <AddIcon /> Row
           </Button>
         </Toolbar>
         <ModelGrid view={selectedView} model={model} />
