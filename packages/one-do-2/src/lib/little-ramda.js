@@ -26,7 +26,8 @@ import {
   lensProp,
   map,
   mathMod,
-  mergeDeepRight, mergeWith,
+  mergeDeepRight,
+  mergeWith,
   nAry,
   over,
   partial,
@@ -43,6 +44,7 @@ import {
 import Sugar from 'sugar'
 import pFinally from 'p-finally'
 import stringify from 'json-stringify-safe'
+import {head, isEmpty, tail, toUpper} from 'ramda'
 
 export {default as pluralize} from 'pluralize'
 if (module.hot) {
@@ -184,3 +186,11 @@ export const flattenObj = obj => {
   return fromPairs(go(obj))
 }
 export const mergeDefaults = mergeWith(defaultTo)
+
+export function fstToUpper(str) {
+  validate('S', [str])
+
+  if (isEmpty(str)) return str
+  const [first, rest] = [head(str), tail(str)]
+  return toUpper(first) + rest
+}

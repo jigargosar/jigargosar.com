@@ -10,20 +10,10 @@ import {
   merge,
   pluck,
   propOr,
-  tail,
-  toUpper,
   values,
 } from '../lib/ramda'
-import {mergeDefaults, validate} from '../lib/little-ramda'
+import {fstToUpper, mergeDefaults, validate} from '../lib/little-ramda'
 import {assert} from '../lib/assert'
-
-function fstToUpper(str) {
-  validate('S', [str])
-
-  if (isEmpty(str)) return str
-  const [first, rest] = [head(str), tail(str)]
-  return toUpper(first) + rest
-}
 
 export function StoreSchema(store) {
   const schema = store.schema
