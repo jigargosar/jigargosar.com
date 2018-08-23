@@ -19,12 +19,12 @@ const modelsDefinition = {
     views: {
       'Pending Tasks': {
         hideId: true,
-        columns: ['dueAt', 'isDone', 'title'],
+        columns: ['isDone', 'title', 'dueAt'],
         filter: [propEq('isDone', false)],
       },
       'All Tasks': {
         hideId: true,
-        columns: ['dueAt', 'isDone', 'title'],
+        columns: ['isDone', 'title', 'dueAt'],
       },
       'Grid Without Id': {
         hideId: true,
