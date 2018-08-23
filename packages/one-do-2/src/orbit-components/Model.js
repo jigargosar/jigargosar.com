@@ -63,11 +63,14 @@ function columnsFromConfigs(configs) {
 }
 
 @compose(
-  withStateHandlers(({model}) => ({selectedView: head(model.viewNames)}), {
-    handleViewChange: () => (e, viewName) => ({
-      selectedView: viewName,
-    }),
-  }),
+  withStateHandlers(
+    ({model}) => ({selectedViewName: head(model.viewNames)}),
+    {
+      handleViewChange: () => (e, viewName) => ({
+        selectedViewName: viewName,
+      }),
+    },
+  ),
   observer,
 )
 export class Model extends Component {
@@ -83,13 +86,13 @@ export class Model extends Component {
 
   render() {
     const model = this.props.model
-    const selectedView = this.props.selectedView
+    const selectedViewName = this.props.selectedViewName
     return (
       <Fragment>
         <Toolbar variant={'regular'}>
           <ValueSelection
             label={'views'}
-            value={selectedView}
+            value={selectedViewName}
             values={model.viewNames}
             onChange={this.props.handleViewChange}
           />
@@ -100,7 +103,7 @@ export class Model extends Component {
         <ModelGrid
           key={model.type}
           records={this.query.current()}
-          view={model.getView(selectedView)}
+          view={model.getView(selectedViewName)}
           model={model}
         />
       </Fragment>
