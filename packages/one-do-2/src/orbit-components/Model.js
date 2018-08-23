@@ -108,9 +108,13 @@ export class Model extends Component {
 @compose(
   withSortStateHandlers,
   observer,
-  withProps(({records, sort}) => ({
-    sortedRecords: sortWith([sort.comparator])(records),
-  })),
+  withProps(({records, sort, view}) => {
+    const sortedRecords = sortWith([sort.comparator])(records)
+    return {
+      sortedRecords,
+      sortedAndFilteredRecords: view.filterRecords(this.sortedRecords),
+    }
+  }),
   observer,
 )
 export class ModelGrid extends Component {
@@ -122,20 +126,10 @@ export class ModelGrid extends Component {
     return this.props.sort.direction
   }
 
-  @computed
-  get sortedRecords() {
-    return this.props.sortedRecords
-  }
-
-  @computed
-  get sortFilterRecords() {
-    return this.props.view.filterRecords(this.sortedRecords)
-  }
-
   render() {
     return (
       <DataGrid
-        rows={this.sortFilterRecords}
+        rows={this.props.sortedAndFilteredRecords}
         columns={columnsFromConfigs(this.columnConfigs)}
       />
     )
