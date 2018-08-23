@@ -74,6 +74,12 @@ export class Model extends Component {
   handleAddRecord() {
     return updateStore(t => t.addRecord({type: this.props.model.type}))
   }
+
+  @computed
+  get query() {
+    return liveQuery(q => q.findRecords(this.props.model.type))
+  }
+
   render() {
     const model = this.props.model
     const selectedView = this.props.selectedView
@@ -90,7 +96,12 @@ export class Model extends Component {
             <AddIcon /> Row
           </Button>
         </Toolbar>
-        <ModelGrid view={selectedView} model={model} />
+        <ModelGrid
+          key={model.type}
+          records={this.query.current()}
+          view={selectedView}
+          model={model}
+        />
       </Fragment>
     )
   }
@@ -114,13 +125,12 @@ export class ModelGrid extends Component {
   @computed
   get sortedRows() {
     const sortComparator = this.props.sort.comparator
-    return sortWith([sortComparator])(this.query.current())
+    return sortWith([sortComparator])(this.props.records)
   }
 
   @computed
   get sortedThenFilteredRows() {
-    const sortComparator = this.props.sort.comparator
-    return sortWith([sortComparator])(this.query.current())
+    return this.sortedRows
   }
 
   render() {
