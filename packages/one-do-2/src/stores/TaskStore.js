@@ -1,6 +1,6 @@
 import {action, computed, observable, toJS} from '../lib/mobx'
 import {nanoid} from '../lib/nanoid'
-import {fWord} from '../lib/fake'
+import {randomWord} from '../lib/fake'
 import {autobind} from '../lib/autobind'
 import {
   always,
@@ -190,7 +190,7 @@ class TaskCollection extends Collection {
 
   @action
   addNewTask() {
-    return this.unshiftProps({title: fWord()})
+    return this.unshiftProps({title: randomWord()})
   }
 }
 

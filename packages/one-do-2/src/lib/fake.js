@@ -1,3 +1,4 @@
 import f from 'faker'
 
-export const fWord = () => f.random.word()
+export const randomWord = () => f.random.word()
+export const randomBool = () => f.random.word()

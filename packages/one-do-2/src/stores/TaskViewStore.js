@@ -22,7 +22,7 @@ import {
 import {Disposers} from '../lib/little-mobx'
 import {tryFocusDOMId} from '../lib/little-dom'
 import {taskStore} from './TaskStore'
-import {fWord} from '../lib/fake'
+import {randomWord} from '../lib/fake'
 
 @autobind
 class TaskViewStore {
@@ -119,7 +119,7 @@ class TaskViewStore {
 
   @action
   addNewTask() {
-    this.setSelectedTask(taskStore.add({title: fWord()}))
+    this.setSelectedTask(taskStore.add({title: randomWord()}))
   }
 
   @action
