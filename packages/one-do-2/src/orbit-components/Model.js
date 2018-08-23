@@ -8,6 +8,7 @@ import {
   TableCell,
   TableSortLabel,
   Toolbar,
+  InputLabel,
 } from '@material-ui/core'
 import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
@@ -82,6 +83,7 @@ export class Model extends Component {
       <Fragment>
         <Toolbar variant={'regular'}>
           <ValueSelection
+            label={'views'}
             value={selectedView.name}
             values={model.viewNames}
             onChange={this.props.handleViewChange}
@@ -103,9 +105,10 @@ class ValueSelection extends Component {
     this.props.onChange(e, e.target.value)
   }
   render() {
-    const {values, value} = this.props
+    const {values, value, label} = this.props
     return (
       <FormControl>
+        <InputLabel>{label}</InputLabel>
         <Select
           style={{minWidth: 180}}
           value={value}
