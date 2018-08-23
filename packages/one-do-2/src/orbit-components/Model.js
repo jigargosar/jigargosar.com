@@ -14,7 +14,7 @@ import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
-import DataGrid from './DataGrid'
+import {DataGrid, defaultRowRenderer} from './DataGrid'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {Observer} from '../lib/mobx-react'
 import {withProps} from 'recompose'
@@ -123,6 +123,7 @@ export class ModelGridView extends Component {
       <DataGrid
         rows={this.props.sortedAndFilteredRecords}
         columns={map(colConfigToColumnProp)(this.columnConfigs)}
+        rowRenderer={defaultRowRenderer}
       />
     )
   }

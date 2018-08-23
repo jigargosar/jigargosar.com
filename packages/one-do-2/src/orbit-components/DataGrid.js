@@ -1,39 +1,43 @@
 import PropTypes from 'prop-types'
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {map} from '../lib/ramda'
 import {observer} from '../lib/mobx-react'
 import {Table, TableBody, TableHead, TableRow} from '@material-ui/core'
 import {mapIndexed} from '../lib/little-ramda'
 
+export const defaultRowRenderer = function defaultRowRenderer({
+  row,
+  columns,
+}) {
+  return (
+    <Fragment key={row.id || row.key}>
+      <GridRow row={row} columns={columns} />
+    </Fragment>
+  )
+}
+
 @observer
-class DataGrid extends Component {
+export class DataGrid extends Component {
   static propTypes = {
     columns: PropTypes.array.isRequired,
     rows: PropTypes.array.isRequired,
   }
 
   render() {
-    const {
-      rows,
-      columns,
-      rowRenderer = ({row, columns}) => (
-        <GridRow key={row.id || row.key} row={row} columns={columns} />
-      ),
-    } = this.props
+    const {rows, columns} = this.props
+
     return (
       <Table padding={'dense'}>
         <TableHead>
           <HeaderRow columns={columns} />
         </TableHead>
         <TableBody>
-          {map(row => rowRenderer({row, columns}))(rows)}
+          {map(row => defaultRowRenderer({row, columns}))(rows)}
         </TableBody>
       </Table>
     )
   }
 }
-
-export default DataGrid
 
 @observer
 class GridRow extends Component {
@@ -70,6 +74,7 @@ class HeaderRow extends Component {
     )
   }
 }
+
 @observer
 class HeaderCell extends Component {
   render() {
