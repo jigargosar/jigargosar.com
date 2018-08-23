@@ -21,7 +21,7 @@ const modelsDefinition = {
     views: {
       'All Tasks': {
         hideId: true,
-        columns: ['isDone', 'title', 'dueAt'],
+        columns: ['title', 'dueAt'],
         groupBy: _path(attributePath('isDone')),
       },
       'Pending Tasks': {
