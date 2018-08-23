@@ -1,3 +1,4 @@
+import 'mobx'
 import {Provider as MRProvider, Observer as MRObserver} from 'mobx-react'
 
 export const Provider = MRProvider
