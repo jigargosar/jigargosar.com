@@ -81,7 +81,7 @@ export class Model extends Component {
           return (
             <Fragment>
               <Toolbar variant={'regular'}>
-                <ValueSelection
+                <SimpleSelection
                   label={'views'}
                   value={viewName}
                   values={model.viewNames}
@@ -186,7 +186,7 @@ export class ModelGrid extends Component {
 }
 
 @observer
-class ValueSelection extends Component {
+class SimpleSelection extends Component {
   @action.bound
   onChange(e) {
     // this.props.onChange(e, e.target.value)
