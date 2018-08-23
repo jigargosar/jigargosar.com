@@ -128,6 +128,7 @@ export class ModelGridView extends Component {
     )
   }
 
+  // noinspection JSMethodCanBeStatic
   rowRenderer({row, columns, ...rest}) {
     return defaultRowRenderer({row, columns, ...rest})
   }
