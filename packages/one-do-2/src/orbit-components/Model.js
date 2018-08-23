@@ -16,7 +16,6 @@ import {
   compose,
   concat,
   equals,
-  head,
   map,
   merge,
   sortWith,
@@ -25,7 +24,6 @@ import {
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
-import {withHandlers, withState} from '../lib/recompose'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {validate} from '../lib/little-ramda'
 import {Observer} from '../lib/mobx-react'
