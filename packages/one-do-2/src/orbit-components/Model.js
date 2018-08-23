@@ -31,7 +31,6 @@ import {
   identity,
   ifElse,
   is,
-  isNil,
   keys,
   map,
   mapObjIndexed,
@@ -44,7 +43,6 @@ import {
   sortWith,
   T,
   take,
-  unless,
   values,
 } from 'ramda'
 import {prettyStringifySafe} from '../lib/little-ramda'
