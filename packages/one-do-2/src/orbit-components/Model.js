@@ -65,7 +65,7 @@ function columnsFromConfigs(configs) {
 
 @observer
 class StringValue extends Component {
-  @observable value = this.props.defaultValue || ''
+  @observable value = this.props.defaultValue || null
 
   @action.bound
   setValue(val) {
