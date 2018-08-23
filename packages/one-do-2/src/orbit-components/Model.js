@@ -17,7 +17,6 @@ import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {Observer} from '../lib/mobx-react'
-import {tapLog} from '../lib/little-ramda'
 import {withProps} from 'recompose'
 import {
   compose,
@@ -118,7 +117,6 @@ export class Model extends Component {
     const sortedRecords = sortWith([sort.comparator])(records)
     const sortedAndFilteredRecords = view.filterRecords(sortedRecords)
     const groupRecords = compose(
-      tapLog,
       flatten,
       values,
       mapObjIndexed((records, groupKey) => [
@@ -129,7 +127,6 @@ export class Model extends Component {
         },
         ...records,
       ]),
-      tapLog,
       groupBy(view.groupBy),
     )
     return {
