@@ -84,8 +84,8 @@ export class Model extends Component {
               <Toolbar variant={'regular'}>
                 <SelectDropDown
                   label={'views'}
-                  value={viewName}
-                  values={model.viewNames}
+                  item={viewName}
+                  items={model.viewNames}
                   onChange={setViewName}
                 />
                 <Button color={'primary'} onClick={this.handleAddRecord}>
@@ -195,10 +195,10 @@ class SelectDropDown extends Component {
   }
 
   render() {
-    const {values, value, label} = this.props
     const {
-      items = values,
-      item = value,
+      label,
+      items,
+      item,
       toValue = identity,
       toContent = identity,
     } = this.props
