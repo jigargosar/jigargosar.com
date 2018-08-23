@@ -2,6 +2,7 @@ import {fstToUpper, mergeDefaults} from '../lib/little-ramda'
 import {assert} from '../lib/assert'
 import {validate} from '../lib/validate'
 import {
+  __,
   allPass,
   compose,
   contains,
@@ -46,6 +47,7 @@ export function StoreSchema(store) {
     validate('A', [viewNames])
     validate('A', [attributeNames])
 
+    const relationships = defaultTo({})(model.relationships)
     return {
       type,
       attributeNames,
@@ -53,7 +55,7 @@ export function StoreSchema(store) {
       viewNames,
       getView,
       defaultView: getView(defaultViewName),
-      relationships: defaultTo({})(model.relationships),
+      relationships,
     }
 
     function getAttribute(name) {
@@ -87,7 +89,8 @@ export function StoreSchema(store) {
         ...viewProps,
         filterRecords: filter(allPass(viewProps.filters)),
         getAttribute,
-        hasAttribute: flip(contains)(attributeNames),
+        hasAttribute: contains(__)(attributeNames),
+        relationships,
       }
     }
   }

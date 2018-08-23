@@ -20,6 +20,8 @@ import {Observer} from '../lib/mobx-react'
 import {withProps} from 'recompose'
 import {
   compose,
+  contains,
+  __,
   T,
   equals,
   filter,
@@ -220,6 +222,14 @@ export class ModelGridView extends Component {
           [equals('id'), idColumnConfig],
           [
             view.hasAttribute,
+            compose(attributeToColConfig, view.getAttribute),
+          ],
+          [
+            view.hasAttribute,
+            compose(attributeToColConfig, view.getAttribute),
+          ],
+          [
+            contains(__, view.relationships),
             compose(attributeToColConfig, view.getAttribute),
           ],
           [
