@@ -29,8 +29,6 @@ import {
   take,
 } from 'ramda'
 
-import {tapLog} from '../lib/little-ramda'
-
 function attributeToColumnConfig(attribute) {
   const name = attribute.name
   return {
@@ -148,20 +146,24 @@ export class ModelGrid extends Component {
     }
     const {sort, view} = this.props
 
-    const map1 = map(c =>
-      merge(this.getSortProps(sort, c.cellDataPath))(c),
-    )
+    const sortPropsFor = path => ({
+      sort: {
+        active: equals(sort.path, path),
+        onClick: () => this.props.handleSortPathClicked(path),
+        direction: sort.direction,
+      },
+    })
     return compose(
-      tapLog,
       //
-      map1(concat(view.hideId ? [] : [idColumnConfig])),
-      tapLog,
+      map(colConfig =>
+        merge(sortPropsFor(colConfig.cellDataPath))(colConfig),
+      ),
+      concat(view.hideId ? [] : [idColumnConfig]),
       map(attributeToColumnConfig),
-      tapLog,
     )(view.columnAttributes)
   }
 
-  getSortProps(sort, path) {
+  getSortProps = sort => path => {
     return {
       sort: {
         active: equals(sort.path, path),
