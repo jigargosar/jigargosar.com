@@ -11,7 +11,7 @@ const modelsDefinition = {
     views: {
       'Task List': {
         hideId: true,
-        columns: ['isDone', 'title'],
+        columns: ['dueAt', 'isDone', 'title'],
       },
       'Grid Without Id': {
         hideId: true,
