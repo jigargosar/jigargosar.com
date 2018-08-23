@@ -9,7 +9,6 @@ import nanoid from 'nanoid'
 import {_compose, _merge, _path, _startsWith} from './ramda'
 import {pDrop} from './little-ramda'
 import {atomic} from 'mst-middlewares'
-import store from '../orbit-store/Store'
 
 export {
   addDisposer,
@@ -111,7 +110,5 @@ export const stringArray = types.array(types.string)
 export const spliceItem = el => arr => arr.splice(arr.indexOf(el), 1)
 export const dropFlow = generator => pDrop(flow(generator))
 export const decorateAtomic = action => decorate(atomic, action)
-export const bindStoreAction = actionName => comp => (...args) => () =>
-  store[actionName](...args)
 export const optionalEnum = (name, values, defaultValue = values[0]) =>
   optional(types.enumeration(name, values), defaultValue)

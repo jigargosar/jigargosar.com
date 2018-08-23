@@ -1,7 +1,7 @@
 import {Component} from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import autosize from 'src/lib/AutoSize'
+import autosize from 'autosize'
 
 export class AutoSize extends Component {
   static propTypes = {

@@ -122,7 +122,7 @@ export class ModelGrid extends Component {
 
   @computed
   get sortedThenFilteredRows() {
-    return this.sortedRows
+    return this.props.view.filterRecords(this.sortedRows)
   }
 
   render() {
