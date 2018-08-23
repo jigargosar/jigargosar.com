@@ -123,9 +123,14 @@ export class ModelGridView extends Component {
       <DataGrid
         rows={this.props.sortedAndFilteredRecords}
         columns={map(colConfigToColumnProp)(this.columnConfigs)}
-        rowRenderer={defaultRowRenderer}
+        rowRenderer={this.rowRenderer}
       />
     )
+  }
+
+  @computed
+  get rowRenderer() {
+    return defaultRowRenderer
   }
 
   @computed
