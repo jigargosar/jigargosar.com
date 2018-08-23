@@ -26,6 +26,10 @@ import {
   map,
   sortWith,
   take,
+  groupBy,
+  mapObjIndexed,
+  flatten,
+  values,
 } from 'ramda'
 import {DataGrid, defaultRowRenderer} from './DataGrid'
 
@@ -111,9 +115,19 @@ export class Model extends Component {
 @compose(
   withProps(({records, sort, view}) => {
     const sortedRecords = sortWith([sort.comparator])(records)
+    const sortedAndFilteredRecords = view.filterRecords(sortedRecords)
     return {
       sortedRecords,
-      sortedAndFilteredRecords: view.filterRecords(sortedRecords),
+      sortedAndFilteredRecords,
+      sortedFilteredAndGroupedRecords: compose(
+        flatten,
+        values,
+        mapObjIndexed((records, groupId) => [
+          {id: groupId, isGrouped: true},
+          ...records,
+        ]),
+        groupBy(view.groupBy),
+      )(sortedAndFilteredRecords),
     }
   }),
   observer,

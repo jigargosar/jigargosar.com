@@ -15,7 +15,6 @@ import {
 import {randomBool, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
 import {validate} from '../lib/validate'
-import {groupBy} from 'ramda'
 
 const modelsDefinition = {
   task: {
@@ -23,7 +22,7 @@ const modelsDefinition = {
       'All Tasks': {
         hideId: true,
         columns: ['isDone', 'title', 'dueAt'],
-        groupBy: groupBy(_prop('isDone')),
+        groupBy: _prop('isDone'),
       },
       'Pending Tasks': {
         hideId: true,
