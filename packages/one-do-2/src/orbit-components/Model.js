@@ -81,28 +81,26 @@ export class Model extends Component {
     const model = this.props.model
     return (
       <StringValue defaultValue={model.defaultView.name}>
-        {([viewName, setViewName]) => {
-          return (
-            <Fragment>
-              <Toolbar variant={'regular'}>
-                <SimpleSelect
-                  label={'views'}
-                  item={viewName}
-                  items={model.viewNames}
-                  onChange={setViewName}
-                />
-                <Button color={'primary'} onClick={this.handleAddRecord}>
-                  <AddIcon /> Row
-                </Button>
-              </Toolbar>
-              <ModelGrid
-                key={model.type}
-                records={this.query.current()}
-                view={model.getView(viewName)}
+        {([viewName, setViewName]) => (
+          <Fragment>
+            <Toolbar variant={'regular'}>
+              <SimpleSelect
+                label={'views'}
+                item={viewName}
+                items={model.viewNames}
+                onChange={setViewName}
               />
-            </Fragment>
-          )
-        }}
+              <Button color={'primary'} onClick={this.handleAddRecord}>
+                <AddIcon /> Row
+              </Button>
+            </Toolbar>
+            <ModelGrid
+              key={model.type}
+              records={this.query.current()}
+              view={model.getView(viewName)}
+            />
+          </Fragment>
+        )}
       </StringValue>
     )
   }
