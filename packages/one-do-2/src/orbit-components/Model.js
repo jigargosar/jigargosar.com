@@ -23,6 +23,7 @@ import {
   identity,
   map,
   merge,
+  objOf,
   sortWith,
   take,
 } from '../lib/ramda'
@@ -110,7 +111,7 @@ export class Model extends Component {
       toggleSortDirection: ({sort: {direction}}) => () => ({
         direction: direction === 'asc' ? 'desc' : 'asc',
       }),
-      setSortState: () => identity,
+      setSortState: () => objOf('sort'),
     },
   ),
   observer,
