@@ -5,23 +5,21 @@ import {
   head,
   isEmpty,
   keys,
-  lensIndex,
   map,
   mapObjIndexed,
   merge,
-  over,
   pluck,
   propOr,
-  replace,
   tail,
   toUpper,
-  unless,
   values,
 } from '../lib/ramda'
-import {mergeDefaults, overProp, validate} from '../lib/little-ramda'
+import {mergeDefaults, validate} from '../lib/little-ramda'
 import {assert} from '../lib/assert'
 
 function fstToUpper(str) {
+  validate('S', [str])
+
   if (isEmpty(str)) return str
   const [first, rest] = [head(str), tail(str)]
   return toUpper(first) + rest
