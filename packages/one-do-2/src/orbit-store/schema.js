@@ -18,9 +18,9 @@ const modelsDefinition = {
       },
     },
     attributes: {
-      title: {type: 'string', label: 'Title'},
-      isDone: {type: 'boolean', label: 'Done'},
       sortIdx: {type: 'number', label: 'Sort Index'},
+      isDone: {type: 'boolean', label: 'Done'},
+      title: {type: 'string', label: 'Title'},
       createdAt: {type: 'timestamp', label: 'Created'},
     },
   },
