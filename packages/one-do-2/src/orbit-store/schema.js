@@ -3,7 +3,7 @@ import {Schema} from './orbit'
 import {mergeDefaults, overProp, validate} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
 import {always, compose, cond, equals, isNil, map} from '../lib/ramda'
-import {randomWord} from '../lib/fake'
+import {randomBool, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
 
 const modelsDefinition = {
@@ -74,7 +74,7 @@ function getDefaultValueForAttribute(a) {
     //
     [equals('number'), always(0)],
     [equals('string'), randomWord],
-    [equals('boolean'), always(false)],
+    [equals('boolean'), randomBool],
     [equals('timestamp'), Date.now],
   ])(a.type)
 }
