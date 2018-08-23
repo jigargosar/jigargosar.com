@@ -5,15 +5,26 @@ import {
   head,
   isEmpty,
   keys,
+  lensIndex,
   map,
   mapObjIndexed,
   merge,
+  over,
   pluck,
   propOr,
+  replace,
+  toUpper,
+  unless,
   values,
 } from '../lib/ramda'
-import {mergeDefaults, validate} from '../lib/little-ramda'
+import {mergeDefaults, overProp, validate} from '../lib/little-ramda'
 import {assert} from '../lib/assert'
+
+function fstToUpper(str) {
+  if (isEmpty(str)) return str
+  const [first, tail] = [head(str), tail(str)]
+  return toUpper(first) + tail
+}
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -30,7 +41,7 @@ export function StoreSchema(store) {
 
     const viewsLookup = compose(
       mapObjIndexed(ModelView),
-      merge({[`Default ${type} Grid`]: {}}),
+      merge({[`Default ${fstToUpper(type)} Grid`]: {}}),
       defaultTo([]),
     )(model.views)
     assert(!isEmpty(viewsLookup))
