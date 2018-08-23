@@ -81,7 +81,10 @@ export function StoreSchema(store) {
       const viewProps = mergeDefaults(
         {
           name,
-          columns: [idColumn(), ...map(attributeColumn)(attributeList)],
+          columns: [
+            idColumn(),
+            ...map(name => ({name, type: 'attribute'}))(attributeNames),
+          ],
           type: 'grid',
           filters: [],
           groupBy: null,
@@ -89,9 +92,18 @@ export function StoreSchema(store) {
         },
         view,
       )
+
+      function toColConfig(column) {
+        if (column.type === 'id') {
+          return idColumn()
+        } else {
+          return attributeColumn(getAttribute(column.name))
+        }
+      }
+
       return {
         ...viewProps,
-        columnAttributes: map(getAttribute)(attributeNames),
+        columns: map(toColConfig)(viewProps.columns),
         filterRecords: filter(allPass(viewProps.filters)),
       }
     }

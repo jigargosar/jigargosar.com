@@ -33,14 +33,17 @@ function timeStampToGroupTitle(timestamp) {
 const modelsDefinition = {
   task: {
     views: {
-      // 'Date View': {
-      //   hideId: true,
-      //   columns: ['isDone', 'title', 'dueAt'],
-      //   groupBy: compose(
-      //     timeStampToGroupTitle,
-      //     _path(attributePath('dueAt')),
-      //   ),
-      // },
+      'Date View': {
+        hideId: true,
+        columns: ['isDone', 'title', 'dueAt'].map(name => ({
+          type: 'attribute',
+          name,
+        })),
+        groupBy: compose(
+          timeStampToGroupTitle,
+          _path(attributePath('dueAt')),
+        ),
+      },
       // All: {
       //   hideId: true,
       //   columns: ['title', 'dueAt'],
