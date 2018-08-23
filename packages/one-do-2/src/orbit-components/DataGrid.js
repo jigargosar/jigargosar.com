@@ -9,11 +9,7 @@ export const defaultRowRenderer = function defaultRowRenderer({
   row,
   columns,
 }) {
-  return (
-    <Fragment key={row.id || row.key}>
-      <GridRow row={row} columns={columns} />
-    </Fragment>
-  )
+  return <GridRow row={row} columns={columns} />
 }
 
 @observer
@@ -32,7 +28,11 @@ export class DataGrid extends Component {
           <HeaderRow columns={columns} />
         </TableHead>
         <TableBody>
-          {map(row => defaultRowRenderer({row, columns}))(rows)}
+          {map(row => (
+            <Fragment key={row.id || row.key}>
+              {defaultRowRenderer({row, columns})}
+            </Fragment>
+          ))(rows)}
         </TableBody>
       </Table>
     )

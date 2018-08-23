@@ -7,6 +7,7 @@ import {
   MenuItem,
   Select,
   TableCell,
+  TableRow,
   TableSortLabel,
   Toolbar,
 } from '@material-ui/core'
@@ -27,6 +28,7 @@ import {
   take,
 } from 'ramda'
 import {DataGrid, defaultRowRenderer} from './DataGrid'
+import {mapIndexed} from '../lib/little-ramda'
 
 function attributeToColConfig(attribute) {
   const name = attribute.name
@@ -130,6 +132,15 @@ export class ModelGridView extends Component {
 
   // noinspection JSMethodCanBeStatic
   rowRenderer({row, columns, ...rest}) {
+    if (row.isGroupRow) {
+      return (
+        <TableRow>
+          {mapIndexed((column, idx) => <TableCell>Group Row</TableCell>)(
+            columns,
+          )}
+        </TableRow>
+      )
+    }
     return defaultRowRenderer({row, columns, ...rest})
   }
 
