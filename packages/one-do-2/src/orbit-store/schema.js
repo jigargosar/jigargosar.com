@@ -12,6 +12,7 @@ import {
   equals,
   isNil,
   map,
+  pathEq,
 } from '../lib/ramda'
 import {randomBool, randomTS, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
@@ -33,28 +34,24 @@ const modelsDefinition = {
   task: {
     views: {
       'Date View': {
-        hideId: true,
         columnNames: ['isDone', 'title', 'dueAt'],
         groupBy: compose(
           timeStampToGroupTitle,
           _path(attributePath('dueAt')),
         ),
       },
-      // All: {
-      //   hideId: true,
-      //   columns: ['title', 'dueAt'],
-      //   groupBy: _path(attributePath('isDone')),
-      //   groupKeyToTitle: groupKey =>
-      //     JSON.parse(groupKey) ? 'Completed' : 'Pending',
-      // },
-      // Pending: {
-      //   hideId: true,
-      //   columns: ['isDone', 'title', 'dueAt'],
-      //   filters: [pathEq(attributePath('isDone'), false)],
-      // },
-      /*'Grid Without Id': {
+      All: {
         hideId: true,
-      },*/
+        columnNames: ['title', 'dueAt'],
+        groupBy: _path(attributePath('isDone')),
+        groupKeyToTitle: groupKey =>
+          JSON.parse(groupKey) ? 'Completed' : 'Pending',
+      },
+      Pending: {
+        hideId: true,
+        columnNames: ['isDone', 'title', 'dueAt'],
+        filters: [pathEq(attributePath('isDone'), false)],
+      },
     },
     attributes: {
       sortIdx: {type: 'number', label: 'Sort Index'},
