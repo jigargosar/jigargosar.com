@@ -8,7 +8,7 @@ import {
   pluck,
   values,
 } from '../lib/ramda'
-import {mergeDefaults} from '../lib/little-ramda'
+import {mergeDefaults, validate} from '../lib/little-ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -31,6 +31,9 @@ export function StoreSchema(store) {
 
     const viewNames = pluck('name')(views)
     const attributeNames = pluck('name')(attributes)
+    validate('A', [viewNames])
+    validate('A', [attributeNames])
+
     return {
       type,
       attributes,
