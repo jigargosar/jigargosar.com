@@ -16,6 +16,7 @@ import {
   ascend,
   compose,
   concat,
+  contains,
   descend,
   equals,
   filter,
@@ -178,7 +179,9 @@ export class ModelGrid extends Component {
       concat(
         hideId ? [] : [idColumnConfig],
         map(attributesToColumnConfigs)(
-          pick(view.columns)(model.attributes),
+          filter(attribute => contains(attribute.name, view.columns))(
+            model.attributes,
+          ),
         ),
       ),
     )
