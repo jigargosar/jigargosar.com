@@ -53,9 +53,9 @@ const modelsDefinition = {
       //   columns: ['isDone', 'title', 'dueAt'],
       //   filters: [pathEq(attributePath('isDone'), false)],
       // },
-      'Grid Without Id': {
+      /*'Grid Without Id': {
         hideId: true,
-      },
+      },*/
     },
     attributes: {
       sortIdx: {type: 'number', label: 'Sort Index'},

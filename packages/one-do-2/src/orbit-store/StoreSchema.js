@@ -82,7 +82,6 @@ export function StoreSchema(store) {
         {
           name,
           columns: [idColumn(), ...map(attributeColumn)(attributeList)],
-          hideId: false,
           type: 'grid',
           filters: [],
           groupBy: null,
