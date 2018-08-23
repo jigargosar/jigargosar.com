@@ -1,5 +1,5 @@
-import {ascend, compose, descend, objOf} from 'ramda'
-import {withProps, withStateHandlers} from 'recompose'
+import {ascend, compose, descend, equals, objOf} from 'ramda'
+import {withHandlers, withProps, withStateHandlers} from 'recompose'
 import {overPath} from '../lib/little-ramda'
 import {_path} from '../lib/ramda'
 
@@ -19,6 +19,19 @@ export const withSortStateHandlers = compose(
       setSortState: () => objOf('sort'),
     },
   ),
+  withHandlers({
+    onSortLabelClicked: ({
+      sort,
+      toggleSortDirection,
+      setSortState,
+    }) => path => {
+      if (equals(sort.path, path)) {
+        toggleSortDirection()
+      } else {
+        setSortState({direction: 'asc', path})
+      }
+    },
+  }),
   withProps(({sort}) => ({
     sort: {
       ...sort,
