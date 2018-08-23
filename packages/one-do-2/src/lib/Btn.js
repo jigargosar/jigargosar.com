@@ -3,6 +3,19 @@ import React, {Component} from 'react'
 import cn from 'classnames'
 import {identity} from './ramda'
 
+// language=JSX Harmony
+/**
+ * @render react
+ * @name Btn
+ * @example
+ *
+ * <Btn
+ *  onClick={()=>console.log('clicked')}>
+ *  Click Me
+ * </Btn>
+ *
+ */
+
 @observer
 export class Btn extends Component {
   render() {
@@ -44,6 +57,7 @@ export class Btn extends Component {
     )
   }
 }
+
 @observer
 export class BtnBehaviour extends Component {
   render() {
