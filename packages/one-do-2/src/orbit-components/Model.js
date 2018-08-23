@@ -20,6 +20,7 @@ import {
   descend,
   equals,
   head,
+  identity,
   map,
   merge,
   sortWith,
@@ -106,9 +107,10 @@ export class Model extends Component {
       },
     },
     {
-      handleViewChange: (state, {model}) => (e, viewName) => ({
-        selectedView: model.getView(viewName),
+      toggleSortDirection: ({sort: {direction}}) => () => ({
+        direction: direction === 'asc' ? 'desc' : 'asc',
       }),
+      setSortState: () => identity,
     },
   ),
   observer,
@@ -177,7 +179,9 @@ export class ModelGrid extends Component {
     const sortPath = columnConfig.cellDataPath
     if (equals(this.sortPath, sortPath)) {
       this.direction = this.direction === 'asc' ? 'desc' : 'asc'
+      this.props.toggleSortDirection()
     } else {
+      this.props.setSortState({direction: 'asc', sortPath})
       this.direction = 'asc'
       this.sortPath = sortPath
     }
