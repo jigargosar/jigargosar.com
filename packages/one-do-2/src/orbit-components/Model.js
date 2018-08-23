@@ -144,14 +144,14 @@ export class ModelGrid extends Component {
       cellDataPath: ['id'],
       label: 'ID',
     }
-    const view = this.props.view
+    const {sort, view} = this.props
 
     return map(c =>
       merge({
         sort: {
-          active: equals(this.sortPath, c.cellDataPath),
+          active: equals(sort.path, c.cellDataPath),
           onClick: () => this.props.handleSortPathClicked(c.cellDataPath),
-          direction: this.direction,
+          direction: sort.direction,
         },
       })(c),
     )(
