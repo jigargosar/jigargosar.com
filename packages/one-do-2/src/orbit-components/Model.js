@@ -10,7 +10,7 @@ import {
   TableSortLabel,
   Toolbar,
 } from '@material-ui/core'
-import {action, computed} from '../lib/mobx'
+import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   compose,
@@ -28,6 +28,7 @@ import DataGrid from './DataGrid'
 import {withHandlers, withState} from '../lib/recompose'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {validate} from '../lib/little-ramda'
+import {Observer} from '../lib/mobx-react'
 
 function attributeToColumnConfig(attribute) {
   const name = attribute.name
@@ -60,6 +61,29 @@ function columnsFromConfigs(configs) {
       ),
     }
   })(configs)
+}
+
+@observer
+class StringValue extends Component {
+  @observable value = this.props.defaultValue || ''
+
+  @action.bound
+  setValue(val) {
+    this.value = val
+  }
+
+  render() {
+    return (
+      <Observer>
+        {() =>
+          React.Children.only(this.props.children)([
+            this.value,
+            this.setValue,
+          ])
+        }
+      </Observer>
+    )
+  }
 }
 
 @compose(
@@ -196,6 +220,7 @@ class ValueSelection extends Component {
   onChange(e) {
     this.props.onChange(e, e.target.value)
   }
+
   render() {
     const {values, value, label} = this.props
     return (
