@@ -15,18 +15,36 @@ import {
 import {randomBool, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
 import {validate} from '../lib/validate'
+import {T} from 'ramda'
+
+function timeStampToGroupTitle(timestamp) {
+  const now = Date.now()
+  return cond([
+    //
+    [ts => ts <= now, () => 'Overdue'],
+    [T, () => 'Someday'],
+  ])(timestamp)
+}
 
 const modelsDefinition = {
   task: {
     views: {
-      'All Tasks': {
+      'Date View': {
+        hideId: true,
+        columns: ['isDone', 'title', 'dueAt'],
+        groupBy: compose(
+          timeStampToGroupTitle,
+          _path(attributePath('dueAt')),
+        ),
+      },
+      All: {
         hideId: true,
         columns: ['title', 'dueAt'],
         groupBy: _path(attributePath('isDone')),
         groupKeyToTitle: groupKey =>
           JSON.parse(groupKey) ? 'Completed' : 'Pending',
       },
-      'Pending Tasks': {
+      Pending: {
         hideId: true,
         columns: ['isDone', 'title', 'dueAt'],
         filters: [pathEq(attributePath('isDone'), false)],
