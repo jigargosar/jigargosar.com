@@ -184,7 +184,6 @@ class SimpleSelect extends Component {
       item,
       toValue = identity,
       toContent = identity,
-      toKey = toValue,
     } = this.props
     return (
       <FormControl>
@@ -195,8 +194,9 @@ class SimpleSelect extends Component {
           onChange={e => this.props.onChange(e.target.value)}
         >
           {map(item => {
+            const value = toValue(item)
             return (
-              <MenuItem key={toKey(item)} value={toValue(item)}>
+              <MenuItem key={value} value={value}>
                 {toContent(item)}
               </MenuItem>
             )
