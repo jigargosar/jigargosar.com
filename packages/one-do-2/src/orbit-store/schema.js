@@ -2,7 +2,15 @@ import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
 import {mergeDefaults, overProp, validate} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
-import {always, compose, cond, equals, isNil, map} from '../lib/ramda'
+import {
+  always,
+  compose,
+  cond,
+  equals,
+  isNil,
+  map,
+  propEq,
+} from '../lib/ramda'
 import {randomBool, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
 
@@ -12,6 +20,7 @@ const modelsDefinition = {
       'Pending Tasks': {
         hideId: true,
         columns: ['dueAt', 'isDone', 'title'],
+        filter: [propEq('isDone', false)],
       },
       'All Tasks': {
         hideId: true,
