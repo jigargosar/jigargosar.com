@@ -154,7 +154,7 @@ export class ModelGridView extends Component {
     if (row.isGroupRow) {
       return (
         <TableRow>
-          <TableCell>Group Row</TableCell>
+          <TableCell colSpan={3}>{`Group Row`}</TableCell>
         </TableRow>
       )
     }
