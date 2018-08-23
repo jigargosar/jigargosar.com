@@ -19,6 +19,7 @@ import {withSortStateHandlers} from './withSortStateHandlers'
 import {Observer} from '../lib/mobx-react'
 import {withProps} from 'recompose'
 import {
+  merge,
   compose,
   contains,
   __,
@@ -226,9 +227,8 @@ export class ModelGridView extends Component {
           ],
           [
             contains(__, keys(view.relationships)),
-            compose(
-              attributeToColConfig,
-              name => view.relationships[name],
+            compose(relationshipToColConfig, name =>
+              merge({name}, view.relationships[name]),
             ),
           ],
           [
@@ -241,6 +241,15 @@ export class ModelGridView extends Component {
       ),
     )(view.columnNames)
 
+    function relationshipToColConfig(relationship) {
+      const name = relationship.name
+      return {
+        isNumeric: false,
+        getCellData: row => `${row.attributes[name]}`,
+        cellDataPath: ['relationship', name],
+        label: name,
+      }
+    }
     function attributeToColConfig(attribute) {
       const name = attribute.name
       return {
