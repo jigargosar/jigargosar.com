@@ -197,7 +197,7 @@ class SelectDropDown extends Component {
     const {values, value, label} = this.props
     return (
       <FormControl>
-        <InputLabel>{label}</InputLabel>
+        {label && <InputLabel>{label}</InputLabel>}
         <Select
           style={{minWidth: 180}}
           value={value}
