@@ -22,8 +22,8 @@ export function StoreSchema(store) {
   }
 
   function SchemaModel(model, type) {
-    const attributeLookup = mapObjIndexed(ModelAttribute)
-    const attributes = compose(values, attributeLookup)(model.attributes)
+    const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
+    const attributes = compose(values, attributeLookup)
     const views = compose(
       prepend(ModelView({}, 'Default Grid')),
       values,
