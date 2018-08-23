@@ -12,7 +12,6 @@ import {
   equals,
   isNil,
   map,
-  pathEq,
 } from '../lib/ramda'
 import {randomBool, randomTS, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
@@ -35,10 +34,7 @@ const modelsDefinition = {
     views: {
       'Date View': {
         hideId: true,
-        columns: ['isDone', 'title', 'dueAt'].map(name => ({
-          type: 'attribute',
-          name,
-        })),
+        columnNames: ['isDone', 'title', 'dueAt'],
         groupBy: compose(
           timeStampToGroupTitle,
           _path(attributePath('dueAt')),

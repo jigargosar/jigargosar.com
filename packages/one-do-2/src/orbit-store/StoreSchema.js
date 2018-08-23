@@ -11,21 +11,12 @@ import {
   identity,
   isEmpty,
   keys,
-  map,
   mapObjIndexed,
   merge,
   pluck,
   propOr,
   values,
 } from 'ramda'
-
-function idColumn() {
-  return {type: 'id'}
-}
-
-function attributeColumn(data) {
-  return {type: 'attribute', data}
-}
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -81,10 +72,7 @@ export function StoreSchema(store) {
       const viewProps = mergeDefaults(
         {
           name,
-          columns: [
-            idColumn(),
-            ...map(name => ({name, type: 'attribute'}))(attributeNames),
-          ],
+          columnNames: ['id', ...attributeNames],
           type: 'grid',
           filters: [],
           groupBy: null,
@@ -93,18 +81,10 @@ export function StoreSchema(store) {
         view,
       )
 
-      function toColConfig(column) {
-        if (column.type === 'id') {
-          return idColumn()
-        } else {
-          return attributeColumn(getAttribute(column.name))
-        }
-      }
-
       return {
         ...viewProps,
-        columns: map(toColConfig)(viewProps.columns),
         filterRecords: filter(allPass(viewProps.filters)),
+        getAttribute,
       }
     }
   }

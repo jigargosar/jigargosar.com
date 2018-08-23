@@ -230,12 +230,12 @@ export class ModelGridView extends Component {
         sort: sortPropsFor(colConfig.cellDataPath),
       })),
       map(
-        c =>
-          c.type === 'attribute'
-            ? attributeToColConfig(c.data)
-            : idColumnConfig,
+        name =>
+          name === 'id'
+            ? idColumnConfig
+            : attributeToColConfig(view.getAttribute(name)),
       ),
-    )(view.columns)
+    )(view.columnNames)
   }
 }
 
