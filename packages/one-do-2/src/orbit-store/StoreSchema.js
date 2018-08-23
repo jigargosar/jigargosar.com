@@ -5,6 +5,7 @@ import {
   head,
   isEmpty,
   keys,
+  map,
   mapObjIndexed,
   merge,
   pluck,
@@ -62,8 +63,15 @@ export function StoreSchema(store) {
     }
 
     function ModelView(view, name) {
+      const columns = attributeNames
+
       return mergeDefaults(
-        {name, hideId: false, columns: attributeNames},
+        {
+          name,
+          hideId: false,
+          columns,
+          columnAttributes: map(getAttribute)(columns),
+        },
         view,
       )
     }
