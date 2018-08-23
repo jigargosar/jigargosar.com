@@ -9,7 +9,7 @@ import {
   equals,
   isNil,
   map,
-  propEq,
+  pathEq,
 } from '../lib/ramda'
 import {randomBool, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
@@ -20,7 +20,7 @@ const modelsDefinition = {
       'Pending Tasks': {
         hideId: true,
         columns: ['isDone', 'title', 'dueAt'],
-        filter: [propEq('isDone', false)],
+        filter: [pathEq(['attributes', 'isDone'], false)],
       },
       'All Tasks': {
         hideId: true,
