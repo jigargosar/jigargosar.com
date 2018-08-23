@@ -20,7 +20,6 @@ import {
   descend,
   equals,
   head,
-  identity,
   map,
   merge,
   objOf,
