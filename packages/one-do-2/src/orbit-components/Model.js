@@ -75,27 +75,13 @@ class StringValue extends Component {
   render() {
     return (
       <Observer>
-        {() =>
-          React.Children.only(this.props.children)([
-            this.value,
-            this.setValue,
-          ])
-        }
+        {() => this.props.children([this.value, this.setValue])}
       </Observer>
     )
   }
 }
 
-@compose(
-  withState('selectedViewName', 'setSelectedViewName', ({model}) =>
-    head(model.viewNames),
-  ),
-  withHandlers({
-    handleViewChange: ({setSelectedViewName}) => (e, value) =>
-      setSelectedViewName(value),
-  }),
-  observer,
-)
+@observer
 export class Model extends Component {
   @action.bound
   handleAddRecord() {
@@ -109,27 +95,32 @@ export class Model extends Component {
 
   render() {
     const model = this.props.model
-    const selectedViewName = this.props.selectedViewName
     return (
-      <Fragment>
-        <Toolbar variant={'regular'}>
-          <ValueSelection
-            label={'views'}
-            value={selectedViewName}
-            values={model.viewNames}
-            onChange={this.props.handleViewChange}
-          />
-          <Button color={'primary'} onClick={this.handleAddRecord}>
-            <AddIcon /> Row
-          </Button>
-        </Toolbar>
-        <ModelGrid
-          key={model.type}
-          records={this.query.current()}
-          view={model.getView(selectedViewName)}
-          model={model}
-        />
-      </Fragment>
+      <StringValue defaultValue={model.defaultViewName}>
+        {([viewName, setViewName]) => {
+          return (
+            <Fragment>
+              <Toolbar variant={'regular'}>
+                <ValueSelection
+                  label={'views'}
+                  value={viewName}
+                  values={model.viewNames}
+                  onChange={setViewName}
+                />
+                <Button color={'primary'} onClick={this.handleAddRecord}>
+                  <AddIcon /> Row
+                </Button>
+              </Toolbar>
+              <ModelGrid
+                key={model.type}
+                records={this.query.current()}
+                view={model.getView(viewName)}
+                model={model}
+              />
+            </Fragment>
+          )
+        }}
+      </StringValue>
     )
   }
 }
@@ -218,7 +209,8 @@ export class ModelGrid extends Component {
 class ValueSelection extends Component {
   @action.bound
   onChange(e) {
-    this.props.onChange(e, e.target.value)
+    // this.props.onChange(e, e.target.value)
+    this.props.onChange(e.target.value)
   }
 
   render() {

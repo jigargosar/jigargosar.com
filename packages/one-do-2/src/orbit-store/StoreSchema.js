@@ -1,6 +1,7 @@
 import {
   compose,
   defaultTo,
+  has,
   keys,
   mapObjIndexed,
   merge,
@@ -8,6 +9,7 @@ import {
   values,
 } from '../lib/ramda'
 import {mergeDefaults, validate} from '../lib/little-ramda'
+import {assert} from '../lib/assert'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -37,7 +39,11 @@ export function StoreSchema(store) {
       attributeNames,
       getAttribute: name => attributeLookup[name],
       viewNames,
-      getView: viewName => viewsLookup[viewName],
+      getView: viewName => {
+        validate('S', [viewName])
+        assert(has(viewName, viewsLookup))
+        return viewsLookup[viewName]
+      },
     }
 
     function ModelAttribute(attribute, name) {
