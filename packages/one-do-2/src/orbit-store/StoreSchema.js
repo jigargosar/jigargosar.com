@@ -13,6 +13,7 @@ import {
   pluck,
   propOr,
   replace,
+  tail,
   toUpper,
   unless,
   values,
@@ -22,8 +23,8 @@ import {assert} from '../lib/assert'
 
 function fstToUpper(str) {
   if (isEmpty(str)) return str
-  const [first, tail] = [head(str), tail(str)]
-  return toUpper(first) + tail
+  const [first, rest] = [head(str), tail(str)]
+  return toUpper(first) + rest
 }
 
 export function StoreSchema(store) {
