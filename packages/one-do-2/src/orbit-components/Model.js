@@ -104,8 +104,8 @@ export class Model extends Component {
   }
 }
 
+@withSortStateHandlers
 @compose(
-  withSortStateHandlers,
   withProps(({records, sort, view}) => {
     const sortedRecords = sortWith([sort.comparator])(records)
     return {
