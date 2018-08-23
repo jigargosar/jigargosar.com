@@ -60,6 +60,17 @@ const modelsDefinition = {
       dueAt: {type: 'timestamp', label: 'Due Date'},
       createdAt: {type: 'timestamp', label: 'Created'},
     },
+    relationships: {
+      project: {type: 'hasOne', model: 'project', inverse: 'tasks'},
+    },
+  },
+  project: {
+    attributes: {
+      title: {type: 'string', label: 'Title'},
+    },
+    relationships: {
+      tasks: {type: 'hasMany', model: 'task', inverse: 'project'},
+    },
   },
   planet: {
     attributes: {
