@@ -3,6 +3,7 @@ import {
   defaultTo,
   has,
   head,
+  isEmpty,
   keys,
   mapObjIndexed,
   merge,
@@ -30,12 +31,12 @@ export function StoreSchema(store) {
       merge({[`${type} Grid`]: {}}),
       defaultTo([]),
     )(model.views)
+    assert(!isEmpty(viewsLookup))
     const viewNames = pluck('name')(values(viewsLookup))
+    const defaultViewName = head(viewNames)
 
     validate('A', [viewNames])
     validate('A', [attributeNames])
-
-    const defaultViewName = head(viewNames)
 
     return {
       type,
