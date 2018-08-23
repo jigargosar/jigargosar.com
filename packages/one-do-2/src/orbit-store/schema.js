@@ -12,7 +12,7 @@ import {
   map,
   pathEq,
 } from '../lib/ramda'
-import {randomBool, randomWord} from '../lib/fake'
+import {randomBool, randomTS, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
 import {validate} from '../lib/validate'
 import {T} from 'ramda'
@@ -113,7 +113,7 @@ function getDefaultValueForAttribute(a) {
     [equals('number'), always(0)],
     [equals('string'), randomWord],
     [equals('boolean'), randomBool],
-    [equals('timestamp'), Date.now],
+    [equals('timestamp'), randomTS],
   ])(a.type)
 }
 
