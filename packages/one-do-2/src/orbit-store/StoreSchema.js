@@ -73,7 +73,6 @@ export function StoreSchema(store) {
         {
           name,
           hideId: false,
-          columns: attributeNames,
           type: 'grid',
           filters: [],
           groupBy: null,
@@ -83,7 +82,7 @@ export function StoreSchema(store) {
       )
       return {
         ...viewProps,
-        columnAttributes: map(getAttribute)(viewProps.columns),
+        columnAttributes: map(getAttribute)(attributeNames),
         filterRecords: filter(allPass(viewProps.filters)),
       }
     }
