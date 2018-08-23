@@ -146,15 +146,7 @@ export class ModelGrid extends Component {
     }
     const {sort, view} = this.props
 
-    return map(c =>
-      merge({
-        sort: {
-          active: equals(sort.path, c.cellDataPath),
-          onClick: () => this.props.handleSortPathClicked(c.cellDataPath),
-          direction: sort.direction,
-        },
-      })(c),
-    )(
+    return map(c => merge(this.getSortProps(sort, c.cellDataPath))(c))(
       concat(
         view.hideId ? [] : [idColumnConfig],
         map(
@@ -163,6 +155,16 @@ export class ModelGrid extends Component {
         )(view.columnAttributes),
       ),
     )
+  }
+
+  getSortProps(sort, path) {
+    return {
+      sort: {
+        active: equals(sort.path, path),
+        onClick: () => this.props.handleSortPathClicked(path),
+        direction: sort.direction,
+      },
+    }
   }
 }
 
