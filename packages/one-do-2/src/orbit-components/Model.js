@@ -28,7 +28,6 @@ import {
   take,
 } from 'ramda'
 import {DataGrid, defaultRowRenderer} from './DataGrid'
-import {mapIndexed} from '../lib/little-ramda'
 
 function attributeToColConfig(attribute) {
   const name = attribute.name
