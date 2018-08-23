@@ -30,6 +30,11 @@ import {
   sortWith,
   take,
   values,
+  pathEq,
+  propEq,
+  find,
+  filter,
+  prop,
 } from 'ramda'
 import {DataGrid} from '../shared-components/DataGrid'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
@@ -71,11 +76,20 @@ function colConfigToColumnProp({
   }
 }
 
+function addRecord(model) {
+  const firstHasOneRel = compose(
+    filter(propEq('type')('hasOne')),
+    prop('relationships'),
+  )(model)
+  console.log(`firstHasOneRel`, firstHasOneRel)
+  return updateStore(t => t.addRecord({type: model.type}))
+}
+
 @observer
 export class Model extends Component {
   @action.bound
   handleAddRecord() {
-    return updateStore(t => t.addRecord({type: this.props.model.type}))
+    return addRecord(this.props.model)
   }
 
   @computed
