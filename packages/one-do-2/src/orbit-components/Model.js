@@ -99,7 +99,8 @@ export class Model extends Component {
     )
   }
 }
-@compose(
+
+const withSortState = compose(
   withStateHandlers(
     {
       sort: {
@@ -124,8 +125,9 @@ export class Model extends Component {
       )(sort.path),
     },
   })),
-  observer,
 )
+
+@compose(withSortState, observer)
 export class ModelGrid extends Component {
   @computed
   get query() {
