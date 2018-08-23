@@ -68,6 +68,7 @@ export function StoreSchema(store) {
           name,
           hideId: false,
           columns: attributeNames,
+          type: 'grid',
         },
         view,
       )
