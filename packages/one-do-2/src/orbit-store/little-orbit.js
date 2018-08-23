@@ -2,15 +2,17 @@ import {_path, compose, curry, map, pick, tap} from '../lib/ramda'
 import {prettyStringifySafe} from '../lib/little-ramda'
 import {validate} from '../lib/validate'
 
-const flattenRecord = ({attributes, ...rest}) => ({
-  ...rest,
-  ...attributes,
-})
-
 export function logRecords(records) {
   const flatRecords = map(flattenRecord)(records)
   console.table(flatRecords)
   console.debug(prettyStringifySafe(records))
+
+  function flattenRecord({attributes, ...rest}) {
+    return {
+      ...rest,
+      ...attributes,
+    }
+  }
 }
 
 export const tapLogRecords = compose(tap, logRecords)
