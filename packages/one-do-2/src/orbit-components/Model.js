@@ -94,7 +94,7 @@ export class Model extends Component {
                 <AddIcon /> Row
               </Button>
             </Toolbar>
-            <ModelGrid
+            <ModelGridView
               key={model.type}
               records={this.query.current()}
               view={model.getView(viewName)}
@@ -117,7 +117,7 @@ export class Model extends Component {
   }),
   observer,
 )
-export class ModelGrid extends Component {
+export class ModelGridView extends Component {
   render() {
     return (
       <DataGrid
