@@ -18,9 +18,11 @@ import {
   concat,
   descend,
   equals,
+  filter,
   head,
   map,
   merge,
+  pick,
   sortWith,
   take,
 } from '../lib/ramda'
@@ -161,7 +163,9 @@ export class ModelGrid extends Component {
       cellDataPath: ['id'],
       label: 'ID',
     }
-    const hideId = this.props.view.hideId
+    const view = this.props.view
+    const hideId = view.hideId
+    const model = this.props.model
     return map(c =>
       merge({
         sort: {
@@ -173,7 +177,9 @@ export class ModelGrid extends Component {
     )(
       concat(
         hideId ? [] : [idColumnConfig],
-        map(attributesToColumnConfigs)(this.props.model.attributes),
+        map(attributesToColumnConfigs)(
+          pick(view.columns)(model.attributes),
+        ),
       ),
     )
   }
