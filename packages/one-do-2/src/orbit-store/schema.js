@@ -9,7 +9,11 @@ import {assert} from '../lib/assert'
 const modelsDefinition = {
   task: {
     views: {
-      'Task List': {
+      'Pending Tasks': {
+        hideId: true,
+        columns: ['dueAt', 'isDone', 'title'],
+      },
+      'All Tasks': {
         hideId: true,
         columns: ['dueAt', 'isDone', 'title'],
       },
