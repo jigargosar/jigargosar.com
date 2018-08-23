@@ -151,10 +151,8 @@ export class ModelGrid extends Component {
       label: 'ID',
     }
     const view = this.props.view
-    const hideId = view.hideId
     const model = this.props.model
-    const columns = view.columns
-    validate('A', [columns])
+    validate('A', [view.columns])
 
     return map(c =>
       merge({
@@ -166,11 +164,11 @@ export class ModelGrid extends Component {
       })(c),
     )(
       concat(
-        hideId ? [] : [idColumnConfig],
+        view.hideId ? [] : [idColumnConfig],
         map(
           //
           compose(attributeToColumnConfig, model.getAttribute),
-        )(columns),
+        )(view.columns),
       ),
     )
   }
