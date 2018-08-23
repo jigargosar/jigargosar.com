@@ -8,6 +8,7 @@ import {
   values,
 } from '../lib/ramda'
 import {mergeDefaults, validate} from '../lib/little-ramda'
+import {values} from 'ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -20,16 +21,14 @@ export function StoreSchema(store) {
 
   function SchemaModel(model, type) {
     const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
-    const attributeList = values(attributeLookup)
-    const attributeNames = pluck('name')(attributeList)
+    const attributeNames = pluck('name')(values(attributeLookup))
 
     const viewsLookup = compose(
       mapObjIndexed(ModelView),
       merge({[`${type} Grid`]: {}}),
       defaultTo([]),
     )(model.views)
-    const viewList = values(viewsLookup)
-    const viewNames = pluck('name')(viewList)
+    const viewNames = pluck('name')(values(viewsLookup))
 
     validate('A', [viewNames])
     validate('A', [attributeNames])
