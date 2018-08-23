@@ -22,7 +22,7 @@ import {
   unless,
 } from './ramda'
 import {hotDispose} from './hot'
-import {validate} from './little-ramda'
+import {validate} from './validate'
 
 export function mobxStorage({store, key, disposers, preProcessStorageJS}) {
   function startStoring() {

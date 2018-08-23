@@ -3,9 +3,9 @@ import {schema} from './schema'
 import {identity, partial} from '../lib/ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
-import {validate} from '../lib/little-ramda'
 import {autoBind} from '../lib/auto-bind'
 import {StoreSchema} from './StoreSchema'
+import {validate} from '../lib/validate'
 
 const logPrefix = ['[store]']
 // const log = partial(console.log.bind(console), logPrefix)
