@@ -25,9 +25,8 @@ export function StoreSchema(store) {
     const attributeNames = pluck('name')(attributeList)
 
     const viewsLookup = compose(
-      append(ModelView({}, `${type} Grid`)),
-      values,
       mapObjIndexed(ModelView),
+      merge({[`${type} Grid`]: {}}),
       defaultTo([]),
     )(model.views)
     const viewList = values(viewsLookup)
