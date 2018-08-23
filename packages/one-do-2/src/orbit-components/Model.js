@@ -41,6 +41,8 @@ import {
   take,
   values,
 } from 'ramda'
+import {prettyStringifySafe} from '../lib/little-ramda'
+
 import {DataGrid} from '../shared-components/DataGrid'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
 
@@ -245,7 +247,7 @@ export class ModelGridView extends Component {
       const name = relationship.name
       return {
         isNumeric: false,
-        getCellData: row => `${row.attributes[name]}`,
+        getCellData: row => prettyStringifySafe(row.relationships[name]),
         cellDataPath: ['relationship', name],
         label: name,
       }
