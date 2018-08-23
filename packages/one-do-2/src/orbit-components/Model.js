@@ -126,12 +126,10 @@ export class ModelGrid extends Component {
     return this.direction === 'asc' ? ascend : descend
   }
 
-  @computed
   get sortPath() {
     return this.props.sort.path
   }
 
-  @computed
   get direction() {
     return this.props.sort.direction
   }
