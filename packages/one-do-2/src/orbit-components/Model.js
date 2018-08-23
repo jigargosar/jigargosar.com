@@ -3,14 +3,14 @@ import React, {Component, Fragment} from 'react'
 import {
   Button,
   FormControl,
+  InputLabel,
   MenuItem,
   Select,
   TableCell,
   TableSortLabel,
   Toolbar,
-  InputLabel,
 } from '@material-ui/core'
-import {action, computed, observable} from '../lib/mobx'
+import {action, computed} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   _path,
@@ -116,9 +116,6 @@ export class Model extends Component {
   observer,
 )
 export class ModelGrid extends Component {
-  @observable sortPath = ['attributes', 'sortIdx']
-  @observable direction = 'asc'
-
   @computed
   get query() {
     return liveQuery(q => q.findRecords(this.props.model.type))
@@ -127,6 +124,16 @@ export class ModelGrid extends Component {
   @computed
   get sortDirFn() {
     return this.direction === 'asc' ? ascend : descend
+  }
+
+  @computed
+  get sortPath() {
+    return this.props.sort.path
+  }
+
+  @computed
+  get direction() {
+    return this.props.sort.direction
   }
 
   @computed
@@ -178,12 +185,9 @@ export class ModelGrid extends Component {
   onSortLabelClicked(columnConfig) {
     const sortPath = columnConfig.cellDataPath
     if (equals(this.sortPath, sortPath)) {
-      this.direction = this.direction === 'asc' ? 'desc' : 'asc'
       this.props.toggleSortDirection()
     } else {
       this.props.setSortState({direction: 'asc', sortPath})
-      this.direction = 'asc'
-      this.sortPath = sortPath
     }
   }
 }
