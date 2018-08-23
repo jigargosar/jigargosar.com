@@ -99,33 +99,6 @@ export class Model extends Component {
 }
 
 @observer
-class ValueSelection extends Component {
-  @action.bound
-  onChange(e) {
-    this.props.onChange(e, e.target.value)
-  }
-  render() {
-    const {values, value, label} = this.props
-    return (
-      <FormControl>
-        <InputLabel>{label}</InputLabel>
-        <Select
-          style={{minWidth: 180}}
-          value={value}
-          onChange={this.onChange}
-        >
-          {map(value => (
-            <MenuItem key={value} value={value}>
-              {value}
-            </MenuItem>
-          ))(values)}
-        </Select>
-      </FormControl>
-    )
-  }
-}
-
-@observer
 export class ModelGrid extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
   @observable direction = 'asc'
@@ -194,5 +167,32 @@ export class ModelGrid extends Component {
       this.direction = 'asc'
       this.sortPath = sortPath
     }
+  }
+}
+
+@observer
+class ValueSelection extends Component {
+  @action.bound
+  onChange(e) {
+    this.props.onChange(e, e.target.value)
+  }
+  render() {
+    const {values, value, label} = this.props
+    return (
+      <FormControl>
+        <InputLabel>{label}</InputLabel>
+        <Select
+          style={{minWidth: 180}}
+          value={value}
+          onChange={this.onChange}
+        >
+          {map(value => (
+            <MenuItem key={value} value={value}>
+              {value}
+            </MenuItem>
+          ))(values)}
+        </Select>
+      </FormControl>
+    )
   }
 }
