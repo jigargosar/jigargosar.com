@@ -102,11 +102,11 @@ class CustomSchema extends Schema {
     const model = this.getModel(type)
     assert(!isNil(model))
 
-    const defaultAttributed = map(getDefaultValueForAttribute)(
+    const defaultAttributes = map(getDefaultValueForAttribute)(
       model.attributes,
     )
     const setDefaultProps = compose(
-      overProp('attributes')(mergeDefaults(defaultAttributed)),
+      overProp('attributes')(mergeDefaults(defaultAttributes)),
       mergeDefaults({attributes: {}}),
     )
     Object.assign(record, setDefaultProps(record))
