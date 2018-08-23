@@ -13,24 +13,20 @@ import {
 import {action, computed} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
-  _path,
-  ascend,
   compose,
   concat,
-  descend,
   equals,
   head,
   map,
   merge,
-  objOf,
   sortWith,
   take,
 } from '../lib/ramda'
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
-import {withProps, withStateHandlers} from '../lib/recompose'
-import {overPath} from '../lib/little-ramda'
+import {withStateHandlers} from '../lib/recompose'
+import {withSortStateHandlers} from './withSortStateHandlers'
 
 function attributeToColumnConfig(attribute) {
   const name = attribute.name
@@ -100,34 +96,7 @@ export class Model extends Component {
   }
 }
 
-const withSortState = compose(
-  withStateHandlers(
-    {
-      sort: {
-        path: ['attributes', 'sortIdx'],
-        direction: 'asc',
-      },
-    },
-    {
-      toggleSortDirection: state => () =>
-        overPath(['sort', 'direction'])(
-          direction => (direction === 'asc' ? 'desc' : 'asc'),
-        )(state),
-      setSortState: () => objOf('sort'),
-    },
-  ),
-  withProps(({sort}) => ({
-    sort: {
-      ...sort,
-      comparator: compose(
-        sort.direction === 'asc' ? ascend : descend,
-        _path,
-      )(sort.path),
-    },
-  })),
-)
-
-@compose(withSortState, observer)
+@compose(withSortStateHandlers, observer)
 export class ModelGrid extends Component {
   @computed
   get query() {
