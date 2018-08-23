@@ -201,6 +201,7 @@ class SelectDropDown extends Component {
       item,
       toValue = identity,
       toContent = identity,
+      toKey = toValue,
     } = this.props
     return (
       <FormControl>
@@ -211,11 +212,9 @@ class SelectDropDown extends Component {
           onChange={e => this.props.onChange(e.target.value)}
         >
           {map(item => {
-            const value = toValue(item)
-            const content = toContent(item)
             return (
-              <MenuItem key={value} value={value}>
-                {content}
+              <MenuItem key={toKey(item)} value={toValue(item)}>
+                {toContent(item)}
               </MenuItem>
             )
           })(items)}
