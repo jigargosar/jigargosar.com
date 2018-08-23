@@ -32,7 +32,7 @@ import DataGrid from './DataGrid'
 import {withProps, withStateHandlers} from '../lib/recompose'
 import {overPath} from '../lib/little-ramda'
 
-function attributesToColumnConfigs(attribute) {
+function attributeToColumnConfig(attribute) {
   const name = attribute.name
   return {
     isNumeric: attribute.type === 'number',
@@ -178,9 +178,10 @@ export class ModelGrid extends Component {
     )(
       concat(
         hideId ? [] : [idColumnConfig],
-        map(attributesToColumnConfigs)(
-          map(model.getAttribute, view.columns),
-        ),
+        map(
+          //
+          compose(attributeToColumnConfig, model.getAttribute),
+        )(view.columns),
       ),
     )
   }
