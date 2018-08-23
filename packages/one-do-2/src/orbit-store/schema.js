@@ -20,7 +20,7 @@ const modelsDefinition = {
       'Pending Tasks': {
         hideId: true,
         columns: ['isDone', 'title', 'dueAt'],
-        filter: [pathEq(['attributes', 'isDone'], false)],
+        filters: [pathEq(['attributes', 'isDone'], false)],
       },
       'All Tasks': {
         hideId: true,
