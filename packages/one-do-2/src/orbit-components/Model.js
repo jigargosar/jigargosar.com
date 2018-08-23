@@ -30,7 +30,7 @@ import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
 import {withStateHandlers} from '../lib/recompose'
-import {overProp} from '../lib/little-ramda'
+import {overPath} from '../lib/little-ramda'
 
 function attributesToColumnConfigs(attribute) {
   const name = attribute.name
@@ -108,10 +108,10 @@ export class Model extends Component {
       },
     },
     {
-      toggleSortDirection: ({sort}) => () =>
-        overProp('direction')(
+      toggleSortDirection: state => () =>
+        overPath(['sort', 'direction'])(
           direction => (direction === 'asc' ? 'desc' : 'asc'),
-        )(sort),
+        )(state),
       setSortState: () => objOf('sort'),
     },
   ),
