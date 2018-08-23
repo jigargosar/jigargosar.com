@@ -1,6 +1,6 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
-import {mergeDefaults, overProp, validate} from '../lib/little-ramda'
+import {mergeDefaults, overProp} from '../lib/little-ramda'
 import {typeOfRecord} from './little-orbit'
 import {
   always,
@@ -13,6 +13,7 @@ import {
 } from '../lib/ramda'
 import {randomBool, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
+import {validate} from '../lib/validate'
 
 const modelsDefinition = {
   task: {

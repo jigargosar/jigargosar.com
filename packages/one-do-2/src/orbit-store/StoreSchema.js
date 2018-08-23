@@ -12,8 +12,9 @@ import {
   propOr,
   values,
 } from '../lib/ramda'
-import {fstToUpper, mergeDefaults, validate} from '../lib/little-ramda'
+import {fstToUpper, mergeDefaults} from '../lib/little-ramda'
 import {assert} from '../lib/assert'
+import {validate} from '../lib/validate'
 
 export function StoreSchema(store) {
   const schema = store.schema

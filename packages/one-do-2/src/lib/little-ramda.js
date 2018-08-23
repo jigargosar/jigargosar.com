@@ -35,16 +35,18 @@ import {
   propEq,
   propOr,
   reduce,
-  reject, tail,
+  reject,
+  tail,
   tap,
-  toPairs, toUpper,
+  toPairs,
+  toUpper,
   type,
   unless,
 } from './ramda'
 import Sugar from 'sugar'
 import pFinally from 'p-finally'
 import stringify from 'json-stringify-safe'
-import {validate} from './assert'
+import {validate} from './validate'
 
 export {default as pluralize} from 'pluralize'
 if (module.hot) {
@@ -70,7 +72,6 @@ export function wrapLog(fn, name = 'wrapTapLog fn') {
     return out
   })
 }
-export {validate}
 
 export const mapIndexed = addIndex(map)
 
