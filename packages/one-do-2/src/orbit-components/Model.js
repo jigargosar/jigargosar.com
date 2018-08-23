@@ -26,7 +26,6 @@ import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
 import {withSortStateHandlers} from './withSortStateHandlers'
-import {validate} from '../lib/little-ramda'
 import {Observer} from '../lib/mobx-react'
 
 function attributeToColumnConfig(attribute) {
@@ -151,7 +150,6 @@ export class ModelGrid extends Component {
       label: 'ID',
     }
     const view = this.props.view
-    const model = this.props.model
 
     return map(c =>
       merge({
