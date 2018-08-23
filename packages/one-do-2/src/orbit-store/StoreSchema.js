@@ -19,6 +19,16 @@ import {
   values,
 } from 'ramda'
 
+import {attributePath} from './little-orbit'
+
+function idColumn() {
+  return {type: 'id', path: ['id']}
+}
+
+function attributeColumn(name) {
+  return {type: 'attribute', name, path: attributePath(name)}
+}
+
 export function StoreSchema(store) {
   const schema = store.schema
   const modelLookup = mapObjIndexed(SchemaModel)(schema.models)
@@ -72,6 +82,7 @@ export function StoreSchema(store) {
       const viewProps = mergeDefaults(
         {
           name,
+          columns: [idColumn(), map(attributeColumn)(attributeNames)],
           hideId: false,
           type: 'grid',
           filters: [],
