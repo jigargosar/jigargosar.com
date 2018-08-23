@@ -107,11 +107,6 @@ export class Model extends Component {
 
 @compose(withSortStateHandlers, observer)
 export class ModelGrid extends Component {
-  @computed
-  get query() {
-    return liveQuery(q => q.findRecords(this.props.model.type))
-  }
-
   get sortPath() {
     return this.props.sort.path
   }
