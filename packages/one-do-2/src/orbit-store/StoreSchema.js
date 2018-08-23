@@ -74,6 +74,7 @@ export function StoreSchema(store) {
           columns: attributeNames,
           type: 'grid',
           filters: [],
+          groupBy: null,
         },
         view,
       )

@@ -17,10 +17,11 @@ export class DataGrid extends Component {
   static propTypes = {
     columns: PropTypes.array.isRequired,
     rows: PropTypes.array.isRequired,
+    rowRenderer: PropTypes.func,
   }
 
   render() {
-    const {rows, columns} = this.props
+    const {rows, columns, rowRenderer = defaultRowRenderer} = this.props
 
     return (
       <Table padding={'dense'}>
@@ -30,7 +31,7 @@ export class DataGrid extends Component {
         <TableBody>
           {map(row => (
             <Fragment key={row.id || row.key}>
-              {defaultRowRenderer({row, columns})}
+              {rowRenderer({row, columns})}
             </Fragment>
           ))(rows)}
         </TableBody>

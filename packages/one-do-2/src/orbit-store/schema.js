@@ -1,9 +1,9 @@
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
 import {mergeDefaults, overProp} from '../lib/little-ramda'
-import {typeOfRecord} from './little-orbit'
+import {attributePath, typeOfRecord} from './little-orbit'
 import {
-  _prop,
+  _path,
   always,
   compose,
   cond,
@@ -22,12 +22,12 @@ const modelsDefinition = {
       'All Tasks': {
         hideId: true,
         columns: ['isDone', 'title', 'dueAt'],
-        groupBy: _prop('isDone'),
+        groupBy: _path(attributePath('isDone')),
       },
       'Pending Tasks': {
         hideId: true,
         columns: ['isDone', 'title', 'dueAt'],
-        filters: [pathEq(['attributes', 'isDone'], false)],
+        filters: [pathEq(attributePath('isDone'), false)],
       },
       'Grid Without Id': {
         hideId: true,

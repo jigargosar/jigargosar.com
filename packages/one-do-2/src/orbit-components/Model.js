@@ -118,6 +118,7 @@ export class Model extends Component {
     const sortedRecords = sortWith([sort.comparator])(records)
     const sortedAndFilteredRecords = view.filterRecords(sortedRecords)
     const groupRecords = compose(
+      tapLog,
       flatten,
       values,
       mapObjIndexed((records, groupId) => [
@@ -148,15 +149,14 @@ export class ModelGridView extends Component {
     )
   }
 
-  // noinspection JSMethodCanBeStatic
+  @action.bound
   rowRenderer({row, columns, ...rest}) {
-    if (row.isGroupRow) {
-      return (
-        <TableRow>
-          <TableCell>Group Row</TableCell>
-        </TableRow>
-      )
-    }
+    return null
+    return (
+      <TableRow>
+        <TableCell>Group Row</TableCell>
+      </TableRow>
+    )
     return defaultRowRenderer({row, columns, ...rest})
   }
 
