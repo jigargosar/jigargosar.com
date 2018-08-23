@@ -95,7 +95,6 @@ export class Model extends Component {
                 key={model.type}
                 records={this.query.current()}
                 view={model.getView(viewName)}
-                model={model}
               />
             </Fragment>
           )
