@@ -1,14 +1,4 @@
-import {
-  _path,
-  _prop,
-  compose,
-  curry,
-  keys,
-  map,
-  pick,
-  tap,
-  toPairs,
-} from '../lib/ramda'
+import {_path, compose, curry, map, pick, tap} from '../lib/ramda'
 import {prettyStringifySafe} from '../lib/little-ramda'
 import {validate} from '../lib/validate'
 
@@ -70,19 +60,6 @@ export function typeOfRecord(record) {
   validate('S', [type])
   return type
 }
-
-export const modelDefOfType = type => schema => {
-  const modelDesc = _path(['models', type])(schema)
-  validate('SOO', [type, schema, modelDesc])
-  return modelDesc
-}
-export const getModelTypes = compose(keys, _prop('models'))
-
-export const attributesOfType = type => schema =>
-  compose(toPairs, _prop('attributes'), modelDefOfType(type))(schema)
-
 export function attributePath(name) {
   return ['attributes', name]
 }
-
-export const idPath = ['id']
