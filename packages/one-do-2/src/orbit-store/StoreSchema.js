@@ -51,6 +51,7 @@ export function StoreSchema(store) {
       viewNames,
       getView,
       defaultView: getView(defaultViewName),
+      relationships: defaultTo({})(model.relationships),
     }
 
     function getAttribute(name) {
