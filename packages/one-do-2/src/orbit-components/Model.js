@@ -117,14 +117,6 @@ export class Model extends Component {
   observer,
 )
 export class ModelGrid extends Component {
-  get sortPath() {
-    return this.props.sort.path
-  }
-
-  get direction() {
-    return this.props.sort.direction
-  }
-
   render() {
     return (
       <DataGrid
