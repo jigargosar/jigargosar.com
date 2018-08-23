@@ -8,7 +8,6 @@ import {
   values,
 } from '../lib/ramda'
 import {mergeDefaults, validate} from '../lib/little-ramda'
-import {values} from 'ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
