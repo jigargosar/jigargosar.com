@@ -25,7 +25,7 @@ import {
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
 import DataGrid from './DataGrid'
-import {withStateHandlers} from '../lib/recompose'
+import {withHandlers, withState, withStateHandlers} from '../lib/recompose'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {validate} from '../lib/little-ramda'
 
@@ -63,14 +63,13 @@ function columnsFromConfigs(configs) {
 }
 
 @compose(
-  withStateHandlers(
-    ({model}) => ({selectedViewName: head(model.viewNames)}),
-    {
-      handleViewChange: () => (e, selectedViewName) => ({
-        selectedViewName,
-      }),
-    },
+  withState('selectedViewName', 'setSelectedViewName', ({model}) =>
+    head(model.viewNames),
   ),
+  withHandlers({
+    handleViewChange: ({setSelectedViewName}) => (e, value) =>
+      setSelectedViewName(value),
+  }),
   observer,
 )
 export class Model extends Component {
