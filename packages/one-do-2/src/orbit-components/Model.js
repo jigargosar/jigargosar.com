@@ -112,7 +112,7 @@ export class Model extends Component {
     const sortedRecords = sortWith([sort.comparator])(records)
     return {
       sortedRecords,
-      sortedAndFilteredRecords: view.filterRecords(this.sortedRecords),
+      sortedAndFilteredRecords: view.filterRecords(sortedRecords),
     }
   }),
   observer,
