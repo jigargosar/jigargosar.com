@@ -160,16 +160,6 @@ export class ModelGrid extends Component {
       map(attributeToColConfig),
     )(view.columnAttributes)
   }
-
-  getSortProps = sort => path => {
-    return {
-      sort: {
-        active: equals(sort.path, path),
-        onClick: () => this.props.handleSortPathClicked(path),
-        direction: sort.direction,
-      },
-    }
-  }
 }
 
 @observer
