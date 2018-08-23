@@ -150,7 +150,7 @@ export class ModelGrid extends Component {
       merge({
         sort: {
           active: equals(this.sortPath, c.cellDataPath),
-          onClick: () => this.onSortLabelClicked(c.cellDataPath),
+          onClick: () => this.props.handleSortPathClicked(c.cellDataPath),
           direction: this.direction,
         },
       })(c),
@@ -163,15 +163,6 @@ export class ModelGrid extends Component {
         )(view.columnAttributes),
       ),
     )
-  }
-
-  @action
-  onSortLabelClicked(path) {
-    if (equals(this.sortPath, path)) {
-      this.props.toggleSortDirection()
-    } else {
-      this.props.setSortState({direction: 'asc', path})
-    }
   }
 }
 

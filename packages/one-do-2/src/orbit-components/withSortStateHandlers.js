@@ -20,7 +20,7 @@ export const withSortStateHandlers = compose(
     },
   ),
   withHandlers({
-    onSortLabelClicked: ({
+    handleSortPathClicked: ({
       sort,
       toggleSortDirection,
       setSortState,
