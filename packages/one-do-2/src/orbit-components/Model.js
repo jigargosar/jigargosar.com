@@ -12,6 +12,12 @@ import {
 } from '@material-ui/core'
 import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
+import cn from 'classnames'
+import {AddIcon} from '../lib/Icons'
+import DataGrid from './DataGrid'
+import {withSortStateHandlers} from './withSortStateHandlers'
+import {Observer} from '../lib/mobx-react'
+import {withProps} from 'recompose'
 import {
   compose,
   concat,
@@ -21,13 +27,9 @@ import {
   merge,
   sortWith,
   take,
-} from '../lib/ramda'
-import cn from 'classnames'
-import {AddIcon} from '../lib/Icons'
-import DataGrid from './DataGrid'
-import {withSortStateHandlers} from './withSortStateHandlers'
-import {Observer} from '../lib/mobx-react'
-import {withProps} from 'recompose'
+} from 'ramda'
+
+import {tapLog} from '../lib/little-ramda'
 
 function attributeToColumnConfig(attribute) {
   const name = attribute.name
@@ -146,12 +148,17 @@ export class ModelGrid extends Component {
     }
     const {sort, view} = this.props
 
-    return map(c => merge(this.getSortProps(sort, c.cellDataPath))(c))(
-      concat(
-        view.hideId ? [] : [idColumnConfig],
-        map(attributeToColumnConfig)(view.columnAttributes),
-      ),
+    const map1 = map(c =>
+      merge(this.getSortProps(sort, c.cellDataPath))(c),
     )
+    return compose(
+      tapLog,
+      //
+      map1(concat(view.hideId ? [] : [idColumnConfig])),
+      tapLog,
+      map(attributeToColumnConfig),
+      tapLog,
+    )(view.columnAttributes)
   }
 
   getSortProps(sort, path) {
