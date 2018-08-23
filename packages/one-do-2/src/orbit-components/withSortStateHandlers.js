@@ -2,6 +2,7 @@ import {ascend, compose, descend, equals, objOf} from 'ramda'
 import {withHandlers, withProps, withStateHandlers} from 'recompose'
 import {overPath} from '../lib/little-ramda'
 import {_path} from '../lib/ramda'
+import {observer} from 'mobx-react'
 
 export const withSortStateHandlers = compose(
   withStateHandlers(
@@ -41,4 +42,5 @@ export const withSortStateHandlers = compose(
       )(sort.path),
     },
   })),
+  observer,
 )
