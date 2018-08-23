@@ -8,7 +8,6 @@ import {
   contains,
   defaultTo,
   filter,
-  flip,
   has,
   head,
   identity,
@@ -89,7 +88,7 @@ export function StoreSchema(store) {
         ...viewProps,
         filterRecords: filter(allPass(viewProps.filters)),
         getAttribute,
-        hasAttribute: contains(__)(attributeNames),
+        hasAttribute: contains(__, attributeNames),
         relationships,
       }
     }
