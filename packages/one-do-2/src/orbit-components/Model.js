@@ -62,24 +62,6 @@ function columnsFromConfigs(configs) {
 }
 
 @observer
-class StringValue extends Component {
-  @observable value = this.props.defaultValue || null
-
-  @action.bound
-  setValue(val) {
-    this.value = val
-  }
-
-  render() {
-    return (
-      <Observer>
-        {() => this.props.children([this.value, this.setValue])}
-      </Observer>
-    )
-  }
-}
-
-@observer
 export class Model extends Component {
   @action.bound
   handleAddRecord() {
@@ -228,6 +210,24 @@ class ValueSelection extends Component {
           ))(values)}
         </Select>
       </FormControl>
+    )
+  }
+}
+
+@observer
+class StringValue extends Component {
+  @observable value = this.props.defaultValue || null
+
+  @action.bound
+  setValue(val) {
+    this.value = val
+  }
+
+  render() {
+    return (
+      <Observer>
+        {() => this.props.children([this.value, this.setValue])}
+      </Observer>
     )
   }
 }
