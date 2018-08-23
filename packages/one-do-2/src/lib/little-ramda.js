@@ -45,6 +45,7 @@ import Sugar from 'sugar'
 import pFinally from 'p-finally'
 import stringify from 'json-stringify-safe'
 import {head, isEmpty, tail, toUpper} from 'ramda'
+import {validate} from './assert'
 
 export {default as pluralize} from 'pluralize'
 if (module.hot) {
@@ -70,7 +71,8 @@ export function wrapLog(fn, name = 'wrapTapLog fn') {
     return out
   })
 }
-export {default as validate} from './aproba/index'
+export {validate}
+
 export const mapIndexed = addIndex(map)
 
 export const forEachIndexed = addIndex(forEach)

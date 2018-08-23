@@ -4,3 +4,5 @@ export function assert(bool, msg) {
     throw new Error(`Assertion Failed: ${msg || `msg not provided`}`)
   }
 }
+
+export {validate} from './aproba/index'
