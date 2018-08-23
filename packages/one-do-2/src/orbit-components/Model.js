@@ -97,8 +97,22 @@ export class Model extends Component {
     )
   }
 }
-
-@observer
+@compose(
+  withStateHandlers(
+    {
+      sort: {
+        path: ['attributes', 'sortIdx'],
+        direction: 'asc',
+      },
+    },
+    {
+      handleViewChange: (state, {model}) => (e, viewName) => ({
+        selectedView: model.getView(viewName),
+      }),
+    },
+  ),
+  observer,
+)
 export class ModelGrid extends Component {
   @observable sortPath = ['attributes', 'sortIdx']
   @observable direction = 'asc'
