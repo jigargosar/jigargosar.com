@@ -123,7 +123,7 @@ export class Model extends Component {
         {
           id: groupKey,
           isGroupRow: true,
-          title: groupKey ? 'Completed' : 'Pending',
+          title: equals(groupKey, 'true') ? 'Completed' : 'Pending',
         },
         ...records,
       ]),
