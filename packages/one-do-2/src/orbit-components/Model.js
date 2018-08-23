@@ -149,7 +149,7 @@ export class ModelGridView extends Component {
     )
   }
 
-  @action.bound()
+  @action.bound
   rowRenderer({row, columns, ...rest}) {
     if (row.isGroupRow) {
       return (
