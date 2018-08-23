@@ -20,15 +20,15 @@ import {groupBy} from 'ramda'
 const modelsDefinition = {
   task: {
     views: {
+      'All Tasks': {
+        hideId: true,
+        columns: ['isDone', 'title', 'dueAt'],
+        groupBy: groupBy(_prop('isDone')),
+      },
       'Pending Tasks': {
         hideId: true,
         columns: ['isDone', 'title', 'dueAt'],
         filters: [pathEq(['attributes', 'isDone'], false)],
-        groupBy: groupBy(_prop('isDone')),
-      },
-      'All Tasks': {
-        hideId: true,
-        columns: ['isDone', 'title', 'dueAt'],
       },
       'Grid Without Id': {
         hideId: true,
