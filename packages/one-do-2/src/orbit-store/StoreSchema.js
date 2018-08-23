@@ -1,5 +1,4 @@
 import {
-  append,
   compose,
   defaultTo,
   keys,
