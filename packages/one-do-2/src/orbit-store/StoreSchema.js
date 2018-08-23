@@ -2,6 +2,7 @@ import {
   compose,
   defaultTo,
   has,
+  head,
   keys,
   mapObjIndexed,
   merge,
@@ -33,6 +34,8 @@ export function StoreSchema(store) {
 
     validate('A', [viewNames])
     validate('A', [attributeNames])
+
+    const defaultViewName = head(viewNames)
 
     return {
       type,
