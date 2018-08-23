@@ -124,8 +124,9 @@ export class ModelGrid extends Component {
 
   @computed
   get sortedRows() {
-    const sortComparator = this.props.sort.comparator
-    return sortWith([sortComparator])(this.props.records)
+    // const sortComparator = this.props.sort.comparator
+    // return sortWith([sortComparator])(this.props.records)
+    return this.props.sortedRecords
   }
 
   @computed
