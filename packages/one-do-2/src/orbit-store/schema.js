@@ -9,12 +9,12 @@ import {assert} from '../lib/assert'
 const modelsDefinition = {
   task: {
     views: {
-      'Grid Without Id': {
-        hideId: true,
-      },
-      Tasks: {
+      'Task List': {
         hideId: true,
         columns: ['isDone', 'title'],
+      },
+      'Grid Without Id': {
+        hideId: true,
       },
     },
     attributes: {

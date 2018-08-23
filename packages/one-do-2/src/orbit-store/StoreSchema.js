@@ -1,4 +1,5 @@
 import {
+  append,
   compose,
   defaultTo,
   find,
@@ -6,7 +7,6 @@ import {
   mapObjIndexed,
   merge,
   pluck,
-  prepend,
   propEq,
   values,
 } from '../lib/ramda'
@@ -25,7 +25,7 @@ export function StoreSchema(store) {
     const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
     const attributes = values(attributeLookup)
     const views = compose(
-      prepend(ModelView({}, 'Default Grid')),
+      append(ModelView({}, `${type} Grid`)),
       values,
       mapObjIndexed(ModelView),
       defaultTo([]),
