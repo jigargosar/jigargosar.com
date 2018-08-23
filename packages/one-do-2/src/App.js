@@ -19,6 +19,7 @@ class App extends Component {
 
   // noinspection JSMethodCanBeStatic
   renderError() {
+    debugger
     return <div>Error Occurred</div>
   }
 }

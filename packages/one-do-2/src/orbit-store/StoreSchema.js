@@ -2,12 +2,10 @@ import {
   append,
   compose,
   defaultTo,
-  find,
   keys,
   mapObjIndexed,
   merge,
   pluck,
-  propEq,
   values,
 } from '../lib/ramda'
 import {mergeDefaults} from '../lib/little-ramda'
