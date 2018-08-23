@@ -1,5 +1,5 @@
 import {tap, tryCatch} from 'ramda'
-import {validate} from './assert'
+import {validate} from './validate'
 
 export function hotDispose(fn, module) {
   validate('FO', [fn, module])
