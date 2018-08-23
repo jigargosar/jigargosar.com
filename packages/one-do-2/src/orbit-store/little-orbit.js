@@ -60,6 +60,7 @@ export function typeOfRecord(record) {
   validate('S', [type])
   return type
 }
+
 export function attributePath(name) {
   return ['attributes', name]
 }
