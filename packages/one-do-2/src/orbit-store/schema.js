@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 import {nanoid} from '../lib/nanoid'
 import {Schema} from './orbit'
 import {mergeDefaults, overProp} from '../lib/little-ramda'
@@ -26,29 +28,31 @@ function timeStampToGroupTitle(timestamp) {
   ])(timestamp)
 }
 
+/*eslint-enable */
+
 const modelsDefinition = {
   task: {
     views: {
-      'Date View': {
-        hideId: true,
-        columns: ['isDone', 'title', 'dueAt'],
-        groupBy: compose(
-          timeStampToGroupTitle,
-          _path(attributePath('dueAt')),
-        ),
-      },
-      All: {
-        hideId: true,
-        columns: ['title', 'dueAt'],
-        groupBy: _path(attributePath('isDone')),
-        groupKeyToTitle: groupKey =>
-          JSON.parse(groupKey) ? 'Completed' : 'Pending',
-      },
-      Pending: {
-        hideId: true,
-        columns: ['isDone', 'title', 'dueAt'],
-        filters: [pathEq(attributePath('isDone'), false)],
-      },
+      // 'Date View': {
+      //   hideId: true,
+      //   columns: ['isDone', 'title', 'dueAt'],
+      //   groupBy: compose(
+      //     timeStampToGroupTitle,
+      //     _path(attributePath('dueAt')),
+      //   ),
+      // },
+      // All: {
+      //   hideId: true,
+      //   columns: ['title', 'dueAt'],
+      //   groupBy: _path(attributePath('isDone')),
+      //   groupKeyToTitle: groupKey =>
+      //     JSON.parse(groupKey) ? 'Completed' : 'Pending',
+      // },
+      // Pending: {
+      //   hideId: true,
+      //   columns: ['isDone', 'title', 'dueAt'],
+      //   filters: [pathEq(attributePath('isDone'), false)],
+      // },
       'Grid Without Id': {
         hideId: true,
       },
