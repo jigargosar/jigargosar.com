@@ -102,7 +102,7 @@ async function addRecord(model) {
 }
 
 @observer
-export class SModel extends Component {
+export class Model extends Component {
   @action.bound
   handleAddRecord() {
     return addRecord(this.props.model)

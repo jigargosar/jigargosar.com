@@ -6,7 +6,7 @@ import {head, map} from '../lib/ramda'
 import store from '../orbit-store/Store'
 import {Tab, Tabs, Toolbar} from '@material-ui/core'
 import {action, computed, observable} from '../lib/mobx'
-import {SModel} from './SModel'
+import {Model} from './Model'
 
 @observer
 export class SchemaPage extends Component {
@@ -43,7 +43,7 @@ export class SchemaPage extends Component {
         </Toolbar>
         <div>
           {this.selectedModel && (
-            <SModel
+            <Model
               key={this.selectedModel.type}
               model={this.selectedModel}
             />
