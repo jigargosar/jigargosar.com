@@ -14,7 +14,6 @@ import {action, computed} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import {
   _path,
-  always,
   ascend,
   compose,
   concat,
@@ -109,12 +108,10 @@ export class Model extends Component {
       },
     },
     {
-      toggleSortDirection: state =>
-        always(
-          overPath(['sort', 'direction'])(
-            direction => (direction === 'asc' ? 'desc' : 'asc'),
-          )(state),
-        ),
+      toggleSortDirection: state => () =>
+        overPath(['sort', 'direction'])(
+          direction => (direction === 'asc' ? 'desc' : 'asc'),
+        )(state),
       setSortState: () => objOf('sort'),
     },
   ),
