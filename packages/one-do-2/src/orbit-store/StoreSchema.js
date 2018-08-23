@@ -21,27 +21,29 @@ export function StoreSchema(store) {
 
   function SchemaModel(model, type) {
     const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
-    const attributes = values(attributeLookup)
-    const views = compose(
+    const attributeList = values(attributeLookup)
+    const attributeNames = pluck('name')(attributeList)
+
+    const viewsLookup = compose(
       append(ModelView({}, `${type} Grid`)),
       values,
       mapObjIndexed(ModelView),
       defaultTo([]),
     )(model.views)
+    const viewList = values(viewsLookup)
+    const viewNames = pluck('name')(viewList)
 
-    const viewNames = pluck('name')(views)
-    const attributeNames = pluck('name')(attributes)
     validate('A', [viewNames])
     validate('A', [attributeNames])
 
     return {
       type,
-      attributes,
+      attributes: attributeList,
       attributeNames,
       getAttribute: name => attributeLookup[name],
-      views,
+      views: viewList,
       viewNames,
-      getView: viewName => views[viewName],
+      getView: viewName => viewsLookup[viewName],
     }
 
     function ModelAttribute(attribute, name) {

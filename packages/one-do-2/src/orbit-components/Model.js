@@ -156,7 +156,6 @@ export class ModelGrid extends Component {
     const hideId = view.hideId
     const model = this.props.model
     const columns = view.columns
-    debugger
     validate('A', [columns])
 
     return map(c =>
