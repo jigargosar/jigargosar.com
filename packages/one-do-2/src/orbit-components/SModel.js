@@ -34,6 +34,8 @@ import {
   propEq,
   find,
   filter,
+  keys,
+  head,
   prop,
 } from 'ramda'
 import {DataGrid} from '../shared-components/DataGrid'
@@ -76,17 +78,21 @@ function colConfigToColumnProp({
   }
 }
 
-function addRecord(model) {
-  const firstHasOneRel = compose(
+async function addRecord(model) {
+  const firstHasOneType = compose(
+    head,
+    keys,
     filter(propEq('type')('hasOne')),
     prop('relationships'),
   )(model)
-  console.log(`firstHasOneRel`, firstHasOneRel)
-  return updateStore(t => t.addRecord({type: model.type}))
+  console.log(`firstHasOneRel`, firstHasOneType)
+  const addResult = await updateStore(t => t.addRecord({type: model.type}))
+  console.log(`addResult`, addResult)
+  return addResult
 }
 
 @observer
-export class Model extends Component {
+export class SModel extends Component {
   @action.bound
   handleAddRecord() {
     return addRecord(this.props.model)
