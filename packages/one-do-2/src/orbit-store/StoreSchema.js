@@ -40,7 +40,7 @@ export function StoreSchema(store) {
       getAttribute: name => attributeLookup[name],
       views,
       viewNames,
-      getView: viewName => find(propEq('name', viewName))(views),
+      getView: viewName => views[viewName],
     }
 
     function ModelAttribute(attribute, name) {
