@@ -35,16 +35,15 @@ import {
   propEq,
   propOr,
   reduce,
-  reject,
+  reject, tail,
   tap,
-  toPairs,
+  toPairs, toUpper,
   type,
   unless,
 } from './ramda'
 import Sugar from 'sugar'
 import pFinally from 'p-finally'
 import stringify from 'json-stringify-safe'
-import {head, isEmpty, tail, toUpper} from 'ramda'
 import {validate} from './assert'
 
 export {default as pluralize} from 'pluralize'
