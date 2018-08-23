@@ -9,6 +9,7 @@ import {
   mapObjIndexed,
   merge,
   pluck,
+  propOr,
   values,
 } from '../lib/ramda'
 import {mergeDefaults, validate} from '../lib/little-ramda'
@@ -29,12 +30,12 @@ export function StoreSchema(store) {
 
     const viewsLookup = compose(
       mapObjIndexed(ModelView),
-      merge({[`${type} Grid`]: {}}),
+      merge({[`Default ${type} Grid`]: {}}),
       defaultTo([]),
     )(model.views)
     assert(!isEmpty(viewsLookup))
     const viewNames = pluck('name')(values(viewsLookup))
-    const defaultViewName = head(viewNames)
+    const defaultViewName = propOr(head(viewNames), 1)(viewNames)
 
     validate('A', [viewNames])
     validate('A', [attributeNames])
