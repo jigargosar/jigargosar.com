@@ -198,6 +198,7 @@ class SelectDropDown extends Component {
     const {values, value, label} = this.props
     const {
       items = values,
+      item = value,
       toValue = identity,
       toContent = identity,
     } = this.props
@@ -206,7 +207,7 @@ class SelectDropDown extends Component {
         {label && <InputLabel>{label}</InputLabel>}
         <Select
           style={{minWidth: 180}}
-          value={toValue(items)}
+          value={toValue(item)}
           onChange={e => this.props.onChange(e.target.value)}
         >
           {map(item => {
