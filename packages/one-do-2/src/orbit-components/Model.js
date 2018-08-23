@@ -38,27 +38,31 @@ function attributeToColConfig(attribute) {
   }
 }
 
-function columnsFromConfigs(configs) {
-  return map(({isNumeric, getCellData, rowCellProps, label, sort}) => {
-    return {
-      renderHeaderCell: () => (
-        <TableCell numeric={isNumeric}>
-          <TableSortLabel
-            direction={sort.direction}
-            active={sort.active}
-            onClick={sort.onClick}
-          >
-            {label}
-          </TableSortLabel>
-        </TableCell>
-      ),
-      renderCell: ({row}) => (
-        <TableCell numeric={isNumeric} {...rowCellProps}>
-          {getCellData(row)}
-        </TableCell>
-      ),
-    }
-  })(configs)
+function colConfigToColumnProp({
+  isNumeric,
+  getCellData,
+  rowCellProps,
+  label,
+  sort,
+}) {
+  return {
+    renderHeaderCell: () => (
+      <TableCell numeric={isNumeric}>
+        <TableSortLabel
+          direction={sort.direction}
+          active={sort.active}
+          onClick={sort.onClick}
+        >
+          {label}
+        </TableSortLabel>
+      </TableCell>
+    ),
+    renderCell: ({row}) => (
+      <TableCell numeric={isNumeric} {...rowCellProps}>
+        {getCellData(row)}
+      </TableCell>
+    ),
+  }
 }
 
 @observer
@@ -120,7 +124,7 @@ export class ModelGrid extends Component {
     return (
       <DataGrid
         rows={this.props.sortedAndFilteredRecords}
-        columns={columnsFromConfigs(this.columnConfigs)}
+        columns={map(colConfigToColumnProp)(this.columnConfigs)}
       />
     )
   }
