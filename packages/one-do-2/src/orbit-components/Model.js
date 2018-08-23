@@ -149,14 +149,15 @@ export class ModelGridView extends Component {
     )
   }
 
-  @action.bound
+  @action.bound()
   rowRenderer({row, columns, ...rest}) {
-    return null
-    return (
-      <TableRow>
-        <TableCell>Group Row</TableCell>
-      </TableRow>
-    )
+    if (row.isGroupRow) {
+      return (
+        <TableRow>
+          <TableCell>Group Row</TableCell>
+        </TableRow>
+      )
+    }
     return defaultRowRenderer({row, columns, ...rest})
   }
 
