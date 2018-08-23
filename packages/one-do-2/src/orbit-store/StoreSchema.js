@@ -38,10 +38,10 @@ export function StoreSchema(store) {
 
     return {
       type,
-      attributes: attributeList,
+      // attributes: attributeList,
       attributeNames,
       getAttribute: name => attributeLookup[name],
-      views: viewList,
+      // views: viewList,
       viewNames,
       getView: viewName => viewsLookup[viewName],
     }

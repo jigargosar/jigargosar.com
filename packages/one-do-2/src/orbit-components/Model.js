@@ -63,7 +63,7 @@ function columnsFromConfigs(configs) {
 }
 
 @compose(
-  withStateHandlers(({model}) => ({selectedView: head(model.views)}), {
+  withStateHandlers(({model}) => ({selectedView: head(model.viewNames)}), {
     handleViewChange: (state, {model}) => (e, viewName) => ({
       selectedView: model.getView(viewName),
     }),
@@ -100,7 +100,7 @@ export class Model extends Component {
         <ModelGrid
           key={model.type}
           records={this.query.current()}
-          view={selectedView}
+          view={model.getView(selectedView)}
           model={model}
         />
       </Fragment>
