@@ -123,21 +123,19 @@ export class ModelGrid extends Component {
   }
 
   @computed
-  get sortedRows() {
-    // const sortComparator = this.props.sort.comparator
-    // return sortWith([sortComparator])(this.props.records)
+  get sortedRecords() {
     return this.props.sortedRecords
   }
 
   @computed
   get sortedThenFilteredRows() {
-    return this.props.view.filterRecords(this.sortedRows)
+    return this.props.view.filterRecords(this.sortedRecords)
   }
 
   render() {
     return (
       <DataGrid
-        rows={this.sortedRows}
+        rows={this.sortedRecords}
         columns={columnsFromConfigs(this.columnConfigs)}
       />
     )
