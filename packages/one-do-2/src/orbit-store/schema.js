@@ -12,6 +12,10 @@ const modelsDefinition = {
       'Grid Without Id': {
         hideId: true,
       },
+      Tasks: {
+        hideId: true,
+        columns: ['isDone', 'title'],
+      },
     },
     attributes: {
       title: {type: 'string', label: 'Title'},
