@@ -14,7 +14,6 @@ import {action, computed, observable} from '../lib/mobx'
 import {liveQuery, updateStore} from '../orbit-store/Store'
 import cn from 'classnames'
 import {AddIcon} from '../lib/Icons'
-import {DataGrid, defaultRowRenderer} from './DataGrid'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {Observer} from '../lib/mobx-react'
 import {withProps} from 'recompose'
@@ -27,6 +26,7 @@ import {
   sortWith,
   take,
 } from 'ramda'
+import {DataGrid, defaultRowRenderer} from './DataGrid'
 
 function attributeToColConfig(attribute) {
   const name = attribute.name
