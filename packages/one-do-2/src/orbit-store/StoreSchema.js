@@ -63,17 +63,18 @@ export function StoreSchema(store) {
     }
 
     function ModelView(view, name) {
-      const columns = attributeNames
-
-      return mergeDefaults(
+      const viewProps = mergeDefaults(
         {
           name,
           hideId: false,
-          columns,
-          columnAttributes: map(getAttribute)(columns),
+          columns: attributeNames,
         },
         view,
       )
+      return {
+        ...viewProps,
+        columnAttributes: map(getAttribute)(viewProps.columns),
+      }
     }
   }
 }
