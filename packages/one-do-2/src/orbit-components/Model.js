@@ -89,7 +89,7 @@ export class Model extends Component {
         <Toolbar variant={'regular'}>
           <ValueSelection
             label={'views'}
-            value={selectedView.name}
+            value={selectedView}
             values={model.viewNames}
             onChange={this.props.handleViewChange}
           />
