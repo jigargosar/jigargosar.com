@@ -41,13 +41,20 @@ export function StoreSchema(store) {
     return {
       type,
       attributeNames,
-      getAttribute: name => attributeLookup[name],
+      getAttribute,
       viewNames,
-      getView: viewName => {
-        validate('S', [viewName])
-        assert(has(viewName, viewsLookup))
-        return viewsLookup[viewName]
-      },
+      getView,
+      defaultView: getView(defaultViewName),
+    }
+
+    function getAttribute(name) {
+      return attributeLookup[name]
+    }
+
+    function getView(viewName) {
+      validate('S', [viewName])
+      assert(has(viewName, viewsLookup))
+      return viewsLookup[viewName]
     }
 
     function ModelAttribute(attribute, name) {
