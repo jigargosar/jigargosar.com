@@ -179,9 +179,7 @@ export class ModelGrid extends Component {
       concat(
         hideId ? [] : [idColumnConfig],
         map(attributesToColumnConfigs)(
-          filter(attribute => contains(attribute.name, view.columns))(
-            model.attributes,
-          ),
+          map(model.getAttribute, view.columns),
         ),
       ),
     )

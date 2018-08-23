@@ -22,9 +22,8 @@ export function StoreSchema(store) {
   }
 
   function SchemaModel(model, type) {
-    const attributes = compose(values, mapObjIndexed(ModelAttribute))(
-      model.attributes,
-    )
+    const attributeLookup = mapObjIndexed(ModelAttribute)
+    const attributes = compose(values, attributeLookup)(model.attributes)
     const views = compose(
       prepend(ModelView({}, 'Default Grid')),
       values,
@@ -35,6 +34,7 @@ export function StoreSchema(store) {
     const viewNames = pluck('name')(views)
     return {
       type,
+      getAttribute: name => attributeLookup[name],
       attributes,
       views,
       viewNames,
