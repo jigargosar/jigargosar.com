@@ -20,6 +20,7 @@ import {Observer} from '../lib/mobx-react'
 import {withProps} from 'recompose'
 import {
   compose,
+  T,
   equals,
   filter,
   flatten,
@@ -28,6 +29,7 @@ import {
   identity,
   keys,
   map,
+  cond,
   mapObjIndexed,
   pick,
   prop,
@@ -213,10 +215,20 @@ export class ModelGridView extends Component {
         sort: sortPropsFor(colConfig.cellDataPath),
       })),
       map(
-        name =>
-          name === 'id'
-            ? idColumnConfig()
-            : attributeToColConfig(view.getAttribute(name)),
+        cond([
+          //
+          [equals('id'), idColumnConfig],
+          [
+            view.hasAttribute,
+            compose(attributeToColConfig, view.getAttribute),
+          ],
+          [
+            T,
+            name => {
+              throw new Error(`Invalid column name ${name}`)
+            },
+          ],
+        ]),
       ),
     )(view.columnNames)
 

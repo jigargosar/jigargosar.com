@@ -4,8 +4,10 @@ import {validate} from '../lib/validate'
 import {
   allPass,
   compose,
+  contains,
   defaultTo,
   filter,
+  flip,
   has,
   head,
   identity,
@@ -85,6 +87,7 @@ export function StoreSchema(store) {
         ...viewProps,
         filterRecords: filter(allPass(viewProps.filters)),
         getAttribute,
+        hasAttribute: flip(contains)(attributeNames),
       }
     }
   }
