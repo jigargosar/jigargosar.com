@@ -8,6 +8,7 @@ import {
   filter,
   has,
   head,
+  identity,
   isEmpty,
   keys,
   map,
@@ -75,6 +76,7 @@ export function StoreSchema(store) {
           type: 'grid',
           filters: [],
           groupBy: null,
+          groupKeyToTitle: identity,
         },
         view,
       )
