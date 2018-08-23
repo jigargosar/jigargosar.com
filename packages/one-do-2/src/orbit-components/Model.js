@@ -157,8 +157,8 @@ export class ModelGridView extends Component {
     if (row.isGroupRow) {
       return (
         <TableRow>
-          <TableCell colSpan={3} className={cn('b ttu blue')}>
-            {row.title || `Group Row`}
+          <TableCell colSpan={columns.length} className={cn('b ttu blue')}>
+            {`${row.title} (${row.count})`}
           </TableCell>
         </TableRow>
       )
