@@ -32,10 +32,12 @@ export function StoreSchema(store) {
     )(model.views)
 
     const viewNames = pluck('name')(views)
+    const attributeNames = pluck('name')(attributes)
     return {
       type,
-      getAttribute: name => attributeLookup[name],
       attributes,
+      attributeNames,
+      getAttribute: name => attributeLookup[name],
       views,
       viewNames,
       getView: viewName => find(propEq('name', viewName))(views),
@@ -47,7 +49,7 @@ export function StoreSchema(store) {
 
     function ModelView(view, name) {
       return mergeDefaults(
-        {name, hideId: false, columns: pluck('name')(attributes)},
+        {name, hideId: false, columns: attributeNames},
         view,
       )
     }
