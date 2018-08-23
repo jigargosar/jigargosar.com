@@ -46,6 +46,14 @@ class GridRow extends Component {
 }
 
 @observer
+class RowCell extends Component {
+  render() {
+    const {row, column} = this.props
+    return column.renderCell({row})
+  }
+}
+
+@observer
 class HeaderRow extends Component {
   render() {
     const {columns} = this.props
@@ -58,18 +66,10 @@ class HeaderRow extends Component {
     )
   }
 }
-
 @observer
 class HeaderCell extends Component {
   render() {
     const {column} = this.props
     return column.renderHeaderCell()
-  }
-}
-@observer
-class RowCell extends Component {
-  render() {
-    const {row, column} = this.props
-    return column.renderCell({row})
   }
 }
