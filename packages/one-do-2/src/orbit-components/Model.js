@@ -125,6 +125,7 @@ export class Model extends Component {
           id: groupKey,
           isGroupRow: true,
           title: JSON.parse(groupKey) ? 'Completed' : 'Pending',
+          count: records.length,
         },
         ...records,
       ]),
