@@ -34,7 +34,8 @@ export function StoreSchema(store) {
     const attributeList = values(attributeLookup)
     const attributeNames = pluck('name')(attributeList)
 
-    const relationships = defaultTo({})(model.relationships)
+    const relationshipLookup = defaultTo({})(model.relationships)
+    const relationshipNames = keys(relationshipLookup)
 
     const viewsLookup = compose(
       mapObjIndexed(ModelView),
@@ -55,7 +56,7 @@ export function StoreSchema(store) {
       viewNames,
       getView,
       defaultView: getView(defaultViewName),
-      relationships,
+      relationships: relationshipLookup,
     }
 
     function getAttribute(name) {
@@ -76,7 +77,7 @@ export function StoreSchema(store) {
       const viewProps = mergeDefaults(
         {
           name,
-          columnNames: ['id', ...attributeNames],
+          columnNames: ['id', ...attributeNames, ...relationshipNames],
           type: 'grid',
           filters: [],
           groupBy: null,
@@ -90,7 +91,7 @@ export function StoreSchema(store) {
         filterRecords: filter(allPass(viewProps.filters)),
         getAttribute,
         hasAttribute: contains(__, attributeNames),
-        relationships,
+        relationships: relationshipLookup,
       }
     }
   }
