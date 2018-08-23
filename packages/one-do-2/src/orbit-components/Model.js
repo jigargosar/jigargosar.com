@@ -128,14 +128,14 @@ export class ModelGrid extends Component {
   }
 
   @computed
-  get sortedThenFilteredRows() {
+  get sortFilterRecords() {
     return this.props.view.filterRecords(this.sortedRecords)
   }
 
   render() {
     return (
       <DataGrid
-        rows={this.sortedRecords}
+        rows={this.sortFilterRecords}
         columns={columnsFromConfigs(this.columnConfigs)}
       />
     )
