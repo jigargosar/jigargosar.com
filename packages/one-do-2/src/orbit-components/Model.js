@@ -188,12 +188,6 @@ export class ModelGrid extends Component {
 
 @observer
 class SimpleSelect extends Component {
-  @action.bound
-  onChange(e) {
-    // this.props.onChange(e, e.target.value)
-    this.props.onChange(e.target.value)
-  }
-
   render() {
     const {
       label,
