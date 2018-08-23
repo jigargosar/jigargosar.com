@@ -226,7 +226,10 @@ export class ModelGridView extends Component {
           ],
           [
             contains(__, keys(view.relationships)),
-            compose(attributeToColConfig, view.getAttribute),
+            compose(
+              attributeToColConfig,
+              name => view.relationships[name],
+            ),
           ],
           [
             T,
