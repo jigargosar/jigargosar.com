@@ -24,10 +24,11 @@ import Sugar from 'sugar'
 function timeStampToGroupTitle(timestamp) {
   return cond([
     //
+    [isNil, () => 'Someday'],
     [Sugar.Date.isPast, () => 'Overdue'],
     [Sugar.Date.isToday, () => 'Today'],
     [Sugar.Date.isTomorrow, () => 'Tomorrow'],
-    [T, () => 'Someday'],
+    [T, () => 'Upcoming'],
   ])(new Date(timestamp))
 }
 
