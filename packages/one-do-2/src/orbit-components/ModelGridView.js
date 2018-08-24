@@ -8,7 +8,6 @@ import {
   equals,
   flatten,
   groupBy,
-  isNil,
   map,
   mapObjIndexed,
   sortWith,
@@ -84,11 +83,15 @@ function enhance() {
     withSortStateHandlers,
     withProps(({sort, view}) => {
       return {
-        sortComparator: isNil(sort.id)
-          ? view.getDefaultSortComparator()
-          : sort.directionFn(record =>
-              view.getComputedData(sort.id, record),
-            ),
+        // sortComparator: isNil(sort.id)
+        //   ? view.getDefaultSortComparator()
+        //   : sort.directionFn(record =>
+        //       view.getComputedData(sort.id, record),
+        //     ),
+        sortComparator: view.getSortComparatorForOrDefault([
+          sort.id,
+          sort.direction,
+        ]),
       }
     }),
     compose(

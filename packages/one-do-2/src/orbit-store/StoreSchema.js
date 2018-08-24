@@ -126,16 +126,24 @@ export function StoreSchema(store) {
         relationshipLookup,
         computedLookup,
         getComputedData,
-        getDefaultSortComparator: () => {
-          const defaultSort = viewProps.defaultSort
-          if (isNil(defaultSort)) return T
-          const [computedName, direction = 'asc'] = defaultSort
+        getSortComparatorForOrDefault: (customSort = []) => {
+          if (isNil(customSort[0])) return getDefaultSortComparator()
+          const [computedName, direction] = customSort
           const directionFn = direction === 'asc' ? ascend : descend
 
           return directionFn(record =>
             getComputedData(computedName, record),
           )
         },
+      }
+
+      function getDefaultSortComparator() {
+        const defaultSort = viewProps.defaultSort
+        if (isNil(defaultSort)) return T
+        const [computedName, direction = 'asc'] = defaultSort
+        const directionFn = direction === 'asc' ? ascend : descend
+
+        return directionFn(record => getComputedData(computedName, record))
       }
 
       function getComputedData(name, record) {
