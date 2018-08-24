@@ -29,31 +29,16 @@ export class ModelGridView extends Component {
     return (
       <DataGrid
         rows={this.props.sortedFilteredAndGroupedRecords}
-        columns={map(colConfigToColumnProp)(this.columnConfigs)}
+        columns={this.getColumns()}
         rowRenderer={this.rowRenderer}
       />
     )
   }
 
-  @action.bound
-  rowRenderer({row, columns, ...rest}) {
-    if (row.isGroupRow) {
-      return (
-        <TableRow>
-          <TableCell colSpan={columns.length} className={cn('b ttu blue')}>
-            {`${row.title} (${row.count})`}
-          </TableCell>
-        </TableRow>
-      )
-    }
-    return defaultRowRenderer({row, columns, ...rest})
-  }
-
-  @computed
-  get columnConfigs() {
+  getColumns() {
     const {sort, view, handleSortHeaderCellClick} = this.props
 
-    return map(id => {
+    const columnConfigs = map(id => {
       validate('S', [id])
 
       const computed = view.computedLookup[id]
@@ -73,6 +58,22 @@ export class ModelGridView extends Component {
         label: computed.label,
       }
     })(view.columnNames)
+
+    return map(colConfigToColumnProp)(columnConfigs)
+  }
+
+  @action.bound
+  rowRenderer({row, columns, ...rest}) {
+    if (row.isGroupRow) {
+      return (
+        <TableRow>
+          <TableCell colSpan={columns.length} className={cn('b ttu blue')}>
+            {`${row.title} (${row.count})`}
+          </TableCell>
+        </TableRow>
+      )
+    }
+    return defaultRowRenderer({row, columns, ...rest})
   }
 }
 
