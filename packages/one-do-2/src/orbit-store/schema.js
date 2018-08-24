@@ -13,6 +13,7 @@ import {
   isNil,
   map,
   pathEq,
+  pathOr,
 } from '../lib/ramda'
 import {randomBool, randomTS, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
@@ -33,8 +34,17 @@ function timeStampToGroupTitle(timestamp) {
 const modelsDefinition = {
   task: {
     views: {
-      'Date View': {
+      'Projects View': {
         columnNames: ['isDone', 'title', 'dueAt', 'project'],
+        groupBy: pathOr(' No Project', [
+          'relationships',
+          'project',
+          'data',
+          'id',
+        ]),
+      },
+      'Date View': {
+        columnNames: ['isDone', 'title', 'dueAt'],
         groupBy: compose(
           timeStampToGroupTitle,
           _path(attributePath('dueAt')),
