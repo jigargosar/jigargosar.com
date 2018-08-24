@@ -38,7 +38,7 @@ export class ModelGridView extends Component {
 
     return map(id => {
       validate('S', [id])
-      const computed = view.computedLookup[id]
+      const computed = view.getComputed(id)
       assert(computed, `computed not found ${id}`)
 
       const isNumeric = computed.type === 'number'
