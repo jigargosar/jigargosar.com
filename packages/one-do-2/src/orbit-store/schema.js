@@ -85,6 +85,13 @@ const modelsDefinition = {
         label: 'Due',
         get: compose(timeStampToGroupTitle, _path(attributePath('dueAt'))),
       },
+      dueAt: {
+        label: 'Due Date',
+        get: compose(
+          ts => new Date(ts).format(),
+          _path(attributePath('dueAt')),
+        ),
+      },
       projectId: {
         label: 'Project',
         get: pathOr('Inbox', ['relationships', 'project', 'data', 'id']),
