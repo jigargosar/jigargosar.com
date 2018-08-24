@@ -40,7 +40,9 @@ export function StoreSchema(store) {
 }
 
 function SchemaModel(model, type) {
-  const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
+  const attributeLookup = mapObjIndexed((attribute, name) =>
+    merge({name}, attribute),
+  )(model.attributes)
 
   const computedLookup = compose(
     merge({
@@ -77,56 +79,52 @@ function SchemaModel(model, type) {
     assert(has(viewName, viewsLookup))
     return viewsLookup[viewName]
   }
+}
 
-  function ModelAttribute(attribute, name) {
-    return merge({name}, attribute)
-  }
+function ModelView(computedLookup, view, name) {
+  const viewProps = mergeDefaults(
+    {
+      name,
+      columnNames: without(['id'])(keys(computedLookup)),
+      filters: [],
+      defaultSort: null,
+    },
+    view,
+  )
 
-  function ModelView(computedLookup, view, name) {
-    const viewProps = mergeDefaults(
-      {
-        name,
-        columnNames: without(['id'])(keys(computedLookup)),
-        filters: [],
-        defaultSort: null,
-      },
-      view,
-    )
-
-    return {
-      ...viewProps,
-      filterRecords: filter(allPass(viewProps.filters)),
-      getComputed,
-      getComputedData,
-      getSortComparatorForOrDefault: (customSort = []) => {
-        if (isNil(customSort[0])) return getDefaultSortComparator()
-        const [computedName, direction] = customSort
-        const directionFn = direction === 'asc' ? ascend : descend
-
-        return directionFn(record => getComputedData(computedName, record))
-      },
-    }
-
-    function getDefaultSortComparator() {
-      const defaultSort = viewProps.defaultSort
-      if (isNil(defaultSort)) return T
-      const [computedName, direction = 'asc'] = defaultSort
+  return {
+    ...viewProps,
+    filterRecords: filter(allPass(viewProps.filters)),
+    getComputed,
+    getComputedData,
+    getSortComparatorForOrDefault: (customSort = []) => {
+      if (isNil(customSort[0])) return getDefaultSortComparator()
+      const [computedName, direction] = customSort
       const directionFn = direction === 'asc' ? ascend : descend
 
       return directionFn(record => getComputedData(computedName, record))
-    }
+    },
+  }
 
-    function getComputedData(name, record) {
-      validate('SO', [name, record])
-      return getComputed(name).get(record)
-    }
+  function getDefaultSortComparator() {
+    const defaultSort = viewProps.defaultSort
+    if (isNil(defaultSort)) return T
+    const [computedName, direction = 'asc'] = defaultSort
+    const directionFn = direction === 'asc' ? ascend : descend
 
-    function getComputed(name) {
-      validate('S', [name])
-      const computed = computedLookup[name]
-      assert(computed)
-      return computed
-    }
+    return directionFn(record => getComputedData(computedName, record))
+  }
+
+  function getComputedData(name, record) {
+    validate('SO', [name, record])
+    return getComputed(name).get(record)
+  }
+
+  function getComputed(name) {
+    validate('S', [name])
+    const computed = computedLookup[name]
+    assert(computed)
+    return computed
   }
 }
 
