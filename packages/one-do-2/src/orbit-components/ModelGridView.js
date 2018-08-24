@@ -38,28 +38,40 @@ export class ModelGridView extends Component {
   getColumns() {
     const {sort, view, handleSortHeaderCellClick} = this.props
 
-    const columnConfigs = map(id => {
+    return map(id => {
       validate('S', [id])
 
       const computed = view.computedLookup[id]
       assert(computed, `computed not found ${id}`)
 
-      return {
+      const config = {
         id,
-        sort: {
-          active: equals(sort.id, id),
-          onClick: () => handleSortHeaderCellClick(id),
-          direction: sort.direction,
-        },
         isNumeric: computed.type === 'number',
         getRawCellData: record => computed.get(record),
         getCellContent: record =>
           formatComputedDataFromRecord(computed, record),
         label: computed.label,
       }
+      const {isNumeric, getRawCellData, rowCellProps, label} = config
+      return {
+        renderHeaderCell: () => (
+          <TableCell numeric={isNumeric}>
+            <TableSortLabel
+              active={equals(sort.id, id)}
+              direction={sort.direction}
+              onClick={() => handleSortHeaderCellClick(id)}
+            >
+              {label}
+            </TableSortLabel>
+          </TableCell>
+        ),
+        renderCell: ({row}) => (
+          <TableCell numeric={isNumeric} {...rowCellProps}>
+            {getRawCellData(row)}
+          </TableCell>
+        ),
+      }
     })(view.columnNames)
-
-    return map(colConfigToColumnProp)(columnConfigs)
   }
 
   @action.bound
@@ -74,28 +86,6 @@ export class ModelGridView extends Component {
       )
     }
     return defaultRowRenderer({row, columns, ...rest})
-  }
-}
-
-function colConfigToColumnProp(config) {
-  const {isNumeric, getRawCellData, rowCellProps, label, sort} = config
-  return {
-    renderHeaderCell: () => (
-      <TableCell numeric={isNumeric}>
-        <TableSortLabel
-          direction={sort.direction}
-          active={sort.active}
-          onClick={sort.onClick}
-        >
-          {label}
-        </TableSortLabel>
-      </TableCell>
-    ),
-    renderCell: ({row}) => (
-      <TableCell numeric={isNumeric} {...rowCellProps}>
-        {getRawCellData(row)}
-      </TableCell>
-    ),
   }
 }
 
