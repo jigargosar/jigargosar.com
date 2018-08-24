@@ -10,7 +10,6 @@ import {
   head,
   isEmpty,
   keys,
-  map,
   mapObjIndexed,
   merge,
   pathOr,
@@ -40,10 +39,6 @@ export function StoreSchema(store) {
 }
 
 function SchemaModel(model, type) {
-  const attributeLookup = mapObjIndexed((attribute, name) =>
-    merge({name}, attribute),
-  )(model.attributes)
-
   const computedLookup = compose(
     merge({
       id: {
@@ -55,7 +50,7 @@ function SchemaModel(model, type) {
         get: row => take(10)(row.id),
       },
     }),
-    merge(map(attributeToComputed)(attributeLookup)),
+    merge(mapObjIndexed(attributeToComputed)(model.attributes)),
     defaultTo({}),
   )(model.computed)
 
@@ -128,10 +123,11 @@ function ModelView(computedLookup, view, name) {
   }
 }
 
-function attributeToComputed(attribute) {
+function attributeToComputed(attribute, attributeName) {
+  const name = attributeName
   return {
-    get: pathOr(null, attributePath(attribute.name)),
-    label: attribute.label || attribute.name,
+    get: pathOr(null, attributePath(name)),
+    label: attribute.label || name,
     type: attribute.type || 'string',
   }
 }
