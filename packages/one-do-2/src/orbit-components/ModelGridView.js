@@ -99,11 +99,11 @@ function enhance() {
         const groupRecords = compose(
           flatten,
           values,
-          mapObjIndexed((records, groupKey) => [
+          mapObjIndexed((records, groupName) => [
             {
-              id: groupKey,
+              id: groupName,
               isGroupRow: true,
-              title: view.groupKeyToTitle(groupKey),
+              title: groupName,
               count: records.length,
             },
             ...records,
