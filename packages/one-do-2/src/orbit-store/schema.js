@@ -35,7 +35,7 @@ const modelsDefinition = {
   task: {
     views: {
       'Projects View': {
-        columnNames: ['id', 'isDone', 'title', 'dueAt', 'projectId'],
+        columnNames: ['shortId', 'isDone', 'title', 'dueAt', 'projectId'],
         groupBy: pathOr('Inbox', [
           'relationships',
           'project',
@@ -74,9 +74,12 @@ const modelsDefinition = {
       project: {type: 'hasOne', model: 'project', inverse: 'tasks'},
     },
     computed: {
-      shortId: {
-        label: 'ID',
-        get: row => take(10)(row.id),
+      isDone: {
+        label: 'Completion Status',
+        get: compose(
+          bool => (bool ? 'DONE' : 'PENDING'),
+          _path(attributePath('isDone')),
+        ),
       },
       dueGroup: {
         label: 'Due',
