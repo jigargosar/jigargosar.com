@@ -67,7 +67,7 @@ const modelsDefinition = {
       sortIdx: {type: 'number', label: 'Sort Index'},
       isDone: {type: 'boolean', label: 'Done'},
       title: {type: 'string', label: 'Title'},
-      dueAt: {type: 'timestamp', label: 'Due Date'},
+      dueAt: {type: 'timestamp', format: '', label: 'Due Date'},
       createdAt: {type: 'timestamp', label: 'Created'},
     },
     relationships: {
@@ -75,6 +75,7 @@ const modelsDefinition = {
     },
     computed: {
       isDone: {
+        type: 'string',
         label: 'Completion Status',
         get: compose(
           bool => (bool ? 'DONE' : 'PENDING'),
@@ -82,10 +83,12 @@ const modelsDefinition = {
         ),
       },
       dueGroup: {
+        type: 'string',
         label: 'Due',
         get: compose(timeStampToGroupTitle, _path(attributePath('dueAt'))),
       },
       projectId: {
+        type: 'string',
         label: 'Project',
         get: pathOr('Inbox', ['relationships', 'project', 'data', 'id']),
       },
