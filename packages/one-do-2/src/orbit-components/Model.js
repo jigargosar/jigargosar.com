@@ -29,23 +29,17 @@ import {
   groupBy,
   head,
   identity,
-  ifElse,
-  is,
   keys,
   map,
   mapObjIndexed,
   merge,
-  path,
   pick,
-  pluck,
   prop,
   propEq,
   sortWith,
   T,
-  take,
   values,
 } from 'ramda'
-import {prettyStringifySafe} from '../lib/little-ramda'
 
 import {DataGrid} from '../shared-components/DataGrid'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
@@ -217,7 +211,6 @@ export class ModelGridView extends Component {
       onClick: () => this.props.handleSortPathClicked(path),
       direction: sort.direction,
     })
-    const hasRelationship = contains(__, keys(view.relationshipLookup))
     const hasComputed = contains(__, keys(view.computedLookup))
     // debugger
     return compose(
@@ -233,17 +226,6 @@ export class ModelGridView extends Component {
             hasComputed,
             compose(computedToColConfig, name =>
               merge({name}, view.computedLookup[name]),
-            ),
-          ],
-          [equals('id'), idColumnConfig],
-          [
-            view.hasAttribute,
-            compose(attributeToColConfig, view.getAttribute),
-          ],
-          [
-            hasRelationship,
-            compose(relationshipToColConfig, name =>
-              merge({name}, view.relationshipLookup[name]),
             ),
           ],
           [
@@ -262,41 +244,7 @@ export class ModelGridView extends Component {
         isNumeric: false,
         getCellData: row => computed.get(row),
         cellDataPath: ['computed', name],
-        label: computed.label || name,
-      }
-    }
-    function relationshipToColConfig(relationship) {
-      const name = relationship.name
-      return {
-        isNumeric: false,
-        getCellData: row =>
-          compose(
-            ifElse(is(Array))(compose(prettyStringifySafe, pluck('id')))(
-              prop('id'),
-            ),
-            path(['relationships', name, 'data']),
-          )(row),
-        cellDataPath: ['relationship', name],
-        label: name,
-      }
-    }
-    function attributeToColConfig(attribute) {
-      const name = attribute.name
-      return {
-        isNumeric: attribute.type === 'number',
-        getCellData: row => `${row.attributes[name]}`,
-        cellDataPath: ['attributes', name],
-        label: attribute.label,
-      }
-    }
-
-    function idColumnConfig() {
-      return {
-        isNumeric: false,
-        getCellData: row => take(10)(row.id),
-        rowCellProps: {className: cn('code')},
-        cellDataPath: ['id'],
-        label: 'ID',
+        label: computed.label,
       }
     }
   }

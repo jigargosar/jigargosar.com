@@ -13,12 +13,16 @@ import {
   identity,
   isEmpty,
   keys,
+  map,
   mapObjIndexed,
   merge,
+  pathOr,
   pluck,
   propOr,
+  take,
   values,
 } from 'ramda'
+import {attributePath} from './little-orbit'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -37,21 +41,34 @@ export function StoreSchema(store) {
     const relationshipLookup = defaultTo({})(model.relationships)
     // const relationshipNames = keys(relationshipLookup)
 
-    const computedLookup = defaultTo({})(model.computed)
-    const computedNames = keys(computedLookup)
+    const computedLookup = compose(
+      merge({
+        id: {
+          label: 'id',
+          get: row => row.id,
+        },
+        shortId: {
+          label: 'ID',
+          get: row => take(10)(row.id),
+        },
+      }),
+      merge(map(attributeToComputed)(attributeLookup)),
+      defaultTo({}),
+    )(model.computed)
 
+    const computedNames = keys(computedLookup)
     const viewsLookup = compose(
       mapObjIndexed(ModelView),
       merge({[`Default ${fstToUpper(type)} Grid`]: {}}),
       defaultTo([]),
     )(model.views)
+
     assert(!isEmpty(viewsLookup))
     const viewNames = pluck('name')(values(viewsLookup))
     const defaultViewName = propOr(head(viewNames), 1)(viewNames)
-
     validate('A', [viewNames])
-    validate('A', [attributeNames])
 
+    validate('A', [attributeNames])
     return {
       type,
       attributeNames,
@@ -60,6 +77,13 @@ export function StoreSchema(store) {
       getView,
       defaultView: getView(defaultViewName),
       relationships: relationshipLookup,
+    }
+
+    function attributeToComputed(attribute) {
+      return {
+        get: pathOr(null, attributePath(attribute.name)),
+        label: attribute.label || attribute.name,
+      }
     }
 
     function getAttribute(name) {
