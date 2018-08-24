@@ -15,9 +15,6 @@ import {Observer} from '../lib/mobx-react'
 
 import {identity, map} from '../lib/exports-ramda'
 import {ModelGridView} from './ModelGridView'
-// import assertDefault from 'assert'
-
-// const assert = assertDefault.strict
 
 function addRecord(model) {
   return updateStore(t => t.addRecord({type: model.type}))
