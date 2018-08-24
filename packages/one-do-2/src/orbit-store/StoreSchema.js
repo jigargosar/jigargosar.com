@@ -73,7 +73,6 @@ export function StoreSchema(store) {
     return {
       type,
       attributeNames,
-      getAttribute,
       viewNames,
       getView,
       defaultView: getView(defaultViewName),
@@ -87,10 +86,6 @@ export function StoreSchema(store) {
         label: attribute.label || attribute.name,
         type: attribute.type || 'string',
       }
-    }
-
-    function getAttribute(name) {
-      return attributeLookup[name]
     }
 
     function getView(viewName) {
@@ -120,7 +115,6 @@ export function StoreSchema(store) {
       return {
         ...viewProps,
         filterRecords: filter(allPass(viewProps.filters)),
-        getAttribute,
         hasAttribute: contains(__, attributeNames),
         relationships: relationshipLookup,
         relationshipLookup,
