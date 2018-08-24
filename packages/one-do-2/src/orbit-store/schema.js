@@ -37,28 +37,17 @@ function timeStampToGroupTitle(timestamp) {
 const modelsDefinition = {
   task: {
     views: {
+      'Projects View': {
+        columnNames: ['projectId', 'isDone', 'title', 'dueAt'],
+        groupByColumnName: 'projectId',
+      },
       'Date View': {
         columnNames: ['dueGroup', 'isDone', 'title', 'dueAt'],
         groupByColumnName: 'dueGroup',
-        groupBy: compose(
-          timeStampToGroupTitle,
-          _path(attributePath('dueAt')),
-        ),
-      },
-      'Projects View': {
-        columnNames: ['shortId', 'isDone', 'title', 'dueAt', 'projectId'],
-        groupBy: pathOr('Inbox', [
-          'relationships',
-          'project',
-          'data',
-          'id',
-        ]),
       },
       All: {
-        columnNames: ['title', 'dueAt'],
-        groupBy: _path(attributePath('isDone')),
-        groupKeyToTitle: groupKey =>
-          JSON.parse(groupKey) ? 'Completed' : 'Pending',
+        columnNames: ['isDone', 'title', 'dueAt'],
+        groupByColumnName: 'isDone',
       },
       Pending: {
         columnNames: ['isDone', 'title', 'dueAt'],
