@@ -97,13 +97,6 @@ function enhance() {
     }),
     compose(
       withProps(({sortComparator, records, sort, view}) => {
-        // const sortComparator = (() => {
-        //   if (isNil(sort.id)) return T
-        //   return sort.directionFn(record =>
-        //     view.getComputedData(sort.id, record),
-        //   )
-        // })()
-
         const sortedRecords = sortWith([sortComparator])(records)
         const sortedAndFilteredRecords = view.filterRecords(sortedRecords)
         const groupRecords = compose(
