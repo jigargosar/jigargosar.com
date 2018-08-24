@@ -1,5 +1,5 @@
-import {compose, equals, objOf} from 'ramda'
-import {withHandlers, withStateHandlers} from 'recompose'
+import {ascend, compose, descend, equals, objOf} from 'ramda'
+import {withHandlers, withProps, withStateHandlers} from 'recompose'
 import {overPath} from '../lib/little-ramda'
 import {observer} from 'mobx-react'
 
@@ -32,5 +32,11 @@ export const withSortStateHandlers = compose(
       }
     },
   }),
+  withProps(({sort}) => ({
+    sort: {
+      ...sort,
+      directionFn: sort.direction === 'asc' ? ascend : descend,
+    },
+  })),
   observer,
 )

@@ -93,15 +93,6 @@ function enhance() {
   return compose(
     withSortStateHandlers,
     compose(
-      withProps(({sort}) => ({
-        sort: {
-          ...sort,
-          directionFn: sort.direction === 'asc' ? ascend : descend,
-        },
-      })),
-      observer,
-    ),
-    compose(
       withProps(({records, sort, view}) => {
         const sortedRecords = sortWith([getSortComparator(view, sort)])(
           records,
