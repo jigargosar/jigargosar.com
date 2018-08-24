@@ -18,7 +18,7 @@ import {
 import {randomBool, randomTS, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
 import {validate} from '../lib/validate'
-import {T} from 'ramda'
+import {T, take} from 'ramda'
 
 function timeStampToGroupTitle(timestamp) {
   const now = Date.now()
@@ -36,7 +36,7 @@ const modelsDefinition = {
     views: {
       'Projects View': {
         columnNames: ['id', 'isDone', 'title', 'dueAt', 'projectId'],
-        groupBy: pathOr('No Project', [
+        groupBy: pathOr('Inbox', [
           'relationships',
           'project',
           'data',
@@ -74,9 +74,9 @@ const modelsDefinition = {
       project: {type: 'hasOne', model: 'project', inverse: 'tasks'},
     },
     computed: {
-      id: {
+      shortId: {
         label: 'ID',
-        get: pathOr(null, ['id']),
+        get: row => take(10)(row.id),
       },
       projectId: {
         label: 'Project',
@@ -92,9 +92,9 @@ const modelsDefinition = {
       tasks: {type: 'hasMany', model: 'task', inverse: 'project'},
     },
     computed: {
-      id: {
+      shortId: {
         label: 'ID',
-        get: pathOr(null, ['id']),
+        get: row => take(10)(row.id),
       },
     },
   },
