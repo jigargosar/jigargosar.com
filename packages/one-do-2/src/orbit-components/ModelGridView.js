@@ -12,7 +12,6 @@ import {
   map,
   mapObjIndexed,
   sortWith,
-  T,
   values,
 } from '../lib/exports-ramda'
 import {withProps} from 'recompose'
@@ -86,7 +85,7 @@ function enhance() {
     withProps(({sort, view}) => {
       return {
         sortComparator: isNil(sort.id)
-          ? T
+          ? view.getDefaultSortComparator()
           : sort.directionFn(record =>
               view.getComputedData(sort.id, record),
             ),

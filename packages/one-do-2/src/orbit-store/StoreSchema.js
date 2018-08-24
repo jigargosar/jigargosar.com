@@ -23,7 +23,7 @@ import {
   values,
 } from 'ramda'
 import {attributePath} from './little-orbit'
-import {without} from '../lib/exports-ramda'
+import {ascend, descend, isNil, T, without} from '../lib/exports-ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -77,6 +77,7 @@ export function StoreSchema(store) {
       viewNames,
       getView,
       defaultView: getView(defaultViewName),
+
       relationships: relationshipLookup,
     }
 
@@ -111,6 +112,7 @@ export function StoreSchema(store) {
           filters: [],
           groupBy: null,
           groupKeyToTitle: identity,
+          defaultSort: null,
         },
         view,
       )
@@ -123,10 +125,22 @@ export function StoreSchema(store) {
         relationships: relationshipLookup,
         relationshipLookup,
         computedLookup,
-        getComputedData: (name, record) => {
-          validate('SO', [name, record])
-          return getComputed(name).get(record)
+        getComputedData,
+        getDefaultSortComparator: () => {
+          const defaultSort = viewProps.defaultSort
+          if (isNil(defaultSort)) return T
+          const [computedName, direction = 'asc'] = defaultSort
+          const directionFn = direction === 'asc' ? ascend : descend
+
+          return directionFn(record =>
+            getComputedData(computedName, record),
+          )
         },
+      }
+
+      function getComputedData(name, record) {
+        validate('SO', [name, record])
+        return getComputed(name).get(record)
       }
 
       function getComputed(name) {
