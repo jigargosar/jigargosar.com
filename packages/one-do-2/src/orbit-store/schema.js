@@ -39,6 +39,7 @@ const modelsDefinition = {
     views: {
       'Date View': {
         columnNames: ['dueGroup', 'isDone', 'title', 'dueAt'],
+        groupColumnNames: ['dueGroup'],
         groupBy: compose(
           timeStampToGroupTitle,
           _path(attributePath('dueAt')),
