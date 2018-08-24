@@ -13,55 +13,14 @@ import {liveQuery, updateStore} from '../orbit-store/Store'
 import {AddIcon} from '../lib/Icons'
 import {Observer} from '../lib/mobx-react'
 
-import {
-  compose,
-  filter,
-  head,
-  identity,
-  keys,
-  map,
-  pick,
-  prop,
-  propEq,
-} from '../lib/exports-ramda'
+import {identity, map} from '../lib/exports-ramda'
 import {ModelGridView} from './ModelGridView'
 // import assertDefault from 'assert'
 
 // const assert = assertDefault.strict
 
-async function addRecord(model) {
-  const firstHasOneType = compose(
-    head,
-    keys,
-    filter(propEq('type')('hasOne')),
-    prop('relationships'),
-  )(model)
-
-  let hasOneRecord = null
-  if (firstHasOneType) {
-    hasOneRecord = await updateStore(t =>
-      t.addRecord({
-        type: firstHasOneType,
-      }),
-    )
-  }
-
-  const addResult = await updateStore(t =>
-    t.addRecord({
-      type: model.type,
-      ...(firstHasOneType
-        ? {
-            relationships: {
-              [firstHasOneType]: {
-                data: pick(['type', 'id'])(hasOneRecord),
-              },
-            },
-          }
-        : {}),
-    }),
-  )
-  console.debug(`addResult`, addResult)
-  return addResult
+function addRecord(model) {
+  return updateStore(t => t.addRecord({type: model.type}))
 }
 
 @observer
