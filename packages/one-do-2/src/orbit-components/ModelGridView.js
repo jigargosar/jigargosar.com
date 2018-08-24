@@ -86,7 +86,7 @@ function getSortComparator(view, sort) {
   const hasComputed = has(sort.id)(view.computedLookup)
   if (!hasComputed) return T
   const computed = view.computedLookup[sort.id]
-  return record => sort.directionFn(computed.get(record))
+  return sort.directionFn(record => computed.get(record))
 }
 
 function enhance() {
