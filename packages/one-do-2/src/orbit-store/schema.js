@@ -40,6 +40,7 @@ const modelsDefinition = {
       'Date View': {
         columnNames: ['dueAt', 'isDone', 'title'],
         groupByColumnName: 'dueGroup',
+        defaultSort: ['dueAt', 'asc'],
       },
       'Projects View': {
         columnNames: ['isDone', 'title', 'dueAt'],
