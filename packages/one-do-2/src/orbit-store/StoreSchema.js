@@ -105,7 +105,7 @@ export function StoreSchema(store) {
       const viewProps = mergeDefaults(
         {
           name,
-          columnNames: [...computedNames, ...attributeNames],
+          columnNames: [...computedNames],
           type: 'grid',
           filters: [],
           groupBy: null,
