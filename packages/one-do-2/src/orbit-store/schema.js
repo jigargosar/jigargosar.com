@@ -14,7 +14,7 @@ import {
   map,
   pathEq,
   pathOr,
-} from '../lib/ramda'
+} from '../lib/exports-ramda'
 import {randomBool, randomTS, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
 import {validate} from '../lib/validate'

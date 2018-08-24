@@ -1,7 +1,7 @@
 import {whenKeyPD, whenKeySP, withKeyEvent} from './little-react'
 import React, {Component} from 'react'
 import cn from 'classnames'
-import {identity} from './ramda'
+import {identity} from './exports-ramda'
 import {observer} from './mobx-react'
 
 // language=JSX Harmony

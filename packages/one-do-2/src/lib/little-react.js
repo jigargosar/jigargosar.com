@@ -11,7 +11,7 @@ import {
   prop,
   reduce,
   reduced,
-} from './ramda'
+} from './exports-ramda'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
 import {mapIndexed} from './little-ramda'

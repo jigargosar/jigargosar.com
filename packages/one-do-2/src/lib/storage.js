@@ -1,4 +1,4 @@
-import {compose, curry, identity, isNil} from './ramda'
+import {compose, curry, identity, isNil} from './exports-ramda'
 import {validate} from './validate'
 
 export const storage = Storage()

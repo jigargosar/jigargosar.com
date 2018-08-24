@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 // import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 import {sugarExtend} from './lib/little-ramda'
-import {tryCatch} from './lib/ramda'
+import {tryCatch} from './lib/exports-ramda'
 
 sugarExtend()
 

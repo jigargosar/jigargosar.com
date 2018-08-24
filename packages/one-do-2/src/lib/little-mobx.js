@@ -20,7 +20,7 @@ import {
   once,
   pick,
   unless,
-} from './ramda'
+} from './exports-ramda'
 import {hotDispose} from './hot'
 import {validate} from './validate'
 

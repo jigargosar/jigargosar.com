@@ -1,6 +1,6 @@
 import {Store} from './orbit'
 import {schema} from './schema'
-import {identity, partial} from '../lib/ramda'
+import {identity, partial} from '../lib/exports-ramda'
 import {fromResource, lazyObservable} from '../lib/mobx-utils'
 import {Disposers} from '../lib/little-mobx'
 import {autoBind} from '../lib/auto-bind'

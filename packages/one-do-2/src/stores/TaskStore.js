@@ -11,7 +11,7 @@ import {
   map,
   omit,
   unless,
-} from '../lib/ramda'
+} from '../lib/exports-ramda'
 import {findById, indexOfOrNaN} from '../lib/little-ramda'
 import {taskView} from './index'
 import {Disposers, setObservableProps} from '../lib/little-mobx'

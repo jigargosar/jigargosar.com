@@ -1,5 +1,5 @@
 import {liveQuery, query, queryRecordsOfType, updateStore} from './Store'
-import {__, compose, head, insert, map} from '../lib/ramda'
+import {__, compose, head, insert, map} from '../lib/exports-ramda'
 import {mapIndexed} from '../lib/little-ramda'
 import {
   asc,

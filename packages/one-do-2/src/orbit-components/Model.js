@@ -38,7 +38,9 @@ import {
   propEq,
   sortWith,
   values,
-} from 'ramda'
+} from '../lib/exports-ramda'
+
+import {validate} from '../lib/validate'
 
 import {DataGrid} from '../shared-components/DataGrid'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
@@ -237,12 +239,14 @@ export class ModelGridView extends Component {
 }
 
 function formatComputedDataFromRecord(computed, record) {
-  const value = computed.get(record)
+  validate('OO', [computed, record])
+
+  const data = computed.get(record)
   if (computed.type === 'timestamp') {
-    return Sugar.Date(value).format(`{Dow} {do} {Mon} '{yy} {hh}:{mm}{t}`)
+    return Sugar.Date(data).format(`{Dow} {do} {Mon} '{yy} {hh}:{mm}{t}`)
       .raw
   }
-  return value
+  return data
 }
 
 @observer

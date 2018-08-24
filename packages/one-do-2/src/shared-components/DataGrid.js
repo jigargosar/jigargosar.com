@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, {Component, Fragment} from 'react'
-import {map} from '../lib/ramda'
+import {map} from '../lib/exports-ramda'
 import {observer} from '../lib/mobx-react'
 import {Table, TableBody, TableHead, TableRow} from '@material-ui/core'
 import {mapIndexed} from '../lib/little-ramda'

@@ -12,7 +12,7 @@ import {
 import {disposable} from '../lib/disposable'
 import {startSimulation} from '../orbit-store/Simulation'
 import {AsciiCheckButton} from '../lib/AsciiCheckButton'
-import {take} from '../lib/ramda'
+import {take} from '../lib/exports-ramda'
 import {PageTitle} from './PageTitle'
 import {Page} from './Page'
 import {SchemaPage} from './SchemaPage'

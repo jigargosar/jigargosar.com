@@ -1,5 +1,5 @@
 import {default as pQueue} from 'p-queue'
-import {construct} from './ramda'
+import {construct} from './exports-ramda'
 export {default as delay} from 'delay'
 
 export {default as pSeries} from 'p-series'

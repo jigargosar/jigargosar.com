@@ -42,7 +42,7 @@ import {
   toUpper,
   type,
   unless,
-} from './ramda'
+} from './exports-ramda'
 import Sugar from 'sugar'
 import pFinally from 'p-finally'
 import stringify from 'json-stringify-safe'

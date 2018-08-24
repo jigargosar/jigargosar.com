@@ -1,2 +1,3 @@
-import validate from './aproba/index'
-export {validate}
+import def from './aproba'
+
+export const validate = def

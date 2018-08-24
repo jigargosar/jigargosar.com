@@ -1,4 +1,4 @@
-import {_path, compose, curry, map, pick, tap} from '../lib/ramda'
+import {_path, compose, curry, map, pick, tap} from '../lib/exports-ramda'
 import {prettyStringifySafe} from '../lib/little-ramda'
 import {validate} from '../lib/validate'
 

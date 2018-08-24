@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import {fromPromise, fromResource} from './mobx-utils'
-import {complement, identity} from './ramda'
+import {complement, identity} from './exports-ramda'
 import {autorun} from './little-mst'
 
 const app = (() => {

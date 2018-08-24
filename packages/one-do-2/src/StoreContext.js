@@ -1,7 +1,7 @@
 import React from 'react'
 import store from './mst-models/store'
 import {observer} from './lib/little-react'
-import {mergeAll} from './lib/ramda'
+import {mergeAll} from './lib/exports-ramda'
 
 const StoreContext = React.createContext(store)
 const StoreContentConsumer = StoreContext.Consumer

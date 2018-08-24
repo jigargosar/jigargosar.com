@@ -2,7 +2,7 @@ import {observer} from './little-react'
 import React, {Component} from 'react'
 import {wrapDisplayName} from './recompose'
 import {Disposers} from './little-mobx'
-import {pick} from './ramda'
+import {pick} from './exports-ramda'
 
 /**
  * @deprecated

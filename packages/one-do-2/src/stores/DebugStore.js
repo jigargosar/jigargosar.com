@@ -1,6 +1,6 @@
 import {action, observable} from '../lib/mobx'
 import {autobind} from '../lib/autobind'
-import {compose, defaultTo, mergeWith} from '../lib/ramda'
+import {compose, defaultTo, mergeWith} from '../lib/exports-ramda'
 import {setObservableProp, toggleObservableProp} from '../lib/little-mobx'
 
 @autobind

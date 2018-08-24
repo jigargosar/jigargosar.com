@@ -6,7 +6,7 @@ import {
   types,
 } from 'mobx-state-tree'
 import nanoid from 'nanoid'
-import {_compose, _merge, _path, _startsWith} from './ramda'
+import {_compose, _merge, _path, _startsWith} from './exports-ramda'
 import {pDrop} from './little-ramda'
 import {atomic} from 'mst-middlewares'
 

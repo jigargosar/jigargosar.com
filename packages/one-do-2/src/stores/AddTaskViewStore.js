@@ -1,7 +1,7 @@
 import {autobind} from '../lib/autobind'
 import {action, observable} from '../lib/mobx'
 import {taskView} from './index'
-import {isEmpty, pick} from '../lib/ramda'
+import {isEmpty, pick} from '../lib/exports-ramda'
 import {tryFocusDOMId} from '../lib/little-dom'
 
 @autobind

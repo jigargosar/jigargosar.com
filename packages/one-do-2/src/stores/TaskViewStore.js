@@ -8,7 +8,7 @@ import {
   mergeWith,
   pick,
   sortWith,
-} from '../lib/ramda'
+} from '../lib/exports-ramda'
 import {
   eqById,
   filterDone,
