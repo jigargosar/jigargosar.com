@@ -122,6 +122,18 @@ export function StoreSchema(store) {
         relationships: relationshipLookup,
         relationshipLookup,
         computedLookup,
+        getComputed,
+        getComputedData: (name, record) => {
+          validate('SO', [name, record])
+          return getComputed(name).get(record)
+        },
+      }
+
+      function getComputed(name) {
+        validate('S', [name])
+        const computed = computedLookup[name]
+        assert(computed)
+        return computed
       }
     }
   }
