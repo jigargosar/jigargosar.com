@@ -58,14 +58,11 @@ function SchemaModel(model, type) {
 
   assert(!isEmpty(viewsLookup))
   const viewNames = pluck('name')(values(viewsLookup))
-  const defaultViewName = propOr(head(viewNames), 1)(viewNames)
-  validate('A', [viewNames])
-
   return {
     type,
     viewNames,
     getView,
-    defaultView: getView(defaultViewName),
+    defaultView: getView(propOr(head(viewNames), 1)(viewNames)),
   }
 
   function getView(viewName) {
