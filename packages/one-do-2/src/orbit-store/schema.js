@@ -73,6 +73,14 @@ const modelsDefinition = {
     relationships: {
       project: {type: 'hasOne', model: 'project', inverse: 'tasks'},
     },
+    computed: {
+      projectName: pathOr('No Project', [
+        'relationships',
+        'project',
+        'data',
+        'id',
+      ]),
+    },
   },
   project: {
     attributes: {
