@@ -25,6 +25,8 @@ function timeStampToGroupTitle(timestamp) {
   return cond([
     //
     [Sugar.Date.isPast, () => 'Overdue'],
+    [Sugar.Date.isToday, () => 'Today'],
+    [Sugar.Date.isTomorrow, () => 'Tomorrow'],
     [T, () => 'Someday'],
   ])(new Date(timestamp))
 }
@@ -35,7 +37,7 @@ const modelsDefinition = {
   task: {
     views: {
       'Date View': {
-        columnNames: ['dueGroup', 'isDone', 'title', 'projectId', 'dueAt'],
+        columnNames: ['dueGroup', 'isDone', 'title', 'dueAt'],
         groupBy: compose(
           timeStampToGroupTitle,
           _path(attributePath('dueAt')),
