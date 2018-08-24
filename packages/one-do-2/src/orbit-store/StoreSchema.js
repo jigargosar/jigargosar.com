@@ -34,11 +34,6 @@ export function StoreSchema(store) {
 
   function SchemaModel(model, type) {
     const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
-    const attributeList = values(attributeLookup)
-    const attributeNames = pluck('name')(attributeList)
-
-    const relationshipLookup = defaultTo({})(model.relationships)
-    // const relationshipNames = keys(relationshipLookup)
 
     const computedLookup = compose(
       merge({
@@ -67,15 +62,11 @@ export function StoreSchema(store) {
     const defaultViewName = propOr(head(viewNames), 1)(viewNames)
     validate('A', [viewNames])
 
-    validate('A', [attributeNames])
     return {
       type,
-      attributeNames,
       viewNames,
       getView,
       defaultView: getView(defaultViewName),
-
-      relationships: relationshipLookup,
     }
 
     function attributeToComputed(attribute) {
@@ -113,8 +104,6 @@ export function StoreSchema(store) {
       return {
         ...viewProps,
         filterRecords: filter(allPass(viewProps.filters)),
-        relationships: relationshipLookup,
-        relationshipLookup,
         computedLookup,
         getComputedData,
         getSortComparatorForOrDefault: (customSort = []) => {
