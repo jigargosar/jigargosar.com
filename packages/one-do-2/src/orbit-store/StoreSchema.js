@@ -30,108 +30,106 @@ export function StoreSchema(store) {
     getModel: type => modelLookup[type],
     modelTypes: keys(modelLookup),
   }
+}
 
-  function SchemaModel(model, type) {
-    const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
+function SchemaModel(model, type) {
+  const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
 
-    const computedLookup = compose(
-      merge({
-        id: {
-          label: 'id',
-          get: row => row.id,
-        },
-        shortId: {
-          label: 'ID',
-          get: row => take(10)(row.id),
-        },
-      }),
-      merge(map(attributeToComputed)(attributeLookup)),
-      defaultTo({}),
-    )(model.computed)
+  const computedLookup = compose(
+    merge({
+      id: {
+        label: 'id',
+        get: row => row.id,
+      },
+      shortId: {
+        label: 'ID',
+        get: row => take(10)(row.id),
+      },
+    }),
+    merge(map(attributeToComputed)(attributeLookup)),
+    defaultTo({}),
+  )(model.computed)
 
-    const viewsLookup = compose(
-      mapObjIndexed(ModelView),
-      merge({[`Default ${fstToUpper(type)} Grid`]: {}}),
-      defaultTo([]),
-    )(model.views)
+  const viewsLookup = compose(
+    mapObjIndexed(ModelView),
+    merge({[`Default ${fstToUpper(type)} Grid`]: {}}),
+    defaultTo([]),
+  )(model.views)
 
-    assert(!isEmpty(viewsLookup))
-    const viewNames = pluck('name')(values(viewsLookup))
-    const defaultViewName = propOr(head(viewNames), 1)(viewNames)
-    validate('A', [viewNames])
+  assert(!isEmpty(viewsLookup))
+  const viewNames = pluck('name')(values(viewsLookup))
+  const defaultViewName = propOr(head(viewNames), 1)(viewNames)
+  validate('A', [viewNames])
+
+  return {
+    type,
+    viewNames,
+    getView,
+    defaultView: getView(defaultViewName),
+  }
+
+  function getView(viewName) {
+    validate('S', [viewName])
+    assert(has(viewName, viewsLookup))
+    return viewsLookup[viewName]
+  }
+
+  function ModelAttribute(attribute, name) {
+    return merge({name}, attribute)
+  }
+
+  function ModelView(view, name) {
+    const viewProps = mergeDefaults(
+      {
+        name,
+        columnNames: without(['id'])(keys(computedLookup)),
+        filters: [],
+        defaultSort: null,
+      },
+      view,
+    )
 
     return {
-      type,
-      viewNames,
-      getView,
-      defaultView: getView(defaultViewName),
-    }
-
-    function attributeToComputed(attribute) {
-      return {
-        get: pathOr(null, attributePath(attribute.name)),
-        label: attribute.label || attribute.name,
-        type: attribute.type || 'string',
-      }
-    }
-
-    function getView(viewName) {
-      validate('S', [viewName])
-      assert(has(viewName, viewsLookup))
-      return viewsLookup[viewName]
-    }
-
-    function ModelAttribute(attribute, name) {
-      return merge({name}, attribute)
-    }
-
-    function ModelView(view, name) {
-      const viewProps = mergeDefaults(
-        {
-          name,
-          columnNames: without(['id'])(keys(computedLookup)),
-          filters: [],
-          defaultSort: null,
-        },
-        view,
-      )
-
-      return {
-        ...viewProps,
-        filterRecords: filter(allPass(viewProps.filters)),
-        getComputed,
-        getComputedData,
-        getSortComparatorForOrDefault: (customSort = []) => {
-          if (isNil(customSort[0])) return getDefaultSortComparator()
-          const [computedName, direction] = customSort
-          const directionFn = direction === 'asc' ? ascend : descend
-
-          return directionFn(record =>
-            getComputedData(computedName, record),
-          )
-        },
-      }
-
-      function getDefaultSortComparator() {
-        const defaultSort = viewProps.defaultSort
-        if (isNil(defaultSort)) return T
-        const [computedName, direction = 'asc'] = defaultSort
+      ...viewProps,
+      filterRecords: filter(allPass(viewProps.filters)),
+      getComputed,
+      getComputedData,
+      getSortComparatorForOrDefault: (customSort = []) => {
+        if (isNil(customSort[0])) return getDefaultSortComparator()
+        const [computedName, direction] = customSort
         const directionFn = direction === 'asc' ? ascend : descend
 
         return directionFn(record => getComputedData(computedName, record))
-      }
-
-      function getComputedData(name, record) {
-        validate('SO', [name, record])
-        return getComputed(name).get(record)
-      }
-
-      function getComputed(name) {
-        validate('S', [name])
-        const computed = computedLookup[name]
-        assert(computed)
-        return computed
-      }
+      },
     }
+
+    function getDefaultSortComparator() {
+      const defaultSort = viewProps.defaultSort
+      if (isNil(defaultSort)) return T
+      const [computedName, direction = 'asc'] = defaultSort
+      const directionFn = direction === 'asc' ? ascend : descend
+
+      return directionFn(record => getComputedData(computedName, record))
+    }
+
+    function getComputedData(name, record) {
+      validate('SO', [name, record])
+      return getComputed(name).get(record)
+    }
+
+    function getComputed(name) {
+      validate('S', [name])
+      const computed = computedLookup[name]
+      assert(computed)
+      return computed
+    }
+  }
+}
+
+function attributeToComputed(attribute) {
+  return {
+    get: pathOr(null, attributePath(attribute.name)),
+    label: attribute.label || attribute.name,
+    type: attribute.type || 'string',
   }
 }
