@@ -41,9 +41,13 @@ import {
 } from '../lib/exports-ramda'
 
 import {validate} from '../lib/validate'
+import {assert} from '../lib/assert'
+// import assertDefault from 'assert'
 
 import {DataGrid} from '../shared-components/DataGrid'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
+
+// const assert = assertDefault.strict
 
 function colConfigToColumnProp({
   isNumeric,
@@ -214,18 +218,19 @@ export class ModelGridView extends Component {
 
   @computed
   get columnConfigs() {
-    const {sort, view} = this.props
+    const {sort, view, handleSortPathClicked} = this.props
 
-    return map(computedToColConfig)(view.columnNames)
+    return map(id => {
+      validate('S', [id])
 
-    function computedToColConfig(id) {
       const computed = view.computedLookup[id]
+      assert(computed, `computed not found ${id}`)
 
       return {
         id,
         sort: {
           active: equals(sort.id, id),
-          onClick: () => this.props.handleSortPathClicked(id),
+          onClick: () => handleSortPathClicked(id),
           direction: sort.direction,
         },
         isNumeric: computed.type === 'number',
@@ -234,7 +239,7 @@ export class ModelGridView extends Component {
           formatComputedDataFromRecord(computed, record),
         label: computed.label,
       }
-    }
+    })(view.columnNames)
   }
 }
 

@@ -44,21 +44,19 @@ const modelsDefinition = {
         ]),
       },
       'Date View': {
-        columnNames: ['dueGroup', 'isDone', 'title', 'project', 'dueAt'],
+        columnNames: ['dueGroup', 'isDone', 'title', 'projectId', 'dueAt'],
         groupBy: compose(
           timeStampToGroupTitle,
           _path(attributePath('dueAt')),
         ),
       },
       All: {
-        hideId: true,
         columnNames: ['title', 'dueAt'],
         groupBy: _path(attributePath('isDone')),
         groupKeyToTitle: groupKey =>
           JSON.parse(groupKey) ? 'Completed' : 'Pending',
       },
       Pending: {
-        hideId: true,
         columnNames: ['isDone', 'title', 'dueAt'],
         filters: [pathEq(attributePath('isDone'), false)],
       },
