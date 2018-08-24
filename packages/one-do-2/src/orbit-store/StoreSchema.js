@@ -93,8 +93,6 @@ export function StoreSchema(store) {
           name,
           columnNames: without(['id'])(computedNames),
           filters: [],
-          groupBy: null,
-          groupKeyToTitle: identity,
           defaultSort: null,
         },
         view,
