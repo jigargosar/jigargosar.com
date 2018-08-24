@@ -100,7 +100,6 @@ export function StoreSchema(store) {
       return {
         ...viewProps,
         filterRecords: filter(allPass(viewProps.filters)),
-        computedLookup: computedLookup,
         getComputed,
         getComputedData,
         getSortComparatorForOrDefault: (customSort = []) => {
