@@ -21,11 +21,8 @@ import {withProps} from 'recompose'
 import Sugar from 'sugar'
 
 import {
-  __,
   ascend,
   compose,
-  cond,
-  contains,
   descend,
   equals,
   filter,
@@ -36,12 +33,10 @@ import {
   keys,
   map,
   mapObjIndexed,
-  merge,
   pick,
   prop,
   propEq,
   sortWith,
-  T,
   values,
 } from 'ramda'
 
@@ -219,40 +214,23 @@ export class ModelGridView extends Component {
   get columnConfigs() {
     const {sort, view} = this.props
 
-    const sortPropsFor = config => ({
-      active: equals(sort.id, config.id),
-      onClick: () => this.props.handleSortPathClicked(config.id),
-      direction: sort.direction,
-    })
-    const hasComputed = contains(__, keys(view.computedLookup))
-    // debugger
-    return compose(
-      //
-      map(colConfig => ({
-        ...colConfig,
-        sort: sortPropsFor(colConfig),
-      })),
-      map(
-        cond([
-          //
-          [
-            hasComputed,
-            compose(computedToColConfig, name =>
-              merge({name}, view.computedLookup[name]),
-            ),
-          ],
-          [
-            T,
-            name => {
-              throw new Error(`Invalid column name ${name}`)
-            },
-          ],
-        ]),
-      ),
-    )(view.columnNames)
+    return map(computedToColConfig)(view.columnNames)
 
-    function computedToColConfig(computed) {
-      const name = computed.name
+    function computedToColConfig(id) {
+      const computed = view.computedLookup[id]
+
+      return {
+        id,
+        sort: {
+          active: equals(sort.id, id),
+          onClick: () => this.props.handleSortPathClicked(id),
+          direction: sort.direction,
+        },
+        isNumeric: computed.type === 'number',
+        getCellData: row => computed.get(row),
+        getFormattedCellData: row => format(computed.get(row)),
+        label: computed.label,
+      }
       function format(value) {
         if (computed.type === 'timestamp') {
           return Sugar.Date(value).format(
@@ -260,13 +238,6 @@ export class ModelGridView extends Component {
           ).raw
         }
         return value
-      }
-      return {
-        id: name,
-        isNumeric: computed.type === 'number',
-        getCellData: row => computed.get(row),
-        getFormattedCellData: row => format(computed.get(row)),
-        label: computed.label,
       }
     }
   }
