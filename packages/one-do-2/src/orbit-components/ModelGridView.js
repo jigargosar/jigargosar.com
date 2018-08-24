@@ -77,6 +77,28 @@ export class ModelGridView extends Component {
   }
 }
 
+function colConfigToColumnProp(config) {
+  const {isNumeric, getRawCellData, rowCellProps, label, sort} = config
+  return {
+    renderHeaderCell: () => (
+      <TableCell numeric={isNumeric}>
+        <TableSortLabel
+          direction={sort.direction}
+          active={sort.active}
+          onClick={sort.onClick}
+        >
+          {label}
+        </TableSortLabel>
+      </TableCell>
+    ),
+    renderCell: ({row}) => (
+      <TableCell numeric={isNumeric} {...rowCellProps}>
+        {getRawCellData(row)}
+      </TableCell>
+    ),
+  }
+}
+
 function enhance() {
   return compose(
     withSortStateHandlers,
@@ -118,28 +140,6 @@ function enhance() {
       observer,
     ),
   )
-}
-
-function colConfigToColumnProp(config) {
-  const {isNumeric, getRawCellData, rowCellProps, label, sort} = config
-  return {
-    renderHeaderCell: () => (
-      <TableCell numeric={isNumeric}>
-        <TableSortLabel
-          direction={sort.direction}
-          active={sort.active}
-          onClick={sort.onClick}
-        >
-          {label}
-        </TableSortLabel>
-      </TableCell>
-    ),
-    renderCell: ({row}) => (
-      <TableCell numeric={isNumeric} {...rowCellProps}>
-        {getRawCellData(row)}
-      </TableCell>
-    ),
-  }
 }
 
 function formatComputedDataFromRecord(computed, record) {
