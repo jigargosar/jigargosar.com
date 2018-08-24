@@ -44,15 +44,7 @@ export class ModelGridView extends Component {
       const computed = view.computedLookup[id]
       assert(computed, `computed not found ${id}`)
 
-      const config = {
-        id,
-        isNumeric: computed.type === 'number',
-        getRawCellData: record => computed.get(record),
-        getCellContent: record =>
-          formatComputedDataFromRecord(computed, record),
-        label: computed.label,
-      }
-      const {isNumeric, getRawCellData, rowCellProps, label} = config
+      const isNumeric = computed.type === 'number'
       return {
         renderHeaderCell: () => (
           <TableCell numeric={isNumeric}>
@@ -61,13 +53,13 @@ export class ModelGridView extends Component {
               direction={sort.direction}
               onClick={() => handleSortHeaderCellClick(id)}
             >
-              {label}
+              {computed.label}
             </TableSortLabel>
           </TableCell>
         ),
         renderCell: ({row}) => (
-          <TableCell numeric={isNumeric} {...rowCellProps}>
-            {getRawCellData(row)}
+          <TableCell numeric={isNumeric}>
+            {formatComputedDataFromRecord(computed, row)}
           </TableCell>
         ),
       }
