@@ -44,8 +44,6 @@ export function startSimulation(dynamic = false) {
       updateAddTask,
       updateAddTask,
       updateAddTask,
-      updateAddTask,
-      updateAddTask,
     ])
   }
   return () => pQueue.clear()
