@@ -120,13 +120,8 @@ function enhance() {
   )
 }
 
-function colConfigToColumnProp({
-  isNumeric,
-  getRawCellData,
-  rowCellProps,
-  label,
-  sort,
-}) {
+function colConfigToColumnProp(config) {
+  const {isNumeric, getRawCellData, rowCellProps, label, sort} = config
   return {
     renderHeaderCell: () => (
       <TableCell numeric={isNumeric}>
