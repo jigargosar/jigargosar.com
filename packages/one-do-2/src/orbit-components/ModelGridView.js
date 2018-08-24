@@ -81,16 +81,12 @@ export class ModelGridView extends Component {
 function enhance() {
   return compose(
     withSortStateHandlers,
-    withProps(({sort, view}) => {
-      return {
-        sortComparator: view.getSortComparatorForOrDefault([
+    compose(
+      withProps(({records, sort, view}) => {
+        const sortComparator = view.getSortComparatorForOrDefault([
           sort.id,
           sort.direction,
-        ]),
-      }
-    }),
-    compose(
-      withProps(({sortComparator, records, sort, view}) => {
+        ])
         const sortedRecords = sortWith([sortComparator])(records)
         const sortedAndFilteredRecords = view.filterRecords(sortedRecords)
         const groupRecords = compose(
