@@ -19,14 +19,14 @@ import {randomBool, randomTS, randomWord} from '../lib/fake'
 import {assert} from '../lib/assert'
 import {validate} from '../lib/validate'
 import {T, take} from 'ramda'
+import Sugar from 'sugar'
 
 function timeStampToGroupTitle(timestamp) {
-  const now = Date.now()
   return cond([
     //
-    [ts => ts <= now, () => 'Overdue'],
+    [Sugar.Date.isPast, () => 'Overdue'],
     [T, () => 'Someday'],
-  ])(timestamp)
+  ])(new Date(timestamp))
 }
 
 /*eslint-enable */
@@ -34,6 +34,13 @@ function timeStampToGroupTitle(timestamp) {
 const modelsDefinition = {
   task: {
     views: {
+      'Date View': {
+        columnNames: ['dueGroup', 'isDone', 'title', 'projectId', 'dueAt'],
+        groupBy: compose(
+          timeStampToGroupTitle,
+          _path(attributePath('dueAt')),
+        ),
+      },
       'Projects View': {
         columnNames: ['shortId', 'isDone', 'title', 'dueAt', 'projectId'],
         groupBy: pathOr('Inbox', [
@@ -42,13 +49,6 @@ const modelsDefinition = {
           'data',
           'id',
         ]),
-      },
-      'Date View': {
-        columnNames: ['dueGroup', 'isDone', 'title', 'projectId', 'dueAt'],
-        groupBy: compose(
-          timeStampToGroupTitle,
-          _path(attributePath('dueAt')),
-        ),
       },
       All: {
         columnNames: ['title', 'dueAt'],
