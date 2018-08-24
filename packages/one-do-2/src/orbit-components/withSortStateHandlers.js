@@ -1,14 +1,13 @@
-import {ascend, compose, descend, equals, objOf} from 'ramda'
-import {withHandlers, withProps, withStateHandlers} from 'recompose'
+import {compose, equals, objOf} from 'ramda'
+import {withHandlers, withStateHandlers} from 'recompose'
 import {overPath} from '../lib/little-ramda'
-import {_path} from '../lib/ramda'
 import {observer} from 'mobx-react'
 
 export const withSortStateHandlers = compose(
   withStateHandlers(
     {
       sort: {
-        path: ['attributes', 'sortIdx'],
+        id: '',
         direction: 'asc',
       },
     },
@@ -25,11 +24,11 @@ export const withSortStateHandlers = compose(
       sort,
       toggleSortDirection,
       setSortState,
-    }) => path => {
-      if (equals(sort.path, path)) {
+    }) => id => {
+      if (equals(sort.id, id)) {
         toggleSortDirection()
       } else {
-        setSortState({direction: 'asc', path})
+        setSortState({direction: 'asc', id})
       }
     },
   }),

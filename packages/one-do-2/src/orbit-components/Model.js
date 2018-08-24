@@ -47,7 +47,6 @@ import {
 
 import {DataGrid} from '../shared-components/DataGrid'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
-import {_path} from '../lib/ramda'
 
 function colConfigToColumnProp({
   isNumeric,
@@ -158,10 +157,7 @@ export class Model extends Component {
   withProps(({sort}) => ({
     sort: {
       ...sort,
-      comparator: compose(
-        sort.direction === 'asc' ? ascend : descend,
-        _path,
-      )(sort.path),
+      comparator: sort.direction === 'asc' ? ascend : descend,
     },
   })),
   observer,
@@ -223,9 +219,9 @@ export class ModelGridView extends Component {
   get columnConfigs() {
     const {sort, view} = this.props
 
-    const sortPropsFor = path => ({
-      active: equals(sort.path, path),
-      onClick: () => this.props.handleSortPathClicked(path),
+    const sortPropsFor = config => ({
+      active: equals(sort.id, config.id),
+      onClick: () => this.props.handleSortPathClicked(config.id),
       direction: sort.direction,
     })
     const hasComputed = contains(__, keys(view.computedLookup))
@@ -234,7 +230,7 @@ export class ModelGridView extends Component {
       //
       map(colConfig => ({
         ...colConfig,
-        sort: sortPropsFor(colConfig.cellDataPath),
+        sort: sortPropsFor(colConfig),
       })),
       map(
         cond([
@@ -266,10 +262,10 @@ export class ModelGridView extends Component {
         return value
       }
       return {
+        id: name,
         isNumeric: computed.type === 'number',
         getCellData: row => computed.get(row),
         getFormattedCellData: row => format(computed.get(row)),
-        cellDataPath: ['computed', name],
         label: computed.label,
       }
     }
