@@ -227,20 +227,22 @@ export class ModelGridView extends Component {
           direction: sort.direction,
         },
         isNumeric: computed.type === 'number',
-        getRawCellData: row => computed.get(row),
-        getFormattedCellData: row => format(computed.get(row)),
+        getRawCellData: record => computed.get(record),
+        getCellContent: record =>
+          formatComputedDataFromRecord(computed, record),
         label: computed.label,
-      }
-      function format(value) {
-        if (computed.type === 'timestamp') {
-          return Sugar.Date(value).format(
-            `{Dow} {do} {Mon} '{yy} {hh}:{mm}{t}`,
-          ).raw
-        }
-        return value
       }
     }
   }
+}
+
+function formatComputedDataFromRecord(computed, record) {
+  const value = computed.get(record)
+  if (computed.type === 'timestamp') {
+    return Sugar.Date(value).format(`{Dow} {do} {Mon} '{yy} {hh}:{mm}{t}`)
+      .raw
+  }
+  return value
 }
 
 @observer
