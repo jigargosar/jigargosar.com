@@ -37,13 +37,13 @@ function timeStampToGroupTitle(timestamp) {
 const modelsDefinition = {
   task: {
     views: {
-      'Projects View': {
-        columnNames: ['projectId', 'isDone', 'title', 'dueAt'],
-        groupByColumnName: 'projectId',
-      },
       'Date View': {
         columnNames: ['dueGroup', 'isDone', 'title', 'dueAt'],
         groupByColumnName: 'dueGroup',
+      },
+      'Projects View': {
+        columnNames: ['projectId', 'isDone', 'title', 'dueAt'],
+        groupByColumnName: 'projectId',
       },
       All: {
         columnNames: ['isDone', 'title', 'dueAt'],
