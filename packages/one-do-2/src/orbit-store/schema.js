@@ -35,7 +35,7 @@ const modelsDefinition = {
   task: {
     views: {
       'Projects View': {
-        columnNames: ['isDone', 'title', 'dueAt', 'project'],
+        columnNames: ['isDone', 'title', 'dueAt'],
         groupBy: pathOr(' No Project', [
           'relationships',
           'project',
