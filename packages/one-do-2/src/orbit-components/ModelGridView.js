@@ -4,13 +4,10 @@ import {validate} from '../lib/validate'
 import Sugar from 'sugar'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {
-  ascend,
   compose,
-  descend,
   equals,
   flatten,
   groupBy,
-  has,
   isNil,
   map,
   mapObjIndexed,
