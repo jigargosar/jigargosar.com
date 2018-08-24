@@ -34,6 +34,13 @@ function timeStampToGroupTitle(timestamp) {
 const modelsDefinition = {
   task: {
     views: {
+      'Date View': {
+        columnNames: ['dueGroup', 'isDone', 'title', 'project', 'dueAt'],
+        groupBy: compose(
+          timeStampToGroupTitle,
+          _path(attributePath('dueAt')),
+        ),
+      },
       'Projects View': {
         columnNames: ['id', 'isDone', 'title', 'dueAt', 'projectId'],
         groupBy: pathOr('Inbox', [
@@ -42,13 +49,6 @@ const modelsDefinition = {
           'data',
           'id',
         ]),
-      },
-      'Date View': {
-        columnNames: ['isDone', 'title', 'dueAt', 'project'],
-        groupBy: compose(
-          timeStampToGroupTitle,
-          _path(attributePath('dueAt')),
-        ),
       },
       All: {
         hideId: true,
@@ -77,6 +77,10 @@ const modelsDefinition = {
       shortId: {
         label: 'ID',
         get: row => take(10)(row.id),
+      },
+      dueGroup: {
+        label: 'Due',
+        get: compose(timeStampToGroupTitle, _path(attributePath('dueAt'))),
       },
       projectId: {
         label: 'Project',
