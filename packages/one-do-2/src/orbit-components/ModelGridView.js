@@ -83,20 +83,28 @@ export class ModelGridView extends Component {
   }
 }
 
-function getSortComparator(view, sort) {
-  if (isNil(sort.id)) return T
-  const computed = view.computedLookup[sort.id]
-  return sort.directionFn(record => computed.get(record))
-}
-
 function enhance() {
   return compose(
     withSortStateHandlers,
+    withProps(({sort, view}) => {
+      return {
+        sortComparator: isNil(sort.id)
+          ? T
+          : sort.directionFn(record =>
+              view.getComputedData(sort.id, record),
+            ),
+      }
+    }),
     compose(
-      withProps(({records, sort, view}) => {
-        const sortedRecords = sortWith([getSortComparator(view, sort)])(
-          records,
-        )
+      withProps(({sortComparator, records, sort, view}) => {
+        // const sortComparator = (() => {
+        //   if (isNil(sort.id)) return T
+        //   return sort.directionFn(record =>
+        //     view.getComputedData(sort.id, record),
+        //   )
+        // })()
+
+        const sortedRecords = sortWith([sortComparator])(records)
         const sortedAndFilteredRecords = view.filterRecords(sortedRecords)
         const groupRecords = compose(
           flatten,
