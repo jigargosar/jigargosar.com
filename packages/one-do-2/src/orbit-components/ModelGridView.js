@@ -11,6 +11,7 @@ import {
   flatten,
   groupBy,
   has,
+  isNil,
   map,
   mapObjIndexed,
   sortWith,
@@ -83,8 +84,7 @@ export class ModelGridView extends Component {
 }
 
 function getSortComparator(view, sort) {
-  const hasComputed = has(sort.id)(view.computedLookup)
-  if (!hasComputed) return T
+  if (isNil(sort.id)) return T
   const computed = view.computedLookup[sort.id]
   return sort.directionFn(record => computed.get(record))
 }

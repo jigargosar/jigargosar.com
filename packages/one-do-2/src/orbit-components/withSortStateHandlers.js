@@ -7,7 +7,7 @@ export const withSortStateHandlers = compose(
   withStateHandlers(
     {
       sort: {
-        id: '',
+        id: null,
         direction: 'asc',
       },
     },
