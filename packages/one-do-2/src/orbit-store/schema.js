@@ -38,11 +38,11 @@ const modelsDefinition = {
   task: {
     views: {
       'Date View': {
-        columnNames: ['dueGroup', 'isDone', 'title', 'dueAt'],
+        columnNames: ['dueAt', 'isDone', 'title'],
         groupByColumnName: 'dueGroup',
       },
       'Projects View': {
-        columnNames: ['projectId', 'isDone', 'title', 'dueAt'],
+        columnNames: ['isDone', 'title', 'dueAt'],
         groupByColumnName: 'projectId',
       },
       All: {
