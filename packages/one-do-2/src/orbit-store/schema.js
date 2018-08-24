@@ -35,7 +35,7 @@ const modelsDefinition = {
   task: {
     views: {
       'Projects View': {
-        columnNames: ['isDone', 'title', 'dueAt'],
+        columnNames: ['id', 'isDone', 'title', 'dueAt', 'projectId'],
         groupBy: pathOr('No Project', [
           'relationships',
           'project',
@@ -74,12 +74,14 @@ const modelsDefinition = {
       project: {type: 'hasOne', model: 'project', inverse: 'tasks'},
     },
     computed: {
-      projectName: pathOr('No Project', [
-        'relationships',
-        'project',
-        'data',
-        'id',
-      ]),
+      id: {
+        label: 'ID',
+        get: pathOr(null, ['id']),
+      },
+      projectId: {
+        label: 'Project',
+        get: pathOr('Inbox', ['relationships', 'project', 'data', 'id']),
+      },
     },
   },
   project: {
@@ -89,22 +91,11 @@ const modelsDefinition = {
     relationships: {
       tasks: {type: 'hasMany', model: 'task', inverse: 'project'},
     },
-  },
-  planet: {
-    attributes: {
-      name: {type: 'string', label: 'Name'},
-      classification: {type: 'string', label: 'Classification'},
-    },
-    relationships: {
-      moons: {type: 'hasMany', model: 'moon', inverse: 'planet'},
-    },
-  },
-  moon: {
-    attributes: {
-      name: {type: 'string', label: 'Name'},
-    },
-    relationships: {
-      planet: {type: 'hasOne', model: 'planet', inverse: 'moons'},
+    computed: {
+      id: {
+        label: 'ID',
+        get: pathOr(null, ['id']),
+      },
     },
   },
 }

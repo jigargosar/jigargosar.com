@@ -217,7 +217,8 @@ export class ModelGridView extends Component {
       onClick: () => this.props.handleSortPathClicked(path),
       direction: sort.direction,
     })
-    const hasRelationship = contains(__, keys(view.relationships))
+    const hasRelationship = contains(__, keys(view.relationshipLookup))
+    const hasComputed = contains(__, keys(view.computedLookup))
     // debugger
     return compose(
       //
@@ -228,6 +229,12 @@ export class ModelGridView extends Component {
       map(
         cond([
           //
+          [
+            hasComputed,
+            compose(computedToColConfig, name =>
+              merge({name}, view.computedLookup[name]),
+            ),
+          ],
           [equals('id'), idColumnConfig],
           [
             view.hasAttribute,
@@ -236,7 +243,7 @@ export class ModelGridView extends Component {
           [
             hasRelationship,
             compose(relationshipToColConfig, name =>
-              merge({name}, view.relationships[name]),
+              merge({name}, view.relationshipLookup[name]),
             ),
           ],
           [
@@ -249,6 +256,15 @@ export class ModelGridView extends Component {
       ),
     )(view.columnNames)
 
+    function computedToColConfig(computed) {
+      const name = computed.name
+      return {
+        isNumeric: false,
+        getCellData: row => computed.get(row),
+        cellDataPath: ['computed', name],
+        label: computed.label || name,
+      }
+    }
     function relationshipToColConfig(relationship) {
       const name = relationship.name
       return {
