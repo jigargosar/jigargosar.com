@@ -18,11 +18,15 @@ import {AddIcon} from '../lib/Icons'
 import {withSortStateHandlers} from './withSortStateHandlers'
 import {Observer} from '../lib/mobx-react'
 import {withProps} from 'recompose'
+import Sugar from 'sugar'
+
 import {
   __,
+  ascend,
   compose,
   cond,
   contains,
+  descend,
   equals,
   filter,
   flatten,
@@ -43,6 +47,7 @@ import {
 
 import {DataGrid} from '../shared-components/DataGrid'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
+import {_path} from '../lib/ramda'
 
 function colConfigToColumnProp({
   isNumeric,
@@ -150,6 +155,18 @@ export class Model extends Component {
 
 @withSortStateHandlers
 @compose(
+  withProps(({sort}) => ({
+    sort: {
+      ...sort,
+      comparator: compose(
+        sort.direction === 'asc' ? ascend : descend,
+        _path,
+      )(sort.path),
+    },
+  })),
+  observer,
+)
+@compose(
   withProps(({records, sort, view}) => {
     const sortedRecords = sortWith([sort.comparator])(records)
     const sortedAndFilteredRecords = view.filterRecords(sortedRecords)
@@ -242,13 +259,16 @@ export class ModelGridView extends Component {
       const name = computed.name
       function format(value) {
         if (computed.type === 'timestamp') {
-          return new Date(value).format()
+          return Sugar.Date(value).format(
+            `{Dow} {do} {Mon} '{yy} {hh}:{mm}{t}`,
+          ).raw
         }
         return value
       }
       return {
         isNumeric: computed.type === 'number',
-        getCellData: row => format(computed.get(row)),
+        getCellData: row => computed.get(row),
+        getFormattedCellData: row => format(computed.get(row)),
         cellDataPath: ['computed', name],
         label: computed.label,
       }

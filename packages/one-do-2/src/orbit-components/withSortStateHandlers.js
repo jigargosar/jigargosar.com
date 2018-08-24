@@ -33,14 +33,5 @@ export const withSortStateHandlers = compose(
       }
     },
   }),
-  withProps(({sort}) => ({
-    sort: {
-      ...sort,
-      comparator: compose(
-        sort.direction === 'asc' ? ascend : descend,
-        _path,
-      )(sort.path),
-    },
-  })),
   observer,
 )
