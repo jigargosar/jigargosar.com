@@ -20,7 +20,14 @@ import {
   values,
 } from 'ramda'
 import {attributePath} from './little-orbit'
-import {ascend, descend, isNil, T, without} from '../lib/exports-ramda'
+import {
+  ascend,
+  descend,
+  isNil,
+  partial,
+  T,
+  without,
+} from '../lib/exports-ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -51,7 +58,7 @@ function SchemaModel(model, type) {
   )(model.computed)
 
   const viewsLookup = compose(
-    mapObjIndexed(ModelView),
+    mapObjIndexed(partial(ModelView, [computedLookup])),
     merge({[`Default ${fstToUpper(type)} Grid`]: {}}),
     defaultTo([]),
   )(model.views)
@@ -75,7 +82,7 @@ function SchemaModel(model, type) {
     return merge({name}, attribute)
   }
 
-  function ModelView(view, name) {
+  function ModelView(computedLookup, view, name) {
     const viewProps = mergeDefaults(
       {
         name,
