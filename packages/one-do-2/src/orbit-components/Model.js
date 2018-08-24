@@ -240,9 +240,15 @@ export class ModelGridView extends Component {
 
     function computedToColConfig(computed) {
       const name = computed.name
+      function format(value) {
+        if (computed.type === 'timestamp') {
+          return new Date(value).format(computed.format)
+        }
+        return value
+      }
       return {
-        isNumeric: false,
-        getCellData: row => computed.get(row),
+        isNumeric: computed.type === 'number',
+        getCellData: row => format(computed.get(row)),
         cellDataPath: ['computed', name],
         label: computed.label,
       }

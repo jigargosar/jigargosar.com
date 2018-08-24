@@ -67,7 +67,7 @@ const modelsDefinition = {
       sortIdx: {type: 'number', label: 'Sort Index'},
       isDone: {type: 'boolean', label: 'Done'},
       title: {type: 'string', label: 'Title'},
-      dueAt: {type: 'timestamp', format: '', label: 'Due Date'},
+      dueAt: {type: 'timestamp', label: 'Due Date'},
       createdAt: {type: 'timestamp', label: 'Created'},
     },
     relationships: {
