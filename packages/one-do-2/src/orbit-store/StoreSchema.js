@@ -23,7 +23,7 @@ import {
   values,
 } from 'ramda'
 import {attributePath} from './little-orbit'
-import {omit, without} from '../lib/exports-ramda'
+import {without} from '../lib/exports-ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
