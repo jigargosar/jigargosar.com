@@ -108,12 +108,14 @@ function enhance() {
             },
             ...records,
           ]),
-          groupBy(view.groupBy),
+          groupBy(record =>
+            view.getComputedData(view.groupByColumnName, record),
+          ),
         )
         return {
           sortedRecords,
           sortedAndFilteredRecords,
-          sortedFilteredAndGroupedRecords: view.groupBy
+          sortedFilteredAndGroupedRecords: view.groupByColumnName
             ? groupRecords(sortedAndFilteredRecords)
             : sortedAndFilteredRecords,
         }
