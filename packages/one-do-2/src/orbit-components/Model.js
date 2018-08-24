@@ -218,7 +218,7 @@ export class ModelGridView extends Component {
 
   @computed
   get columnConfigs() {
-    const {sort, view, handleSortPathClicked} = this.props
+    const {sort, view, handleSortHeaderCellClick} = this.props
 
     return map(id => {
       validate('S', [id])
@@ -230,7 +230,7 @@ export class ModelGridView extends Component {
         id,
         sort: {
           active: equals(sort.id, id),
-          onClick: () => handleSortPathClicked(id),
+          onClick: () => handleSortHeaderCellClick(id),
           direction: sort.direction,
         },
         isNumeric: computed.type === 'number',
