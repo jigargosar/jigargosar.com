@@ -2,10 +2,8 @@ import {fstToUpper, mergeDefaults} from '../lib/little-ramda'
 import {assert} from '../lib/assert'
 import {validate} from '../lib/validate'
 import {
-  __,
   allPass,
   compose,
-  contains,
   defaultTo,
   filter,
   has,
@@ -115,7 +113,6 @@ export function StoreSchema(store) {
       return {
         ...viewProps,
         filterRecords: filter(allPass(viewProps.filters)),
-        hasAttribute: contains(__, attributeNames),
         relationships: relationshipLookup,
         relationshipLookup,
         computedLookup,
