@@ -18,7 +18,7 @@ import {
 import {withProps} from 'recompose'
 import {observer} from 'mobx-react'
 import {DataGrid} from '../shared-components/DataGrid'
-import {action, computed} from 'mobx'
+import {action} from 'mobx'
 import cn from 'classnames'
 import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
 import {assert} from '../lib/assert'
