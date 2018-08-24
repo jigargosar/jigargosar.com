@@ -82,7 +82,7 @@ const modelsDefinition = {
       },
       dueGroup: {
         type: 'string',
-        label: 'Due',
+        label: 'Schedule',
         get: compose(timeStampToGroupTitle, _path(attributePath('dueAt'))),
       },
       projectId: {
