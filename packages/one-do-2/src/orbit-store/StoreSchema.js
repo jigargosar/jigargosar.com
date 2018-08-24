@@ -8,7 +8,6 @@ import {
   filter,
   has,
   head,
-  identity,
   isEmpty,
   keys,
   map,
@@ -50,7 +49,7 @@ export function StoreSchema(store) {
       defaultTo({}),
     )(model.computed)
 
-    const computedNames = keys(columnLookup)
+    const columnNames = keys(columnLookup)
     const viewsLookup = compose(
       mapObjIndexed(ModelView),
       merge({[`Default ${fstToUpper(type)} Grid`]: {}}),
@@ -91,7 +90,7 @@ export function StoreSchema(store) {
       const viewProps = mergeDefaults(
         {
           name,
-          columnNames: without(['id'])(computedNames),
+          columnNames: without(['id'])(columnNames),
           filters: [],
           defaultSort: null,
         },
