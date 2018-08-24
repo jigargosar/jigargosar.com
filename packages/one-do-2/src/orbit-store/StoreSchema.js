@@ -35,7 +35,7 @@ export function StoreSchema(store) {
   function SchemaModel(model, type) {
     const attributeLookup = mapObjIndexed(ModelAttribute)(model.attributes)
 
-    const computedLookup = compose(
+    const columnLookup = compose(
       merge({
         id: {
           label: 'id',
@@ -50,7 +50,7 @@ export function StoreSchema(store) {
       defaultTo({}),
     )(model.computed)
 
-    const computedNames = keys(computedLookup)
+    const computedNames = keys(columnLookup)
     const viewsLookup = compose(
       mapObjIndexed(ModelView),
       merge({[`Default ${fstToUpper(type)} Grid`]: {}}),
@@ -101,7 +101,7 @@ export function StoreSchema(store) {
       return {
         ...viewProps,
         filterRecords: filter(allPass(viewProps.filters)),
-        computedLookup,
+        computedLookup: columnLookup,
         getComputedData,
         getSortComparatorForOrDefault: (customSort = []) => {
           if (isNil(customSort[0])) return getDefaultSortComparator()
@@ -130,7 +130,7 @@ export function StoreSchema(store) {
 
       function getComputed(name) {
         validate('S', [name])
-        const computed = computedLookup[name]
+        const computed = columnLookup[name]
         assert(computed)
         return computed
       }
