@@ -36,7 +36,7 @@ const modelsDefinition = {
     views: {
       'Projects View': {
         columnNames: ['isDone', 'title', 'dueAt'],
-        groupBy: pathOr(' No Project', [
+        groupBy: pathOr('No Project', [
           'relationships',
           'project',
           'data',
