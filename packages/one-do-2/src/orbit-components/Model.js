@@ -45,7 +45,7 @@ import {defaultRowRenderer} from '../shared-components/defaultRowRenderer'
 
 function colConfigToColumnProp({
   isNumeric,
-  getCellData,
+  getRawCellData,
   rowCellProps,
   label,
   sort,
@@ -64,7 +64,7 @@ function colConfigToColumnProp({
     ),
     renderCell: ({row}) => (
       <TableCell numeric={isNumeric} {...rowCellProps}>
-        {getCellData(row)}
+        {getRawCellData(row)}
       </TableCell>
     ),
   }
@@ -227,7 +227,7 @@ export class ModelGridView extends Component {
           direction: sort.direction,
         },
         isNumeric: computed.type === 'number',
-        getCellData: row => computed.get(row),
+        getRawCellData: row => computed.get(row),
         getFormattedCellData: row => format(computed.get(row)),
         label: computed.label,
       }
