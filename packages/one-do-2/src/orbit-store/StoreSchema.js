@@ -23,6 +23,7 @@ import {
   values,
 } from 'ramda'
 import {attributePath} from './little-orbit'
+import {omit} from '../lib/exports-ramda'
 
 export function StoreSchema(store) {
   const schema = store.schema
@@ -105,7 +106,7 @@ export function StoreSchema(store) {
       const viewProps = mergeDefaults(
         {
           name,
-          columnNames: [...computedNames],
+          columnNames: omit(['id'])(computedNames),
           type: 'grid',
           filters: [],
           groupBy: null,
