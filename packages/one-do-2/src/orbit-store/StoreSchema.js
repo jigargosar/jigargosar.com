@@ -83,6 +83,7 @@ export function StoreSchema(store) {
       return {
         get: pathOr(null, attributePath(attribute.name)),
         label: attribute.label || attribute.name,
+        type: attribute.type || 'string',
       }
     }
 
