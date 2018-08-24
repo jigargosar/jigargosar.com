@@ -10,9 +10,11 @@ import {
   equals,
   flatten,
   groupBy,
+  has,
   map,
   mapObjIndexed,
   sortWith,
+  T,
   values,
 } from '../lib/exports-ramda'
 import {withProps} from 'recompose'
@@ -40,7 +42,6 @@ export class ModelGridView extends Component {
 
     return map(id => {
       validate('S', [id])
-
       const computed = view.computedLookup[id]
       assert(computed, `computed not found ${id}`)
 
@@ -81,6 +82,13 @@ export class ModelGridView extends Component {
   }
 }
 
+function getSortComparator(view, sort) {
+  const hasComputed = has(sort.id)(view.computedLookup)
+  if (!hasComputed) return T
+  const computed = view.computedLookup[sort.id]
+  return record => sort.directionFn(computed.get(record))
+}
+
 function enhance() {
   return compose(
     withSortStateHandlers,
@@ -88,14 +96,16 @@ function enhance() {
       withProps(({sort}) => ({
         sort: {
           ...sort,
-          comparator: sort.direction === 'asc' ? ascend : descend,
+          directionFn: sort.direction === 'asc' ? ascend : descend,
         },
       })),
       observer,
     ),
     compose(
       withProps(({records, sort, view}) => {
-        const sortedRecords = sortWith([sort.comparator])(records)
+        const sortedRecords = sortWith([getSortComparator(view, sort)])(
+          records,
+        )
         const sortedAndFilteredRecords = view.filterRecords(sortedRecords)
         const groupRecords = compose(
           flatten,
