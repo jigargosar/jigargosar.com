@@ -242,7 +242,7 @@ export class ModelGridView extends Component {
       const name = computed.name
       function format(value) {
         if (computed.type === 'timestamp') {
-          return new Date(value).format(computed.format)
+          return new Date(value).format()
         }
         return value
       }
